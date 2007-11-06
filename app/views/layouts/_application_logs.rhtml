@@ -1,0 +1,53 @@
+<% if application_logs.is_today? %>
+  <tr class="logToday">
+<% elsif application_logs.is_yesterday? %>
+  <tr class="logYesterday">
+<% else %>
+  <tr class="logOlder">
+<% end %>
+
+    <td class="logTypeIcon"><img src="/images/logtypes/<%= "#{application_logs.rel_object_type.downcase}s.gif" %>" alt="<%= application_logs.rel_object_type %>" title="<%= application_logs.rel_object_type %>" /></td>
+    <td class="logDetails">
+      <span>
+      <% if not ['Comment', 'ProjectMessage'].include?(application_logs.rel_object_type) %>
+      <b><%= application_logs.friendly_action %>:</b>
+      <% end %>
+      <%= application_logs.object_name %>
+      </span>
+
+<% if show_project_column %>
+    <br /><span class="desc">
+    <% if application_logs.is_today? %>
+        <%= "Today #{format_usertime(application_logs.created_on, '%H:%M')}" %>
+    <% elsif application_logs.is_yesterday? %>
+        <%= "Yesterday" %>
+    <% else %>
+        <%= format_usertime(application_logs.created_on, "%b %d %Y") %>
+    <% end %>
+    <% if not application_logs.taken_by.nil? %>
+    , <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>
+    <% end %>
+    </span>
+<% end %>
+    </td>
+<% if show_project_column %>
+    <td class="logProject">
+<% if not application_logs.project.nil? %>
+      <%= link_to (h application_logs.project.name), :controller => 'project', :action => 'overview', :active_project => application_logs.project.id %>
+<% end %>
+    </td>
+<% else %>
+    <td class="logTakenOnBy">
+    <% if application_logs.is_today? %>
+        <%= "Today #{format_usertime(application_logs.created_on, '%H:%M')}" %>
+    <% elsif application_logs.is_yesterday? %>
+        <%= "Yesterday" %>
+    <% else %>
+        <%= format_usertime(application_logs.created_on, "%b %d %Y") %>
+    <% end %>
+    <% if not application_logs.taken_by.nil? %>
+    , <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>
+    <% end %>
+    </td>
+<% end %>
+  </tr>

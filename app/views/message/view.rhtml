@@ -1,0 +1,62 @@
+<%
+  @page_title = (h @message.title)
+  
+  @tabbed_navigation_items = project_tabbed_navigation(1)
+  @bread_crumbs = project_crumbs("View message", [{:title => 'Messages', :url => "/project/#{@active_project.id}/message"}])
+  
+  @page_actions = []
+  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => "Add message", :url => "/project/#{@active_project.id}/message/add"}
+  end
+  
+  @additional_stylesheets = ['project/messages']
+%>
+
+<div class="message">
+  <div class="messageDetails">
+<% if @message.is_private %>
+    <div class="private" title="<%= "Private message" %>"><span><%= "Private message" %></span></div>
+<% end %>
+<% if not @message.created_by.nil? %>
+    <div class="messageAuthor"><%= format_usertime(@message.created_on, "%b %d. %Y %H:%M") %> | <%= link_to (h @message.created_by.display_name), :controller => 'user', :action => 'card', :id => @message.created_by.id %></div>
+<% end %>
+  </div>
+  <div class="messageText">
+    <%= textilize @message.text %>
+<% if !@message.additional_text.nil? and @message.additional_text.strip %>
+    <div class="messageSeparator"><%= "* * *" %></div>
+    <%= textilize @message.additional_text %>
+<% end%>
+  </div>
+
+<%= render :partial => 'files/list_attached_files', :locals => {:attached_files => @message.attached_files(@logged_user.member_of_owner?), :attached_files_object => @message} %>
+  <div class="messageCommentCount">
+<% if not @message.comments.empty? %>
+        <span><%= "Comments" %>:</span> <a href="<%= "/project/#{@active_project.id}/message/view/#{@message.id}#objectComments" %>"><%= @message.comments.length %></a>
+<% else %>
+        <span><%= "Comments" %>:</span> <%= @message.comments.length %>
+<% end %>
+  </div>
+  <div class="messageTags">
+    <span><%= "Tags" %>:</span> <%= @message.tags %>
+  </div>
+  
+<%
+	temp_actions = [
+		{:name => 'Edit', :url => {:controller => 'message', :action => 'edit', :id => @message.id}, :cond => @message.can_be_edited_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'message', :action => 'delete', :id => @message.id}, :cond => @message.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this message?"}
+	]
+%>
+<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
+      <div class="messageOptions"><%= action_list temp_actions %></div>
+<% end %>
+</div>
+
+<!-- Comments -->
+<div id="messageComments">
+<%= render :partial => 'comment/object_comments', :locals => {'comments' => @message.comments} %>
+
+<% if @message.comment_can_be_added_by(@logged_user) %>
+<%= render :partial => 'comment/add_form', :locals => {'commented_object' => @message} %>
+<% end %>
+</div>

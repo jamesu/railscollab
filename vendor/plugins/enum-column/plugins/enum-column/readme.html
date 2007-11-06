@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Ruby on Rails Enumerated Column Constraints</title>
+<style>
+body { 
+    font-family: "Lucida Sans", Verdana, sans-serif;
+    font-size: small;
+}
+
+h1 { font-size: 175%; }
+
+.indent { 
+    margin-left: 4em;
+}
+
+</style>
+</head>
+<body>
+  <h1>Ruby on Rails Enumerated Column Constraints</h1>
+  <h2>Overview</h2>
+  <p>This plugin is an ROR extension to support enumerations in the database schema using the enum type in MySQL or column constraints in other databases. Currently only MySQL has been implemented, but other connection adapters can easily be extended to check for column constraints and then parse out the possible values.</p>
+
+  <p>This makes it very easy to implement and maintain controlled vocabularies in the database schema without having to change the validations and the view. I have made an effort to make the modifications without modifying the core classes, but I have not been extreamly successful. I have had to make some modifications that are version dependent and then put some exception handlers to make the backward compatible. </p>
+
+<p>This is not the ideal solution and could cause some performance issues in the helpers. The core code still works with both 1.1 and 1.2 without modification.</p>
+
+<h2>Installation</h2>
+
+<p>To install using the plugin script:</p>
+<pre>
+    script/plugin install enum-column
+</pre>
+
+<p>To manually install using Subversion, do the following. In your <code>vendor/plugins</code> directory, 
+  type the following:<p>
+<pre>
+    svn checkout svn://rubyforge.org/var/svn/enum-column
+</pre>
+
+<p>Otherwize download the latest zip or tarball and unpack it in your <code>vendor/plugins</code> directory.</p>
+
+<h2>How to use it.</h2>
+
+<h3>In your schema</h3>
+
+<p>When you create your schema, specify the constraint as a limit:</p>
+<pre>
+  create_table :enumerations, :force => true do |t|
+    t.column :severity, :enum, :limit =&gt; [:low, :medium, :high, :critical],
+       :default => :medium
+    t.column :color, :enum, :limit =&gt; [:red, :blue, :green, :yellow]
+    ...
+  end
+</pre>
+
+<h3>In the model</h3>
+<p>You can then automatically validate this column using:</p>
+<pre>
+    validates_columns :severity, :color
+</pre>
+
+<p>The rest will be handled for you. All enumerated values will be given as symbols.</p>
+<pre>
+    @e = Enumeration.new
+    @e.severity = :low
+</pre>
+
+<h3>In the views.</h3>
+
+<p>In the controller:</p>
+<pre>
+   @e = Enumeration.new
+</pre>
+
+<p>The enumerates list of values will be specified as follows:</p>
+<pre>
+    &lt;%= input 'e', 'severity' %&gt;
+</pre>
+
+<p>Will create a select/option list:</p>
+<pre>
+     &lt;select id="e_severity" name="e[severity]"&gt;
+     	     &lt;option value="low"&gt;low&lt;/option&gt;
+	     &lt;option value="medium" selected="selected"&gt;medium&lt;/option&gt;
+	     &lt;option value="high"&gt;high&lt;/option&gt;
+	     &lt;option value="critical"&gt;critical&lt;/option&gt;
+     &lt;/select&gt;
+</pre>
+
+<div class="indent">
+     <select id="e_severity" name="e[severity]">
+     	     <option value="low">low</option>
+	     <option value="medium" selected="selected">medium</option>
+	     <option value="high">high</option>
+	     <option value="critical">critical</option>
+     </select>
+</div>
+
+<p>You can also create a set of radio buttons using the following helper:</p>
+<pre>
+    &lt;%= enum_radio('e', 'severity') %=&gt;
+</pre>
+<p>Will produce the following group of radio buttons:</p>
+<pre>
+    &lt;label&gt;low: &lt;input id="test_severity_low" name="test[severity]" type="radio" value="low" /&gt;&lt;/label&gt;
+    &lt;label&gt;medium: &lt;input checked="checked" id="test_severity_medium" name="test[severity]" type="radio" value="medium" /&gt;&lt;/label&gt;
+    &lt;label&gt;high: &lt;input id="test_severity_high" name="test[severity]" type="radio" value="high" /&gt;&lt;/label&gt;
+    &lt;label&gt;critical: &lt;input id="test_severity_critical" name="test[severity]" type="radio" value="critical" /&gt;&lt;/label&gt;
+</pre>
+
+<div class="indent">
+    <label>low: <input id="test_severity_low" name="test[severity]" type="radio" value="low" /></label>
+    <label>medium: <input checked="checked" id="test_severity_medium" name="test[severity]" type="radio" value="medium" /></label>
+    <label>high: <input id="test_severity_high" name="test[severity]" type="radio" value="high" /></label>
+    <label>critical: <input id="test_severity_critical" name="test[severity]" type="radio" value="critical" /></label>
+</div>
+
+<p>You can always use the column reflection to get the list of possible values from the database column. </p>
+<pre>
+    Enumeration.columns_hash['color'].values
+    
+    Will yield: [:red, :blue, :green, :yellow]
+</pre>
+
+

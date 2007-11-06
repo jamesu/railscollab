@@ -1,0 +1,43 @@
+<% if @folders.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Folders" %></h2>
+  <div class="blockContent" id="sidebarFolderList">
+    <ul>
+<% if !@current_folder.nil? %>
+      <li><%= link_to "All Files", :action => 'index' %></li>
+<% else %>
+      <li><%= link_to "All Files", {:action => 'index'}, :class => 'selected' %></li>
+<% end %>
+    
+<% @folders.each do |folder| -%>
+<% if !@current_folder.nil? and @current_folder.id == folder.id %>
+<% selected_class = {:class => 'selected'} %>
+<% else %>
+<% selected_class = {} %>
+<% end %>
+      <li><%= link_to (h folder.name), {:action => 'browse_folder', :id => folder.id}, selected_class %> 
+      <% if folder.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), :action => 'edit_folder', :id => folder.id %><% end %>
+      <% if folder.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:action => 'delete_folder', :id => folder.id}, :method => :post, :confirm => "Are you sure you want to delete this folder?" %><% end %>
+      </li>
+<% end %>
+    </ul>
+    <p><a href="<%= "/project/#{@active_project.id}/files/add_folder" %>"><%= "Add folder" %></a></p>
+  </div>
+</div>
+<% end %>
+
+<% if @important_files.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Important files" %></h2>
+  <div class="blockContent">
+    <ul>
+<% @important_files.each do |important_file| -%>
+      <li>
+        <a href="<%= important_file.object_url %>"><%= important_file.filename %></a><br />
+        <span class="desc"><%= "#{important_file.project_file_revisions.length} revision(s)" %></span>
+      </li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

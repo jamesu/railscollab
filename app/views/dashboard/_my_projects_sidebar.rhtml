@@ -1,0 +1,30 @@
+<% if not active_projects.nil? and active_projects.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Active projects" %></h2>
+  <div class="blockContent">
+    <ul>
+<% active_projects.each do |project| -%>
+      <li><%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>
+
+<% if not finished_projects.nil? and finished_projects.length > 0 -%>
+<div class="sidebarBlock">
+  <h2><%= "Finished projects" %></h2>
+  <div class="blockContent">
+    <p><%= "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them." %></p>
+    <ul class="listWithDetails">
+<% finished_projects.each do |project| -%>
+      <li>
+      	<%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %><br />
+        <span class="desc">(<%= "#{format_usertime(project.completed_on, '%b %d, %Y')} | " %>
+        <%= link_to project.completed_by.display_name, :controller => 'user', :action => 'card', :id => project.completed_by.id %>)</span>
+      </li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

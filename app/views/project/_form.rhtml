@@ -1,0 +1,20 @@
+<%= error_messages_for :project %>
+  <div>
+    <label for="projectFormName"><%= "Name" %>: <span class="label_required">*</span></label>
+    <%= text_field 'project', 'name', :id => 'projectFormName', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="projectPriority"><%= "Priority" %>: <span class="label_required">*</span></label>
+    <%= text_field 'project', 'priority', :id => 'projectPriority', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="projectFormDescription"><%= "Description" %>:</label>
+    <%= text_area 'project', 'description', :id => 'projectFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
+  </div>
+  
+  <div>
+    <%= check_box 'project', 'show_description_in_overview', :id => 'projectFormShowDescription', :class => 'checkbox'  %>
+    <label for="projectFormShowDescription" class="checkbox"><%= "Show description on project overview page" %></label>
+  </div>

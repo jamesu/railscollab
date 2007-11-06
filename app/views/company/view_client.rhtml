@@ -1,0 +1,37 @@
+<%
+
+  @page_title = h @company.name
+  
+  if @company.is_owner?
+  	@tabbed_navigation_items = administration_tabbed_navigation(1)
+  	@bread_crumbs = administration_crumbs(h @company.name)
+  else
+  	@tabbed_navigation_items = administration_tabbed_navigation(3)
+  	@bread_crumbs = administration_crumbs((h @company.name), [{:title => "Clients", :url => '/administration/clients'}])
+  end
+  
+  @page_actions = []
+    
+  if @company.can_be_edited_by(@logged_user)
+  	@page_actions << {:title => "Edit company", :url => "/company/edit_client/#{@company.id}"}
+  	@page_actions << {:title => "Edit company logo", :url => "/company/edit_logo/#{@company.id}"}
+  	
+  	if @company.is_owner?
+  		@page_actions << {:title => "Update permissions", :url => "/company/update_permissions/#{@company.id}"}
+  	end
+  end
+  
+  if Company.can_be_created_by(@logged_user)
+  	@page_actions << {:title => "Add user", :url => "/user/add?company_id=#{@company.id}"}
+  end
+  
+  @additional_stylesheets = ['admin/user_list']
+%>
+<%=
+  render :partial => 'company/company_card', :collection => [@company]
+%>
+
+<h2><%= "Users" %></h2>
+<%=
+  render :partial => 'administration/list_users', :locals => {'users' => @company.users, 'company' => @company}
+%>

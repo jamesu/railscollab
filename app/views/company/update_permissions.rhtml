@@ -1,0 +1,39 @@
+<%
+  @page_title = 'Update permissions'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(3)
+  @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Clients', :url => "/project/#{@active_project.id}/people"}, {:title => (h @company.name), :url => "/company/card/#{@company.id}"}])
+  
+  @page_actions = []
+  
+  @additional_stylesheets = ['project/permissions.css']
+%>
+<% if @projects.length > 0 %>
+<div id="companyPermissions">
+  <div class="hint">
+    <div class="header"><%= "Hint" %></div>
+    <div class="content"><%= "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)." %></div>
+  </div>
+  <%= form_tag :controller => 'company', :action => 'update_permissions', :id => @company.id %>
+    <table class="blank">
+<% @projects.each do |project| -%>
+      <tr>
+        <td><%= check_box_tag "project[]", project.id.to_s, @company.is_part_of(@active_project), {:id => "projectPermissionsCheckbox#{project.id}", :disabled => !@logged_user.member_of(project)} %>
+        </td>
+        <td>
+          <label for="<%= "projectPermissionsCheckbox#{project.id}" %>" class="checkbox normal">
+<% if !project.is_active? %>
+          <del><span title="<%= "Completed on #{format_usertime(project.completed_on, '%b %d, %Y')} by #{project.completed_by.display_name}" %>"><%= h project.name %></span></del>
+<% else %>
+          <%= h project.name %>
+<% end %>
+          </label>
+        </td>
+      </tr>
+<% end %>
+    </table>
+    
+    <button class="submit" type="submit">Update permissions</button>
+  <%= end_form_tag %>
+</div>
+<% end %>

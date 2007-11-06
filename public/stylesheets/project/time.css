@@ -1,0 +1,54 @@
+#times .time .doneDate span {
+  font-weight: bolder;
+}
+table.timeLogs {
+  width: 530px;
+}
+
+table.timeLogs th {
+  background: transparent;
+  border-bottom: 1px solid #333;
+}
+
+table.timeLogs tr.timeToday {
+  background: #FFFFCC;
+}
+
+table.timeLogs tr.timeYesterday {
+  background: #FFFFE5;
+}
+
+table.timeLogs tr.timeOlder {
+  background: white;
+}
+
+table.timeLogs td {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+table.timeLogs td.timeTypeIcon {
+  width: 50px;
+}
+
+table.timeLogs .timeProject, table.timeLogs .timeEdit {
+  text-align: right;
+}
+
+table.timeLogs .timeProject {
+  width: 100px;
+}
+
+table.timeLogs .timeDate {
+  width: 200px;
+}
+
+h2
+{
+	font-size: 14px;
+}
+
+h3
+{
+	font-size: 12px;
+	text-decoration: none;
+}

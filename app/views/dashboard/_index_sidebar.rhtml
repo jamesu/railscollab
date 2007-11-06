@@ -1,0 +1,44 @@
+<% if @logged_user.company.has_logo? %>
+<div class="sidebarBlock">
+  <div class="cardIcon"><img src="<%= @logged_user.company.logo_url %>" alt="<%= h @logged_user.company.name %> logo" /></div>
+</div>
+<% end %>
+
+<% if not users.nil? and users.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Online Users" %></h2>
+  <div class="blockContent">
+    <p><%= "Users who were active in last 15 minutes:" %></p>
+    <ul>
+<% users.each do |user| -%>
+<% if logged_user.can_see(user) %>
+      <li><%= link_to user.display_name, :controller => 'user', :action => 'card', :id => user.id %> <span class="desc">(<%= h user.company.name %>)</span></li>
+<% end %>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>
+
+<% if not my_projects.nil? and my_projects.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "My Projects" %></h2>
+  <div class="blockContent">
+    <ul>
+<% my_projects.each do |project| -%>
+      <li><%= link_to project.name, :controller => 'project', :action => 'overview', :active_project => project.id %></li>
+<% end %>
+    </ul>
+    <p><%= link_to '&raquo; My projects', :controller => 'dashboard', :action => 'my_projects' %></p>
+  </div>
+</div>
+<% end %>
+
+<div class="sidebarBlock">
+  <h2><%= "RSS feeds" %></h2>
+  <div class="blockContent">
+    <ul id="listOfRssFeeds">
+      <li><a href="<%= @logged_user.recent_activity_feed_url(nil, 'rss') %>"><%= "Recent activities" %></a></li>
+    </ul>
+  </div>
+</div>

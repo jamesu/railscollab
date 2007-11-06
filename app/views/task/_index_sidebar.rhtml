@@ -1,0 +1,26 @@
+<% if @open_task_lists.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Open task lists" %></h2>
+  <div class="blockContent">
+    <ul class="listWithDetails">
+<% @open_task_lists.each do |task_list| %>
+      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= "#{task_list.project_tasks.reject do |task| not task.completed_on.nil? end.length } open of #{task_list.project_tasks.length} tasks in list" %>)</span></li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>
+
+<% if @completed_task_lists.length > 0%>
+<div class="sidebarBlock">
+  <h2><%= "Completed task lists" %></h2>
+  <div class="blockContent">
+    <ul class="listWithDetails">
+<% @completed_task_lists.each do |task_list| %>
+      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= "#{format_usertime(task_list.completed_on, '%b %d, %Y')} | " %>
+        <%= link_to (h task_list.completed_by.display_name), :controller => 'user', :action => 'card', :id => task_list.completed_by.id %>)</span></li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,18 @@
+<%
+  @page_title = h @task_list.name
+  @tabbed_navigation_items = project_tabbed_navigation(2)
+  @bread_crumbs = project_crumbs((h @task_list.name), [{:title => 'Tasks', :url => "/project/#{@active_project.id}/task/index"}])
+  
+  @page_actions = []
+  
+  if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title =>'Add task list', :url=> "/project/#{@active_project.id}/task/add_list"}
+  end
+  
+  @additional_stylesheets = ['project/task_list']
+%>
+<script type="text/javascript" src="<?= get_javascript_url('modules/addTaskForm.js') ?>"></script>
+<%= render :partial => 'task_list', :collection => [@task_list], :locals => {:on_list_page => true} %>
+<script type="text/javascript">
+  App.modules.addTaskForm.hideAllAddTaskForms();
+</script>

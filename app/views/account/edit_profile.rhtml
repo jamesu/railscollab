@@ -1,0 +1,158 @@
+<%
+    @page_actions = []
+    @additional_stylesheets = []
+  
+  
+    if @user.id == @logged_user.id
+        @page_title = 'Update profile'
+        @tabbed_navigation_items = account_tabbed_navigation
+        @bread_crumbs = account_crumbs('Update profile')
+    else
+        # must be an admin
+        @page_title = 'Update profile'
+        if @user.member_of_owner?
+            # ADMINISTRATION_TAB_COMPANY
+            @tabbed_navigation_items = administration_tabbed_navigation(1)
+            @bread_crumbs = administration_crumbs('Update profile', [{:title => 'Company' , :url => "/administration/company"}])
+        else
+            # ADMINISTRATION_TAB_CLIENTS
+            @tabbed_navigation_items = administration_tabbed_navigation(3)
+            @bread_crumbs = administration_crumbs('Update profile', [{:title => 'Clients' , :url => '/administration/clients'}, {:title => @user.company.name , :url => "/company/view_client/#{Company.owner.id}"}, {:title => @user.display_name , :url => "/user/edit_profile/#{@user.id}"}])
+        end
+        
+    end
+    
+    if @user.profile_can_be_updated_by(@logged_user)
+        @page_actions += [{:title => 'Update profile', :url => "/account/edit_profile/#{@user.id}"},
+                          {:title => 'Change password', :url => "/account/edit_password/#{@user.id}"},
+                          {:title => 'Update avatar', :url => "/account/edit_avatar/#{@user.id}"}]
+    end
+    
+    if @user.permissions_can_be_updated_by(@logged_user)
+        @page_actions << {:title => 'Permissions', :url => "/account/update_permissions/#{@user.id}"}
+    end
+
+%>
+
+<%= form_tag :controller => 'account', :action => 'edit_profile', :id => @user.id %>
+<%= error_messages_for :user %>
+
+<% if @logged_user.is_admin %>
+  <div class="hint">
+    <div class="header"><%= "Administration options (available only to administrators!)" %></div>
+    <div class="content">
+      <div>
+        <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+        <%= text_field 'user', 'username', :id => 'userFormUsername' %>
+      </div>
+      
+<% if @logged_user.member_of_owner? %>
+      <div>
+        <label for="userFormCompany"><%= "Company" %>: <span class="label_required">*</span></label>
+        <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
+      </div>
+      
+      <fieldset>
+        <legend><%= "Options" %></legend>
+        
+        <div>
+          <label for="userFormIsAdmin"><%= "Administrator" %>: <span class="label_required">*</span></label>
+          <%= check_box 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
+        </div>
+    
+        <div>
+          <label for="userFormAutoAssign"><%= "Auto assign to new projects?" %>: <span class="label_required">*</span></label>
+          <%= check_box 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
+        </div>
+      </fieldset>
+<% end %>
+    </div>
+  </div>
+<% else %>
+  <div>
+    <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+    <%= @user.username %>
+  </div>
+<% end %>
+
+<% if AppConfig.allow_openid %>
+  <div>
+    <label for="userFormOpenID"><%= "OpenID" %>:</label>
+    <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
+    <p class="desc"><%= "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>." %></p>
+  </div>
+<% end %>
+  
+  <div>
+    <label for="profileFormDisplayName"><%= "Display name" %>:</label>
+    <%= text_field 'user', 'display_name', :id => 'profileFormDisplayName', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="profileFormTitle"><%= "Title" %>:</label>
+    <%= text_field 'user', 'title', :id => 'profileFormTitle' %>
+  </div>
+  
+  <div>
+    <label for="profileFormEmail"><%= "Email address" %>: <span class="label_required">*</span></label>
+    <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="profileFormTimezone"><%= "Timezone" %>: <span class="label_required">*</span></label>
+    <%= time_zone_select 'user', 'timezone_name', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
+  </div>
+
+<% all_im_values = @user.im_info %>
+<% if all_im_values.length > 0 %>
+  <fieldset>
+    <legend><%= "Instant Messengers" %></legend>
+    <table class="blank">
+      <tr>
+        <th colspan="2"><%= "Service" %></th>
+        <th><%= "Value" %></th>
+        <th><%= "Primary IM" %></th>
+      </tr>
+<% @count = 0 %>
+<% all_im_values.each do |im_value| -%>
+      <tr>
+        <td style="vertical-align: middle"><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %> icon" /></td>
+        <td style="vertical-align: middle"><label class="checkbox" for="<%= "profileFormIm#{@count}" %>"><%= im_value.im_type.name %></label></td>
+        <td style="vertical-align: middle"><%= text_field_tag "im_values[#{im_value.im_type_id}][value]", im_value.value, :id => "profileFormIm#{@count}" %></td>
+        <td style="vertical-align: middle"><%= radio_button_tag "default_im_value", im_value.im_type_id, im_value.is_default, :id => 'im_default', :class => 'checkbox' %></td>
+      </tr>
+<% @count += 1 %>
+<% end %>
+    </table>
+    <p class="desc"><%= "All IM addresses that you enter will be listed on your card page. Only the primary IM will be shown on other pages (like the people page of the project)." %></p>
+  </fieldset>
+<% end %>
+  
+  <fieldset>
+    <legend><%= "Phone numbers" %></legend>
+    
+    <div>
+      <label for="profileFormOfficeNumber"><%= "Office" %>:</label>
+      <%= text_field 'user', 'office_number', :id => 'profileFormOfficeNumber' %>
+    </div>
+    
+    <div>
+      <label for="profileFormFaxNumber"><%= "Fax" %>:</label>
+      <%= text_field 'user', 'fax_number', :id => 'profileFormFaxNumber' %>
+    </div>
+    
+    <div>
+      <label for="profileFormMobileNumber"><%= "Mobile" %>:</label>
+      <%= text_field 'user', 'mobile_number', :id => 'profileFormMobileNumber' %>
+    </div>
+    
+    <div>
+      <label for="profileFormHomeNumber"><%= "Home" %>:</label>
+      <%= text_field 'user', 'home_number', :id => 'profileFormHomeNumber' %>
+    </div>
+    
+  </fieldset>
+  
+  <button class="submit" type="submit">Update profile</button>
+
+</form>

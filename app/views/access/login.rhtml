@@ -1,0 +1,50 @@
+<% @page_title = 'Login' %>
+
+<% if AppConfig.allow_openid %>
+<div id="login_header">
+    <%= check_box "login", "use_openid", :size => 30, :id => 'loginOpenID', :class => 'checkbox', :onclick => 'login_toggle_openid();' %>
+    <label class="checkbox" for="loginOpenID"><%= "Use OpenID" %></label>
+</div>
+<% end %>
+
+<div id="normal_login" style="display: block;">
+<%= form_tag :controller => 'access', :action => 'login' %>
+  <div id="loginUsernameDiv">
+    <label class="leftl"  for="loginUsername"><%= "Username" %>:</label>
+    <%= text_field "login", "user", :size => 30, :id => 'loginUsername', :class => 'medium' %>
+  </div>
+  <div id="loginPasswordDiv">
+    <label class="leftl" for="loginPassword"><%= "Password" %>:</label>
+    <%= password_field "login", "password", :size => 30, :id => 'loginPassword', :class => 'medium' %>
+  </div>
+  <div class="clean"></div>
+  <div style="margin-top: 6px">
+    <%= check_box "login", "remember", :id => 'loginRememberMe', :class => 'checkbox', :checked => false %>
+    <label class="checkbox" for="loginRememberMe"><%= "Remember me for 14 days" %></label>
+  </div>
+  
+  <input type="hidden" name="login[k]" value="<?= $login_data[$k] ?>" />
+  
+  <span>(<%= link_to 'Forgot password?', :controller => 'access', :action => 'forgot_password' %>)</span>
+  <div id="loginSubmit">
+  <button class="submit" type="submit" accesskey="s">Login</button>
+  </div>
+</form>
+</div>
+    
+<% if AppConfig.allow_openid %>
+<div id="openid_login" style="display: none;">
+<%= form_tag :controller => 'access', :action => 'begin' %>
+  <div id="loginUsernameDiv">
+    <label for="loginOpenIDIdentity"><%= "OpenID" %>:</label>
+    <%= text_field_tag "openid_url", "", :size => 30, :id => 'loginOpenIDIdentity', :class => 'openid_login' %>
+  </div>
+  <div id="loginSubmit">
+  <button class="submit" type="submit" accesskey="s">Login</button>
+  </div>
+</form>
+</div>
+
+<% end %>
+
+</form>

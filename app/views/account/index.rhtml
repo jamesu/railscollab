@@ -1,0 +1,20 @@
+<%
+
+  @page_title = h @logged_user.display_name
+  @tabbed_navigation_items = account_tabbed_navigation
+  @bread_crumbs = account_crumbs('Index')
+  
+  @page_actions = [{:title => 'Update profile', :url => "/account/edit_profile/#{@logged_user.id}"},
+    {:title => 'Change password', :url => "/account/edit_password/#{@logged_user.id}"},
+    {:title => 'Update avatar', :url => "/account/edit_avatar/#{@logged_user.id}"}]
+  
+  @additional_stylesheets = []
+  
+  if @user.permissions_can_be_updated_by(@logged_user)
+  	@page_actions << {:title => 'Permissions', :url => "/account/update_permissions/#{@logged_user.id}"}
+  end
+
+%>
+<%=
+  render :partial => 'user/user_card', :collection => [@logged_user]
+%>

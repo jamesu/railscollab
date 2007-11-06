@@ -1,0 +1,78 @@
+<% 
+  @page_title = 'My tasks'
+  @tabbed_navigation_items = dashboard_tabbed_navigation(2)
+  @bread_crumbs = dashboard_crumbs("My tasks")
+  
+  if nil
+      @page_actions = [{:title =>'Add project', :url=> '/project/add'}]
+  end
+  
+  @additional_stylesheets = ['dashboard/my_tasks']
+%>
+<% if @projects_milestonestasks.length > 0 %>
+<div id="myTasks">
+<% @projects_milestonestasks.each do |project| -%>
+<% if project[:milestones].length > 0 or project[:tasks].length > 0 %>
+  <div class="block">
+    <div class="header"><h2><%= link_to (h project[:name]), :controller => 'project', :action => 'overview', :active_project => project[:id] %></h2></div>
+    <div class="content">
+<% if project[:milestones].length > 0 %>
+      <p><%= link_to 'Milestones', :controller => 'milestone', :action => 'index', :active_project => project[:id] %>:</p>
+      <table class="blank">
+<% project[:milestones].each do |milestone| -%>
+        <tr>
+          <td class="milestoneCheckbox"><%= checkbox_link "/project/#{project[:id]}/milestone/complete/#{milestone.id}", false %></td>
+          <td class="milestoneText">
+<% if not milestone.assigned_to.nil? %>
+            <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span> 
+<% else %>
+            <span class="assignedTo"><%= "Anyone" %>:</span> 
+<% end %>
+            <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => project[:id] %> - 
+<% if milestone.is_upcomming? %>
+            <span><%= "#{milestone.days_left} days left" %></span>
+<% elsif milestone.is_late? %>
+            <span class="error"><%= "#{milestone.days_late} days left" %></span>
+<% elsif milestone.is_today? %>
+            <span><%= "Today" %></span>
+<% end %>
+          </td>
+        </tr>
+<% end %>
+      </table>
+<% end %>
+
+<% if project[:tasks].length > 0 %>
+      <p><%= link_to 'Tasks', :controller => 'task', :action => 'index', :active_project => project[:id] %>:</p>
+      <table class="blank">
+<% project[:tasks].each do |task| -%>
+        <tr>
+          <td class="taskCheckbox"><%= checkbox_link "/project/#{project[:id]}/task/complete_task/#{task.id}", false, "Mark task as completed" %></td>
+          <td class="taskText">
+<% if not task.assigned_to.nil? %>
+            <span class="assignedTo"><%= h task.assigned_to.object_name  %>:</span>
+<% else %>
+            <span class="assignedTo"><%= "Anyone" %>:</span>
+<% end %>
+            <%= h task.text %> 
+<% if not task.task_list.nil? %>
+            (In <%= link_to (h task.task_list.name), :controller => 'task', :action => 'view_list', :id => task.task_list.id, :active_project => project[:id] %>)
+<% end %>
+          </td>
+        </tr>
+<% end %>
+      </table>
+<% end %>
+    </div>
+  </div>
+<% end %>
+
+<% end %>
+</div>
+<% else %>
+<p><%= "There are no active projects" %></p>
+<% end  %>
+
+<% if not @has_assigned_tasks %>
+<p><%= "There are no tasks assigned to you" %></p>
+<% end %>

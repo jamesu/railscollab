@@ -1,0 +1,88 @@
+<%
+  @page_title = @current_folder.nil? ? "Files" : "Folder : #{h @current_folder.name}" 
+  @tabbed_navigation_items = project_tabbed_navigation(5)
+  
+  crumb_list = [{:title => "Files", :url => "/project/#{@active_project.id}/files"}]
+  crumb_list << {:title => (h @current_folder.name), :url => url_for({:controller => 'files', :action => 'browse_folder', :id => @current_folder.id})} unless @current_folder.nil?
+  @bread_crumbs = project_crumbs("Index", crumb_list)
+  
+  @page_actions = []
+  
+  if ProjectFile.can_be_created_by(@logged_user, @active_project)
+  	if @current_folder.nil?
+	    @page_actions << {:title =>'Add file', :url => "/project/#{@active_project.id}/files/add_file"}
+    else
+    	@page_actions << {:title =>'Add file', :url => "/project/#{@active_project.id}/files/add_file?folder_id=#{@current_folder.id}"}
+    end
+  end
+
+  if ProjectFolder.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title =>'Add folder', :url => "/project/#{@active_project.id}/files/add_folder"}
+  end
+  
+  @additional_stylesheets = ['project/files']
+%>
+<% if !@files.empty? %>
+<div id="files">
+
+<%= render :partial => 'order_and_pagination', :locals => {:order => @order, :page => @page, :pagination => @pagination} %>
+
+<% counter = 0 %>
+<% @files.each do |group_by, grouped_files| -%>
+<h2><%= group_by %></h2>
+<div class="filesList">
+<% grouped_files.each do |file| -%>
+<% counter += 1 %>
+  <% if (counter % 2) == 1 %>
+  <div class="listedFile even">
+  <% else %>
+  <div class="listedFile odd">
+  <% end %>
+<% if file.is_private %>
+    <div class="private" title="<%= "Private file" %>"><span><%= "Private file" %></span></div>
+<% end %>
+    <div class="fileIcon"><img src="<%= file.filetype_icon_url %>" alt="<%= h file.filename %>" /></div>
+    <div class="fileInfo">
+      <div class="fileName"><a href="<%= file.object_url %>" title="<%= "View file details" %>"><%= h file.filename %></a></div>
+
+<% last_revision = file.last_revision %>      
+      <div class="fileLastRevision">
+<% if !last_revision.created_by.nil? %>
+		<%= "Revision \##{last_revision.revision_number} (by <a href=\"#{last_revision.created_by.object_url}\">#{h last_revision.created_by.display_name}</a> on #{format_usertime(last_revision.created_on, '%A, %d %B')})" %>
+<% else %>
+		<%= "Revision \##{last_revision.revision_number} (created on #{format_usertime(last_revision.created_on, '%A, %d %B')})" %>
+<% end %>
+      </div>
+
+<% if file.description %>
+      <div class="fileDescription"><%= textilize file.description %></div>
+<% end %>
+      <div class="fileDetails">
+      <% if !file.created_by.nil? %>
+      <span><%= "Created by" %>:</span> <a href="<%= file.created_by.object_url %>"><%= h file.created_by.display_name %></a> | 
+      <% end %>
+      <span><a href="<%= file.object_url %>#objectComments"><%= "Comments" %></a>:</span> <%= file.comments.length %> | <span><a href="<%= file.object_url %>#revisions"><%= "Revisions" %></a>:</span> <%= file.project_file_revisions.length %>
+      </div>
+      <div class="fileTags"><%= "Tags" %>: <%= tag_list file %></div>
+<%
+	temp_actions = [
+		{:name => "Download (#{format_size last_revision.filesize})", :url => {:controller => 'files', :action => 'download_file', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
+		{:name => 'Edit', :url => {:controller => 'files', :action => 'edit_file', :id => file.id}, :cond => file.can_be_edited_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'files', :action => 'delete_file', :id => file.id}, :cond => file.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this file?"}
+	]
+%>
+<% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
+<div class="fileOptions"><%= action_list temp_actions %></div>
+<% end %>
+    </div>
+  </div>
+<% end %>
+</div>
+<% end %>
+
+<%= render :partial => 'order_and_pagination', :locals => {:order => @order, :page => @page, :pagination => @pagination} %>
+
+</div>
+<% else %>
+<p><%= "There are no files in this location." %></p>
+<% end %>

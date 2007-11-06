@@ -1,0 +1,22 @@
+<%
+  @page_title = (h @milestone.name)
+  @tabbed_navigation_items = project_tabbed_navigation(3)
+  @bread_crumbs = project_crumbs((h @milestone.name), [{:title => 'Milestones', :url => "/project/#{@active_project.id}/milestone/index"}])
+  
+  @page_actions = []
+  
+  if not @milestone.is_completed?
+      if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+        @page_actions << {:title => 'Add message', :url => "/project/#{@active_project.id}/message/add?milestone_id=#{@milestone.id}"}
+      end
+      if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+        @page_actions << {:title => 'Add task list', :url => "/project/#{@active_project.id}/task/add_list?milestone_id=#{@milestone.id}"}
+      end
+  end
+
+  @additional_stylesheets = ['project/milestones']
+%>
+<div id="milestones">
+<%= render :partial => 'view_milestone', :collection => [@milestone] %>
+</div>
+

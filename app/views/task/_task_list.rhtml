@@ -1,0 +1,131 @@
+<script type="text/javascript">
+  if(App.modules.addTaskForm) {
+    App.modules.addTaskForm.task_lists[<?= $task_list->getId() ?>] = {
+      id               : <?= $task_list->getId() ?>,
+      can_add_task     : <?= $task_list->canAddTask(logged_user()) ? 'true' : 'false' ?>,
+      add_task_link_id : 'addTaskForm<?= $task_list->getId() ?>ShowLink',
+      task_form_id     : 'addTaskForm<?= $task_list->getId() ?>',
+      text_id          : 'addTaskText<?= $task_list->getId() ?>',
+      assign_to_id     : 'addTaskAssignTo<?= $task_list->getId() ?>',
+      submit_id        : 'addTaskSubmit<?= $task_list->getId() ?>'
+    };
+  } // if
+</script>
+<div class="taskList">
+<div class="block" id="taskList<%= task_list.id %>">
+<% if task_list.is_private? %>
+    <div class="private" title="<%= "Private task list" %>"><span><%= "Private task list" %></span></div>
+<% end %>
+  <div class="header"><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %></div>
+<% if task_list.description %>
+  <div class="desc"><%= textilize task_list.description %></div>
+<% end %>
+  <div class="openTasks">
+<% if task_list.open_tasks.length > 0 %>
+    <table class="blank">
+<% task_list.open_tasks.each do |task| -%>
+      <tr>
+      
+<!-- Checkbox -->
+<% if task.can_be_changed_by(@logged_user) %>
+        <td class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/complete_task/#{task.id}", false, "Mark task as completed" %></td>
+<% else %>
+        <td class="taskCheckbox"><img src="<%= icon_url 'not-checked.gif' %>" alt="<%= "Open task"%>" /></td>
+<% end %>
+
+<!-- Task text and options -->
+        <td class="taskText">
+<% if not task.assigned_to.nil? %>
+          <span class="assignedTo"><%= task.assigned_to.object_name %>:</span> 
+<% end %>
+          <%= link_to (h task.text), :controller => 'task', :action => 'task_details', :id => task.id %>  <% if task.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), {:controller => 'task', :action => 'edit_task', :id => task.id}, {:class => 'blank'} %><% end %>
+          <% if task.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:controller => 'task', :action => 'delete_task', :id => task.id}, {:method => :post, :confirm => "Are you sure you want to delete this task?", :class => 'blank'} %><% end %><br />
+          </td>
+      </tr>
+<% end %>
+    </table>
+<% else %>
+  <%= "No open tasks in the list" %>
+<% end %>
+  </div>
+  
+  <div class="addTask">
+<% if task_list.can_be_changed_by(@logged_user) %>
+<div id="addTaskForm<%= task_list.id %>ShowLink" style="display:block;"><%= link_to "Add task", :controller => 'task', :action => 'add_task', :task_list_id => task_list.id %></div>
+<% if nil %>
+<!-- TODO: fix -->
+    <div id="addTaskForm<?= $task_list->getId() ?>ShowLink"><a href="<?= $task_list->getAddTaskUrl($on_list_page) ?>" onclick="App.modules.addTaskForm.showAddTaskForm(<?= $task_list->getId() ?>); return false"><?= lang('add task') ?></a></div>
+  
+    <div id="addTaskForm<?= $task_list->getId() ?>">
+      <form action="<?= $task_list->getAddTaskUrl($on_list_page) ?>" method="post">
+        <div class="taskListAddTaskText">
+          <label for="addTaskText<?= $task_list->getId() ?>"><?= lang('text') ?>:</label>
+          <?= textarea_field("task[text]", null, array('class' => 'short', 'id' => 'addTaskText' . $task_list->getId())) ?>
+        </div>
+        <div class="taskListAddTaskAssignedTo">
+          <label for="addTaskAssignTo<?= $task_list->getId() ?>"><?= lang('assign to') ?>:</label>
+          <?= assign_to_select_box("task[assigned_to]", active_project(), null, array('id' => 'addTaskAssignTo' . $task_list->getId())) ?>
+        </div>
+        
+        <?= submit_button(lang('add task'), 's', array('id' => 'addTaskSubmit' . $task_list->getId())) ?> <?= lang('or') ?> <a href="#" onclick="App.modules.addTaskForm.hideAddTaskForm(<?= $task_list->getId() ?>); return false;"><?= lang('cancel') ?></a>
+        
+      </form>
+    </div>
+<% end %>
+<% end %>
+  </div>
+  
+<% if task_list.completed_tasks.length > 0 %>
+  <div class="completedTasks">
+<% if on_list_page %>
+<%= "Completed tasks" %>:
+<% else %>
+<%= "Recently completed tasks" %>:
+<% end %>
+    <table class="blank">
+<% counter = 5 %>
+<% task_list.completed_tasks.each do |task| -%>
+<% counter += 1 %>
+<% if on_list_page and counter == 5
+    break
+end %>
+      <tr>
+<% if task.can_be_changed_by(@logged_user) %>
+        <td class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/open_task/#{task.id}", true, "Mark task as open" %> </td>
+<% else %>
+        <td class="taskCheckbox"><img src="<%= icon_url 'checked.gif' %>" alt="<%= "Completed task" %>" /></td>
+<% end %>
+        <td class="taskText">
+          <%= link_to (h task.text), :controller => 'task', :action => 'task_details', :id => task.id %>  <% if task.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), {:controller => 'task', :action => 'edit_task', :id => task.id}, {:class => 'blank'} %><% end %>
+          <% if task.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:controller => 'task', :action => 'delete_task', :id => task.id}, {:method => :post, :confirm => "Are you sure you want to delete this task?", :class => 'blank'} %><% end %><br />
+          <span class="taskCompletedOnBy">(<%= "#{format_usertime(task.completed_on, '%b %d, %Y')} | " %>
+        <%= link_to task.completed_by.display_name, :controller => 'user', :action => 'card', :id => task.completed_by.id %>)</span>
+        </td>
+        <td></td>
+      </tr>
+<% end %>
+<% if !on_list_page and counter > 5 %>
+      <tr>
+        <td colspan="2"><% link_to 'View all completed tasks', :controller => 'task', :action => 'view_list', :id => task_list.id %></td>
+      </tr>
+<% end %>
+    </table>
+  </div>
+<% end %>
+  <div class="taskListTags"><span><%= "Tags" %>:</span> <%= tag_list task_list %></div>
+  
+<%
+	temp_actions = [
+		{:name => 'Edit', :url => {:controller => 'task', :action => 'edit_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'task', :action => 'delete_list', :id => task_list.id}, :cond => task_list.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this task list?"},
+		{:name => 'Reorder tasks', :url => {:controller => 'task', :action => 'reorder_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)}
+	]
+%>
+<% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
+<div class="options">
+<%= action_list temp_actions %>
+</div>
+<% end %>
+
+</div>
+</div>

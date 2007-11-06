@@ -1,0 +1,36 @@
+<div class="time block">
+
+<% if view_time.is_private %>
+    <div class="private" title="<%= "Private time" %>"><span><%= "Private time" %></span></div>
+<% end %>
+
+    <div class="header">
+<% if !view_time.assigned_to.nil? %>
+        <span class="assignedTo"><%= h view_time.assigned_to.object_name %>:</span>
+<% end %>
+      <a href="<%= view_time.object_url %>"><%= h view_time.name %></a>
+    </div>
+    <div class="content">
+<% if view_time.done_date.year == Time.now.year %>
+      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "%A, %d %B") %></div>
+<% else %>
+      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "%b %d. %Y") %></div>
+<% end %>
+      <div class="hours"><span><%= "Hours" %>:</span> <%= view_time.hours %></div>
+      
+<% if !view_time.description.nil? and !view_time.description.empty? %>
+      <div class="description"><%= textilize view_time.description %></div>
+<% end %>
+
+<%
+	temp_actions = [
+		{:name => 'Edit', :url => {:controller => 'time', :action => 'edit', :id => view_time.id}, :cond => view_time.can_be_edited_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'time', :action => 'delete', :id => view_time.id}, :cond => view_time.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this this record?"}
+	]
+%>
+<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
+      <div class="timeOptions"><%= action_list temp_actions %></div>
+<% end %>
+    </div>
+    
+</div>

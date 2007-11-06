@@ -1,0 +1,15 @@
+<%
+  @page_title = 'Edit project'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(4)
+  @bread_crumbs = administration_crumbs("Edit project", [{:title => 'Projects', :url => "/administration/projects"}])
+  
+  @page_actions = []
+  
+  @additional_stylesheets = []
+%>
+
+<%= start_form_tag :controller => 'project', :action => 'edit' %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Edit project</button>
+<%= end_form_tag %>

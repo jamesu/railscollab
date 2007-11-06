@@ -1,0 +1,14 @@
+<%
+  @page_title = "Add time"
+  @tabbed_navigation_items = project_tabbed_navigation(4)
+  @bread_crumbs = project_crumbs('Add time', [{:title => 'Time', :url => "/project/#{@active_project.id}/time/index"}])
+  
+  @page_actions = []
+
+  @additional_stylesheets = ['project/time']
+%>
+
+<%= start_form_tag :controller => 'time', :action => 'add' %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Add time</button>
+<%= end_form_tag %>

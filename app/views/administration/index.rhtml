@@ -1,0 +1,24 @@
+<%
+  @page_title = 'Administration'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation()
+  @bread_crumbs = administration_crumbs("Index")
+  
+  @page_actions = []
+  
+  @additional_stylesheets = []
+%>
+<div class="hint">
+  <div class="header"><%= "Administration" %></div>
+  <div class="content">
+    <%= "A rather long boring piece of info goes here" %>
+    <ul>
+      <li><a href="/administration/company"><%= "Company" %></a></li>
+      <li><a href="/administration/members"><%= "Members" %></a> (<%= link_to "Add user", :controller => 'user', :action => 'add', :company_id => Company.owner.id %>)</li>
+      <li><a href="/administration/clients"><%= "Clients" %></a> (<%= link_to "Add client", :controller => 'company', :action => 'add_client' %>)</li>
+      <li><a href="/administration/projects"><%= "Projects" %></a> (<%= link_to "Add project", :controller => 'project', :action => 'add' %>)</li>
+      <li><a href="/administration/configuration"><%= "Configuration" %></a></li>
+      <li><a href="/administration/upgrade"><%= "Upgrade" %></a></li>
+    </ul>
+  </div>
+</div>

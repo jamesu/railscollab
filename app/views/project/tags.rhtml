@@ -1,0 +1,19 @@
+<%
+  @page_title = 'Tags'
+  
+  @tabbed_navigation_items = project_tabbed_navigation(6)
+  @bread_crumbs = project_crumbs("Tags")
+  
+  @page_actions = []
+%>
+<% if @tag_list.length > 0 %>
+<p><%= "Tags used in this project" %>:</p>
+<ul>
+<% is_public = @logged_user.member_of_owner? %>
+<% @tag_list.each do |tag| -%>
+  <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag}" %>"><%= h tag %></a> <span class="desc"> - <%= "#{Tag.count_by(tag, @active_project, is_public)} objects."%></span></li>
+<% end %>
+</ul>
+<% else %>
+<p><%= "There are no tags used in this project" %></p>
+<% end %>

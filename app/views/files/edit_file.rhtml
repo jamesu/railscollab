@@ -1,0 +1,22 @@
+<%
+  @page_title = "Edit file"
+  @tabbed_navigation_items = project_tabbed_navigation(5)
+  
+  @bread_crumbs = project_crumbs("Edit file", [{:title => "Files", :url => "/project/#{@active_project.id}/files"}])
+  
+  @page_actions = []
+  
+  if ProjectFile.can_be_created_by(@logged_user, @active_project)
+	@page_actions << {:title =>'Add file', :url => "/project/#{@active_project.id}/files/add_file"}
+  end
+
+  if ProjectFolder.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title =>'Add folder', :url => "/project/#{@active_project.id}/files/add_folder"}
+  end
+  
+  @additional_stylesheets = ['project/files']
+%>
+<%= start_form_tag( {:controller => 'files', :action => 'edit_file', :id => @file.id}, :multipart => true ) %>
+<%= render :partial => 'file_form' %>
+    <button class="submit" type="submit">Edit file</button>
+<%= end_form_tag %>

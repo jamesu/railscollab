@@ -1,0 +1,13 @@
+<% if @important_messages.length > 0 %>
+<div class="sidebarBlock">
+  <h2><%= "Important messages" %></h2>
+  <div class="blockContent">
+    <ul class="listWithDetails">
+<% @important_messages.each do |important_message| -%>
+      <li><a href="<%= important_message.object_url %>"><%= h important_message.title %></a><br />
+      <span class="desc"><%= "There is a total of #{important_message.comments.length } comment(s)."%></span></li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,16 @@
+xml.instruct!
+xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
+
+  xml.channel do 
+    xml.title "Recent Activities Feed"
+    xml.link @activity_url
+    xml.description "Recent activities for all projects"
+    
+    xml.language 'en-us'
+    @activity_log.each do |activity|      xml.item do        xml.title		"#{activity.friendly_action} #{activity.object_name}"
+        xml.category    activity.project.name, activity.created_by.display_name, activity.created_on.strftime("%a, %d %b %Y %H:%M:%S %z")
+        xml.link		(activity.rel_object ? activity.rel_object.object_url : "/")
+        xml.guid		"#{activity.rel_object_type}-#{activity.rel_object_id}"      end    end
+  end
+
+end

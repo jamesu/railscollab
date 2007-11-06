@@ -1,0 +1,46 @@
+<% 
+
+  @page_title = 'My projects'
+  @tabbed_navigation_items = dashboard_tabbed_navigation(1)
+  @bread_crumbs = dashboard_crumbs("My projects")
+  
+  @page_actions = []
+  if @logged_user.is_admin?
+      @page_actions << {:title =>'Add project', :url=> '/project/add'}
+  end
+  
+  @page_actions += [
+  	{:title => "Order by name", :url => '/dashboard/my_projects?orderBy=name'},
+  	{:title => "Order by priority", :url => '/dashboard/my_projects?orderBy=priority'}
+  ]
+%>
+<% if @sorted_projects.length > 0 %>
+<% @sorted_projects.each do |project| -%>
+<div class="block">
+  <div class="header"><h2><%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></h2></div>
+  <div class="content">
+<% if not project.description.nil? and project.description.strip.length > 0 %>
+    <div class="description"><%= project.description %></div>
+<% end %>
+<% if project.companies.length > 0 %>
+    <div class="involvedCompanies"><em><%= "Companies involved in project" %>:</em> 
+    <%=
+    project.companies.collect do |company|
+    link_to( (h company.name), :controller => 'company', :action => 'card', :id => company.id )
+    end.join(', ') 
+    %>
+    </div>
+<% end %>
+<% if not project.created_by.nil? %>
+    <div class="startedOnBy"><em><%= "Started on" %>:</em> <%= "#{format_usertime(project.created_on, '%b %d, %Y')} | " %>
+    <%= link_to project.created_by.display_name, :controller => 'user', :action => 'card', :id => project.created_by.id %>
+    </div>
+<% else %>
+    <div class="startedOnBy"><em><%= "Started on" %>:</em> <%= format_usertime(project.created_on, '%b %d, %Y')  %></div>
+<% end %>
+  </div>
+</div>
+<% end %>
+<% else %>
+<p><%= "No Active Projects" %></p>
+<% end %>

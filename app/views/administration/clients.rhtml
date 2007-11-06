@@ -1,0 +1,40 @@
+<%
+  @page_title = 'Clients'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(3)
+  @bread_crumbs = administration_crumbs("Clients")
+  
+  @page_actions = []
+  
+  if Company.can_be_created_by(@logged_user)
+  	@page_actions << {:title => "Add client", :url => '/company/add_client'}
+  end
+  
+  @additional_stylesheets = []
+%>
+<% if @clients.length > 0 %>
+<table>
+  <tr>
+    <th><%= "Name" %></th>
+    <th><%= "Users" %></th>
+    <th><%= "Options" %></th>
+  </tr>
+<% @clients.each do |client| -%>
+  <tr>
+    <td><a href="<%= "/company/view_client/#{client.id}" %>"><%= h client.name %></a></td>
+    <td style="text-align: center"><%= client.users.length %></td>
+<%
+	temp_actions = [
+		{:name => 'Add user', :url => {:controller => 'user', :action => 'add', :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+		{:name => 'Permissions', :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+		{:name => 'Edit', :url => {:controller => 'company', :action => 'edit_client', :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'company', :action => 'delete_client', :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this client?"}
+	]
+%>
+    <td><%= action_list temp_actions %></td>
+  </tr>
+<% end %>
+</table>
+<% else %>
+<%= "No clients are present for this company" %>
+<% end %>

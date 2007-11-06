@@ -1,0 +1,9 @@
+<%
+
+  @page_title = "Company card of #{h @company.name}"
+  @tabbed_navigation_items = dashboard_tabbed_navigation
+  @bread_crumbs = dashboard_crumbs(h @company.name)
+%>
+<%=
+  render :partial => 'company/company_card', :collection => [@company]
+%>

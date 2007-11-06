@@ -1,0 +1,21 @@
+<%
+  if @company.is_owner?
+    @page_title = 'Edit company'
+  	@tabbed_navigation_items = administration_tabbed_navigation(1)
+  	@bread_crumbs = administration_crumbs("Edit company", [{:title => "Company", :url => '/administration/company'}])
+  else
+    @page_title = 'Edit client'
+  	@tabbed_navigation_items = administration_tabbed_navigation(3)
+  	@bread_crumbs = administration_crumbs("Edit client", [{:title => "Clients", :url => '/administration/clients'}])
+  end
+
+%>
+
+<% if @company.is_owner? %>
+<%= form_tag :controller => 'company', :action => 'edit' %>
+<% else %>
+<%= form_tag :controller => 'company', :action => 'edit_client', :id => @company.id %>
+<% end %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Edit company</button>
+</form>

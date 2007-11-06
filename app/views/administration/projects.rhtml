@@ -1,0 +1,51 @@
+<%
+  @page_title = 'Projects'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(4)
+  @bread_crumbs = administration_crumbs("Projects")
+  
+  @page_actions = []
+  
+  if Project.can_be_created_by(@logged_user)
+  	@page_actions << {:title => "Add project", :url => '/project/add'}
+  end
+  
+  @additional_stylesheets = []
+%>
+<% if @projects.length > 0 %>
+<table id="projects">
+  <tr>
+    <th></th>
+    <th><%= "Name" %></th>
+    <th><%= "Options" %></th>
+  </tr>
+
+<% @projects.each do |project| -%>
+  <tr>
+    <td class="middle">
+<% if project.status_can_be_changed_by(@logged_user) %>
+<% if !project.is_active? %>
+<%= checkbox_link "/project/#{project.id}/open", false %>
+<% else %>
+<%= checkbox_link "/project/#{project.id}/complete", true %>
+<% end %>
+<% else %>
+<% if project.is_active? %>
+<img src="<%= icon_url('not-checked') %>" alt="" title="Active project" />
+<% else %>
+<img src="<%= icon_url('checked') %>" alt="" title="Finished project" />
+<% end %>
+<% end %>
+    </td>
+    <td class="long middle"><a href="<%= "/project/#{project.id}/overview" %>"><%= h project.name %></a></td>
+<% temp_actions = [
+	{:name => 'Edit', :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
+	{:name => 'Delete', :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this project?"}
+] %>
+    <td class="middle"><%= action_list temp_actions %></td>
+  </tr>
+<% end %>
+</table>
+<% else %>
+<%= "There are no projects owned by this company" %>
+<% end %>

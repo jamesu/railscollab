@@ -1,0 +1,73 @@
+<%
+    @page_title = 'Update permissions'
+  
+    if @user.member_of_owner?
+        @tabbed_navigation_items = administration_tabbed_navigation(1)
+        @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Company' , :url => "/company/card/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
+    else
+        @tabbed_navigation_items = administration_tabbed_navigation(3)
+        @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Clients', :url => "/administration/clients"}, {:title => (h @user.company.name), :url => "/company/view_client/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
+    end
+    
+    @page_actions = []
+    
+    if @user.profile_can_be_updated_by(@logged_user)
+        @page_actions += [{:title => 'Update profile', :url => "/account/edit_profile/#{@user.id}"},
+                          {:title => 'Change password', :url => "/account/edit_password/#{@user.id}"},
+                          {:title => 'Update avatar', :url => "/account/edit_avatar/#{@user.id}"}]
+    end
+    
+    if @user.permissions_can_be_updated_by(@logged_user)
+        @page_actions << {:title => 'Permissions', :url => "/account/update_permissions/#{@user.id}"}
+    end
+    
+    @additional_stylesheets = ['admin/user_permissions.css']
+%>
+<script type="text/javascript" src="<?= get_javascript_url('modules/updateUserPermissions.js') ?>"></script>
+<script type="text/javascript">
+  //App.modules.updateUserPermissions.project_permissions = new Array(<?= implode(', ', $quoted_permissions) ?>);
+</script>
+
+<% if not @projects.empty? %>
+<div id="userPermissions">
+  <%= start_form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
+    <div id="userProjects">
+<% @projects.each do |project| -%>
+<%
+	user_permissions = ProjectUser.find(:all, :conditions => ['project_id = ? AND user_id = ?', project.id, @user.id])
+	user_permission = user_permissions.length > 0 ? user_permissions[0] : nil
+%>
+      <table class="blank">
+        <tr>
+          <td class="projectName">
+            <%= check_box_tag "user_project[]", "#{project.id}", @user.member_of(project), {:id => "projectPermissions#{project.id}", :class => 'checkbox normal', :onclick => "App.modules.updateUserPermissions.projectPermissionCheckboxClick(#{project.id})"} %>
+<% if !project.is_active? %>
+            <label for="projectPermissions<%= project.id %>" class="checkbox"><del class="help" title="<%= "Completed on #{format_usertime(project.completed_on, '%b %d, %Y')} by #{project.completed_by.display_name}" %>"><%= h project.name %></del></label>
+<% else %>
+            <label for="projectPermissions<%= project.id %>>" class="checkbox"><%= h project.name %></label>
+<% end %>
+          </td>
+          <td class="permissionsList">
+<% if @user.member_of(project) %>
+            <div id="projectPermissionsBlock<%= project.id %>">
+<% else %>
+            <div id="projectPermissionsBlock<%= project.id %>" style="display: none">
+<% end %>
+              <div class="projectPermission">
+                <%= check_box_tag "project_#{project.id}_all", "1", @user.has_all_permissions(@active_project), {:id => "projectPermissions#{project.id}All", :class => 'checkbox', :onclick => "App.modules.updateUserPermissions.projectAllCheckboxClick(#{project.id})"} %> <label for="<%= "projectPermissions#{project.id}All" %>" class="checkbox" style="font-weight: bolder"><%= "All" %></label>
+              </div>
+<% @permissions.keys.each do |permission| -%>           
+                <div class="projectPermission">
+                <%= check_box_tag "project_permission[#{project.id}][]", "#{permission}", user_permission ? user_permission[permission] : false, {:id => "projectPermission#{project.id}#{permission}", :class => 'checkbox normal', :onclick => "App.modules.updateUserPermissions.projectPermissionCheckboxClick(project_permission_#{project.id}_permissionTODO)"} %> <label for="<%= "projectPermission#{project.id}#{permission}" %>" class="checkbox normal"><%= @permissions[permission] %></label>
+                </div>
+<% end %>
+            </div>
+          </td>
+        </tr>
+      </table>
+<% end %>
+    </div>
+    <button class="submit" type="submit">Update permissions</button>
+  <%= end_form_tag %>
+</div>
+<% end %>

@@ -1,0 +1,33 @@
+<%
+  @page_title = 'Search results'
+  
+  @tabbed_navigation_items = project_tabbed_navigation(0)
+  @bread_crumbs = project_crumbs("Search results")
+  
+  @page_actions = []
+  
+  @additional_stylesheets = ['project/search_results.css']
+%>
+<div id="searchForm">
+  <%= start_form_tag :action => 'search' %>
+    <%= text_field_tag 'search_for', @search_for %>
+    <button class="submit" type="submit">Search</button>
+  <%= end_form_tag %>
+</div>
+
+
+<% if !@search_results.empty? %>
+<p><?= lang('search result description', $pagination->countItemsOnPage($current_page), $pagination->getTotalItems(), clean($search_string)) ?>:</p>
+<ul>
+<?php foreach($search_results as $search_result) { ?>
+  <li><?= clean($search_result->getObjectTypeName()) ?>: <a href="<?= $search_result->getObjectUrl() ?>"><?= clean($search_result->getObjectName()) ?></a></li>
+<?php } // foreach ?>
+</ul>
+
+<?php if(isset($pagination) && ($pagination instanceof DataPagination)) { ?>
+<?= advanced_pagination($pagination, active_project()->getSearchUrl($search_string, '#PAGE#')); ?>
+<?php } // if ?>
+
+<% else %>
+<p><%= "There are no objects which match \"<strong>#{h @search_for}</strong>\"" %></p>
+<% end %>

@@ -1,0 +1,11 @@
+<%
+
+  @page_title = "Edit comment"
+  @tabbed_navigation_items = project_tabbed_navigation(0)
+  @bread_crumbs = project_crumbs('Add comment', [{:title => @commented_object.object_name, :url => @commented_object.object_url}])
+%>
+
+<%= start_form_tag :controller => 'comment', :action => 'edit', :id => @comment.id %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Edit comment</button>
+</form>

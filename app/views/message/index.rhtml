@@ -1,0 +1,26 @@
+<%
+  @page_title = 'Messages'
+  
+  @tabbed_navigation_items = project_tabbed_navigation(1)
+  @bread_crumbs = project_crumbs("Messages")
+  
+  @page_actions = []
+  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => "Add Message", :url => "/project/#{@active_project.id}/message/add"}
+  end
+  
+  @additional_stylesheets = ['project/messages']
+%>
+
+<% if not @messages.empty? %>
+<div id="messages">
+  <div id="messagesPaginationTop">
+  <%= pagination_links "/project/#{@active_project.id}/message/index?", @pagination unless @pagination.length <= 1 %>
+  </div>
+<%= render :partial => 'view_message', :collection => @messages, :locals => {:on_message_page => false} %>
+  <div id="messagesPaginationBottom">
+  <%= pagination_links "/project/#{@active_project.id}/message/index?", @pagination unless @pagination.length <= 1 %></div>
+</div>
+<% else %>
+<p><%= "No messages in project" %></p>
+<% end %>

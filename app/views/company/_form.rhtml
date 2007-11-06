@@ -1,0 +1,75 @@
+<%= error_messages_for :company %>
+      
+  <div>
+    <label for="clientFormName"><%= "Name" %>: <span class="label_required">*</span></label>
+    <%= text_field 'company', 'name', :id => 'clientFormName' %>
+  </div>
+  
+  <div>
+    <label for="clientFormTimezone"><%= "Timezone" %>: <span class="label_required">*</span></label>
+    <%= time_zone_select 'company', 'timezone_name', nil, {}, {:id => 'clientFormTimezone', :class => 'long'} %>
+  </div>
+  
+  <fieldset>
+    <legend><%= "Web contact details" %></legend>
+    
+    <div>
+      <label for="clientFormEmail"><%= "Email address" %>:</label>
+      <%= text_field 'company', 'email', :id => 'clientFormEmail' %>
+    </div>
+    
+    <div>
+      <label for="clientFormHomepage"><%= "Homepage" %>:</label>
+      <%= text_field 'company', 'homepage', :id => 'clientFormHomepage' %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= "Phone numbers" %></legend>
+    
+    <div>
+      <label for="clientFormPhoneNumber"><%= "Phone number" %>:</label>
+      <%= text_field 'company', 'phone_number', :id => 'clientFormPhoneNumber' %>
+    </div>
+    
+    <div>
+      <label for="clientFormFaxNumber"><%= "Fax number" %>:</label>
+      <%= text_field 'company', 'fax_number', :id => 'clientFormFaxNumber' %>
+    </div>
+    
+  </fieldset>
+
+  <fieldset>
+    <legend><%= "Address" %></legend>
+    
+    <div>
+      <label for="clientFormAddress"><%= "Address" %>:</label>
+      <%= text_field 'company', 'address', :id => 'clientFormAddress' %>
+    </div>
+    
+    <div>
+      <label for="clientFormAddress2"><%= "Address 2" %>:</label>
+      <%= text_field 'company', 'address2', :id => 'clientFormAddress2' %>
+    </div>
+    
+    <div>
+      <label for="clientFormCity"><%= "City" %>:</label>
+      <%= text_field 'company', 'city', :id => 'clientFormCity' %>
+    </div>
+    
+    <div>
+      <label for="clientFormState"><%= "State" %>:</label>
+      <%= text_field 'company', 'state', :id => 'clientFormState' %>
+    </div>
+    
+    <div>
+      <label for="clientFormZipcode"><%= "Zipcode" %>:</label>
+      <%= text_field 'company', 'zipcode', :id => 'clientFormZipcode' %>
+    </div>
+    
+    <div>
+      <label for="clientFormCountry"><%= "Country" %>:</label>
+      <%= country_code_select 'company', 'country_code', :id => 'clientFormCountry' %>
+    </div>
+    
+  </fieldset>

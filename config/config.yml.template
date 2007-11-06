@@ -1,0 +1,40 @@
+common:
+  site_name: RailsCollab
+  
+  project_logs_per_page: 10
+  logs_per_project: 5
+  
+  messages_per_page: 10
+  times_per_page: 10
+  files_per_page: 10
+  
+  max_avatar_width: 50
+  max_avatar_height: 50
+  max_logo_width: 50
+  max_logo_height: 50
+  
+  file_upload_storage: local_database
+  file_upload_directory: public/uploads
+  file_thumbnail_width: 50
+  file_thumbnail_height: 50
+  
+  minutes_to_comment_edit_expire: 3
+  
+  max_upload_size: 10485760
+  
+  default_project_folders: [
+  	'images',
+  	'documents',
+  	'other'
+  ]
+  
+  allow_openid: false
+	
+# Environment specific configuration
+
+production:
+  
+development:
+  
+testing:
+  

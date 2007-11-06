@@ -1,0 +1,10 @@
+<%
+  @page_title = 'Add client'
+  @tabbed_navigation_items = administration_tabbed_navigation(3)
+  @bread_crumbs = administration_crumbs("Add client", [{:title => "Clients", :url => '/administration/clients'}])
+%>
+
+<%= form_tag :controller => 'company', :action => 'add_client' %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Add client</button>
+</form>

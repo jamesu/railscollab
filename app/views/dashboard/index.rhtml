@@ -1,0 +1,74 @@
+<%
+
+  # Set page title and set crumbs to index
+  @page_title = 'Dashboard'
+  @tabbed_navigation_items = dashboard_tabbed_navigation
+  @bread_crumbs = dashboard_crumbs
+  
+  if @logged_user.is_admin?
+      @page_actions = [{:title =>'Add project', :url=> '/project/add'}]
+  end
+  
+  @additional_stylesheets = ['project/project_log']
+%>
+<% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
+<div class="hint">
+
+  <div class="header"><%= "Welcome to your newly created account" %></div>
+  <div class="content"><%= "#{@logged_user.display_name}, welcome to your new account.<br> You can get started in a minute following these easy steps:" %></div>
+  
+   <% new_account_steps(@logged_user).each do |step| %>
+    <div class='header'><%= step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>
+    <div class='content'><%= step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
+   <% end %>
+  <p><%= link_to '&raquo; Hide this info permanently', {:controller => 'company', :action => 'hide_welcome_info'}, :method => :post %></p>
+  
+</div>
+<% end %>
+
+<% if @today_milestones.length > 0 or @late_milestones.length > 0 %>
+<div id="lateOrTodayMilestones" class="important">
+<% if @late_milestones.length > 0 %>
+  <div class="header"><%= "Late milestones" %></div>
+  <ul>
+<% @late_milestones.each do |milestone| %>
+<% if not milestone.assigned_to.nil? %>
+    <li><%= h milestone.assigned_to.object_name %>: <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %>
+    <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %> (<%= "#{milestone.days_late} days late" %>)</li>
+<% else %>
+    <li><%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %> <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %> (<%= "#{milestone.days_late} days late" %>)</li>
+<% end %>
+<% end %>
+  </ul>
+<% end %>
+
+<% if @today_milestones.length > 0 %>
+  <div class="header"><%= "Todays milestones" %></div>
+  <ul>
+<% @today_milestones.each do |milestone| %>
+<% if not milestone.assigned_to.nil? %>
+    <li><%= h milestone.assigned_to.object_name %>: <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %>
+    <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %></li>
+<% else %>
+    <li><%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %> <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %></li>
+<% end %>
+<% end %>
+  </ul>
+<% end %>
+</div>
+<% end %>
+
+<% if @activity_log.length > 0 %>
+<%
+  @additional_stylesheets << 'application_logs'
+%>
+<table class="applicationLogs blank">
+  <tr>
+    <th></th>
+    <th><%= "Details" %></th>
+    <th class="right"><%= "Project" %></th>
+	<%= render :partial => 'layouts/application_logs', :collection => @activity_log, :locals => {:show_project_column => true} %>
+</table>
+<% else %>
+No recent activities
+<% end %>

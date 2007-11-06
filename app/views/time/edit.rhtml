@@ -1,0 +1,14 @@
+<%
+  @page_title = "Edit time"
+  @tabbed_navigation_items = project_tabbed_navigation(4)
+  @bread_crumbs = project_crumbs('Edit time', [{:title => 'Time', :url => "/project/#{@active_project.id}/time/index"}])
+  
+  @page_actions = []
+
+  @additional_stylesheets = ['project/time']
+%>
+
+<%= start_form_tag :controller => 'time', :action => 'edit', :id => @time.id %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Edit time</button>
+<%= end_form_tag %>

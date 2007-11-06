@@ -1,0 +1,84 @@
+<%= error_messages_for :user %>
+
+<% if @logged_user.is_admin? %>
+  <div>
+    <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+    <%= text_field 'user', 'username', :id => 'userFormUsername', :class => 'medium' %>
+  </div>
+  
+<% if @user.new_record? and @logged_user.member_of_owner? %>
+  <div>
+    <label for="userFormCompany"><%= "Company" %>: <span class="label_required">*</span></label>
+    <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
+  </div>
+<% end %>
+<% end %>
+
+<% if AppConfig.allow_openid %>
+  <div>
+    <label for="userFormOpenID"><%= "OpenID" %>:</label>
+    <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
+    <p class="desc"><%= "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>." %></p>
+  </div>
+<% end %>
+
+  <div>
+    <label for="userFormDisplayName"><%= "Display name" %>:</label>
+    <%= text_field 'user', 'display_name', :id => 'userFormDisplayName', :class => 'medium' %>
+  </div>
+  
+  <div>
+    <label for="profileFormEmail"><%= "Email address" %>: <span class="label_required">*</span></label>
+    <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="profileFormTimezone"><%= "Timezone" %>: <span class="label_required">*</span></label>
+    <%= time_zone_select 'user', 'timezone_name', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
+  </div>
+  
+<% if @user.new_record? or @logged_user.is_admin? %>
+  <fieldset>
+    <legend><%= "Password" %></legend>
+    <div>
+        <label for="userFormGeneratePassword"><%= "Generate password" %>:</label>
+        <input type="checkbox" checked="true" value="generate_password" class="checkbox" id="userFormGeneratePassword"/>      
+    </div>
+    <div id="userFormPasswordInputs">
+      <div>
+        <label for="userFormPassword"><%= "Password" %>: <span class="label_required">*</span></label>
+        <input type="password" id="userFormPassword" name="credentials[password]" />
+      </div>
+
+      <div>
+        <label for="userFormPasswordA"><%= "Repeat password" %>: <span class="label_required">*</span></label>
+        <input type="password" id="userFormPasswordA" name="credentials[password_confirmation]" />
+      </div>
+    </div>
+  </fieldset>
+  <script type="text/javascript">
+    App.modules.addUserForm.generateRandomPasswordClick();
+  </script>
+<% end %>
+
+<% if @logged_user.is_admin? and @logged_user.member_of_owner? %>
+  <div class="formBlock">
+    <div>
+      <label for="userFormIsAdmin"><%= "Administrator" %>: <span class="label_required">*</span></label>
+      <%= check_box 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
+    </div>
+    
+    <div>
+      <label for="userFormAutoAssign"><%= "Auto assign to new projects?" %>: <span class="label_required">*</span></label>
+      <%= check_box 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
+    </div>
+  </div>
+<% end %>
+  
+<% if @user.new_record? %>
+  <div class="formBlock">
+    <label for="userFormEmailNotification"><%= "Send new account notification?" %>: <span class="label_required">*</span></label>
+    <input type="checkbox" checked="false" value="new_account_notification" class="checkbox" id="userFormEmailNotification"/>     
+    <br /><span class="desc"><%= "Add a rather short yet interesting description here" %></span>
+  </div>
+<% end %>

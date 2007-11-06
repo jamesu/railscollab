@@ -1,0 +1,17 @@
+<%
+  @page_title = 'Members'
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(2)
+  @bread_crumbs = administration_crumbs("Members")
+  
+  @page_actions = []
+  
+  if User.can_be_created_by(@logged_user)
+  	@page_actions << {:title => "Add user", :url => "/user/add?company_id=#{Company.owner.id}"}
+  end
+  
+  @additional_stylesheets = []
+%>
+<%=
+  render :partial => 'administration/list_users', :locals => {'users' => @users, 'company' => @company}
+%>

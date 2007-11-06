@@ -1,0 +1,7 @@
+require 'enum/enum_adapter'
+require 'enum/mysql_adapter'
+require 'enum/postgresql_adapter'
+require 'enum/schema_statements'
+require 'enum/quoting'
+require 'enum/validations'
+require 'enum/active_record_helper'

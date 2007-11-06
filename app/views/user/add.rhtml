@@ -1,0 +1,20 @@
+<%
+  @page_title = "Add user"
+  if @company.is_owner?
+	  @tabbed_navigation_items = administration_tabbed_navigation(1)
+	  @bread_crumbs = administration_crumbs("Add user", [{:title => "Company", :url => "/company/view/#{@company.id}"}])
+  else
+	  @tabbed_navigation_items = administration_tabbed_navigation(3)
+	  @bread_crumbs = administration_crumbs("Add user", [{:title => "Clients", :url => '/administration/clients'},
+	                                                     {:title => "Company", :url => "/company/view/#{@company.id}"}])
+  end
+  
+  @page_actions = []
+  
+  @additional_stylesheets = ['admin/user_permissions.css']
+%>
+<script type="text/javascript" src="<?= get_javascript_url('modules/addUserForm.js') ?>"></script>
+<%= start_form_tag :controller => 'user', :action => 'add' %>
+<%= render :partial => 'form' %>
+    <button class="submit" type="submit">Add user</button>
+</form>

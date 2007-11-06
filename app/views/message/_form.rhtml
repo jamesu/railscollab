@@ -1,0 +1,99 @@
+<%= error_messages_for :message %>
+
+ <div>
+    <label for="messageFormTitle"><%= "Title" %>: <span class="label_required">*</span></label>
+    <%= text_field 'message', 'title', :id => 'messageFormTitle', :class => 'title' %>
+  </div>
+  
+  <div>
+    <label for="messageFormText"><%= "Text" %>: <span class="label_required">*</span></label>
+    <%= text_area 'message', 'text', :id => 'messageFormText' %>
+  </div>
+  
+  <div>
+<% if is_new %>
+    <label for="messageFormAdditionalText"><%= "Additional text" %>: <span class="desc">- (<%= "Additional message text is visible only on comments page" %>)</span></label>
+    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
+<% else %>
+    <label for="messageFormAdditionalText"><%= "Additional text" %>: (<a href="#" onclick="return App.modules.addMessageForm.toggleAdditionalText(this, 'messageFormAdditionalText', '<?php echo lang('expand additional text') ?>', '<?php echo lang('collapse additional text') ?>')"><?php echo lang('expand additional text') ?></a>): <span class="desc">- <%= "Additional message text is visible only on comments page" %></span></label>
+    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
+    <script type="text/javascript">$('messageFormAdditionalText').style.display = 'none';</script>
+<% end %>
+  </div>
+  
+  <fieldset>
+    <legend><%= "Milestone" %></legend>
+    <%= select 'message', 'milestone_id', ProjectMilestone.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
+  </fieldset>
+  
+<% if @logged_user.member_of_owner? %>
+  <fieldset>
+    <legend><%= "Options" %></legend>
+    
+    <div class="objectOption">
+      <div class="optionLabel"><label><%= "Private message" %>:</label></div>
+      <div class="optionControl"><%= check_box 'message', 'is_private', :class => 'checkbox', :id => 'messageFormIsPrivate' %></div>
+      <div class="optionDesc"><%= "Private messages are visible only to owner company members. Members of client companies will not be able to see them." %></div>
+    </div>
+    
+    <div class="objectOption">
+      <div class="optionLabel"><label><%= "Important message" %>:</label></div>
+      <div class="optionControl"><%= check_box 'message', 'is_important', :class => 'checkbox', :id => 'messageFormIsImportant' %></div>
+      <div class="optionDesc"><%= "Important messages are listed in the \"Important messages\" sidebar on the project messages page" %></div>
+    </div>
+    
+    <div class="objectOption">
+    <div class="optionLabel"><label><%= "Enable comments" %>:</label></div>
+    <div class="optionControl"><%= check_box 'message', 'comments_enabled', :class => 'checkbox', :id => 'messageFormEnableComments' %></div>
+    <div class="optionDesc"><%= "Users that can view this object can post comments on it. Select \"No\" to lock comments" %></div>
+  </div>
+  
+  <div class="objectOption">
+    <div class="optionLabel"><label><%= "Enable anonymous comments" %>:</label></div>
+    <div class="optionControl"><%= check_box 'message', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'messageFormEnableAnonymousComments' %></div>
+    <div class="optionDesc"><%= "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged." %></div>
+  </div>
+  </fieldset>
+<% end %>
+  
+  <fieldset>
+    <legend><%= "Tags" %></legend>
+    <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %>
+  </fieldset>
+  <!--
+  <fieldset id="emailNotification">
+    <legend><%= "Email notification" %></legend>
+    <p><%= "Notify selected people about this message via email" %></p>
+<% @active_project.companies.each do |company| -%>
+    <script type="text/javascript">
+      App.modules.addMessageForm.notify_companies.company_<?php echo $company->getId() ?> = {
+        id          : <?php echo $company->getId() ?>,
+        checkbox_id : 'notifyCompany<?php echo $company->getId() ?>',
+        users       : []
+      };
+    </script>
+<% users_on_project = company.users_on_project(@active_project) %>
+<% if users_on_project.length > 0 %>
+    <div class="companyDetails">
+      <div class="companyName"><?php echo checkbox_field('message[notify_company_' . $company->getId() . ']', array_var($message_data, 'notify_company_' . $company->getId()), array('id' => 'notifyCompany' . $company->getId(), 'onclick' => 'App.modules.addMessageForm.emailNotifyClickCompany(' . $company->getId() . ')')) ?> <label for="notifyCompany<?php echo $company->getId() ?>" class="checkbox"><?php echo clean($company->getName()) ?></label></div>
+      <div class="companyMembers">
+        <ul>
+<% users_on_project.each do |user| -%>
+          <li><?php echo checkbox_field('message[notify_user_' . $user->getId() . ']', array_var($message_data, 'notify_user_' . $user->getId()), array('id' => 'notifyUser' . $user->getId(), 'onclick' => 'App.modules.addMessageForm.emailNotifyClickUser(' . $company->getId() . ', ' . $user->getId() . ')')) ?> <label for="notifyUser<?php echo $user->getId() ?>" class="checkbox"><?php echo clean($user->getDisplayName()) ?></label></li>
+          <script type="text/javascript">
+            App.modules.addMessageForm.notify_companies.company_<?php echo $company->getId() ?>.users.push({
+              id          : <?php echo $user->getId() ?>,
+              checkbox_id : 'notifyUser<?php echo $user->getId() ?>'
+            });
+          </script>
+<% end %>
+        </ul>
+      </div>
+    </div>
+<% end %>
+<% end %>
+  </fieldset>
+-->  
+<% if ProjectFile.can_be_created_by(@logged_user, @active_project) %>
+  <%= render :partial => 'files/attach_file', :locals => {:attach_id => 1} %>
+<% end %>
