@@ -15,7 +15,7 @@
 </script>
 
 <% if @companies.length > 0%>
-<%= start_form_tag :controller => 'project', :action => 'permissions' %>
+<%= form_tag :controller => 'project', :action => 'permissions' %>
 <div id="projectCompanies">
 <% @companies.each do |company| -%>
 <% if company.users.length > 0 %>

@@ -16,7 +16,7 @@
   
   @additional_stylesheets = ['project/files']
 %>
-<%= start_form_tag :controller => 'files', :action => 'add_folder' %>
+<%= form_tag :controller => 'files', :action => 'add_folder' %>
 <%= render :partial => 'folder_form' %>
     <button class="submit" type="submit">Add folder</button>
 </form>

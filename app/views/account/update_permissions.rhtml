@@ -30,7 +30,7 @@
 
 <% if not @projects.empty? %>
 <div id="userPermissions">
-  <%= start_form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
+  <%= form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
     <div id="userProjects">
 <% @projects.each do |project| -%>
 <%

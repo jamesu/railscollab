@@ -14,7 +14,7 @@
   @additional_stylesheets = ['admin/user_permissions.css']
 %>
 <script type="text/javascript" src="<?= get_javascript_url('modules/addUserForm.js') ?>"></script>
-<%= start_form_tag :controller => 'user', :action => 'edit' %>
+<%= form_tag :controller => 'user', :action => 'edit' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Edit user</button>
 </form>

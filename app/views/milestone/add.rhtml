@@ -8,7 +8,7 @@
   @additional_stylesheets = ['project/milestones']
 %>
 
-<%= start_form_tag :controller => 'milestone', :action => 'add' %>
+<%= form_tag :controller => 'milestone', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Add milestone</button>
 </form>

@@ -9,7 +9,7 @@
 %>
 
 <script type="text/javascript" src="<?php echo get_javascript_url('modules/addProjectForm.js') ?>"></script>
-<%= start_form_tag :controller => 'form', :action => 'edit', :id => @form.id %>
+<%= form_tag :controller => 'form', :action => 'edit', :id => @form.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Edit form</button>
 </form>

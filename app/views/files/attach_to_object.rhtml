@@ -7,7 +7,7 @@
   @additional_stylesheets = ['project/attach_files']
 %>
 <script type="text/javascript" src="<?php echo get_javascript_url('modules/attachToObjectForm.js') ?>"></script>
-<%= start_form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :multipart => true) %>
+<%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :multipart => true) %>
 
   <div class="hint">Use this form to attach files to <strong><a href="<%= @attach_object.object_url %>"><%= @attach_object.object_name %></a></strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>.</div>
   <div>

@@ -5,7 +5,7 @@
   @bread_crumbs = project_crumbs('Add comment', [{:title => @commented_object.object_name, :url => @commented_object.object_url}])
 %>
 
-<%= start_form_tag :controller => 'comment', :action => 'edit', :id => @comment.id %>
+<%= form_tag :controller => 'comment', :action => 'edit', :id => @comment.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Edit comment</button>
 </form>

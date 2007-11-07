@@ -9,7 +9,7 @@
   @additional_stylesheets = ['project/search_results.css']
 %>
 <div id="searchForm">
-  <%= start_form_tag :action => 'search' %>
+  <%= form_tag :action => 'search' %>
     <%= text_field_tag 'search_for', @search_for %>
     <button class="submit" type="submit">Search</button>
   </form>

@@ -8,7 +8,7 @@
   @additional_stylesheets = ['project/time']
 %>
 
-<%= start_form_tag :controller => 'time', :action => 'add' %>
+<%= form_tag :controller => 'time', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Add time</button>
 </form>

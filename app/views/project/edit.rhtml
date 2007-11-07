@@ -9,7 +9,7 @@
   @additional_stylesheets = []
 %>
 
-<%= start_form_tag :controller => 'project', :action => 'edit' %>
+<%= form_tag :controller => 'project', :action => 'edit' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Edit project</button>
 </form>

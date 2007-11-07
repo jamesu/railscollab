@@ -18,7 +18,7 @@
   
   @additional_stylesheets = []
 %>
-<%= start_form_tag :controller => 'task', :action => 'add_task', :task_list_id => @task_list.id %>
+<%= form_tag :controller => 'task', :action => 'add_task', :task_list_id => @task_list.id %>
 <%= render :partial => 'task_form' %>
     <button class="submit" type="submit">Add task</button>
 </form>

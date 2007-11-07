@@ -25,7 +25,7 @@
 <div class="sidebarBlock">
   <h2><%= "Options" %></h2>
   <div class="blockContent">
-    <%= start_form_tag :controller => 'message', :action => 'update_options', :id => @message.id %>
+    <%= form_tag :controller => 'message', :action => 'update_options', :id => @message.id %>
       <div class="formBlock">
         <div>
           <label><%= "Private message" %>:</label>

@@ -14,7 +14,7 @@
   @additional_stylesheets = ['admin/user_permissions.css']
 %>
 <script type="text/javascript" src="<?= get_javascript_url('modules/addUserForm.js') ?>"></script>
-<%= start_form_tag :controller => 'user', :action => 'add' %>
+<%= form_tag :controller => 'user', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit">Add user</button>
 </form>
