@@ -13,4 +13,4 @@
 <%= start_form_tag( {:controller => 'message', :action => 'edit', :id => @message.id}, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => false} %>
     <button class="submit" type="submit">Edit message</button>
-<%= end_form_tag %>
+</form>
