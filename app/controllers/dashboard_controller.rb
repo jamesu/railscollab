@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class DashboardController < ApplicationController
@@ -12,16 +27,18 @@ class DashboardController < ApplicationController
 	def index
 	    @active_projects = @logged_user.active_projects
 		
-		if @active_projects.length > 0
-			include_private = @logged_user.member_of_owner?
+		when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
+			if @active_projects.length > 0
+				include_private = @logged_user.member_of_owner?
+				
+				project_ids = @active_projects.collect do |i|
+					i.id
+				end.join','
 			
-			project_ids = @active_projects.collect do |i|
-				i.id
-			end.join','
-			
-			@activity_log = ApplicationLog.find(:all, :conditions => "project_id in (#{project_ids}) #{include_private ? '' : 'AND is_private = false'}", :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
-	    else
-			@activity_log = []
+				@activity_log = ApplicationLog.find(:all, :conditions => "project_id in (#{project_ids}) #{include_private ? '' : 'AND is_private = false'}", :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
+			else
+				@activity_log = []
+			end
 		end
 		
 		@today_milestones = @logged_user.todays_milestones
