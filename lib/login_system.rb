@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 require_dependency "user"
@@ -51,17 +66,32 @@ module LoginSystem
     if not protect?(action_name)
       return true  
     end
-
-    if not session['user_id'].nil?
-      @logged_user = User.find(:first, :conditions => "id = #{session['user_id']}")
-    else
-      @logged_user = nil
-    end
+	
+	do_action = false
+	
+	if request.accepts.first == Mime::XML
+		# HTTP basic authentication for XML / YAML requests
+		@logged_user = nil
+		
+		authenticate_or_request_with_http_basic do |user_name, password|
+			@logged_user = User.authenticate(user_name, password)
+			
+		end
+	else
+		# Session authentication
+		if not session['user_id'].nil?
+			@logged_user = User.find(:first, :conditions => "id = #{session['user_id']}")
+		else
+			@logged_user = nil
+		end
+		
+		do_action = true
+	end
     
     # Don't exist? what a pity!
     if @logged_user.nil?
       session['user_id'] = nil
-      redirect_to :controller => 'access', :action => 'login'
+      access_denied if do_action
       return false
     end
     
@@ -74,7 +104,7 @@ module LoginSystem
     store_location
   
     # call overwriteable reaction to unauthorized access
-    access_denied
+    access_denied if do_action
     return false 
   end
   
