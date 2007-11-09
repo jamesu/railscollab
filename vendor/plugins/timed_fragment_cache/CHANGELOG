@@ -1,0 +1,8 @@
+*0.1.1* (2006.09.03) 
+
+* Added License
+* Added expiry_time to get time the fragment is set to expire
+
+*0.1* 
+
+* Initial version
