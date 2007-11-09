@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class MessageController < ApplicationController
@@ -11,7 +26,7 @@ class MessageController < ApplicationController
   verify :method => :post,
   		 :only => [ :delete, :subscribe, :unsubscribe ],
   		 :add_flash => { :flash_error => "Invalid request" },
-         :redirect_to => { :controller => 'project' }
+         :redirect_to => { :controller => 'dashboard' }
   
   before_filter :login_required
   before_filter :process_session
@@ -155,13 +170,33 @@ class MessageController < ApplicationController
   end
   
   def subscribe
-      flash[:flash_error] = "Unimplemented"
-      redirect_back_or_default :controller => 'dashboard'
+    if not @message.can_be_seen_by(@logged_user)
+      flash[:flash_error] = "Insufficient permissions"
+      redirect_back_or_default :controller => 'message'
+      return
+    end
+	
+	begin
+		@message.subscribers.find(@logged_user.id)
+	rescue ActiveRecord::RecordNotFound
+		@message.subscribers << @logged_user
+	end
+
+    flash[:flash_success] = "Successfully subscribed to message"
+    redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
   end
   
   def unsubscribe
-      flash[:flash_error] = "Unimplemented"
-      redirect_back_or_default :controller => 'dashboard'
+    if not @message.can_be_seen_by(@logged_user)
+      flash[:flash_error] = "Insufficient permissions"
+      redirect_back_or_default :controller => 'message'
+      return
+    end
+	
+	@message.subscribers.delete(@logged_user)
+
+    flash[:flash_success] = "Successfully unsubscribed from message"
+    redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
   end
 
 private

@@ -9,7 +9,7 @@
       @page_actions = [{:title =>'Add project', :url=> '/project/add'}]
   end
   
-  @additional_stylesheets = ['project/project_log']
+  @additional_stylesheets = ['project/project_log', 'application_logs']
 %>
 <% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
 <div class="hint">
@@ -58,10 +58,8 @@
 </div>
 <% end %>
 
+<% cache "user#{@logged_user.id}_dblog" do %>
 <% if @activity_log.length > 0 %>
-<%
-  @additional_stylesheets << 'application_logs'
-%>
 <table class="applicationLogs blank">
   <tr>
     <th></th>
@@ -71,4 +69,5 @@
 </table>
 <% else %>
 No recent activities
+<% end %>
 <% end %>

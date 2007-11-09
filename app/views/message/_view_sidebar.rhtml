@@ -4,9 +4,9 @@
     <p><%= "Subscribers will receive an email notification whenever someone (except themselves) posts a comment on this message" %></p>
 <% if @subscribers.length > 0 %>
     <ul>
-<% subscribers.each do |subscriber| %>
+<% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to "Unsubscribe from this message", {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:confirm => "Are you sure you want to unsubscribe from this message?"} %>)</li>
+      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to "Unsubscribe from this message", {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:post => true, :confirm => "Are you sure you want to unsubscribe from this message?"} %>)</li>
 <% else %>
       <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %></li>
 <% end %>
@@ -15,8 +15,8 @@
 <% else %>
     <p><%= "There are no subscribers" %></p>
 <% end %>
-<% if !@message.subscribers.include?(@logged_user) %>
-    <p><%= link_to "Subscribe to message", {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:confirm => "Are you sure you want to subscribe to this message?"} %></p>
+<% if !@subscribers.include?(@logged_user) %>
+    <p><%= link_to "Subscribe to message", {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:post => true, :confirm => "Are you sure you want to subscribe to this message?"} %></p>
 <% end %>
   </div>
 </div>

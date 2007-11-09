@@ -21,7 +21,7 @@
     @page_actions << {:title =>'Add file', :url=> '/project/#{@active_project.id}/files/add'}
   end
   
-  @additional_stylesheets = ['project/project_log']
+  @additional_stylesheets = ['project/project_log', 'application_logs']
 %>
 <% if @active_project.description.chop and @active_project.show_description_in_overview %>
 <div class="hint">
@@ -88,10 +88,8 @@
 <% end %>
 
 <h2><%= "Recent activities" %></h2>
+<% cache "user#{@logged_user.id}_#{@active_project.id}_dblog" do %>
 <% if @project_log_entries.length > 0 %>
-<%
-  @additional_stylesheets << 'application_logs'
-%>
 <table class="applicationLogs blank">
   <tr>
     <th></th>
@@ -102,4 +100,5 @@
 </table>
 <% else %>
 No recent activities
+<% end %>
 <% end %>

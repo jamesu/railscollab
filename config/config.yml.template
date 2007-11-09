@@ -19,6 +19,7 @@ common:
   file_thumbnail_height: 50
   
   minutes_to_comment_edit_expire: 3
+  minutes_to_activity_log_expire: 5
   
   max_upload_size: 10485760
   
