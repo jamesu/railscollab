@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class TaskController < ApplicationController
@@ -146,15 +161,25 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:task_list_id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task list"
-      redirect_back_or_default :controller => 'task'
-      return
+	  flash[:flash_error] = "Invalid task list"
+	  if params[:partial]
+		render :text => '403 Invalid', :status => 403
+	  else
+		redirect_back_or_default :controller => 'task'
+	  end
+	  
+	  return
     end
     
     if not ProjectTask.can_be_created_by(@logged_user, @task_list.project)
-      flash[:flash_error] = "Insufficient permissions"
-      redirect_back_or_default :controller => 'task'
-      return
+	  flash[:flash_error] = "Insufficient permissions"
+      if params[:partial]
+		render :text => '403 Invalid', :status => 403
+	  else
+		redirect_back_or_default :controller => 'task'
+	  end
+	  
+	  return
     end
     
     @task = ProjectTask.new
@@ -170,7 +195,15 @@ class TaskController < ApplicationController
         if @task.save
           ApplicationLog::new_log(@task, @logged_user, :add, @task_list.is_private, @active_project)
           flash[:flash_success] = "Successfully added task"
-          redirect_back_or_default :controller => 'task'
+		  
+		  if params[:partial]
+			puts "RENDERING PARTIAL!!!"
+			render :partial => 'task/task_item', :collection => [@task]
+		  else
+			redirect_back_or_default :controller => 'task'
+		  end
+		elsif params[:partial]
+			render :text => 'Validation failed', :status => 400
         end
     end 
   end

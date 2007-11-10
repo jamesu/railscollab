@@ -11,8 +11,4 @@
   
   @additional_stylesheets = ['project/task_list']
 %>
-<script type="text/javascript" src="<?= get_javascript_url('modules/addTaskForm.js') ?>"></script>
 <%= render :partial => 'task_list', :collection => [@task_list], :locals => {:on_list_page => true} %>
-<script type="text/javascript">
-  App.modules.addTaskForm.hideAllAddTaskForms();
-</script>

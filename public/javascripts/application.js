@@ -76,5 +76,23 @@ function login_toggle_openid()
 		$('normal_login').style.display = 'block';
 	}
 }
+
+function task_form_show_add(id)
+{
+	$('addTaskForm' + id).style.display = 'block';
+}
+
+function task_form_hide_add(id)
+{
+	$('addTaskForm' + id).style.display = 'none';
+}
+
+function task_form_loaded_add(id)
+{
+}
+
+function task_form_loading_add(id)
+{
+}
   	
 Event.observe(window, 'load', userbox_init, false);

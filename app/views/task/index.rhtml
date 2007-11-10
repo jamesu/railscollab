@@ -11,14 +11,10 @@
   
   @additional_stylesheets = ['project/task_list']
 %>
-<script type="text/javascript" src="<?= get_javascript_url('modules/addTaskForm.js') ?>"></script>
 <% if @open_task_lists.length > 0 %>
 <div id="openTaskLists">
 <%= render :partial => 'task_list', :collection => @open_task_lists, :locals => {:on_list_page => false} %>
 </div>
-<script type="text/javascript">
-  App.modules.addTaskForm.hideAllAddTaskForms();
-</script>
 <% else %>
 <p><%= "There are no open tasks for this project" %></p>
 <% end %>
