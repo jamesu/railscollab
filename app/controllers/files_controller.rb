@@ -32,7 +32,11 @@ class FilesController < ApplicationController
   before_filter :process_session, :except => [:thumbnail]
   before_filter :accept_folder_name, :only => [:browse_folder, :edit_folder, :delete_folder]
   after_filter  :user_track, :only => [:index, :browse_folder]
-  
+
+  # Caching
+  caches_page :thumbnail
+  cache_sweeper :files_sweeper, :only => [ :add_file, :edit_file, :delete_file ]
+    
   def index
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
