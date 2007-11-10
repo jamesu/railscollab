@@ -34,9 +34,7 @@ conventions of certain fields.
 
 More or less all the features of ActiveCollab are implemented, with the exception 
 of the following:
-    - Message subscription
     - E-mail dispatching
-    - File thumbnails
     - Administration tools
     - Runtime configuration editor
 
