@@ -19,6 +19,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
+require 'gd2'
+
 class ProjectFileRevision < ActiveRecord::Base
 	include ActionController::UrlWriter
 	
@@ -67,20 +69,38 @@ class ProjectFileRevision < ActiveRecord::Base
 		else
 			self.repository_id = FileRepo.handle_update(self.repository_id, value.read)
 		end
+		
+		self.update_thumb if !self.repository_id.nil?
 	end
 	
 	def update_thumb
-		# TODO
+		FileRepo.handle_delete(self.thumb_filename) unless self.thumb_filename.nil?
+		
+		# Check if we can make a thumbnail
+		if self.project_file.is_private || !['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(self.type_string)
+			self.thumb_filename = nil
+			return
+		end
+
+		max_width = AppConfig.max_thumbnail_width
+		max_height = AppConfig.max_thumbnail_height
+				
+		# Now try to make it!
+		image_data = FileRepo.get_data(self.repository_id)
+		image = GD2::Image.load(image_data)
+		
+		image.resize!(image.width > max_width ? max_width : image.width,
+					  image.height > max_height ? max_height : image.height)
+		
+		self.thumb_filename = FileRepo.handle_storage(image.jpeg(AppConfig.file_thumbnail_quality))
 	end
 	
 	def filetype_icon_url
 		if self.thumb_filename.nil?
-			puts self.file_type
-			puts "@@@@@"
 			ext = self.file_type ? self.file_type.icon : "unknown.png"
 			return "/images/filetypes/#{ext}"
 		else
-			return "/images/thumbnails/#{self.thumb_filename}"
+			return "/files/thumbnail/#{self.id}.jpg"
 		end
 	end
 		

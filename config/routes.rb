@@ -55,6 +55,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'project/:active_project/tags', :controller => 'project', :action => 'tags'
   map.connect 'project/:active_project/tags/:id', :controller => 'tag', :action => 'project'
   
+  map.connect '/files/thumbnail/:id.jpg', :controller => 'files', :action => 'thumbnail', :format => 'jpg'
+  
   ['search', 'people', 'permissions', 'remove_user', 'remove_company', 'edit', 'delete', 'complete', 'open'].each do |action|
   	map.connect "project/:active_project/#{action}/:id", :controller => 'project', :action => action
   end

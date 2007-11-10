@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class FilesController < ApplicationController
@@ -14,7 +29,7 @@ class FilesController < ApplicationController
          :redirect_to => { :controller => 'file', :action => 'index' }
 
   before_filter :login_required
-  before_filter :process_session
+  before_filter :process_session, :except => [:thumbnail]
   before_filter :accept_folder_name, :only => [:browse_folder, :edit_folder, :delete_folder]
   after_filter  :user_track, :only => [:index, :browse_folder]
   
@@ -388,6 +403,25 @@ class FilesController < ApplicationController
     
     flash[:flash_success] = "Successfully deleted file"
     redirect_back_or_default :controller => 'files'
+  end
+  
+  def thumbnail
+    begin
+      file = ProjectFileRevision.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render :text => 'Not found', :status => 404
+      return
+    end
+    
+  	# Get thumbnail data
+  	data = FileRepo.get_data(file.thumb_filename)
+  	
+  	if data.empty?
+  		render :text => 'Not found', :status => 404
+  		return
+  	end
+  	
+  	send_data data, :type => 'image/jpg', :disposition => 'inline'
   end
   
   def attach_to_object
