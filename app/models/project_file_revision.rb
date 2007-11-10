@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class ProjectFileRevision < ActiveRecord::Base
@@ -38,7 +53,7 @@ class ProjectFileRevision < ActiveRecord::Base
 		self.filesize = value.size
 		self.type_string = value.content_type.chomp
 		
-		extension = value.original_filename.slice(".*")
+		extension = value.original_filename.split('.', 2)[-1]
 		if extension
 			begin
 				self.file_type = FileType.find(:first, :conditions => ['extension = ?', extension])
@@ -58,9 +73,15 @@ class ProjectFileRevision < ActiveRecord::Base
 		# TODO
 	end
 	
-	def thumb_url
-		name = "unknown.png"
-		return "/images/filetypes/#{name}"
+	def filetype_icon_url
+		if self.thumb_filename.nil?
+			puts self.file_type
+			puts "@@@@@"
+			ext = self.file_type ? self.file_type.icon : "unknown.png"
+			return "/images/filetypes/#{ext}"
+		else
+			return "/images/thumbnails/#{self.thumb_filename}"
+		end
 	end
 		
 	def object_name
