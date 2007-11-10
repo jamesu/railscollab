@@ -18,10 +18,10 @@ function userbox_reset_menus()
 
 function userbox_menu_switch(icon, el)
 {
-	var icon_pos = icon.getPosition();
+	var icon_pos = Position.cumulativeOffset(icon);
 	
-	el.style.left = icon_pos.x + 'px';
-	el.style.top = (icon_pos.y + icon.offsetHeight) + 'px';
+	el.style.left = icon_pos[0] + 'px';
+	el.style.top = (icon_pos[1] + icon.offsetHeight) + 'px';
 	el.style.display = el.style.display == 'none' ? 'block' : 'none';
 	
 	if (el.style.display == 'none')

@@ -1480,34 +1480,8 @@ Element.Methods = {
     element.style.overflow = element._overflow == 'auto' ? '' : element._overflow;
     element._overflow = null;
     return element;
-  },
+  }
   
-/*
-BEGIN MOOTOOLS BLOCK
-Copyright: (C) 2007 Valerio Proietti 
-License: MIT-style license.
-*/
-	
-getPosition: function(overflown){
-	overflown = overflown || [];
-	var el = this, left = 0, top = 0;
-	do {
-		left += el.offsetLeft || 0;
-		top += el.offsetTop || 0;
-		el = el.offsetParent;
-	} while (el);
-	for (var i=0; i<overflown.length; i++)
-	{
-		var element = overflown[i];
-		left -= element.scrollLeft || 0;
-		top -= element.scrollTop || 0;
-	}
-	return {'x': left, 'y': top};
-}
-	
-/*
-END MOOTOOLS BLOCK
-*/
 };
 
 Object.extend(Element.Methods, {childOf: Element.Methods.descendantOf});
