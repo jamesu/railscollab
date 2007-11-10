@@ -12,11 +12,14 @@ common:
   max_avatar_height: 50
   max_logo_width: 50
   max_logo_height: 50
+  max_thumbnail_width: 50
+  max_thumbnail_height: 50
   
   file_upload_storage: local_database
   file_upload_directory: public/uploads
   file_thumbnail_width: 50
   file_thumbnail_height: 50
+  file_thumbnail_quality: 50
   
   minutes_to_comment_edit_expire: 3
   minutes_to_activity_log_expire: 5
