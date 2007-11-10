@@ -99,8 +99,7 @@ protected
   def user_track
     if not @logged_user.nil?
       store_location
-      @logged_user.last_visit = Time.now.utc
-      @logged_user.save
+	  @logged_user.update_attribute('last_visit', Time.now.utc)
     end
     true
   end

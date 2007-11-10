@@ -243,11 +243,11 @@ class User < ActiveRecord::Base
 	end
 	
 	def member_of_owner?
-		self.company.client_of == nil
+		self.company.client_of.nil?
 	end
 	
 	def owner_of_owner?
-		self.company.client_of == nil and self.company.created_by.id == self.id
+		self.company.client_of.nil? and self.company.created_by.id == self.id
 	end
 	
 	def member_of(project)
