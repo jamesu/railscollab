@@ -111,7 +111,9 @@ class ProjectFile < ActiveRecord::Base
 		old_revision.save!
 	end
 	
-	def self.handle_files(files, to_object, user, is_private)
+	def self.handle_files(files, to_object, user, is_private)		
+		count = 0
+		
 		if !files.nil?
 			files.each do |file|
 				return if file.class != StringIO
@@ -126,17 +128,20 @@ class ProjectFile < ActiveRecord::Base
 					attached_file.expiration_time = Time.now.utc
 					attached_file.project = to_object.project
 					
-					attached_file.save!
+					if attached_file.save
+						# Upload revision
+						attached_file.add_revision(file, 1, user, "")
+						to_object.project_file << attached_file
+						
+						count += 1
 					
-					# Upload revision
-					attached_file.add_revision(file, 1, user, "")
-					to_object.project_file << attached_file
-					
-					
-					ApplicationLog::new_log(attached_file, user, :add)
+						ApplicationLog::new_log(attached_file, user, :add)
+					end
 				end
 			end
 		end
+		
+		return count
 	end
 	
 	def self.find_grouped(group_field, params)

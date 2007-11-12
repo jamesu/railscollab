@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class CommentController < ApplicationController
@@ -24,7 +39,7 @@ class CommentController < ApplicationController
     
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['ProjectMessage', 'ProjectMilestone', 'ProjectTask', 'ProjectTaskList', 'ProjectFile'].include?(rel_object_type))
       flash[:flash_error] = "Invalid request"
-      redirect_back_or_default :controller => 'project', :action => 'overview'
+      redirect_back_or_default :controller => 'dashboard', :action => 'index'
       return
     end
     
@@ -33,9 +48,11 @@ class CommentController < ApplicationController
        @commented_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
       flash[:flash_error] = "Invalid object"
-      redirect_back_or_default :controller => 'project', :action => 'overview'
+      redirect_back_or_default :controller => 'dashboard', :action => 'index'
       return
     end
+	
+	@active_project = @commented_object.project
     
     if not @commented_object.comment_can_be_added_by(@logged_user)
       flash[:flash_error] = "Insufficient permissions"
@@ -46,6 +63,8 @@ class CommentController < ApplicationController
     @comment = Comment.new()
     
     case request.method
+	  when :get
+		render :layout => 'dashboard'
       when :post
       	comment_attribs = params[:comment]
       	
@@ -61,9 +80,11 @@ class CommentController < ApplicationController
           # TODO: notifications
           
           
-          ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private)
-          
-          flash[:flash_success] = "Successfully added comment"
+          if ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length then
+			flash[:flash_success] = "Successfully added comment, some attachments failed validation"
+		  else
+			flash[:flash_success] = "Successfully added comment"
+          end
           redirect_back_or_default @commented_object.object_url
         end
     end
@@ -92,9 +113,11 @@ class CommentController < ApplicationController
           
           # TODO: notifications
           
-          ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private)
-          
-          flash[:flash_success] = "Successfully updated comment"
+          if ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length then
+			flash[:flash_success] = "Successfully updated comment, some attachments failed validation"
+		  else
+			flash[:flash_success] = "Successfully updated comment"
+          end
           redirect_back_or_default @commented_object.object_url
         end
     end

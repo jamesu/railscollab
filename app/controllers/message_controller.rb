@@ -106,9 +106,11 @@ class MessageController < ApplicationController
           @message.tags = message_attribs[:tags]
           # TODO: notifications
           
-          ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private)
-          
-          flash[:flash_success] = "Successfully added message"
+          if ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length then
+			flash[:flash_success] = "Successfully added message, some attachments failed validation"
+		  else
+			flash[:flash_success] = "Successfully added message"
+          end
           redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
         end
     end
@@ -143,9 +145,11 @@ class MessageController < ApplicationController
           
           # TODO: notifications
           
-          ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private)
-          
-          flash[:flash_success] = "Successfully updated message"
+          if ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length then
+			flash[:flash_success] = "Successfully updated message, some attachments failed validation"
+		  else
+			flash[:flash_success] = "Successfully updated message"
+          end          
           redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
         end
     end
