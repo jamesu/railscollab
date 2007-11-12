@@ -300,8 +300,9 @@ class ProjectController < ApplicationController
         project_attribs = params[:project]
         
         @project.update_attributes(project_attribs)
+        @project.created_by = @logged_user
         @project.companies << Company.owner
-        
+		
         @auto_assign_users = Company.owner.auto_assign_users
         
         # Add auto assigned people (note: we assume default permissions are all access)

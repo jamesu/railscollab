@@ -54,7 +54,7 @@ class Company < ActiveRecord::Base
 	end
       
 	def is_part_of(project)
-	 if self.is_owner? and (project.company_id == self.id) then
+	 if self.is_owner? and (project.created_by.company_id == self.id) then
 	   return true
 	 end
 	 
