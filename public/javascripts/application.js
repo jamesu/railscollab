@@ -139,5 +139,13 @@ function permissions_form_items_set(list)
 {
 	permissions_form_items = list;
 }
+
+// Form form stuff
+
+function form_form_update_action()
+{
+	$('projectFormActionSelectMessage').disabled = !$('projectFormActionAddComment').checked;
+	$('projectFormActionSelectTaskList').disabled =  !$('projectFormActionAddTask').checked;
+}
   	
 Event.observe(window, 'load', userbox_init, false);
