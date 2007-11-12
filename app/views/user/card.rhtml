@@ -12,7 +12,7 @@
   end
   
   if @user.permissions_can_be_updated_by(@logged_user)
-  	@page_actions << {:title => 'Update permissions', :url => "/account/update_permissions/#{@logged_user.id}"}
+  	@page_actions << {:title => 'Update permissions', :url => "/account/update_permissions/#{@user.id}"}
   end
   
   @additional_stylesheets = []

@@ -77,6 +77,9 @@ function login_toggle_openid()
 	}
 }
 
+
+// Task form stuff
+
 function task_form_show_add(id)
 {
 	$('addTaskForm' + id).style.display = 'block';
@@ -93,6 +96,48 @@ function task_form_loaded_add(id)
 
 function task_form_loading_add(id)
 {
+}
+
+// Permissions form stuff
+var permissions_form_items = [];
+
+function permissions_form_project_select(id)
+{
+	$('projectPermissionsBlock' + id).style.display = $('projectPermissions' + id).checked ? 'block' : 'none';
+}
+
+function permissions_form_project_select_company(id)
+{
+	$('projectCompanyUsers' + id).style.display = $('projectCompany' + id).checked ? 'block' : 'none';
+}
+
+function permissions_form_project_select_all(id)
+{
+	if (!$('projectPermissions' + id + 'All').checked)
+		return;
+	
+	// Select all items then!
+	permissions_form_items.each(function(permission){
+		$('projectPermission' + id + permission).checked = true;
+	});
+}
+
+function permissions_form_project_select_item(id)
+{
+	var do_all = true;
+	
+	// Check to see if everything has been selected
+	permissions_form_items.each(function(permission){
+		if (!$('projectPermission' + id + permission).checked)
+			do_all = false;
+	});
+	
+	$('projectPermissions' + id + 'All').checked = do_all;
+}
+
+function permissions_form_items_set(list)
+{
+	permissions_form_items = list;
 }
   	
 Event.observe(window, 'load', userbox_init, false);

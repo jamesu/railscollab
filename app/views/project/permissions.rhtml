@@ -7,12 +7,9 @@
   @page_actions = []
   
   @additional_stylesheets = ['project/permissions.css']
+  
+  company_list = []
 %>
-<script type="text/javascript" src="<?= get_javascript_url('modules/updatePermissionsForm.js') ?>"></script>
-<script type="text/javascript">
-  //App.modules.updatePermissionsForm.owner_company_id = <%= Company.owner.id %>;
-  //App.modules.updatePermissionsForm.project_permissions = new Array();
-</script>
 
 <% if @companies.length > 0%>
 <%= form_tag :controller => 'project', :action => 'permissions' %>
@@ -27,20 +24,26 @@
         <label><%= h company.name %></label>
         <input type="hidden" name="project_company[]" value="<%= company.id %>" checked="checked" />
 <% else %>
-        <%= check_box_tag "project_company[]", "#{company.id}", company.is_part_of(@active_project), {:class => 'checkbox', :onclick => "App.modules.updatePermissionsForm.companyCheckboxClick(project_company_#{company.id})"} %> <label for="<%= "project_company[]" %>" class="checkbox"><%= h company.name %></label>
+        <%= check_box_tag "project_company[]", "#{company.id}", company.is_part_of(@active_project), {:id => "projectCompany#{@active_project.id}_#{company.id}", :class => 'checkbox', :onclick => "permissions_form_project_select_company('#{@active_project.id}_#{company.id}')"} %> <label for="<%= "project_company[]" %>" class="checkbox"><%= h company.name %></label>
 <% end %>
       </div>
-      <div class="projectCompanyUsers" id="project_company_users_<%= company.id %>">
+<% if company.is_part_of(@active_project) %>
+      <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>">
+<% else %>
+      <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>" style="display: none">
+<% end %>
         <table class="blank">
 <% if company.users.length > 0 %>
 <% company.users.each do |user| %>
+<% perm_id = "#{@active_project.id}_#{company.id}_#{user.id}" %>
           <tr class="user">
             <td>
 <% if user.owner_of_owner? %>
               <%= render_icon 'ok', 'Ok' %> <label class="checkbox"><%= h user.display_name %></label>
               <input type="hidden" name="<%= "project_user_#{user.id}" %>" value="checked" />
 <% else %>
-              <%= check_box_tag "project_user[]", "#{user.id}", user.member_of(@active_project), {:class => 'checkbox', :onclick => "App.modules.updatePermissionsForm.userCheckboxClick(project_user_#{user.id})"} %> <label for="<%= "project_user[]" %>" class="checkbox"><%= h user.display_name %></label>
+              <%= check_box_tag "project_user[]", "#{user.id}", user.member_of(@active_project), {:id => "projectPermissions#{perm_id}", :class => 'checkbox', :onclick => "permissions_form_project_select('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}" %>" class="checkbox"><%= h user.display_name %></label>
+
 <% end %>
   
 <% if user.is_admin? %>
@@ -49,23 +52,20 @@
             </td>
             <td>
 <% if !company.is_owner? %>
-              <div class="projectUserPermissions" id="user_<%= user.id %>_permissions">
-                    <div><%= check_box_tag "project_user_#{user.id}_all", "1", user.has_all_permissions(@active_project), {:class => 'checkbox', :onclick => "App.modules.updatePermissionsForm.userPermissionAllCheckboxClick(#{user.id})"} %> <label for="<%= "project_user_#{user.id}_all" %>" class="checkbox" style="font-weight: bolder"><%= "All" %></label><div>
+<% if user.member_of(@active_project) %>
+            <div class="projectUserPermissions" id="projectPermissionsBlock<%= perm_id %>">
+<% else %>
+            <div class="projectUserPermissions" id="projectPermissionsBlock<%= perm_id %>" style="display: none">
+<% end %>
+                    <div><%= check_box_tag "project_user_#{user.id}_all", "1", user.has_all_permissions(@active_project), {:id => "projectPermissions#{perm_id}All", :class => 'checkbox', :onclick => "permissions_form_project_select_all('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}All" %>" class="checkbox" style="font-weight: bolder"><%= "All" %></label><div>
 <% user_permissions = user.permissions_for(@active_project) %>
 <% @permissions.keys.each do |permission| -%>           
-                <div><%= check_box_tag "project_user_permissions[#{user.id}][]", "#{permission}", user_permissions ? user_permissions[permission] : false, {:class => 'checkbox normal', :onclick => "App.modules.updatePermissionsForm.userCheckboxClick(project_user_#{user.id}_permissionTODO)"} %> <label for="<%= "project_user_permissions[#{user.id}][]" %>" class="checkbox normal"><%= @permissions[permission] %></label></div>
+                <div><%= check_box_tag "project_user_permissions[#{user.id}][]", "#{permission}", user_permissions ? user_permissions[permission] : false, {:id => "projectPermission#{perm_id}#{permission}", :class => 'checkbox normal', :onclick => "permissions_form_project_select_item('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}#{permission}" %>" class="checkbox normal"><%= @permissions[permission] %></label></div>
 <% end %>
               </div>
 <% end %>
             </td>
           </tr>
-<% if !company.is_owner? %>
-          <script type="text/javascript">
-            if(!document.getElementById('project_user_<%= user.id %>').checked) {
-              document.getElementById('user_<%= user.id %>_permissions').style.display = 'none';
-            } // if
-          </script>
-<% end %>
 <% end %>
 <% else %>
           <tr>
@@ -77,13 +77,6 @@
       <div class="clear"></div>
     </div>
   </div>
-<% if !company.is_owner? %>
-  <script type="text/javascript">
-    if(!document.getElementById('project_company_<%= company.id %>').checked) {
-      document.getElementById('project_company_users_<%= company.id %>').style.display = 'none';
-    } // if
-  </script>
-<% end %>
 <% end %>
 <% end %>
 
@@ -91,3 +84,7 @@
 </div>
 </form>
 <% end %>
+
+<script type="text/javascript">
+  permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
+</script>
