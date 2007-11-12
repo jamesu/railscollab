@@ -1,0 +1,26 @@
+<tr>
+<% if task_item.completed_on.nil? %>
+
+<% if task_item.can_be_changed_by(@logged_user) %>
+        <td class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/complete_task/#{task_item.id}", false, "Mark task as completed" %></td>
+<% else %>
+        <td class="taskCheckbox"><img src="<%= icon_url 'not-checked.gif' %>" alt="<%= "Open task"%>" /></td>
+<% end %>
+
+<% else %>
+
+<% if task_item.can_be_changed_by(@logged_user) %>
+        <td class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/open_task/#{task_item.id}", true, "Mark task as open" %> </td>
+<% else %>
+        <td class="taskCheckbox"><img src="<%= icon_url 'checked.gif' %>" alt="<%= "Completed task" %>" /></td>
+<% end %>
+
+<% end %>
+        <td class="taskText">
+<% if not task_item.assigned_to.nil? %>
+          <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
+<% end %>
+          <%= link_to (h task_item.text), :controller => 'task', :action => 'task_details', :id => task_item.id %>  <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), {:controller => 'task', :action => 'edit_task', :id => task_item.id}, {:class => 'blank'} %><% end %>
+          <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:controller => 'task', :action => 'delete_task', :id => task_item.id}, {:method => :post, :confirm => "Are you sure you want to delete this task?", :class => 'blank'} %><% end %><br />
+        </td>
+</tr>
