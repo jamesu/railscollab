@@ -6,12 +6,11 @@
   
   @additional_stylesheets = ['project/attach_files']
 %>
-<script type="text/javascript" src="<?php echo get_javascript_url('modules/attachToObjectForm.js') ?>"></script>
 <%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :multipart => true) %>
 
   <div class="hint">Use this form to attach files to <strong><a href="<%= @attach_object.object_url %>"><%= @attach_object.object_name %></a></strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>.</div>
   <div>
-  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox'} %> <label for="attachFormExistingFile" class="checkbox"><%= "Attach existing file (from Files section)" %></label>
+  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormExistingFile" class="checkbox"><%= "Attach existing file (from Files section)" %></label>
   </div>
   
   <div id="attachFormExistingFileControls">
@@ -23,15 +22,16 @@
   </div>
   
   <div>
-  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox'} %> <label for="attachFormNewFile" class="checkbox"><%= "Upload new file and attach it to message" %></label>
+  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormNewFile" class="checkbox"><%= "Upload new file and attach it to message" %></label>
   </div>
   
   <div id="attachFormNewFileControls">
-    <%= render :partial => 'files/attach_file', :locals => {:attach_id => 1} %>
+    <%= render :partial => 'files/attach_file' %>
   </div>
   
   <script type="text/javascript">
-    App.modules.attachToObjectForm.toggleAttachForms();
+    file_form_attach_update_action();
+    file_form_attach_init(<%= AppConfig.max_attachments %>);
   </script>
   
   <button class="submit" type="submit">Attach files</button>

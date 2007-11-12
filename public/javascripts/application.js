@@ -156,6 +156,7 @@ function user_form_update_passwordgen()
 }
 
 // File form stuff
+var file_form_controls = null;
 
 function file_form_select_revision()
 {
@@ -165,6 +166,76 @@ function file_form_select_revision()
 function file_form_select_update()
 {
 	$('updateFileForm').style.display = $('fileFormUpdateFile').checked ? 'block' : 'none';	
+}
+
+function file_form_attach_update_action()
+{
+	$('attachFormSelectFile').disabled = !$('attachFormExistingFile').checked;
+	$('attachFilesInput_1').disabled = !$('attachFormNewFile').checked;
+}
+
+function file_form_attach_init(limit)
+{
+	if (file_form_controls != null)
+		return;
+	
+	file_form_controls = {'count' : 1, 'next_id' : 2, 'limit' : limit};
+	
+	var add_button = document.createElement('button');
+    add_button.setAttribute('type', 'button');
+    add_button.setAttribute('id', 'attachFilesAdd');
+    add_button.className = 'add_button';
+    add_button.appendChild(document.createTextNode( "Add file" ));
+	
+	$('attachFiles').appendChild(add_button);
+	
+	add_button.observe('click', function(event){
+		file_form_attach_add();
+	});
+}
+
+function file_form_attach_add()
+{
+	// Check to see if we have reached the limit
+	if (file_form_controls.count >= file_form_controls.limit)
+		return;
+	
+	var cur_id = file_form_controls.next_id;
+	
+	var attach_div = document.createElement('div');
+	attach_div.id = 'attachFiles' + '_' + cur_id;
+	
+	var file_input = document.createElement('input');
+	file_input.id = 'attachFilesInput_' + '_' + cur_id;
+	file_input.setAttribute('type', 'file');
+	file_input.setAttribute('name', 'uploaded_files[]');
+	
+	var remove_button = document.createElement('button');
+	remove_button.setAttribute('type', 'button');
+	remove_button.className = 'remove_button';
+	remove_button.appendChild(document.createTextNode("Remove"));
+	
+	remove_button.observe('click', function(event){
+		file_form_attach_remove(cur_id);
+	});
+	
+	attach_div.appendChild(file_input);
+	attach_div.appendChild(remove_button);
+
+	$('attachFilesControls').appendChild(attach_div);
+	
+	if (cur_id >= file_form_controls.limit)
+		$('attachFilesAdd').disabled = true;
+	
+	file_form_controls.next_id += 1;
+	file_form_controls.count += 1;
+}
+
+function file_form_attach_remove(id)
+{
+	$('attachFilesControls').removeChild($('attachFiles_' + id));
+	$('attachFilesAdd').disabled = false;
+    file_form_controls.count -= 1;
 }
   	
 Event.observe(window, 'load', userbox_init, false);

@@ -46,6 +46,8 @@ ActionController::Routing::Routes.draw do |map|
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
   
+  map.connect "comment/add/:object_id.:object_type", :controller => 'comment', :action => 'add'
+  
   map.connect 'administration/:action/:id.:format', :controller => 'administration'
   map.connect 'administration/:action/:id', :controller => 'administration'
   

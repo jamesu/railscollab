@@ -95,5 +95,8 @@
   </fieldset>
 -->  
 <% if ProjectFile.can_be_created_by(@logged_user, @active_project) %>
-  <%= render :partial => 'files/attach_file', :locals => {:attach_id => 1} %>
+  <%= render :partial => 'files/attach_file' %>
+  <script type="text/javascript">
+    file_form_attach_init(<%= AppConfig.max_attachments %>);
+  </script>
 <% end %>
