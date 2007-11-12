@@ -147,5 +147,12 @@ function form_form_update_action()
 	$('projectFormActionSelectMessage').disabled = !$('projectFormActionAddComment').checked;
 	$('projectFormActionSelectTaskList').disabled =  !$('projectFormActionAddTask').checked;
 }
+
+// User form stuff
+
+function user_form_update_passwordgen()
+{
+	userFormPasswordInputs.style.display = $('userFormGeneratePassword').checked ? 'none' : 'block';
+}
   	
 Event.observe(window, 'load', userbox_init, false);
