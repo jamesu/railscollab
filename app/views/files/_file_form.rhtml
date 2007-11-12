@@ -16,7 +16,7 @@
   </div>
 <% else %>
   <div class="hint">
-    <div class="header"><%= check_box_tag 'file_data[updated_file]', '1', false, :class => 'checkbox', :id => 'fileFormUpdateFile' %><label for="fileFormUpdateFile" class="checkbox"><%= "Update file" %></label></div>
+    <div class="header"><%= check_box_tag 'file_data[updated_file]', '1', false, :class => 'checkbox', :id => 'fileFormUpdateFile', :onclick => "file_form_select_update()" %><label for="fileFormUpdateFile" class="checkbox"><%= "Update file" %></label></div>
     <div class="content">
       <div id="updateFileDescription">
         <p><%= "You can replace an existing file by specifying a new one. If you don't want to replace it simply leave this field blank." %></p>
@@ -31,7 +31,7 @@
         
         <div id="revisionControls">
           <div>
-            <%= check_box_tag 'file_data[version_file_change]', '1', false, :class => 'checkbox', :id => 'fileFormVersionChange' %><label for="fileFormVersionChange" class="checkbox"><%= "New revision" %></label>
+            <%= check_box_tag 'file_data[version_file_change]', '1', false, :class => 'checkbox', :id => 'fileFormVersionChange', :onclick => "file_form_select_revision()" %><label for="fileFormVersionChange" class="checkbox"><%= "New revision" %></label>
           </div>
           <div id="fileFormRevisionCommentBlock">
             <label for="fileFormRevisionComment"><%= "Revision comment" %>:</label>
@@ -41,8 +41,8 @@
       </div>
       
       <script type="text/javascript">
-        App.modules.addFileForm.updateFileClick();
-        App.modules.addFileForm.versionFileChangeClick();
+        file_form_select_update();
+        file_form_select_revision();
       </script>
       
     </div>

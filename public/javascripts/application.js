@@ -154,5 +154,17 @@ function user_form_update_passwordgen()
 {
 	userFormPasswordInputs.style.display = $('userFormGeneratePassword').checked ? 'none' : 'block';
 }
+
+// File form stuff
+
+function file_form_select_revision()
+{
+	$('fileFormRevisionCommentBlock').style.display = $('fileFormVersionChange').checked ? 'block' : 'none';
+}
+
+function file_form_select_update()
+{
+	$('updateFileForm').style.display = $('fileFormUpdateFile').checked ? 'block' : 'none';	
+}
   	
 Event.observe(window, 'load', userbox_init, false);
