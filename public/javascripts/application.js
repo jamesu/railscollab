@@ -237,5 +237,31 @@ function file_form_attach_remove(id)
 	$('attachFilesAdd').disabled = false;
     file_form_controls.count -= 1;
 }
+
+// Notification form stuff (mainly for message posting)
+var notify_form_companies = {};
+
+function notify_form_select(company_id, id)
+{
+	var do_all = true;
+	
+	// Check to see if everything has been selected
+	notify_form_companies['company_' + company_id].users.each(function(user_id){
+		if (!$('notifyUser' + user_id).checked)
+			do_all = false;
+	});
+	
+	$('notifyCompany' + company_id).checked = do_all;
+}
+
+function notify_form_select_company(id)
+{
+	if (!$('notifyCompany' + id).checked)
+		return;
+	
+	notify_form_companies['company_' + id].users.each(function(user_id){
+		$('notifyUser' + user_id).checked = true;
+	});
+}
   	
 Event.observe(window, 'load', userbox_init, false);

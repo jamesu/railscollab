@@ -11,14 +11,8 @@
   </div>
   
   <div>
-<% if is_new %>
     <label for="messageFormAdditionalText"><%= "Additional text" %>: <span class="desc">- (<%= "Additional message text is visible only on comments page" %>)</span></label>
     <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
-<% else %>
-    <label for="messageFormAdditionalText"><%= "Additional text" %>: (<a href="#" onclick="return App.modules.addMessageForm.toggleAdditionalText(this, 'messageFormAdditionalText', '<?php echo lang('expand additional text') ?>', '<?php echo lang('collapse additional text') ?>')"><?php echo lang('expand additional text') ?></a>): <span class="desc">- <%= "Additional message text is visible only on comments page" %></span></label>
-    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
-    <script type="text/javascript">$('messageFormAdditionalText').style.display = 'none';</script>
-<% end %>
   </div>
   
   <fieldset>
@@ -60,31 +54,27 @@
     <legend><%= "Tags" %></legend>
     <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %>
   </fieldset>
-  <!--
   <fieldset id="emailNotification">
     <legend><%= "Email notification" %></legend>
     <p><%= "Notify selected people about this message via email" %></p>
 <% @active_project.companies.each do |company| -%>
     <script type="text/javascript">
-      App.modules.addMessageForm.notify_companies.company_<?php echo $company->getId() ?> = {
-        id          : <?php echo $company->getId() ?>,
-        checkbox_id : 'notifyCompany<?php echo $company->getId() ?>',
+      notify_form_companies.company_<%= company.id %> = {
+        id          : <%= company.id %>,
         users       : []
       };
     </script>
 <% users_on_project = company.users_on_project(@active_project) %>
 <% if users_on_project.length > 0 %>
-    <div class="companyDetails">
-      <div class="companyName"><?php echo checkbox_field('message[notify_company_' . $company->getId() . ']', array_var($message_data, 'notify_company_' . $company->getId()), array('id' => 'notifyCompany' . $company->getId(), 'onclick' => 'App.modules.addMessageForm.emailNotifyClickCompany(' . $company->getId() . ')')) ?> <label for="notifyCompany<?php echo $company->getId() ?>" class="checkbox"><?php echo clean($company->getName()) ?></label></div>
+   <div class="companyDetails">
+      <div class="companyName"><%= check_box_tag "notify_company[]", "#{company.id}", false, {:id => "notifyCompany#{company.id}", :class => 'checkbox', :onclick => "notify_form_select_company(#{company.id})"} %> <label for="<%= "notifyCompany#{company.id}" %>" class="checkbox"><%= h company.name %></label></div> 
       <div class="companyMembers">
         <ul>
 <% users_on_project.each do |user| -%>
-          <li><?php echo checkbox_field('message[notify_user_' . $user->getId() . ']', array_var($message_data, 'notify_user_' . $user->getId()), array('id' => 'notifyUser' . $user->getId(), 'onclick' => 'App.modules.addMessageForm.emailNotifyClickUser(' . $company->getId() . ', ' . $user->getId() . ')')) ?> <label for="notifyUser<?php echo $user->getId() ?>" class="checkbox"><?php echo clean($user->getDisplayName()) ?></label></li>
+          <li><%= check_box_tag "notify_user[]", "#{user.id}", false, {:id => "notifyUser#{user.id}", :class => 'checkbox', :onclick => "notify_form_select(#{company.id}, #{user.id})"} %> <label for="<%= "notifyUser#{user.id}" %>" class="checkbox"><%= h user.display_name %></label>
+          </li>
           <script type="text/javascript">
-            App.modules.addMessageForm.notify_companies.company_<?php echo $company->getId() ?>.users.push({
-              id          : <?php echo $user->getId() ?>,
-              checkbox_id : 'notifyUser<?php echo $user->getId() ?>'
-            });
+            notify_form_companies.company_<%= company.id %>.users.push(<%= user.id %>);
           </script>
 <% end %>
         </ul>
@@ -93,7 +83,7 @@
 <% end %>
 <% end %>
   </fieldset>
--->  
+ 
 <% if ProjectFile.can_be_created_by(@logged_user, @active_project) %>
   <%= render :partial => 'files/attach_file' %>
   <script type="text/javascript">
