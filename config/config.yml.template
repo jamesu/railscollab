@@ -1,5 +1,6 @@
 common:
   site_name: RailsCollab
+  site_url: "http://localhost:3000"
   
   project_logs_per_page: 10
   logs_per_project: 5
@@ -33,6 +34,23 @@ common:
   	'other'
   ]
   
+  # Email notification
+  
+  notification_email_address: "RailsCollab Notification <fill.this.in@localhost>"
+  notification_email_method: test # smtp, sendmail, or test
+  
+  # Overrides ActionMailer smtp_settings
+  notification_email_smtp:
+    address: localhost
+    port: 123
+    user_name: user
+    password: password
+    authentication: login
+  
+  # Overrides ActionMailer sendmail_settings
+  notification_email_sendmail:
+    location: "/usr/bin/sendmail"
+    arguments: "-i -t -O DeliveryMode='b'"  
   allow_openid: false
 	
 # Environment specific configuration
