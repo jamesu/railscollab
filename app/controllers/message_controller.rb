@@ -104,9 +104,25 @@ class MessageController < ApplicationController
           ApplicationLog.new_log(@message, @logged_user, :add, @message.is_private)
           
           @message.tags = message_attribs[:tags]
-          # TODO: notifications
+		  
+          # Notify selected users
+          if !params[:notify_user].nil?
+			valid_users = params[:notify_user].collect do |user_id|
+				real_id = user_id.to_i
+				
+				if ProjectUser.find(:all, :conditions => ["user_id = ? AND project_id = ?", real_id, @active_project.id]).length > 0
+					real_id
+				else
+					nil
+				end
+			end
+			
+			User.find(:all, :conditions => "id IN (#{valid_users.compact.join(',')})").each do |user|
+				@message.send_notification(user)
+			end
+		  end
           
-          if ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length then
+          if (!params[:uploaded_files].nil? ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
 			flash[:flash_success] = "Successfully added message, some attachments failed validation"
 		  else
 			flash[:flash_success] = "Successfully added message"
@@ -143,9 +159,7 @@ class MessageController < ApplicationController
         if @message.save
           ApplicationLog.new_log(@message, @logged_user, :edit, @message.is_private)
           
-          # TODO: notifications
-          
-          if ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length then
+          if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
 			flash[:flash_success] = "Successfully updated message, some attachments failed validation"
 		  else
 			flash[:flash_success] = "Successfully updated message"

@@ -87,6 +87,9 @@ class ProjectFile < ActiveRecord::Base
 		return self.project_file_revisions[0]
 	end
 	
+	def send_comment_notifications(comment)
+	end
+	
 	def add_revision(file, new_revision, user, comment)
 		file_revision = ProjectFileRevision.new(:revision_number => new_revision)
 		file_revision.project_file = self

@@ -67,3 +67,9 @@ config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.yml"))
 env_config = config.send(RAILS_ENV)
 config.common.update(env_config) unless env_config.nil?
 ::AppConfig = OpenStruct.new(config.common)
+
+# ActionMailer stuff
+ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
+ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
+ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
+ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail

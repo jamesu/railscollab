@@ -77,10 +77,10 @@ class CommentController < ApplicationController
         if @comment.save
           ApplicationLog.new_log(@comment, @logged_user, :add, @comment.is_private, @commented_object.project)
           
-          # TODO: notifications
+          # Notify everyone
+          @commented_object.send_comment_notifications(@comment)
           
-          
-          if ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length then
+          if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
 			flash[:flash_success] = "Successfully added comment, some attachments failed validation"
 		  else
 			flash[:flash_success] = "Successfully added comment"
@@ -113,7 +113,7 @@ class CommentController < ApplicationController
           
           # TODO: notifications
           
-          if ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length then
+          if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
 			flash[:flash_success] = "Successfully updated comment, some attachments failed validation"
 		  else
 			flash[:flash_success] = "Successfully updated comment"

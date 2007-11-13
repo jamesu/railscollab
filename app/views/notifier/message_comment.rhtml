@@ -1,0 +1,14 @@
+------------------------------------------------------------
+ <%= "DO NOT REPLY TO THIS MESSAGE" %>
+------------------------------------------------------------
+
+<%= "A new comment has been posted to the message'#{@message.title}'." %> <%= "To view this comment, visit the following URL:" %>
+
+- <%= "#{AppConfig.site_url}#{@comment.object_url}" %>
+
+Company: <%= Company.owner.name %>
+Project: <%= @message.project.name %>
+Author: <%= @comment.created_by.display_name %>
+
+--
+<%= AppConfig.site_url %>
