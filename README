@@ -24,6 +24,7 @@ following to deploy & run RailsCollab:
     - Ruby/GD2 (http://gd2.rubyforge.org/)
     - RedCloth (http://whytheluckystiff.net/ruby/redcloth/)
     - ruby-openid (gem install ruby-openid)
+    - ActionMailer (gem install ActionMailer)
 
 Upgrading from ActiveCollab
 ***************************
@@ -34,7 +35,8 @@ conventions of certain fields.
 
 More or less all the features of ActiveCollab are implemented, with the exception 
 of the following:
-    - E-mail dispatching
+    - E-mail Notification for assignments and new accounts
+    - Forgot password reset
     - Administration tools
     - Runtime configuration editor
 
