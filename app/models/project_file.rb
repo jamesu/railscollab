@@ -116,7 +116,10 @@ class ProjectFile < ActiveRecord::Base
 		
 		if !files.nil?
 			files.each do |file|
-				return if file.class != StringIO
+				if file.class != StringIO
+					count += 1
+					next
+				end
 				
 				filename = (file.original_filename).sanitize_filename
 				
