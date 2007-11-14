@@ -23,7 +23,7 @@ class ProjectFile < ActiveRecord::Base
 	include ActionController::UrlWriter
 	
 	belongs_to :project
-	belongs_to :project_folder, :foreign_key => 'folder_id'
+	belongs_to :project_folder, :foreign_key => 'folder_id', :counter_cache => true
 	
 	has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
 	has_many :comments, :as => 'rel_object', :dependent => :destroy
