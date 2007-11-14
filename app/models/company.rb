@@ -129,7 +129,7 @@ class Company < ActiveRecord::Base
 	end
 	
 	def users_on_project(project)
-	 proj_users = ProjectUser.find(:all, :select => 'user_id')
+	 proj_users = ProjectUser.find(:all, :conditions => "project_id = #{project.id}", :select => 'user_id')
 	 query_users = proj_users.collect do |pu|
 	   pu.user_id
 	 end.join(',')
