@@ -68,7 +68,7 @@ class CommentController < ApplicationController
       when :post
       	comment_attribs = params[:comment]
       	
-      	@comment.update_attributes(comment_attribs)
+      	@comment.attributes = comment_attribs
       	@comment.rel_object = @commented_object
       	@comment.created_by = @logged_user
       	
@@ -103,7 +103,7 @@ class CommentController < ApplicationController
       when :post
         comment_attribs = params[:comment]
         
-        @comment.update_attributes(comment_attribs)
+        @comment.attributes = comment_attribs
         @comment.updated_by = @logged_user
         
         @comment.is_private = @logged_user.member_of_owner? ? comment_attribs[:is_private] : false

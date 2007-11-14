@@ -299,7 +299,7 @@ class ProjectController < ApplicationController
       when :post
         project_attribs = params[:project]
         
-        @project.update_attributes(project_attribs)
+        @project.attributes = project_attribs
         @project.created_by = @logged_user
         @project.companies << Company.owner
 		
@@ -355,7 +355,7 @@ class ProjectController < ApplicationController
       when :post
         project_attribs = params[:project]
         
-        @project.update_attributes(project_attribs)
+        @project.attributes = project_attribs
         @project.updated_by = @logged_user
         if @project.save
           ApplicationLog.new_log(@project, @logged_user, :edit, true)

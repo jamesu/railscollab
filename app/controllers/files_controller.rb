@@ -111,7 +111,7 @@ class FilesController < ApplicationController
       when :post
         folder_attribs = params[:folder]
         
-        @folder.update_attributes(folder_attribs)
+        @folder.attributes = folder_attribs
         
         @folder.project = @active_project
         
@@ -143,7 +143,7 @@ class FilesController < ApplicationController
       when :post
         folder_attribs = params[:folder]
         
-        @folder.update_attributes(folder_attribs)
+        @folder.attributes = folder_attribs
         
         if @folder.save
           ApplicationLog::new_log(@folder, @logged_user, :edit)
@@ -288,7 +288,7 @@ class FilesController < ApplicationController
        		do_abort = false
         end
         
-        @file.update_attributes(file_attribs)
+        @file.attributes = file_attribs
         @file.comments_enabled = true
         
         if @logged_user.member_of_owner?
@@ -347,7 +347,7 @@ class FilesController < ApplicationController
         	end
         end
         
-        @file.update_attributes(file_attribs)
+        @file.attributes = file_attribs
         
         if @logged_user.member_of_owner?
         	# These are reserved

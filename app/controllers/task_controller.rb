@@ -80,7 +80,7 @@ class TaskController < ApplicationController
       when :post
         task_attribs = params[:task_list]
         
-        @task_list.update_attributes(task_attribs)
+        @task_list.attributes = task_attribs
         @task_list.created_by = @logged_user
         @task_list.project = @active_project
         
@@ -116,7 +116,7 @@ class TaskController < ApplicationController
       when :post
         task_attribs = params[:task_list]
         
-        @task_list.update_attributes(task_attribs)
+        @task_list.attributes = task_attribs
         
         @task_list.updated_by = @logged_user
         @task_list.tags = task_attribs[:tags]
@@ -188,7 +188,7 @@ class TaskController < ApplicationController
       when :post
         task_attribs = params[:task]
         
-        @task.update_attributes(task_attribs)
+        @task.attributes = task_attribs
         @task.created_by = @logged_user
         @task.task_list = @task_list
         
@@ -226,7 +226,7 @@ class TaskController < ApplicationController
       when :post
         task_attribs = params[:task]
         
-        @task.update_attributes(task_attribs)
+        @task.attributes = task_attribs
         @task.updated_by = @logged_user
         
         if @task.save

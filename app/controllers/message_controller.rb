@@ -138,7 +138,7 @@ class MessageController < ApplicationController
       when :post
         category_attribs = params[:category]
         
-        @category.update_attributes(category_attribs)
+        @category.attributes = category_attribs
         
         if @category.save
           ApplicationLog::new_log(@category, @logged_user, :edit)
@@ -212,8 +212,8 @@ class MessageController < ApplicationController
       when :post
         message_attribs = params[:message]
         
-        # TODO: set subscribers, handle file uploads
-        @message.update_attributes(message_attribs)
+        # TODO: set subscribers
+        @message.attributes = message_attribs
         
         @message.project = @active_project
         @message.created_by = @logged_user
@@ -270,7 +270,7 @@ class MessageController < ApplicationController
       when :post
         message_attribs = params[:message]
         
-        @message.update_attributes(message_attribs)
+        @message.attributes = message_attribs
         
         @message.updated_by = @logged_user
         @message.tags = message_attribs[:tags]
