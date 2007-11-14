@@ -337,7 +337,7 @@ class ProjectController < ApplicationController
           end
           
           flash[:flash_success] = "Successfully added project"
-          redirect_to :controller => 'project', :action => 'permissions', :id => @project.id
+          redirect_to :controller => 'project', :action => 'permissions', :active_project => @project.id
         end
     end 
   end
