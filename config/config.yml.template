@@ -34,6 +34,14 @@ common:
   	'other'
   ]
   
+  default_project_message_categories: [
+  	'General',
+  	'Projects',
+  	'Problems'
+  ]
+  
+  default_project_message_category: General
+  
   # Email notification
   
   notification_email_address: "RailsCollab Notification <fill.this.in@localhost>"
