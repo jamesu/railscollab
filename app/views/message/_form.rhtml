@@ -19,7 +19,12 @@
     <legend><%= "Milestone" %></legend>
     <%= select 'message', 'milestone_id', ProjectMilestone.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
   </fieldset>
-  
+
+  <fieldset>
+    <legend><%= "Category" %></legend>
+    <%= select 'message', 'category_id', ProjectMessageCategory.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormCategory'} %>
+  </fieldset>
+    
 <% if @logged_user.member_of_owner? %>
   <fieldset>
     <legend><%= "Options" %></legend>

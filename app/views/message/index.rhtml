@@ -6,7 +6,12 @@
   
   @page_actions = []
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => "Add Message", :url => "/project/#{@active_project.id}/message/add"}
+    @page_actions += [
+    	{:title => "Add Message", :url => (@current_category.nil? ? 
+    										"/project/#{@active_project.id}/message/add" : 
+    										"/project/#{@active_project.id}/message/add?category_id=#{@current_category.id}")},
+    	{:title => "Add Category", :url => "/project/#{@active_project.id}/message/add_category"},
+    ]
   end
   
   @additional_stylesheets = ['project/messages']
@@ -22,5 +27,11 @@
   <%= pagination_links "/project/#{@active_project.id}/message/index?", @pagination unless @pagination.length <= 1 %></div>
 </div>
 <% else %>
-<p><%= "No messages in project" %></p>
+<p>
+<% if @current_category.nil? %>
+<%= "No messages in project" %>
+<% else %>
+<%= "No messages in category" %>
+<% end %>
+</p>
 <% end %>

@@ -1,4 +1,4 @@
-<% if @important_messages.length > 0 %>
+<% if !@important_messages.empty? %>
 <div class="sidebarBlock">
   <h2><%= "Important messages" %></h2>
   <div class="blockContent">
@@ -8,6 +8,34 @@
       <span class="desc"><%= "There is a total of #{important_message.comments.length } comment(s)."%></span></li>
 <% end %>
     </ul>
+  </div>
+</div>
+<% end %>
+
+<% if !@message_categories.empty? %>
+<div class="sidebarBlock">
+  <h2><%= "Categories" %></h2>
+  <div class="blockContent" id="sidebarMessageCategoryList">
+    <ul>
+<% if !@current_category.nil? %>
+      <li><%= link_to "All Categories", :action => 'index' %></li>
+<% else %>
+      <li><%= link_to "All Categories", {:action => 'index'}, :class => 'selected' %></li>
+<% end %>
+    
+<% @message_categories.each do |category| -%>
+<% if !@current_category.nil? and @current_category.id == category.id %>
+<% selected_class = {:class => 'selected'} %>
+<% else %>
+<% selected_class = {} %>
+<% end %>
+      <li><%= link_to (h category.name), {:action => 'category', :id => category.id}, selected_class %> 
+      <% if category.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), :action => 'edit_category', :id => category.id %><% end %>
+      <% if category.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:action => 'delete_category', :id => category.id}, :method => :post, :confirm => "Are you sure you want to delete this category?" %><% end %>
+      </li>
+<% end %>
+    </ul>
+    <p><a href="<%= "/project/#{@active_project.id}/message/add_category" %>"><%= "Add category" %></a></p>
   </div>
 </div>
 <% end %>

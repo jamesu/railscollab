@@ -2,7 +2,10 @@
   @page_title = (h @message.title)
   
   @tabbed_navigation_items = project_tabbed_navigation(1)
-  @bread_crumbs = project_crumbs("View message", [{:title => 'Messages', :url => "/project/#{@active_project.id}/message"}])
+  @bread_crumbs = project_crumbs("View message", [
+  	{:title => 'Messages', :url => "/project/#{@active_project.id}/message"},
+  	{:title => (h @message.project_message_category.name), :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"}
+  ])
   
   @page_actions = []
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
