@@ -34,6 +34,22 @@ class AddExtraData < ActiveRecord::Migration
     		message.save
     	end
     end
+    
+    # Fix counter cache's
+    ProjectMessage.reset_column_information
+    Comment.reset_column_information
+    ProjectFolder.reset_column_information
+    
+    ProjectMessage.find(:all).each do |obj|
+    	obj.update_attribute :comments_count, obj.comments.length
+    	obj.update_attribute :attached_files_count, obj.attached_file.length
+    end
+    Comment.find(:all).each do |obj|
+    	obj.update_attribute :attached_files_count, obj.attached_file.length
+    end
+    ProjectFolder.find(:all).each do |obj|
+    	obj.update_attribute :project_files_count, obj.project_files.length
+    end
   end
 
   def self.down
