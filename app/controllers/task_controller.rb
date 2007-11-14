@@ -197,7 +197,6 @@ class TaskController < ApplicationController
           flash[:flash_success] = "Successfully added task"
 		  
 		  if params[:partial]
-			puts "RENDERING PARTIAL!!!"
 			render :partial => 'task/task_item', :collection => [@task]
 		  else
 			redirect_back_or_default :controller => 'task'
