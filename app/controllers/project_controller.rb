@@ -313,7 +313,7 @@ class ProjectController < ApplicationController
 			@project.users << user unless (user == @logged_user)
           end
 		  
-		  @project.users << @logged_user
+          @project.users << @logged_user
           
           # Add default folders
           AppConfig.default_project_folders.each do |folder_name|
