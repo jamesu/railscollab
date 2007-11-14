@@ -1,0 +1,9 @@
+xml = xml_instance
+
+xml.comment :id => comment.id do
+	xml.post_id comment.rel_object_id
+	xml.creator_name (h comment.created_by.display_name)
+	xml.creator_id comment.created_by_id
+	xml.body (h comment.text)
+	xml.posted_on basecamp_time(comment.created_on)
+end

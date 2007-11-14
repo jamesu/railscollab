@@ -1,0 +1,3 @@
+xml.tag!('attachment-categories') do
+  render :partial => 'basecamp/attachment_category', :collection => @folders, :locals => {:xml_instance => xml}
+end

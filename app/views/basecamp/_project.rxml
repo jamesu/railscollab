@@ -1,0 +1,22 @@
+xml = xml_instance
+
+xml.project do
+	xml.id project.id, :type => 'integer'
+	xml.name (h project.name)
+	xml.tag!('created-on', basecamp_time(project.created_on), :type => 'datetime')
+	xml.status "UNKNOWN"
+	xml.tag!('last-changed-on', basecamp_time(project.updated_on), :type => 'datetime')
+	xml.company do
+		owner = Company.owner
+		xml.id owner.id
+		xml.name (h owner.name)
+	end
+	
+	#xml.announcement "UNKNOWN"
+	
+	if @logged_user.is_admin?
+		xml.tag!('start-page', 'UNKNOWN')
+		xml.tag!('show-writeboards', false, :type => 'boolean')
+		xml.tag!('show-announcement', false, :type => 'boolean')
+	end
+end

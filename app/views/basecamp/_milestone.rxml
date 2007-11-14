@@ -1,0 +1,18 @@
+xml = xml_instance
+
+xml.milestone do
+	xml.id milestone.id, :type => 'integer'
+	xml.title milestone.name
+	xml.deadline basecamp_date(milestone.due_date), :type => 'date'
+	xml.completed milestone.is_completed?, :type => 'boolean'
+	xml.tag!('project-id', milestone.project_id, :type => 'integer')
+	xml.tag!('created-on', basecamp_time(milestone.created_on), :type => 'datetime')
+	xml.tag!('creator-id', milestone.created_by_id, :type => 'integer')
+	xml.tag!('responsible-party-id', milestone.assigned_to.id, :type => 'integer')
+	xml.tag!('responsible-party-type', milestone.assigned_to.type.to_s)
+	
+	if milestone.is_completed?
+		xml.tag!('completed-on', basecamp_time(milestone.created_on), :type => 'datetime')
+		xml.tag!('completer-id', milestone.completed_by_id, :type => 'integer')
+	end
+end

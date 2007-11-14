@@ -1,0 +1,3 @@
+xml.comments do
+  render :partial => 'basecamp/comment', :collection => @comments, :locals => {:xml_instance => xml}
+end

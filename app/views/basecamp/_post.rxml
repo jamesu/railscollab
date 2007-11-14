@@ -1,0 +1,32 @@
+xml = xml_instance
+
+xml.post do
+	xml.id post.id, :type => 'integer'
+	xml.title post.title
+	xml.body (h post.text) unless is_abbreviated
+	xml.tag!('posted-on', basecamp_time(post.created_on), :type => 'datetime')
+	
+	unless is_abbreviated
+		xml.tag!('project-id', post.project_id, :type => 'integer')
+		xml.tag!('category-id', post.category_id, :type => 'integer')
+		xml.tag!('milestone-id', post.milestone_id, :type => 'integer')
+		xml.tag!('comments-count', post.comments.length, :type => 'integer')
+	end
+	
+	xml.tag!('attachments-count', 0, :type => 'integer')
+	
+	unless is_abbreviated
+		xml.tag!('use-textile', true, :type => 'boolean')
+		xml.tag!('extended-body', (h post.additional_text))
+		xml.tag!('display-body', true)
+		xml.tag!('display-extended-body', true)
+		xml.private post.is_private, :type => 'boolean'
+	end
+	
+	if is_abbreviated
+		xml.category do
+			xml.id post.milestone_id
+			xml.name post.milestone.name
+		end
+	end
+end

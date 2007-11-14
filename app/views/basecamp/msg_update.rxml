@@ -1,0 +1,1 @@
+render :partial => 'basecamp/post', :collection => [@message], :locals => {:xml_instance => xml, :is_abbreviated => false}

@@ -90,7 +90,7 @@ class CommentController < ApplicationController
     end
   end
   
-  def edit    
+  def edit
     if not @comment.can_be_edited_by(@logged_user)
       flash[:flash_error] = "Insufficient permissions"
       redirect_back_or_default :controller => 'project', :action => 'overview'

@@ -1,0 +1,8 @@
+xml = xml_instance
+
+xml.tag!('attachment-category') do
+	xml.id attachment_category.id, :type => 'integer'
+	xml.name (h attachment_category.name)
+	xml.tag!('project-id', attachment_category.project_id, :type => 'integer')
+	xml.tag!('elements-count', attachment_category.project_files.length, :type => 'integer')
+end
