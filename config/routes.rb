@@ -70,7 +70,26 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
-        
+
+
+  # BaseCamp API
+  map.connect 'projects/list', :controller => 'basecamp', :action => 'projects_list'
+  map.connect 'projects/:active_project/attachment_categories', :controller => 'basecamp', :action => 'projects_attachment_categories'
+  map.connect 'projects/:active_project/post_categories', :controller => 'basecamp', :action => 'projects_post_categories'
+  map.connect 'contacts/companies', :controller => 'basecamp', :action => 'contacts_companies'
+  
+  map.connect 'msg/comment/:id', :controller => 'basecamp', :action => 'msg_comment'
+  map.connect 'msg/comments/:id', :controller => 'basecamp', :action => 'msg_comments'
+  map.connect 'msg/create_comment/:id', :controller => 'basecamp', :action => 'msg_create_comment'
+  map.connect 'projects/:active_project/msg/create', :controller => 'basecamp', :action => 'projects_msg_create'
+  map.connect 'msg/delete_comment/:id', :controller => 'basecamp', :action => 'msg_delete_comment'
+  map.connect 'msg/delete/:id', :controller => 'basecamp', :action => 'msg_delete'
+  map.connect 'msg/get/:ids', :controller => 'basecamp', :action => 'msg_get'
+  map.connect 'projects/:active_project/msg/archive', :controller => 'basecamp', :action => 'projects_msg_archive'
+  map.connect 'projects/:active_project/msg/cat/:cat_id/archive', :controller => 'basecamp', :action => 'projects_msg_cat_archive'
+  map.connect 'msg/update_comment', :controller => 'basecamp', :action => 'msg_update_comment'
+  map.connect 'msg/update/:id', :controller => 'basecamp', :action => 'msg_update'
+  
   # Install the default route as the lowest priority.
   #map.connect ':controller/:action/:id.:format'
   #map.connect ':controller/:action/:id'
