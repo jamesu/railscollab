@@ -159,7 +159,7 @@ class ProjectTaskList < ActiveRecord::Base
 	# Validation
 	
 	validates_presence_of :name
-	validates_each :project_milestone do |record, attr, value|
+	validates_each :project_milestone, :allow_nil => true do |record, attr, value|
 		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
 	end
 end
