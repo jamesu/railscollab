@@ -305,20 +305,15 @@ class ProjectController < ApplicationController
 		
         @auto_assign_users = Company.owner.auto_assign_users
         
-        # Add auto assigned people (note: we assume default permissions are all access)
-        has_logged_user = false
-        @auto_assign_users.each do |user|
-          	if user == @logged_user
-          		has_logged_user = true
-          	end
-          	
-          	@project.users << user
-        end
-        
-        @project.users << @logged_user unless has_logged_user
-        
         if @project.save
           ApplicationLog.new_log(@project, @logged_user, :add, true)
+		  
+          # Add auto assigned people (note: we assume default permissions are all access)
+          @auto_assign_users.each do |user|
+			@project.users << user unless (user == @logged_user)
+          end
+		  
+		  @project.users << @logged_user
           
           # Add default folders
           AppConfig.default_project_folders.each do |folder_name|
