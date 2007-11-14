@@ -324,9 +324,16 @@ class ProjectController < ApplicationController
           AppConfig.default_project_folders.each do |folder_name|
           	folder = ProjectFolder.new(:name => folder_name)
           	folder.project = @project
-          	if folder.save
-          	ApplicationLog::new_log(folder, @logged_user, :add)
-          	end
+			
+          	ApplicationLog::new_log(folder, @logged_user, :add) if folder.save
+          end
+		  
+		  # Add default message categories
+          AppConfig.default_project_message_categories.each do |category_name|
+          	category = ProjectMessageCategory.new(:name => category_name)
+          	category.project = @project
+			
+			ApplicationLog::new_log(category, @logged_user, :add) if category.save
           end
           
           flash[:flash_success] = "Successfully added project"

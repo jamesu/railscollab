@@ -160,10 +160,17 @@ class ProjectMessage < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :title, :text, :additional_text, :milestone_id
+	attr_accessible :title, :text, :additional_text, :milestone_id, :category_id
 	
 	# Validation
 	
 	validates_presence_of :title
 	validates_presence_of :text
+	validates_each :project_milestone, :allow_nil => true do |record, attr, value|
+		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+	end
+	
+	validates_each :project_message_category do |record, attr, value|
+		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+	end
 end
