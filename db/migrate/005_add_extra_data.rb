@@ -17,6 +17,23 @@ class AddExtraData < ActiveRecord::Migration
     # Useful extra fields
     add_column :users, "office_number_ext",					:string, :limit => 5
     add_column :project_companies, "can_view_private",		:boolean, :default => false, :null => false
+    
+    # Add default categories to every project
+    Project.find(:all).each do |project|
+    	
+    	AppConfig.default_project_message_categories.each do |category_name|
+    		category = ProjectMessageCategory.new(:name => category_name)
+    		category.project = project
+    		category.save
+    	end
+    	
+    	# Set every message in this project to the default category
+    	default_category = ProjectMessageCategory.find(:first, :conditions => ['project_id = ? AND name = ?', project.id, AppConfig.default_project_message_category])
+    	project.project_messages.each do |message|
+    		message.project_message_category = default_category
+    		message.save
+    	end
+    end
   end
 
   def self.down
