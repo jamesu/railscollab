@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 4) do
+ActiveRecord::Schema.define(:version => 5) do
 
   create_table "administration_tools", :force => true do |t|
     t.column "name",       :string,  :limit => 50, :default => "", :null => false
@@ -38,18 +38,19 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   create_table "comments", :force => true do |t|
-    t.column "rel_object_id",   :integer,  :limit => 10,  :default => 0,     :null => false
-    t.column "rel_object_type", :string,   :limit => 30
-    t.column "text",            :text
-    t.column "is_private",      :boolean,                 :default => false, :null => false
-    t.column "is_anonymous",    :boolean,                 :default => false, :null => false
-    t.column "author_name",     :string,   :limit => 50
-    t.column "author_email",    :string,   :limit => 100
-    t.column "author_homepage", :string,   :limit => 100, :default => "",    :null => false
-    t.column "created_on",      :datetime,                                   :null => false
-    t.column "created_by_id",   :integer,  :limit => 10
-    t.column "updated_on",      :datetime
-    t.column "updated_by_id",   :integer,  :limit => 10
+    t.column "rel_object_id",        :integer,  :limit => 10,  :default => 0,     :null => false
+    t.column "rel_object_type",      :string,   :limit => 30
+    t.column "text",                 :text
+    t.column "is_private",           :boolean,                 :default => false, :null => false
+    t.column "is_anonymous",         :boolean,                 :default => false, :null => false
+    t.column "author_name",          :string,   :limit => 50
+    t.column "author_email",         :string,   :limit => 100
+    t.column "author_homepage",      :string,   :limit => 100, :default => "",    :null => false
+    t.column "created_on",           :datetime,                                   :null => false
+    t.column "created_by_id",        :integer,  :limit => 10
+    t.column "updated_on",           :datetime
+    t.column "updated_by_id",        :integer,  :limit => 10
+    t.column "attached_files_count", :integer,                 :default => 0
   end
 
   add_index "comments", ["rel_object_id", "rel_object_type"], :name => "object_id"
@@ -154,8 +155,9 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   create_table "project_companies", :id => false, :force => true do |t|
-    t.column "project_id", :integer, :limit => 10, :default => 0, :null => false
-    t.column "company_id", :integer, :limit => 5,  :default => 0, :null => false
+    t.column "project_id",       :integer, :limit => 10, :default => 0,     :null => false
+    t.column "company_id",       :integer, :limit => 5,  :default => 0,     :null => false
+    t.column "can_view_private", :boolean,               :default => false, :null => false
   end
 
   create_table "project_file_revisions", :force => true do |t|
@@ -198,8 +200,9 @@ ActiveRecord::Schema.define(:version => 4) do
   add_index "project_files", ["project_id"], :name => "project_id"
 
   create_table "project_folders", :force => true do |t|
-    t.column "project_id", :integer, :limit => 10, :default => 0,  :null => false
-    t.column "name",       :string,  :limit => 50, :default => "", :null => false
+    t.column "project_id",          :integer, :limit => 10, :default => 0,  :null => false
+    t.column "name",                :string,  :limit => 50, :default => "", :null => false
+    t.column "project_files_count", :integer,               :default => 0
   end
 
   add_index "project_folders", ["project_id", "name"], :name => "project_id", :unique => true
@@ -220,6 +223,12 @@ ActiveRecord::Schema.define(:version => 4) do
     t.column "order",           :integer,  :limit => 6,                         :default => 0,            :null => false
   end
 
+  create_table "project_message_categories", :force => true do |t|
+    t.column "project_id",             :integer, :limit => 10,                 :null => false
+    t.column "name",                   :string,  :limit => 50, :default => "", :null => false
+    t.column "project_messages_count", :integer,               :default => 0
+  end
+
   create_table "project_messages", :force => true do |t|
     t.column "milestone_id",               :integer,  :limit => 10,  :default => 0,     :null => false
     t.column "project_id",                 :integer,  :limit => 10
@@ -234,6 +243,9 @@ ActiveRecord::Schema.define(:version => 4) do
     t.column "created_by_id",              :integer,  :limit => 10
     t.column "updated_on",                 :datetime
     t.column "updated_by_id",              :integer,  :limit => 10
+    t.column "category_id",                :integer,  :limit => 5,                      :null => false
+    t.column "comments_count",             :integer,                 :default => 0
+    t.column "attached_files_count",       :integer,                 :default => 0
   end
 
   add_index "project_messages", ["milestone_id"], :name => "milestone_id"
@@ -395,29 +407,30 @@ ActiveRecord::Schema.define(:version => 4) do
   add_index "user_im_values", ["is_default"], :name => "is_default"
 
   create_table "users", :force => true do |t|
-    t.column "company_id",    :integer,  :limit => 5,   :default => 0,     :null => false
-    t.column "username",      :string,   :limit => 50,  :default => "",    :null => false
-    t.column "email",         :string,   :limit => 100
-    t.column "token",         :string,   :limit => 40,  :default => "",    :null => false
-    t.column "salt",          :string,   :limit => 13,  :default => "",    :null => false
-    t.column "twister",       :string,   :limit => 10,  :default => "",    :null => false
-    t.column "display_name",  :string,   :limit => 50
-    t.column "title",         :string,   :limit => 30
-    t.column "avatar_file",   :string,   :limit => 44
-    t.column "office_number", :string,   :limit => 20
-    t.column "fax_number",    :string,   :limit => 20
-    t.column "mobile_number", :string,   :limit => 20
-    t.column "home_number",   :string,   :limit => 20
-    t.column "timezone",      :float,                   :default => 0.0,   :null => false
-    t.column "created_on",    :datetime,                                   :null => false
-    t.column "created_by_id", :integer,  :limit => 10
-    t.column "updated_on",    :datetime
-    t.column "last_login",    :datetime
-    t.column "last_visit",    :datetime
-    t.column "last_activity", :datetime
-    t.column "is_admin",      :boolean
-    t.column "auto_assign",   :boolean,                 :default => false, :null => false
-    t.column "identity_url",  :string
+    t.column "company_id",        :integer,  :limit => 5,   :default => 0,     :null => false
+    t.column "username",          :string,   :limit => 50,  :default => "",    :null => false
+    t.column "email",             :string,   :limit => 100
+    t.column "token",             :string,   :limit => 40,  :default => "",    :null => false
+    t.column "salt",              :string,   :limit => 13,  :default => "",    :null => false
+    t.column "twister",           :string,   :limit => 10,  :default => "",    :null => false
+    t.column "display_name",      :string,   :limit => 50
+    t.column "title",             :string,   :limit => 30
+    t.column "avatar_file",       :string,   :limit => 44
+    t.column "office_number",     :string,   :limit => 20
+    t.column "fax_number",        :string,   :limit => 20
+    t.column "mobile_number",     :string,   :limit => 20
+    t.column "home_number",       :string,   :limit => 20
+    t.column "timezone",          :float,                   :default => 0.0,   :null => false
+    t.column "created_on",        :datetime,                                   :null => false
+    t.column "created_by_id",     :integer,  :limit => 10
+    t.column "updated_on",        :datetime
+    t.column "last_login",        :datetime
+    t.column "last_visit",        :datetime
+    t.column "last_activity",     :datetime
+    t.column "is_admin",          :boolean
+    t.column "auto_assign",       :boolean,                 :default => false, :null => false
+    t.column "identity_url",      :string
+    t.column "office_number_ext", :string,   :limit => 5
   end
 
   add_index "users", ["username"], :name => "username", :unique => true
