@@ -259,4 +259,7 @@ class ProjectFile < ActiveRecord::Base
 	# Validation
 	
 	validates_presence_of :filename
+	validates_each :project_folder, :allow_nil => true do |record, attr, value|
+		record.errors.add attr, 'not part of project' if value.project_id != record.projext_id
+	end
 end
