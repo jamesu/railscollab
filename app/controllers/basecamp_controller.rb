@@ -114,12 +114,12 @@ class BasecampController < ApplicationController
     	
     	# Notify everyone
     	@message.send_comment_notifications(@comment)
+    	
+    	render :template => 'basecamp/msg_comment', :status => 201
     else
     	render :text => 'Error', :status => 500
     	return
     end
-    
-    render :file => 'basecamp/msg_comment'
   end
   
   # /projects/#{project_id}/msg/create
@@ -170,12 +170,12 @@ class BasecampController < ApplicationController
     	if !@request_fields[:attachments].nil?
     		# TODO
     	end
+    	
+    	render :template => 'basecamp/msg_update', :status => 201
     else
     	render :text => 'Error', :status => 500
     	return
     end
-    
-    render :file => 'basecamp/msg_update'
   end
   
   # /msg/delete_comment/#{comment_id}
@@ -195,7 +195,7 @@ class BasecampController < ApplicationController
     ApplicationLog.new_log(@comment, @logged_user, :delete, true, @comment.rel_object.project)
     @comment.destroy
     
-    render :file => 'basecamp/msg_comment'
+    render :template => 'basecamp/msg_comment'
   end
   
   # /msg/delete/#{message_id}
@@ -215,7 +215,7 @@ class BasecampController < ApplicationController
     ApplicationLog.new_log(@comment, @logged_user, :delete, true)
     @message.destroy
 
-    render :file => 'basecamp/msg_update'
+    render :template => 'basecamp/msg_update'
   end
   
   # /msg/get/#{message_ids}
@@ -228,7 +228,7 @@ class BasecampController < ApplicationController
   
   # /projects/#{project_id}/msg/cat/#{category_id}/archive
   def projects_msg_cat_archive
-  	render :file => 'basecamp/projects_msg_archive'
+  	render :template => 'basecamp/projects_msg_archive'
   end
   
   # /msg/update_comment
@@ -257,7 +257,7 @@ class BasecampController < ApplicationController
     	return
     end
     
-    render :file => 'basecamp/msg_comment'
+    render :template => 'basecamp/msg_comment'
   end
   
   # /msg/update/#{message_id}
