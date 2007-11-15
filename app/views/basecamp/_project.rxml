@@ -4,7 +4,7 @@ xml.project do
 	xml.id project.id, :type => 'integer'
 	xml.name (h project.name)
 	xml.tag!('created-on', basecamp_time(project.created_on), :type => 'datetime')
-	xml.status "UNKNOWN"
+	xml.status project.is_active? ? 'active' : 'closed'
 	xml.tag!('last-changed-on', basecamp_time(project.updated_on), :type => 'datetime')
 	xml.company do
 		owner = Company.owner
