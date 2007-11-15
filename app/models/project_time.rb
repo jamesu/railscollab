@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class ProjectTime < ActiveRecord::Base
@@ -22,8 +37,10 @@ class ProjectTime < ActiveRecord::Base
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
-	before_create :process_params
-	before_update :process_update_params
+	before_create  :process_params
+	after_create   :process_create
+	before_update  :process_update_params
+	before_destroy :process_destroy
 	 
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
@@ -36,15 +53,25 @@ class ProjectTime < ActiveRecord::Base
 	  end
 	end
 	
+	def process_create
+	  ApplicationLog::new_log(self, self.created_by, :add, self.is_private)
+	end
+	
 	def process_update_params
-		write_attribute("updated_on", Time.now.utc)
-		
-		if self.assigned_to_user_id.nil?
-	      write_attribute("assigned_to_user_id", 0)
-	    end
-	    if self.assigned_to_company_id.nil?
-	      write_attribute("assigned_to_company_id", 0)
-	    end
+	  write_attribute("updated_on", Time.now.utc)
+	  
+	  if self.assigned_to_user_id.nil?
+		write_attribute("assigned_to_user_id", 0)
+	  end
+	  if self.assigned_to_company_id.nil?
+		write_attribute("assigned_to_company_id", 0)
+	  end
+	  
+	  ApplicationLog::new_log(self, self.updated_by, :edit, self.is_private)
+	end
+	
+	def process_destroy
+	  ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
 	end
 	
 	def object_name
@@ -150,6 +177,10 @@ class ProjectTime < ActiveRecord::Base
 		return self.done_date.to_date == Date.today-1
 	end
 	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
+	end
+	
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
@@ -208,10 +239,13 @@ class ProjectTime < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id
+	attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_important
 	
 	# Validation
 	
 	validates_presence_of :name
+	validates_each :is_private, :is_important, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
+	end
 end
 

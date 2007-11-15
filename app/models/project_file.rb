@@ -25,11 +25,15 @@ class ProjectFile < ActiveRecord::Base
 	belongs_to :project
 	belongs_to :project_folder, :foreign_key => 'folder_id', :counter_cache => true
 	
+	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
+	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+	
 	has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
 	has_many :comments, :as => 'rel_object', :dependent => :destroy
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
 	before_create :process_params
+	after_create  :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	
@@ -37,12 +41,18 @@ class ProjectFile < ActiveRecord::Base
 	  write_attribute("created_on", Time.now.utc)
 	end
 	
+	def process_create
+	  ApplicationLog::new_log(self, self.created_by, :add)
+	end
+	
 	def process_update_params
-      write_attribute("updated_on", Time.now.utc)
+	  write_attribute("updated_on", Time.now.utc)
+	  ApplicationLog::new_log(self, self.updated_by, :edit)
 	end
 	
 	def process_destroy
-		AttachedFile.clear_files(self.id)
+	  AttachedFile.clear_files(self.id)
+	  ApplicationLog::new_log(@file, self.updated_by, :delete)
 	end
 	
 	def tags
@@ -55,11 +65,11 @@ class ProjectFile < ActiveRecord::Base
 	 Tag.set_to_object(self, val.split(','), real_owner) unless val.nil?
 	end
 	
-	def created_by
+	def last_created_by
 		return project_file_revisions[0].created_by
 	end
 	
-	def updated_by
+	def last_updated_by
 		return project_file_revisions[0].updated_by
 	end
 
@@ -87,6 +97,10 @@ class ProjectFile < ActiveRecord::Base
 		return self.project_file_revisions[0]
 	end
 	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
+	end
+	
 	def send_comment_notifications(comment)
 	end
 	
@@ -101,6 +115,7 @@ class ProjectFile < ActiveRecord::Base
 		file_revision.update_thumb
 		
 		file_revision.save!
+		ApplicationLog::new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
 	end
 	
 	def update_revision(file, old_revision, user, comment)
@@ -254,12 +269,20 @@ class ProjectFile < ActiveRecord::Base
     
 	# Accesibility
 	
-	attr_accessible :folder_id, :description
+	attr_accessible :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 	
 	# Validation
 	
 	validates_presence_of :filename
 	validates_each :project_folder, :allow_nil => true do |record, attr, value|
-		record.errors.add attr, 'not part of project' if value.project_id != record.projext_id
+		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+	end
+	
+	validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
+	end
+	
+	validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == false
 	end
 end

@@ -96,7 +96,6 @@ class TimeController < ApplicationController
         end
         
         if @time.save
-          ApplicationLog::new_log(@time, @logged_user, :add, @time.is_private)
           flash[:flash_success] = "Successfully added time record"
           redirect_back_or_default :controller => 'time'
         end
@@ -133,7 +132,6 @@ class TimeController < ApplicationController
         end
         
         if @time.save
-          ApplicationLog::new_log(@time, @logged_user, :edit, @time.is_private)
           flash[:flash_success] = "Successfully edited time record"
           redirect_back_or_default :controller => 'time', :id => @time.id
         end
@@ -147,7 +145,7 @@ class TimeController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@time, @logged_user, :delete, @time.is_private)
+    @time.updated_by = @logged_user
     @time.destroy
     
     flash[:flash_success] = "Successfully deleted time record"

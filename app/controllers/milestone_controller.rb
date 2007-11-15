@@ -68,11 +68,7 @@ class MilestoneController < ApplicationController
         @milestone.created_by = @logged_user
         @milestone.project = @active_project
         
-        @milestone.is_private = milestone_attribs[:is_private] if @logged_user.member_of_owner?
-        
         if @milestone.save
-          ApplicationLog::new_log(@milestone, @logged_user, :add, @milestone.is_private)
-          
           @milestone.tags = milestone_attribs[:tags]
           
           flash[:flash_success] = "Successfully updated milestone"
@@ -96,10 +92,7 @@ class MilestoneController < ApplicationController
         @milestone.updated_by = @logged_user
         @milestone.tags = milestone_attribs[:tags]
         
-        @milestone.is_private = milestone_attribs[:is_private] if @logged_user.member_of_owner?
-        
         if @milestone.save
-          ApplicationLog::new_log(@milestone, @logged_user, :edit, @milestone.is_private)
           flash[:flash_success] = "Successfully updated milestone"
           redirect_back_or_default :controller => 'milestone'
         end
@@ -113,7 +106,7 @@ class MilestoneController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@milestone, @logged_user, :delete, @milestone.is_private)
+    @milestone.updated_by = @logged_user
     @milestone.destroy
     
     flash[:flash_success] = "Successfully deleted milestone"
@@ -127,19 +120,16 @@ class MilestoneController < ApplicationController
       return
     end
    
-    if not @milestone.completed_by.nil?
+    if @milestone.is_completed?
       flash[:flash_error] = "Milestone already completed"
       redirect_back_or_default :controller => 'milestone'
       return
     end
     
-    @milestone.completed_on = Time.now.utc
-    @milestone.completed_by = @logged_user
+	@milestone.set_completed(true, @logged_user)
     
     if not @milestone.save
       flash[:flash_error] = "Error saving"
-    else
-      ApplicationLog::new_log(@milestone, @logged_user, :close)
     end
     
     redirect_back_or_default :controller => 'milestone', :action => 'view', :id => @milestone.id
@@ -152,19 +142,16 @@ class MilestoneController < ApplicationController
       return
     end
     
-    if @milestone.completed_by.nil?
+    if !@milestone.is_completed?
       flash[:flash_error] = "Milestone already open"
       redirect_back_or_default :controller => 'milestone'
       return
     end
     
-    @milestone.completed_on = 0
-    @milestone.completed_by = nil
+	@milestone.set_completed(false)
     
     if not @milestone.save
       flash[:flash_error] = "Error saving"
-    else
-      ApplicationLog::new_log(@milestone, @logged_user, :open, @milestone.is_private)
     end
     
     redirect_back_or_default :controller => 'milestone', :action => 'view', :id => @milestone.id

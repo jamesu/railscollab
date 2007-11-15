@@ -157,8 +157,7 @@ class CompanyController < ApplicationController
   	end
   	
   	begin
-  		@company.destroy
-        #ApplicationLog.new_log(@company, @logged_user, :delete, true)
+        @company.destroy
         flash[:flash_success] = "Successfully deleted client"
   	rescue
       flash[:flash_error] = "Error deleting client"

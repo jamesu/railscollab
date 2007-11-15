@@ -38,6 +38,7 @@ class ProjectMessage < ActiveRecord::Base
 	has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
 
 	before_create :process_params
+	after_create  :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	 
@@ -45,12 +46,18 @@ class ProjectMessage < ActiveRecord::Base
 	  write_attribute("created_on", Time.now.utc)
 	end
 	
+	def process_create
+	  ApplicationLog.new_log(self, self.created_by, :add, self.is_private)
+	end
+	
 	def process_update_params
-      write_attribute("updated_on", Time.now.utc)
+	  write_attribute("updated_on", Time.now.utc)
+	  ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private)
 	end
 	
 	def process_destroy
-      AttachedFile.clear_attachments(self)
+	  AttachedFile.clear_attachments(self)
+	  ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
 	end
 	
 	def tags
@@ -78,6 +85,10 @@ class ProjectMessage < ActiveRecord::Base
 		self.subscribers.each do |subscriber|
 			Notifier.deliver_message_comment(subscriber, comment, self)
 		end
+	end
+	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
 	end
 	
 	def send_notification(user)
@@ -160,7 +171,7 @@ class ProjectMessage < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :title, :text, :additional_text, :milestone_id, :category_id
+	attr_accessible :title, :text, :additional_text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 	
 	# Validation
 	
@@ -172,5 +183,13 @@ class ProjectMessage < ActiveRecord::Base
 	
 	validates_each :project_message_category do |record, attr, value|
 		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+	end
+	
+	validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
+	end
+	
+	validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == false
 	end
 end

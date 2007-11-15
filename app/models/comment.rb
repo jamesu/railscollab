@@ -29,6 +29,7 @@ class Comment < ActiveRecord::Base
 	has_many :project_file, :through => :attached_file
 
 	before_create :process_params
+	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	 
@@ -36,12 +37,23 @@ class Comment < ActiveRecord::Base
 	  write_attribute("created_on", Time.now.utc)
 	end
 	
+	def process_create
+	  ApplicationLog.new_log(self, self.created_by, :add, self.is_private, self.rel_object.project)
+	end
+	
 	def process_update_params
-      write_attribute("updated_on", Time.now.utc)
+	  write_attribute("updated_on", Time.now.utc)
+	  
+	  ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private, self.rel_object.project)
 	end
 	
 	def process_destroy
       AttachedFile.clear_attachments(self)
+	  ApplicationLog.new_log(self, self.updated_by, :delete, true,  self.rel_object.project)
+	end
+	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
 	end
 		
 	# Core Permissions
@@ -105,9 +117,12 @@ class Comment < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :text
+	attr_accessible :text, :is_private
 	
 	# Validation
 	
 	validates_presence_of :text
+	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
+	end
 end

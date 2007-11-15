@@ -37,8 +37,10 @@ class ProjectMilestone < ActiveRecord::Base
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
-	before_create :process_params
-	before_update :process_update_params
+	before_create  :process_params
+	after_create   :process_create
+	before_update  :process_update_params
+	before_destroy :process_destroy
 	 
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
@@ -52,15 +54,30 @@ class ProjectMilestone < ActiveRecord::Base
 	  end
 	end
 	
+	def process_create
+	  ApplicationLog::new_log(self, self.created_by, :add, self.is_private)
+	end
+	
 	def process_update_params
+	  if self.assigned_to_user_id.nil?
+		write_attribute("assigned_to_user_id", 0)
+	  end
+	  if self.assigned_to_company_id.nil?
+		write_attribute("assigned_to_company_id", 0)
+	  end
+	  
+	  if @update_completed.nil?
 		write_attribute("updated_on", Time.now.utc)
-		
-		if self.assigned_to_user_id.nil?
-	      write_attribute("assigned_to_user_id", 0)
-	    end
-	    if self.assigned_to_company_id.nil?
-	      write_attribute("assigned_to_company_id", 0)
-	    end
+		ApplicationLog::new_log(self, self.updated_by, :edit, self.is_private)
+	  else
+		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
+		self.completed_by = @update_completed_user
+		ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
+	  end
+	end
+	
+	def process_destroy
+	  ApplicationLog::new_log(self, self.updated_by, :delete, self.is_private)
 	end
 	
 	def object_name
@@ -141,7 +158,16 @@ class ProjectMilestone < ActiveRecord::Base
 		return (Date.today-self.due_date.to_date).to_i
 	end
 	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
+	end
+	
 	def send_comment_notifications(comment)
+	end
+	
+	def set_completed(value, user=nil)
+	 @update_completed = value
+	 @update_completed_user = user
 	end
 	
 	# Core Permissions
@@ -275,9 +301,12 @@ class ProjectMilestone < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :name, :description, :due_date, :assigned_to_id
+	attr_accessible :name, :description, :due_date, :assigned_to_id, :is_private
 	
 	# Validation
 	
 	validates_presence_of :name
+	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
+	end
 end

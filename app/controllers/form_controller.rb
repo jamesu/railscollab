@@ -93,7 +93,6 @@ class FormController < ApplicationController
         @form.created_by = @logged_user
         
         if @form.save
-          ApplicationLog::new_log(@form, @logged_user, :add)
           flash[:flash_success] = "Successfully added form"
           redirect_back_or_default :controller => 'form'
         end
@@ -119,7 +118,6 @@ class FormController < ApplicationController
         @form.updated_by = @logged_user
         
         if @form.save
-          ApplicationLog::new_log(@form, @logged_user, :edit)
           flash[:flash_success] = "Successfully edited form"
           redirect_back_or_default :controller => 'form'
         end
@@ -133,7 +131,7 @@ class FormController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@form, @logged_user, :delete)
+    @form.updated_by = @logged_user
     @form.destroy
     
     flash[:flash_success] = "Successfully deleted form"

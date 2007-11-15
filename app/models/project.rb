@@ -52,8 +52,9 @@ class Project < ActiveRecord::Base
 	
 	has_and_belongs_to_many :companies, :join_table => :project_companies
 	
-	before_create :process_params
-	before_update :process_update_params
+	before_create  :process_params
+	after_create   :process_create
+	before_update  :process_update_params
 	before_destroy :process_destroy
 	 
 	def process_params
@@ -61,12 +62,24 @@ class Project < ActiveRecord::Base
 	  write_attribute("completed_on", nil)
 	end
 	
+	def process_create
+	  ApplicationLog.new_log(self, self.created_by, :add, true)
+	end
+	
 	def process_update_params
+	  if @update_completed.nil?
 		write_attribute("updated_on", Time.now.utc)
+		ApplicationLog::new_log(self, self.updated_by, :edit, true)
+	  else
+		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
+		self.completed_by = @update_completed_user
+		ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
+	  end
 	end
 	
 	def process_destroy
-		ActiveRecord::Base.connection.execute("DELETE FROM project_users WHERE project_id = #{self.id}")
+	  ActiveRecord::Base.connection.execute("DELETE FROM project_users WHERE project_id = #{self.id}")
+	  ApplicationLog.new_log(self, self.updated_by, :delete, true)
 	end
 	
 	def object_name
@@ -121,6 +134,11 @@ class Project < ActiveRecord::Base
 	
 	def has_member(user)
 	 return ProjectUser.find(:first, :conditions => "project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
+	end
+	
+	def set_completed(value, user=nil)
+	 @update_completed = value
+	 @update_completed_user = user
 	end
 	
 	# Core Permissions

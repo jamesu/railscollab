@@ -32,24 +32,46 @@ class ProjectTaskList < ActiveRecord::Base
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
-	before_create :process_params
-	before_update :process_update_params
+	before_create  :process_params
+	after_create   :process_create
+	before_update  :process_update_params
+	before_destroy :process_destroy
 	
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
 	end
 	
+	def process_create
+	  ApplicationLog.new_log(self, self.created_by, :add, self.is_private)
+	end
+	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
+	  return if !@ensured_complete.nil?
 	  
-	  # Close task list if we have completed all tasks
+	  write_attribute("updated_on", Time.now.utc)
+	  ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private)
+	end
+	
+	def process_destroy
+	  ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
+	end
+	
+	def ensure_completed(task_completed, completed_by)
+	  # If the task isn't complete, and we don't think we are
+	  # complete either, exit (vice versa)
+	  @ensured_complete = true
+	  return if self.is_completed? == task_completed
+	  
+	  # Ok now lets check if we are *really* complete
 	  if self.finished_all_tasks?
 	   write_attribute("completed_on", Time.now.utc)
+	   self.completed_by = completed_by
 	  else
 	   write_attribute("completed_on", nil)
 	  end
 	  
+	  ApplicationLog::new_log(self, completed_by, task_completed ? :close : :open, self.is_private)
 	end
 	
 	def object_name
@@ -71,6 +93,10 @@ class ProjectTaskList < ActiveRecord::Base
 	
 	def is_completed?
 	 return self.completed_on != nil
+	end
+	
+	def last_edited_by_owner?
+	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
 	end
 	
 	def send_comment_notifications(comment)
@@ -154,12 +180,16 @@ class ProjectTaskList < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :name, :priority, :description, :milestone_id
+	attr_accessible :name, :priority, :description, :milestone_id, :is_private
 	
 	# Validation
 	
 	validates_presence_of :name
 	validates_each :project_milestone, :allow_nil => true do |record, attr, value|
 		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+	end
+	
+	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+		record.errors.add attr, 'not allowed' if value == true
 	end
 end

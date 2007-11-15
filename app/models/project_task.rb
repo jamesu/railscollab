@@ -34,23 +34,44 @@ class ProjectTask < ActiveRecord::Base
 	
 	has_many :project_times, :foreign_key => 'task_id', :dependent => :nullify
 
-	before_create :process_params
-	before_update :process_update_params
-	after_update  :update_task_list
+	before_create  :process_params
+	after_create   :process_create
+	before_update  :process_update_params
+	after_update   :update_task_list
+	before_destroy :process_destroy
 	 
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
 	end
 	
+	def process_create
+	  self.task_list.ensure_completed(!self.completed_on.nil?, self.created_by)
+	  ApplicationLog.new_log(self, self.created_by, :add, self.task_list.is_private, self.task_list.project)
+	end
+	
 	def process_update_params
+	  if @update_completed.nil?
 		write_attribute("updated_on", Time.now.utc)
+		ApplicationLog.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
+	  else
+		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
+		self.completed_by = @update_completed_user
+		ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.task_list.is_private, self.task_list.project)
+	  end
+	end
+	
+	def process_destroy
+	  ApplicationLog.new_log(self, self.updated_by, :delete, true, self.task_list.project)
 	end
 	
 	def update_task_list
+	  if !@update_completed.nil?
 		task_list = self.task_list
-		task_list.completed_by = self.completed_by
-		task_list.save
+		
+		task_list.ensure_completed(@update_completed, self.completed_by)
+		task_list.save!
+	  end
 	end
 	
 	def object_name
@@ -99,6 +120,11 @@ class ProjectTask < ActiveRecord::Base
 	end
 	
 	def send_comment_notifications(comment)
+	end
+	
+	def set_completed(value, user=nil)
+	 @update_completed = value
+	 @update_completed_user = user
 	end
 	
 	def self.can_be_created_by(user, project)

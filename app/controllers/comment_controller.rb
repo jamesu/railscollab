@@ -72,11 +72,7 @@ class CommentController < ApplicationController
       	@comment.rel_object = @commented_object
       	@comment.created_by = @logged_user
       	
-      	@comment.is_private = @logged_user.member_of_owner? ? comment_attribs[:is_private] : false
-      	
         if @comment.save
-          ApplicationLog.new_log(@comment, @logged_user, :add, @comment.is_private, @commented_object.project)
-          
           # Notify everyone
           @commented_object.send_comment_notifications(@comment)
           
@@ -106,11 +102,7 @@ class CommentController < ApplicationController
         @comment.attributes = comment_attribs
         @comment.updated_by = @logged_user
         
-        @comment.is_private = @logged_user.member_of_owner? ? comment_attribs[:is_private] : false
-        
         if @comment.save
-          ApplicationLog.new_log(@comment, @logged_user, :edit, @comment.is_private, @commented_object.project)
-          
           # TODO: notifications
           
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
@@ -130,7 +122,7 @@ class CommentController < ApplicationController
       return
     end
     
-    ApplicationLog.new_log(@comment, @logged_user, :delete, true,  @comment.rel_object.project)
+    @comment.updated_by = @logged_user
     @comment.destroy
     
     flash[:flash_success] = "Successfully deleted comment"

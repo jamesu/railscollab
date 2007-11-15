@@ -84,11 +84,7 @@ class TaskController < ApplicationController
         @task_list.created_by = @logged_user
         @task_list.project = @active_project
         
-        @task_list.is_private = task_attribs[:is_private] if @logged_user.member_of_owner?
-        
         if @task_list.save
-          ApplicationLog::new_log(@task_list, @logged_user, :add, @task_list.is_private)
-          
           @task_list.tags = task_attribs[:tags]
         
           flash[:flash_success] = "Successfully added task"
@@ -121,10 +117,7 @@ class TaskController < ApplicationController
         @task_list.updated_by = @logged_user
         @task_list.tags = task_attribs[:tags]
         
-        @task_list.is_private = task_attribs[:is_private] if @logged_user.member_of_owner?
-        
         if @task_list.save
-          ApplicationLog::new_log(@task_list, @logged_user, :edit, @task_list.is_private)
           flash[:flash_success] = "Successfully modified task"
           redirect_back_or_default :controller => 'task'
         end
@@ -146,7 +139,7 @@ class TaskController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@task_list, @logged_user, :delete, @task_list.is_private)
+    @task_list.updated_by = @logged_user
     @task_list.destroy
     
     flash[:flash_success] = "Successfully deleted task"
@@ -193,7 +186,6 @@ class TaskController < ApplicationController
         @task.task_list = @task_list
         
         if @task.save
-          ApplicationLog::new_log(@task, @logged_user, :add, @task_list.is_private, @active_project)
           flash[:flash_success] = "Successfully added task"
 		  
 		  if params[:partial]
@@ -230,7 +222,6 @@ class TaskController < ApplicationController
         @task.updated_by = @logged_user
         
         if @task.save
-          ApplicationLog::new_log(@task, @logged_user, :edit, @task.task_list.is_private, @active_project)
           flash[:flash_success] = "Successfully modified task"
           redirect_back_or_default :controller => 'task'
         end
@@ -252,7 +243,7 @@ class TaskController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@task, @logged_user, :delete, @task.task_list.is_private, @active_project)
+    @task.updated_by = @logged_user
     @task.destroy
     
     flash[:flash_success] = "Successfully deleted task"
@@ -274,26 +265,16 @@ class TaskController < ApplicationController
       return
     end
     
-    if not @task.completed_by.nil?
+    if not @task.completed_on.nil?
       flash[:flash_error] = "Task already completed"
       redirect_back_or_default :controller => 'task'
       return
     end
     
-    @task.completed_on = Time.now.utc
-    @task.completed_by = @logged_user
-    
-    if @task.valid?
-      ApplicationLog::new_log(@task, @logged_user, :close, @task.task_list.is_private, @active_project)
-    end
+    @task.set_completed(true, @logged_user)
     
     if not @task.save
       flash[:flash_error] = "Error saving"
-    else
-      # add a log entry for the task list
-      if @task.task_list.finished_all_tasks?
-        ApplicationLog::new_log(@task.task_list, @task.completed_by, :close, false)
-      end
     end
     
     redirect_back_or_default :controller => 'task'
@@ -314,22 +295,16 @@ class TaskController < ApplicationController
       return
     end
     
-    if @task.completed_by.nil?
+    if @task.completed_on.nil?
       flash[:flash_error] = "Task already open"
       redirect_back_or_default :controller => 'task'
       return
     end
     
-    @task.completed_on = 0
-    @task.completed_by = nil
+    @task.set_completed(false, @logged_user)
     
     if not @task.save
       flash[:flash_error] = "Error saving"
-    else
-      if not @task.task_list.finished_all_tasks?
-        ApplicationLog::new_log(@task.task_list, @logged_user, :open, @task.task_list.is_private)
-      end
-      ApplicationLog::new_log(@task, @logged_user, :open, @task.task_list.is_private, @active_project)
     end
     
     redirect_back_or_default :controller => 'task'

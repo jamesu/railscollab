@@ -234,8 +234,6 @@ class ProjectController < ApplicationController
         #  flash[:flash_success] = "Error updating permissions"
         #  redirect_to :controller => 'project', :action => 'permissions'   
         #else
-          ApplicationLog.new_log(@project, @logged_user, :edit, true)
-            
           flash[:flash_success] = "Successfully updated permissions"
           redirect_to :controller => 'project', :action => 'permissions'
         #end
@@ -254,8 +252,6 @@ class ProjectController < ApplicationController
     user = User.find(params[:user])
     if not user.owner_of_owner?
       ProjectUser.delete_all(["user_id = ? AND project_id = ?", params[:user], @project.id])
-      
-      ApplicationLog.new_log(@project, @logged_user, :edit, true)
     end
     
     redirect_back_or_default :controller => 'project', :action => 'people'
@@ -279,8 +275,6 @@ class ProjectController < ApplicationController
       
       ProjectUser.delete_all("user_id IN (#{company_user_ids}) AND project_id = #{@project.id}")
       @project.companies.delete(company)
-      
-      ApplicationLog.new_log(@project, @logged_user, :edit, true)
     end
     
     redirect_back_or_default :controller => 'project', :action => 'people'
@@ -306,8 +300,6 @@ class ProjectController < ApplicationController
         @auto_assign_users = Company.owner.auto_assign_users
         
         if @project.save
-          ApplicationLog.new_log(@project, @logged_user, :add, true)
-		  
           # Add auto assigned people (note: we assume default permissions are all access)
           @auto_assign_users.each do |user|
 			@project.users << user unless (user == @logged_user)
@@ -352,9 +344,8 @@ class ProjectController < ApplicationController
         
         @project.attributes = project_attribs
         @project.updated_by = @logged_user
+        
         if @project.save
-          ApplicationLog.new_log(@project, @logged_user, :edit, true)
-          
           flash[:flash_success] = "Successfully updated project"
           redirect_back_or_default :controller => 'project'
         end
@@ -370,7 +361,7 @@ class ProjectController < ApplicationController
       return
     end
     
-    ApplicationLog.new_log(@project, @logged_user, :delete, true)
+    @project.updated_by = @logged_user
     @project.destroy
     
     flash[:flash_success] = "Successfully deleted project"
@@ -392,8 +383,7 @@ class ProjectController < ApplicationController
       return
     end
     
-    @project.completed_on = Time.now.utc
-    @project.completed_by = @logged_user
+    @project.set_completed(true, @logged_user)
     
     if not @project.save
       flash[:flash_error] = "Error saving"
@@ -419,8 +409,7 @@ class ProjectController < ApplicationController
       return
     end
     
-    @project.completed_on = 0
-    @project.completed_by = nil
+    @project.set_completed(false, @logged_user)
     
     if not @project.save
       flash[:flash_error] = "Error saving"

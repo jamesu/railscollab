@@ -193,7 +193,7 @@ class MessageController < ApplicationController
 	    end
 	    
 	    if @milestone
-	    	@message.milestone_id = @milestone.id
+	      @message.milestone_id = @milestone.id
 	    end
 		
 		# Grab default category
@@ -204,10 +204,12 @@ class MessageController < ApplicationController
 	    end
 	    
 	    if @category
-	    	@message.category_id = @category.id
+	      @message.category_id = @category.id
 	    else
-	    	@category = ProjectMessageCategory.find(:first, :conditions => ['project_id = ? AND name = ?', @active_project.id, AppConfig.default_project_message_category])
+	      @category = ProjectMessageCategory.find(:first, :conditions => ['project_id = ? AND name = ?', @active_project.id, AppConfig.default_project_message_category])
 	    end
+	    
+	    @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))
 
       when :post
         message_attribs = params[:message]
@@ -217,19 +219,8 @@ class MessageController < ApplicationController
         
         @message.project = @active_project
         @message.created_by = @logged_user
-        @message.comments_enabled = true
-        
-        if @logged_user.member_of_owner?
-        	# These are reserved
-        	@message.is_private = message_attribs[:is_private]
-        	@message.is_important = message_attribs[:is_important]
-        	@message.comments_enabled = message_attribs[:comments_enabled]
-        	@message.anonymous_comments_enabled = message_attribs[:anonymous_comments_enabled]
-        end
         
         if @message.save
-          ApplicationLog.new_log(@message, @logged_user, :add, @message.is_private)
-          
           @message.tags = message_attribs[:tags]
 		  
           # Notify selected users
@@ -275,17 +266,7 @@ class MessageController < ApplicationController
         @message.updated_by = @logged_user
         @message.tags = message_attribs[:tags]
         
-        if @logged_user.member_of_owner?
-        	# These are reserved
-        	@message.is_private = message_attribs[:is_private]
-        	@message.is_important = message_attribs[:is_important]
-        	@message.comments_enabled = message_attribs[:comments_enabled]
-        	@message.anonymous_comments_enabled = message_attribs[:anonymous_comments_enabled]
-        end
-        
         if @message.save
-          ApplicationLog.new_log(@message, @logged_user, :edit, @message.is_private)
-          
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
 			flash[:flash_success] = "Successfully updated message, some attachments failed validation"
 		  else
@@ -307,7 +288,7 @@ class MessageController < ApplicationController
       return
     end
     
-    ApplicationLog.new_log(@message, @logged_user, :delete, true)
+    @message.updated_by = @logged_user
     @message.destroy
     
     flash[:flash_success] = "Successfully deleted message"

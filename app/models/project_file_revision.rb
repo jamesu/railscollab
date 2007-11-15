@@ -40,11 +40,13 @@ class ProjectFileRevision < ActiveRecord::Base
 	
 	def process_update_params
 	  write_attribute("updated_on", Time.now.utc)
+	  ApplicationLog::new_log(self, self.updated_by, :edit, self.project_file.is_private, self.project_file.project)
 	end
 	
 	def process_destroy
-		# Destroy FileRepo entries
-		FileRepo.handle_delete(self.repository_id)
+	  # Destroy FileRepo entries
+	  FileRepo.handle_delete(self.repository_id)
+	  ApplicationLog::new_log(self, self.updated_by, :delete, self.project_file.is_private, self.project_file.project)
 	end
 	
 	def upload_file
@@ -105,7 +107,7 @@ class ProjectFileRevision < ActiveRecord::Base
 	end
 		
 	def object_name
-		self.name
+		self.project_file.filename
 	end
 	
 	def object_url

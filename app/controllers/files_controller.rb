@@ -274,6 +274,7 @@ class FilesController < ApplicationController
 	    end
     
       	@file.project_folder = @folder unless @folder.nil?
+	    @file.comments_enabled = true unless (params[:file] and params[:file].has_key?(:comments_enabled))
       when :post
         file_attribs = params[:file]
         file_data = params[:file_data]
@@ -282,25 +283,11 @@ class FilesController < ApplicationController
         	@file.errors.add(:file, "Required")
         end
         
-        if !@file.errors.empty?
-        	do_abort = true
-       	else
-       		do_abort = false
-        end
+        do_abort = !@file.errors.empty?
         
         @file.attributes = file_attribs
-        @file.comments_enabled = true
         
-        if @logged_user.member_of_owner?
-        	# These are reserved
-        	@file.is_private = file_attribs[:is_private]
-        	@file.is_important = file_attribs[:is_important]
-        	@file.comments_enabled = file_attribs[:comments_enabled]
-        	@file.anonymous_comments_enabled = file_attribs[:anonymous_comments_enabled]
-        end
-        
-        return if do_abort
-        
+        @file.created_by = @logged_user
         @file.project = @active_project
         @file.filename = file_data[:file] ? (file_data[:file].original_filename).sanitize_filename : nil
         @file.expiration_time = 0
@@ -309,8 +296,6 @@ class FilesController < ApplicationController
         ProjectFile.transaction do
 	        if @file.save
 	          @file.add_revision(file_data[:file], 1, @logged_user, "")
-	          
-	          ApplicationLog::new_log(@file, @logged_user, :add)
 	          
 	          @file.tags = file_attribs[:tags]
 	          
@@ -349,20 +334,9 @@ class FilesController < ApplicationController
         
         @file.attributes = file_attribs
         
-        if @logged_user.member_of_owner?
-        	# These are reserved
-        	@file.is_private = file_attribs[:is_private]
-        	@file.is_important = file_attribs[:is_important]
-        	@file.comments_enabled = file_attribs[:comments_enabled]
-        	@file.anonymous_comments_enabled = file_attribs[:anonymous_comments_enabled]
-        end
-        
-        if @file.errors.length > 0
-        	return
-        end
-        
         @file.project = @active_project
         @file.is_visible = true
+        @file.updated_by = @logged_user
         
         ProjectFile.transaction do
 	        if @file.save
@@ -376,11 +350,9 @@ class FilesController < ApplicationController
 	          	@file.filename = (file_data[:file].original_filename).sanitize_filename
 	          end
 	          
-	          ApplicationLog::new_log(@file, @logged_user, :edit)
-	          
 	          @file.tags = file_attribs[:tags]
 	          
-	          flash[:flash_success] = "Successfully added file"
+	          flash[:flash_success] = "Successfully edited file"
 	          redirect_back_or_default :controller => 'files'
 	        end
         end
@@ -402,7 +374,7 @@ class FilesController < ApplicationController
       return
     end
     
-    ApplicationLog::new_log(@file, @logged_user, :delete)
+    @file.updated_by = @logged_user
     @file.destroy
     
     flash[:flash_success] = "Successfully deleted file"

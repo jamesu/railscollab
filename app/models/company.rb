@@ -34,11 +34,21 @@ class Company < ActiveRecord::Base
 	has_many :auto_assign_users, :class_name => 'User', :foreign_key => 'company_id', :conditions => 'auto_assign = true'
 	
 	has_and_belongs_to_many :projects,  :join_table => :project_companies
-	
+
+	before_create :process_params
+	before_update :process_update_params
 	before_destroy :process_destroy
+	 
+	def process_params
+	  write_attribute("created_on", Time.now.utc)
+	end
+	
+	def process_update_params
+	  write_attribute("updated_on", Time.now.utc)
+	end
 	
 	def process_destroy
-		FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
+	  FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
 	end
 	
 	def self.owner
