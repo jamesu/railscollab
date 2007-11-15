@@ -26,7 +26,7 @@ class Project < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
-	has_many :project_user
+	has_many :project_users
 	has_many :users, :through=> :project_user
 	
 	has_many :project_times, :dependent => :destroy
@@ -35,7 +35,7 @@ class Project < ActiveRecord::Base
 	has_many :project_milestones, :dependent => :destroy
 	has_many :open_milestones, :class_name => 'ProjectMilestone', :foreign_key => 'project_id', :conditions => 'project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC'
 	
-	has_many :project_task_list, :order => 'project_task_lists.order DESC', :dependent => :destroy
+	has_many :project_task_lists, :order => 'project_task_lists.order DESC', :dependent => :destroy
 	has_many :open_task_lists, :class_name => 'ProjectTaskList', :foreign_key => 'project_id', :conditions => 'project_task_lists.completed_on IS NULL', :order => 'project_task_lists.order DESC'
 	has_many :completed_task_lists, :class_name => 'ProjectTaskList', :foreign_key => 'project_id', :conditions => 'project_task_lists.completed_on IS NOT NULL', :order => 'project_task_lists.order DESC'
 	
