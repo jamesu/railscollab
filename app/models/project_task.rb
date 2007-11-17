@@ -99,23 +99,20 @@ class ProjectTask < ActiveRecord::Base
 	
 	def assigned_to_id=(val)
         # Set assigned_to accordingly
-        assign_id = val.to_i
-        if assign_id == 0
-        	self.assigned_to = nil
-        elsif assign_id > 1000
-          self.assigned_to = User.find(assign_id-1000)
-        else
-          self.assigned_to = Company.find(assign_id)
-        end
+		self.assigned_to = nil if (val == '0' or val == 'c0')
+		
+		self.assigned_to = val[0] == 'c' ? 
+		                   Company.find(val[1...val.length]) :
+						   User.find(val)
 	end
 	
 	def assigned_to_id
 		if self.company
-			self.company.id
+			"c#{self.company.id}"
 		elsif self.user
-			self.user.id+1000
+			self.user.id.to_s
 		else
-			0
+			"0"
 		end
 	end
 	
