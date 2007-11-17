@@ -99,9 +99,12 @@ class ProjectTask < ActiveRecord::Base
 	
 	def assigned_to_id=(val)
         # Set assigned_to accordingly
-		self.assigned_to = nil if (val == '0' or val == 'c0')
+		if (val == '0' or val == 'c0')
+			self.assigned_to = nil
+			return
+		end
 		
-		self.assigned_to = val[0] == 'c' ? 
+		self.assigned_to = val[0] == 99 ? 
 		                   Company.find(val[1...val.length]) :
 						   User.find(val)
 	end

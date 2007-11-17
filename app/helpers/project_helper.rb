@@ -57,7 +57,7 @@ module ProjectHelper
 	     items += [["--"], [company.name, "c#{company.id}"]]
 	     items += company.users.collect do |user|
 	       if user.member_of(project)
-	         ["#{company.name}: #{user.username}", user.id]
+	         ["#{company.name}: #{user.username}", user.id.to_s]
 	       else
 	         nil
 	       end
