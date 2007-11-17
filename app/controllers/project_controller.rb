@@ -199,9 +199,9 @@ class ProjectController < ApplicationController
           elsif ProjectUser.find(:all, :conditions => "user_id = #{user.id} AND project_id = #{@project.id}").length > 0
             # Re-apply permissions
             if params[:project_user_permissions] and params[:project_user_permissions][found_id]
-              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][found_id]), "user_id = #{user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][found_id], user), "user_id = #{user.id} AND project_id = #{@project.id}")
             else
-              ProjectUser.update_all(ProjectUser.update_str, "user_id = #{user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str({}, user), "user_id = #{user.id} AND project_id = #{@project.id}")
             end
             
             params[:project_user].delete(found_id)
@@ -220,9 +220,9 @@ class ProjectController < ApplicationController
             
             @project.users << proj_user
             if params[:project_user_permissions] && params[:project_user_permissions][id]
-              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][id]), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][id], user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
             else
-              ProjectUser.update_all(ProjectUser.update_str, "user_id = #{proj_user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str({}, user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
             end
           end
         end

@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
 	has_many :project_users
-	has_many :users, :through=> :project_user
+	has_many :users, :through=> :project_users
 	
 	has_many :project_times, :dependent => :destroy
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us

@@ -23,7 +23,7 @@ class ProjectUser < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :project
 	
-	after_create :ensure_permissions
+	before_create :ensure_permissions
 	
 	def ensure_permissions(set_val=true)
 	 self.can_manage_messages ||= set_val
@@ -36,20 +36,25 @@ class ProjectUser < ActiveRecord::Base
 	 self.can_assign_to_other ||= set_val
 	end
 	
-	def self.update_str(vals={})
-	 mvals = {:can_manage_messages => false,
-	         :can_manage_tasks => false,
-	         :can_manage_milestones => false,
-	         :can_manage_time => false,
-	         :can_upload_files => false,
-	         :can_manage_files => false,
-	         :can_assign_to_owners => false,
-	         :can_assign_to_other=> false,
+	def self.update_str(vals={}, user=nil)
+	 member_of_owner = !user.nil? ?  user.member_of_owner? : false
+	 
+	 mvals = {:can_manage_messages => member_of_owner,
+	         :can_manage_tasks => member_of_owner,
+	         :can_manage_milestones => member_of_owner,
+	         :can_manage_time => member_of_owner,
+	         :can_upload_files => member_of_owner,
+	         :can_manage_files => member_of_owner,
+	         :can_assign_to_owners => member_of_owner,
+	         :can_assign_to_other=> member_of_owner,
 	 }
 	 
-	 vals.each do |val|
-	   intern_val = val.intern
-	   mvals[intern_val] = true if !mvals[intern_val].nil?
+	 # Override mvals with vals if we are not a member of the owner
+	 unless member_of_owner
+		vals.each do |val|
+			intern_val = val.intern
+			mvals[intern_val] = true if !mvals[intern_val].nil?
+		end
 	 end
 	 
 	 return (mvals.keys.collect do |key|

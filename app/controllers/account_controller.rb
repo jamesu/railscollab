@@ -183,9 +183,9 @@ class AccountController < ApplicationController
           	
           	# Reset and update permissions
           	if permission_list.nil?
-          		ProjectUser.update_all(ProjectUser.update_str, ['user_id = ? AND project_id = ?', @user.id, project_id])
+          		ProjectUser.update_all(ProjectUser.update_str({}, @user), ['user_id = ? AND project_id = ?', @user.id, project_id])
           	else
-          		ProjectUser.update_all(ProjectUser.update_str(permission_list), ['user_id = ? AND project_id = ?', @user.id, project_id])
+          		ProjectUser.update_all(ProjectUser.update_str(permission_list, @user), ['user_id = ? AND project_id = ?', @user.id, project_id])
           	end
           end
           
