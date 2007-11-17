@@ -11,7 +11,7 @@
     <p><%= "Users who were active in last 15 minutes:" %></p>
     <ul>
 <% users.each do |user| -%>
-<% if logged_user.can_see(user) %>
+<% if user.can_be_viewed_by(@logged_user) %>
       <li><%= link_to user.display_name, :controller => 'user', :action => 'card', :id => user.id %> <span class="desc">(<%= h user.company.name %>)</span></li>
 <% end %>
 <% end %>

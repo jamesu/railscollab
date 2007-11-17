@@ -151,7 +151,7 @@ class UserController < ApplicationController
       return
     end
     
-    if not @user.can_see(@logged_user)
+    if not @user.can_be_viewed_by(@logged_user)
       flash[:flash_error] = "Insufficient permissions"
       redirect_back_or_default :controller => 'dashboard'
       return

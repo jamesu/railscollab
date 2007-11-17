@@ -200,10 +200,6 @@ class User < ActiveRecord::Base
 		return self.token == Digest::SHA1.hexdigest(self.salt + pass)
 	end
 	
-	def can_see(user)
-		return true
-	end
-	
 	# Core permissions
 	
 	def self.can_be_created_by(user)
@@ -212,6 +208,10 @@ class User < ActiveRecord::Base
 	
 	def can_be_deleted_by(user)
 		return ((user.member_of_owner? or user.company == self.company) and user.is_admin)
+	end
+	
+	def can_be_viewed_by(user)
+		true
 	end
 	
 	# Specific permissions
