@@ -140,12 +140,12 @@ class ProjectMessage < ActiveRecord::Base
 	   return false
 	 end
 	 
-	 if user.has_permission(project, :can_manage_messages)
-	   return true
-	 end
-	 
 	 if self.is_private and !user.member_of_owner?
 	   return false
+	 end
+	 
+	 if user.has_permission(project, :can_manage_messages)
+	   return true
 	 end
 	 
 	 return true
