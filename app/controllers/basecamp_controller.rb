@@ -139,7 +139,7 @@ class BasecampController < ApplicationController
       return
     end
 	
-	@comments = @message.comments.reject { |comment| !comment.can_be_seen_by(@logged_user) }
+	@comments = @logged_user.member_of_owner ? @message.comments : @message.comments.public
   end
   
   # /msg/create_comment

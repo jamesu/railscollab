@@ -29,7 +29,13 @@ class ProjectFile < ActiveRecord::Base
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
 	has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
-	has_many :comments, :as => 'rel_object', :dependent => :destroy
+	has_many :comments, :as => 'rel_object', :dependent => :destroy do
+		def public(reload=false)
+			# Grab public comments only
+			@public_comments = nil if reload
+			@public_comments ||= find(:all, :conditions => 'is_private = false')
+		end
+	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
 	before_create :process_params

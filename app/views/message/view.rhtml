@@ -57,7 +57,7 @@
 
 <!-- Comments -->
 <div id="messageComments">
-<%= render :partial => 'comment/object_comments', :locals => {'comments' => @message.comments} %>
+<%= render :partial => 'comment/object_comments', :locals => {'comments' => @logged_user.member_of_owner? ? @message.comments : @message.comments.public} %>
 
 <% if @message.comment_can_be_added_by(@logged_user) %>
 <%= render :partial => 'comment/add_form', :locals => {'commented_object' => @message} %>

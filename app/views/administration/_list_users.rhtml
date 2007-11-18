@@ -22,7 +22,7 @@ profile_updateable = listed_user.profile_can_be_updated_by(@logged_user)
       {:name => 'Update profile', :url => "/account/edit_profile/#{listed_user.id}", :cond => profile_updateable},
       {:name => 'Change password', :url => "/account/edit_password/#{listed_user.id}", :cond => profile_updateable},
       {:name => 'Update avatar', :url => "/account/edit_avatar/#{listed_user.id}", :cond => profile_updateable},
-      {:name => 'Permissions', :url => "/user/update_permissions/#{listed_user.id}}", :cond => listed_user.permissions_can_be_updated_by(@logged_user)},
+      {:name => 'Permissions', :url => "/account/update_permissions/#{listed_user.id}", :cond => listed_user.permissions_can_be_updated_by(@logged_user)},
       {:name => 'Delete', :url => "/user/delete/#{listed_user.id}", :cond => listed_user.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this user?"} ] %>
       </div>
       <div class="clear"></div>

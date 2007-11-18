@@ -97,7 +97,7 @@
 
 <!-- Comments -->
 <div id="fileComments">
-<%= render :partial => 'comment/object_comments', :locals => {'comments' => @file.comments} %>
+<%= render :partial => 'comment/object_comments', :locals => {'comments' => @logged_user.member_of_owner? ? @file.comments : @file.comments.public} %>
 
 <% if @file.comment_can_be_added_by(@logged_user) %>
 <%= render :partial => 'comment/add_form', :locals => {'commented_object' => @file} %>

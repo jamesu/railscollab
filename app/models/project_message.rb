@@ -29,7 +29,13 @@ class ProjectMessage < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
-	has_many :comments, :as => 'rel_object', :dependent => :destroy
+	has_many :comments, :as => 'rel_object', :dependent => :destroy do
+		def public(reload=false)
+			# Grab public comments only
+			@public_comments = nil if reload
+			@public_comments ||= find(:all, :conditions => 'is_private = false')
+		end
+	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	has_many :attached_file, :as => 'rel_object', :dependent => :destroy
 	
