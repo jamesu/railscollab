@@ -6,9 +6,9 @@ xml.tag!('todo-item') do
 	xml.position todo_item.order, :type => 'integer'
 	xml.tag!('created-on', basecamp_time(todo_item.created_on), :type => 'datetime')
 	xml.tag!('creator-id', todo_item.created_by_id, :type => 'integer')
-	xml.tag!('completed', todo_item.completed_on.nil?, :type => 'boolean')
+	xml.tag!('completed', !todo_item.completed_on.nil?, :type => 'boolean')
 	
-	if !xml.assigned_to.nil?
+	if !todo_item.assigned_to.nil?
 		xml.tag!('responsible-party-type', todo_item.assigned_to.type.to_s)
 		xml.tag!('responsible-party-id', todo_item.assigned_to.id, :type => 'integer')
 	end

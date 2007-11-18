@@ -25,8 +25,8 @@ xml.post do
 	
 	if is_abbreviated
 		xml.category do
-			xml.id post.milestone_id
-			xml.name post.milestone.name
+			xml.id post.category_id
+			xml.name post.project_message_category.name
 		end
 	end
 end

@@ -2,14 +2,14 @@ xml = xml_instance
 
 xml.project do
 	xml.id project.id, :type => 'integer'
-	xml.name (h project.name)
+	xml.name h(project.name)
 	xml.tag!('created-on', basecamp_time(project.created_on), :type => 'datetime')
 	xml.status project.is_active? ? 'active' : 'closed'
 	xml.tag!('last-changed-on', basecamp_time(project.updated_on), :type => 'datetime')
 	xml.company do
 		owner = Company.owner
-		xml.id owner.id
-		xml.name (h owner.name)
+		xml.id owner.id, :type => 'integer'
+		xml.name h(owner.name)
 	end
 	
 	#xml.announcement "UNKNOWN"

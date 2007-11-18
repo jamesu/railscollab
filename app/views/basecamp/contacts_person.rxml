@@ -1,0 +1,1 @@
+render :partial => 'basecamp/person', :collection => [@user], :locals => {:xml_instance => xml}

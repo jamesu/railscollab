@@ -1,0 +1,3 @@
+xml.tag!('todo-lists') do
+  render :partial => 'basecamp/todo_list', :collection => @task_lists, :locals => {:xml_instance => xml, :include_todos => false}
+end

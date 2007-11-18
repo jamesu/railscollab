@@ -1,0 +1,3 @@
+xml.milestones do
+  render :partial => 'basecamp/milestone', :collection => @milestones, :locals => {:xml_instance => xml}
+end

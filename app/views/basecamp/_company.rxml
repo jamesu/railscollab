@@ -2,18 +2,18 @@ xml = xml_instance
 
 xml.company do
 	xml.id company.id, :type => 'integer'
-	xml.name (h company.name)
+	xml.name h(company.name)
     	
-	xml.tag!('address-one', (h company.address))
-	xml.tag!('address-two', (h company.address2))
-	xml.city (h company.city)
-	xml.state (h company.state)
-	xml.zip (h company.zipcode)
+	xml.tag!('address-one', h(company.address))
+	xml.tag!('address-two', h(company.address2))
+	xml.city h(company.city)
+	xml.state h(company.state)
+	xml.zip h(company.zipcode)
 	xml.country company.country_name
-	xml.tag!('web-address', (h company.homepage))
-	xml.tag!('phone-number-office', (h company.phone_number))
-	xml.tag!('phone-number-fax', (h company.fax_number))
-	xml.tag!('time-zone-id', (h company.timezone_name))
+	xml.tag!('web-address', h(company.homepage))
+	xml.tag!('phone-number-office', h(company.phone_number))
+	xml.tag!('phone-number-fax', h(company.fax_number))
+	xml.tag!('time-zone-id', h(company.timezone_name))
 	xml.tag!('can-see-private', company.is_owner?, :type => 'boolean')
 	
 	if company.is_owner?

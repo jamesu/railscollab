@@ -56,6 +56,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects/:active_project/attachment_categories', :controller => 'basecamp', :action => 'projects_attachment_categories'
   map.connect 'projects/:active_project/post_categories', :controller => 'basecamp', :action => 'projects_post_categories'
   map.connect 'contacts/companies', :controller => 'basecamp', :action => 'contacts_companies'
+  map.connect 'contacts/company/:id', :controller => 'basecamp', :action => 'contacts_company'
+  map.connect 'contacts/people/:id', :controller => 'basecamp', :action => 'contacts_people'
+  map.connect 'projects/:active_project/contacts/people/:id', :controller => 'basecamp', :action => 'contacts_people'
+  map.connect 'contacts/person/:id', :controller => 'basecamp', :action => 'contacts_person'
   
   map.connect 'msg/comment/:id', :controller => 'basecamp', :action => 'msg_comment'
   map.connect 'msg/comments/:id', :controller => 'basecamp', :action => 'msg_comments'
@@ -63,12 +67,42 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects/:active_project/msg/create', :controller => 'basecamp', :action => 'projects_msg_create'
   map.connect 'msg/delete_comment/:id', :controller => 'basecamp', :action => 'msg_delete_comment'
   map.connect 'msg/delete/:id', :controller => 'basecamp', :action => 'msg_delete'
-  map.connect 'msg/get/:ids', :controller => 'basecamp', :action => 'msg_get'
+  map.connect 'msg/get/:ids', :controller => 'basecamp', :action => 'msg_get',
+			   :requirements => {:ids => %r([^/;?]+)} 
   map.connect 'projects/:active_project/msg/archive', :controller => 'basecamp', :action => 'projects_msg_archive'
-  map.connect 'projects/:active_project/msg/cat/:cat_id/archive', :controller => 'basecamp', :action => 'projects_msg_cat_archive'
+  map.connect 'projects/:active_project/msg/cat/:cat_id/archive', :controller => 'basecamp', :action => 'projects_msg_archive'
   map.connect 'msg/update_comment', :controller => 'basecamp', :action => 'msg_update_comment'
   map.connect 'msg/update/:id', :controller => 'basecamp', :action => 'msg_update'
   
+  map.connect 'todos/complete_item/:id', :controller => 'basecamp', :action => 'todos_complete_item'
+  map.connect 'todos/create_item/:list_id', :controller => 'basecamp', :action => 'todos_create_item'
+  map.connect 'projects/:active_project/todos/create_list', :controller => 'basecamp', :action => 'projects_todos_create_list'
+  map.connect 'todos/delete_item/:id', :controller => 'basecamp', :action => 'todos_delete_item'
+  map.connect 'todos/delete_list/:id', :controller => 'basecamp', :action => 'todos_delete_list'
+  map.connect 'todos/list/:id', :controller => 'basecamp', :action => 'todos_list'
+  map.connect 'projects/:active_project/todos/list/:id', :controller => 'basecamp', :action => 'todos_list'
+  map.connect 'projects/:active_project/todos/lists', :controller => 'basecamp', :action => 'projects_todos_lists'
+  map.connect 'todos/move_item/:id', :controller => 'basecamp', :action => 'todos_move_item'
+  map.connect 'todos/move_list/:id', :controller => 'basecamp', :action => 'todos_move_list'
+  map.connect 'todos/uncomplete_item/:id', :controller => 'basecamp', :action => 'todos_uncomplete_item'
+  map.connect 'todos/update_item/:id', :controller => 'basecamp', :action => 'todos_update_item'
+  map.connect 'todos/update_list/:id', :controller => 'basecamp', :action => 'todos_update_list'
+  
+  map.connect 'milestones/complete/:id', :controller => 'basecamp', :action => 'milestones_complete'
+  map.connect 'projects/:active_project/milestones/create', :controller => 'basecamp', :action => 'projects_milestones_create'
+  map.connect 'milestones/delete/:id', :controller => 'basecamp', :action => 'milestones_delete'
+  map.connect 'projects/:active_project/milestones/list', :controller => 'basecamp', :action => 'projects_milestones_list'
+  map.connect 'milestones/uncomplete/:id', :controller => 'basecamp', :action => 'milestones_uncomplete'
+  map.connect 'milestones/update/:id', :controller => 'basecamp', :action => 'milestones_update'
+
+  map.connect 'time/save_entry', :controller => 'basecamp', :action => 'time_save_entry'
+  map.connect 'projects/:active_project/time/delete_entry/:id', :controller => 'basecamp', :action => 'projects_time_delete_entry'
+  map.connect 'time/report/:id/:from/:to/:filter', :controller => 'basecamp', :action => 'time_report'
+  map.connect 'time/save_entry/:id', :controller => 'basecamp', :action => 'time_update_entry'
+    
+  # Useful BaseCamp RSS Feeds
+  map.connect '/feed/recent_items_rss', :controller => 'basecamp', :action => 'recent_items_rss'
+    
   # project & project object url's
   map.connect 'project/add', :controller => 'project', :action => 'add'
   

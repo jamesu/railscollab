@@ -8,8 +8,11 @@ xml.milestone do
 	xml.tag!('project-id', milestone.project_id, :type => 'integer')
 	xml.tag!('created-on', basecamp_time(milestone.created_on), :type => 'datetime')
 	xml.tag!('creator-id', milestone.created_by_id, :type => 'integer')
-	xml.tag!('responsible-party-id', milestone.assigned_to.id, :type => 'integer')
-	xml.tag!('responsible-party-type', milestone.assigned_to.type.to_s)
+	
+	if !milestone.assigned_to.nil?
+		xml.tag!('responsible-party-id', milestone.assigned_to.id, :type => 'integer')
+		xml.tag!('responsible-party-type', milestone.assigned_to.type.to_s)
+	end
 	
 	if milestone.is_completed?
 		xml.tag!('completed-on', basecamp_time(milestone.created_on), :type => 'datetime')

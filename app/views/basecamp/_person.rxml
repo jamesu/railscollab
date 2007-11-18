@@ -2,17 +2,17 @@ xml = xml_instance
 
 xml.person do
 	xml.id person.id, :type => 'integer'
-	xml.tag!('first-name', person.display_name)
+	xml.tag!('first-name', h(person.display_name))
 	xml.tag!('last-name', '')
-	xml.title (h person.title)
+	xml.title h(person.title)
 	xml.tag!('email-address', person.email)
 	xml.tag!('im-handle', '')
 	xml.tag!('im-service', '')
-	xml.tag!('phone-number-office', person.office_number)
-	xml.tag!('phone-number-office-ext', person.fax_number)
-	xml.tag!('phone-number-office-mobile', person.mobile_number)
-	xml.tag!('phone-number-mobile', person.mobile_number)
-	xml.tag!('phone-number-fax', person.fax_number)
+	xml.tag!('phone-number-office', h(person.office_number))
+	xml.tag!('phone-number-office-ext', h(person.office_number_ext))
+	xml.tag!('phone-number-office-mobile', h(person.mobile_number))
+	xml.tag!('phone-number-mobile', h(person.mobile_number))
+	xml.tag!('phone-number-fax', h(person.fax_number))
 	xml.tag!('last-login', basecamp_time(person.last_login), :type => 'datetime')
 	xml.tag!('client-id', person.company_id, :type => 'integer')
 	
@@ -27,20 +27,5 @@ xml.person do
 		xml.administrator person.is_admin, :type => 'boolean'
 		xml.deleted false, :type => 'boolean'
 		xml.tag!('has-access-to-new-projects', person.auto_assign, :type => 'boolean')
-	end
-	
-	xml.name project.name
-	xml.tag!('created-on', "UNKNOWN", :type => 'datetime')
-	xml.status "UNKNOWN"
-	xml.tag!('last-changed-on', 'UNKNOWN', :type => 'datetime')
-	xml.company do
-	end
-	
-	#xml.announcement "UNKNOWN"
-	
-	if @logged_user.is_admin?
-		xml.tag!('start-page', 'UNKNOWN')
-		xml.tag!('show-writeboards', false, :type => 'boolean')
-		xml.tag!('show-announcement', false, :type => 'boolean')
 	end
 end
