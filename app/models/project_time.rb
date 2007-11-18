@@ -100,24 +100,24 @@ class ProjectTime < ActiveRecord::Base
 	end
 	
 	def open_task_id=(val)
-        # Set assigned_to accordingly
-        assign_id = val.to_i
-        if assign_id == 0
-        	self.open_task = nil
-        elsif assign_id > 1000
-          self.open_task = ProjectTask.find(assign_id-1000)
-        else
-          self.open_task = ProjectTaskList.find(assign_id)
-        end
+        # Set open_task accordingly
+		if (val == '0' or val == 'l0')
+			self.open_task = nil
+			return
+		end
+		
+		self.open_task = val[0] == 108 ? 
+		                   ProjectTaskList.find(val[1...val.length]) :
+						   ProjectTask.find(val)
 	end
 	
 	def open_task_id
 		if self.project_task_list
-			self.project_task_list.id
+			"l#{self.project_task_list.id}"
 		elsif self.project_task
-			self.project_task.id+1000
+			self.project_task_list.id.to_s
 		else
-			0
+			"0"
 		end
 	end
 	
