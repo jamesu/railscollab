@@ -166,7 +166,7 @@ class BasecampController < ApplicationController
     	# Notify everyone
     	message.send_comment_notifications(@comment)
     	
-    	render :template => 'msg_comment', :status => 201
+    	render :template => 'basecamp/msg_comment', :status => 201
     else
     	render :text => 'Error', :status => 500
     	return
@@ -216,7 +216,7 @@ class BasecampController < ApplicationController
     		# TODO
     	end
     	
-    	render :template => 'msg_update', :status => 201
+    	render :template => 'basecamp/msg_update', :status => 201
     else
     	render :text => 'Error', :status => 500
     	return
@@ -240,7 +240,7 @@ class BasecampController < ApplicationController
     @comment.updated_by = @logged_user
     @comment.destroy
     
-    render :template => 'msg_comment'
+    render :template => 'basecamp/msg_comment'
   end
   
   # /msg/delete/#{message_id}
@@ -260,7 +260,7 @@ class BasecampController < ApplicationController
     @message.updated_by = @logged_user
     @message.destroy
 
-    render :template => 'msg_update'
+    render :template => 'basecamp/msg_update'
   end
   
   # /msg/get/#{message_ids}
@@ -321,7 +321,7 @@ class BasecampController < ApplicationController
     	return
     end
     
-    render :template => 'msg_comment'
+    render :template => 'basecamp/msg_comment'
   end
   
   # /msg/update/#{message_id}
@@ -388,7 +388,7 @@ class BasecampController < ApplicationController
       end
     end
     
-    render :template => 'todos_update_item'
+    render :template => 'basecamp/todos_update_item'
   end
   
   # /todos/create_item/#{list_id}
@@ -417,7 +417,7 @@ class BasecampController < ApplicationController
     @task.created_by = @logged_user
     
     if @task.save
-    	render :template => 'todos_update_item', :status => 201
+    	render :template => 'basecamp/todos_update_item', :status => 201
     else
     	render :text => 'Error', :status => 500
     end
@@ -444,7 +444,7 @@ class BasecampController < ApplicationController
     @task_list.created_by = @logged_user
     
     if @task_list.save
-    	render :template => 'todos_list', :status => 201
+    	render :template => 'basecamp/todos_list', :status => 201
     else
     	render :text => 'Error', :status => 500
     end
@@ -467,7 +467,7 @@ class BasecampController < ApplicationController
     @task.updated_by = @logged_user
     @task.destroy
 
-    render :template => 'todos_update_item'
+    render :template => 'basecamp/todos_update_item'
   end
   
   # /todos/delete_list/#{id}
@@ -487,7 +487,7 @@ class BasecampController < ApplicationController
     @task_list.updated_by = @logged_user
     @task_list.destroy
 
-    render :template => 'todos_list'
+    render :template => 'basecamp/todos_list'
   end
   
   # /todos/list/#{id}
@@ -559,7 +559,7 @@ class BasecampController < ApplicationController
       end
     end
     
-    render :template => 'todos_update_item'
+    render :template => 'basecamp/todos_update_item'
   end
   
   # /todos/update_item/#{id}
@@ -587,7 +587,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    render :template => 'todos_update_item'
+    render :template => 'basecamp/todos_update_item'
   end
   
   # /todos/update_list/#{id}
@@ -621,7 +621,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    render :template => 'todos_list'
+    render :template => 'basecamp/todos_list'
   end
   
   # /milestones/complete/#{id}
@@ -633,7 +633,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    if not @milestone.can_be_changed_by(@logged_user)
+    if not @milestone.status_can_be_changed_by(@logged_user)
       render :text => 'Error', :status => 403
       return
     end
@@ -648,7 +648,7 @@ class BasecampController < ApplicationController
       end
     end
     
-    render :template => 'milestones_update'
+    render :template => 'basecamp/milestones_update'
   end
   
   # /projects/#{project_id}/milestones/create
@@ -672,7 +672,7 @@ class BasecampController < ApplicationController
     @milestone.created_by = @logged_user
     
     if @milestone.save
-    	render :template => 'milestones_update', :status => 201
+    	render :template => 'basecamp/milestones_update', :status => 201
     else
     	render :text => 'Error', :status => 500
     end
@@ -695,7 +695,7 @@ class BasecampController < ApplicationController
     @milestone.updated_by = @logged_user
     @milestone.destroy
     
-    render :template => 'milestones_update'
+    render :template => 'basecamp/milestones_update'
   end
   
   # /projects/#{project_id}/milestones/list
@@ -730,7 +730,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    if not @milestone.can_be_changed_by(@logged_user)
+    if not @milestone.status_can_be_changed_by(@logged_user)
       render :text => 'Error', :status => 403
       return
     end
@@ -745,7 +745,7 @@ class BasecampController < ApplicationController
       end
     end
     
-    render :template => 'milestones_update'
+    render :template => 'basecamp/milestones_update'
   end
   
   # /milestones/update/#{id}
@@ -757,7 +757,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    if not @milestone.can_be_changed_by(@logged_user)
+    if not @milestone.can_be_edited_by(@logged_user)
       render :text => 'Error', :status => 403
       return
     end
@@ -804,7 +804,7 @@ class BasecampController < ApplicationController
     @time.created_by = @logged_user
     
     if @time.save
-    	render :template => 'time_save_entry', :status => 201
+    	render :template => 'basecamp/time_save_entry', :status => 201
     else
     	render :text => 'Error', :status => 500
     end
@@ -827,7 +827,7 @@ class BasecampController < ApplicationController
     @time.updated_by = @logged_user
     @time.destroy
     
-    render :template => 'time_save_entry'
+    render :template => 'basecamp/time_save_entry'
   end
   
   # /time/report/#{person-id}/#{from}/#{to}/#{filter}
@@ -936,7 +936,7 @@ class BasecampController < ApplicationController
       return
     end
     
-  	render :template => 'time_save_entry'
+  	render :template => 'basecamp/time_save_entry'
   end
   
   # RSS feeds
