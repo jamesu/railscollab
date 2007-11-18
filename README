@@ -26,17 +26,17 @@ following to deploy & run RailsCollab:
     - ruby-openid (gem install ruby-openid)
     - ActionMailer (gem install ActionMailer)
 
-Upgrading from ActiveCollab
-***************************
+Upgrading from ActiveCollab (or ProjectPier 0.8)
+********************************************
 
-Currently the database model of RailsCollab is identical to
-that of ActiveCollab, with the exception of changes in the naming
-conventions of certain fields.
+RailsCollab uses a derivative of ActiveCollab's database model, which is similar 
+but not identical to RailsCollab's.
 
 More or less all the features of ActiveCollab are implemented, with the exception 
 of the following:
     - E-mail Notification for assignments and new accounts
     - Forgot password reset
+    - Localization
     - Administration tools
     - Runtime configuration editor
 
