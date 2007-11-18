@@ -34,10 +34,10 @@ class MilestoneController < ApplicationController
   after_filter  :user_track, :only => [:index, :view]
   
   def index
-    @late_milestones = @active_project.late_milestones
-    @today_milestones = @active_project.today_milestones
-    @upcomming_milestones = @active_project.upcomming_milestones
-    @completed_milestones = @active_project.completed_milestones
+    @late_milestones = @active_project.project_milestones.late
+    @today_milestones = @active_project.project_milestones.todays
+    @upcomming_milestones = @active_project.project_milestones.upcomming
+    @completed_milestones = @active_project.project_milestones.completed
     
     @content_for_sidebar = 'index_sidebar'
   end

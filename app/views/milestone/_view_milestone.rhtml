@@ -52,7 +52,7 @@
 <% if view_milestone.project_messages.length > 0 %>
       <p><%= "Messages" %>:</p>
       <ul>
-<% view_milestone.project_messages.each do |message| -%>
+<% (@logged_user.member_of_owner? ? view_milestone.project_messages : view_milestone.project_messages.public).each do |message| -%>
         <li><%= link_to (h message.title), :controller => 'message', :action => 'view', :id => message.id %>
 <% if not message.created_by.nil? %>
       <span class="desc">(<%= format_usertime(message.created_on, "%b %d. %Y %H:%M") %> | <%= link_to (h message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id %>)</span>
@@ -65,7 +65,7 @@
 <% if view_milestone.project_task_lists.length > 0 %>
       <p><%= "Task lists" %>:</p>
       <ul>
-<% view_milestone.project_task_lists.each do |task_list| -%>
+<% (@logged_user.member_of_owner? ? view_milestone.project_task_lists : view_milestone.project_task_lists.public).each do |task_list| -%>
 <% if task_list.is_completed? %>
         <li><del datetime="<%= task_list.completed_on.iso8601 %>"><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %></del></li>
 <% else %>

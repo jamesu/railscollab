@@ -32,8 +32,21 @@ class ProjectMilestone < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 		
-	has_many :project_task_lists, :foreign_key => 'milestone_id', :order => 'project_task_lists.order DESC', :dependent => :nullify
-	has_many :project_messages, :foreign_key => 'milestone_id', :dependent => :nullify
+	has_many :project_task_lists, :foreign_key => 'milestone_id', :order => 'project_task_lists.order DESC', :dependent => :nullify do
+		def public(reload=false)
+			# Grab public comments only
+			@public_task_lists = nil if reload
+			@public_task_lists ||= find(:all, :conditions => 'is_private = false')
+		end
+	end
+	
+	has_many :project_messages, :foreign_key => 'milestone_id', :dependent => :nullify do
+		def public(reload=false)
+			# Grab public comments only
+			@public_messages = nil if reload
+			@public_messages ||= find(:all, :conditions => 'is_private = false')
+		end
+	end
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
@@ -209,12 +222,12 @@ class ProjectMilestone < ActiveRecord::Base
 	   return false
 	 end
 	 
-	 if user.has_permission(project, :can_manage_milestones)
-	   return true
-	 end
-	 
 	 if self.is_private and !user.member_of_owner?
 	   return false
+	 end
+	 
+	 if user.has_permission(project, :can_manage_milestones)
+	   return true
 	 end
 	 
 	 return true
@@ -255,7 +268,13 @@ class ProjectMilestone < ActiveRecord::Base
 			return []
 		end
 		
-		return self.find(:all, :conditions => "completed_on IS NULL AND project_id IN (#{project_ids})")
+		if user.member_of_owner?
+			private_check = ""
+		else
+			private_check = "AND is_private = false"
+		end
+		
+		return self.find(:all, :conditions => "completed_on IS NULL AND project_id IN (#{project_ids}) #{private_check}")
 	end
 	
 	def self.todays_by_user(user)
@@ -272,7 +291,13 @@ class ProjectMilestone < ActiveRecord::Base
 			return []
 		end
 		
-		return self.find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{from_date}' AND due_date < '#{to_date}') AND project_id IN (#{project_ids})")
+		if user.member_of_owner?
+			private_check = ""
+		else
+			private_check = "AND is_private = false"
+		end
+		
+		return self.find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{from_date}' AND due_date < '#{to_date}') AND project_id IN (#{project_ids}) #{private_check}")
 	end
 	
 	def self.late_by_user(user)
@@ -288,7 +313,13 @@ class ProjectMilestone < ActiveRecord::Base
 			return []
 		end
 		
-		self.find(:all, :conditions => "due_date < '#{due_date}' AND completed_on IS NULL AND project_id IN (#{project_ids})")
+		if user.member_of_owner?
+			private_check = ""
+		else
+			private_check = "AND is_private = false"
+		end
+		
+		self.find(:all, :conditions => "due_date < '#{due_date}' AND completed_on IS NULL AND project_id IN (#{project_ids}) #{private_check}")
 	end
 	
 	def self.select_list(project)

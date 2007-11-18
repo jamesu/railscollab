@@ -33,8 +33,8 @@ class TaskController < ApplicationController
   after_filter  :user_track, :only => [:index, :view_list]
   
   def index
-    @open_task_lists = @active_project.open_task_lists
-    @completed_task_lists = @active_project.completed_task_lists
+    @open_task_lists = @active_project.project_task_lists.open
+    @completed_task_lists = @active_project.project_task_lists.completed
     @content_for_sidebar = 'index_sidebar'
   end
   
@@ -54,8 +54,8 @@ class TaskController < ApplicationController
       return
     end
     
-    @open_task_lists = @active_project.open_task_lists
-    @completed_task_lists = @active_project.completed_task_lists
+    @open_task_lists = @active_project.project_task_lists.open
+    @completed_task_lists = @active_project.project_task_lists.completed
     @content_for_sidebar = 'index_sidebar'
   end
   

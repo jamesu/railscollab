@@ -32,19 +32,59 @@ class Project < ActiveRecord::Base
 	has_many :project_times, :dependent => :destroy
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
 	
-	has_many :project_milestones, :dependent => :destroy
-	has_many :open_milestones, :class_name => 'ProjectMilestone', :foreign_key => 'project_id', :conditions => 'project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC'
+	has_many :project_milestones, :dependent => :destroy do
+		def open(reload=false)
+			# Grab open milestones only
+			find(:all, :conditions => 'project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC')
+		end
+		
+		def late(reload=false)
+			find(:all, :conditions => "due_date < '#{Date.today}' AND completed_on IS NULL")
+		end
+		
+		def todays(reload=false)
+			find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{Date.today}' AND due_date < '#{Date.today+1}')")
+		end
+		
+		def upcomming(reload=false)
+			find(:all, :conditions => "completed_on IS NULL AND due_date > '#{Date.today}'")
+		end
+		
+		def completed(reload=false)
+			find(:all, :conditions => 'completed_on IS NOT NULL')
+		end
+	end
 	
-	has_many :project_task_lists, :order => 'project_task_lists.order DESC', :dependent => :destroy
-	has_many :open_task_lists, :class_name => 'ProjectTaskList', :foreign_key => 'project_id', :conditions => 'project_task_lists.completed_on IS NULL', :order => 'project_task_lists.order DESC'
-	has_many :completed_task_lists, :class_name => 'ProjectTaskList', :foreign_key => 'project_id', :conditions => 'project_task_lists.completed_on IS NOT NULL', :order => 'project_task_lists.order DESC'
+	has_many :project_task_lists, :order => 'project_task_lists.order DESC', :dependent => :destroy do
+		def open(reload=false)
+			# Grab open task lists only
+			find(:all, :conditions => 'project_task_lists.completed_on IS NULL', :order => 'project_task_lists.order DESC')
+		end
+		
+		def completed(reload=false)
+			# Grab completed task lists only
+			find(:all, :conditions => 'project_task_lists.completed_on IS NOT NULL', :order => 'project_task_lists.order DESC')
+		end
+	end
 	
-	has_many :project_forms, :order => 'project_forms.order DESC', :dependent => :destroy
-	has_many :visible_forms, :class_name => 'ProjectForm', :foreign_key => 'project_id', :conditions => 'project_forms.is_visible', :order => 'project_forms.order DESC'
+	has_many :project_forms, :order => 'project_forms.order DESC', :dependent => :destroy do
+		def visible(reload=false)
+			# Grab visible forms only
+			find(:all, :conditions => 'project_forms.is_visible', :order => 'project_forms.order DESC')
+		end
+	end
 	
 	has_many :project_folders, :dependent => :destroy
-	has_many :project_files, :dependent => :destroy
-	has_many :project_messages, :dependent => :destroy
+	has_many :project_files, :dependent => :destroy do
+		def important(reload=false)
+			find(:all, :conditions => "is_important = true")
+		end
+	end
+	has_many :project_messages, :dependent => :destroy do
+		def important(reload=false)
+			find(:all, :conditions => "is_important = true")
+		end
+	end
 	has_many :project_message_categories, :dependent => :destroy
 	
 	has_many :application_logs, :order => 'created_on DESC, id DESC', :dependent => :destroy do
@@ -106,35 +146,6 @@ class Project < ActiveRecord::Base
 	
 	def milestones_by_user(user, completed=false)
 		ProjectMilestone.find(:all, :conditions => ["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
-	end
-	
-	def late_milestones
-	    due_date = Date.today
-	    ProjectMilestone.find(:all, :conditions => "project_id = #{self.id} AND due_date < '#{due_date}' AND completed_on IS NULL")
-	end
-	
-	def today_milestones
-	    from_date = Date.today
-		to_date = Date.today+1
-	    
-	    ProjectMilestone.find(:all, :conditions => "project_id = #{self.id} AND completed_on IS NULL AND (due_date >= '#{from_date}' AND due_date < '#{to_date}')")
-	end
-	
-	def upcomming_milestones
-	   from_date = Date.today
-	   ProjectMilestone.find(:all, :conditions => "completed_on IS NULL AND due_date > '#{from_date}' AND project_id = #{self.id}")
-	end
-	
-	def completed_milestones
-	 ProjectMilestone.find(:all, :conditions => "completed_on IS NOT NULL AND project_id = #{self.id}")
-	end
-	
-	def important_messages
-	 ProjectMessage.find(:all, :conditions => "is_important AND project_id = #{self.id}")
-	end
-	
-	def important_files
-	 ProjectFile.find(:all, :conditions => "is_important AND project_id = #{self.id}")
 	end
 	
 	def has_member(user)

@@ -510,14 +510,19 @@ class BasecampController < ApplicationController
   	# Allow for constraints
   	if !@request_fields.nil?
   		if @request_fields.has_key?(:complete)
-  			@task_lists = @request_fields[:complete] ? @active_project.completed_task_lists : 
-  			                                           @active_project.open_task_lists
+  			@task_lists = @request_fields[:complete] ? @active_project.project_task_lists.completed : 
+  			                                           @active_project.project_task_lists.open
   			return
   		end
   	end
   	
   	# Otherwise display everything
   	@task_lists = @active_project.project_task_lists
+  	
+  	# Filter out private
+  	unless @logged_user.member_of_owner?
+  		@task_lists = @task_lists.reject { |list| list.is_private? }
+  	end
   end
   
   # /todos/move_item/#{id}
@@ -700,13 +705,13 @@ class BasecampController < ApplicationController
   		if @request_fields.has_key?(:find)
   			case @request_fields[:find]
   				when 'late'
-  					@milestones = @active_project.late_milestones
+  					@milestones = @active_project.project_milestones.late
   					return
   				when 'completed'
-  					@milestones = @active_project.completed_milestones
+  					@milestones = @active_project.project_milestones.completed
   					return
   				when 'upcoming'
-  					@milestones = @active_project.upcomming_milestones
+  					@milestones = @active_project.project_milestones.upcomming
   					return
   			end
   		end

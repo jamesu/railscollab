@@ -54,7 +54,7 @@ class FilesController < ApplicationController
     @order = sort_type
     @page = current_page
     @folders = @active_project.project_folders
-    @important_files = @active_project.important_files
+    @important_files = @active_project.project_files.important
     
     @content_for_sidebar = 'index_sidebar'
   end
@@ -91,7 +91,7 @@ class FilesController < ApplicationController
     @order = sort_type
     @page = current_page
     @folders = @active_project.project_folders
-    @important_files = @active_project.important_files
+    @important_files = @active_project.project_files.important
        
     @content_for_sidebar = 'index_sidebar'
     
@@ -208,7 +208,7 @@ class FilesController < ApplicationController
     @order = nil
     @page = nil
     @folders = @active_project.project_folders
-    @important_files = @active_project.important_files
+    @important_files = @active_project.project_files.important
        
     @content_for_sidebar = 'index_sidebar'
   end

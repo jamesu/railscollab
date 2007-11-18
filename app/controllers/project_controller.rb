@@ -46,14 +46,14 @@ class ProjectController < ApplicationController
 		@project_log_entries = (@logged_user.member_of_owner? ? project.application_logs : project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
 	  end
 	  
-      @late_milestones = project.late_milestones
-      @today_milestones = project.today_milestones
-      @upcomming_milestones = project.upcomming_milestones
+      @late_milestones = project.project_milestones.late
+      @today_milestones = project.project_milestones.todays
+      @upcomming_milestones = project.project_milestones.upcomming
       
-      @visible_forms = project.visible_forms(true)
+      @visible_forms = project.project_forms.visible
       @project_companies = project.companies
-      @important_messages = project.important_messages
-      @important_files = project.important_files
+      @important_messages = project.project_messages.important
+      @important_files = project.project_files.important
       
       @content_for_sidebar = 'overview_sidebar'
   end
