@@ -47,8 +47,13 @@ class Project < ActiveRecord::Base
 	has_many :project_messages, :dependent => :destroy
 	has_many :project_message_categories, :dependent => :destroy
 	
-	has_many :public_application_logs, :class_name => 'ApplicationLog', :conditions => 'is_private = false', :order => 'created_on DESC, id DESC'
-	has_many :application_logs, :order => 'created_on DESC, id DESC', :dependent => :destroy
+	has_many :application_logs, :order => 'created_on DESC, id DESC', :dependent => :destroy do
+		def public(reload=false)
+			# Grab public logs only
+			@public_application_logs = nil if reload
+			@public_application_logs ||= find(:all, :conditions => 'is_private = false')
+		end
+	end
 	
 	has_and_belongs_to_many :companies, :join_table => :project_companies
 	

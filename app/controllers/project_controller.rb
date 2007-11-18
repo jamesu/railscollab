@@ -43,7 +43,7 @@ class ProjectController < ApplicationController
   def overview
       project = @active_project
 	  when_fragment_expired "user#{@logged_user.id}_#{@active_project.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
-		@project_log_entries = (@logged_user.member_of_owner? ? project.application_logs : project.public_application_logs)[0..(AppConfig.project_logs_per_page-1)]
+		@project_log_entries = (@logged_user.member_of_owner? ? project.application_logs : project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
 	  end
 	  
       @late_milestones = project.late_milestones
@@ -385,10 +385,8 @@ class ProjectController < ApplicationController
     
     @project.set_completed(true, @logged_user)
     
-    if not @project.save
+    unless @project.save
       flash[:flash_error] = "Error saving"
-    else
-      ApplicationLog.new_log(@project, @logged_user, :close, true)
     end
     
     redirect_back_or_default :controller => 'administration', :action => 'projects'
@@ -411,10 +409,8 @@ class ProjectController < ApplicationController
     
     @project.set_completed(false, @logged_user)
     
-    if not @project.save
+    unless @project.save
       flash[:flash_error] = "Error saving"
-    else
-      ApplicationLog.new_log(@project, @logged_user, :open, true)
     end
     
     redirect_back_or_default :controller => 'administration', :action => 'projects'
