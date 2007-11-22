@@ -38,6 +38,8 @@ class Company < ActiveRecord::Base
 	before_create :process_params
 	before_update :process_update_params
 	before_destroy :process_destroy
+	
+	@@cached_owner = nil
 	 
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
@@ -52,7 +54,7 @@ class Company < ActiveRecord::Base
 	end
 	
 	def self.owner
-		Company.find(:first, :conditions => 'client_of_id IS NULL')
+		@@cached_owner ||= Company.find(:first, :conditions => 'client_of_id IS NULL')
 	end
 	
 	def is_owner?
