@@ -57,15 +57,14 @@ class ProjectFileRevision < ActiveRecord::Base
 		self.filesize = value.size
 		self.type_string = value.content_type.chomp
 		
+		# Figure out the intended file type
 		extension = value.original_filename.split('.', 2)[-1]
-		if extension
-			begin
-				self.file_type = FileType.find(:first, :conditions => ['extension = ?', extension])
-			rescue ActiveRecord::RecordNotFound
-				self.file_type = FileType.find(:first, :conditions => 'extension = \'unknown\'')
-			end
-		end
+		self.file_type = FileType.find(:first, :conditions => ['extension = ?', extension])
+		self.file_type ||= FileType.find(:first, :conditions => 'extension = \'txt\'')
 		
+		puts self.file_type
+		
+		# Store to the repository
 		if self.new_record?
 			self.repository_id = FileRepo.handle_storage(value.read)
 		else
