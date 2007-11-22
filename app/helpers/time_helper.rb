@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 module TimeHelper
-  include ActionView::Helpers::ProjectHelper
+  include ProjectHelper
   
   def task_select_list(task_list)
   	items = []

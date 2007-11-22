@@ -5,6 +5,6 @@ RailsCollab
 =end
 
 module MilestoneHelper
-  include ActionView::Helpers::ProjectHelper
+  include ProjectHelper
   
 end

@@ -5,6 +5,6 @@ RailsCollab
 =end
 
 module CompanyHelper
-    include ActionView::Helpers::DashboardHelper
-    include ActionView::Helpers::AdministrationHelper
+    include DashboardHelper
+    include AdministrationHelper
 end

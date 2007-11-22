@@ -5,5 +5,5 @@ RailsCollab
 =end
 
 module FormHelper
-  include ActionView::Helpers::ProjectHelper
+  include ProjectHelper
 end
