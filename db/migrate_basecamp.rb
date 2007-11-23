@@ -159,7 +159,7 @@ xml.elements.each('account/projects/project') do |bproject|
 	project.save!
 	project.created_on = Date.parse(project_attribs['created-on'].text)
 	project.updated_by = MAP_IDS[:owner]
-	project.set_completed(true, MAP_IDS[:owner]) unless project_attribs['status'] == 'active'
+	project.set_completed(true, MAP_IDS[:owner]) unless project_attribs['status'].text == 'active'
 	project.save!
 	
 	# Iterate through project objects
@@ -265,11 +265,13 @@ xml.elements.each('account/projects/project') do |bproject|
 			end
 			
 			task.created_on = Time.parse(todo_item_attribs['created-on'].text)
+			task.updated_by = MAP_IDS[:owner]
 			task.save!
 			
 			MAP_IDS[:tasks][todo_item_attribs['id'].text.to_i] = task.id
 		end
 		
+		task_list.updated_by = MAP_IDS[:owner]
 		task_list.save!
 	end
 	
@@ -315,6 +317,7 @@ xml.elements.each('account/projects/project') do |bproject|
 		puts "  Adding message '#{message.title}'"
 		message.save!
 		message.created_on = Time.parse(post_attribs['posted-on'].text)
+		message.updated_by = MAP_IDS[:owner]
 		message.save!
 		
 		MAP_IDS[:messages][post_attribs['id'].text.to_i] = message.id
@@ -333,6 +336,7 @@ xml.elements.each('account/projects/project') do |bproject|
 			
 			comment.save!
 			comment.created_on = Time.parse(comment_attribs['posted-on'].text)
+			comment.updated_by = MAP_IDS[:owner]
 			comment.save!
 			
 			MAP_IDS[:comments][comment_attribs['id'].text.to_i] = message.id
