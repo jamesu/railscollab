@@ -181,6 +181,15 @@ class Company < ActiveRecord::Base
 		return TZInfo::Country.get(self.country).name
 	end
 	
+	def country_name=(value)
+		TZInfo::Country.all.each do |country|
+			if country.name == value
+				self.country = country.code
+				return
+			end 
+		end
+	end
+	
 	def self.select_list
 	   self.find(:all).collect do |company|
 	     [company.name, company.id]

@@ -381,7 +381,7 @@ class User < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :display_name, :email, :timezone_name, :title, :office_number, :fax_number, :mobile_number, :home_number, :new_account_notification
+	attr_accessible :display_name, :email, :timezone_name, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
 	
 	# Validation
 	

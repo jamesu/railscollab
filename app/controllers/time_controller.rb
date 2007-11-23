@@ -90,11 +90,6 @@ class TimeController < ApplicationController
         @time.project = @active_project
         @time.created_by = @logged_user
         
-        if @logged_user.member_of_owner?
-        	@time.is_private = time_attribs[:is_private]
-        	@time.is_billable = time_attribs[:is_billable]
-        end
-        
         if @time.save
           flash[:flash_success] = "Successfully added time record"
           redirect_back_or_default :controller => 'time'
@@ -125,11 +120,6 @@ class TimeController < ApplicationController
         
         @time.attributes = time_attribs
         @time.created_by = @logged_user
-        
-        if @logged_user.member_of_owner?
-        	@time.is_private = time_attribs[:is_private]
-        	@time.is_billable = time_attribs[:is_billable]
-        end
         
         if @time.save
           flash[:flash_success] = "Successfully edited time record"

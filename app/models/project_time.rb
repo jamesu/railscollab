@@ -244,7 +244,7 @@ class ProjectTime < ActiveRecord::Base
 	# Validation
 	
 	validates_presence_of :name
-	validates_each :is_private, :is_important, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+	validates_each :is_private, :is_important, :is_billable, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
 		record.errors.add attr, 'not allowed' if value == true
 	end
 end

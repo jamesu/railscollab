@@ -187,7 +187,7 @@ class ProjectTask < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :text, :assigned_to_id
+	attr_accessible :text, :order, :assigned_to_id
 	
 	# Validation
 	
