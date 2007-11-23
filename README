@@ -75,11 +75,9 @@ permissions. Files are stored according to the "file_upload_storage" option.
 Note that the "local_database" storage option is currently the only implemented
 storage system in RailsCollab.
 
-When using the "local_database" storage option, you might notice that files you 
-upload may be limited to 64kb. This is likely due to the rails migration creating
-a storage field of insufficient capacity. To solve this problem you should modify the
-field type of the "content" field in the "file_repo" table located in your database 
-accordingly.
+When using the "local_database" storage option with MySQL, you might notice that files you 
+upload may be limited to 64kb. To solve this issue, run the "db:railscollab:fix_files" rake 
+task.
 
 Deployment
 **********
