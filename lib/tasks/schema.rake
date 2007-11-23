@@ -47,6 +47,12 @@ namespace :db do
 			puts "\nDone.\n"
 		end
 		
+		task :migrate_from_basecamp => :environment do
+			puts "\nMigrating from BaseCamp..."
+			Rake::Task["db:schema:load"].invoke unless ENV['RAILSCOLLAB_SCHEMA_EXISTS']
+			load("db/migrate_basecamp.rb")
+		end
+		
 		# Courtesy of Retrospectiva, Copyright (C) 2006 Dimitrij Denissenko
 		desc 'Converts mysql tables to use myisam engine.'
 		task :mysql_convert_to_myisam => :environment do
@@ -59,7 +65,19 @@ namespace :db do
 				end
 				puts "===== Finished\n"
 			else
-				puts "\nYour are not using a MySQL database!\n"
+				puts "\nYou are not using a MySQL database!\n"
+			end
+		end
+		
+		desc 'Sets the MYSQL blob size for ProjectFiles accordingly'
+		task :fix_files => :environment do
+			ActiveRecord::Base.establish_connection
+			if ActiveRecord::Base.connection.adapter_name == 'MySQL'
+				puts "\nFixing file size schema..."
+				ActiveRecord::Base.connection.execute("ALTER TABLE file_repo MODIFY content LONGBLOB NOT NULL DEFAULT ''")
+				puts "Done\n"
+			else
+				puts "\nDatabase not supported by this task!\n"
 			end
 		end
 	end
