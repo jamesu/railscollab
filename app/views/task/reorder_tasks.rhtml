@@ -1,31 +1,23 @@
-<?php
-
-  set_page_title(lang('reorder tasks'));
-  project_tabbed_navigation(PROJECT_TAB_TASKS);
-  project_crumbs(array(
-    array(lang('tasks'), get_url('task')),
-    array($task_list->getName(), $task_list->getViewUrl()),
-    array(lang('reorder tasks'))
-  ));
+<%
+  @page_title = 'Reorder Tasks'
+  @tabbed_navigation_items = project_tabbed_navigation(2)
+  @bread_crumbs = project_crumbs("Redorder tasks", [{:title => 'Tasks', :url => "/project/#{@active_project.id}/task/index"}, {:title => (h @task_list.name), :url => "/project/#{@active_project.id}/task/view_list/#{@task_list.id}"}])
   
-  add_stylesheet_to_page('project/reorder_tasks.css');
+  @page_actions = []
+  
+  if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title =>'Add task list', :url=> "/project/#{@active_project.id}/task/add_list"}
+  end
+  
+  @additional_stylesheets = ['project/task_list']
+%>
 
-?>
-<div id="reorderTasks">
-  <form action="<?= $task_list->getReorderTasksUrl($back_to_list) ?>" method="post">
-    <table class="blank">
-      <tr>
-        <th><?= lang('order') ?></th>
-        <th><?= lang('task') ?></th>
-      </tr>
-<?php foreach($tasks as $task) { ?>
-      <tr>
-        <td><?= text_field('task_' . $task->getId(), $task->getOrder(), array('class' => 'short')) ?></td>
-        <td><?= clean($task->getText()) ?></td>
-      </tr>
-<?php } // foreach ?>
-    </table>
-    <input type="hidden" name="submitted" value="submitted" />
-    <?= submit_button(lang('reorder tasks')) ?>
-  </form>
-</div>
+<ul id="list">
+  <% @task_list.project_tasks.each do |task| -%>
+  <li id="item_<%= task.id %>"><%= text_field_tag 'list[]', task.order, {:class => 'short'} %> <%= h task.text %></li>
+  <% end %>
+</ul>
+
+<%= sortable_element 'list',
+      :complete => visual_effect(:highlight, 'list'), 
+      :url => { :action => "reorder_list", :id => @task_list.id } %>

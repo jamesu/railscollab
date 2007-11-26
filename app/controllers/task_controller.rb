@@ -146,7 +146,37 @@ class TaskController < ApplicationController
     redirect_back_or_default :controller => 'milestone'
   end
   
-  def reorder_tasks
+  def reorder_list
+    begin
+      @task_list = ProjectTaskList.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:flash_error] = "Invalid task"
+      redirect_back_or_default :controller => 'task'
+      return
+    end
+    
+    if not @task_list.can_be_changed_by(@logged_user)
+      flash[:flash_error] = "Insufficient permissions"
+      redirect_back_or_default :controller => 'task'
+      return
+    end
+
+    case request.method
+      when :post
+		tasks = @task_list.project_tasks
+		order = params[:list].collect { |id| id.to_i }
+		
+		tasks.each do |task|
+			idx = order.index(task.id)
+			task.order = idx.nil? ? 0 : idx
+			task.save!
+		end
+		
+		render :text => ''
+		return
+    end
+	
+	render :template => 'task/reorder_tasks'
   end
   
   # Tasks

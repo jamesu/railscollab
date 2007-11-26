@@ -28,7 +28,7 @@ class ProjectTaskList < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
-	has_many :project_tasks, :foreign_key => 'task_list_id', :dependent => :destroy
+	has_many :project_tasks, :foreign_key => 'task_list_id', :order => 'project_tasks.order ASC', :dependent => :destroy
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
