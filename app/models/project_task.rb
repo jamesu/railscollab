@@ -132,6 +132,7 @@ class ProjectTask < ActiveRecord::Base
 	
 	def set_order(value, user=nil)
 	  @update_is_minor = true
+	  self.order = value
 	  self.updated_by = user unless user.nil?
 	end
 	
