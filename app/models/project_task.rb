@@ -43,6 +43,7 @@ class ProjectTask < ActiveRecord::Base
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
+	  write_attribute("order", self.task_list.project_tasks.length)
 	end
 	
 	def process_create
@@ -194,7 +195,7 @@ class ProjectTask < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :text, :order, :assigned_to_id
+	attr_accessible :text, :assigned_to_id
 	
 	# Validation
 	

@@ -527,12 +527,62 @@ class BasecampController < ApplicationController
   
   # /todos/move_item/#{id}
   def todos_move_item
-  	# TODO
+    begin
+      @task = ProjectTask.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render :text => 'Error', :status => 404
+      return
+    end
+    
+    @task_list = @task.project_task_list
+    
+    if not @task_list.can_be_changed_by(@logged_user)
+      render :text => 'Error', :status => 403
+      return
+    end
+    
+    # Maps in the range 1...num_tasks
+    num_tasks = @task_list.project_tasks.length
+    target_idx = (@request_fields[:to].to_i-1) %  @task_list.project_tasks.length
+    
+    # Increment and set where applicable
+  	@task_list.tasks.each do |task|
+  		next if task.id == @task.id
+  		
+  		if task.id == target_idx
+  			@task.id = target_idx
+  			@task.save!
+  		end
+  		
+  		task.order = (task.order+1) % @task_list.project_tasks.length
+  		task.save!
+  	end
+  	
+  	render :template => 'basecamp/todos_update_item'
   end
   
   # /todos/move_list/#{id}
   def todos_move_list
-  	# TODO
+    begin
+      @task_list = ProjectTaskList.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render :text => 'Error', :status => 404
+      return
+    end
+    
+    if not @task_list.can_be_changed_by(@logged_user)
+      render :text => 'Error', :status => 403
+      return
+    end
+    
+    # Maps in the range 1...num_tasks
+    @task_list.priority = @request_fields[:to]
+    unless @task_list.save
+      	render :text => 'Error', :status => 500
+      	return
+    end
+  	
+  	render :template => 'basecamp/todos_list'
   end
   
   # /todos/uncomplete_item/#{id}
