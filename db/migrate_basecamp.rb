@@ -240,13 +240,13 @@ xml.elements.each('account/projects/project') do |bproject|
 			
 			task = ProjectTask.new(
 				:text => todo_item_attribs['content'].text,
-				:order => todo_item_attribs['position'].text,
 				:assigned_to_id => todo_item_attribs['responsible-party-type'].nil? ? '0' :
 				                  (todo_item_attribs['responsible-party-type'].text == 'Person' ? 
 				                   MAP_IDS[:users][todo_item_attribs['responsible-party-id'].text.to_i] : 
 				                   "c#{MAP_IDS[:users][todo_item_attribs['responsible-party-id'].text.to_i]}")
 			)
 			
+			task.order = todo_item_attribs['position'].text
 			task.created_by = User.find(MAP_IDS[:users][todo_item_attribs['creator-id'].text.to_i])
 			task.task_list = task_list
 			puts "    Adding task '#{task.text}'"
