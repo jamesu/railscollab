@@ -53,7 +53,9 @@ class ProjectTask < ActiveRecord::Base
 	def process_update_params
 	  if @update_completed.nil?
 		write_attribute("updated_on", Time.now.utc)
-		ApplicationLog.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
+		if @update_is_minor.nil?
+			ApplicationLog.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
+		end
 	  else
 		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
 		self.completed_by = @update_completed_user
@@ -125,6 +127,11 @@ class ProjectTask < ActiveRecord::Base
 	def set_completed(value, user=nil)
 	 @update_completed = value
 	 @update_completed_user = user
+	end
+	
+	def set_order(value, user=nil)
+	  @update_is_minor = true
+	  self.updated_by = user unless user.nil?
 	end
 	
 	def self.can_be_created_by(user, project)

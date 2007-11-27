@@ -164,16 +164,28 @@ class TaskController < ApplicationController
     case request.method
       when :post
 		tasks = @task_list.project_tasks
-		order = params[:list].collect { |id| id.to_i }
+		if params.has_key? :list
+			order = params[:list].collect { |id| id.to_i }
+		elsif params.has_key? :items
+			order = params[:items].sort{ |val1,val2| val1[1].to_i <=> val2[1].to_i }.collect{ |val| val[0].to_i }
+		else
+			render :text => 'Invalid', :status => 403
+		end
 		
 		tasks.each do |task|
 			idx = order.index(task.id)
-			task.order = idx.nil? ? 0 : idx
+			task.set_order(idx.nil? ? 0 : idx, @logged_user)
 			task.save!
 		end
 		
-		render :text => ''
-		return
+		ApplicationLog.new_log(@task_list, @logged_user, :edit, @task_list.is_private)
+		
+		if params.has_key? :list
+			render :text => ''
+			return
+		end
+		
+		@task_list.project_tasks(true) # Reload
     end
 	
 	render :template => 'task/reorder_tasks'

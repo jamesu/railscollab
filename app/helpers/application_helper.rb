@@ -45,8 +45,10 @@ module ApplicationHelper
 		actions.collect do |action|
 			if action[:cond]
 				extras = {}
-				extras[:confirm] = action[:confirm] if not action[:confirm].nil?
-				extras[:method] = action[:method] if not action[:method].nil?
+				extras[:confirm] = action[:confirm] if action.has_key? :confirm
+				extras[:method] = action[:method] if action.has_key? :method
+				extras[:onclick] = action[:onclick] if action.has_key? :onclick
+				extras[:id] = action[:id] if action.has_key? :id
 				
 				link_to action[:name], action[:url], extras
 			else

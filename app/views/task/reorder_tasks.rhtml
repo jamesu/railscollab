@@ -12,12 +12,40 @@
   @additional_stylesheets = ['project/task_list']
 %>
 
-<ul id="list">
-  <% @task_list.project_tasks.each do |task| -%>
-  <li id="item_<%= task.id %>"><%= text_field_tag 'list[]', task.order, {:class => 'short'} %> <%= h task.text %></li>
-  <% end %>
-</ul>
+<div class="taskList">
+<div class="block" id="taskList<%= @task_list.id %>">
+<% if @task_list.is_private? %>
+    <div class="private" title="<%= "Private task list" %>"><span><%= "Private task list" %></span></div>
+<% end %>
+  <div class="header"><%= link_to (h @task_list.name), :controller => 'task', :action => 'view_list', :id => @task_list.id %></div>
+  <div class="openTasks">
+    <%= start_form_tag({:action => 'reorder_list', :id => @task_list.id}, {:id => 'reorder_task_form'})%>
+    <table class="blank">
+      <tr>
+        <th><%= "Order" %></th>
+        <th><%= "Task" %></th>
+      </tr>
+<% @task_list.project_tasks.each do |task| -%>
+      <tr>
+        <td><%= text_field_tag( "items[#{task.id}]", task.order, {:class => 'short'} ) %></td>
+        <td><%= h task.text %></td>
+      </tr>
+<% end %>
+    </table>
+    <button class="submit" type="submit">Reorder task list</button>
+    </form>
+  </div>
+  
+<%
+	temp_actions = [
+		{:name => 'Edit', :url => {:controller => 'task', :action => 'edit_list', :id => @task_list.id}, :cond => @task_list.can_be_changed_by(@logged_user)},
+		{:name => 'Delete', :url => {:controller => 'task', :action => 'delete_list', :id => @task_list.id}, :cond => @task_list.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this task list?"},
+		{:name => 'Edit tasks', :url => {:controller => 'task', :action => 'view_list', :id => @task_list.id}, :cond => true}
+	]
+%>
+<div class="options">
+<%= action_list temp_actions %>
+</div>
 
-<%= sortable_element 'list',
-      :complete => visual_effect(:highlight, 'list'), 
-      :url => { :action => "reorder_list", :id => @task_list.id } %>
+</div>
+</div>

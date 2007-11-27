@@ -8,11 +8,11 @@
   <div class="desc"><%= textilize task_list.description %></div>
 <% end %>
   <div class="openTasks">
-    <table class="blank" id="openTasksList<%= task_list.id %>">
+    <ul class="taskItems" id="openTasksList<%= task_list.id %>">
 <% if task_list.open_tasks.length > 0 %>
-    <%= render :partial => 'task_item', :collection => task_list.open_tasks %>
+    <%= render :partial => 'task_item', :collection => task_list.open_tasks, :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% end %>
-    </table>
+    </ul>
   </div>
   
   <div class="addTask">
@@ -48,14 +48,14 @@
 <% else %>
 <%= "Recently completed tasks" %>:
 <% end %>
-    <table class="blank">
-    <%= render :partial => 'task_item', :collection => task_list.completed_tasks[0...5] %>
+    <ul class="taskItems">
+    <%= render :partial => 'task_item', :collection => task_list.completed_tasks[0...5], :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% if !on_list_page and task_list.completed_tasks.length > 5 %>
-      <tr>
-        <td colspan="2"><% link_to 'View all completed tasks', :controller => 'task', :action => 'view_list', :id => task_list.id %></td>
-      </tr>
+      <li>
+        <%= link_to 'View all completed tasks', :controller => 'task', :action => 'view_list', :id => task_list.id %>
+      </li>
 <% end %>
-    </table>
+    </ul>
   </div>
 <% end %>
   <div class="taskListTags"><span><%= "Tags" %>:</span> <%= tag_list task_list %></div>
@@ -64,7 +64,7 @@
 	temp_actions = [
 		{:name => 'Edit', :url => {:controller => 'task', :action => 'edit_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)},
 		{:name => 'Delete', :url => {:controller => 'task', :action => 'delete_list', :id => task_list.id}, :cond => task_list.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this task list?"},
-		{:name => 'Reorder tasks', :url => {:controller => 'task', :action => 'reorder_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)}
+		{:name => 'Reorder tasks', :url => {:controller => 'task', :action => 'reorder_list', :id => task_list.id}, :onclick => "task_view_sort(#{task_list.id}, #{task_list.project.id}); return false", :id => "sortTaskList#{task_list.id}", :cond => task_list.can_be_changed_by(@logged_user)}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>

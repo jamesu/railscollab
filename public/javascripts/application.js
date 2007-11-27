@@ -98,6 +98,37 @@ function task_form_loading_add(id)
 {
 }
 
+var task_view_sorts = {};
+
+function task_view_sort(id, pid)
+{
+	// Bit of a hack, but works
+	if (task_view_sorts[id])
+	{
+		task_view_sorts[id] = false;
+		$('sortTaskList' + id).innerHTML = 'Reorder tasks';
+		Sortable.destroy('openTasksList' + id);
+	}
+	else
+	{
+		task_view_sorts[id] = true;
+		$('sortTaskList' + id).innerHTML = 'Edit tasks';
+		Sortable.create('openTasksList' + id, 
+		{
+			onUpdate:function() 
+			{ 
+				new Ajax.Request('/project/' + pid + '/task/reorder_list/' + id, 
+				{
+				asynchronous:true, evalScripts:false,
+				onComplete:function(request) {new Effect.Highlight('openTasksList' + id, {});},
+				parameters:Sortable.serialize('openTasksList' + id, {name: 'list'})
+				})
+			}, 
+		ghosting: true}
+		)
+	}
+}
+
 // Permissions form stuff
 var permissions_form_items = [];
 

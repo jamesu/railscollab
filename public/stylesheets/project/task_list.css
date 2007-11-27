@@ -11,7 +11,11 @@ div.taskList .openTasks, .taskList .completedTasks {
   margin: 10px;
 }
 
-div.taskList td.taskCheckbox {
+div.taskList .taskItems {
+	list-style-type: none;
+}
+
+div.taskList span.taskCheckbox {
   padding-top: 4px;
 }
 
@@ -34,7 +38,7 @@ div.taskList .completedTasks {
   font-size: 90%;
 }
 
-div.taskList .completedTasks td {
+div.taskList .completedTasks li {
   padding: 0 2px;
   line-height: 16px;
 }
