@@ -70,7 +70,7 @@
 <% if upcomming_milestone.days_left <= 30 %>
 
 <% if not upcomming_milestone.assigned_to.nil? %>
-    <li><%= h upcomming_milestone.assigned_to.object_name %>: <%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, "%A, %d %B") %> - <%= "#{upcomming_milestones.days_late} days left" %>)</li>
+    <li><%= h upcomming_milestone.assigned_to.object_name %>: <%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, "%A, %d %B") %> - <%= "#{upcomming_milestone.days_late} days left" %>)</li>
 <% else %>
     <li><%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, "%A, %d %B") %> - <%= "#{upcomming_milestone.days_left} days left" %>)</li>
 <% end %>
