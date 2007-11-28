@@ -119,7 +119,7 @@ class TimeController < ApplicationController
         time_attribs = params[:time]
         
         @time.attributes = time_attribs
-        @time.created_by = @logged_user
+        @time.updated_by = @logged_user
         
         if @time.save
           flash[:flash_success] = "Successfully edited time record"
