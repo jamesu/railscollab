@@ -25,9 +25,9 @@
 <table class="timeLogs blank">
   <tr>
     <th><%= "Date" %></th>
-    <th><%= "Name" %></th>
-    <th><%= "Details" %></th>
+    <th><%= "Person" %></th>
     <th><%= "Hours" %></th>
+    <th><%= "Summary" %></th>
 	<th></th>
   </tr>
 
@@ -43,30 +43,31 @@
 <% end %>
     <td class="timeDate">
 <% if time.done_date.year == Time.now.year %>
-      <%= format_usertime(time.done_date, "%A, %d %B") %>
+      <%= format_usertime(time.done_date, "%b %d.") %>
 <% else %>
       <%= format_usertime(time.done_date, "%b %d. %Y") %>
 <% end %>
 		</td>
 		<td class="timeUser">
-      <% if !time.assigned_to.nil? %>
+      <% if time.assigned_to.nil? %>
+      	???
+      <% else %>
         <%= h time.assigned_to.object_name %>
       <% end %>
 		</td>
-    <td class="timeDetails">
-			<a href="/project/#{@active_project.id}/time/view/<%= time.id %>"><%= h time.name %></a>
-    </td>
     <td class="timeHours"><%= time.hours %></td>
+    <td class="timeDetails">
+			<% if !time.open_task.nil? %><span><img src="/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= link_to (time.name, time.open_task.object_url, :class => 'assignedTo') %><% else %><%= h time.name %><% end %>
+    </td>
 		<td class="timeEdit">
 <%
 	temp_actions = [
+		{:name => 'Details', :url => {:controller => 'time', :action => 'view', :id => time.id}, :cond => true},
 		{:name => 'Edit', :url => {:controller => 'time', :action => 'edit', :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
 		{:name => 'Delete', :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this time record?"}
 	]
 %>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
 <%= action_list temp_actions %>
-<% end %>
 		</td>
   </tr>
 <% end %>

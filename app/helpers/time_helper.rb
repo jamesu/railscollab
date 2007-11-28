@@ -25,17 +25,14 @@ module TimeHelper
   def task_select_list(task_list)
   	items = []
   	task_list.each do |task_list|
-  		items << [html_escape(task_list.name), "l#{task_list.id}"]
+  		items << ['--', 0]
+  		list_name = html_escape(task_list.name)
   		items += task_list.project_tasks.collect do |task|
-  			if task.assigned_to.nil?
-  				["--#{html_escape task.text}", task.id.to_s]
-  			else
-  				["--#{html_escape task.assigned_to.name}: #{html_escape task.text}", task.id.to_s]
-  			end
+  			["#{list_name}: #{html_escape task.text}", task.id.to_s]
   		end
   	end
   	
-  	items = [["--None--", 0]] + items
+  	items = [['None', 0]] + items
   end
 
 end

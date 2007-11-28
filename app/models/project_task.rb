@@ -82,7 +82,7 @@ class ProjectTask < ActiveRecord::Base
 	end
 	
 	def object_url
-		url_for :only_path => true, :controller => 'task', :action => 'view', :id => self.id, :active_project => self.task_list.project
+		"#{self.task_list.object_url}#openTasksList#{self.task_list_id}_#{self.id}"
 	end
 		
 	def assigned_to=(obj)

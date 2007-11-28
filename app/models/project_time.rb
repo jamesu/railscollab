@@ -85,37 +85,27 @@ class ProjectTime < ActiveRecord::Base
 	# Responsible party assignment
 	
 	def open_task=(obj)
-		self.project_task_list = obj.class == ProjectTaskList ? obj : nil
-		self.project_task = obj.class == ProjectTask ? obj : nil
+		self.project_task_list = obj.nil? ? nil : obj.task_list
+		self.project_task = obj
 	end
 	
 	def open_task
-		if self.project_task_list
-			self.project_task_list
-		elsif self.project_task
-			self.project_task
-		else
-			nil
-		end
+		self.project_task
 	end
 	
 	def open_task_id=(val)
         # Set open_task accordingly
-		if (val == '0' or val == 'l0')
+		if (val == '0')
 			self.open_task = nil
 			return
 		end
 		
-		self.open_task = val[0] == 108 ? 
-		                   ProjectTaskList.find(val[1...val.length]) :
-						   ProjectTask.find(val)
+		self.open_task = ProjectTask.find(val)
 	end
 	
 	def open_task_id
-		if self.project_task_list
-			"l#{self.project_task_list.id}"
-		elsif self.project_task
-			self.project_task_list.id.to_s
+		if !self.project_task.nil?
+			self.project_task.id.to_s
 		else
 			"0"
 		end

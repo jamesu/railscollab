@@ -18,9 +18,7 @@
 <% end %>
       <div class="hours"><span><%= "Hours" %>:</span> <%= view_time.hours %></div>
       
-<% if !view_time.description.nil? and !view_time.description.empty? %>
-      <div class="description"><%= textilize view_time.description %></div>
-<% end %>
+      <div class="description"><% if !view_time.open_task.nil? %><p><%= link_to (view_time.open_task.text, view_time.open_task.object_url) %></p><% end %><%= textilize view_time.description %></div>
 
 <%
 	temp_actions = [

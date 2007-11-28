@@ -39,7 +39,11 @@ table.timeLogs .timeProject {
 }
 
 table.timeLogs .timeDate {
-  width: 200px;
+  width: 75px;
+}
+
+table.timeLogs .timeHours {
+  font-weight: bold;
 }
 
 h2

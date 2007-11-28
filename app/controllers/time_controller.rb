@@ -79,7 +79,7 @@ class TimeController < ApplicationController
       return
     end
     
-    @open_task_lists = @active_project.open_task_lists
+    @open_task_lists = @active_project.project_task_lists.open
     
     case request.method
       when :post
@@ -112,7 +112,7 @@ class TimeController < ApplicationController
       return
     end
     
-    @open_task_lists = @active_project.open_task_lists
+    @open_task_lists = @active_project.project_task_lists.open
     
     case request.method
       when :post
