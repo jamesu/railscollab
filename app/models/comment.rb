@@ -96,7 +96,7 @@ class Comment < ActiveRecord::Base
     # Helpers
 
 	def object_name
-		"Comment #{self.id}"
+		self.text.excerpt(50)
 	end
 	
 	def object_url
