@@ -231,7 +231,7 @@ class TaskController < ApplicationController
           flash[:flash_success] = "Successfully added task"
 		  
 		  if params[:partial]
-			render :partial => 'task/task_item', :collection => [@task]
+			render :partial => 'task/task_item', :collection => [@task], :locals => {:tprefix => "openTasksList#{@task_list.id}"}
 		  else
 			redirect_back_or_default :controller => 'task'
 		  end
