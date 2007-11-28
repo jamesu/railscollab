@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 6) do
 
   create_table "administration_tools", :force => true do |t|
     t.column "name",       :string,  :limit => 50, :default => "", :null => false
@@ -195,6 +195,8 @@ ActiveRecord::Schema.define(:version => 5) do
     t.column "created_by_id",              :integer,  :limit => 10,  :default => 0
     t.column "updated_on",                 :datetime
     t.column "updated_by_id",              :integer,  :limit => 10,  :default => 0
+    t.column "comments_count",             :integer,                 :default => 0
+    t.column "can_time_track",             :boolean,                 :default => false, :null => false
   end
 
   add_index "project_files", ["project_id"], :name => "index_project_files_on_project_id"
@@ -375,6 +377,7 @@ ActiveRecord::Schema.define(:version => 5) do
   end
 
   add_index "searchable_objects", ["project_id"], :name => "index_searchable_objects_on_project_id"
+  add_index "searchable_objects", ["rel_object_id", "rel_object_type"], :name => "index_searchable_objects_on_rel_object_id_and_rel_object_type"
 
   create_table "tags", :force => true do |t|
     t.column "project_id",      :integer,  :limit => 10, :default => 0,     :null => false
