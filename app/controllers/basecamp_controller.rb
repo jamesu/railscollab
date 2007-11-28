@@ -840,11 +840,12 @@ class BasecampController < ApplicationController
     end
     
     @time = ProjectTime.new(
-    		:name => time_attribs[:title],
-    		:description => time_attribs[:description],
+    		:name => time_attribs.has_key?(:todo_item_id) ? 
+    		         ProjectTime.find(time_attribs[:todo_item_id]).object_name : 
+    		         time_attribs[:description],
     		:done_date => Date.parse(time_attribs[:date]),
     		:hours => time_attribs[:hours],
-    		:assigned_to_id => time_attribs[:responsible_party],
+    		:assigned_to_id => time_attribs[:person_id],
     		:open_task_id => time_attribs[:todo_item_id]
     )
     
@@ -946,9 +947,10 @@ class BasecampController < ApplicationController
   
   # /time/save_entry/#{id}
   def time_update_entry
-  	# First check to see if we can add to the destination project
+    time_attribs = @request_fields[:entry]
     project = Project.find(time_attribs[:project_id])
     
+  	# First check to see if we can add to the destination project
     if not ProjectTime.can_be_created_by(@logged_user, project)
       render :text => 'Error', :status => 403
       return
@@ -968,14 +970,14 @@ class BasecampController < ApplicationController
     end
     
     # Apply modifications
-    time_attribs = @request_fields[:entry]
     
     @time.attribues = {
-    		:name => time_attribs[:title],
-    		:description => time_attribs[:description],
+    		:name => time_attribs.has_key?(:todo_item_id) ? 
+    		         ProjectTime.find(time_attribs[:todo_item_id]).object_name : 
+    		         time_attribs[:description],
     		:done_date => Date.parse(time_attribs[:date]),
     		:hours => time_attribs[:hours],
-    		:assigned_to_id => time_attribs[:responsible_party],
+    		:assigned_to_id => time_attribs[:person_id],
     		:open_task_id => time_attribs[:todo_item_id]
     }
     
