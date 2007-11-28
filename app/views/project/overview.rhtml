@@ -18,7 +18,7 @@
   end
 
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title =>'Add file', :url=> '/project/#{@active_project.id}/files/add'}
+    @page_actions << {:title =>'Add file', :url=> "/project/#{@active_project.id}/files/add_file"}
   end
   
   @additional_stylesheets = ['project/project_log', 'application_logs']
