@@ -41,12 +41,14 @@ class FilesController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     
-    file_conditions = @logged_user.member_of_owner? ? "project_id = ? AND is_visible = true" : "project_id = ? AND is_visible = true AND is_private = false"
+    file_conditions = @logged_user.member_of_owner? ?
+                      ['project_id = ? AND is_visible = ?', @active_project.id, true] : 
+                      ['project_id = ? AND is_visible = ? AND is_private = ?', @active_project.id, true, false]
     sort_type = params[:orderBy]
     sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
     sort_order = 'DESC'
     
-    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => [file_conditions, @active_project.id], :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
     @pagination = []
     result_set.page_count.times {|page| @pagination << page+1}
     
@@ -78,12 +80,14 @@ class FilesController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     
-    file_conditions = @logged_user.member_of_owner? ? "folder_id = ? AND project_id = ? AND is_visible = true" : "folder_id = ? AND project_id = ? AND is_visible = true AND is_private = false"
+    file_conditions = @logged_user.member_of_owner? ?
+                      ["folder_id = ? AND project_id = ? AND is_visible = ?", @folder.id, @active_project.id, true] : 
+                      ["folder_id = ? AND project_id = ? AND is_visible = ? AND is_private = ?",  @folder.id, @active_project.id, true, false]
     sort_type = params[:orderBy]
     sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
     sort_order = 'DESC'
 
-    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => [file_conditions, @folder.id, @active_project.id], :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
     @pagination = []
     result_set.page_count.times {|page| @pagination << page+1}
     

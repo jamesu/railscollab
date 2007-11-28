@@ -34,8 +34,12 @@ class DashboardController < ApplicationController
 				project_ids = @active_projects.collect do |i|
 					i.id
 				end.join','
+				
+				activity_conditions = include_private ? 
+				                      ["project_id in (#{project_ids})"] :
+				                      ["project_id in (#{project_ids}) AND is_private = ?", false]
 			
-				@activity_log = ApplicationLog.find(:all, :conditions => "project_id in (#{project_ids}) #{include_private ? '' : 'AND is_private = false'}", :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
+				@activity_log = ApplicationLog.find(:all, :conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
 			else
 				@activity_log = []
 			end

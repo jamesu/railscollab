@@ -33,7 +33,7 @@ class ProjectMessage < ActiveRecord::Base
 		def public(reload=false)
 			# Grab public comments only
 			@public_comments = nil if reload
-			@public_comments ||= find(:all, :conditions => 'is_private = false')
+			@public_comments ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
@@ -170,7 +170,7 @@ class ProjectMessage < ActiveRecord::Base
     end
 
 	def self.select_list(project)
-	   ProjectMessage.find(:all, :conditions => "project_id = #{project.id}", :select => 'id, title').collect do |message|
+	   ProjectMessage.find(:all, :conditions => ['project_id = ?', project.id], :select => 'id, title').collect do |message|
 	      [message.title, message.id]
 	   end
 	end

@@ -39,12 +39,14 @@ class TimeController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     
-    time_conditions = @logged_user.member_of_owner? ? "project_id = ?" : "project_id = ? AND is_private = false"
+    time_conditions = @logged_user.member_of_owner? ? 
+                      ['project_id = ?', @project.id] : 
+                      ['project_id = ? AND is_private = ?', @project.id, false]
     sort_type = params[:orderBy]
     sort_type = 'created_on' unless ['done_date', 'hours'].include?(params[:orderBy])
     sort_order = 'DESC'
     
-    @times = ProjectTime.find(:all, :conditions => [time_conditions, @project.id], :page => {:size => AppConfig.times_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+    @times = ProjectTime.find(:all, :conditions => time_conditions, :page => {:size => AppConfig.times_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
     @pagination = []
     @times.page_count.times {|page| @pagination << page+1}
     

@@ -47,7 +47,7 @@ class Project < ActiveRecord::Base
 		end
 		
 		def upcomming(reload=false)
-			find(:all, :conditions => "completed_on IS NULL AND due_date > '#{Date.today}'")
+			find(:all, :conditions => "completed_on IS NULL AND due_date >= '#{Date.today+1}'")
 		end
 		
 		def completed(reload=false)
@@ -55,34 +55,34 @@ class Project < ActiveRecord::Base
 		end
 	end
 	
-	has_many :project_task_lists, :order => 'project_task_lists.order DESC', :dependent => :destroy do
+	has_many :project_task_lists, :order => '"order" DESC', :dependent => :destroy do
 		def open(reload=false)
 			# Grab open task lists only
-			find(:all, :conditions => 'project_task_lists.completed_on IS NULL', :order => 'project_task_lists.order DESC')
+			find(:all, :conditions => 'project_task_lists.completed_on IS NULL')
 		end
 		
 		def completed(reload=false)
 			# Grab completed task lists only
-			find(:all, :conditions => 'project_task_lists.completed_on IS NOT NULL', :order => 'project_task_lists.order DESC')
+			find(:all, :conditions => 'project_task_lists.completed_on IS NOT NULL')
 		end
 	end
 	
-	has_many :project_forms, :order => 'project_forms.order DESC', :dependent => :destroy do
+	has_many :project_forms, :order => '"order" DESC', :dependent => :destroy do
 		def visible(reload=false)
 			# Grab visible forms only
-			find(:all, :conditions => 'project_forms.is_visible', :order => 'project_forms.order DESC')
+			find(:all, :conditions => ['project_forms.is_visible = ?', true])
 		end
 	end
 	
 	has_many :project_folders, :dependent => :destroy
 	has_many :project_files, :dependent => :destroy do
 		def important(reload=false)
-			find(:all, :conditions => "is_important = true")
+			find(:all, :conditions => ['is_important = ?', true])
 		end
 	end
 	has_many :project_messages, :dependent => :destroy do
 		def important(reload=false)
-			find(:all, :conditions => "is_important = true")
+			find(:all, :conditions => ['is_important = ?', true])
 		end
 	end
 	has_many :project_message_categories, :dependent => :destroy
@@ -91,7 +91,7 @@ class Project < ActiveRecord::Base
 		def public(reload=false)
 			# Grab public logs only
 			@public_application_logs = nil if reload
-			@public_application_logs ||= find(:all, :conditions => 'is_private = false')
+			@public_application_logs ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 	end
 	

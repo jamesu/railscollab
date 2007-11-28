@@ -289,12 +289,15 @@ class BasecampController < ApplicationController
   	category_id = params[:cat_id].nil? ? @request_fields[:category_id] : params[:cat_id]
   	
   	# Base filter based on is_private and optional category_id
-  	base_filter = @logged_user.member_of_owner? ? "" : " AND is_private = false"
+  	msg_conditions =  @logged_user.member_of_owner? ?
+  	                  ['project_id = ?', project.id, category_id.to_i] :
+  	                  ['project_id = ? AND is_private = ?', project.id, false]
   	unless category_id.nil?
-  		base_filter = "AND category_id = #{category_id.to_i} #{base_filter}"
+  		msg_conditions[0] += 'AND category_id = ?'
+  		msg_conditions.push(category_id.to_i)
   	end
   	
-  	@messages = ProjectMessage.find(:all, :conditions => "project_id = #{project.id} #{base_filter}")
+  	@messages = ProjectMessage.find(:all, :conditions => msg_conditions)
   end
   
   # /msg/update_comment
@@ -906,11 +909,9 @@ class BasecampController < ApplicationController
   	end_time = params[:to] == '0' ? Time.now.utc : Time.parse(params[:to])
   	
   	# Base filter based on is_private
-  	if @logged_user.member_of_owner?
-  		base_filter = "#{user_filter} done_date >= #{start_time} AND done_date <= #{end_time}"
-  	else
-  		base_filter = "#{user_filter} is_private = false AND done_date >= #{start_time} AND done_date <= #{end_time}"
-  	end
+  	time_conditions = @logged_user.member_of_owner? ?
+  	                  ["#{user_filter} done_date >= '#{start_time}' AND done_date <= '#{end_time}'"] :
+  	                  ["#{user_filter} is_private = ? AND done_date >= '#{start_time}' AND done_date <= '#{end_time}'", false]
   	
   	# Now we can grab the times!
   	filter = params[:filter]
@@ -927,7 +928,9 @@ class BasecampController < ApplicationController
   			end
   			
   			projects = company.projects.collect { |project| project.id }.join(',')
-  			@times = ProjectTime.find(:all, :conditions => "#{base_filter} AND project_id IN #{projects}")
+  			
+  			time_conditions[0] += " AND project_id IN (#{projects})"
+  			@times = ProjectTime.find(:all, :conditions => time_conditions)
   		elsif filter[0] == 'p'
   			# Filter by project
   			begin
@@ -937,7 +940,8 @@ class BasecampController < ApplicationController
   				return
   			end
   			
-  			@times = ProjectTime.find(:all, :conditions => "#{base_filter} AND project_id = #{project.id}")
+  			time_conditions[0] += " AND project_id = #{project.id}"
+  			@times = ProjectTime.find(:all, :conditions => time_conditions)
   		end
   	end
   	

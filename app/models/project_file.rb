@@ -33,7 +33,7 @@ class ProjectFile < ActiveRecord::Base
 		def public(reload=false)
 			# Grab public comments only
 			@public_comments = nil if reload
-			@public_comments ||= find(:all, :conditions => 'is_private = false')
+			@public_comments ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
@@ -202,7 +202,7 @@ class ProjectFile < ActiveRecord::Base
 	end
 	
 	def self.select_list(project)
-	   [['--None--', 0]] + ProjectFile.find(:all, :conditions => "project_id = #{project.id}", :select => 'id, filename').collect do |file|
+	   [['--None--', 0]] + ProjectFile.find(:all, :conditions => ['project_id = ?', project.id], :select => 'id, filename').collect do |file|
 	      [file.filename, file.id]
 	   end
 	end

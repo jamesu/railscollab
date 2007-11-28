@@ -31,7 +31,7 @@ class Company < ActiveRecord::Base
 	
 	has_many :clients, :class_name => 'Company', :foreign_key => 'client_of_id'
 	has_many :users
-	has_many :auto_assign_users, :class_name => 'User', :foreign_key => 'company_id', :conditions => 'auto_assign = true'
+	has_many :auto_assign_users, :class_name => 'User', :foreign_key => 'company_id', :conditions => ['auto_assign = ?', true]
 	
 	has_and_belongs_to_many :projects,  :join_table => :project_companies
 
