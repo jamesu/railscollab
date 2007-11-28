@@ -18,11 +18,11 @@ class TimeTrackingSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",          :integer,  :limit => 10
 	  end
 	
-	  add_index :project_time, ["project_id"], :name => "project_id"
-	  add_index :project_time, ["done_date"], :name => "done_date"
-	  add_index :project_time, ["created_on"], :name => "created_on"
+	  add_index :project_time, ["project_id"]
+	  add_index :project_time, ["done_date"]
+	  add_index :project_time, ["created_on"]
 	  
-	  add_column :project_users, "can_manage_time", :boolean,  :null => false
+	  add_column :project_users, "can_manage_time", :boolean,  :default => false, :null => false
   end
 
   def self.down

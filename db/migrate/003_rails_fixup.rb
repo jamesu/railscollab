@@ -1,5 +1,5 @@
 class RailsFixup < ActiveRecord::Migration
-  @@bad_tables = ['application_logs', 'attached_files', 'comments', 'searchable_objects', 'tags']
+  @@bad_tables = [:application_logs, :attached_files, :comments, :searchable_objects, :tags]
   @@bad_plurals = {
   	# More or less the potentially important stuff
   	:AttachedFiles => 'AttachedFile',
@@ -25,12 +25,22 @@ class RailsFixup < ActiveRecord::Migration
   }
   
   def self.up
+    remove_index :comments, :column => ["rel_object_id", "rel_object_manager"]
+    remove_index :tags, :column => ["rel_object_id", "rel_object_manager"]
+    
   	for bad_table in @@bad_tables
   	  rename_column bad_table, "rel_object_manager", "rel_object_type"
   	end
+  	
+    add_index :comments, ["rel_object_id", "rel_object_type"]
+    add_index :tags, ["rel_object_id", "rel_object_type"]
 
-        # Good naming conventions
-        rename_table :project_time, :project_times
+    # Good naming conventions
+    remove_index :project_time, :column => ["project_id"]
+    remove_index :project_time, :column => ["done_date"]
+    remove_index :project_time, :column => ["created_on"]
+    
+    rename_table :project_time, :project_times
 
 	# Times should be nullable
 	[ :comments, 
@@ -48,13 +58,17 @@ class RailsFixup < ActiveRecord::Migration
 	  |tbl|
 	  change_column tbl, :updated_on, :datetime, :default => nil, :null => true
   	end
+    
+    add_index :project_times, ["project_id"]
+    add_index :project_times, ["done_date"]
+    add_index :project_times, ["created_on"]
 
 	change_column :project_milestones, :due_date, :datetime, :default => nil, :null => true
 	change_column :project_tasks, :completed_on, :datetime, :default => nil, :null => true
 	change_column :project_task_lists, :completed_on, :datetime, :default => nil, :null => true
 	change_column :project_times, :done_date, :datetime, :default => nil, :null => true
 	change_column :project_files, :expiration_time, :datetime, :default => nil, :null => true
-        change_column :projects, :completed_on, :datetime, :default => nil, :null => true
+    change_column :projects, :completed_on, :datetime, :default => nil, :null => true
 
 	change_column :users, :last_login, :datetime, :default => nil, :null => true
 	change_column :users, :last_visit, :datetime, :default => nil, :null => true
@@ -82,9 +96,15 @@ class RailsFixup < ActiveRecord::Migration
   	  end
   	end
   	
+    remove_index :comments, :column => ["rel_object_id", "rel_object_type"]
+    remove_index :tags, :column => ["rel_object_id", "rel_object_type"]
+    
   	for bad_table in @@bad_tables
   	  rename_column bad_table, "rel_object_type", "rel_object_manager"
   	end
+  	
+    add_index :comments, ["rel_object_id", "rel_object_manager"]
+    add_index :tags, ["rel_object_id", "rel_object_manager"]
 
         # Times should not be nullable
         [ :comments,
@@ -118,6 +138,14 @@ class RailsFixup < ActiveRecord::Migration
   	change_column :project_users, :can_manage_time, :boolean, :default => false, :null => false
   	
   	# Bad naming conventions
-  	rename_table :project_times, :project_time
+    remove_index :project_times, ["project_id"]
+    remove_index :project_times, ["done_date"]
+    remove_index :project_times, ["created_on"]
+    
+    rename_table :project_times, :project_time
+  	
+    add_index :project_time, ["project_id"]
+    add_index :project_time, ["done_date"]
+    add_index :project_time, ["created_on"]
   end
 end

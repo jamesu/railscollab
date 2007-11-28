@@ -7,7 +7,7 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "order",      :integer, :limit => 3,  :default => 0,  :null => false
 	  end
 	
-	  add_index :administration_tools, ["name"], :name => "name", :unique => true
+	  add_index :administration_tools, ["name"], :unique => true
 	
 	  create_table :application_logs do |t|
 	    t.column "taken_by_id",        :integer,  :limit => 10
@@ -22,8 +22,8 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "is_silent",          :boolean,                                                            :default => false, :null => false
 	  end
 	
-	  add_index :application_logs, ["created_on"], :name => "created_on"
-	  add_index :application_logs, ["project_id"], :name => "project_id"
+	  add_index :application_logs, ["created_on"]
+	  add_index :application_logs, ["project_id"]
 	
 	  create_table :attached_files, :id => false do |t|
 	    t.column "rel_object_manager", :string,   :limit => 50, :default => "", :null => false
@@ -48,8 +48,8 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",      :integer,  :limit => 10
 	  end
 	
-	  add_index :comments, ["rel_object_id", "rel_object_manager"], :name => "object_id"
-	  add_index :comments, ["created_on"], :name => "created_on"
+	  add_index :comments, ["rel_object_id", "rel_object_manager"]
+	  add_index :comments, ["created_on"]
 	
 	  create_table :companies do |t|
 	    t.column "client_of_id",      :integer,  :limit => 5
@@ -73,8 +73,8 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",     :integer,  :limit => 10
 	  end
 	
-	  add_index :companies, ["created_on"], :name => "created_on"
-	  add_index :companies, ["client_of_id"], :name => "client_of_id"
+	  add_index :companies, ["created_on"]
+	  add_index :companies, ["client_of_id"]
 	
 	  create_table :config_categories do |t|
 	    t.column "name",           :string,  :limit => 50, :default => "",    :null => false
@@ -82,8 +82,8 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "category_order", :integer, :limit => 3,  :default => 0,     :null => false
 	  end
 	
-	  add_index :config_categories, ["name"], :name => "name", :unique => true
-	  add_index :config_categories, ["category_order"], :name => "order"
+	  add_index :config_categories, ["name"], :unique => true
+	  add_index :config_categories, ["category_order"]
 	
 	  create_table :config_options do |t|
 	    t.column "category_name",        :string,  :limit => 30, :default => "",    :null => false
@@ -95,16 +95,16 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "dev_comment",          :string
 	  end
 	
-	  add_index :config_options, ["name"], :name => "name", :unique => true
-	  add_index :config_options, ["option_order"], :name => "order"
-	  add_index :config_options, ["category_name"], :name => "category_id"
+	  add_index :config_options, ["name"], :unique => true
+	  add_index :config_options, ["option_order"]
+	  add_index :config_options, ["category_name"]
 	
 	  create_table :file_repo do |t|
 	    t.column "content", :binary,                :default => "", :null => false
 	    t.column "order",   :integer, :limit => 10, :default => 0,  :null => false
 	  end
 	
-	  add_index :file_repo, ["order"], :name => "order"
+	  add_index :file_repo, ["order"]
 	
 	  create_table :file_repo_attributes do |t|
 	    t.column "attribute", :string, :limit => 50, :default => "", :null => false
@@ -118,7 +118,7 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "is_image",      :boolean,               :default => false, :null => false
 	  end
 	
-	  add_index :file_types, ["extension"], :name => "extension", :unique => true
+	  add_index :file_types, ["extension"], :unique => true
 	
 	  create_table :im_types do |t|
 	    t.column "name", :string, :limit => 30, :default => "", :null => false
@@ -150,9 +150,9 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",   :integer,  :limit => 10
 	  end
 	
-	  add_index :project_file_revisions, ["file_id"], :name => "file_id"
-	  add_index :project_file_revisions, ["updated_on"], :name => "updated_on"
-	  add_index :project_file_revisions, ["revision_number"], :name => "revision_number"
+	  add_index :project_file_revisions, ["file_id"]
+	  add_index :project_file_revisions, ["updated_on"]
+	  add_index :project_file_revisions, ["revision_number"]
 	
 	  create_table :project_files do |t|
 	    t.column "project_id",                 :integer,  :limit => 10,  :default => 0,     :null => false
@@ -172,14 +172,14 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",              :integer,  :limit => 10,  :default => 0
 	  end
 	
-	  add_index :project_files, ["project_id"], :name => "project_id"
+	  add_index :project_files, ["project_id"]
 	
 	  create_table :project_folders do |t|
 	    t.column "project_id", :integer, :limit => 10, :default => 0,  :null => false
 	    t.column "name",       :string,  :limit => 50, :default => "", :null => false
 	  end
 	
-	  add_index :project_folders, ["project_id", "name"], :name => "project_id", :unique => true
+	  add_index :project_folders, ["project_id", "name"], :unique => true
 	
 	  create_table :project_forms do |t|
 	    t.column "project_id",      :integer,  :limit => 10,                        :default => 0,            :null => false
@@ -213,9 +213,9 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",              :integer,  :limit => 10
 	  end
 	
-	  add_index :project_messages, ["milestone_id"], :name => "milestone_id"
-	  add_index :project_messages, ["project_id"], :name => "project_id"
-	  add_index :project_messages, ["created_on"], :name => "created_on"
+	  add_index :project_messages, ["milestone_id"]
+	  add_index :project_messages, ["project_id"]
+	  add_index :project_messages, ["created_on"]
 	
 	  create_table :project_milestones do |t|
 	    t.column "project_id",             :integer,  :limit => 10
@@ -233,10 +233,10 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",          :integer,  :limit => 10
 	  end
 	
-	  add_index :project_milestones, ["project_id"], :name => "project_id"
-	  add_index :project_milestones, ["due_date"], :name => "due_date"
-	  add_index :project_milestones, ["completed_on"], :name => "completed_on"
-	  add_index :project_milestones, ["created_on"], :name => "created_on"
+	  add_index :project_milestones, ["project_id"]
+	  add_index :project_milestones, ["due_date"]
+	  add_index :project_milestones, ["completed_on"]
+	  add_index :project_milestones, ["created_on"]
 	
 	  create_table :project_task_lists do |t|
 	    t.column "priority",        :integer
@@ -254,10 +254,10 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "order",           :integer,  :limit => 3,   :default => 0,     :null => false
 	  end
 	
-	  add_index :project_task_lists, ["milestone_id"], :name => "milestone_id"
-	  add_index :project_task_lists, ["project_id"], :name => "project_id"
-	  add_index :project_task_lists, ["completed_on"], :name => "completed_on"
-	  add_index :project_task_lists, ["created_on"], :name => "created_on"
+	  add_index :project_task_lists, ["milestone_id"]
+	  add_index :project_task_lists, ["project_id"]
+	  add_index :project_task_lists, ["completed_on"]
+	  add_index :project_task_lists, ["created_on"]
 	
 	  create_table :project_tasks do |t|
 	    t.column "task_list_id",           :integer,  :limit => 10
@@ -273,10 +273,10 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "order",                  :integer,  :limit => 10, :default => 0, :null => false
 	  end
 	
-	  add_index :project_tasks, ["task_list_id"], :name => "task_list_id"
-	  add_index :project_tasks, ["completed_on"], :name => "completed_on"
-	  add_index :project_tasks, ["created_on"], :name => "created_on"
-	  add_index :project_tasks, ["order"], :name => "order"
+	  add_index :project_tasks, ["task_list_id"]
+	  add_index :project_tasks, ["completed_on"]
+	  add_index :project_tasks, ["created_on"]
+	  add_index :project_tasks, ["order"]
 	
 	  create_table :project_users, :id => false do |t|
 	    t.column "project_id",            :integer,  :limit => 10, :default => 0,     :null => false
@@ -305,7 +305,7 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "updated_by_id",                :integer,  :limit => 10
 	  end
 	
-	  add_index :projects, ["completed_on"], :name => "completed_on"
+	  add_index :projects, ["completed_on"]
 	
 	  create_table :searchable_objects, :id => false do |t|
 	    t.column "rel_object_manager", :string,  :limit => 50, :default => "",    :null => false
@@ -316,7 +316,7 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "is_private",         :boolean,               :default => false, :null => false
 	  end
 	
-	  add_index :searchable_objects, ["project_id"], :name => "project_id"
+	  add_index :searchable_objects, ["project_id"]
 	  # TODO: find alternative
 	  #add_index :searchable_objects, ["content"], :name => "content"
 	
@@ -330,9 +330,9 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "is_private",         :boolean,                :default => false, :null => false
 	  end
 	
-	  add_index :tags, ["project_id"], :name => "project_id"
-	  add_index :tags, ["tag"], :name => "tag"
-	  add_index :tags, ["rel_object_id", "rel_object_manager"], :name => "object_id"
+	  add_index :tags, ["project_id"]
+	  add_index :tags, ["tag"]
+	  add_index :tags, ["rel_object_id", "rel_object_manager"]
 	
 	  create_table :user_im_values, :id => false do |t|
 	    t.column "user_id",    :integer, :limit => 10, :default => 0,     :null => false
@@ -341,7 +341,7 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "is_default", :boolean,               :default => false, :null => false
 	  end
 	
-	  add_index :user_im_values, ["is_default"], :name => "is_default"
+	  add_index :user_im_values, ["is_default"]
 	
 	  create_table :users do |t|
 	    t.column "company_id",    :integer,  :limit => 5,   :default => 0,     :null => false
@@ -368,11 +368,11 @@ class OriginalSchema < ActiveRecord::Migration
 	    t.column "auto_assign",   :boolean,                 :default => false, :null => false
 	  end
 	
-	  add_index :users, ["username"], :name => "username", :unique => true
-	  add_index :users, ["email"], :name => "email", :unique => true
-	  add_index :users, ["last_visit"], :name => "last_visit"
-	  add_index :users, ["company_id"], :name => "company_id"
-	  add_index :users, ["last_login"], :name => "last_login"
+	  add_index :users, ["username"], :unique => true
+	  add_index :users, ["email"], :unique => true
+	  add_index :users, ["last_visit"]
+	  add_index :users, ["company_id"]
+	  add_index :users, ["last_login"]
   end
 
   def self.down
