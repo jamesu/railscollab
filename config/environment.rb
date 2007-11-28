@@ -73,3 +73,6 @@ ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
 ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
 ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
 ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail
+
+# Localisation
+Globalite.language = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym

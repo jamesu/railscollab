@@ -60,6 +60,9 @@ common:
     location: "/usr/bin/sendmail"
     arguments: "-i -t -O DeliveryMode='b'"  
   allow_openid: false
+  
+  # Localisation
+  default_language: en_US
 	
 # Environment specific configuration
 
