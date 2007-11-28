@@ -262,7 +262,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.column "assigned_to_company_id", :integer,  :limit => 10,  :default => 0,     :null => false
     t.column "assigned_to_user_id",    :integer,  :limit => 10,  :default => 0,     :null => false
     t.column "is_private",             :boolean,                 :default => false, :null => false
-    t.column "completed_on",           :datetime,                                   :null => false
+    t.column "completed_on",           :datetime
     t.column "completed_by_id",        :integer,  :limit => 10
     t.column "created_on",             :datetime,                                   :null => false
     t.column "created_by_id",          :integer,  :limit => 10

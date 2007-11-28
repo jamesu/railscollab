@@ -69,6 +69,7 @@ class RailsFixup < ActiveRecord::Migration
 	change_column :project_times, :done_date, :datetime, :default => nil, :null => true
 	change_column :project_files, :expiration_time, :datetime, :default => nil, :null => true
     change_column :projects, :completed_on, :datetime, :default => nil, :null => true
+    change_column :project_milestones, :completed_on, :datetime, :default => nil, :null => true
 
 	change_column :users, :last_login, :datetime, :default => nil, :null => true
 	change_column :users, :last_visit, :datetime, :default => nil, :null => true
