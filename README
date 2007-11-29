@@ -25,6 +25,7 @@ following to deploy & run RailsCollab:
     - RedCloth (http://whytheluckystiff.net/ruby/redcloth/)
     - ruby-openid (gem install ruby-openid)
     - ActionMailer (gem install ActionMailer)
+    - Ferret (gem install ferret)
 
 Upgrading from ActiveCollab (or ProjectPier 0.8)
 ********************************************
