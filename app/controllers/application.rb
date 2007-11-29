@@ -63,6 +63,10 @@ class String
 	end
 end
 
+class RedCloth
+  def filter_html; true; end
+end
+
 class ApplicationController < ActionController::Base
   include LoginSystem
   
