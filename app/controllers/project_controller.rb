@@ -60,7 +60,7 @@ class ProjectController < ApplicationController
   
   def search
     @project = @active_project
-    @last_search = params[:id]
+    @last_search = params[:search_id]
     
     if @last_search.nil?
     	@last_search = "Search..."

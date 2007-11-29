@@ -71,7 +71,7 @@
 	#	:onblur => "if (event.target.value == '#{@search_field_default_value}' event.target.value=''"
   }
 %>
-                <%= text_field_tag 'id', (h @last_search), @search_field_attrs %><button type="submit"><%= "Go" %></button>
+                <%= text_field_tag 'search_id', (h @last_search), @search_field_attrs %><button type="submit"><%= "Go" %></button>
               </div>
             </form>
           </div>

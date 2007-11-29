@@ -10,7 +10,7 @@
 %>
 <div id="searchForm">
   <%= form_tag :action => 'search' %>
-    <%= text_field_tag 'id', @last_search %>
+    <%= text_field_tag 'search_id', @last_search %>
     <button class="submit" type="submit">Search</button>
   </form>
 </div>
@@ -24,7 +24,7 @@
 </ul>
 
 <div id="searchPagination">
-  <%= pagination_links  "/project/#{@active_project.id}/search?id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
+  <%= pagination_links  "/project/#{@active_project.id}/search?search_id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
 </div>
 
 <% else %>
