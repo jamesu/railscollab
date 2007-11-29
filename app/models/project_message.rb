@@ -43,13 +43,14 @@ class ProjectMessage < ActiveRecord::Base
 	
 	has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
 
-	before_create :process_params
+	before_validation_on_create :process_params
 	after_create  :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	 
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
+	  self.comments_enabled = true unless self.created_by.member_of_owner?
 	end
 	
 	def process_create

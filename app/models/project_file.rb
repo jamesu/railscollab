@@ -38,13 +38,14 @@ class ProjectFile < ActiveRecord::Base
 	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
-	before_create :process_params
+	before_validation_on_create :process_params
 	after_create  :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
+	  write_attribute("comments_enabled", true) unless self.created_by.member_of_owner?
 	end
 	
 	def process_create
