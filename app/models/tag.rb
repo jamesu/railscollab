@@ -61,9 +61,11 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.count_by(tag_name, project, is_public)
-		project_cond = is_public ? 'AND is_private = 0' : ''
+		tag_conditions = is_public ? 
+		                 ["project_id = ? AND is_private = ? AND tag = ?", project.id, false, tag_name] :
+		                 ["project_id = ? AND tag = ?", project.id, tag_name]
 		
-		tags = Tag.find(:all, :conditions => ["project_id = #{project.id} #{project_cond} AND tag = ?", tag_name], :select => 'id')
+		tags = Tag.find(:all, :conditions => tag_conditions, :select => 'id')
 		
 		return tags.length
 	end
