@@ -57,9 +57,7 @@ class ProjectUser < ActiveRecord::Base
 		end
 	 end
 	 
-	 return (mvals.keys.collect do |key|
-	   "#{key} = #{mvals[key]}"
-	 end.join ', ')
+	 return [(mvals.keys.collect { |key| "#{key} = ?" }.join ', ')] + mvals.keys.collect { |key| mvals[key] }
 	end
 	
 	def reset_permissions

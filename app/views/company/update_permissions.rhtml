@@ -2,7 +2,7 @@
   @page_title = 'Update permissions'
   
   @tabbed_navigation_items = administration_tabbed_navigation(3)
-  @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Clients', :url => "/project/#{@active_project.id}/people"}, {:title => (h @company.name), :url => "/company/card/#{@company.id}"}])
+  @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Clients', :url => "/administration/clients"}, {:title => (h @company.name), :url => "/company/card/#{@company.id}"}])
   
   @page_actions = []
   
@@ -18,7 +18,7 @@
     <table class="blank">
 <% @projects.each do |project| -%>
       <tr>
-        <td><%= check_box_tag "project[]", project.id.to_s, @company.is_part_of(@active_project), {:id => "projectPermissionsCheckbox#{project.id}", :disabled => !@logged_user.member_of(project)} %>
+        <td><%= check_box_tag "project[]", project.id.to_s, @company.is_part_of(project), {:id => "projectPermissionsCheckbox#{project.id}", :disabled => !@logged_user.member_of(project)} %>
         </td>
         <td>
           <label for="<%= "projectPermissionsCheckbox#{project.id}" %>" class="checkbox normal">

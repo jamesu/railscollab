@@ -30,7 +30,7 @@ class MessageController < ApplicationController
   
   before_filter :login_required
   before_filter :process_session
-  before_filter :obtain_message, :except => [:index, :add, :add_category, :edit_category, :delete_category]
+  before_filter :obtain_message, :except => [:index, :add, :category, :add_category, :edit_category, :delete_category]
   after_filter  :user_track
   
   def index
@@ -46,9 +46,10 @@ class MessageController < ApplicationController
     @messages.page_count.times {|page| @pagination << page+1}
     
     @message_categories = @active_project.project_message_categories
-    msg_conditions[0] += " AND is_important = ?"
-    msg_conditions << true
-    @important_messages = ProjectMessage.find(:all, :conditions => msg_conditions, :order => 'created_on DESC')
+    important_conditions = msg_conditions.clone
+    important_conditions[0] += " AND is_important = ?"
+    important_conditions << true
+    @important_messages = ProjectMessage.find(:all, :conditions => important_conditions, :order => 'created_on DESC')
     
     @content_for_sidebar = 'index_sidebar'
   end
@@ -85,18 +86,19 @@ class MessageController < ApplicationController
     
     msg_conditions = @logged_user.member_of_owner? ? 
                      ['project_id = ? AND category_id = ?', @active_project.id, @category.id] : 
-                     ['project_id = ? AND category_id = ? AND is_private = ?', @active_project.id, @catgory.id, false]
+                     ['project_id = ? AND category_id = ? AND is_private = ?', @active_project.id, @category.id, false]
 
-    @messages = ProjectMessage.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page})
+    @messages = ProjectMessage.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page}, :order => 'created_on DESC')
     @pagination = []
     @messages.page_count.times {|page| @pagination << page+1}
     
     @current_category = @category
     @page = current_page
     @message_categories = @active_project.project_message_categories
-    msg_conditions[0] += " AND is_important = ?"
-    msg_conditions << true
-    @important_messages = ProjectMessage.find(:all, :conditions => msg_conditions, :order => 'created_on DESC')
+    important_conditions = msg_conditions.clone
+    important_conditions[0] += " AND is_important = ?"
+    important_conditions << true
+    @important_messages = ProjectMessage.find(:all, :conditions => important_conditions, :order => 'created_on DESC')
        
     @content_for_sidebar = 'index_sidebar'
     
