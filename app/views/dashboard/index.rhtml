@@ -15,7 +15,7 @@
 <div class="hint">
 
   <div class="header"><%= "Welcome to your newly created account" %></div>
-  <div class="content"><%= "#{@logged_user.display_name}, welcome to your new account.<br> You can get started in a minute following these easy steps:" %></div>
+  <div class="content"><%= "#{h @logged_user.display_name}, welcome to your new account.<br> You can get started in a minute following these easy steps:" %></div>
   
    <% new_account_steps(@logged_user).each do |step| %>
     <div class='header'><%= step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>

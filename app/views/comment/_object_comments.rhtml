@@ -17,13 +17,13 @@
     <div class="private" title="<%= "Private comment" %>"><span><%= "Private comment" %></span></div>
 <% end %>
 <% if not comment.created_by.nil? %>
-    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= "Permalink" %>">#<%= counter %></a>:</span> <%= format_usertime(comment.created_on, "Posted on %b %d. %Y %H:%M by ") %><a href="<%= comment.created_by.object_url %>"><%= comment.created_by.display_name %></a>:</div>
+    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= "Permalink" %>">#<%= counter %></a>:</span> <%= format_usertime(comment.created_on, "Posted on %b %d. %Y %H:%M by ") %><a href="<%= comment.created_by.object_url %>"><%= h comment.created_by.display_name %></a>:</div>
 <% else %>
     <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= "Permalink" %>">#<%= counter %></a>:</span> <%= format_usertime(comment.created_on, "Posted on %b %d. %Y %H:%M") %>:</div>
 <% end %>
     <div class="commentBody">
 <% if (!comment.created_by.nil?) and comment.created_by.has_avatar? %>
-      <div class="commentUserAvatar"><img src="<%= comment.created_by.avatar_url %>" alt="<%= comment.created_by.display_name %> Avatar" /></div>
+      <div class="commentUserAvatar"><img src="<%= comment.created_by.avatar_url %>" alt="<%= h comment.created_by.display_name %> Avatar" /></div>
 <% end %>
       <div class="commentText"><%= textilize comment.text %></div>
       <div class="clear"></div>

@@ -12,7 +12,7 @@
       <% if not ['Comment', 'ProjectMessage'].include?(application_logs.rel_object_type) %>
       <b><%= application_logs.friendly_action %>:</b>
       <% end %>
-      <%= application_logs.object_name %>
+      <%= h application_logs.object_name %>
       </span>
 
 <% if show_project_column %>

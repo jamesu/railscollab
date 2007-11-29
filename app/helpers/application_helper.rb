@@ -62,7 +62,8 @@ module ApplicationHelper
 		
 		if !tags.empty?
 			tags.collect do |tag|
-				"<a href=\"/project/#{object.project_id}/tags/#{tag}\">#{tag}</a>"
+				tag_name = (h tag)
+				"<a href=\"/project/#{object.project_id}/tags/#{tag_name}\">#{tag_name}</a>"
 			end.join(', ')
 		else
 			"--"

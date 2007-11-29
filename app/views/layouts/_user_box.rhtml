@@ -1,5 +1,5 @@
 <div id="userbox">
-  <%= "Welcome back <strong>#{user.display_name}</strong>" %> (<%= link_to 'Logout', {:controller => 'access', :action => 'logout'}, :confirm => "Are you sure you want to log out?" %>),
+  <%= "Welcome back <strong>#{h user.display_name}</strong>" %> (<%= link_to 'Logout', {:controller => 'access', :action => 'logout'}, :confirm => "Are you sure you want to log out?" %>),
   <ul>
     <li><%= link_to 'Account', :controller => 'account' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% if not projects.nil? and projects.length > 0 %>
