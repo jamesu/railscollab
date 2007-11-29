@@ -60,14 +60,22 @@ class ProjectController < ApplicationController
   
   def search
     @project = @active_project
-    @search_for = params[:search_for]
+    @last_search = params[:id]
     
-    if @search_for.nil?
-    	@search_for = "Search..."
+    if @last_search.nil?
+    	@last_search = "Search..."
     end
     
+    current_page = params[:page].to_i
+    current_page = 1 unless current_page > 0
+    
+    @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => AppConfig.search_results_per_page})
+    
     @tag_names = []
-    @search_results = []
+    @pagination = []
+    @start_search_results = AppConfig.search_results_per_page * (current_page-1)
+    (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
+    
     
     @content_for_sidebar = 'search_sidebar'
   end

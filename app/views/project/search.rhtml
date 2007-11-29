@@ -10,24 +10,23 @@
 %>
 <div id="searchForm">
   <%= form_tag :action => 'search' %>
-    <%= text_field_tag 'search_for', @search_for %>
+    <%= text_field_tag 'id', @last_search %>
     <button class="submit" type="submit">Search</button>
   </form>
 </div>
 
-
 <% if !@search_results.empty? %>
-<p><?= lang('search result description', $pagination->countItemsOnPage($current_page), $pagination->getTotalItems(), clean($search_string)) ?>:</p>
+<p><%= "Displaying #{@start_search_results}...#{@start_search_results+@search_results.length} out of #{@total_search_results} results for '#{h @last_search}'."%></p>
 <ul>
-<?php foreach($search_results as $search_result) { ?>
-  <li><?= clean($search_result->getObjectTypeName()) ?>: <a href="<?= $search_result->getObjectUrl() ?>"><?= clean($search_result->getObjectName()) ?></a></li>
-<?php } // foreach ?>
+<% @search_results.each do |obj| -%>
+  <li><%= obj.class.to_s %>: <a href="<%= obj.object_url %>"><%= h obj.object_name %></a></li>
+<% end %>
 </ul>
 
-<?php if(isset($pagination) && ($pagination instanceof DataPagination)) { ?>
-<?= advanced_pagination($pagination, active_project()->getSearchUrl($search_string, '#PAGE#')); ?>
-<?php } // if ?>
+<div id="searchPagination">
+  <%= pagination_links  "/project/#{@active_project.id}/search?id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
+</div>
 
 <% else %>
-<p><%= "There are no objects which match \"<strong>#{h @search_for}</strong>\"" %></p>
+<p><%= "There are no objects which match \"<strong>#{h @last_search}</strong>\"" %></p>
 <% end %>

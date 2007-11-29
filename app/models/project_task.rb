@@ -33,6 +33,8 @@ class ProjectTask < ActiveRecord::Base
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
 	has_many :project_times, :foreign_key => 'task_id', :dependent => :nullify
+	
+	acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
 
 	before_create  :process_params
 	after_create   :process_create
@@ -120,6 +122,14 @@ class ProjectTask < ActiveRecord::Base
 		else
 			"0"
 		end
+	end
+	
+	def is_private
+		self.task_list.is_private
+	end
+	
+	def project_id
+		self.task_list.project_id
 	end
 	
 	def send_comment_notifications(comment)

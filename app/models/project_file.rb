@@ -38,6 +38,8 @@ class ProjectFile < ActiveRecord::Base
 	end
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
+	acts_as_ferret :fields => [:filename, :description, :project_id, :is_private], :store_class_name => true
+	
 	before_validation_on_create :process_params
 	after_create  :process_create
 	before_update :process_update_params

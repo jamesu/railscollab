@@ -8,6 +8,7 @@ common:
   messages_per_page: 10
   times_per_page: 10
   files_per_page: 10
+  search_results_per_page: 20
   
   max_avatar_width: 50
   max_avatar_height: 50
@@ -63,6 +64,9 @@ common:
   
   # Localisation
   default_language: en_US
+
+  # Ferret search
+  search_enabled: true
 	
 # Environment specific configuration
 

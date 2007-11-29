@@ -5,10 +5,14 @@ RailsCollab
 =end
 
 class Tag < ActiveRecord::Base
+	include ActionController::UrlWriter
+	
 	belongs_to :project
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	
 	belongs_to :rel_object, :polymorphic => true
+	
+	acts_as_ferret :fields => [:tag, :project_id, :is_private], :store_class_name => true
 	
 	before_create :process_params
 	 
@@ -20,10 +24,20 @@ class Tag < ActiveRecord::Base
 		return Tag.find_objects(self.name)
 	end
 	
+	def object_name
+		self.tag
+	end
+	
+	def object_url
+		url_for :only_path => true, :controller => 'project', :action => 'tags', :id => self.tag, :active_project => self.project_id
+	end
+	
 	def self.find_objects(tag_name, project, is_public)
-		project_cond = is_public ? 'AND is_private = 0' : ''
+		tag_conditions = is_public ?
+		                 ['project_id = ? AND tag = ? AND is_private = ?', project.id, tag_name, false] : 
+		                 ['project_id = ? AND tag = ?', project.id, tag_name]
 		
-		Tag.find(:all, :conditions => ["project_id = ? #{project_cond} AND tag = ? ", project.id, tag_name]).collect do |tag|
+		Tag.find(:all, :conditions => tag_conditions).collect do |tag|
 			tag.rel_object
 		end
 	end
@@ -51,9 +65,11 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.list_by_project(project, is_public)
-		project_cond = is_public ? 'AND is_private = 0' : ''
+		tag_conditions = is_public ?
+		                 ['project_id = ? AND is_private = ?', project.id, false] : 
+		                 ['project_id = ?', project.id]
 		
-		tags = Tag.find(:all, :group => 'tag', :conditions => "project_id = #{project.id} #{project_cond}", :order => 'tag', :select => 'tag')
+		tags = Tag.find(:all, :group => 'tag', :conditions => tag_conditions, :order => 'tag', :select => 'tag')
 		
 		return tags.collect do |tag|
 			tag.tag

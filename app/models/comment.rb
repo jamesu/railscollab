@@ -27,6 +27,8 @@ class Comment < ActiveRecord::Base
 	
 	has_many :attached_file, :as => 'rel_object', :dependent => :destroy
 	has_many :project_file, :through => :attached_file
+	
+	acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
 
 	before_create :process_params
 	after_create :process_create
@@ -109,6 +111,10 @@ class Comment < ActiveRecord::Base
 	
 	def project
 		self.rel_object.project
+	end
+	
+	def project_id
+		self.rel_object.project_id
 	end
 	
 	def attached_files(with_private)

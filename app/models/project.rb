@@ -157,6 +157,24 @@ class Project < ActiveRecord::Base
 	 @update_completed_user = user
 	end
 	
+	def search(query, is_private, options={})
+	 results = []
+	 return results, 0 unless AppConfig.search_enabled
+	 
+	 real_query = is_private ? 
+	              "is_private:false project_id:#{self.id} #{query}" :
+	              "project_id:#{self.id} #{query}"
+		 
+	 results = Kernel.const_get(FERRETABLE_MODELS[0]).find_by_contents(
+	           real_query,
+	           {
+	             :multi => FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) }
+	           }.merge(options)
+	 )
+
+	 return results, results.total_hits
+	end
+	
 	# Core Permissions
 	
 	def self.can_be_created_by(user)

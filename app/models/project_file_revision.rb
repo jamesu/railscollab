@@ -30,6 +30,8 @@ class ProjectFileRevision < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
+	acts_as_ferret :fields => [:comment, :project_id, :is_private], :store_class_name => true
+	
 	before_create :process_params
 	before_update :process_update_params
 	before_destroy :process_destroy
@@ -101,6 +103,10 @@ class ProjectFileRevision < ActiveRecord::Base
 		else
 			return "/files/thumbnail/#{self.id}.jpg"
 		end
+	end
+	
+	def is_private
+		self.project_file.is_private
 	end
 		
 	def object_name
