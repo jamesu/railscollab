@@ -206,7 +206,7 @@ class TaskController < ApplicationController
 	  return
     end
     
-    if not ProjectTask.can_be_created_by(@logged_user, @task_list.project)
+    if not ProjectTask.can_be_created_by(@logged_user, @task_list)
 	  flash[:flash_error] = "Insufficient permissions"
       if params[:partial]
 		render :text => '403 Invalid', :status => 403

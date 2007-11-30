@@ -111,65 +111,41 @@ class ProjectMessage < ActiveRecord::Base
 	end
 	
 	def can_be_edited_by(user)
-	 if (!self.project.has_member(user))
-	   return false
-	 end
+	 return false if (!user.member_of(self.project))
 	 
-	 if user.has_permission(project, :can_manage_messages) 
-	   return true
-	 end
+	 return true if user.is_admin
 	 
-	 if self.created_by == user
-	   return true
-	 end
-	 
-	 return false
+	 return (!(self.is_private and !user.member_of_owner?) and user.id == self.created_by.id)
     end
 
 	def can_be_deleted_by(user)
-	 if !self.project.has_member(user)
-	   return false
-	 end
+	 return false if (!user.member_of(self.project))
 	 
-	 if user.has_permission(project, :can_manage_messages)
-	   return true
-	 end
-	 
-	 return false
+	 return user.is_admin
     end
     
 	def can_be_seen_by(user)
-	 if !self.project.has_member(user)
-	   return false
-	 end
+	 return false if !user.member_of(self.project)
 	 
-	 if self.is_private and !user.member_of_owner?
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_messages)
-	   return true
-	 end
-	 
-	 return true
+	 return !(self.is_private and !user.member_of_owner?)
     end
     
     # Message permissions
     
     def can_be_managed_by(user)
-      return user.has_permission(self.project, :can_manage_messages)
+     user.has_permission(self.project, :can_manage_messages)
     end
     
     def file_can_be_added_by(user)
-      return user.has_permission(self.project, :can_upload_files)
+     return (self.can_be_edited_by(user) and user.has_permission(self.project, :can_upload_files))
     end
     
     def options_can_be_changed_by(user)
-      return (user.member_of_owner? and self.can_be_edited_by(user))
+     return (user.member_of_owner? and self.can_be_edited_by(user))
     end
     
     def comment_can_be_added_by(user)
-      return (user.member_of(self.project) and self.comments_enabled)
+     return (self.comments_enabled and user.member_of(self.project) and !(self.is_private and !user.member_of_owner?))
     end
 
 	def self.select_list(project)

@@ -188,69 +188,34 @@ class ProjectMilestone < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_messages)
+	 user.has_permission(project, :can_manage_milestones)
 	end
 	
 	def can_be_edited_by(user)
-	 if (!self.project.has_member(user))
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_milestones)
-	   return true
-	 end
-	 
-	 if self.created_by == user
-	   return true
-	 end
-	 
-	 return false
+	 return false if (!user.member_of(self.project))
+	 return (user.is_admin or self.created_by.id == user.id)
 	end
 	
 	def can_be_deleted_by(user)
-	 if !self.project.has_member(user)
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_milestones)
-	   return true
-	 end
-	 
-	 return false
+	 return false if (!user.member_of(self.project))
+	 return user.is_admin
 	end
 	
 	def can_be_seen_by(user)
-	 if !self.project.has_member(user)
-	   return false
-	 end
-	 
-	 if self.is_private and !user.member_of_owner?
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_milestones)
-	   return true
-	 end
-	 
-	 return true
+	 return (user.member_of(self.project) and !(self.is_private and !user.member_of_owner?))
 	end
 	
 	# Specific Permissions
 
     def can_be_managed_by(user)
-      return user.has_permission(self.project, :can_manage_milestones)
+     user.has_permission(self.project, :can_manage_milestones)
     end
     
     def status_can_be_changed_by(user)
-	 if self.can_be_edited_by(user)
-	   return true
-	 end
+	 return true if self.can_be_edited_by(user)
 	 
-	 if (!self.assigned_to.nil?) and (self.assigned_to == user or self.assigned_to == user.company)
-	   return true
-	 end
-	 
-	 return false
+	 milestone_assigned_to = self.assigned_to
+	 return ((milestone_assigned_to == user) or (milestone_assigned_to == user.company))
     end
     
     def comment_can_be_added_by(user)

@@ -190,33 +190,27 @@ class Project < ActiveRecord::Base
 	end
 	
 	def can_be_seen_by(user)
-	 return (self.has_member(user) or user.is_admin)
+	 return (self.has_member(user) or (user.member_of_owner? and user.is_admin))
 	end
 	
 	# Specific Permissions
 	
 	def can_be_managed_by(user)
-	 return (user.owner_of_owner? or user.is_admin?)
+	 return (user.member_of_owner? and user.is_admin)
 	end
 	
 	def company_can_be_removed_by(company, user)
-	 if company.is_owner?
-	   return false
-	 else
-	   return (user.owner_of_owner? or user.is_admin?)
-	 end
+	 return false if company.is_owner?
+	 return (user.member_of_owner? and user.is_admin)
 	end
 	
 	def user_can_be_removed_by(user_remove, user)
-	 if user_remove.owner_of_owner?
-	   return false
-	 end
-	 
-	 return (user.owner_of_owner? or user.is_admin)
+	 return false if user_remove.owner_of_owner?
+	 return (user.member_of_owner? and user.is_admin)
 	end
 	
 	def status_can_be_changed_by(user)
-	 return (user.owner_of_owner? or user.is_admin?)
+	 return self.can_be_edited_by(user)
 	end
 	
 	# Helpers

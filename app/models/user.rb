@@ -203,29 +203,27 @@ class User < ActiveRecord::Base
 	# Core permissions
 	
 	def self.can_be_created_by(user)
-		return ((user.member_of_owner? or user.company == self.company) and user.is_admin)
+		return (user.member_of_owner? and user.is_admin)
 	end
 	
 	def can_be_deleted_by(user)
-		return ((user.member_of_owner? or user.company == self.company) and user.is_admin)
+		return false if (user.owner_of_owner? or user.id == self.id)
+		return user.is_admin
 	end
 	
 	def can_be_viewed_by(user)
-		true
+		return (user.member_of_owner? or user.company_id == self.id or self.member_of_owner?)
 	end
 	
 	# Specific permissions
 	
     def profile_can_be_updated_by(user)
-      return (self.id == user.id or ((user.member_of_owner? or user.company == self.company) and user.is_admin))
+      return (self.id == user.id or (user.member_of_owner? and user.is_admin))
     end
     
     def permissions_can_be_updated_by(user)
-      if self.owner_of_owner?
-        return false
-      end
-      
-      return ((user.member_of_owner? or user.company == self.company) and user.is_admin)
+      return false if self.owner_of_owner?
+      return (user.member_of_owner? and user.is_admin)
     end
     
     # Helpers

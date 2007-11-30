@@ -4,7 +4,7 @@
 <% if task_item.can_be_changed_by(@logged_user) %>
         <span class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/complete_task/#{task_item.id}", false, "Mark task as completed" %></span>
 <% else %>
-        <span class="taskCheckbox"><img src="<%= icon_url 'not-checked.gif' %>" alt="<%= "Open task"%>" /></span>
+        <span class="taskCheckbox"><%= render_icon 'not-checked', "Open task" %></span>
 <% end %>
 
 <% else %>
@@ -12,7 +12,7 @@
 <% if task_item.can_be_changed_by(@logged_user) %>
         <span class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/open_task/#{task_item.id}", true, "Mark task as open" %> </td>
 <% else %>
-        <span class="taskCheckbox"><img src="<%= icon_url 'checked.gif' %>" alt="<%= "Completed task" %>" /></span>
+        <span class="taskCheckbox"><%= render_icon 'checked', "Completed task" %></span>
 <% end %>
 
 <% end %>

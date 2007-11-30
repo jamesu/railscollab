@@ -403,7 +403,7 @@ class BasecampController < ApplicationController
       return
     end
     
-    if not ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+    if not ProjectTaskList.can_be_created_by(@logged_user, task_list)
       render :text => 'Error', :status => 403
       return
     end

@@ -180,31 +180,13 @@ class ProjectTime < ActiveRecord::Base
 	end
 	
 	def can_be_edited_by(user)
-	 if (!self.project.has_member(user))
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_time)
-	   return true
-	 end
-	 
-	 if self.created_by == user
-	   return true
-	 end
-	 
-	 return false
+	 return false if (!user.member_of(self.project))
+	 return (user.is_admin or self.created_by.id == user.id)
 	end
 	
 	def can_be_deleted_by(user)
-	 if !self.project.has_member(user)
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_time)
-	   return true
-	 end
-	 
-	 return false
+	 return false if (!user.member_of(self.project))
+	 return user.is_admin
 	end
 	
 	def can_be_seen_by(user)

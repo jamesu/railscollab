@@ -146,62 +146,35 @@ class ProjectTask < ActiveRecord::Base
 	  self.updated_by = user unless user.nil?
 	end
 	
-	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_tasks)
+	def self.can_be_created_by(user, task_list)
+	 return (user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and task_list.can_be_managed_by(user)))
 	end
 	
 	def can_be_changed_by(user)
 	 project = self.task_list.project
 	 
-	 if (!project.has_member(user))
-	   return false
-	 end
+	 return false if !user.member_of(project)
+	 return true if user.is_admin
 	 
-	 if user.has_permission(project, :can_manage_tasks)
-	   return true
-	 end
+	 task_assigned_to = self.assigned_to
+	 return true if ((task_assigned_to == user) or (task_assigned_to == user.company) or task_assigned_to.nil?)
 	 
-	 if self.created_by == user
-	   return true
-	 end
+	 # Owner editable for 3 mins
+	 return true if (self.created_by == user.id and (this.created_on+(60*3)) < Time.now.utc)
 	 
-	 return false
+	 return self.task_list.can_be_changed_by(user)
 	end
 	
 	def can_be_deleted_by(user)
-	 project = self.task_list.project
-	 
-	 if !project.has_member(user)
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_tasks)
-	   return true
-	 end
-	 
-	 return false
+	 return self.task_list.can_be_deleted_by(user)
 	end
 	
 	def can_be_seen_by(user)
-	 project = self.task_list.project
-	 
-	 if !project.has_member(user)
-	   return false
-	 end
-	 
-	 if user.has_permission(project, :can_manage_tasks)
-	   return true
-	 end
-	 
-	 if self.task_list.is_private and !user.member_of_owner?
-	   return false
-	 end
-	 
-	 return true
+	 return (self.can_be_changed_by(user) or self.task_list.can_be_seen_by(user))
 	end
 	
     def comment_can_be_added_by(user)
-	 return self.task_list.project.has_member(user)
+	 return user.member_of(self.task_list.project)
     end
 	
 	# Accesibility
