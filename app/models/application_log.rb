@@ -26,7 +26,10 @@ class ApplicationLog < ActiveRecord::Base
   belongs_to :rel_object, :polymorphic => true
   
   before_create :process_params
-	 
+  
+  @@action_lookup = {:add => 0, :upload => 1, :open => 2, :close => 3, :edit => 4, :delete => 5}
+  @@action_id_lookup = @@action_lookup.invert
+  
   def process_params
     write_attribute("created_on", Time.now.utc)
   end
@@ -44,6 +47,14 @@ class ApplicationLog < ActiveRecord::Base
       when :close
         return "Closed"
     end
+  end
+  
+  def action
+  	@@action_id_lookup[self.action_id]
+  end
+  
+  def action=(val)
+  	self.action_id = @@action_lookup[val]
   end
   
   def is_today?

@@ -31,6 +31,9 @@ class ProjectForm < ActiveRecord::Base
 	after_create   :process_create
 	before_update  :process_update_params
 	before_destroy :process_destroy
+  
+	@@action_lookup = {:unknown => 0, :add_comment => 1, :add_task => 2}
+	@@action_id_lookup = @@action_lookup.invert
 	
 	def process_params
 	  write_attribute("created_on", Time.now.utc)
@@ -55,6 +58,14 @@ class ProjectForm < ActiveRecord::Base
 	
 	def object_url
 		url_for :only_path => true, :controller => 'form', :action => 'submit', :id => self.id, :active_project => self.project_id
+	end
+  
+	def action
+		@@action_id_lookup[self.action_id]
+	end
+  
+	def action=(val)
+		self.action_id = @@action_lookup[val]
 	end
 	
 	def in_object
