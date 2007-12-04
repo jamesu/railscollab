@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "administration_tools", :force => true do |t|
     t.column "name",       :string,  :limit => 50, :default => "", :null => false
@@ -15,15 +15,15 @@ ActiveRecord::Schema.define(:version => 6) do
 
   create_table "application_logs", :force => true do |t|
     t.column "taken_by_id",     :integer,  :limit => 10
-    t.column "project_id",      :integer,  :limit => 10,                                             :default => 0,     :null => false
-    t.column "rel_object_id",   :integer,  :limit => 10,                                             :default => 0,     :null => false
+    t.column "project_id",      :integer,  :limit => 10, :default => 0,     :null => false
+    t.column "rel_object_id",   :integer,  :limit => 10, :default => 0,     :null => false
     t.column "object_name",     :text
     t.column "rel_object_type", :string,   :limit => 50
-    t.column "created_on",      :datetime,                                                                              :null => false
+    t.column "created_on",      :datetime,                                  :null => false
     t.column "created_by_id",   :integer,  :limit => 10
-    t.column "action",          :enum,     :limit => [:upload, :open, :close, :delete, :edit, :add]
-    t.column "is_private",      :boolean,                                                            :default => false, :null => false
-    t.column "is_silent",       :boolean,                                                            :default => false, :null => false
+    t.column "is_private",      :boolean,                :default => false, :null => false
+    t.column "is_silent",       :boolean,                :default => false, :null => false
+    t.column "action_id",       :integer,  :limit => 1
   end
 
   add_index "application_logs", ["created_on"], :name => "index_application_logs_on_created_on"
@@ -210,19 +210,19 @@ ActiveRecord::Schema.define(:version => 6) do
   add_index "project_folders", ["project_id", "name"], :name => "index_project_folders_on_project_id_and_name", :unique => true
 
   create_table "project_forms", :force => true do |t|
-    t.column "project_id",      :integer,  :limit => 10,                        :default => 0,            :null => false
-    t.column "name",            :string,   :limit => 50,                        :default => "",           :null => false
-    t.column "description",     :text,                                          :default => "",           :null => false
-    t.column "success_message", :text,                                          :default => "",           :null => false
-    t.column "action",          :enum,     :limit => [:add_comment, :add_task], :default => :add_comment, :null => false
-    t.column "in_object_id",    :integer,  :limit => 10,                        :default => 0,            :null => false
+    t.column "project_id",      :integer,  :limit => 10, :default => 0,     :null => false
+    t.column "name",            :string,   :limit => 50, :default => "",    :null => false
+    t.column "description",     :text,                   :default => "",    :null => false
+    t.column "success_message", :text,                   :default => "",    :null => false
+    t.column "in_object_id",    :integer,  :limit => 10, :default => 0,     :null => false
     t.column "created_on",      :datetime
-    t.column "created_by_id",   :integer,  :limit => 10,                        :default => 0,            :null => false
+    t.column "created_by_id",   :integer,  :limit => 10, :default => 0,     :null => false
     t.column "updated_on",      :datetime
-    t.column "updated_by_id",   :integer,  :limit => 10,                        :default => 0,            :null => false
-    t.column "is_visible",      :boolean,                                       :default => false,        :null => false
-    t.column "is_enabled",      :boolean,                                       :default => false,        :null => false
-    t.column "order",           :integer,  :limit => 6,                         :default => 0,            :null => false
+    t.column "updated_by_id",   :integer,  :limit => 10, :default => 0,     :null => false
+    t.column "is_visible",      :boolean,                :default => false, :null => false
+    t.column "is_enabled",      :boolean,                :default => false, :null => false
+    t.column "order",           :integer,  :limit => 6,  :default => 0,     :null => false
+    t.column "action_id",       :integer,  :limit => 1
   end
 
   create_table "project_message_categories", :force => true do |t|

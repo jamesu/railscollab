@@ -4,8 +4,8 @@ class RefactorEnums < ActiveRecord::Migration
   
   def self.up
     # Replaces 'action' enum with 'action_id' which should be abstracted by the model
-    #add_column :application_logs, "action_id", :integer, :limit => 1, :default => nil
-    #add_column :project_forms, "action_id", :integer, :limit => 1, :default => nil
+    add_column :application_logs, "action_id", :integer, :limit => 1, :default => nil
+    add_column :project_forms, "action_id", :integer, :limit => 1, :default => nil
     
     @@log_lookup.keys.each do |key|
     	ApplicationLog.update_all("action_id = #{@@log_lookup[key]}", "action = '#{key}'")
