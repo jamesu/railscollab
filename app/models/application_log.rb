@@ -54,7 +54,7 @@ class ApplicationLog < ActiveRecord::Base
   end
   
   def action=(val)
-  	self.action_id = @@action_lookup[val]
+  	self.action_id = @@action_lookup[val.to_sym]
   end
   
   def is_today?
