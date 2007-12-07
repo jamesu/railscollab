@@ -146,7 +146,7 @@ class CompanyController < ApplicationController
         end
     end
     
-  	render 'company/edit'
+    render :template =>'company/edit'
   end
   
   def delete_client    

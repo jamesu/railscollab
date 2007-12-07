@@ -99,7 +99,7 @@ class FilesController < ApplicationController
        
     @content_for_sidebar = 'index_sidebar'
     
-    render 'files/index'
+    render :template => 'files/index'
   end
   
   def add_folder

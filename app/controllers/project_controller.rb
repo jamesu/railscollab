@@ -37,7 +37,7 @@ class ProjectController < ApplicationController
   
   def index
     overview
-    render 'project/overview'
+    render :template => 'project/overview'
   end
   
   def overview

@@ -19,7 +19,7 @@
 <% end %>
   <div class="header"><%= link_to (h @task_list.name), :controller => 'task', :action => 'view_list', :id => @task_list.id %></div>
   <div class="openTasks">
-    <%= start_form_tag({:action => 'reorder_list', :id => @task_list.id}, {:id => 'reorder_task_form'})%>
+    <%= form_tag({:action => 'reorder_list', :id => @task_list.id}, {:id => 'reorder_task_form'})%>
     <table class="blank">
       <tr>
         <th><%= "Order" %></th>

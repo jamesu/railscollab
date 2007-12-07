@@ -102,7 +102,7 @@ class MessageController < ApplicationController
        
     @content_for_sidebar = 'index_sidebar'
     
-    render 'message/index'
+    render :template => 'message/index'
   end
   
   def add_category

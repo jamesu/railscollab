@@ -13,7 +13,7 @@ class AccessController < ApplicationController
   end
   
   def login
-    case @request.method
+    case request.method
       when :post
         login_params = params[:login]
         remember = login_params[:remember]
@@ -93,7 +93,7 @@ class AccessController < ApplicationController
   end
   
   def forgot_password
-    case @request.method
+    case request.method
       when :post
         @your_email = params[:your_email]
         

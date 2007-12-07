@@ -32,7 +32,7 @@ class ProjectMilestone < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 		
-	has_many :project_task_lists, :foreign_key => 'milestone_id', :order => '"order" DESC', :dependent => :nullify do
+	has_many :project_task_lists, :foreign_key => 'milestone_id', :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify do
 		def public(reload=false)
 			# Grab public comments only
 			@public_task_lists = nil if reload

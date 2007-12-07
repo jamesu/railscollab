@@ -55,7 +55,7 @@ class Project < ActiveRecord::Base
 		end
 	end
 	
-	has_many :project_task_lists, :order => '"order" DESC', :dependent => :destroy do
+	has_many :project_task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
 		def open(reload=false)
 			# Grab open task lists only
 			find(:all, :conditions => 'project_task_lists.completed_on IS NULL')
@@ -67,7 +67,7 @@ class Project < ActiveRecord::Base
 		end
 	end
 	
-	has_many :project_forms, :order => '"order" DESC', :dependent => :destroy do
+	has_many :project_forms, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
 		def visible(reload=false)
 			# Grab visible forms only
 			find(:all, :conditions => ['project_forms.is_visible = ?', true])

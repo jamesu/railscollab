@@ -48,7 +48,7 @@ module PaginatingFind
     #                           :auto => true})
     #
     def paginating_find(*args)
-      options = extract_options_from_args!(args) 
+      options = args.extract_options! 
       page_options = options.delete(:page) || (args.delete(:page) ? {} : nil)
       if page_options
         # The :page option was specified, so page the query results

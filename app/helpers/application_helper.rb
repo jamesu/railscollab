@@ -30,7 +30,7 @@ module ApplicationHelper
 	def checkbox_link(link, checked=false, hint=nil, attrs={})
     	icon_url = checked ? '/images/icons/checked.gif' : '/images/icons/not-checked.gif'
     	
-    	link_to "<img src='#{icon_url}' alt=\'\' />", link, attrs.merge({:post => true, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
+    	link_to "<img src='#{icon_url}' alt='' />", link, attrs.merge({:method => :post, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
 	end
 	
 	def render_icon(filename, alt, attrs={})
@@ -92,6 +92,7 @@ module ApplicationHelper
 	end
 	
 	def format_usertime(time, format, user=@logged_user)
+		return '' if time.nil?
 		adjusted_time = time + ((user.timezone * 60.0 * 60.0).to_i)
 		adjusted_time.strftime(format)
 	end

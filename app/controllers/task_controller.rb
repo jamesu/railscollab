@@ -26,7 +26,7 @@ class TaskController < ApplicationController
   verify :method => :post,
   		 :only => [ :delete_list, :delete_task, :open_task, :complete_task ],
   		 :add_flash => { :flash_error => "Invalid request" },
-         :redirect_to => { :controller => 'project' }
+         :redirect_to => { :controller => 'dashboard' }
   
   before_filter :login_required
   before_filter :process_session
