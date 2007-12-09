@@ -82,3 +82,6 @@ Globalite.language = AppConfig.default_language.nil? ? :en_US : AppConfig.defaul
 
 # Ferret search
 FERRETABLE_MODELS = %w[Tag Comment ProjectMessage ProjectTime ProjectTask ProjectTaskList ProjectMilestone ProjectFile ProjectFileRevision]
+
+# Extensions
+require_dependency "railscollab_extras"
