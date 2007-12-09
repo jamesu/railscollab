@@ -71,7 +71,7 @@ class ProjectController < ApplicationController
     
     @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => AppConfig.search_results_per_page})
     
-    @tag_names = []
+    @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
     @pagination = []
     @start_search_results = AppConfig.search_results_per_page * (current_page-1)
     (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}

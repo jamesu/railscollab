@@ -5,8 +5,8 @@
     <p><%= "Tags used in project" %>:</p>
     <ul class="listWithDetails">
 <% is_public = @logged_user.member_of_owner? %>
-    <% @tag_names.each do |tag_name| -%>
-      <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag}" %>"><%= h tag %></a> <span class="desc"> - <%= "#{Tag.count_by(tag, @active_project, is_public)} objects."%></span></li>
+    <% @tag_names.each do |tag| -%>
+      <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag.tag}" %>"><%= h tag.tag %></a> <span class="desc"> - <%= "#{Tag.count_by(tag.tag, @active_project, is_public)} objects."%></span></li>
     <% end %>
     </ul>
   </div>

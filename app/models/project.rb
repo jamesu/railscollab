@@ -157,20 +157,18 @@ class Project < ActiveRecord::Base
 	 @update_completed_user = user
 	end
 	
-	def search(query, is_private, options={})
+	def search(query, is_private, options={}, tag_search=false)
 	 results = []
 	 return results, 0 unless AppConfig.search_enabled
 	 
 	 real_query = is_private ? 
 	              "is_private:false project_id:#{self.id} #{query}" :
 	              "project_id:#{self.id} #{query}"
-		 
-	 results = Kernel.const_get(FERRETABLE_MODELS[0]).find_by_contents(
-	           real_query,
-	           {
-	             :multi => FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) }
-	           }.merge(options)
-	 )
+	 
+	 real_opts = { }.merge(options)
+	 real_opts[:multi] = FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) } unless tag_search
+	 
+	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_by_contents(real_query, real_opts)
 
 	 return results, results.total_hits
 	end
