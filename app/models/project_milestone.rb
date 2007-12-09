@@ -50,7 +50,7 @@ class ProjectMilestone < ActiveRecord::Base
 	
 	has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
-	acts_as_ferret :fields => [:name, :description, :project_id, :is_private], :store_class_name => true
+	acts_as_ferret :fields => [:name, :description, :project_id, :is_private, :tags_with_spaces], :store_class_name => true
 	
 	before_create  :process_params
 	after_create   :process_create
@@ -105,6 +105,10 @@ class ProjectMilestone < ActiveRecord::Base
 	
 	def tags
 	 return Tag.list_by_object(self).join(',')
+	end
+	
+	def tags_with_spaces
+	 return Tag.list_by_object(self).join(' ')
 	end
 	
 	def tags=(val)
