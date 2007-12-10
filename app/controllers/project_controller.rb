@@ -228,9 +228,9 @@ class ProjectController < ApplicationController
             
             @project.users << proj_user
             if params[:project_user_permissions] && params[:project_user_permissions][id]
-              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][id], user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][id], proj_user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
             else
-              ProjectUser.update_all(ProjectUser.update_str({}, user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str({}, proj_user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
             end
           end
         end
