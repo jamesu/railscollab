@@ -1,0 +1,10 @@
+
+# Permission names
+can_manage_messages: Manage messages
+can_manage_tasks: Manage tasks
+can_manage_milestones: Manage milestones
+can_manage_time: Manage times
+can_upload_files: Upload files
+can_manage_files: Manage files
+can_assign_to_owners: Assign tasks to members of owner company
+can_assign_to_other: Assign tasks to members of other clients
