@@ -7,17 +7,17 @@ RailsCollab
 module AccountHelper
     include AdministrationHelper
     
-	def account_tabbed_navigation(current=0)
-	 items = [{:id => 0, :title => 'My account', :url => '/account/index', :selected => true}]
-		
-     items[current][:selected] = true
-	 return items
+	def account_tabbed_navigation(current)
+	  items = [{:id => :my_account, :url => '/account/index'}]
+	  
+	  @selected_navigation_item = current
+	  return items
 	end
 	
-	def account_crumbs(current="Index")
-	 [{:title => 'Dashboard', :url => '/dashboard'},
-	  {:title => 'Account', :url => '/account'},
-	  {:title => current}]
+	def account_crumbs(current)
+	  [{:title => :dashboard, :url => '/dashboard'},
+	   {:title => :account, :url => '/account'},
+	   {:title => current}]
 	end
   
 end

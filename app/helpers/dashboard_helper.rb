@@ -5,32 +5,32 @@ RailsCollab
 =end
 
 module DashboardHelper
-	def dashboard_tabbed_navigation(current=0)
-	 items = [{:id => 0, :title => 'Overview', :url => '/dashboard/index', :selected => false},
-		{:id => 1, :title => 'My projects', :url => '/dashboard/my_projects', :selected => false},
-		{:id => 2, :title => 'My tasks', :url => '/dashboard/my_tasks', :selected => false}]
-		
-		items[current][:selected] = true
-		return items
+	def dashboard_tabbed_navigation(current)
+	  items = [{:id => :overview, :url => '/dashboard/index'},
+	           {:id => :my_projects, :url => '/dashboard/my_projects'},
+	           {:id => :my_tasks, :url => '/dashboard/my_tasks'}]
+	  
+	  @selected_navigation_item = current
+	  return items
 	end
 	
-	def dashboard_crumbs(current="Overview")
-	 [{:title => 'Dashboard', :url => '/dashboard'},
+	def dashboard_crumbs(current)
+	 [{:title => :dashboard, :url => '/dashboard'},
 	  {:title => current}]
 	end
-	
+		
 	def new_account_steps(user)
-	 [{:title => "Step 1: Update your company info",
-	   :content => "<a href='/company/edit'>Set your company details</a> such as phone and fax number, address, email, homepage etc",
+	 [{:title => :new_account_step1.l,
+	   :content => :new_account_step1_info.l_with_args(:url => '/company/edit'),
 	   :del => Company.owner.updated?},
-	  {:title => "Step 2: Add team members",
-	   :content => "You can <a href='/user/add?company_id=#{user.company.id}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system",
+	  {:title => :new_account_step2.l,
+	   :content => :new_account_step1_info.l_with_args(:url => "/user/add?company_id=#{user.company.id}"),
 	   :del => (Company.owner.users.length > 1)},
-	  {:title => "Step 3: Add client companies and their members",
-	   :content => "Now its time to <a href='/company/add_client'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)",
+	  {:title => :new_account_step3.l,
+	   :content => :new_account_step3_info.l_with_args(:url => '/company/add_client'),
 	   :del => (Company.owner.clients.length > 0)},
-	  {:title => "Step 4: Start a project",
-	   :content => "Defining a <a href='/project/add'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients.",
+	  {:title => :new_account_step4.l,
+	   :content => :new_account_step4_info.l_with_args(:url => '/project/add'),
 	   :del => (Company.owner.projects.length > 0)}]
 	end
 end

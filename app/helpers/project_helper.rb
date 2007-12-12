@@ -20,28 +20,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 module ProjectHelper
-    include AdministrationHelper
-    
-	def project_tabbed_navigation(current=0)
+	include AdministrationHelper
 	
-	 act_proj="#{@active_project.id}"
-	 items = [{:id => 0, :title => 'Overview', :url => "/project/#{act_proj}/overview", :selected => false},
-	 {:id => 1, :title => 'Messages', :url => "/project/#{act_proj}/message", :selected => false},
-	 {:id => 2, :title => 'Tasks', :url => "/project/#{act_proj}/task", :selected => false},
-	 {:id => 3, :title => 'Milestones', :url => "/project/#{act_proj}/milestone", :selected => false},
-	 {:id => 4, :title => 'Time', :url => "/project/#{act_proj}/time", :selected => false},
-	 {:id => 5, :title => 'Files', :url => "/project/#{act_proj}/files", :selected => false},
-	 {:id => 6, :title => 'Tags', :url => "/project/#{act_proj}/tags", :selected => false},
-	 {:id => 7, :title => 'Forms', :url => "/project/#{act_proj}/form", :selected => false},
-	 {:id => 8, :title => 'People', :url => "/project/#{act_proj}/people", :selected => false}]
-	
-     items[current][:selected] = true
-	 return items
+	def project_tabbed_navigation(current)
+	  act_proj="#{@active_project.id}"
+	  items = [{:id => :overview, :url => "/project/#{act_proj}/overview"}]
+	  
+	  items << {:id => :messages, :url => "/project/#{act_proj}/message"} if true
+	  items << {:id => :tasks, :url => "/project/#{act_proj}/task"} if true
+	  items << {:id => :milestones, :url => "/project/#{act_proj}/milestone"} if true
+	  items << {:id => :time, :url => "/project/#{act_proj}/time"} if true
+	  items << {:id => :files, :url => "/project/#{act_proj}/files"} if true
+	  items << {:id => :tags, :url => "/project/#{act_proj}/tags"} if true
+	  items << {:id => :forms, :url => "/project/#{act_proj}/form"} if @logged_user.is_admin?
+	  items << {:id => :people, :url => "/project/#{act_proj}/people"} if true
+	  
+	  @selected_navigation_item = current
+	  return items
 	end
 	
-	def project_crumbs(current="Index", extras=[])
-	 [{:title => 'Dashboard', :url => '/dashboard'},
-	  {:title => (html_escape @active_project.name), :url => "/project/#{@active_project.id}/overview"}] + extras  << {:title => current}
+	def project_crumbs(current, extras=[])
+	  [{:title => :dashboard, :url => '/dashboard'},
+	   {:title => (html_escape @active_project.name), :url => "/project/#{@active_project.id}/overview"}] + extras  << {:title => current}
 	end
 
 	def assign_select_options(project)

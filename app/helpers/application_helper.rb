@@ -16,7 +16,7 @@ module ApplicationHelper
 	end
 	
 	def product_signature
-		"Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
+		:product_signature.l
 	end
 	
 	def pagination_links(url, ids)
