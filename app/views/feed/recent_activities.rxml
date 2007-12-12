@@ -3,9 +3,9 @@ xml.instruct!
 xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
 
   xml.channel do 
-    xml.title "Recent Activities Feed"
+    xml.title :recent_activities_feed.l
     xml.link @activity_url
-    xml.description "Recent activities for all projects"
+    xml.description :recent_activities_feed_info.l
     
     xml.language 'en-us'
     @activity_log.each do |activity|

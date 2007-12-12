@@ -1,17 +1,17 @@
 <%
-  @page_title = "Edit message category"
-  @tabbed_navigation_items = project_tabbed_navigation(5)
+  @page_title = :edit_message_category.l
+  @tabbed_navigation_items = project_tabbed_navigation(:messages)
   
-  @bread_crumbs = project_crumbs("Edit message category", [{:title => "Messages", :url => "/project/#{@active_project.id}/message"}])
+  @bread_crumbs = project_crumbs(:edit_category, [{:title => :messages, :url => "/project/#{@active_project.id}/message"}])
   
   @page_actions = []
   
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-	@page_actions << {:title =>'Add message', :url => "/project/#{@active_project.id}/message/add"}
+	@page_actions << {:title => :add_message, :url => "/project/#{@active_project.id}/message/add"}
   end
 
   if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title =>'Add category', :url => "/project/#{@active_project.id}/message/add_category"}
+    @page_actions << {:title => :add_category, :url => "/project/#{@active_project.id}/message/add_category"}
   end
   
   @additional_stylesheets = ['project/messages']

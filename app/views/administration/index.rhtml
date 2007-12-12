@@ -1,8 +1,8 @@
 <%
-  @page_title = 'Administration'
+  @page_title = :administration.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation()
-  @bread_crumbs = administration_crumbs("Index")
+  @tabbed_navigation_items = administration_tabbed_navigation(:index)
+  @bread_crumbs = administration_crumbs(:index)
   
   @page_actions = []
   
@@ -11,7 +11,7 @@
 <div class="hint">
   <div class="header"><%= "Administration" %></div>
   <div class="content">
-    <%= "A rather long boring piece of info goes here" %>
+    <%= :welcome_to_administration.l %>
     <ul>
       <li><a href="/administration/company"><%= "Company" %></a></li>
       <li><a href="/administration/members"><%= "Members" %></a> (<%= link_to "Add user", :controller => 'user', :action => 'add', :company_id => Company.owner.id %>)</li>

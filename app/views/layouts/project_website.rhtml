@@ -3,7 +3,7 @@
   <head>
   	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <% if not @active_project.nil? %>
-    <title><%= h @active_project.name %> - <%= @page_title %> @ <%= h Company.owner.name %></title>
+    <title><%= h @active_project.name %> - <%= h @page_title %> @ <%= h Company.owner.name %></title>
     <% else %>
     <title><%= h @page_title %> @ <%= h Company.owner.name %></title>
     <% end %>
@@ -18,7 +18,7 @@
 <!-- head needs to go here? -->
   </head>
   <body id="body">
-<%= render :partial => 'system_notices', :collection => system_notices %>
+<%= render :partial => 'layouts/system_notices', :collection => system_notices %>
     <div id="wrapper">
       
       <!-- header -->
@@ -29,37 +29,14 @@
         </div>
       </div>
       <!-- /header -->
-      
-      <div id="tabsWrapper">
-        <div id="tabs">
-<% if not @tabbed_navigation_items.nil? %>
-          <ul>
-<% @tabbed_navigation_items.each do |item| -%>
-            <li id="<%= "item_#{item[:id]}" %>" <% if item[:selected] %> class='active'<% end %>>
-            <a href="<%= item[:url] %>"><%= item[:title] %></a>
-            </li>
-<% end %>
-          </ul>
-<% end %>
-        </div>
-      </div>
-      
+
+      <%= render :partial => 'layouts/tabs' if not @tabbed_navigation_items.nil? %>
+            
       <div id="crumbsWrapper">
         <div id="crumbsBlock">
-          <div id="crumbs">
-<% if not @bread_crumbs.nil? %>
-            <ul>
-<% @bread_crumbs.each do |crumb| -%>
-<% if crumb[:url] %>
-              <li>&raquo; <a href="<%= crumb[:url] %>"><%= h crumb[:title] %></a></li>
-<% else %>
-              <li>&raquo; <span><%= h crumb[:title] %></span></li>
-<% end %>
-<% end %>
-            </ul>
-<% end %>
-          </div>
-<% if AppConfig.search_enabled %>
+          <%= render :partial => 'layouts/crumbs' if not @bread_crumbs.nil? %> 
+          
+          <% if AppConfig.search_enabled %>
           <div id="searchBox">
             <%= form_tag :controller => 'project', :action => 'search' %>
               <div>
@@ -75,7 +52,8 @@
               </div>
             </form>
           </div>
-<% end %>
+         <% end %>
+           
         </div>
       </div>
       
@@ -92,15 +70,7 @@
           <h1 id="pageTitle"><%= @page_title %></h1>
           <div id="pageContent">
             <div id="content">
-<% if not @page_actions.nil? %>
-            <div id="page_actions">
-              <ul>
-<% @page_actions.each do |action| -%>
-                <li><a href="<%= action[:url] %>"><%= h action[:title] %></a></li>
-<% end %>
-              </ul>
-            </div>
-<% end %>
+              <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
               <!-- /Content -->
@@ -113,16 +83,7 @@
         </div>
         
         <!--Footer -->
-        <div id="footer">
-          <div id="copy">
-<% if not Company.owner.homepage.nil? %>
-            <a href="<%= Company.owner.homepage %>"><%= Company.owner.name %></a>
-<% else %>
-            <%= Company.owner.name %>
-<% end %>
-          </div>
-          <div id="productSignature"><%= product_signature %></div>
-        </div>
+        <%= render :partial => 'layouts/footer' %>
       </div>
       <!-- /content wrapper -->
       

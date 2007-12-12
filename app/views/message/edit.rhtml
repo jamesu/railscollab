@@ -1,14 +1,13 @@
 <%
-  @page_title = 'Add message'
+  @page_title = :edit_message.l
   
-  @tabbed_navigation_items = project_tabbed_navigation(1)
-  @bread_crumbs = project_crumbs("Add message", [{:title => 'Messages', :url => "/project/#{@active_project.id}/message"}])
+  @tabbed_navigation_items = project_tabbed_navigation(:messages)
+  @bread_crumbs = project_crumbs(:edit_message, [{:title => :messages, :url => "/project/#{@active_project.id}/message"}])
   
   @page_actions = []
   
   @additional_stylesheets = ['project/messages']
 %>
-<!-- <script type="text/javascript" src="modules/addMessageForm.js"></script> -->
 
 <%= form_tag( {:controller => 'message', :action => 'edit', :id => @message.id}, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => false} %>

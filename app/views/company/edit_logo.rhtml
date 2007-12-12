@@ -1,13 +1,11 @@
 <%
-    @page_title = 'Update logo'
+    @page_title = :update_logo.l
     if @company.is_owner?
-    	# ADMINISTRATION_TAB_COMPANY
-    	@tabbed_navigation_items = administration_tabbed_navigation(1)
-    	@bread_crumbs = administration_crumbs('Update logo', [{:title => 'Company' , :url => "/administration/company"}])
+    	@tabbed_navigation_items = administration_tabbed_navigation(:company)
+    	@bread_crumbs = administration_crumbs(:update_logo, [{:title => :company, :url => "/administration/company"}])
     else
-    	# ADMINISTRATION_TAB_CLIENTS
-    	@tabbed_navigation_items = administration_tabbed_navigation(3)
-    	@bread_crumbs = administration_crumbs('Update logo', [{:title => 'Clients' , :url => '/administration/clients'}, {:title => @company.name, :url => "/company/view_client/#{@company.id}"}])
+    	@tabbed_navigation_items = administration_tabbed_navigation(:clients)
+    	@bread_crumbs = administration_crumbs(:update_logo, [{:title => :clients, :url => '/administration/clients'}, {:title => @company.name, :url => "/company/view_client/#{@company.id}"}])
     end
 %>
 

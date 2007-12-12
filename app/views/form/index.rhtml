@@ -1,12 +1,12 @@
 <%
-  @page_title = "Forms"
-  @tabbed_navigation_items = project_tabbed_navigation(7)
-  @bread_crumbs = project_crumbs('Forms')
+  @page_title = :forms.l
+  @tabbed_navigation_items = project_tabbed_navigation(:forms)
+  @bread_crumbs = project_crumbs(:forms)
   
   @page_actions = []
   
-  if ProjectTime.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => 'Add form', :url => "/project/#{@active_project.id}/form/add"}
+  if ProjectForm.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => :add_form, :url => "/project/#{@active_project.id}/form/add"}
   end
 %>
 

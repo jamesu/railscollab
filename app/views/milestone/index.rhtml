@@ -1,12 +1,12 @@
 <%
-  @page_title = "Milestones"
-  @tabbed_navigation_items = project_tabbed_navigation(3)
-  @bread_crumbs = project_crumbs('Milestones')
+  @page_title = :milestones.l
+  @tabbed_navigation_items = project_tabbed_navigation(:milestones)
+  @bread_crumbs = project_crumbs(:milestones)
   
   @page_actions = []
   
   if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => 'Add milestone', :url => "/project/#{@active_project.id}/milestone/add"}
+    @page_actions << {:title => :add_milestone, :url => "/project/#{@active_project.id}/milestone/add"}
   end
   
   @additional_stylesheets = ['project/milestones']

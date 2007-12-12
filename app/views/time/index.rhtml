@@ -1,18 +1,17 @@
 <%
-
-  @page_title = "Time"
-  @tabbed_navigation_items = project_tabbed_navigation(4)
-  @bread_crumbs = project_crumbs('Time')
+  @page_title = :time.l
+  @tabbed_navigation_items = project_tabbed_navigation(:time)
+  @bread_crumbs = project_crumbs(:time)
   
   @page_actions = []
   
   if ProjectTime.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => 'Add time', :url => "/project/#{@active_project.id}/time/add"}
+    @page_actions << {:title => :add_time, :url => "/project/#{@active_project.id}/time/add"}
   end
   
-  @page_actions << {:title => 'Sort by finished date', :url => "/project/#{@active_project.id}/time/index?orderBy=done_date"}
-  @page_actions << {:title => 'Sort by hours', :url => "/project/#{@active_project.id}/time/index?orderBy=hours"}
-  @page_actions << {:title => 'Report by task', :url => "/project/#{@active_project.id}/time/by_task?orderBy=hours"}
+  @page_actions << {:title => :sort_by_finished_date, :url => "/project/#{@active_project.id}/time/index?orderBy=done_date"}
+  @page_actions << {:title => :sort_by_hours, :url => "/project/#{@active_project.id}/time/index?orderBy=hours"}
+  @page_actions << {:title => :report_by_task, :url => "/project/#{@active_project.id}/time/by_task?orderBy=hours"}
   
   @additional_stylesheets = ['project/time']
 %>

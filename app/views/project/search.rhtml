@@ -1,8 +1,8 @@
 <%
-  @page_title = 'Search results'
+  @page_title = :search_results.l
   
-  @tabbed_navigation_items = project_tabbed_navigation(0)
-  @bread_crumbs = project_crumbs("Search results")
+  @tabbed_navigation_items = project_tabbed_navigation(:overview)
+  @bread_crumbs = project_crumbs(:search_results)
   
   @page_actions = []
   

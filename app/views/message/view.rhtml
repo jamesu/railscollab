@@ -1,15 +1,15 @@
 <%
-  @page_title = (h @message.title)
+  @page_title = @message.title
   
-  @tabbed_navigation_items = project_tabbed_navigation(1)
-  @bread_crumbs = project_crumbs("View message", [
-  	{:title => 'Messages', :url => "/project/#{@active_project.id}/message"},
-  	{:title => (h @message.project_message_category.name), :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"}
+  @tabbed_navigation_items = project_tabbed_navigation(:messages)
+  @bread_crumbs = project_crumbs(:view_message, [
+  	{:title => :messages, :url => "/project/#{@active_project.id}/message"},
+  	{:title => @message.project_message_category.name, :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"}
   ])
   
   @page_actions = []
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => "Add message", :url => "/project/#{@active_project.id}/message/add"}
+    @page_actions << {:title => :add_message, :url => "/project/#{@active_project.id}/message/add"}
   end
   
   @additional_stylesheets = ['project/messages']

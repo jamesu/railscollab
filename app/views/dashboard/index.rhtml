@@ -1,12 +1,10 @@
 <%
-
-  # Set page title and set crumbs to index
-  @page_title = 'Dashboard'
-  @tabbed_navigation_items = dashboard_tabbed_navigation
-  @bread_crumbs = dashboard_crumbs
+  @page_title = :dashboard.l
+  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
+  @bread_crumbs = dashboard_crumbs(:overview)
   
   if @logged_user.is_admin?
-      @page_actions = [{:title =>'Add project', :url=> '/project/add'}]
+      @page_actions = [{:title => :add_project, :url=> '/project/add'}]
   end
   
   @additional_stylesheets = ['project/project_log', 'application_logs']
@@ -14,14 +12,14 @@
 <% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
 <div class="hint">
 
-  <div class="header"><%= "Welcome to your newly created account" %></div>
-  <div class="content"><%= "#{h @logged_user.display_name}, welcome to your new account.<br> You can get started in a minute following these easy steps:" %></div>
+  <div class="header"><%= :welcome_to_new_account.l %></div>
+  <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name)) %></div>
   
    <% new_account_steps(@logged_user).each do |step| %>
     <div class='header'><%= step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>
     <div class='content'><%= step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
    <% end %>
-  <p><%= link_to '&raquo; Hide this info permanently', {:controller => 'company', :action => 'hide_welcome_info'}, :method => :post %></p>
+  <p><%= link_to :hide_welcome_info.l, {:controller => 'company', :action => 'hide_welcome_info'}, :method => :post %></p>
   
 </div>
 <% end %>

@@ -1,17 +1,17 @@
 <%
-  @page_title = "Add file"
-  @tabbed_navigation_items = project_tabbed_navigation(5)
+  @page_title = :add_file.l
+  @tabbed_navigation_items = project_tabbed_navigation(:files)
   
-  @bread_crumbs = project_crumbs("Add file", [{:title => "Files", :url => "/project/#{@active_project.id}/files"}])
+  @bread_crumbs = project_crumbs(:add_file, [{:title => :files, :url => "/project/#{@active_project.id}/files"}])
   
   @page_actions = []
   
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
-	@page_actions << {:title =>'Add file', :url => "/project/#{@active_project.id}/files/add_file"}
+	@page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
   end
 
   if ProjectFolder.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title =>'Add folder', :url => "/project/#{@active_project.id}/files/add_folder"}
+    @page_actions << {:title => :add_folder, :url => "/project/#{@active_project.id}/files/add_folder"}
   end
   
   @additional_stylesheets = ['project/files']

@@ -1,7 +1,7 @@
 <%
-  @page_title = "Tags"
-  @tabbed_navigation_items = project_tabbed_navigation(6)
-  @bread_crumbs = project_crumbs((h @tag_name), [{:title => 'Tags', :url => '/project/#{@active_project.id}/tags'}])
+  @page_title = :tags.l
+  @tabbed_navigation_items = project_tabbed_navigation(:tags)
+  @bread_crumbs = project_crumbs(@tag_name, [{:title => :tags, :url => '/project/#{@active_project.id}/tags'}])
   
   @additional_stylesheets = ['project/tags']
 %>

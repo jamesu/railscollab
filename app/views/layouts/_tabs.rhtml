@@ -1,0 +1,12 @@
+      <div id="tabsWrapper">
+        <div id="tabs">
+          <ul>
+<% @tabbed_navigation_items.each do |item| -%>
+            <li id="<%= "item_#{item[:id]}" %>" <% if item[:id] == @selected_navigation_item %> class='active'<% end %>>
+            <a href="<%= item[:url] %>"><%= item[:id].l %></a>
+            </li>
+<% end %>
+          </ul>
+        </div>
+      </div>
+      

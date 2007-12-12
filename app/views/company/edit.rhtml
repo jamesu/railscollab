@@ -1,12 +1,12 @@
 <%
   if @company.is_owner?
-    @page_title = 'Edit company'
-  	@tabbed_navigation_items = administration_tabbed_navigation(1)
-  	@bread_crumbs = administration_crumbs("Edit company", [{:title => "Company", :url => '/administration/company'}])
+    @page_title = :edit_company
+  	@tabbed_navigation_items = administration_tabbed_navigation(:company)
+  	@bread_crumbs = administration_crumbs(:edit_company, [{:title => :company, :url => '/administration/company'}])
   else
-    @page_title = 'Edit client'
-  	@tabbed_navigation_items = administration_tabbed_navigation(3)
-  	@bread_crumbs = administration_crumbs("Edit client", [{:title => "Clients", :url => '/administration/clients'}])
+    @page_title = :edit_client
+  	@tabbed_navigation_items = administration_tabbed_navigation(:clients)
+  	@bread_crumbs = administration_crumbs(:edit_client, [{:title => :clients, :url => '/administration/clients'}])
   end
 
 %>

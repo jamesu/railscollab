@@ -3,9 +3,9 @@ xml.instruct!
 xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
 
   xml.channel do 
-    xml.title "#{@project.name} Recent Milestones Feed"
+    xml.title :recent_project_milestones_feed.l_with_args(:project => @project.name)
     xml.link @milestones_url
-    xml.description "Recent milestones for the '#{@project.name}' project"
+    xml.description :recent_project_milestones_feed_info.l_with_args(:project => @project.name)
     
     xml.language 'en-us'
     @milestones.each do |milestone|

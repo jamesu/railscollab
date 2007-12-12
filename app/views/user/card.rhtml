@@ -1,18 +1,17 @@
 <%
-
-  @page_title = "User card of #{h @user.display_name}"
+  @page_title = :user_card.l_with_args(@user.display_name)
   @tabbed_navigation_items = dashboard_tabbed_navigation
   @bread_crumbs = dashboard_crumbs(h @logged_user.display_name)
   
   @page_actions = []
   if @user.profile_can_be_updated_by(@logged_user)
-	  @page_actions += [{:title => 'Update profile', :url => "/account/edit_profile/#{@user.id}"},
-	    {:title => 'Change password', :url => "/account/edit_password/#{@user.id}"},
-	    {:title => 'Update avatar', :url => "/account/edit_avatar/#{@user.id}"}]
+	  @page_actions += [{:title => :update_profile, :url => "/account/edit_profile/#{@user.id}"},
+	    {:title => :change_password, :url => "/account/edit_password/#{@user.id}"},
+	    {:title => :update_avatar, :url => "/account/edit_avatar/#{@user.id}"}]
   end
   
   if @user.permissions_can_be_updated_by(@logged_user)
-  	@page_actions << {:title => 'Update permissions', :url => "/account/update_permissions/#{@user.id}"}
+  	@page_actions << {:title => :update_permissions, :url => "/account/update_permissions/#{@user.id}"}
   end
   
   @additional_stylesheets = []

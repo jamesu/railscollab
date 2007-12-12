@@ -1,24 +1,24 @@
 <%
-    @page_title = 'Update permissions'
+    @page_title = :update_permissions.l
   
     if @user.member_of_owner?
-        @tabbed_navigation_items = administration_tabbed_navigation(1)
-        @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Company' , :url => "/company/card/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
+        @tabbed_navigation_items = administration_tabbed_navigation(:company)
+        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :company , :url => "/company/card/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
     else
-        @tabbed_navigation_items = administration_tabbed_navigation(3)
-        @bread_crumbs = administration_crumbs("Update permissions", [{:title => 'Clients', :url => "/administration/clients"}, {:title => (h @user.company.name), :url => "/company/view_client/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
+        @tabbed_navigation_items = administration_tabbed_navigation(:clients)
+        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :clients, :url => "/administration/clients"}, {:title => (h @user.company.name), :url => "/company/view_client/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
     end
     
     @page_actions = []
     
     if @user.profile_can_be_updated_by(@logged_user)
-        @page_actions += [{:title => 'Update profile', :url => "/account/edit_profile/#{@user.id}"},
-                          {:title => 'Change password', :url => "/account/edit_password/#{@user.id}"},
-                          {:title => 'Update avatar', :url => "/account/edit_avatar/#{@user.id}"}]
+        @page_actions += [{:title => :update_profile, :url => "/account/edit_profile/#{@user.id}"},
+                          {:title => :change_password', :url => "/account/edit_password/#{@user.id}"},
+                          {:title => :update_avatar', :url => "/account/edit_avatar/#{@user.id}"}]
     end
     
     if @user.permissions_can_be_updated_by(@logged_user)
-        @page_actions << {:title => 'Permissions', :url => "/account/update_permissions/#{@user.id}"}
+        @page_actions << {:title => :permissions, :url => "/account/update_permissions/#{@user.id}"}
     end
     
     @additional_stylesheets = ['admin/user_permissions.css']

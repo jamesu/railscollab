@@ -1,0 +1,10 @@
+        <div id="footer">
+          <div id="copy">
+<% if not Company.owner.homepage.nil? %>
+            <a href="<%= Company.owner.homepage %>"><%= Company.owner.name %></a>
+<% else %>
+            <%= Company.owner.name %>
+<% end %>
+          </div>
+          <div id="productSignature"><%= product_signature %></div>
+        </div>

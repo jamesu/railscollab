@@ -1,8 +1,8 @@
 <%
-  @page_title = 'Add project'
+  @page_title = :add_project.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation(4)
-  @bread_crumbs = administration_crumbs("Add project", [{:title => 'Projects', :url => "/administration/projects"}])
+  @tabbed_navigation_items = administration_tabbed_navigation(:projects)
+  @bread_crumbs = administration_crumbs(:add_project, [{:title => :projects, :url => "/administration/projects"}])
   
   @page_actions = []
   

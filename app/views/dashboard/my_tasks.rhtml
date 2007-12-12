@@ -1,10 +1,10 @@
 <% 
-  @page_title = 'My tasks'
-  @tabbed_navigation_items = dashboard_tabbed_navigation(2)
-  @bread_crumbs = dashboard_crumbs("My tasks")
+  @page_title = :my_tasks.l
+  @tabbed_navigation_items = dashboard_tabbed_navigation(:my_tasks)
+  @bread_crumbs = dashboard_crumbs(:my_tasks)
   
   if nil
-      @page_actions = [{:title =>'Add project', :url=> '/project/add'}]
+      @page_actions = [{:title => :add_project, :url=> '/project/add'}]
   end
   
   @additional_stylesheets = ['dashboard/my_tasks']

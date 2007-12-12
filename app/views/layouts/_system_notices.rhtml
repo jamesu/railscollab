@@ -1,11 +1,11 @@
-<?php if(isset($_system_notices) && is_array($_system_notices) && count($_system_notices)) { ?>
+<% if !@system_notices.nil? %>
 <div id="systemNoticesWrapper">
   <div id="systemNotices">
     <ul>
-<?php foreach($_system_notices as $_system_notice) { ?>
-      <li><?= $_system_notice ?></li>
-<?php } // foreach ?>
+<% @system_notices.each do |system_notice| -%>
+      <li><%= h system_notice %></li>
+<% end %>
     </ul>
   </div>
 </div>
-<?php } // if ?>
+<% end %>

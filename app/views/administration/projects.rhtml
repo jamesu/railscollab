@@ -1,13 +1,13 @@
 <%
-  @page_title = 'Projects'
+  @page_title = :projects.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation(4)
-  @bread_crumbs = administration_crumbs("Projects")
+  @tabbed_navigation_items = administration_tabbed_navigation(:projects)
+  @bread_crumbs = administration_crumbs(:projects)
   
   @page_actions = []
   
   if Project.can_be_created_by(@logged_user)
-  	@page_actions << {:title => "Add project", :url => '/project/add'}
+  	@page_actions << {:title => :add_project, :url => '/project/add'}
   end
   
   @additional_stylesheets = []

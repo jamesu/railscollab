@@ -1,13 +1,13 @@
 <%
-  @page_title = 'Clients'
+  @page_title = :clients.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation(3)
-  @bread_crumbs = administration_crumbs("Clients")
+  @tabbed_navigation_items = administration_tabbed_navigation(:clients)
+  @bread_crumbs = administration_crumbs(:clients)
   
   @page_actions = []
   
   if Company.can_be_created_by(@logged_user)
-  	@page_actions << {:title => "Add client", :url => '/company/add_client'}
+  	@page_actions << {:title => :add_client, :url => '/company/add_client'}
   end
   
   @additional_stylesheets = []

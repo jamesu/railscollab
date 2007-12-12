@@ -1,19 +1,19 @@
 <%
-  @page_title = 'Add task'
-  @tabbed_navigation_items = project_tabbed_navigation(2)
+  @page_title = :add_task.l
+  @tabbed_navigation_items = project_tabbed_navigation(:tasks)
   
-  extra_crumbs = [{:title => 'Tasks', :url => "/project/#{@active_project.id}/task/index"}]
+  extra_crumbs = [{:title => :tasks, :url => "/project/#{@active_project.id}/task/index"}]
   if not @task_list.nil?
     extra_crumbs << {:title => @task_list.name, :url => "/project/#{@active_project.id}/task/view_list/#{@task_list.id}"}
   else
     extra_crumbs << {:title => @logged_user.display_name, :url => "/dashboard/my_tasks"}
   end
-  @bread_crumbs = project_crumbs("Add task", extra_crumbs)
+  @bread_crumbs = project_crumbs(:add_task, extra_crumbs)
   
   @page_actions = []
   
   if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title =>'Add task list', :url=> '/project/#{@active_project.id}/task/add_list'}
+    @page_actions << {:title => :add_task_list, :url=> '/project/#{@active_project.id}/task/add_list'}
   end
   
   @additional_stylesheets = []
