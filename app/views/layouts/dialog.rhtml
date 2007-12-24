@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="dialog">
-      <h1><%= @page_title %></h1>
+      <h1><%= h @page_title %></h1>
 <% if not flash[:flash_success].nil? %>
           <div id="success" onclick="this.style.display = 'none'"><%= flash[:flash_success] %></div>
 <% end %>

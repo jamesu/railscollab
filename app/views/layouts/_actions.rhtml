@@ -1,7 +1,7 @@
             <div id="page_actions">
               <ul>
 <% @page_actions.each do |action| -%>
-                <li><a href="<%= action[:url] %>"><%= action[:title].l %></a></li>
+                <li><a href="<%= action[:url] %>" id="action_<%= action[:title] %>"><%= action[:title].l %></a></li>
 <% end %>
               </ul>
             </div>

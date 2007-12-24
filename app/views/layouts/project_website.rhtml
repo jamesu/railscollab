@@ -67,7 +67,7 @@
           <div id="error" onclick="this.style.display = 'none'"><%= h flash[:flash_error] %></div>
 <% end %>
 
-          <h1 id="pageTitle"><%= @page_title %></h1>
+          <h1 id="pageTitle"><%= h @page_title %></h1>
           <div id="pageContent">
             <div id="content">
               <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
