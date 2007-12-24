@@ -33,56 +33,88 @@ class Project < ActiveRecord::Base
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
 	
 	has_many :project_milestones, :dependent => :destroy do
-		def open(reload=false)
+		def public(reload=false)
+			# Grab public logs only
+			@public_project_milestones = nil if reload
+			@public_project_milestones ||= find(:all, :conditions => ['is_private = ?', false])
+		end
+	
+		def open(include_private=true, reload=false)
 			# Grab open milestones only
-			find(:all, :conditions => 'project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC')
+			ProjectMilestone.priv_scope(include_private) do
+			  find(:all, :conditions => 'project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC')
+			end
 		end
 		
-		def late(reload=false)
-			find(:all, :conditions => "due_date < '#{Date.today}' AND completed_on IS NULL")
+		def late(include_private=true, reload=false)
+			ProjectMilestone.priv_scope(include_private) do
+			  find(:all, :conditions => "due_date < '#{Date.today}' AND completed_on IS NULL")
+			end
 		end
 		
-		def todays(reload=false)
-			find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{Date.today}' AND due_date < '#{Date.today+1}')")
+		def todays(include_private=true, reload=false)
+			ProjectMilestone.priv_scope(include_private) do
+			  find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{Date.today}' AND due_date < '#{Date.today+1}')")
+			end
 		end
 		
-		def upcomming(reload=false)
-			find(:all, :conditions => "completed_on IS NULL AND due_date >= '#{Date.today+1}'")
+		def upcomming(include_private=true, reload=false)
+			ProjectMilestone.priv_scope(include_private) do
+			  find(:all, :conditions => "completed_on IS NULL AND due_date >= '#{Date.today+1}'")
+			end
 		end
 		
-		def completed(reload=false)
-			find(:all, :conditions => 'completed_on IS NOT NULL')
+		def completed(include_private=true, reload=false)
+			ProjectMilestone.priv_scope(include_private) do 
+			  find(:all, :conditions => 'completed_on IS NOT NULL')
+			end
 		end
 	end
 	
 	has_many :project_task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
-		def open(reload=false)
-			# Grab open task lists only
-			find(:all, :conditions => 'project_task_lists.completed_on IS NULL')
+		def public(reload=false)
+			# Grab public logs only
+			@public_project_task_lists = nil if reload
+			@public_project_task_lists ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 		
-		def completed(reload=false)
-			# Grab completed task lists only
-			find(:all, :conditions => 'project_task_lists.completed_on IS NOT NULL')
+		def open(include_private = true, reload=false)
+			ProjectTaskList.priv_scope(include_private) do
+			  # Grab open task lists only
+			  find(:all, :conditions => 'project_task_lists.completed_on IS NULL')
+			end
+		end
+		
+		def completed(include_private = true, reload=false)
+			ProjectTaskList.priv_scope(include_private) do
+			  # Grab completed task lists only
+			  find(:all, :conditions => 'project_task_lists.completed_on IS NOT NULL')
+			end
 		end
 	end
 	
 	has_many :project_forms, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
-		def visible(reload=false)
-			# Grab visible forms only
-			find(:all, :conditions => ['project_forms.is_visible = ?', true])
+		def visible(include_private = true, reload=false)
+			ProjectForm.priv_scope(include_private) do
+			  # Grab visible forms only
+			  find(:all, :conditions => ['project_forms.is_visible = ?', true])
+			end
 		end
 	end
 	
 	has_many :project_folders, :dependent => :destroy
 	has_many :project_files, :dependent => :destroy do
-		def important(reload=false)
-			find(:all, :conditions => ['is_important = ?', true])
+		def important(include_private = true, reload=false)
+			ProjectFile.priv_scope(include_private) do
+			  find(:all, :conditions => ['is_important = ?', true])
+			end
 		end
 	end
 	has_many :project_messages, :dependent => :destroy do
-		def important(reload=false)
-			find(:all, :conditions => ['is_important = ?', true])
+		def important(include_private = true, reload=false)
+			ProjectMessage.priv_scope(include_private) do
+			  find(:all, :conditions => ['is_important = ?', true])
+			end
 		end
 	end
 	has_many :project_message_categories, :dependent => :destroy

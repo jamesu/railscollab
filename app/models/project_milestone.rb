@@ -189,6 +189,16 @@ class ProjectMilestone < ActiveRecord::Base
 	 @update_completed_user = user
 	end
 	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
+	
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)

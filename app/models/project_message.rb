@@ -107,6 +107,16 @@ class ProjectMessage < ActiveRecord::Base
 	def send_notification(user)
 		Notifier.deliver_message(user, self)
 	end
+	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
 		
     # Core permissions
     

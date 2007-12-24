@@ -81,7 +81,7 @@ class TimeController < ApplicationController
       return
     end
     
-    @open_task_lists = @active_project.project_task_lists.open
+    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
     
     case request.method
       when :post
@@ -114,7 +114,7 @@ class TimeController < ApplicationController
       return
     end
     
-    @open_task_lists = @active_project.project_task_lists.open
+    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
     
     case request.method
       when :post

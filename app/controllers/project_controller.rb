@@ -42,18 +42,19 @@ class ProjectController < ApplicationController
   
   def overview
       project = @active_project
+      include_private = @logged_user.member_of_owner?
 	  when_fragment_expired "user#{@logged_user.id}_#{@active_project.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
 		@project_log_entries = (@logged_user.member_of_owner? ? project.application_logs : project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
 	  end
 	  
-      @late_milestones = project.project_milestones.late
-      @today_milestones = project.project_milestones.todays
-      @upcomming_milestones = project.project_milestones.upcomming
+      @late_milestones = project.project_milestones.late(include_private)
+      @today_milestones = project.project_milestones.todays(include_private)
+      @upcomming_milestones = project.project_milestones.upcomming(include_private)
       
-      @visible_forms = project.project_forms.visible
-      @project_companies = project.companies
-      @important_messages = project.project_messages.important
-      @important_files = project.project_files.important
+      @visible_forms = project.project_forms.visible(include_private)
+      @project_companies = project.companies(include_private)
+      @important_messages = project.project_messages.important(include_private)
+      @important_files = project.project_files.important(include_private)
       
       @content_for_sidebar = 'overview_sidebar'
   end

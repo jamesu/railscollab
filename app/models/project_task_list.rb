@@ -154,6 +154,16 @@ class ProjectTaskList < ActiveRecord::Base
 	 return (completed_count > 0 and completed_count == self.project_tasks.length)
 	end
 	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
+	
 	def self.select_list(project)
 	   ProjectTaskList.find(:all, :conditions => "project_id = #{project.id}", :select => 'id, name').collect do |tasklist|
 	      [tasklist.name, tasklist.id]

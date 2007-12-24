@@ -117,6 +117,16 @@ class ProjectFile < ActiveRecord::Base
 	def send_comment_notifications(comment)
 	end
 	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
+	
 	def add_revision(file, new_revision, user, comment)
 		file_revision = ProjectFileRevision.new(:revision_number => new_revision)
 		file_revision.project_file = self

@@ -32,6 +32,16 @@ class Tag < ActiveRecord::Base
 		url_for :only_path => true, :controller => 'project', :action => 'tags', :id => self.tag, :active_project => self.project_id
 	end
 	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
+	
 	def self.find_objects(tag_name, project, is_public)
 		tag_conditions = is_public ?
 		                 ['project_id = ? AND tag = ? AND is_private = ?', project.id, tag_name, false] : 

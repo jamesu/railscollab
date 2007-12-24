@@ -150,7 +150,7 @@ class FeedController < ApplicationController
   		return
   	end
   	
-  	@milestones = @project.open_milestones
+  	@milestones = @project.project_milestones.open(@logged_user.member_of_owner?)
   	@milestones_url = AppConfig.site_url + @logged_user.milestone_feed_url(@project)
 		    
   	respond_to do |format|

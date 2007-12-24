@@ -513,8 +513,8 @@ class BasecampController < ApplicationController
   	# Allow for constraints
   	if !@request_fields.nil?
   		if @request_fields.has_key?(:complete)
-  			@task_lists = @request_fields[:complete] ? @active_project.project_task_lists.completed : 
-  			                                           @active_project.project_task_lists.open
+  			@task_lists = @request_fields[:complete] ? @active_project.project_task_lists.completed(@logged_user.member_of_owner?) : 
+  			                                           @active_project.project_task_lists.open(@logged_user.member_of_owner?)
   			return
   		end
   	end
@@ -753,25 +753,27 @@ class BasecampController < ApplicationController
   
   # /projects/#{project_id}/milestones/list
   def projects_milestones_list
+  	include_private = @logged_user.member_of_owner?
+  	
   	# Allow for constraints
   	if !@request_fields.nil?
   		if @request_fields.has_key?(:find)
   			case @request_fields[:find]
   				when 'late'
-  					@milestones = @active_project.project_milestones.late
+  					@milestones = @active_project.project_milestones.late(include_private)
   					return
   				when 'completed'
-  					@milestones = @active_project.project_milestones.completed
+  					@milestones = @active_project.project_milestones.completed(include_private)
   					return
   				when 'upcoming'
-  					@milestones = @active_project.project_milestones.upcomming
+  					@milestones = @active_project.project_milestones.upcomming(include_private)
   					return
   			end
   		end
   	end
   	
   	# Otherwise display everything
-  	@milestones = @active_project.project_milestones
+  	@milestones = include_private ? @active_project.project_milestones : @active_project.project_milestones.public
   end
   
   # /milestones/uncomplete/#{id}

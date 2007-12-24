@@ -84,6 +84,16 @@ class ProjectForm < ActiveRecord::Base
 		write_attribute("in_object_id", value.id)
 	end
 	
+	def self.priv_scope(include_private)
+	  if include_private
+	    yield
+	  else
+	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	      yield 
+	    end
+	  end
+	end
+	
 	# Assignment for actions
 	
 	def add_comment_object
