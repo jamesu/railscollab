@@ -1,3 +1,117 @@
+# Tabs
+overview: Overview
+my_projects: My projects
+my_tasks: My tasks
+my_account: My account
+index: Index
+company: Company
+members: Members
+clients: Clients
+projects: Projects
+configuration: Configuration
+tools: Tools
+upgrade: Upgrade
+messages: Messages
+tasks: Tasks
+milestones: Milestones
+time: Time
+files: Files
+tags: Tags
+forms: Forms
+people: People
+
+userbox_more: More
+
+# Crumbs
+dashboard: Dashboard
+account: Account
+administration: Administration
+index: Index
+
+# Actions
+order_by_name: Order by name
+order_by_priority: Order by priority
+sort_by_finished_date: Sort by finished date
+sort_by_hours: Sort by hours
+report_by_task: Report by task
+
+# Page titles & actions
+add_project: Add project
+add_user: Add user
+add_client: Add client
+update_profile: Update profile
+change_password: Change password
+update_avatar: Update avatar
+permissions: Permissions
+edit_company: Edit company
+edit_company_logo: Edit company logo
+add_file: Add file
+edit_file: Edit file
+attach_files: Attach files
+file_details: File details
+add_folder: Add folder
+edit_folder: Edit folder
+forgot_password: Forgot password
+login: Login
+update_permissions: Update permissions
+edit_client: Edit client
+update_logo: Update logo
+forms: Forms
+add_form: Add form
+edit_form: Edit form
+add_time: Add time
+edit_time: Edit time
+edit_user: Edit user
+add_message: Add message
+edit_message: Edit message
+add_message_category: Add message category
+add_category: Add category
+edit_message_category: Edit message category
+edit_category: Edit category
+view_message: View message
+add_milestone: Add milestone
+edit_milestone: Edit milestone
+add_task_list: Add task list
+add_task: Add task
+edit_task_list: Edit task list
+edit_task: Edit task
+reorder_tasks: Reorder tasks
+search_results: Search results
+add_project: Add project
+edit_project: Edit project
+user_card: User card of {user}
+folder_name: "Folder : {folder}"
+
+# Feeds
+recent_milestones_feed: Recent milestones feed
+recent_milestones_feed_info: Recent milestones for all projects
+recent_activities_feed: Recent activities feed
+recent_activities_feed_info: Recent activities for all projects
+recent_project_milestones_feed: "{project} Recent milestones feed"
+recent_project_milestones_feed_info: "Recent milestones for the {project} project"
+recent_project_activities_feed: "{project} Recent activities feed"
+recent_project_activities_feed_info: "Recent activities for the {project} project"
+
+# New account steps
+welcome_to_new_account: Welcome to your newly created account
+welcome_to_new_account_info: "{user}, welcome to your new account. From now on it will always be available on {url} (you can bookmark this link). You can get started in a minute following these easy steps:"
+new_account_step1: "Step 1: Update your company info"
+new_account_step1_info: "<a href='{url}'>Set your company details</a> such as phone and fax number, address, email, homepage etc"
+new_account_step2: "Step 2: Add team members"
+new_account_step2_info: "You can <a href='{url}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system"
+new_account_step3: "Step 3: Add client companies and their members"
+new_account_step3_info: "Now it's time to <a href='{url}'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)"
+new_account_step4: "Step 4: Start a project"
+new_account_step4_info: "Defining a <a href='{url}'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients."
+
+hide_welcome_info: "&raquo; Hide this info permanently"
+
+welcome_to_administration: Welcome to the administration panel. Using this tool you can manage your company data, members, clients and projects you are involved in.
+
+# User box
+welcome_back: "Welcome back <strong>{user}</strong>"
+logout: Logout
+are_you_sure_logout: Are you sure you want to log out?
 
 # Permission names
 can_manage_messages: Manage messages
@@ -8,3 +122,5 @@ can_upload_files: Upload files
 can_manage_files: Manage files
 can_assign_to_owners: Assign tasks to members of owner company
 can_assign_to_other: Assign tasks to members of other clients
+
+product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
