@@ -32,6 +32,11 @@ class ApplicationController < ActionController::Base
   
 protected
   
+  def error_status(error, message)
+  	flash[:error] = error
+  	flash[:message] = message.l
+  end
+  
   def process_session
     @active_project = nil
     
