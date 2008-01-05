@@ -6,7 +6,7 @@
     <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% end %>
 <% if user.is_admin %>
-    <li><%= link_to :administration.l :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :administration.l, :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% end %>
   </ul>
   
