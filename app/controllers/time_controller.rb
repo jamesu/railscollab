@@ -30,7 +30,7 @@ class TimeController < ApplicationController
 
   before_filter :login_required
   before_filter :process_session
-  before_filter :obtain_time, :except => [:index, :add]
+  before_filter :obtain_time, :except => [:index, :add, :by_task]
   after_filter  :user_track, :only => [:index, :view, :by_task] 
   
   def index

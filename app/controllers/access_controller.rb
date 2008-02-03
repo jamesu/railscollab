@@ -27,7 +27,7 @@ class AccessController < ApplicationController
           
           session['user_id'] = @logged_user.id
         else
-          flash[:flash_error]  = "Login unsuccessful"
+          error_status(false, :login_failure)
         end
     end
   end

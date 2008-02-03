@@ -1,6 +1,6 @@
 <%
-  @page_title = :user_card.l_with_args(@user.display_name)
-  @tabbed_navigation_items = dashboard_tabbed_navigation
+  @page_title = :user_card.l_with_args({:user => @user.display_name})
+  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
   @bread_crumbs = dashboard_crumbs(h @logged_user.display_name)
   
   @page_actions = []
