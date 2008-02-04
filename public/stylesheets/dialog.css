@@ -179,7 +179,7 @@ span.required {
   text-align: left;
 }
 
-#error, #success {
+.flash_error, .flash_success {
   margin: 10px 0;
   padding: 5px 10px;
   border: 1px solid #ccc;
@@ -188,12 +188,12 @@ span.required {
   text-align: left;
 }
 
-#error {
+.flash_error {
   background: #FFB0B0;
   border-color: red;
 }
 
-#success {
+.flash_success {
   background: #90DC90;
   border-color: green;
 }

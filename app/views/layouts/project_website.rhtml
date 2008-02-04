@@ -14,7 +14,12 @@
 	  <%= stylesheet_link_tag ss %>
 	  <% end %>
 	<% end %>
-	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag 'prototype.js' %>
+	<%= javascript_include_tag 'effects.js' %>
+	<%= javascript_include_tag 'dragdrop.js' %>
+	<%= javascript_include_tag 'controls.js' %>
+	<%= javascript_include_tag 'lowpro.js' %>
+	<%= javascript_include_tag 'application.js' %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">
@@ -60,13 +65,9 @@
       <!-- content wrapper -->
       <div id="outerContentWrapper">
         <div id="innerContentWrapper">
-<% if flash[:flash_success] %>
-          <div id="success" onclick="this.style.display = 'none'"><%= h flash[:flash_success] %></div>
+<% if flash[:message] %>
+          <div id="status_bar" class="<%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
-<% if flash[:flash_error] %>
-          <div id="error" onclick="this.style.display = 'none'"><%= h flash[:flash_error] %></div>
-<% end %>
-
           <h1 id="pageTitle"><%= h @page_title %></h1>
           <div id="pageContent">
             <div id="content">
