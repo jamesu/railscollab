@@ -1,6 +1,16 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+var StatusBar = Behavior.create({
+	onclick: function(e)
+	{
+		var source = Event.element(e);
+		Event.stop(e);
+		
+		Effect.Fade(source);
+	}
+});
+
 // Userbox stuff
 var userbox_menu_names = ['account_more_', 'projects_more_', 'administration_more_'];
 var userbox_current_menu = null;
@@ -296,3 +306,7 @@ function notify_form_select_company(id)
 }
   	
 Event.observe(window, 'load', userbox_init, false);
+
+Event.addBehavior({
+	'#status_bar' : StatusBar()
+});
