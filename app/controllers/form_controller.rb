@@ -43,7 +43,7 @@ class FormController < ApplicationController
     if @logged_user.member_of_owner?
   		@forms = @active_project.project_forms
     else
-  		@forms = @active_project.visible_forms
+  		@forms = @active_project.project_forms.visible
   	end
   end
   
@@ -69,7 +69,7 @@ class FormController < ApplicationController
         end
     end
     
-    @visible_forms = @active_project.visible_forms
+    @visible_forms = @active_project.project_forms.visible
     @content_for_sidebar = 'submit_sidebar'
   end
   
