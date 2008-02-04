@@ -25,7 +25,7 @@ class TimeController < ApplicationController
   
   verify :method => :post,
   		 :only => :delete,
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
 
   before_filter :login_required
@@ -57,16 +57,8 @@ class TimeController < ApplicationController
   end
   
   def view
-    begin
-      @time = ProjectTime.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid time record"
-      redirect_back_or_default :controller => 'time'
-      return
-    end
-    
     if not @time.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
     end
@@ -76,7 +68,7 @@ class TimeController < ApplicationController
     @time = ProjectTime.new
     
     if not ProjectTime.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
     end
@@ -93,23 +85,15 @@ class TimeController < ApplicationController
         @time.created_by = @logged_user
         
         if @time.save
-          flash[:flash_success] = "Successfully added time record"
+          error_status(false, :success_added_time)
           redirect_back_or_default :controller => 'time'
         end
     end
   end
   
   def edit
-    begin
-      @time = ProjectTime.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid time record"
-      redirect_back_or_default :controller => 'time'
-      return
-    end
-    
     if not @time.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
     end
@@ -124,7 +108,7 @@ class TimeController < ApplicationController
         @time.updated_by = @logged_user
         
         if @time.save
-          flash[:flash_success] = "Successfully edited time record"
+          error_status(false, :success_edited_time)
           redirect_back_or_default :controller => 'time', :id => @time.id
         end
     end
@@ -132,7 +116,7 @@ class TimeController < ApplicationController
   
   def delete
     if not @time.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
     end
@@ -140,7 +124,7 @@ class TimeController < ApplicationController
     @time.updated_by = @logged_user
     @time.destroy
     
-    flash[:flash_success] = "Successfully deleted time record"
+    error_status(false, :success_deleted_time)
     redirect_back_or_default :controller => 'time'
   end
 
@@ -150,7 +134,7 @@ private
     begin
       @time = ProjectTime.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid time record"
+      error_status(true, :invalid_time)
       redirect_back_or_default :controller => 'time'
       return false
     end

@@ -25,7 +25,7 @@ class TaskController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete_list, :delete_task, :open_task, :complete_task ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
   
   before_filter :login_required
@@ -44,13 +44,13 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task list"
+      error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task', :action => 'index'
       return
     end
     
     if not @task_list.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task', :action => 'index'
       return
     end
@@ -63,7 +63,7 @@ class TaskController < ApplicationController
   
   def add_list    
     if not ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -89,7 +89,7 @@ class TaskController < ApplicationController
         if @task_list.save
           @task_list.tags = task_attribs[:tags]
         
-          flash[:flash_success] = "Successfully added task"
+          error_status(false, :success_added_task_list)
           redirect_back_or_default :controller => 'task'
         end
     end 
@@ -99,13 +99,13 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task_list.can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -120,7 +120,7 @@ class TaskController < ApplicationController
         @task_list.tags = task_attribs[:tags]
         
         if @task_list.save
-          flash[:flash_success] = "Successfully modified task"
+          error_status(false, :success_edited_task_list)
           redirect_back_or_default :controller => 'task'
         end
     end 
@@ -130,13 +130,13 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task_list.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -144,7 +144,7 @@ class TaskController < ApplicationController
     @task_list.updated_by = @logged_user
     @task_list.destroy
     
-    flash[:flash_success] = "Successfully deleted task"
+    error_status(false, :success_deleted_task_list)
     redirect_back_or_default :controller => 'milestone'
   end
   
@@ -152,13 +152,13 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task_list.can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -198,7 +198,7 @@ class TaskController < ApplicationController
     begin
       @task_list = ProjectTaskList.find(params[:task_list_id])
     rescue ActiveRecord::RecordNotFound
-	  flash[:flash_error] = "Invalid task list"
+	  error_status(true, :invalid_task)
 	  if params[:partial]
 		render :text => '403 Invalid', :status => 403
 	  else
@@ -209,7 +209,7 @@ class TaskController < ApplicationController
     end
     
     if not ProjectTask.can_be_created_by(@logged_user, @task_list)
-	  flash[:flash_error] = "Insufficient permissions"
+	  error_status(true, :insufficient_permissions)
       if params[:partial]
 		render :text => '403 Invalid', :status => 403
 	  else
@@ -230,7 +230,7 @@ class TaskController < ApplicationController
         @task.task_list = @task_list
         
         if @task.save
-          flash[:flash_success] = "Successfully added task"
+          error_status(false, :success_added_task)
 		  
 		  if params[:partial]
 			render :partial => 'task/task_item', :collection => [@task], :locals => {:tprefix => "openTasksList#{@task_list.id}"}
@@ -247,13 +247,13 @@ class TaskController < ApplicationController
     begin
       @task = ProjectTask.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task.can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -266,7 +266,7 @@ class TaskController < ApplicationController
         @task.updated_by = @logged_user
         
         if @task.save
-          flash[:flash_success] = "Successfully modified task"
+          error_status(false, :success_edited_task)
           redirect_back_or_default :controller => 'task'
         end
     end 
@@ -276,13 +276,13 @@ class TaskController < ApplicationController
     begin
       @task = ProjectTask.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -290,7 +290,7 @@ class TaskController < ApplicationController
     @task.updated_by = @logged_user
     @task.destroy
     
-    flash[:flash_success] = "Successfully deleted task"
+    error_status(false, :success_deleted_task)
     redirect_back_or_default :controller => 'milestone'
   end
   
@@ -298,19 +298,19 @@ class TaskController < ApplicationController
     begin
       @task = ProjectTask.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task.can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task.completed_on.nil?
-      flash[:flash_error] = "Task already completed"
+      error_status(true, :task_already_completed)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -318,7 +318,7 @@ class TaskController < ApplicationController
     @task.set_completed(true, @logged_user)
     
     if not @task.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'task'
@@ -328,19 +328,19 @@ class TaskController < ApplicationController
     begin
       @task = ProjectTask.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid task"
+      error_status(true, :invalid_task)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if not @task.can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'task'
       return
     end
     
     if @task.completed_on.nil?
-      flash[:flash_error] = "Task already open"
+      error_status(true, :task_already_open)
       redirect_back_or_default :controller => 'task'
       return
     end
@@ -348,7 +348,7 @@ class TaskController < ApplicationController
     @task.set_completed(false, @logged_user)
     
     if not @task.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'task'

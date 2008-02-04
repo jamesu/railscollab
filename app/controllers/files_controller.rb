@@ -25,7 +25,7 @@ class FilesController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete_folder, :delete_file, :detatch_from_object ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'file', :action => 'index' }
 
   before_filter :login_required
@@ -67,13 +67,13 @@ class FilesController < ApplicationController
     begin
       @folder ||= ProjectFolder.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid folder"
+      error_status(true, :invalid_folder)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if !@folder.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
     end
     
@@ -106,7 +106,7 @@ class FilesController < ApplicationController
     @folder = ProjectFolder.new
     
     if not ProjectFolder.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -122,7 +122,7 @@ class FilesController < ApplicationController
         if @folder.save
           ApplicationLog::new_log(@folder, @logged_user, :add)
           
-          flash[:flash_success] = "Successfully added folder"
+          error_status(false, :success_added_folder.l)
           redirect_back_or_default :controller => 'files'
         end
     end
@@ -132,13 +132,13 @@ class FilesController < ApplicationController
     begin
       @folder ||= ProjectFolder.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid folder"
+      error_status(true, :invalid_folder)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @folder.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -152,7 +152,7 @@ class FilesController < ApplicationController
         if @folder.save
           ApplicationLog::new_log(@folder, @logged_user, :edit)
           
-          flash[:flash_success] = "Successfully edited folder"
+          error_status(false, :success_edited_folder)
           redirect_back_or_default :controller => 'files'
         end
     end
@@ -162,13 +162,13 @@ class FilesController < ApplicationController
     begin
       @folder ||= ProjectFolder.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid folder"
+      error_status(true, :invalid_folder.l)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @folder.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -176,7 +176,7 @@ class FilesController < ApplicationController
     ApplicationLog::new_log(@folder, @logged_user, :delete)
     @folder.destroy
     
-    flash[:flash_success] = "Successfully deleted folder"
+    error_status(false, :success_deleted_folder)
     redirect_back_or_default :controller => 'files'
   end
   
@@ -186,19 +186,19 @@ class FilesController < ApplicationController
     begin
       @file ||= ProjectFile.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid file"
+      error_status(true, :invalid_file)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if !@file.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
     end
     
     @revisions = @file.project_file_revisions
     if @revisions.length == 0
-      flash[:flash_error] = "No revisions in file"
+      error_status(true, :no_file_revisions)
       redirect_back_or_default :controller => 'files'
     end
     
@@ -221,7 +221,7 @@ class FilesController < ApplicationController
     begin
       @file ||= ProjectFile.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid file"
+      error_status(true, :invalid_file)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -232,7 +232,7 @@ class FilesController < ApplicationController
 	    begin
 	      @file_revision = ProjectFileRevision.find(:first, :conditions => ['file_id = ? AND revision_number = ?', @file.id, revision_id])
 	    rescue ActiveRecord::RecordNotFound
-	      flash[:flash_error] = "Invalid file revision"
+	      error_status(true, :invalid_file_revision)
 	      redirect_back_or_default :controller => 'files'
 	      return
 	    end
@@ -258,7 +258,7 @@ class FilesController < ApplicationController
     @file = ProjectFile.new
     
     if not ProjectFile.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -303,7 +303,7 @@ class FilesController < ApplicationController
 	          
 	          @file.tags = file_attribs[:tags]
 	          
-	          flash[:flash_success] = "Successfully added file"
+	          error_status(false, :success_added_file)
 	          redirect_back_or_default :controller => 'files'
 	        end
         end
@@ -314,13 +314,13 @@ class FilesController < ApplicationController
     begin
       @file = ProjectFile.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid file"
+      error_status(true, :invalid_file)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @file.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -356,7 +356,7 @@ class FilesController < ApplicationController
 	          
 	          @file.tags = file_attribs[:tags]
 	          
-	          flash[:flash_success] = "Successfully edited file"
+	          error_status(false, :success_edited_file)
 	          redirect_back_or_default :controller => 'files'
 	        end
         end
@@ -367,13 +367,13 @@ class FilesController < ApplicationController
     begin
       @file = ProjectFile.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid file"
+      error_status(true, :invalid_file)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @file.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -381,7 +381,7 @@ class FilesController < ApplicationController
     @file.updated_by = @logged_user
     @file.destroy
     
-    flash[:flash_success] = "Successfully deleted file"
+    error_status(false, :success_deleted_file)
     redirect_back_or_default :controller => 'files'
   end
   
@@ -409,7 +409,7 @@ class FilesController < ApplicationController
     rel_object_id = params[:object_id]
     
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'ProjectMessage'].include?(rel_object_type))
-      flash[:flash_error] = "Invalid request"
+      error_status(true, :invalid_request)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -418,13 +418,13 @@ class FilesController < ApplicationController
     begin
        @attach_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid object"
+      error_status(true, :invalid_object)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @attach_object.file_can_be_added_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default @attach_object.object_url
       return
     end
@@ -436,9 +436,9 @@ class FilesController < ApplicationController
       	if attach_attribs[:what] == 'new_file'
       		begin
       			ProjectFile.handle_files(params[:uploaded_files], @attach_object, @logged_user, @attach_object.is_private)	
-      			flash[:flash_success] = "Attached new file to object"
+      			error_status(false, :success_added_new_file_to_object)
       		rescue
-      			flash[:flash_error] = "Error attaching new file to object"
+      			error_status(false, :error_adding_file_to_object)
       		end
       		
      		redirect_back_or_default @attach_object.object_url
@@ -447,7 +447,7 @@ class FilesController < ApplicationController
       		begin
       			existing_file = ProjectFile.find(attach_attribs[:file_id])
       		rescue ActiveRecord::RecordNotFound
-      			flash[:flash_error] = "Invalid existing file"
+      			error_status(true, :invalid_file)
      			redirect_back_or_default @attach_object.object_url
      			return
       		end
@@ -462,12 +462,12 @@ class FilesController < ApplicationController
       		
       		@attach_object.project_file << existing_file unless does_exist
       		
-      		flash[:flash_success] = "Attached file to object"
+      		error_status(false, :success_added_file_to_object)
      		redirect_back_or_default @attach_object.object_url
      		return
       	end
       	
-      	flash[:flash_error] = "Error attaching file"
+      	error_status(true, :error_adding_file_to_object)
         redirect_back_or_default @attach_object.object_url
       	return
     end
@@ -479,7 +479,7 @@ class FilesController < ApplicationController
     rel_object_id = params[:object_id]
     
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'ProjectMessage'].include?(rel_object_type))
-      flash[:flash_error] = "Invalid request"
+      error_status(true, :invalid_request)
       redirect_back_or_default :controller => 'files'
       return
     end
@@ -488,13 +488,13 @@ class FilesController < ApplicationController
     begin
        @attach_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid object"
+      error_status(true, :invalid_object)
       redirect_back_or_default :controller => 'files'
       return
     end
     
     if not @attach_object.file_can_be_added_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default @attach_object.object_url
       return
     end
@@ -502,14 +502,14 @@ class FilesController < ApplicationController
     begin
        existing_file = ProjectFile.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid file"
+      error_status(true, :invalid_file)
       redirect_back_or_default @attach_object.object_url
       return
     end
     
     AttachedFile.clear_attachment(@attach_object, existing_file.id)
          		
-    flash[:flash_success] = "Removed file from object"
+    error_status(false, :success_removed_file_from_object)
     redirect_back_or_default @attach_object.object_url
   end
 
@@ -522,7 +522,7 @@ protected
 	    begin
 	      @folder = ProjectFolder.find(:first, :conditions => ['name = ?', params[:folder_name]])
 	    rescue ActiveRecord::RecordNotFound
-	      flash[:flash_error] = "Invalid folder"
+	      error_status(true, :invalid_folder)
 	      redirect_back_or_default :controller => 'files'
 	      return false
 	    end
@@ -530,7 +530,7 @@ protected
 	    begin
 	      @folder = ProjectFolder.find(params[:folder_id])
 	    rescue ActiveRecord::RecordNotFound
-	      flash[:flash_error] = "Invalid folder id"
+	      error_status(true, :invalid_folder)
 	      redirect_back_or_default :controller => 'files'
 	      return false
 	    end

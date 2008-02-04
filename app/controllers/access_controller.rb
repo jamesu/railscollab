@@ -22,12 +22,12 @@ class AccessController < ApplicationController
         @logged_user = User.authenticate(login_params['user'], login_params['password']) 
         
         if !@logged_user.nil?
-          flash[:flash_success]  = "Login successful"
+          error_status(false, :login_success)
           redirect_back_or_default :controller => "dashboard"
           
           session['user_id'] = @logged_user.id
         else
-          error_status(false, :login_failure)
+          error_status(true, :login_failure)
         end
     end
   end
@@ -45,7 +45,7 @@ class AccessController < ApplicationController
         # redirect to the server
         redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + '/'), url_for(:action => 'complete'))
       else
-        flash[:flash_error] = "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+        error_status(true, :invalid_openid_server, {:openid_url => h(params[:openid_url])})
         redirect_to :action => 'login'
     end
   end
@@ -57,9 +57,9 @@ class AccessController < ApplicationController
         # URL that we were verifying. We include it in the error
         # message to help the user figure out what happened.
         if open_id_response.identity_url
-          flash[:flash_error] = "Verification of #{open_id_response.identity_url} failed. "
+          error_status(true, :failed_verification_openid_url, {:openid_url => h(open_id_response.identity_url)})
         else
-          flash[:flash_error] = "Verification failed. "
+          error_status(true, :verification_failed)
         end
         flash[:message] += open_id_response.msg.to_s
     
@@ -70,19 +70,19 @@ class AccessController < ApplicationController
           
         log_user = User.openid_login(open_id_response.identity_url)
         if log_user.nil?
-          flash[:flash_error] = "Failed login with identity #{open_id_response.identity_url}."
+          error_status(true, :failed_login_openid_url, {:openid_url => h(open_id_response.identity_url)})
         else
-          flash[:flash_success] = "You have successfully logged in with #{open_id_response.identity_url} as your identity."
+          error_status(false, :success_login_openid_url, {:openid_url => h(open_id_response.identity_url)})
           redirect_back_or_default :controller => "dashboard"
           session['user_id'] = log_user.id
           return
         end
     
       when OpenID::CANCEL
-        flash[:flash_error] = "Verification cancelled."
+        error_status(true, :verification_cancelled)
     
       else
-        flash[:flash_error] = "Unknown response status: #{open_id_response.status}"
+        error_status(true, :unknown_response_status, {:status => h(open_id_response.status)})
     end
     redirect_to :action => 'login'
   end
@@ -98,13 +98,13 @@ class AccessController < ApplicationController
         @your_email = params[:your_email]
         
         if not @your_email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-          flash[:flash_error] = "Invalid email address"
+          error_status(false, :invalid_email)
           return
         end
         
         user = User.by_email(@your_email)
         if user.nil?
-          flash[:flash_error] = "Email address not in use"
+          error_status(false, :invalid_email_not_in_use)
           return
         end
         

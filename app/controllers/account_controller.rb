@@ -23,7 +23,7 @@ class AccountController < ApplicationController
 
   verify :method => :post,
   		 :only => [ :delete_avatar ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'account' }
   
   before_filter :login_required
@@ -93,7 +93,7 @@ class AccountController < ApplicationController
           real_im_values.each do |im_value|
             im_value.save
           end
-          flash[:flash_success] = "Successfully updated profile"
+          error_status(false, :success_updated_profile)
           redirect_back_or_default :controller => 'dashboard'
         end
     end
@@ -139,7 +139,7 @@ class AccountController < ApplicationController
         @user.password = @password_data[:password]
         @user.save
         
-        flash[:flash_success] = "Password changed"
+        error_status(false, :password_changed)
         redirect_back_or_default :controller => 'dashboard'
         return
     end
@@ -147,7 +147,7 @@ class AccountController < ApplicationController
   
   def update_permissions
     if !@user.permissions_can_be_updated_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -204,14 +204,14 @@ class AccountController < ApplicationController
           
           #ApplicationLog.new_log(@project, @logged_user, :edit, true)
             
-          flash[:flash_success] = "Successfully updated permissions"
+          error_status(false, :success_updated_permissions)
           redirect_to :controller => 'account', :action => 'update_permissions', :id => @user.id
     end
   end
   
   def edit_avatar
   	if not @user.profile_can_be_updated_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
@@ -229,9 +229,9 @@ class AccountController < ApplicationController
           
           if @user.errors.empty?
 	          if @user.save
-	          	flash[:flash_success] = "Successfully updated avatar"
+	          	error_status(false, :success_updated_avatar)
 	          else
-	          	flash[:flash_error] = "Error uploading avatar"
+	          	error_status(true, :error_updating_avatar)
 	          end
 	          
 	          redirect_to :controller => 'account', :action => 'edit_avatar', :id => @user.id
@@ -241,7 +241,7 @@ class AccountController < ApplicationController
   
   def delete_avatar    
   	if not @user.profile_can_be_updated_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
@@ -249,7 +249,7 @@ class AccountController < ApplicationController
     @user.avatar = nil
     @user.save
     
-    flash[:flash_success] = "Successfully deleted avatar"
+    error_status(false, :success_deleted_avatar)
     redirect_to :controller => 'account', :action => 'index'
   end
   
@@ -278,7 +278,7 @@ private
     begin
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid user"
+      error_status(true, :invalid_user)
       redirect_back_or_default :controller => 'dashboard'
       return false
     end

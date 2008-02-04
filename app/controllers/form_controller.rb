@@ -25,7 +25,7 @@ class FormController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
 
   before_filter :login_required
@@ -35,7 +35,7 @@ class FormController < ApplicationController
   
   def index
     if not ProjectForm.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'form'
       return
     end
@@ -49,7 +49,7 @@ class FormController < ApplicationController
   
   def submit
     if not @form.can_be_submitted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'form'
       return
     end
@@ -60,10 +60,11 @@ class FormController < ApplicationController
         
         if @form.submit(form_attribs, @logged_user)
           ApplicationLog::new_log(@form, @logged_user, :add)
-          flash[:flash_success] = @form.success_message
+          flash[:error] = false
+          flash[:message] = @form.success_message
           redirect_back_or_default :controller => 'form'
         else
-          flash[:flash_error] = "Error submitting form"
+          error_status(true, :error_submitting_form)
           redirect_back_or_default :controller => 'form'
         end
     end
@@ -76,7 +77,7 @@ class FormController < ApplicationController
     @form = ProjectForm.new
     
     if not ProjectForm.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
     end
@@ -93,7 +94,7 @@ class FormController < ApplicationController
         @form.created_by = @logged_user
         
         if @form.save
-          flash[:flash_success] = "Successfully added form"
+          error_status(false, :success_added_form)
           redirect_back_or_default :controller => 'form'
         end
     end
@@ -101,7 +102,7 @@ class FormController < ApplicationController
   
   def edit
     if not @form.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'form'
       return
     end
@@ -118,7 +119,7 @@ class FormController < ApplicationController
         @form.updated_by = @logged_user
         
         if @form.save
-          flash[:flash_success] = "Successfully edited form"
+          error_status(false, :success_edited_form)
           redirect_back_or_default :controller => 'form'
         end
     end
@@ -126,7 +127,7 @@ class FormController < ApplicationController
   
   def delete
     if not @form.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'form'
       return
     end
@@ -134,7 +135,7 @@ class FormController < ApplicationController
     @form.updated_by = @logged_user
     @form.destroy
     
-    flash[:flash_success] = "Successfully deleted form"
+    error_status(false, :success_deleted_form)
     redirect_back_or_default :controller => 'form'
   end
 
@@ -144,7 +145,7 @@ private
     begin
       @form = ProjectForm.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid form"
+      error_status(true, :invalid_form)
       redirect_back_or_default :controller => 'form'
       return false
     end

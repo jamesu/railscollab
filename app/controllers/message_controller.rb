@@ -25,7 +25,7 @@ class MessageController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete, :subscribe, :unsubscribe, :delete_category ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
   
   before_filter :login_required
@@ -56,7 +56,7 @@ class MessageController < ApplicationController
   
   def view
     if not @message.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -71,13 +71,13 @@ class MessageController < ApplicationController
     begin
       @category ||= ProjectMessageCategory.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid message category"
+      error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
       return
     end
     
     if !@category.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
     end
     
@@ -109,7 +109,7 @@ class MessageController < ApplicationController
     @category = ProjectMessageCategory.new
     
     if not ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -123,7 +123,7 @@ class MessageController < ApplicationController
         if @category.save
           ApplicationLog::new_log(@category, @logged_user, :add)
           
-          flash[:flash_success] = "Successfully added message category"
+          error_status(false, :success_added_message_category)
           redirect_back_or_default :controller => 'message'
         end
     end
@@ -133,13 +133,13 @@ class MessageController < ApplicationController
     begin
       @category ||= ProjectMessageCategory.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid message category"
+      error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
       return
     end
     
     if not @category.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -153,7 +153,7 @@ class MessageController < ApplicationController
         if @category.save
           ApplicationLog::new_log(@category, @logged_user, :edit)
           
-          flash[:flash_success] = "Successfully edited message category"
+          error_status(false, :success_edited_message_category)
           redirect_back_or_default :controller => 'message'
         end
     end
@@ -163,13 +163,13 @@ class MessageController < ApplicationController
     begin
       @category ||= ProjectMessageCategory.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid message category"
+      error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
       return
     end
     
     if not @category.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -177,7 +177,7 @@ class MessageController < ApplicationController
     ApplicationLog::new_log(@category, @logged_user, :delete)
     @category.destroy
     
-    flash[:flash_success] = "Successfully deleted message category"
+    error_status(false, :success_deleted_message_category)
     redirect_back_or_default :controller => 'message'
   end
 
@@ -186,7 +186,7 @@ class MessageController < ApplicationController
   
   def add
     if not ProjectMessage.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -251,9 +251,9 @@ class MessageController < ApplicationController
 		  end
           
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
-			flash[:flash_success] = "Successfully added message, some attachments failed validation"
+			error_status(false, :success_added_message_failed_attachments)
 		  else
-			flash[:flash_success] = "Successfully added message"
+			error_status(false, :success_added_message)
           end
           redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
         end
@@ -262,7 +262,7 @@ class MessageController < ApplicationController
   
   def edit
     if not @message.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -278,9 +278,9 @@ class MessageController < ApplicationController
         
         if @message.save
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
-			flash[:flash_success] = "Successfully updated message, some attachments failed validation"
+			error_status(false, :success_edited_message_failed_attachments)
 		  else
-			flash[:flash_success] = "Successfully updated message"
+			error_status(false, :success_edited_message)
           end          
           redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
         end
@@ -293,7 +293,7 @@ class MessageController < ApplicationController
   
   def delete
     if not @message.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -301,13 +301,13 @@ class MessageController < ApplicationController
     @message.updated_by = @logged_user
     @message.destroy
     
-    flash[:flash_success] = "Successfully deleted message"
+    error_status(false, :success_deleted_message)
     redirect_back_or_default :controller => 'dashboard'
   end
   
   def subscribe
     if not @message.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
@@ -318,20 +318,20 @@ class MessageController < ApplicationController
 		@message.subscribers << @logged_user
 	end
 
-    flash[:flash_success] = "Successfully subscribed to message"
+    error_status(false, :success_subscribed_to_message)
     redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
   end
   
   def unsubscribe
     if not @message.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'message'
       return
     end
 	
 	@message.subscribers.delete(@logged_user)
 
-    flash[:flash_success] = "Successfully unsubscribed from message"
+    error_status(false, :success_unsubscribed_from_message)
     redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id
   end
 
@@ -341,7 +341,7 @@ private
      begin
         @message = ProjectMessage.find(params[:id])
      rescue ActiveRecord::RecordNotFound
-       flash[:flash_error] = "Invalid message"
+       error_status(true, :invalid_message)
        redirect_back_or_default :controller => 'message'
        return false
      end

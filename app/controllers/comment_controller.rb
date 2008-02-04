@@ -25,7 +25,7 @@ class CommentController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
 
   before_filter :login_required
@@ -38,7 +38,7 @@ class CommentController < ApplicationController
     rel_object_id = params[:object_id]
     
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['ProjectMessage', 'ProjectMilestone', 'ProjectTask', 'ProjectTaskList', 'ProjectFile'].include?(rel_object_type))
-      flash[:flash_error] = "Invalid request"
+      error_status(true, :invalid_request)
       redirect_back_or_default :controller => 'dashboard', :action => 'index'
       return
     end
@@ -47,7 +47,7 @@ class CommentController < ApplicationController
     begin
        @commented_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid object"
+      error_status(true, :invalid_object)
       redirect_back_or_default :controller => 'dashboard', :action => 'index'
       return
     end
@@ -55,7 +55,7 @@ class CommentController < ApplicationController
 	@active_project = @commented_object.project
     
     if not @commented_object.comment_can_be_added_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default @commented_object.object_url
       return
     end
@@ -77,9 +77,9 @@ class CommentController < ApplicationController
           @commented_object.send_comment_notifications(@comment)
           
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
-			flash[:flash_success] = "Successfully added comment, some attachments failed validation"
+			error_status(false, :success_added_comment_error_files)
 		  else
-			flash[:flash_success] = "Successfully added comment"
+			error_status(false, :success_added_comment)
           end
           redirect_back_or_default @commented_object.object_url
         end
@@ -88,7 +88,7 @@ class CommentController < ApplicationController
   
   def edit
     if not @comment.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'project', :action => 'overview'
       return
     end
@@ -106,9 +106,9 @@ class CommentController < ApplicationController
           # TODO: notifications
           
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
-			flash[:flash_success] = "Successfully updated comment, some attachments failed validation"
+			error_status(false, :success_edited_comment_error_files)
 		  else
-			flash[:flash_success] = "Successfully updated comment"
+			error_status(false, :success_edited_comment)
           end
           redirect_back_or_default @commented_object.object_url
         end
@@ -117,7 +117,7 @@ class CommentController < ApplicationController
   
   def delete
     if not @comment.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'project', :action => 'overview'
       return
     end
@@ -125,7 +125,7 @@ class CommentController < ApplicationController
     @comment.updated_by = @logged_user
     @comment.destroy
     
-    flash[:flash_success] = "Successfully deleted comment"
+    error_status(false, :success_deleted_comment)
     redirect_back_or_default :controller => 'project', :action => 'overview'
   end
   
@@ -135,7 +135,7 @@ private
     begin
        @comment = Comment.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid comment"
+      error_status(true, :invalid_comment)
       redirect_back_or_default :controller => 'project', :action => 'overview'
       return false
     end

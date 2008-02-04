@@ -25,7 +25,7 @@ class MilestoneController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete, :complete, :open ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
     
   before_filter :login_required
@@ -46,7 +46,7 @@ class MilestoneController < ApplicationController
   
   def view
     if not @milestone.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -56,7 +56,7 @@ class MilestoneController < ApplicationController
     @milestone = ProjectMilestone.new
     
     if not ProjectMilestone.can_be_created_by(@logged_user, @active_project)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -73,7 +73,7 @@ class MilestoneController < ApplicationController
         if @milestone.save
           @milestone.tags = milestone_attribs[:tags]
           
-          flash[:flash_success] = "Successfully updated milestone"
+          error_status(false, :success_added_milestone)
           redirect_back_or_default :controller => 'milestone'
         end
     end 
@@ -81,7 +81,7 @@ class MilestoneController < ApplicationController
   
   def edit
     if not @milestone.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -95,7 +95,7 @@ class MilestoneController < ApplicationController
         @milestone.tags = milestone_attribs[:tags]
         
         if @milestone.save
-          flash[:flash_success] = "Successfully updated milestone"
+          error_status(false, :success_edited_milestone)
           redirect_back_or_default :controller => 'milestone'
         end
     end     
@@ -103,7 +103,7 @@ class MilestoneController < ApplicationController
   
   def delete
     if not @milestone.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -111,19 +111,19 @@ class MilestoneController < ApplicationController
     @milestone.updated_by = @logged_user
     @milestone.destroy
     
-    flash[:flash_success] = "Successfully deleted milestone"
+    error_status(false, :success_deleted_milestone)
     redirect_back_or_default :controller => 'milestone'
   end
   
   def complete
     if not @milestone.status_can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
    
     if @milestone.is_completed?
-      flash[:flash_error] = "Milestone already completed"
+      error_status(true, :milestone_already_completed)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -131,7 +131,7 @@ class MilestoneController < ApplicationController
 	@milestone.set_completed(true, @logged_user)
     
     if not @milestone.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'milestone', :action => 'view', :id => @milestone.id
@@ -139,13 +139,13 @@ class MilestoneController < ApplicationController
   
   def open
     if not @milestone.status_can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'milestone'
       return
     end
     
     if !@milestone.is_completed?
-      flash[:flash_error] = "Milestone already open"
+      error_status(true, :milestone_already_open)
       redirect_back_or_default :controller => 'milestone'
       return
     end
@@ -153,7 +153,7 @@ class MilestoneController < ApplicationController
 	@milestone.set_completed(false)
     
     if not @milestone.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'milestone', :action => 'view', :id => @milestone.id
@@ -165,7 +165,7 @@ private
     begin
       @milestone = ProjectMilestone.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid milestone"
+      error_status(true, :invalid_milestone)
       redirect_back_or_default :controller => 'milestone'
       return false
     end

@@ -46,12 +46,12 @@ class AdministrationController < ApplicationController
   end
   
   def configuration
-      flash[:flash_error] = "Edit config/config.yml for configuration options"
+      error_status(true, :edit_config_yml_for_options)
       redirect_back_or_default :controller => 'administration'
   end
   
   def tools
-      flash[:flash_error] = "Unimplemented"
+      error_status(true, :unimplemented)
       redirect_back_or_default :controller => 'administration'
   end
   

@@ -25,7 +25,7 @@ class CompanyController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete_client, :delete_logo, :hide_welcome_info ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
   
   before_filter :login_required
@@ -39,7 +39,7 @@ class CompanyController < ApplicationController
   
   def card    
     if not @company.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -47,7 +47,7 @@ class CompanyController < ApplicationController
   
   def view_client    
     if not @company.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -71,13 +71,13 @@ class CompanyController < ApplicationController
     begin
       @company = Company.owner
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid company"
+      error_status(true, :invalid_company)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
     
     if not @company.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -91,7 +91,7 @@ class CompanyController < ApplicationController
         if @company.save
           #ApplicationLog.new_log(@company, @logged_user, :edit, true)
           
-          flash[:flash_success] = "Successfully updated company"
+          error_status(false, :success_added_company)
           redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
         end
     end
@@ -99,7 +99,7 @@ class CompanyController < ApplicationController
   
   def add_client
     if not Company.can_be_created_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -117,7 +117,7 @@ class CompanyController < ApplicationController
         if @company.save
           #ApplicationLog.new_log(@company, @logged_user, :add, true)
           
-          flash[:flash_success] = "Successfully added client"
+          error_status(false, :success_added_client)
           redirect_back_or_default :controller => 'administration', :action => 'clients'
         end
     end      
@@ -125,7 +125,7 @@ class CompanyController < ApplicationController
   
   def edit_client    
     if not @company.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -140,7 +140,7 @@ class CompanyController < ApplicationController
         if @company.save
           #ApplicationLog.new_log(@company, @logged_user, :edit, true)
           
-          flash[:flash_success] = "Successfully updated company"
+          error_status(false, :success_edited_client)
           redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
           return
         end
@@ -151,16 +151,16 @@ class CompanyController < ApplicationController
   
   def delete_client    
   	if not @company.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
   	
   	begin
         @company.destroy
-        flash[:flash_success] = "Successfully deleted client"
+        error_status(true, :success_deleted_client)
   	rescue
-      flash[:flash_error] = "Error deleting client"
+      error_status(true, :error_deleting_client)
   	end
   	
     redirect_back_or_default :controller => 'administration', :action => 'clients'
@@ -168,14 +168,14 @@ class CompanyController < ApplicationController
   
   def update_permissions
   	if not @company.can_be_managed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
   	
   	@projects = Project.find(:all, :order => 'name')
   	if @projects.length == 0
-      flash[:flash_error] = "No projects"
+      error_status(true, :no_projects)
       redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
       return
   	end
@@ -207,7 +207,7 @@ class CompanyController < ApplicationController
 
   def edit_logo
   	if not @company.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
@@ -225,9 +225,9 @@ class CompanyController < ApplicationController
           
           if @company.errors.empty?
 	          if @company.save
-	          	flash[:flash_success] = "Successfully updated logo"
+	          	error_status(false, :success_updated_logo)
 	          else
-	          	flash[:flash_error] = "Error uploading logo"
+	            error_status(true, :error_uploading_logo)
 	          end
 	          
 	          redirect_to :controller => 'company', :action => 'card', :id => @company.id 
@@ -237,7 +237,7 @@ class CompanyController < ApplicationController
   
   def delete_logo
   	if not @company.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
   	end
@@ -245,7 +245,7 @@ class CompanyController < ApplicationController
     @company.logo = nil
     @company.save
     
-    flash[:flash_success] = "Successfully deleted logo"
+    error_status(false, :success_deleted_logo)
     redirect_to :controller => 'company', :action => 'card', :id => @company.id
   end
   
@@ -273,7 +273,7 @@ class CompanyController < ApplicationController
       owner = Company.owner
       
       if not owner.can_be_edited_by(@logged_user)
-        flash[:flash_error] = "Insufficient permissions"
+        error_status(true, :insufficient_permissions)
         redirect_back_or_default :controller => 'dashboard'
         return
       end
@@ -281,9 +281,9 @@ class CompanyController < ApplicationController
       owner.hide_welcome_info = true
       owner.save
       
-      flash[:flash_error] = "Welcome info hidden"
+      error_status(false, :welcome_info_hidden)
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Error hiding welcome info"
+      error_status(true, :invalid_company)
     end
     
     redirect_back_or_default :controller => 'dashboard'
@@ -295,7 +295,7 @@ private
     begin
       @company = Company.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid company"
+      error_status(true, :invalid_company)
       redirect_back_or_default :controller => 'dashboard'
       return false
     end

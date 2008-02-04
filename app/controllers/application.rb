@@ -32,9 +32,9 @@ class ApplicationController < ActionController::Base
   
 protected
   
-  def error_status(error, message)
+  def error_status(error, message, args={})
   	flash[:error] = error
-  	flash[:message] = message.l
+  	flash[:message] = message.l_with_args(args)
   end
   
   def process_session

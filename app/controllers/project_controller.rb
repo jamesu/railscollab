@@ -25,7 +25,7 @@ class ProjectController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete, :remove_user, :remove_company, :open, :complete ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
   
   before_filter :login_required
@@ -85,7 +85,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -97,7 +97,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_seen_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -109,7 +109,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_managed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -243,7 +243,7 @@ class ProjectController < ApplicationController
         #  flash[:flash_success] = "Error updating permissions"
         #  redirect_to :controller => 'project', :action => 'permissions'   
         #else
-          flash[:flash_success] = "Successfully updated permissions"
+          error_status(false, :success_updated_permissions)
           redirect_to :controller => 'project', :action => 'permissions'
         #end
     end 
@@ -253,7 +253,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_managed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -270,7 +270,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_managed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -291,7 +291,7 @@ class ProjectController < ApplicationController
   
   def add
     if not Project.can_be_created_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -332,7 +332,7 @@ class ProjectController < ApplicationController
 			ApplicationLog::new_log(category, @logged_user, :add) if category.save
           end
           
-          flash[:flash_success] = "Successfully added project"
+          error_status(false, :success_added_project)
           redirect_to :controller => 'project', :action => 'permissions', :active_project => @project.id
         end
     end 
@@ -342,7 +342,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_edited_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -355,7 +355,7 @@ class ProjectController < ApplicationController
         @project.updated_by = @logged_user
         
         if @project.save
-          flash[:flash_success] = "Successfully updated project"
+          error_status(false, :success_edited_project)
           redirect_back_or_default :controller => 'project'
         end
     end     
@@ -365,7 +365,7 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -373,7 +373,7 @@ class ProjectController < ApplicationController
     @project.updated_by = @logged_user
     @project.destroy
     
-    flash[:flash_success] = "Successfully deleted project"
+    error_status(false, :success_deleted_project)
     redirect_back_or_default :controller => 'dashboard'
   end
   
@@ -381,13 +381,13 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.status_can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return
     end
     
     if not @project.completed_by.nil?
-      flash[:flash_error] = "Project already completed"
+      error_status(true, :project_already_completed)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return
     end
@@ -395,7 +395,7 @@ class ProjectController < ApplicationController
     @project.set_completed(true, @logged_user)
     
     unless @project.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'administration', :action => 'projects'
@@ -405,13 +405,13 @@ class ProjectController < ApplicationController
     @project = @active_project
     
     if not @project.status_can_be_changed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return
     end
     
     if @project.completed_by.nil?
-      flash[:flash_error] = "Project already open"
+      error_status(true, :project_already_open)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return
     end
@@ -419,7 +419,7 @@ class ProjectController < ApplicationController
     @project.set_completed(false, @logged_user)
     
     unless @project.save
-      flash[:flash_error] = "Error saving"
+      error_status(true, :error_saving)
     end
     
     redirect_back_or_default :controller => 'administration', :action => 'projects'

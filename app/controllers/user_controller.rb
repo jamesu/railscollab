@@ -25,7 +25,7 @@ class UserController < ApplicationController
   
   verify :method => :post,
   		 :only => [ :delete ],
-  		 :add_flash => { :flash_error => "Invalid request" },
+  		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
 
   before_filter :login_required
@@ -38,7 +38,7 @@ class UserController < ApplicationController
   
   def add
     if not User.can_be_created_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -53,7 +53,7 @@ class UserController < ApplicationController
 	      	@company = Company.find(params[:company_id])
 	      end
 	    rescue ActiveRecord::RecordNotFound
-	      flash[:flash_error] = "Invalid company"
+	      error_status(true, :invalid_company)
 	      redirect_back_or_default :controller => 'dashboard'
 	      return
 	    end
@@ -104,7 +104,7 @@ class UserController < ApplicationController
         
         if @user.save
           #ApplicationLog.new_log(@user, @logged_user, :add, true)
-          flash[:flash_success] = "Successfully added user"
+          error_status(false, :success_added_user)
           redirect_back_or_default :controller => 'company', :action => 'view_client', :id => @company.id
         end
     end
@@ -112,7 +112,7 @@ class UserController < ApplicationController
   
   def edit
      # Note: doesn't seem to have been implemented in ActiveCollab
-    flash[:flash_success] = "Unimplemented"
+    error_status(true, :unimplemented)
     redirect_back_or_default :controller => 'dashboard'
   end
   
@@ -120,13 +120,13 @@ class UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid user"
+      error_status(true, :invalid_user)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
     
     if not @user.can_be_deleted_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
@@ -137,7 +137,7 @@ class UserController < ApplicationController
     @user.destroy
     ApplicationLog::new_log(@milestone, @logged_user, :delete, true)
     
-    flash[:flash_success] = "Deleted user #{old_name}"
+    error_status(false, :success_deleted_user, {:name => old_name})
     
     redirect_back_or_default :controller => 'company', :action => 'view', :id => old_id
   end
@@ -146,13 +146,13 @@ class UserController < ApplicationController
     begin
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      flash[:flash_error] = "Invalid user"
+      error_status(false, :invalid_user)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
     
     if not @user.can_be_viewed_by(@logged_user)
-      flash[:flash_error] = "Insufficient permissions"
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
     end
