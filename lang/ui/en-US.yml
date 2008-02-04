@@ -123,4 +123,108 @@ can_manage_files: Manage files
 can_assign_to_owners: Assign tasks to members of owner company
 can_assign_to_other: Assign tasks to members of other clients
 
+# Status messages
+login_success: Login successful
+login_failure: Invalid login
+invalid_openid_server: "Unable to find openid server for <q>{openid_url}</q>"
+failed_verification_openid_url: "Verification of {openid_url} failed"
+failed_login_openid_url: "Failed login with identity {openid_url}"
+success_login_openid_url: "You have successfully logged in with {openid_url} as your identity"
+verification_failed: Verification failed
+verification_cancelled: Verification cancelled
+unknown_response_status: "Unknown response status: {status}"
+invalid_email: Invalid email address
+invalid_email_not_in_use: Invalid email address
+success_updated_profile: Successfully updated profile
+password_changed: Password changed
+insufficient_permissions: Insufficient permissions
+success_updated_permissions: Successfully updated permissions
+success_updated_avatar: Successfully updated avatar
+error_updating_avatar: Error uploading avatar
+success_deleted_avatar: Successfully deleted avatar
+invalid_user: Invalid user
+edit_config_yml_for_options: "Edit config/config.yml for configuration options"
+invalid_object: Invalid object
+invalid_comment: Invalid comment
+success_added_comment_error_files: Successfully added comment, some attachments failed validation
+success_added_comment: Successfully added comment
+success_edited_comment_error_files: Successfully updated comment, some attachments failed validation
+success_edited_comment: Successfully updated comment
+success_deleted_comment: Successfully deleted comment
+invalid_company: Invalid company
+success_added_company: Successfully added company
+success_added_client: Successfully added client
+success_edited_client: Successfully updated client
+success_deleted_client: Successfully deleted client
+error_deleting_client: Error deleting client
+no_projects: No projects
+success_updated_logo: Successfully updated logo
+error_uploading_logo: Error uploading logo
+success_deleted_logo: Successfully deleted logo
+welcome_info_hidden: Welcome info hidden
+invalid_folder: Invalid folder
+success_added_folder: Successfully added folder
+success_edited_folder: Successfully updated folder
+success_deleted_folder: Successfully deleted folder
+invalid_file: Invalid file
+invalid_file_revision: Invalid file revision
+no_file_revisions: No file revisions
+success_added_file: Successfully added file
+success_edited_file: Successfully updated file
+success_deleted_file: Successfully deleted file
+success_added_new_file_to_object: Successfully attached new file to object
+error_adding_file_to_object: Error attaching new file to object
+success_added_file_to_object: Successfully attached file to object
+error_adding_file_to_object: Error attaching file to object
+success_removed_file_from_object: Successfully removed file from object
+invalid_form: Invalid form
+error_submitting_form: Error submitting form
+success_added_form: Successfully added form
+success_edited_form: Successfully updated form
+success_deleted_form: Successfully deleted form
+invalid_message_category: Invalid message category
+success_added_message_category: Successfully added message category
+success_edited_message_category: Successfully updated message category
+success_deleted_message_category: Successfully deleted message category
+invalid_message: Invalid message
+success_added_message_failed_attachments: Successfully added message, some attachments failed validation
+success_added_message: Successfully added message
+success_edited_message: Successfully updated message
+success_edited_message_failed_attachments: Successfully updated message, some attachments failed validation
+success_deleted_message: Successfully deleted message
+success_subscribed_to_message: Subscribed to message
+success_unsubscribed_from_message: Unsubscribed from message
+invalid_milestone: Invalid milestone
+success_added_milestone: Successfully added milestone
+success_edited_milestone: Successfully updated milestone
+success_deleted_milestone: Successfully deleted milestone
+milestone_already_completed: Milestone already completed
+milestone_already_open: Milestone already open
+error_saving: Error saving
+invalid_project: Invalid project
+success_added_project: Successfully added project
+success_edited_project: Successfully updated project
+success_deleted_project: Successfully deleted project
+project_already_completed: Project already completed
+project_already_open: Project already open
+invalid_task_list: Invalid task list
+success_added_task_list: Successfully added task list
+success_edited_task_list: Successfully updated task list
+success_deleted_task_list: Successfully deleted task list
+invalid_task: Invalid task
+success_added_task: Successfully added task
+success_edited_task: Successfully updated task
+success_deleted_task: Successfully deleted task
+task_already_completed: Task already completed
+task_already_open: Task already open
+invalid_time: Invalid time record
+success_added_time: Successfully added time record
+success_edited_time: Successfully updated time record
+success_deleted_time: Successfully deleted time record
+success_added_user: Successfully added user
+success_deleted_user: "Successfully deleted user #{name}"
+unimplemented: Unimplemented
+invalid_request: Invalid request
+      
+
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
