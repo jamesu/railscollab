@@ -34,7 +34,7 @@
     
 <% if AppConfig.allow_openid %>
 <div id="openid_login" style="display: none;">
-<%= form_tag :controller => 'access', :action => 'begin' %>
+<%= form_tag :controller => 'access', :action => 'openid_login' %>
   <div id="loginUsernameDiv">
     <label for="loginOpenIDIdentity"><%= "OpenID" %>:</label>
     <%= text_field_tag "openid_url", "", :size => 30, :id => 'loginOpenIDIdentity', :class => 'openid_login' %>

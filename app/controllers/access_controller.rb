@@ -8,10 +8,6 @@ class AccessController < ApplicationController
 
   layout 'dialog'
   
-  if AppConfig.allow_openid
-  	open_id_consumer
-  end
-  
   def login
     case request.method
       when :post
@@ -32,61 +28,46 @@ class AccessController < ApplicationController
     end
   end
   
-  def begin
-    # If the URL was unusable (either because of network conditions,
-    # a server error, or that the response returned was not an OpenID
-    # identity page), the library will return HTTP_FAILURE or PARSE_ERROR.
-    # Let the user know that the URL is unusable.
-    case open_id_response.status
-      when OpenID::SUCCESS
-        # The URL was a valid identity URL. Now we just need to send a redirect
-        # to the server using the redirect_url the library created for us.
-    
-        # redirect to the server
-        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + '/'), url_for(:action => 'complete'))
-      else
-        error_status(true, :invalid_openid_server, {:openid_url => h(params[:openid_url])})
-        redirect_to :action => 'login'
+  def openid_login
+    unless AppConfig.allow_openid
+      error_status(true, :invalid_request)
+      redirect_to :action => 'login'
+      return
     end
-  end
-
-  def complete
-    case open_id_response.status
-      when OpenID::FAILURE
-        # In the case of failure, if info is non-nil, it is the
-        # URL that we were verifying. We include it in the error
-        # message to help the user figure out what happened.
-        if open_id_response.identity_url
-          error_status(true, :failed_verification_openid_url, {:openid_url => h(open_id_response.identity_url)})
-        else
-          error_status(true, :verification_failed)
-        end
-        flash[:message] += open_id_response.msg.to_s
     
-      when OpenID::SUCCESS
-        # Success means that the transaction completed without
-        # error. If info is nil, it means that the user cancelled
-        # the verification.
-          
-        log_user = User.openid_login(open_id_response.identity_url)
+    authenticate_with_open_id(params[:openid_url]) do |result, identity_url, registration|
+      if result.successful?
+        log_user = User.openid_login(identity_url)
+        
         if log_user.nil?
-          error_status(true, :failed_login_openid_url, {:openid_url => h(open_id_response.identity_url)})
+          error_status(true, :failed_login_openid_url, {:openid_url => identity_url})
         else
-          error_status(false, :success_login_openid_url, {:openid_url => h(open_id_response.identity_url)})
-          redirect_back_or_default :controller => "dashboard"
+          error_status(false, :success_login_openid_url, {:openid_url => identity_url})
+          redirect_back_or_default :controller => 'dashboard'
           session['user_id'] = log_user.id
           return
         end
-    
-      when OpenID::CANCEL
-        error_status(true, :verification_cancelled)
-    
+        
+        redirect_to :action => 'login'
+      
+      elsif result.unsuccessful?
+        if result == :canceled
+          error_status(true, :verification_cancelled)
+        elsif !identity_url.nil?
+          error_status(true, :failed_verification_openid_url, {:openid_url => identity_url})
+        else
+          error_status(true, :verification_failed)
+        end
+        
+        redirect_to :action => 'login'
+        
       else
-        error_status(true, :unknown_response_status, {:status => h(open_id_response.status)})
+        error_status(true, :unknown_response_status, {:status => result.message})
+        redirect_to :action => 'login'
+      end
     end
-    redirect_to :action => 'login'
   end
-  
+    
   def logout
     session['user_id'] = nil
     redirect_to :controller => 'access', :action => 'login'
