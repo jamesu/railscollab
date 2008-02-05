@@ -4,13 +4,13 @@
 </div>
 <% end %>
 
-<% if not users.nil? and users.length > 0 %>
+<% unless @online_users.empty? %>
 <div class="sidebarBlock">
   <h2><%= "Online Users" %></h2>
   <div class="blockContent">
     <p><%= "Users who were active in last 15 minutes:" %></p>
     <ul>
-<% users.each do |user| -%>
+<% @online_users.each do |user| -%>
 <% if user.can_be_viewed_by(@logged_user) %>
       <li><%= link_to (h user.display_name), :controller => 'user', :action => 'card', :id => user.id %> <span class="desc">(<%= h user.company.name %>)</span></li>
 <% end %>
@@ -20,12 +20,12 @@
 </div>
 <% end %>
 
-<% if not my_projects.nil? and my_projects.length > 0 %>
+<% unless @my_projects.empty? %>
 <div class="sidebarBlock">
   <h2><%= "My Projects" %></h2>
   <div class="blockContent">
     <ul>
-<% my_projects.each do |project| -%>
+<% @my_projects.each do |project| -%>
       <li><%= link_to project.name, :controller => 'project', :action => 'overview', :active_project => project.id %></li>
 <% end %>
     </ul>

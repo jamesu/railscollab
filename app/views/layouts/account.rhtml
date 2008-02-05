@@ -51,7 +51,7 @@
               <!-- /Content -->
             </div>
 <% if not @content_for_sidebar.nil? %>
-            <div id="sidebar"><%= render :partial => @content_for_sidebar, :locals => {:users => @online_users, :logged_user => @logged_user, :my_projects => @my_projects, :active_projects => @active_projects, :finished_projects => @finished_projects} %></div>
+            <div id="sidebar"><%= render :partial => @content_for_sidebar %></div>
 <% end %>
             <div class="clear"></div>
           </div>
