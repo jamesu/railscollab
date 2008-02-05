@@ -59,6 +59,7 @@
     <legend><%= "Tags" %></legend>
     <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %>
   </fieldset>
+<% if @message.new_record? %>
   <fieldset id="emailNotification">
     <legend><%= "Email notification" %></legend>
     <p><%= "Notify selected people about this message via email" %></p>
@@ -88,6 +89,7 @@
 <% end %>
 <% end %>
   </fieldset>
+<% end %>
  
 <% if ProjectFile.can_be_created_by(@logged_user, @active_project) %>
   <%= render :partial => 'files/attach_file' %>
