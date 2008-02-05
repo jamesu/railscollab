@@ -83,13 +83,54 @@ class AccessController < ApplicationController
           return
         end
         
-        user = User.by_email(@your_email)
+        user = User.find(:first, ['email = ?', @your_email])
         if user.nil?
           error_status(false, :invalid_email_not_in_use)
           return
         end
         
-        # TODO
+        # Send the reset!
+        user.send_password_reset()
+        error_status(false, :forgot_password_sent_email)
+        redirect_to :action => 'login'
+    end
+  end
+  
+  def reset_password
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(false, :invalid_request)
+      redirect_to :action => 'login'
+      return
+    end
+    
+    unless @user.password_reset_key == params[:confirm]
+      error_status(false, :invalid_request)
+      redirect_to :action => 'login'
+    end
+    
+    case request.method
+      when :post
+        
+        @password_data = params[:user]
+            
+        unless @password_data[:password]
+          @user.errors.add(:password, "New password required")
+          return
+        end
+          
+        unless @password_data[:password] == @password_data[:password_confirmation]
+          @user.errors.add(:password_confirmation, "Does not match")
+          return
+        end
+    
+        @user.password = @password_data[:password]
+        @user.save
+        
+        error_status(false, :password_changed)
+        redirect_to :action => 'login'
+        return
     end
   end
   
