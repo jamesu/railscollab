@@ -83,6 +83,7 @@ user_card: User card of {user}
 folder_name: "Folder : {folder}"
 company_card: "Company card of {company}"
 reset_password: Reset password
+set_password: Set password
 
 # Feeds
 recent_milestones_feed: Recent milestones feed
