@@ -1,0 +1,21 @@
+------------------------------------------------------------
+ <%= "DO NOT REPLY TO THIS MESSAGE" %>
+------------------------------------------------------------
+
+<%= "Hi #{@user.display_name}" %>
+
+<%= "#{@user.created_by.display_name} has created new account for you at #{AppConfig.site_name}." %> 
+<% if @password.nil? %>
+<%= "To access this account, simply visit the following URL:" %>
+
+<%= "#{AppConfig.site_url}/access/reset_password/#{@user.id}?confirm=#{@user.password_reset_key}&initial=1" %>
+
+<%= "Then login using the username '#{h @user.username}'." %>
+<% else %>
+<%= "To access this account, simply visit #{AppConfig.site_url} and login using the following credentials: "%>
+
+<%= "Username" %>: <%= @user.username %>
+<%= "Password" %>: <%= @password %>
+<% end %>
+--
+<%= AppConfig.site_url %>

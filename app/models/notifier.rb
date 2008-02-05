@@ -44,5 +44,20 @@ class Notifier < ActionMailer::Base
 		:sent_on => sent_at
 	}
   end
+  
+  def account_new_info(user, password, sent_at = Time.now)
+    @subject    = "#{AppConfig.site_name} - Your account has been created"
+    @recipients = user.email
+    @from       = AppConfig.notification_email_address
+    @sent_on    = sent_at
+    @headers    = {}
+	
+	@body       = {
+		:site_name => AppConfig.site_name,
+		:user => user,
+		:password => password,
+		:sent_on => sent_at
+	}
+  end
 
 end
