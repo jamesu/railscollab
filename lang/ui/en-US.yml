@@ -82,6 +82,7 @@ edit_project: Edit project
 user_card: User card of {user}
 folder_name: "Folder : {folder}"
 company_card: "Company card of {company}"
+reset_password: Reset password
 
 # Feeds
 recent_milestones_feed: Recent milestones feed
@@ -287,7 +288,8 @@ tags_used_in_project: Tags used in project
 tag_object_count: "{count} objects."
 
 
-
+# Email
+forgot_password_sent_email: Further instructions have been sent to your e-mail address
 
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
