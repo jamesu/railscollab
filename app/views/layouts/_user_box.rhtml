@@ -1,16 +1,16 @@
 <div id="userbox">
   <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, {:controller => 'access', :action => 'logout'}, :confirm => :are_you_sure_logout.l %>),
   <ul>
-    <li><%= link_to :account.l, :controller => 'account' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :account.l, :controller => 'account' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'popup_menu_selector', :title => 'Enable javascript' %></li>
 <% if not projects.nil? and projects.length > 0 %>
-    <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'popup_menu_selector', :title => 'Enable javascript' %></li>
 <% end %>
 <% if user.is_admin %>
-    <li><%= link_to :administration.l, :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more_icon', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :administration.l, :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more', :class => 'popup_menu_selector', :title => 'Enable javascript' %></li>
 <% end %>
   </ul>
   
-  <div class="PopupMenuWidgetDiv" id="account_more_menu">
+  <div class="popup_menu" id="account_more_menu">
     <p><%= :account.l %>:</p>
     <ul>
       <li><%= link_to :update_profile.l, :controller => 'account', :action => 'edit_profile', :id => user.id %></li>
@@ -25,7 +25,7 @@
   </div>
   
 <% if not projects.nil? and projects.length > 0 %>
-  <div class="PopupMenuWidgetDiv" id="projects_more_menu">
+  <div class="popup_menu" id="projects_more_menu">
     <p><%= :projects.l %>:</p>
     <ul>
 <% projects.each do |project| -%>
@@ -36,7 +36,7 @@
 <% end %>
   
 <% if user.is_admin %>
-  <div class="PopupMenuWidgetDiv" id="administration_more_menu">
+  <div class="popup_menu" id="administration_more_menu">
     <p><%= :administration.l %>:</p>
     <ul>
       <li><%= link_to :company.l, :controller => 'administration', :action => 'company' %></li>
