@@ -1,68 +1,68 @@
 <%= error_messages_for :message %>
 
  <div>
-    <label for="messageFormTitle"><%= "Title" %>: <span class="label_required">*</span></label>
+    <label for="messageFormTitle"><%= :title.l %>: <span class="label_required">*</span></label>
     <%= text_field 'message', 'title', :id => 'messageFormTitle', :class => 'title' %>
   </div>
   
   <div>
-    <label for="messageFormText"><%= "Text" %>: <span class="label_required">*</span></label>
+    <label for="messageFormText"><%= :text.l %>: <span class="label_required">*</span></label>
     <%= text_area 'message', 'text', :id => 'messageFormText' %>
   </div>
   
   <div>
-    <label for="messageFormAdditionalText"><%= "Additional text" %>: <span class="desc">- (<%= "Additional message text is visible only on comments page" %>)</span></label>
+    <label for="messageFormAdditionalText"><%= :additional_text.l %>: <span class="desc">- (<%= :additional_text_info.l %>)</span></label>
     <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
   </div>
   
   <fieldset>
-    <legend><%= "Milestone" %></legend>
+    <legend><%= :milestone.l %></legend>
     <%= select 'message', 'milestone_id', ProjectMilestone.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
   </fieldset>
 
   <fieldset>
-    <legend><%= "Category" %></legend>
+    <legend><%= :category.l %></legend>
     <%= select 'message', 'category_id', ProjectMessageCategory.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormCategory'} %>
   </fieldset>
     
 <% if @logged_user.member_of_owner? %>
   <fieldset>
-    <legend><%= "Options" %></legend>
+    <legend><%= :options.l %></legend>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= "Private message" %>:</label></div>
+      <div class="optionLabel"><label><%= :private_message.l %>:</label></div>
       <div class="optionControl"><%= check_box 'message', 'is_private', :class => 'checkbox', :id => 'messageFormIsPrivate' %></div>
-      <div class="optionDesc"><%= "Private messages are visible only to owner company members. Members of client companies will not be able to see them." %></div>
+      <div class="optionDesc"><%= :private_message_info.l %></div>
     </div>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= "Important message" %>:</label></div>
+      <div class="optionLabel"><label><%= :important_message.l %>:</label></div>
       <div class="optionControl"><%= check_box 'message', 'is_important', :class => 'checkbox', :id => 'messageFormIsImportant' %></div>
-      <div class="optionDesc"><%= "Important messages are listed in the \"Important messages\" sidebar on the project messages page" %></div>
+      <div class="optionDesc"><%= :important_message_info.l %></div>
     </div>
     
     <div class="objectOption">
-    <div class="optionLabel"><label><%= "Enable comments" %>:</label></div>
+    <div class="optionLabel"><label><%= :enable_comments.l %>:</label></div>
     <div class="optionControl"><%= check_box 'message', 'comments_enabled', :class => 'checkbox', :id => 'messageFormEnableComments' %></div>
-    <div class="optionDesc"><%= "Users that can view this object can post comments on it. Select \"No\" to lock comments" %></div>
+    <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
   
   <div class="objectOption">
-    <div class="optionLabel"><label><%= "Enable anonymous comments" %>:</label></div>
+    <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
     <div class="optionControl"><%= check_box 'message', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'messageFormEnableAnonymousComments' %></div>
-    <div class="optionDesc"><%= "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged." %></div>
+    <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
   </div>
   </fieldset>
 <% end %>
   
   <fieldset>
-    <legend><%= "Tags" %></legend>
+    <legend><%= :tags.l %></legend>
     <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %>
   </fieldset>
 <% if @message.new_record? %>
   <fieldset id="emailNotification">
-    <legend><%= "Email notification" %></legend>
-    <p><%= "Notify selected people about this message via email" %></p>
+    <legend><%= :email_notification.l %></legend>
+    <p><%= :email_notification_info.l %></p>
 <% @active_project.companies.each do |company| -%>
     <script type="text/javascript">
       notify_form_companies.company_<%= company.id %> = {

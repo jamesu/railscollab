@@ -288,6 +288,19 @@ task_list_completed_time_format: "%b %d, %Y"
 tags_used_in_project: Tags used in project
 tag_object_count: "{count} objects."
 
+# Message form
+title: Title
+text: Text
+additional_text: Additional text
+additional_text_info: Additional message text is visible only on comments page
+milestone: Milestone
+category: Category
+private_message_info: "Private messages are visible only to owner company members. Members of client companies will not be able to see them."
+important_message_info: "Important messages are listed in the \"Important messages\" sidebar on the project messages page"
+enable_comments_info: "Users that can view this object can post comments on it. Select \"No\" to lock comments"
+enable_anonymous_comments_info: "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged."
+email_notification: Email notification
+email_notification_info: Notify selected people about this message via email
 
 # Email
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
