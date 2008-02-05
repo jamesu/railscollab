@@ -96,6 +96,7 @@ class ProjectMessage < ActiveRecord::Base
 	
 	def send_comment_notifications(comment)
 		self.subscribers.each do |subscriber|
+			next if subscriber == comment.created_by
 			Notifier.deliver_message_comment(subscriber, comment, self)
 		end
 	end

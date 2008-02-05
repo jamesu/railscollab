@@ -6,7 +6,7 @@
     <ul>
 <% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:post => true, :confirm => :message_unsubscription_confirmation.l} %>)</li>
+      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:method => :post, :confirm => :message_unsubscription_confirmation.l} %>)</li>
 <% else %>
       <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %></li>
 <% end %>
@@ -16,7 +16,7 @@
     <p><%= :no_subscribers.l %></p>
 <% end %>
 <% if !@subscribers.include?(@logged_user) %>
-    <p><%= link_to :message_subscribe.l, {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:post => true, :confirm => :message_subscription_confirmation.l} %></p>
+    <p><%= link_to :message_subscribe.l, {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:method => :post, :confirm => :message_subscription_confirmation.l} %></p>
 <% end %>
   </div>
 </div>
