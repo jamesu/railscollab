@@ -110,6 +110,8 @@ class AccessController < ApplicationController
       redirect_to :action => 'login'
     end
     
+    @initial_signup = params.has_key? :initial
+    
     case request.method
       when :post
         

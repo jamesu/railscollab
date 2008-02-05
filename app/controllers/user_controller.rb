@@ -82,13 +82,21 @@ class UserController < ApplicationController
         # Process extra parameters
         
         @user.username = user_attribs[:username]
-        @user.password = user_credentials[:password]
-        if @logged_user.member_of_owner?
-        	@user.company_id = user_attribs[:company_id]
-        	@user.is_admin = user_attribs[:is_admin]
-        	@user.auto_assign = user_attribs[:auto_assign]
+        new_account_password = nil
+        
+        if user_credentials.has_key?(:generate_password)
+          @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
         else
-        	@user.company_id = @company.id
+          new_account_password = user_credentials[:password]
+          @user.password = new_account_password
+        end
+        
+        if @logged_user.member_of_owner?
+          @user.company_id = user_attribs[:company_id]
+          @user.is_admin = user_attribs[:is_admin]
+          @user.auto_assign = user_attribs[:auto_assign]
+        else
+          @user.company_id = @company.id
         end
         
         if user_attribs[:identity_url]
@@ -104,6 +112,8 @@ class UserController < ApplicationController
         
         if @user.save
           #ApplicationLog.new_log(@user, @logged_user, :add, true)
+          @user.send_new_account_info(new_account_password)
+          
           error_status(false, :success_added_user)
           redirect_back_or_default :controller => 'company', :action => 'view_client', :id => @company.id
         end
