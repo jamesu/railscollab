@@ -30,4 +30,19 @@ class Notifier < ActionMailer::Base
 		:sent_on => sent_at
 	}
   end
+  
+  def password_reset(user, sent_at = Time.now)
+    @subject    = "#{AppConfig.site_name} - Reset password request"
+    @recipients = user.email
+    @from       = AppConfig.notification_email_address
+    @sent_on    = sent_at
+    @headers    = {}
+	
+	@body       = {
+		:site_name => AppConfig.site_name,
+		:user => user,
+		:sent_on => sent_at
+	}
+  end
+
 end

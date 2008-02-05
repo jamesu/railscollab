@@ -141,6 +141,10 @@ class User < ActiveRecord::Base
 		return self.token
 	end
 	
+	def password_reset_key
+	   value = Digest::SHA1.hexdigest(self.salt + self.twisted_token + (self.last_login.nil? ? self.last_login : ''))
+	end
+	
 	def twisted_token()
 		value = self.token
 		return value if not value.valid_hash?
@@ -198,6 +202,10 @@ class User < ActiveRecord::Base
 	
 	def valid_password(pass)
 		return self.token == Digest::SHA1.hexdigest(self.salt + pass)
+	end
+	
+	def send_password_reset()
+		Notifier.deliver_password_reset(self)
 	end
 	
 	# Core permissions
