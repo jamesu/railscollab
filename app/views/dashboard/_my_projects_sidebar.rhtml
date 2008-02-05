@@ -1,6 +1,6 @@
 <% unless @active_projects.empty? %>
 <div class="sidebarBlock">
-  <h2><%= "Active projects" %></h2>
+  <h2><%= :active_projects.l %></h2>
   <div class="blockContent">
     <ul>
 <% @active_projects.each do |project| -%>
@@ -13,15 +13,17 @@
 
 <% unless @finished_projects.empty? %>
 <div class="sidebarBlock">
-  <h2><%= "Finished projects" %></h2>
+  <h2><%= :finished_projects.l %></h2>
   <div class="blockContent">
-    <p><%= "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them." %></p>
+    <p><%= :archived_projects_list_info.l %></p>
     <ul class="listWithDetails">
 <% @finished_projects.each do |project| -%>
       <li>
       	<%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %><br />
-        <span class="desc">(<%= "#{format_usertime(project.completed_on, '%b %d, %Y')} | " %>
-        <%= link_to project.completed_by.display_name, :controller => 'user', :action => 'card', :id => project.completed_by.id %>)</span>
+        <span class="desc">(<%= :project_completed_time_with_user.l_with_args(
+                    :time => format_usertime(project.completed_on, :project_completed_time_format.l),
+                    :user => link_to(h(project.completed_by.display_name), :controller => 'user', :action => 'card', :id => project.completed_by.id)
+        )%>)</span>
       </li>
 <% end %>
     </ul>

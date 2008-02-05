@@ -1,52 +1,52 @@
 <div class="sidebarBlock">
-  <h2><%= "Message subscribers" %></h2>
+  <h2><%= :message_subscribers.l %></h2>
   <div class="blockContent">
-    <p><%= "Subscribers will receive an email notification whenever someone (except themselves) posts a comment on this message" %></p>
+    <p><%= :message_subscribers_email_notification_info.l %></p>
 <% if @subscribers.length > 0 %>
     <ul>
 <% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to "Unsubscribe from this message", {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:post => true, :confirm => "Are you sure you want to unsubscribe from this message?"} %>)</li>
+      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:post => true, :confirm => :message_unsubscription_confirmation.l} %>)</li>
 <% else %>
       <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %></li>
 <% end %>
 <% end %>
     </ul>
 <% else %>
-    <p><%= "There are no subscribers" %></p>
+    <p><%= :no_subscribers.l %></p>
 <% end %>
 <% if !@subscribers.include?(@logged_user) %>
-    <p><%= link_to "Subscribe to message", {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:post => true, :confirm => "Are you sure you want to subscribe to this message?"} %></p>
+    <p><%= link_to :message_subscribe.l, {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:post => true, :confirm => :message_subscription_confirmation.l} %></p>
 <% end %>
   </div>
 </div>
 
 <% if @message.options_can_be_changed_by(@logged_user) %>
 <div class="sidebarBlock">
-  <h2><%= "Options" %></h2>
+  <h2><%= :options.l %></h2>
   <div class="blockContent">
     <%= form_tag :controller => 'message', :action => 'update_options', :id => @message.id %>
       <div class="formBlock">
         <div>
-          <label><%= "Private message" %>:</label>
+          <label><%= :private_message.l %>:</label>
           <%= check_box 'message', 'is_private', :class => 'checkbox', :id => 'messageFormIsPrivate' %>
         </div>
         <div>
-          <label><%= "Important message" %>:</label>
+          <label><%= :important_message.l %>:</label>
           <%= check_box 'message', 'is_important', :class => 'checkbox', :id => 'messageFormIsImportant' %>
         </div>
         <div>
-          <label><%= "Enable comments" %>:</label>
+          <label><%= :enable_comments.l %>:</label>
           <%= check_box 'message', 'comments_enabled', :class => 'checkbox', :id => 'messageFormEnableComments' %>
         </div>
         
         <div>
-          <label><%= "Enable anonymous comments" %>:</label>
+          <label><%= :enable_anonymous_comments.l %>:</label>
           <%= check_box 'message', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'messageFormEnableAnonymousComments' %>
         </div>
       </div>
-      <button class="submit" type="submit">Update options</button>
-      <p>&raquo; <%= link_to "Edit message", :controller => 'message', :action => 'edit', :id => @message.id %></p>
+      <button class="submit" type="submit"><%= :update_options.l %></button>
+      <p><%= link_to :edit_message_sidebar_link.l, :controller => 'message', :action => 'edit', :id => @message.id %></p>
     </form>
   </div>
 </div>

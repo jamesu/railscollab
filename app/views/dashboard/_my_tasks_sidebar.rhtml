@@ -1,9 +1,8 @@
 <div class="sidebarBlock">
-  <h2><%= "iCalendar" %></h2>
+  <h2><%= :calendar_feeds.l %></h2>
   <div class="blockContent">
-    <a href="<%= @logged_user.milestone_feed_url(nil, 'ics') %>" class="iCalSubscribe"><%= "iCalendar" %></a>
-    <p><%= "Use this link to bring milestone data to your favorite calendar application." %></p>
-    <p><%= "<strong>Note:</strong> if you change your password the link to the calendar data will also change! You'll need to resubscribe.
-" %></p>
+    <a href="<%= @logged_user.milestone_feed_url(nil, 'ics') %>" class="iCalSubscribe"><%= :ical.l %></a>
+    <p><%= :calendar_feed_milestone_info.l %></p>
+    <p><%= :calendar_feeds_password_warning.l %></p></p>
   </div>
 </div>

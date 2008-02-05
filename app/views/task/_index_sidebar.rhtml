@@ -1,10 +1,10 @@
 <% if @open_task_lists.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= "Open task lists" %></h2>
+  <h2><%= :open_task_lists.l %></h2>
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @open_task_lists.each do |task_list| %>
-      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= "#{task_list.project_tasks.reject do |task| not task.completed_on.nil? end.length } open of #{task_list.project_tasks.length} tasks in list" %>)</span></li>
+      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= :num_tasks_open_in_task_list.l_with_args(:num => (task_list.project_tasks.reject { |task| not task.completed_on.nil? }.length ), :total => task_list.project_tasks.length ) %>)</span></li>
 <% end %>
     </ul>
   </div>
@@ -13,12 +13,13 @@
 
 <% if @completed_task_lists.length > 0%>
 <div class="sidebarBlock">
-  <h2><%= "Completed task lists" %></h2>
+  <h2><%= :completed_task_lists.l %></h2>
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @completed_task_lists.each do |task_list| %>
-      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= "#{format_usertime(task_list.completed_on, '%b %d, %Y')} | " %>
-        <%= link_to (h task_list.completed_by.display_name), :controller => 'user', :action => 'card', :id => task_list.completed_by.id %>)</span></li>
+      <li><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %><br /><span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
+                     :time => format_usertime(task_list.completed_on, :task_list_completed_time_format.l),
+                     :user => link_to(h(task_list.completed_by.display_name), :controller => 'user', :action => 'card', :id => task_list.completed_by.id)) %>)</span></li>
 <% end %>
     </ul>
   </div>

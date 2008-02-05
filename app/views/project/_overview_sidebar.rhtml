@@ -1,6 +1,6 @@
 <% if @visible_forms.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= "Forms" %></h2>
+  <h2><%= :forms.l %></h2>
   <div class="blockContent">
     <ul>
 <% @visible_forms.each do |visible_form| -%>
@@ -13,12 +13,12 @@
 
 <% if @important_messages.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= "Important messages" %></h2>
+  <h2><%= :important_messages.l %></h2>
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @important_messages.each do |important_message| -%>
       <li><%= link_to (h important_message.title), :controller => 'message', :action => 'view' %><br />
-      <span class="desc"><%= "#{important_message.comments.length} comment(s)" %></span></li>
+      <span class="desc"><%= :important_messages_comments_count.l_with_args(:count => important_message.comments.length) %></span></li>
 <% end %>
     </ul>
   </div>
@@ -27,13 +27,13 @@
 
 <% if @important_files.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= "Important files" %></h2>
+  <h2><%= :important_files.l %></h2>
   <div class="blockContent">
     <ul>
 <% @important_files.each do |important_file| -%>
       <li>
         <a href="<%= important_file.object_url %>"><%= h important_file.filename %></a><br />
-        <span class="desc"><%= "#{important_file.project_file_revisions.length} revision(s)" %></span>
+        <span class="desc"><%= :important_file_revisions_count.l_with_args(:count => important_file.project_file_revisions.length) %></span>
       </li>
 <% end %>
     </ul>
@@ -44,21 +44,21 @@
 <% if @active_project.can_be_edited_by(@logged_user) or @active_project.status_can_be_changed_by(@logged_user) %>
 <div class="sidebarBlock">
 <% if @active_project.is_active? %>
-  <h2><%= "Project status" %>: <%= "Active" %></h2>
+  <h2><%= :project_status_header.l_with_args(:status => :active.l) %></h2>
 <% else %>
-  <h2><%= "Project status" %>: <%= "Completed" %></h2>
+  <h2><%= :project_status_header.l_with_args(:status => :completed.l) %></h2>
 <% end %>
   <div class="blockContent">
     <ul>
 <% if @active_project.can_be_edited_by(@logged_user) %>
-      <li><%= link_to 'Edit project details', :controller => 'project', :action => 'edit' %></li>
+      <li><%= link_to :edit_project_details.l, :controller => 'project', :action => 'edit' %></li>
 <% end %>
 
 <% if @active_project.status_can_be_changed_by(@logged_user) %>
 <% if @active_project.completed_on == nil %>
-      <li><%= link_to 'Mark project as finished', {:controller => 'project', :action => 'complete'}, :method => :post, :confirm => "Are you sure you want to mark this project as finished? All project actions will be locked" %></li>
+      <li><%= link_to :mark_project_as_finished.l, {:controller => 'project', :action => 'complete'}, :method => :post, :confirm => :mark_project_as_finished_confirmation.l %></li>
 <% else %>
-      <li><%= link_to 'Mark project as active', {:controller => 'project', :action => 'open'}, :method => :post, :confirm => "Are you sure you want to mark this project as open? This will unlock all project actions" %></li>
+      <li><%= link_to :mark_project_as_active.l, {:controller => 'project', :action => 'open'}, :method => :post, :confirm => :mark_project_as_active_confirmation.l %></li>
 <% end %>
 <% end %>
 
@@ -69,7 +69,7 @@
 
 <% if @project_companies.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= "Involved comapnies" %></h2>
+  <h2><%= :involved_companies.l %></h2>
   <div class="blockContent">
     <ul>
 <% @project_companies.each do |project_company| -%>
@@ -81,10 +81,10 @@
 <% end %>
 
 <div class="sidebarBlock">
-  <h2><%= "RSS feeds" %></h2>
+  <h2><%= :update_feeds.l %></h2>
   <div class="blockContent">
     <ul id="listOfRssFeeds">
-      <li><%= link_to 'Recent activities', @logged_user.recent_activity_feed_url(@active_project, 'rss') %></li>
+      <li><%= link_to :recent_activities.l, @logged_user.recent_activity_feed_url(@active_project, 'rss') %></li>
     </ul>
   </div>
 </div>
