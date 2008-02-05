@@ -81,6 +81,7 @@ add_project: Add project
 edit_project: Edit project
 user_card: User card of {user}
 folder_name: "Folder : {folder}"
+company_card: "Company card of {company}"
 
 # Feeds
 recent_milestones_feed: Recent milestones feed
@@ -225,6 +226,68 @@ success_added_user: Successfully added user
 success_deleted_user: "Successfully deleted user #{name}"
 unimplemented: Unimplemented
 invalid_request: Invalid request
-      
+
+# Stuff which appears in the sidebar
+online_users: Online users
+users_active_in_last_n_minutes: "Users who were active in last {number} minutes:"
+my_projects_sidebar_link: "&raquo; My projects"
+update_feeds: RSS feeds
+recent_activities: Recent activities
+active_projects: Active projects
+finished_projects: Finished projects
+archived_projects_list_info: "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them."
+project_completed_time_with_user: "{time} | {user}"
+project_completed_time_format: "%b %d, %Y"
+calendar_feeds: iCalendar
+ical: iCalendar
+calendar_feed_milestone_info: Use this link to bring milestone data to your favorite calendar application.
+calendar_feeds_password_warning: "<strong>Note:</strong> if you change your password the link to the calendar data will also change! You'll need to resubscribe."
+folders: Folders
+folder_delete_confirmation: "Are you sure you want to delete this folder?"
+all_files: All files
+important_files: Important files
+important_file_revisions_count: "{count} revision(s)"
+important_messages: Important messages
+important_messages_comments_count: "{count} comment(s)"
+categories: Categories
+all_categories: All categories
+category_delete_confirmation: "Are you sure you want to delete this category?"
+message_subscribers: Message subscribers
+message_subscribers_email_notification_info: "Subscribers will receive an email notification whenever someone (except themselves) posts a comment on this message"
+message_unsubscribe: Unsubscribe from this message
+message_unsubscription_confirmation: "Are you sure you want to unsubscribe from this message?"
+no_subscribers: There are no subscribers
+message_subscribe: Subscribe to message
+message_subscription_confirmation: "Are you sure you want to subscribe to this message?"
+options: Options
+private_message: Private message
+important_message: Important message
+enable_comments: Enable comments
+enable_anonymous_comments: Enable anonymous comments
+update_options: Update options
+edit_message_sidebar_link: "&raquo; Edit message"
+completed_milestones: Completed milestones
+milestone_completed_time_with_user: "{time} | {user}"
+milestone_completed_time_format: "%b %d, %Y %H:%M"
+project_status_header: "Project status: {status}"
+active: Active
+completed: Completed
+edit_project_details: Edit project details
+mark_project_as_finished: Mark project as finished
+mark_project_as_finished_confirmation: "Are you sure you want to mark this project as finished? All project actions will be locked"
+mark_project_as_active: Mark project as active
+mark_project_as_active_confirmation: "Are you sure you want to mark this project as open? This will unlock all project actions"
+involved_companies: Involved comapnies
+open_task_lists: Open task lists
+num_tasks_open_in_task_list: "{num} open of {total} tasks in list"
+completed_task_lists: Completed task lists
+task_list_completed_time_with_user: "{time} | {user}"
+task_list_completed_time_format: "%b %d, %Y"
+tags_used_in_project: Tags used in project
+tag_object_count: "{count} objects."
+
+
+
+
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
