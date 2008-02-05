@@ -7,12 +7,12 @@
   
   <div>
     <label for="messageFormText"><%= :text.l %>: <span class="label_required">*</span></label>
-    <%= text_area 'message', 'text', :id => 'messageFormText' %>
+    <%= text_area 'message', 'text', :id => 'messageFormText', :class => 'editor' %>
   </div>
   
   <div>
-    <label for="messageFormAdditionalText"><%= :additional_text.l %>: <span class="desc">- (<%= :additional_text_info.l %>)</span></label>
-    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText' %>
+    <label for="messageFormAdditionalText"><%= :additional_text.l %> (<a href="#" id="messageFormAdditionalTextToggle"><%= 'Expand' %></a>):<span class="desc"> - <%= :additional_text_info.l %></span></label>
+    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText', :class => 'editor', :style => 'display: none' %>
   </div>
   
   <fieldset>
