@@ -178,18 +178,18 @@ class ProjectMessage < ActiveRecord::Base
 	validates_presence_of :title
 	validates_presence_of :text
 	validates_each :project_milestone, :allow_nil => true do |record, attr, value|
-		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+		record.errors.add attr, :not_part_of_project.l if value.project_id != record.project_id
 	end
 	
 	validates_each :project_message_category do |record, attr, value|
-		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+		record.errors.add attr, :not_part_of_project.l if value.project_id != record.project_id
 	end
 	
 	validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-		record.errors.add attr, 'not allowed' if value == true
+		record.errors.add attr, :not_allowed.l if value == true
 	end
 	
 	validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-		record.errors.add attr, 'not allowed' if value == false
+		record.errors.add attr, :not_allowed.l if value == false
 	end
 end

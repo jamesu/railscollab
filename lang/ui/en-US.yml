@@ -340,6 +340,15 @@ mark_task_completed: Mark task as completed
 edit_tasks: Edit tasks
 task: Task
 
+# Activity
+action_add: Added
+action_delete: Deleted
+action_modified: Modified
+action_reopened: Reopened
+action_open: Opened
+action_close: Closed
+action_upload: Uploaded
+
 # Email
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
 
@@ -350,5 +359,7 @@ does_not_match: Does not match
 has_insufficient_permissions: Has insufficient permissions
 required: Required
 is_incorrect: Is incorrect
+not_allowed: Not allowed
+not_part_of_project: Not part of project
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"

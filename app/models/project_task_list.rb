@@ -178,10 +178,10 @@ class ProjectTaskList < ActiveRecord::Base
 	
 	validates_presence_of :name
 	validates_each :project_milestone, :allow_nil => true do |record, attr, value|
-		record.errors.add attr, 'not part of project' if value.project_id != record.project_id
+		record.errors.add attr, :not_part_of_project.l if value.project_id != record.project_id
 	end
 	
 	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-		record.errors.add attr, 'not allowed' if value == true
+		record.errors.add attr, :not_allowed.l if value == true
 	end
 end

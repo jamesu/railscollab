@@ -35,18 +35,7 @@ class ApplicationLog < ActiveRecord::Base
   end
   
   def friendly_action
-    case self.action
-      when :add
-        return "Added"
-      when :delete
-        return "Deleted"
-      when :edit
-        return "Modified"
-      when :open
-        return "Reopened"
-      when :close
-        return "Closed"
-    end
+    "action_#{self.action}".to_sym.l
   end
   
   def action
