@@ -29,20 +29,20 @@
       <div class="formBlock">
         <div>
           <label><%= :private_message.l %>:</label>
-          <%= check_box 'message', 'is_private', :class => 'checkbox', :id => 'messageFormIsPrivate' %>
+          <%= yesno_toggle 'message', 'is_private', :class => 'yes_no', :id => 'messageFormIsPrivate' %>
         </div>
         <div>
           <label><%= :important_message.l %>:</label>
-          <%= check_box 'message', 'is_important', :class => 'checkbox', :id => 'messageFormIsImportant' %>
+          <%= yesno_toggle 'message', 'is_important', :class => 'yes_no', :id => 'messageFormIsImportant' %>
         </div>
         <div>
           <label><%= :enable_comments.l %>:</label>
-          <%= check_box 'message', 'comments_enabled', :class => 'checkbox', :id => 'messageFormEnableComments' %>
+          <%= yesno_toggle 'message', 'comments_enabled', :class => 'yes_no', :id => 'messageFormEnableComments' %>
         </div>
         
         <div>
           <label><%= :enable_anonymous_comments.l %>:</label>
-          <%= check_box 'message', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'messageFormEnableAnonymousComments' %>
+          <%= yesno_toggle 'message', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'messageFormEnableAnonymousComments' %>
         </div>
       </div>
       <button class="submit" type="submit"><%= :update_options.l %></button>

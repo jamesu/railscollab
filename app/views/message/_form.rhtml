@@ -31,25 +31,25 @@
     
     <div class="objectOption">
       <div class="optionLabel"><label><%= :private_message.l %>:</label></div>
-      <div class="optionControl"><%= check_box 'message', 'is_private', :class => 'checkbox', :id => 'messageFormIsPrivate' %></div>
+      <div class="optionControl"><%= yesno_toggle 'message', 'is_private', :class => 'yes_no', :id => 'messageFormIsPrivate' %></div>
       <div class="optionDesc"><%= :private_message_info.l %></div>
     </div>
     
     <div class="objectOption">
       <div class="optionLabel"><label><%= :important_message.l %>:</label></div>
-      <div class="optionControl"><%= check_box 'message', 'is_important', :class => 'checkbox', :id => 'messageFormIsImportant' %></div>
+      <div class="optionControl"><%= yesno_toggle 'message', 'is_important', :class => 'yes_no', :id => 'messageFormIsImportant' %></div>
       <div class="optionDesc"><%= :important_message_info.l %></div>
     </div>
     
     <div class="objectOption">
     <div class="optionLabel"><label><%= :enable_comments.l %>:</label></div>
-    <div class="optionControl"><%= check_box 'message', 'comments_enabled', :class => 'checkbox', :id => 'messageFormEnableComments' %></div>
+    <div class="optionControl"><%= yesno_toggle 'message', 'comments_enabled', :class => 'yes_no', :id => 'messageFormEnableComments' %></div>
     <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
   
   <div class="objectOption">
     <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
-    <div class="optionControl"><%= check_box 'message', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'messageFormEnableAnonymousComments' %></div>
+    <div class="optionControl"><%= yesno_toggle 'message', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'messageFormEnableAnonymousComments' %></div>
     <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
   </div>
   </fieldset>
