@@ -2,16 +2,16 @@
 
 <% if not @task.new_record? %>
   <div>
-    <label for="addTaskTaskList"><%= "Task List" %>: <span class="label_required">*</span></label>
+    <label for="addTaskTaskList"><%= :task_list.l %>: <span class="label_required">*</span></label>
     <%= select 'task', 'task_list_id', ProjectTaskList.select_list(@active_project), {}, {:id => 'addTaskTaskList'} %>
   </div>
 <% end %>
 
   <div>
-    <label for="addTaskText"><%= "Text" %>: <span class="label_required">*</span></label>
+    <label for="addTaskText"><%= :text.l %>: <span class="label_required">*</span></label>
     <%= text_area 'task', 'text', :id => 'addTaskText', :class => 'short', :rows => 10, :cols => 40  %>
   </div>
   <div>
-    <label for="taskAssignedTo"><%= "Assigned to" %>:</label>
+    <label for="taskAssignedTo"><%= :assign_to.l %>:</label>
     <%= select 'task', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'taskAssignedTo'} %>
   </div>

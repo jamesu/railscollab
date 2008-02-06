@@ -1,35 +1,37 @@
 <div class="message">
   <div class="block">
 <% if view_message.is_private? %>
-    <div class="private" title="<%= "Private message" %>"><span><%= "Private message" %></span></div>
+    <div class="private" title="<%= :private_message.l %>"><span><%= private_message.l %></span></div>
 <% end %>
     <div class="header"><%= link_to (h view_message.title), :controller => 'message', :action => 'view', :id => view_message.id %></div>
     <div class="content">
 <% if not view_message.created_by.nil? %>
-      <div class="messageAuthor"><%= format_usertime(view_message.created_on, "%b %d. %Y %H:%M") %> | <%= link_to (h view_message.created_by.display_name), :controller => 'user', :action => 'card', :id => view_message.created_by.id %></div>
+      <div class="messageAuthor"><%= :message_created_with_user.l_with_args(
+            :time => format_usertime(view_message.created_on, :message_created_format.l),
+            :user => link_to( h(view_message.created_by.display_name), :controller => 'user', :action => 'card', :id => view_message.created_by.id)) %></div>
 <% end %>
       <div class="messageText">
         <%= textilize view_message.text %>
         <% if not view_message.additional_text.nil? %>
-        <p><%= link_to "Read more...", :controller => 'message', :action => 'view', :id => view_message.id %></p>
+        <p><%= link_to :read_more.l, :controller => 'message', :action => 'view', :id => view_message.id %></p>
         <% end %>
       </div>
     
 <%= render :partial => 'files/list_attached_files', :locals => {:attached_files => view_message.attached_files(@logged_user.member_of_owner?), :attached_files_object => view_message} %>
       <div class="messageCommentCount">
 <% if not view_message.comments.empty? %>
-        <span><%= "Comments" %>:</span> <a href="<%= "/project/#{@active_project.id}/message/view/#{view_message.id}#objectComments" %>"><%= view_message.comments.length %></a>
+        <span><%= :comments.l %>:</span> <a href="<%= "/project/#{@active_project.id}/message/view/#{view_message.id}#objectComments" %>"><%= view_message.comments.length %></a>
 <% else %>
-        <span><%= "Comments" %>:</span> <%= view_message.comments.length %>
+        <span><%= :comments.l %>:</span> <%= view_message.comments.length %>
 <% end %>
       </div>
       <div class="messageTags">
-        <span><%= "Tags" %>:</span> <%= tag_list view_message %>
+        <span><%= :tags.l %>:</span> <%= tag_list view_message %>
       </div>
 <%
 	temp_actions = [
-		{:name => 'Edit', :url => {:controller => 'message', :action => 'edit', :id => view_message.id}, :cond => view_message.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'message', :action => 'delete', :id => view_message.id}, :cond => view_message.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this message?"}
+		{:name => :edit.l, :url => {:controller => 'message', :action => 'edit', :id => view_message.id}, :cond => view_message.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'message', :action => 'delete', :id => view_message.id}, :cond => view_message.can_be_deleted_by(@logged_user), :method => :post, :confirm => :message_delete_confirm.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] %>

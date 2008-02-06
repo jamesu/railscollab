@@ -11,5 +11,5 @@
 
 <%= form_tag( {:controller => 'message', :action => 'add'}, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => true} %>
-    <button class="submit" type="submit">Add message</button>
+    <button class="submit" type="submit"><%= :add_message.l %></button>
 </form>

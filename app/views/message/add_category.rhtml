@@ -18,5 +18,5 @@
 %>
 <%= form_tag :controller => 'message', :action => 'add_category' %>
 <%= render :partial => 'category_form' %>
-    <button class="submit" type="submit">Add category</button>
+    <button class="submit" type="submit"><%= :add_category.l %></button>
 </form>

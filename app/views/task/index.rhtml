@@ -16,5 +16,5 @@
 <%= render :partial => 'task_list', :collection => @open_task_lists, :locals => {:on_list_page => false} %>
 </div>
 <% else %>
-<p><%= "There are no open tasks for this project" %></p>
+<p><%= :no_open_task_lists_for_project.l %></p>
 <% end %>

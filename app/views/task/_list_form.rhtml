@@ -1,42 +1,43 @@
 <%= error_messages_for :task_list %>
 
   <div>
-    <label for="taskListFormName"><%= "Name" %>: <span class="label_required">*</span></label>
+    <label for="taskListFormName"><%= :name.l %>: <span class="label_required">*</span></label>
     <%= text_field 'task_list', 'name', :id => 'taskListFormName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="taskListPriority"><%= "Priority" %>: <span class="label_required">*</span></label>
+    <label for="taskListPriority"><%= :priority.l %>: <span class="label_required">*</span></label>
     <%= text_field 'task_list', 'priority', :id => 'taskListPriority', :class => 'long' %>
   </div>
   
   <div>
-    <label for="taskListFormDescription"><%= "Description" %>: </label>
+    <label for="taskListFormDescription"><%= :description.l %>: </label>
     <%= text_area 'task_list', 'description', :id => 'taskListFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div class="formBlock">
-    <label for="taskListFormMilestone"><%= "Milestone" %>: </label>
+    <label for="taskListFormMilestone"><%= :milestone.l %>: </label>
     <%= select 'task_list', 'milestone_id', ProjectMilestone.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'taskListFormMilestone'} %>
   </div>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
-    <%= check_box 'task_list', 'is_private', :id => 'taskListFormIsPrivate', :class => 'checkbox'  %><label for="taskListFormIsPrivate" class="checkbox"><%= "Is private" %></label>
+    <label for="taskListFormIsPrivate"><%= :is_private_list.l %>: <span class="desc"><%= :is_private_list_info.l %></span></label>
+    <%= yesno_toggle 'task_list', 'is_private', :id => 'taskListFormIsPrivate', :class => 'yes_no'  %>
   </div>
 <% end %>
   
   <div class="formBlock">
-     <label for="taskListFormTags"><%= "Tags" %>:</label>
-     <%= text_field 'task_list', 'tags', :id => 'taskListFormTags', :class => 'long' %><br /><span class="desc">List of comma separated tags (example: "interface, javascript, public beta")</span>
+     <label for="taskListFormTags"><%= :tags.l %>:</label>
+     <%= text_field 'task_list', 'tags', :id => 'taskListFormTags', :class => 'long' %><br /><span class="desc"><%=:tags_info.l %></span>
   </div>
   
 <% if false and @task_list.new_record? %>
-  <h2><%= "Tasks" %></h2>
+  <h2><%= :tasks.l %></h2>
   <table class="blank">
     <tr>
-      <th><%= "Task" %>:</th>
-      <th><%= "Assign to "%>:</th>
+      <th><%= :task.l %>:</th>
+      <th><%= :assign_to.l %>:</th>
     </tr>
 <!-- TODO: tr with alterating background: #fff / #e8e8e8 & td's with short textarea & selection box -->
   </table>

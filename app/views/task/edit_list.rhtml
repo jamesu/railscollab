@@ -13,5 +13,5 @@
 %>
 <%= form_tag :controller => 'task', :action => 'edit_list' %>
 <%= render :partial => 'list_form' %>
-    <button class="submit" type="submit">Edit task list</button>
+    <button class="submit" type="submit"><%= :edit_task_list.l %></button>
 </form>

@@ -57,7 +57,7 @@
   
   <fieldset>
     <legend><%= :tags.l %></legend>
-    <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %>
+    <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %><br /><span class="desc"><%=:tags_info.l %></span>
   </fieldset>
 <% if @message.new_record? %>
   <fieldset id="emailNotification">
