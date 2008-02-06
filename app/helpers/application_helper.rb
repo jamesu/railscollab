@@ -97,6 +97,13 @@ module ApplicationHelper
 		adjusted_time.strftime(format)
 	end
 	
+	def yesno_toggle(object_name, method, options = {})
+		radio_button(object_name, method, "true", options.merge({:id => "#{options[:id]}Yes"})) +
+		" <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> " +
+		radio_button(object_name, method, "false", options.merge({:id => "#{options[:id]}No"})) +
+		" <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>"
+	end
+	
 	#def textilize(text)
 	# "<p>#{text}</p>"
 	#end

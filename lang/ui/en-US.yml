@@ -265,7 +265,7 @@ options: Options
 private_message: Private message
 important_message: Important message
 enable_comments: Enable comments
-enable_anonymous_comments: Enable anonymous comments
+enable_anonymous_comments: Anonymous comments
 update_options: Update options
 edit_message_sidebar_link: "&raquo; Edit message"
 completed_milestones: Completed milestones
@@ -305,5 +305,7 @@ email_notification_info: Notify selected people about this message via email
 # Email
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
 
+yesno_yes: "Yes"
+yesno_no: "No"
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
