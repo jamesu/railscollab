@@ -235,6 +235,7 @@ users_active_in_last_n_minutes: "Users who were active in last {number} minutes:
 my_projects_sidebar_link: "&raquo; My projects"
 update_feeds: RSS feeds
 recent_activities: Recent activities
+recent_milestones: Recent milestones
 active_projects: Active projects
 finished_projects: Finished projects
 archived_projects_list_info: "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them."
@@ -344,5 +345,10 @@ forgot_password_sent_email: Further instructions have been sent to your e-mail a
 
 yesno_yes: "Yes"
 yesno_no: "No"
+new_password_required: New password requires
+does_not_match: Does not match
+has_insufficient_permissions: Has insufficient permissions
+required: Required
+is_incorrect: Is incorrect
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"

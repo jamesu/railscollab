@@ -118,12 +118,12 @@ class AccessController < ApplicationController
         @password_data = params[:user]
             
         unless @password_data[:password]
-          @user.errors.add(:password, "New password required")
+          @user.errors.add(:password, :new_password_required.l)
           return
         end
           
         unless @password_data[:password] == @password_data[:password_confirmation]
-          @user.errors.add(:password_confirmation, "Does not match")
+          @user.errors.add(:password_confirmation, :does_not_match.l)
           return
         end
     

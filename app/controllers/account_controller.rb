@@ -109,30 +109,30 @@ class AccountController < ApplicationController
         end
         
         if not @user.profile_can_be_updated_by(@logged_user)
-          @user.errors.add(:logged_user, "Has insufficient permissions")
+          @user.errors.add(:logged_user, :has_insufficient_permissions.l)
           return
         end
         
         @password_data = params[:user]
         if not @logged_user.is_admin?
           if not @password_data[:old_password]
-            @user.errors.add(:old_password, "Required")
+            @user.errors.add(:old_password, :required.l)
             return
           end
             
           if not @user.valid_password(@password_data[:old_password])
-            @user.errors.add(:old_password, "Is incorrect")
+            @user.errors.add(:old_password, :is_incorrect.l)
             return
           end
         end
             
         if not @password_data[:password]
-          @user.errors.add(:password, "New password required")
+          @user.errors.add(:password, :new_password_required.l)
           return
         end
           
         if not @password_data[:password] == @password_data[:password_confirmation]
-          @user.errors.add(:password_confirmation, "Does not match")
+          @user.errors.add(:password_confirmation, :does_not_match.l)
           return
         end
     
