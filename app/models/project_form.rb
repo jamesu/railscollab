@@ -71,11 +71,15 @@ class ProjectForm < ActiveRecord::Base
 	def in_object
 		return nil if (self.in_object_id == nil or self.in_object_id == 0)
 		
-		if self.action == :add_comment
-			ProjectMessage.find(self.in_object_id)
-		elsif self.action == :add_task
-			ProjectTaskList.find(self.in_object_id)
-		else
+		begin
+			if self.action == :add_comment
+				ProjectMessage.find(self.in_object_id)
+			elsif self.action == :add_task
+				ProjectTaskList.find(self.in_object_id)
+			else
+				nil
+			end
+		rescue ActiveRecord::RecordNotFound
 			nil
 		end
 	end
