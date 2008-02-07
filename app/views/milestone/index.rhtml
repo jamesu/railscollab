@@ -16,26 +16,26 @@
 <div id="milestones">
 <% if @late_milestones.length > 0 %>
   <div id="lateMilestones">
-  <h2><%= "Late milestones" %></h2>
+  <h2><%= :late_milestones.l %></h2>
 <%= render :partial => 'view_milestone', :collection => @late_milestones %>
   </div>
 <% end %>
 
 <% if @today_milestones.length > 0 %>
   <div id="todayMilestones">
-  <h2><%= "Todays milestones" %></h2>
+  <h2><%= :todays_milestones.l %></h2>
 <%= render :partial => 'view_milestone', :collection => @today_milestones %> 
   </div>
 <% end %>
 
 <% if @upcomming_milestones.length > 0 %>
   <div id="upcomingMilestones">
-  <h2><%= "Upcomming milestones" %></h2>
+  <h2><%= :upcomming_milestones.l %></h2>
 <%= render :partial => 'view_milestone', :collection => @upcomming_milestones %> 
   </div>
 <% end %>
 
 </div>
 <% else %>
-<p><%= "No active milestones in project" %></p>
+<p><%= :no_active_milestones_in_project.l %></p>
 <% end %>

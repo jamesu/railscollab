@@ -1,35 +1,35 @@
 <%= error_messages_for :milestone %>
   <div>
-    <label for="milestoneFormName"><%= "Name" %>: <span class="label_required">*</span></label>
+    <label for="milestoneFormName"><%= :name.l %>: <span class="label_required">*</span></label>
     <%= text_field 'milestone', 'name', :id => 'milestoneFormName', :class => 'long' %>
   </div>
 
   <div>
-    <label for="milestoneFormDesc"><%= "Description" %>: <span class="label_required">*</span></label>
+    <label for="milestoneFormDesc"><%= :description.l %>: <span class="label_required">*</span></label>
     <%= text_area 'milestone', 'description', :id => 'milestoneFormDesc', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
 
   <div>
-    <label for="milestoneDueDate"><%= "Due date" %>:</label>
+    <label for="milestoneDueDate"><%= :due_date.l %>:</label>
     <%= date_select 'milestone', 'due_date', :id => 'milestoneDueDate', :class => 'short' %>
   </div>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
-    <label for="milestoneIsPrivate"><%= "Private milestone" %>: <span class="desc">(<%= "Private milestones are visible only to owner company members. Members of client companies will not be able to see them." %>)</span></label>
-    <%= check_box 'milestone', 'is_private', :id => 'milestoneIsPrivate', :class => 'checkbox'  %>
+    <label for="milestoneIsPrivate"><%= :private_milestone.l %>: <span class="desc"><%= :milestones_private_info.l %></span></label>
+    <%= yesno_toggle 'milestone', 'is_private', :id => 'milestoneIsPrivate', :class => 'checkbox'  %>
   </div>
 <% end %>
   
   <div class="formBlock">
     <div>
-      <label for="milestoneFormAssignedTo"><%= "Assigned to" %>:</label>
+      <label for="milestoneFormAssignedTo"><%= :assign_to.l %>:</label>
       <%= select 'milestone', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'milestoneFormAssignedTo'} %>
     </div>
-    <div><%= check_box_tag 'send_notification', '1', params[:send_notification], :id => 'milestoneFormSendNotification', :class => 'checkbox'  %><label for="milestoneFormSendNotification" class="checkbox"><%= "Send email notification to user" %></label></div>
+    <div><%= check_box_tag 'send_notification', '1', params[:send_notification], :id => 'milestoneFormSendNotification', :class => 'checkbox'  %> <label for="milestoneFormSendNotification" class="checkbox"><%= :send_email_notification_to_user.l %></label></div>
   </div>
   
   <div class="formBlock">
-     <label for="milestoneFormTags"><%= "Tags" %>:</label>
-     <%= text_field 'milestone', 'tags', :id => 'milestoneFormTags', :class => 'long' %><br /><span class="desc">List of comma separated tags (example: "interface, javascript, public beta")</span>
+     <label for="milestoneFormTags"><%= :tags.l %>:</label>
+     <%= text_field 'milestone', 'tags', :id => 'milestoneFormTags', :class => 'long' %><br /><span class="desc"><%= :tags_info.l %></span>
   </div>

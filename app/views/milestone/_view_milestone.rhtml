@@ -9,7 +9,7 @@
 <% end %>
 
 <% if view_milestone.is_private %>
-    <div class="private" title="<%= "Private milestone" %>"><span><%= "Private milestone" %></span></div>
+    <div class="private" title="<%= :private_milestone.l %>"><span><%= :private_milestone.l %></span></div>
 <% end %>
 
     <div class="header">
@@ -22,23 +22,23 @@
 <% end %>
 
 <% if not view_milestone.assigned_to.nil? %>
-        <span class="assignedTo"><%= view_milestone.assigned_to.object_name %>:</span>
+        <span class="assignedTo"><%= h view_milestone.assigned_to.object_name %>:</span>
 <% end %>
       <%= link_to (h view_milestone.name), :controller => 'milestone', :action => 'view', :id => view_milestone.id %>
 <% if view_milestone.is_upcomming? %>
- (<%= "#{view_milestone.days_left} Days left" %>)
+ (<%= :milestone_days_left.l_with_args(:days => view_milestone.days_left) %>)
 <% elsif view_milestone.is_late? %>
- (<%= "#{view_milestone.days_late} Days late" %>)
+ (<%= :milestone_days_late.l_with_args(:days => view_milestone.days_late) %>)
 <% elsif view_milestone.is_today? %>
- (<%= "Today" %>)
+ (<%= :today.l %>)
 <% end %>
     </div>
     
     <div class="content">
 <% if view_milestone.due_date.year > Date.today.year %>
-      <div class="dueDate"><span><%= "Due date" %>:</span> <%= format_usertime(view_milestone.due_date, "%A, %d %B, %Y") %></div>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(view_milestone.due_date, :milestone_due_date_extended_format.l) %></div>
 <% else %>
-      <div class="dueDate"><span><%= "Due date" %>:</span> <%= format_usertime(view_milestone.due_date, "%A, %d %B") %></div>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(view_milestone.due_date, :milestone_due_date_format.l) %></div>
 <% end %>
       
 <% if not view_milestone.description.nil? %>
@@ -47,15 +47,19 @@
 
 <!-- Milestones -->
 <% if not (view_milestone.project_messages.length > 0 or view_milestone.project_task_lists.length > 0) %>
-      <p>This milestone is empty. You can add a <%= link_to 'message', :controller => 'message', :action => 'add', :milestone_id => view_milestone.id %> or a <%= link_to 'task list', :controller => 'task', :action => 'add_list', :milestone_id => view_milestone.id %> to it at any time</p>
+      <p><%= :milestone_empty_info.l_with_args(
+               :message => link_to(:message.l, :controller => 'message', :action => 'add', :milestone_id => view_milestone.id),
+               :task_list => link_to(:task_list.l, :controller => 'task', :action => 'add_list', :milestone_id => view_milestone.id)) %></p>
 <% else %>
 <% if view_milestone.project_messages.length > 0 %>
-      <p><%= "Messages" %>:</p>
+      <p><%= :messages.l %>:</p>
       <ul>
 <% (@logged_user.member_of_owner? ? view_milestone.project_messages : view_milestone.project_messages.public).each do |message| -%>
         <li><%= link_to (h message.title), :controller => 'message', :action => 'view', :id => message.id %>
 <% if not message.created_by.nil? %>
-      <span class="desc">(<%= format_usertime(message.created_on, "%b %d. %Y %H:%M") %> | <%= link_to (h message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id %>)</span>
+      <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
+             :time => format_usertime(message.created_on, :milestone_messages_created_format.l),
+             :user => link_to(h(message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id )) %>)</span>
 <% end %>
 <% end %>
       </ul>
@@ -63,7 +67,7 @@
 
 <!-- Task lists -->
 <% if view_milestone.project_task_lists.length > 0 %>
-      <p><%= "Task lists" %>:</p>
+      <p><%= :task_lists.l %>:</p>
       <ul>
 <% (@logged_user.member_of_owner? ? view_milestone.project_task_lists : view_milestone.project_task_lists.public).each do |task_list| -%>
 <% if task_list.is_completed? %>
@@ -77,12 +81,12 @@
 
 <% end %>
 
-  <p><span><%= "Tags" %>:</span> <%= tag_list view_milestone %></p>
+  <p><span><%= :tags.l %>:</span> <%= tag_list view_milestone %></p>
 
 <%
 	temp_actions = [
-		{:name => 'Edit', :url => {:controller => 'milestone', :action => 'edit', :id => view_milestone.id}, :cond => view_milestone.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'milestone', :action => 'delete', :id => view_milestone.id}, :cond => view_milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this milestone?"}
+		{:name => :edit.l, :url => {:controller => 'milestone', :action => 'edit', :id => view_milestone.id}, :cond => view_milestone.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => view_milestone.id}, :cond => view_milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => :milestone_confirm_delete.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] %>

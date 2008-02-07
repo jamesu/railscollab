@@ -340,6 +340,29 @@ mark_task_completed: Mark task as completed
 edit_tasks: Edit tasks
 task: Task
 
+# Milestone form
+private_milestone: Private milestone
+milestones_private_info: "(Private milestones are visible only to owner company members. Members of client companies will not be able to see them.)"
+due_date: Due date
+send_email_notification_to_user: Send email notification to user
+
+# Milestone view
+no_active_milestones_in_project: There are no active milestones in this project
+late_milestones: Late milestones
+todays_milestones: Todays milestones
+upcomming_milestones: Upcomming milestones
+milestone_days_left: "{days} days left"
+milestone_days_late: "{days} days late"
+today: Today
+milestone_due_date_extended_format: "%A, %d %B, %Y"
+milestone_due_date_format: "%A, %d %B"
+milestone_empty_info: "This milestone is empty. You can add a {message} or a {task_list} to it at any time"
+task_lists: Task lists
+message: Message
+milestone_messages_created_with_user: "{time} | {user}"
+milestone_messages_created_format: "%b %d. %Y %H:%M"
+milestone_confirm_delete: "Are you sure you want to delete this milestone?"
+
 # Activity
 action_add: Added
 action_delete: Deleted
