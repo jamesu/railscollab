@@ -142,7 +142,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def password_reset_key
-	   Digest::SHA1.hexdigest(self.salt + self.twisted_token + (self.last_login.nil? ? '' : self.last_login))
+	   Digest::SHA1.hexdigest(self.salt + self.twisted_token + (self.last_login.nil? ? '' : self.last_login.strftime('%Y-%m-%d %H:%M:%S')))
 	end
 	
 	def twisted_token()
