@@ -372,8 +372,17 @@ action_open: Opened
 action_close: Closed
 action_upload: Uploaded
 
-# Email
+# Access
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
+email_address: Email address
+send_password: Send password
+repeat_password: Repeat password
+username: Username
+password: Password
+openid: OpenID
+use_openid: Use OpenID
+remember_me_for_days: "Remember me for {days} days"
+forgot_password_q: "Forgot password?"
 
 yesno_yes: "Yes"
 yesno_no: "No"
