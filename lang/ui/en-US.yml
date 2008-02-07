@@ -389,6 +389,29 @@ use_openid: Use OpenID
 remember_me_for_days: "Remember me for {days} days"
 forgot_password_q: "Forgot password?"
 
+# Account
+current_avatar: Current avatar
+delete_current_avatar: Delete current avatar
+avatar_confirm_delete: "Are you sure you want to delete this avatar?"
+avatar_upload_info: "Note that the current avatar will be deleted and replaced with new one!"
+avatar_not_uploaded: "Avatar is not uploaded"
+administration_options_info: "Administration options (available only to administrators!)"
+administrator: Administrator
+auto_assign_to_new_projects: "Auto assign to new projects?"
+openid_info: "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>."
+display_name: Display name
+timezone: Timezone
+instant_messengers: Instant Messengers
+service: Service
+value: Value
+primary_im: Primary IM
+instant_messengers_info: "All IM addresses that you enter will be listed on your card page. Only the primary IM will be shown on other pages (like the people page of the project)."
+phone_numbers: Phone numbers
+office: Office
+fax: Fax
+mobile: Mobile
+home: Home
+
 yesno_yes: "Yes"
 yesno_no: "No"
 new_password_required: New password requires

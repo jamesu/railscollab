@@ -38,30 +38,30 @@
 
 <% if @logged_user.is_admin %>
   <div class="hint">
-    <div class="header"><%= "Administration options (available only to administrators!)" %></div>
+    <div class="header"><%= :administration_options_info.l %></div>
     <div class="content">
       <div>
-        <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+        <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
         <%= text_field 'user', 'username', :id => 'userFormUsername' %>
       </div>
       
 <% if @logged_user.member_of_owner? %>
       <div>
-        <label for="userFormCompany"><%= "Company" %>: <span class="label_required">*</span></label>
+        <label for="userFormCompany"><%= :company.l %>: <span class="label_required">*</span></label>
         <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
       </div>
       
       <fieldset>
-        <legend><%= "Options" %></legend>
+        <legend><%= :options.l %></legend>
         
         <div>
-          <label for="userFormIsAdmin"><%= "Administrator" %>: <span class="label_required">*</span></label>
-          <%= check_box 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
+          <label for="userFormIsAdmin"><%= :administrator.l %>: <span class="label_required">*</span></label>
+          <%= yesno_toggle 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
         </div>
     
         <div>
-          <label for="userFormAutoAssign"><%= "Auto assign to new projects?" %>: <span class="label_required">*</span></label>
-          <%= check_box 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
+          <label for="userFormAutoAssign"><%= :auto_assign_to_new_projects.l %>: <span class="label_required">*</span></label>
+          <%= yesno_toggle 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
         </div>
       </fieldset>
 <% end %>
@@ -69,48 +69,48 @@
   </div>
 <% else %>
   <div>
-    <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+    <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
     <%= @user.username %>
   </div>
 <% end %>
 
 <% if AppConfig.allow_openid %>
   <div>
-    <label for="userFormOpenID"><%= "OpenID" %>:</label>
+    <label for="userFormOpenID"><%= :openid.l %>:</label>
     <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
-    <p class="desc"><%= "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>." %></p>
+    <p class="desc"><%= :openid_info.l %></p>
   </div>
 <% end %>
   
   <div>
-    <label for="profileFormDisplayName"><%= "Display name" %>:</label>
+    <label for="profileFormDisplayName"><%= :display_name.l %>:</label>
     <%= text_field 'user', 'display_name', :id => 'profileFormDisplayName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="profileFormTitle"><%= "Title" %>:</label>
+    <label for="profileFormTitle"><%= :title.l %>:</label>
     <%= text_field 'user', 'title', :id => 'profileFormTitle' %>
   </div>
   
   <div>
-    <label for="profileFormEmail"><%= "Email address" %>: <span class="label_required">*</span></label>
+    <label for="profileFormEmail"><%= :email_address.l %>: <span class="label_required">*</span></label>
     <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
   </div>
   
   <div>
-    <label for="profileFormTimezone"><%= "Timezone" %>: <span class="label_required">*</span></label>
+    <label for="profileFormTimezone"><%= :timezone.l %>: <span class="label_required">*</span></label>
     <%= time_zone_select 'user', 'timezone_name', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
   </div>
 
 <% all_im_values = @user.im_info %>
 <% if all_im_values.length > 0 %>
   <fieldset>
-    <legend><%= "Instant Messengers" %></legend>
+    <legend><%= :instant_messengers.l %></legend>
     <table class="blank">
       <tr>
-        <th colspan="2"><%= "Service" %></th>
-        <th><%= "Value" %></th>
-        <th><%= "Primary IM" %></th>
+        <th colspan="2"><%= :service.l %></th>
+        <th><%= :value.l %></th>
+        <th><%= :primary_im.l %></th>
       </tr>
 <% @count = 0 %>
 <% all_im_values.each do |im_value| -%>
@@ -123,35 +123,35 @@
 <% @count += 1 %>
 <% end %>
     </table>
-    <p class="desc"><%= "All IM addresses that you enter will be listed on your card page. Only the primary IM will be shown on other pages (like the people page of the project)." %></p>
+    <p class="desc"><%= :instant_messengers_info.l %></p>
   </fieldset>
 <% end %>
   
   <fieldset>
-    <legend><%= "Phone numbers" %></legend>
+    <legend><%= :phone_numbers.l %></legend>
     
     <div>
-      <label for="profileFormOfficeNumber"><%= "Office" %>:</label>
+      <label for="profileFormOfficeNumber"><%= :office.l %>:</label>
       <%= text_field 'user', 'office_number', :id => 'profileFormOfficeNumber' %>
     </div>
     
     <div>
-      <label for="profileFormFaxNumber"><%= "Fax" %>:</label>
+      <label for="profileFormFaxNumber"><%= :fax.l %>:</label>
       <%= text_field 'user', 'fax_number', :id => 'profileFormFaxNumber' %>
     </div>
     
     <div>
-      <label for="profileFormMobileNumber"><%= "Mobile" %>:</label>
+      <label for="profileFormMobileNumber"><%= :mobile.l %>:</label>
       <%= text_field 'user', 'mobile_number', :id => 'profileFormMobileNumber' %>
     </div>
     
     <div>
-      <label for="profileFormHomeNumber"><%= "Home" %>:</label>
+      <label for="profileFormHomeNumber"><%= :home.l %>:</label>
       <%= text_field 'user', 'home_number', :id => 'profileFormHomeNumber' %>
     </div>
     
   </fieldset>
   
-  <button class="submit" type="submit">Update profile</button>
+  <button class="submit" type="submit"><%= :update_profile.l %></button>
 
 </form>

@@ -3,7 +3,7 @@
   
     if @user.member_of_owner?
         @tabbed_navigation_items = administration_tabbed_navigation(:company)
-        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :company , :url => "/company/card/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
+        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :company , :url => "/company/card/#{@user.company.id}"}, {:title => @user.display_name, :url => "/user/card/#{@user.id}"}])
     else
         @tabbed_navigation_items = administration_tabbed_navigation(:clients)
         @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :clients, :url => "/administration/clients"}, {:title => (h @user.company.name), :url => "/company/view_client/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
@@ -66,7 +66,7 @@
       </table>
 <% end %>
     </div>
-    <button class="submit" type="submit">Update permissions</button>
+    <button class="submit" type="submit"><%= :update_permissions.l %></button>
   </form>
 </div>
 <% end %>
