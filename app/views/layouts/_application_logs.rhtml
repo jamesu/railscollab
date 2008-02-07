@@ -18,11 +18,11 @@
 <% if show_project_column %>
     <br /><span class="desc">
     <% if application_logs.is_today? %>
-        <%= "Today #{format_usertime(application_logs.created_on, '%H:%M')}" %>
+        <%= :action_today_with_time.l_with_args(:time => format_usertime(application_logs.created_on, :action_today_fomat.l)) %>
     <% elsif application_logs.is_yesterday? %>
-        <%= "Yesterday" %>
+        <%= :yesterday.l %>
     <% else %>
-        <%= format_usertime(application_logs.created_on, "%b %d %Y") %>
+        <%= format_usertime(application_logs.created_on, :action_past_format.l) %>
     <% end %>
     <% if not application_logs.taken_by.nil? %>
     , <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>
@@ -39,11 +39,11 @@
 <% else %>
     <td class="logTakenOnBy">
     <% if application_logs.is_today? %>
-        <%= "Today #{format_usertime(application_logs.created_on, '%H:%M')}" %>
+        <%= :action_today_with_time.l_with_args(:time => format_usertime(application_logs.created_on, :action_today_fomat.l)) %>
     <% elsif application_logs.is_yesterday? %>
-        <%= "Yesterday" %>
+        <%= :yesterday.l %>
     <% else %>
-        <%= format_usertime(application_logs.created_on, "%b %d %Y") %>
+        <%= format_usertime(application_logs.created_on, :action_past_format.l) %>
     <% end %>
     <% if not application_logs.taken_by.nil? %>
     , <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>

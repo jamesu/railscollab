@@ -369,8 +369,13 @@ action_delete: Deleted
 action_modified: Modified
 action_reopened: Reopened
 action_open: Opened
+action_edit: Modified
 action_close: Closed
 action_upload: Uploaded
+action_today_with_time: "Today {time}"
+action_today_fomat: "%H:%M"
+action_past_format: "%b %d %Y"
+action_yesterday: Yesterday
 
 # Access
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
@@ -393,5 +398,6 @@ required: Required
 is_incorrect: Is incorrect
 not_allowed: Not allowed
 not_part_of_project: Not part of project
+search_box_default: "Search..."
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
