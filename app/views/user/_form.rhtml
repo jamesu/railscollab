@@ -2,13 +2,13 @@
 
 <% if @logged_user.is_admin? %>
   <div>
-    <label for="userFormUsername"><%= "Username" %>: <span class="label_required">*</span></label>
+    <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
     <%= text_field 'user', 'username', :id => 'userFormUsername', :class => 'medium' %>
   </div>
   
 <% if @user.new_record? and @logged_user.member_of_owner? %>
   <div>
-    <label for="userFormCompany"><%= "Company" %>: <span class="label_required">*</span></label>
+    <label for="userFormCompany"><%= :company.l %>: <span class="label_required">*</span></label>
     <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
   </div>
 <% end %>
@@ -16,42 +16,42 @@
 
 <% if AppConfig.allow_openid %>
   <div>
-    <label for="userFormOpenID"><%= "OpenID" %>:</label>
+    <label for="userFormOpenID"><%= :openid.l %>:</label>
     <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
-    <p class="desc"><%= "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>." %></p>
+    <p class="desc"><%= :openid_info.l %></p>
   </div>
 <% end %>
 
   <div>
-    <label for="userFormDisplayName"><%= "Display name" %>:</label>
+    <label for="userFormDisplayName"><%= :display_name.l %>:</label>
     <%= text_field 'user', 'display_name', :id => 'userFormDisplayName', :class => 'medium' %>
   </div>
   
   <div>
-    <label for="profileFormEmail"><%= "Email address" %>: <span class="label_required">*</span></label>
+    <label for="profileFormEmail"><%= :email_address.l %>: <span class="label_required">*</span></label>
     <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
   </div>
   
   <div>
-    <label for="profileFormTimezone"><%= "Timezone" %>: <span class="label_required">*</span></label>
+    <label for="profileFormTimezone"><%= :timezone.l %>: <span class="label_required">*</span></label>
     <%= time_zone_select 'user', 'timezone_name', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
   </div>
   
 <% if @user.new_record? or @logged_user.is_admin? %>
   <fieldset>
-    <legend><%= "Password" %></legend>
+    <legend><%= :password.l %></legend>
     <div>
-        <label for="userFormGeneratePassword"><%= "Generate password" %>:</label>
+        <label for="userFormGeneratePassword"><%= :generate_password.l %>:</label>
         <input type="checkbox" checked="true" name="credentials[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="user_form_update_passwordgen()"/>      
     </div>
     <div id="userFormPasswordInputs">
       <div>
-        <label for="userFormPassword"><%= "Password" %>: <span class="label_required">*</span></label>
+        <label for="userFormPassword"><%= :password.l %>: <span class="label_required">*</span></label>
         <input type="password" id="userFormPassword" name="credentials[password]" />
       </div>
 
       <div>
-        <label for="userFormPasswordA"><%= "Repeat password" %>: <span class="label_required">*</span></label>
+        <label for="userFormPasswordA"><%= :repeat_password.l %>: <span class="label_required">*</span></label>
         <input type="password" id="userFormPasswordA" name="credentials[password_confirmation]" />
       </div>
     </div>
@@ -64,21 +64,24 @@
 <% if @logged_user.is_admin? and @logged_user.member_of_owner? %>
   <div class="formBlock">
     <div>
-      <label for="userFormIsAdmin"><%= "Administrator" %>: <span class="label_required">*</span></label>
-      <%= check_box 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
+      <label for="userFormIsAdmin"><%= :administrator.l %>: <span class="label_required">*</span></label>
+      <%= yesno_toggle 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'yes_no'  %>
     </div>
     
     <div>
-      <label for="userFormAutoAssign"><%= "Auto assign to new projects?" %>: <span class="label_required">*</span></label>
-      <%= check_box 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
+      <label for="userFormAutoAssign"><%= :auto_assign_to_new_projects.l %>: <span class="label_required">*</span></label>
+      <%= yesno_toggle 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'yes_no'  %>
     </div>
   </div>
 <% end %>
   
 <% if @user.new_record? %>
   <div class="formBlock">
-    <label for="userFormEmailNotification"><%= "Send new account notification?" %>: <span class="label_required">*</span></label>
-    <input type="checkbox" checked="false" value="new_account_notification" class="checkbox" id="userFormEmailNotification"/>     
-    <br /><span class="desc"><%= "Add a rather short yet interesting description here" %></span>
+  
+  <label><%= :send_account_email_notification.l %>: <span class="label_required">*</span></label>
+  <input id="userFormEmailNotificationYes" class="yes_no" value="true" type="radio" <%= @send_email ? 'checked="checked"' : '' %> name="new_account_notification" />
+  <label class="yes_no" for="userFormEmailNotificationYes"><%= :yesno_yes.l %></label>
+  <input id="userFormEmailNotificationNo" class="yes_no" value="false" type="radio" <%= @send_email ? '' : 'checked="checked"' %> name="new_account_notification" />
+  <label class="yes_no" for="userFormEmailNotificationNo"><%= :yesno_no.l %></label> <br /><span class="desc"><%= :send_account_email_notication_info.l %></span>
   </div>
 <% end %>

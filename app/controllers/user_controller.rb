@@ -46,6 +46,8 @@ class UserController < ApplicationController
     @user = User.new
     @company = @logged_user.company
     
+    @send_email = params[:new_account_notification] == 'false' ? false : true
+    
     case request.method
       when :get
 	    begin
@@ -93,8 +95,10 @@ class UserController < ApplicationController
         
         if @logged_user.member_of_owner?
           @user.company_id = user_attribs[:company_id]
-          @user.is_admin = user_attribs[:is_admin]
-          @user.auto_assign = user_attribs[:auto_assign]
+          unless @user.company.id == Company.owner.id
+            @user.is_admin = user_attribs[:is_admin]
+            @user.auto_assign = user_attribs[:auto_assign]
+          end
         else
           @user.company_id = @company.id
         end
@@ -112,7 +116,7 @@ class UserController < ApplicationController
         
         if @user.save
           #ApplicationLog.new_log(@user, @logged_user, :add, true)
-          @user.send_new_account_info(new_account_password)
+          @user.send_new_account_info(new_account_password) if @send_email
           
           error_status(false, :success_added_user)
           redirect_back_or_default :controller => 'company', :action => 'view_client', :id => @company.id

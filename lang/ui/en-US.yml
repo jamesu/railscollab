@@ -412,6 +412,57 @@ fax: Fax
 mobile: Mobile
 home: Home
 
+# Comments
+add_comment: Add comment
+edit_comment: Edit comment
+post_comment: Post comment
+private_comment: Private comment
+private_comment_info: "Private comments are visible only to owner company members. Members of client companies will not be able to see them"
+comment_delete_confirm: "Are you sure you want to delete this comment?"
+no_comments_for_object: No comments are posted for this object
+comment_posted_with_user: "Posted on {time} by {user}"
+comment_posted: "Posted on {time}"
+comment_posted_format: "%b %d. %Y %H:%M"
+
+# User
+generate_password: Generate password
+send_account_email_notification: "Send email notification?"
+send_account_email_notication_info:  "If you select \"Yes\" the user will receive an email with a welcome message and login parameters"
+
+# Project
+project_show_description_in_overview: Show description on project overview page
+
+# Forms
+success_message: Success message
+action: Action
+enabled: Enabled
+visible: Visible
+
+# Time
+summary: Summary
+hours: Hours
+open_tasks: Open tasks
+done_date: Done date
+private_time: Private time
+private_time_info: "Private times are visible only to owner company members. Members of client companies will not be able to see them."
+billable_time: Billable time
+billable_time_info: "Billable times are those for which you expect payment from the client(s)."
+
+# Files
+file: File
+folder: Folder
+update_file: Update file
+new_file: New file
+new_revision: New revision
+existing_file: Existing file
+file_upload_info: "You can upload files of any type. Maximum filesize is {max}"
+file_update_info: "You can replace an existing file by specifying a new one. If you don't want to replace it simply leave this field blank."
+revision_comment: Revision comment
+private_file: Private file
+private_file_info: "Private files are visible only to owner company members. Members of client companies will not be able to see them."
+important_file: Important file
+important_file_info: "Important files are listed in the \"Important files\" sidebar on the project files page"
+
 yesno_yes: "Yes"
 yesno_no: "No"
 new_password_required: New password requires

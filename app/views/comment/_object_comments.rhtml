@@ -3,7 +3,7 @@
 	@additional_stylesheets << 'project/comments'
 %>
 <div id="objectComments">
-  <h2><%= "Comments" %></h2>
+  <h2><%= :comments.l %></h2>
 <% if comments.length > 0 %>
 <% counter = 0 %>
 <% comments.each do |comment| -%>
@@ -14,12 +14,15 @@
   <div class="comment odd" id="comment<%= comment.id %>">
   <% end %>
 <% if comment.is_private %>
-    <div class="private" title="<%= "Private comment" %>"><span><%= "Private comment" %></span></div>
+    <div class="private" title="<%= :private_comment.l %>"><span><%= :private_comment.l %></span></div>
 <% end %>
 <% if not comment.created_by.nil? %>
-    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= "Permalink" %>">#<%= counter %></a>:</span> <%= format_usertime(comment.created_on, "Posted on %b %d. %Y %H:%M by ") %><a href="<%= comment.created_by.object_url %>"><%= h comment.created_by.display_name %></a>:</div>
+    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= :permalink.l %>">#<%= counter %></a>:</span> <%= :comment_posted_with_user.l_with_args(
+             :time => format_usertime(comment.created_on, :comment_posted_format.l),
+             :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>") %>:</div>
 <% else %>
-    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= "Permalink" %>">#<%= counter %></a>:</span> <%= format_usertime(comment.created_on, "Posted on %b %d. %Y %H:%M") %>:</div>
+    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= :permalink.l %>">#<%= counter %></a>:</span> <%= :comment_posted.l_with_args(
+             :time => format_usertime(comment.created_on, comment_posted_format.l)) %>:</div>
 <% end %>
     <div class="commentBody">
 <% if (!comment.created_by.nil?) and comment.created_by.has_avatar? %>
@@ -31,8 +34,8 @@
     </div>
 <%
 	temp_actions = [
-		{:name => 'Edit', :url => "/project/#{@active_project.id}/comment/edit/#{comment.id}", :cond => comment.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => "/project/#{@active_project.id}/comment/delete/#{comment.id}", :cond => comment.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this comment?"}
+		{:name => :edit.l, :url => "/project/#{@active_project.id}/comment/edit/#{comment.id}", :cond => comment.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => "/project/#{@active_project.id}/comment/delete/#{comment.id}", :cond => comment.can_be_deleted_by(@logged_user), :method => :post, :confirm => :comment_delete_confirm.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
@@ -41,7 +44,7 @@
   </div>
 <% end %>
 <% else %>
-<p><%= "No comments are posted for this object" %></p>
+<p><%= :no_comments_for_object.l %></p>
 <% end %>
 
 </div>

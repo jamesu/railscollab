@@ -7,5 +7,5 @@
 
 <%= form_tag( {:controller => 'comment', :action => 'edit', :id => @comment.id}, :multipart => true ) %>
 <%= render :partial => 'form' %>
-    <button class="submit" type="submit">Edit comment</button>
+    <button class="submit" type="submit"><%= :edit_comment.l %></button>
 </form>

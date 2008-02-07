@@ -1,18 +1,18 @@
 <%= error_messages_for :comment %>
 
   <div class="formAddCommentText">
-    <label for="addCommentText"><%= "Text" %>: <span class="label_required">*</span></label>
+    <label for="addCommentText"><%= :text.l %>: <span class="label_required">*</span></label>
     <%= text_area 'comment', 'text', :id => 'addCommentText', :class => 'comment' %>
   </div>
     
 <% if @logged_user.member_of_owner? %>
   <fieldset>
-    <legend><%= "Options" %></legend>
+    <legend><%= :options.l %></legend>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= "Private comment" %>:</label></div>
-      <div class="optionControl"><%= check_box 'comment', 'is_private', :class => 'checkbox', :id => 'commentFormIsPrivate' %></div>
-      <div class="optionDesc"><%= "Private comments are visible only to owner company members. Members of client companies will not be able to see them" %></div>
+      <div class="optionLabel"><label><%= :private_comment.l %>:</label></div>
+      <div class="optionControl"><%= yesno_toggle 'comment', 'is_private', :class => 'yes_no', :id => 'commentFormIsPrivate' %></div>
+      <div class="optionDesc"><%= :private_comment_info.l %></div>
     </div>
   </fieldset>
 <% end %>

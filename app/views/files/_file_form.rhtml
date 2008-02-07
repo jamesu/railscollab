@@ -4,37 +4,37 @@
   <div class="hint">
     <div class="content">
       <div id="selectFileControl">
-        <label for="fileFormFile"><%= "File" %>: <span class="label_required">*</span></label>
+        <label for="fileFormFile"><%= :file.l %>: <span class="label_required">*</span></label>
         <input type="file" id="fileFormFile" name="file_data[file]"/>
       </div>
       <div id="selectFolderControl">
-        <label for="fileFormFolder"><%= "Folder" %>: <span class="label_required">*</span></label>
+        <label for="fileFormFolder"><%= :folder.l %>: <span class="label_required">*</span></label>
         <%= select 'file', 'folder_id', ProjectFolder.select_list(@active_project), {}, {:id => 'fileFormFolder'} %>
       </div>
-      <p><%= "You can upload files of any type. Maximum filesize is #{format_size AppConfig.max_upload_size}" %></p>
+      <p><%= :file_upload_info.l_with_args(:max => format_size(AppConfig.max_upload_size)) %></p>
     </div>
   </div>
 <% else %>
   <div class="hint">
-    <div class="header"><%= check_box_tag 'file_data[updated_file]', '1', false, :class => 'checkbox', :id => 'fileFormUpdateFile', :onclick => "file_form_select_update()" %><label for="fileFormUpdateFile" class="checkbox"><%= "Update file" %></label></div>
+    <div class="header"><%= check_box_tag 'file_data[updated_file]', '1', false, :class => 'checkbox', :id => 'fileFormUpdateFile', :onclick => "file_form_select_update()" %><label for="fileFormUpdateFile" class="checkbox"><%= :update_file.l %></label></div>
     <div class="content">
       <div id="updateFileDescription">
-        <p><%= "You can replace an existing file by specifying a new one. If you don't want to replace it simply leave this field blank." %></p>
+        <p><%= :file_update_info.l %></p>
       </div>
       <div id="updateFileForm">
-        <p><strong><%= "Existing file" %>:</strong> <a href="<%= @file.download_url %>"><%= h @file.filename %></a> | <%= format_size @file.file_size %></p>
+        <p><strong><%= :existing_file.l %>:</strong> <a href="<%= @file.download_url %>"><%= h @file.filename %></a> | <%= format_size @file.file_size %></p>
         
         <div>
-          <label for="fileFormFile"><%= "New file" %>: </label>
+          <label for="fileFormFile"><%= :new_file.l %>: </label>
           <input type="file" id="fileFormFile" name="file_data[file]"/>
         </div>
         
         <div id="revisionControls">
           <div>
-            <%= check_box_tag 'file_data[version_file_change]', '1', false, :class => 'checkbox', :id => 'fileFormVersionChange', :onclick => "file_form_select_revision()" %><label for="fileFormVersionChange" class="checkbox"><%= "New revision" %></label>
+            <%= check_box_tag 'file_data[version_file_change]', '1', false, :class => 'checkbox', :id => 'fileFormVersionChange', :onclick => "file_form_select_revision()" %><label for="fileFormVersionChange" class="checkbox"><%= :new_revision.l %></label>
           </div>
           <div id="fileFormRevisionCommentBlock">
-            <label for="fileFormRevisionComment"><%= "Revision comment" %>:</label>
+            <label for="fileFormRevisionComment"><%= :revision_comment.l %>:</label>
             <%= text_area_tag 'file_data[revision_comment]', '', :id => 'fileFormRevisionComment', :class => 'short' %>
           </div>
         </div>
@@ -50,41 +50,41 @@
 <% end %>
 
   <fieldset>
-    <label for="fileFormDescription"><%= "Description" %>:</label>
+    <label for="fileFormDescription"><%= :description.l %>:</label>
     <%= text_area 'file', 'description', :id => 'fileFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
   </fieldset>
   
 <% if @logged_user.member_of_owner? %>
   <fieldset>
-    <legend><%= "Options" %></legend>
+    <legend><%= :options.l %></legend>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= "Private file" %>:</label></div>
-      <div class="optionControl"><%= check_box 'file', 'is_private', :class => 'checkbox', :id => 'fileFormIsPrivate' %></div>
-      <div class="optionDesc"><%= "Private files are visible only to owner company members. Members of client companies will not be able to see them." %></div>
+      <div class="optionLabel"><label><%= :private_file.l %>:</label></div>
+      <div class="optionControl"><%= yesno_toggle 'file', 'is_private', :class => 'yes_no', :id => 'fileFormIsPrivate' %></div>
+      <div class="optionDesc"><%= :private_file_info.l %></div>
     </div>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= "Important file" %>:</label></div>
-      <div class="optionControl"><%= check_box 'file', 'is_important', :class => 'checkbox', :id => 'fileFormIsImportant' %></div>
-      <div class="optionDesc"><%= "Important messages are listed in the \"Important files\" sidebar on the project files page" %></div>
+      <div class="optionLabel"><label><%= :important_file.l %>:</label></div>
+      <div class="optionControl"><%= yesno_toggle 'file', 'is_important', :class => 'yes_no', :id => 'fileFormIsImportant' %></div>
+      <div class="optionDesc"><%= :important_file_info.l %></div>
     </div>
     
     <div class="objectOption">
-    <div class="optionLabel"><label><%= "Enable comments" %>:</label></div>
-    <div class="optionControl"><%= check_box 'file', 'comments_enabled', :class => 'checkbox', :id => 'fileFormEnableComments' %></div>
-    <div class="optionDesc"><%= "Users that can view this object can post comments on it. Select \"No\" to lock comments" %></div>
+    <div class="optionLabel"><label><%= :enable_comments.l %>:</label></div>
+    <div class="optionControl"><%= yesno_toggle 'file', 'comments_enabled', :class => 'yes_no', :id => 'fileFormEnableComments' %></div>
+    <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
   
   <div class="objectOption">
-    <div class="optionLabel"><label><%= "Enable anonymous comments" %>:</label></div>
-    <div class="optionControl"><%= check_box 'file', 'anonymous_comments_enabled', :class => 'checkbox', :id => 'fileFormEnableAnonymousComments' %></div>
-    <div class="optionDesc"><%= "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged." %></div>
+    <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
+    <div class="optionControl"><%= yesno_toggle 'file', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'fileFormEnableAnonymousComments' %></div>
+    <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
   </div>
   </fieldset>
 <% end %>
 
   <fieldset>
-    <legend><%= "Tags" %></legend>
-    <%= text_field 'file', 'tags', :id => 'fileFormTags', :class => 'long' %>
+    <legend><%= :tags.l %></legend>
+    <%= text_field 'file', 'tags', :id => 'fileFormTags', :class => 'long' %><br /><span class="desc"><%= :tags_info.l %></span>
   </fieldset>

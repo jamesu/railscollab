@@ -1,30 +1,30 @@
 <%= error_messages_for :form %>
   <div>
-    <label for="projectFormName"><%= "Name" %>: <span class="label_required">*</span></label>
+    <label for="projectFormName"><%= :name.l %>: <span class="label_required">*</span></label>
     <%= text_field 'form', 'name', :id => 'projectFormName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="projectFormDescription"><%= "Description" %>: </label>
+    <label for="projectFormDescription"><%= :description.l %>: </label>
     <%= text_area 'form', 'description', :id => 'projectFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div>
-    <label for="projectFormSuccessMessage"><%= "Success message" %>: </label>
+    <label for="projectFormSuccessMessage"><%= :success_message.l %>: </label>
     <%= text_area 'form', 'success_message', :id => 'projectFormSuccessMessage', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div class="formBlock" id="projectFormAction">
     <fieldset>
-      <legend><%= "Action" %></legend>
+      <legend><%= :action.l %></legend>
       
       <table class="blank">
         <tr>
-          <td><%= radio_button 'form', 'action', 'add_comment', {:id => 'projectFormActionAddComment', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddComment" class="checkbox"><%= "Add comment" %></label></td>
+          <td><%= radio_button 'form', 'action', 'add_comment', {:id => 'projectFormActionAddComment', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddComment" class="checkbox"><%= :add_comment.l %></label></td>
           <td><%= "to" %>: <%= select 'form_objects', 'add_comment_object', ProjectMessage.select_list(@active_project), {}, {:id => 'projectFormActionSelectMessage', :class => 'select_message'} %></td>
         </tr>
         <tr>
-          <td><%= radio_button 'form', 'action', 'add_task', {:id => 'projectFormActionAddTask', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddTask" class="checkbox"><%= "Add task" %></label></td>
+          <td><%= radio_button 'form', 'action', 'add_task', {:id => 'projectFormActionAddTask', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddTask" class="checkbox"><%= :add_task.l %></label></td>
           <td><%= "to" %>: <%= select 'form_objects', 'add_task_object', ProjectTaskList.select_list(@active_project), {}, {:id => 'projectFormActionSelectTaskList', :class => 'select_task_list'} %></td>
         </tr>
       </table>
@@ -33,15 +33,15 @@
   
   <div class="formBlock" id="projectFormOptions">
     <fieldset>
-      <legend><%= "Options" %></legend>
+      <legend><%= :options.l %></legend>
       <table class="blank">
         <tr>
-          <td><label for="projectFormIsEnabled"><%= "Enabled" %>:</label></td>
-          <td><%= check_box 'form', 'is_enabled', :id => 'projectFormIsEnabled', :class => 'checkbox' %></td>
+          <td><label><%= :enabled.l %>:</label></td>
+          <td><%= yesno_toggle 'form', 'is_enabled', :id => 'projectFormIsEnabled', :class => 'yes_no' %></td>
         </tr>
         <tr>
-          <td><label for="projectFormIsVisible"><%= "Visible" %>:</label></td>
-          <td><%= check_box 'form', 'is_visible', :id => 'projectFormIsVisible', :class => 'checkbox' %></td>
+          <td><label><%= :visible.l %>:</label></td>
+          <td><%= yesno_toggle 'form', 'is_visible', :id => 'projectFormIsVisible', :class => 'yes_no' %></td>
         </tr>
       </table>
     </fieldset>

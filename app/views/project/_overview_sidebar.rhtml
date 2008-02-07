@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul>
 <% @visible_forms.each do |visible_form| -%>
-      <li><%= link_to (h visible_form.name), :controller => 'form', :action => 'submit' %></li>
+      <li><%= link_to (h visible_form.name), :controller => 'form', :action => 'submit', :id => visible_form.id %></li>
 <% end %>
     </ul>
   </div>

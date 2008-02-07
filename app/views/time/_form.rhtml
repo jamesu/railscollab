@@ -1,45 +1,45 @@
 <%= error_messages_for :time %>
   <div>
-    <label for="timeFormName"><%= "Summary" %>: <span class="label_required">*</span></label>
+    <label for="timeFormName"><%= :summary.l %>: <span class="label_required">*</span></label>
     <%= text_field 'time', 'name', :id => 'timeFormName', :class => 'long' %>
   </div>
 
 <div id="openTaskLists">
 <% if @open_task_lists.length > 0 %>
-	<label for="timeOpenTasks"><%= "Open tasks" %>:</label>
+	<label for="timeOpenTasks"><%= :open_tasks.l %>:</label>
     <%= select 'time', 'open_task_id', task_select_list(@open_task_lists), {}, {:id => 'timeOpenTasks'} %>
 <% end %>
 </div>
 
   <div>
-    <label for="timeFormHours"><%= "Hours" %>: <span class="label_required">*</span></label>
+    <label for="timeFormHours"><%= :hours.l %>: <span class="label_required">*</span></label>
     <%= text_field 'time', 'hours', :id => 'timeFormHours', :class => 'short' %>
   </div>
   
   <div>
-    <label for="timeFormDesc"><%= "Description" %>: </label>
+    <label for="timeFormDesc"><%= :description.l %>: </label>
     <%= text_area 'time', 'description', :id => 'timeFormDesc', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div>
-    <label for="timeDoneDate"><%= "Done date" %>:</label>
+    <label for="timeDoneDate"><%= :done_date.l %>:</label>
     <%= date_select 'time', 'done_date', :id => 'timeDoneDate', :class => 'short' %>
   </div>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
-    <label for="timeFormIsPrivate"><%= "Private" %>: <span class="desc">(<%= "Private times are visible only to owner company members. Members of client companies will not be able to see them." %>)</span></label>
-    <%= check_box 'time', 'is_private', :id => 'timeFormIsPrivate', :class => 'checkbox'  %>
+    <label for="timeFormIsPrivate"><%= :private_time.l %>: <span class="desc">(<%= :private_time_info.l %>)</span></label>
+    <%= yesno_toggle 'time', 'is_private', :id => 'timeFormIsPrivate', :class => 'checkbox'  %>
   </div>
   <div class="formBlock">
-    <label for="timeFormIsBillable"><%= "Billable" %>: <span class="desc">(<%= "Billable times are those for which you expect payment from the client(s)." %>)</span></label>
-    <%= check_box 'time', 'is_billable', :id => 'timeFormIsBillable', :class => 'checkbox'  %>
+    <label for="timeFormIsBillable"><%= :billable_time.l %>: <span class="desc">(<%= :billable_time_info.l %>)</span></label>
+    <%= yesno_toggle 'time', 'is_billable', :id => 'timeFormIsBillable', :class => 'checkbox'  %>
   </div>
 <% end %>
   
   <div class="formBlock">
     <div>
-      <label for="timeFormAssignedTo"><%= "Assigned to" %>:</label>
+      <label for="timeFormAssignedTo"><%= :assign_to.l %>:</label>
       <%= select 'time', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'timeFormAssignedTo'} %>
     </div>
   </div>
