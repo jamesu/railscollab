@@ -91,9 +91,9 @@ end
 # Try loading gd2
 begin
 	require 'gd2'
-	::AppConfig.no_gd2 = false
+	AppConfig.no_gd2 = false
 rescue Exception
-	::AppConfig.no_gd2 = true
+	AppConfig.no_gd2 = true
 end
 
 # ActionMailer stuff
