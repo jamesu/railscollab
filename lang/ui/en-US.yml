@@ -517,7 +517,17 @@ option_file_upload_storage_name: "File storage"
 option_file_upload_storage_description: "Select where you want to store attachments, avatars, logos and any other uploaded documents. Database storage engine is recommended."
 file_storage_file_system: "File system" 
 file_storage_local_database: "Database"
-		                              
+notification_method_test: "Test"
+notification_method_smtp: "SMTP"
+notification_smtp_address: "Address"
+notification_smtp_port: "Port"
+notification_smtp_username: "Username"
+notification_smtp_password: "Password"
+notification_smtp_authentication: "Authentication"
+notification_method_sendmail: "Sendmail"
+notification_sendmail_location: "Location"
+notification_sendmail_arguments: "Arguments"
+		                           		                              
 # mailing
 option_notification_email_address_name: "Notification identity"
 option_notification_email_address_description: "Identity of the email notifier, in the format 'Name <email@address>'"
