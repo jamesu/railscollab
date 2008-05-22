@@ -117,6 +117,12 @@ general:
     default: "http://localhost:3000"
     comment: ""
     order: 1
+    
+  file_upload_storage:   
+    handler: FileStorageConfigHandler
+    default: "local_database"
+    comment: ""
+    order: 1
   
   default_project_folders:
     handler: TextListConfigHandler
