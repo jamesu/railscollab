@@ -78,11 +78,14 @@ end
 
 # Merge database & config.yml into ::AppConfig
 ::AppConfig = OpenStruct.new()
+begin
 ConfigOption.dump_config(::AppConfig)
-unless config.common.nil?
-	config.common.keys.each do |key|
-		::AppConfig.send("#{config.common[key]}=", config.common[key])
+	unless config.common.nil?
+		config.common.keys.each do |key|
+			::AppConfig.send("#{config.common[key]}=", config.common[key])
+		end
 	end
+rescue Exception
 end
 
 # ActionMailer stuff
