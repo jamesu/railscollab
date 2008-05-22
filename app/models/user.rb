@@ -20,14 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 require 'digest/sha1'
-
-begin
-	require 'gd2'
-	no_gd2 = false
-rescue Exception
-	no_gd2 = true
-end
-
+require 'gd2' unless AppConfig.no_gd2
 
 class User < ActiveRecord::Base
 	include ActionController::UrlWriter
@@ -311,7 +304,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar=(value)
-		return if no_gd2
+		return if AppConfig.no_gd2
 		FileRepo.handle_delete(self.avatar_file) unless self.avatar_file.nil?
 		
 		if value.nil?

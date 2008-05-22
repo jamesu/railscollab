@@ -88,6 +88,14 @@ ConfigOption.dump_config(::AppConfig)
 rescue Exception
 end
 
+# Try loading gd2
+begin
+	require 'gd2'
+	::AppConfig.no_gd2 = false
+rescue Exception
+	::AppConfig.no_gd2 = true
+end
+
 # ActionMailer stuff
 begin
 	ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym

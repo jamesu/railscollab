@@ -19,12 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-begin
-	require 'gd2'
-	no_gd2 = false
-rescue Exception
-	no_gd2 = true
-end
+require 'gd2' unless AppConfig.no_gd2
 
 class Company < ActiveRecord::Base
 	include ActionController::UrlWriter
@@ -111,7 +106,7 @@ class Company < ActiveRecord::Base
 	end
 	
 	def logo=(value)
-		return if no_gd2
+		return if AppConfig.no_gd2
 		
 		FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
 		
