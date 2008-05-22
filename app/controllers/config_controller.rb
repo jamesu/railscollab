@@ -5,9 +5,50 @@ RailsCollab
 =end
 
 class ConfigController < ApplicationController
-
+  layout 'administration'
+  
   before_filter :login_required
   before_filter :process_session
-  after_filter  :user_track
+  
+  def update_category
+    begin
+      @category = ConfigCategory.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_category)
+      redirect_to :controller => 'administration', :action => 'configuration'
+      return false
+    end
+    
+    if @category.options.empty?
+      error_status(true, :config_category_empty)
+      redirect_to :controller => 'administration', :action => 'configuration'
+    end
+    
+    @content_for_sidebar = 'update_category_sidebar'
+    @options = @category.options
+    @categories = ConfigCategory.find(:all, :order => 'category_order DESC')
+    
+    case request.method
+      when :post
+      	option_values = params[:options]
+      	
+      	@options.each do |option|
+      		if option_values.has_key? option.name
+      			option.value = option_values[option.name]
+      			option.save
+      		end
+      	end
+      	
+      	# Force reload of configuration
+      	ConfigOption.reload_all
+      	
+        error_status(false, :success_updated_config_category)
+        redirect_to :controller => 'administration', :action => 'configuration'
+    end
+  end
+  
+  def authorize?(user)
+  	return user.is_admin
+  end
   
 end

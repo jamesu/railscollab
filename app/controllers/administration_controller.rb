@@ -46,8 +46,7 @@ class AdministrationController < ApplicationController
   end
   
   def configuration
-      error_status(true, :edit_config_yml_for_options)
-      redirect_back_or_default :controller => 'administration'
+      @categories = ConfigCategory.find(:all, :order => 'category_order DESC')
   end
   
   def tools

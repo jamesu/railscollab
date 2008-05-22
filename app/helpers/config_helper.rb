@@ -5,4 +5,5 @@ RailsCollab
 =end
 
 module ConfigHelper
+	include AdministrationHelper
 end

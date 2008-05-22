@@ -1,0 +1,40 @@
+<%
+  @page_title = @category.display_name
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(:configuration)
+  @bread_crumbs = administration_crumbs(@category.display_name, [{:title => :configuration, :url => "/administration/configuration"}])
+  
+  @page_actions = []
+  
+  @additional_stylesheets = ['admin/config']
+%>
+
+<% if !@options.empty? %>
+<%= form_tag :controller => 'config', :action => 'update_category', :id => @category.id %>
+  <div id="configCategoryOptions">
+<% counter = 0 %>
+<% @options.each do |option| -%>
+  <% counter += 1 %>
+  <% if (counter % 2) == 1 %>
+    <div class="configCategoryOption even" 
+  <% else %>
+    <div class="configCategoryOption odd" 
+  <% end %> id="configCategoryOption_<%= option.name %>">
+      <div class="configOptionInfo">
+        <div class="configOptionLabel"><label><%= h(option.display_name) %>:</label></div>
+<% option_description = option.display_description.strip %>
+<% if !option_description.empty? %>
+        <div class="configOptionDescription desc"><%= h(option_description) %></div>
+<% end %>
+      </div>
+      <div class="configOptionControl"><%= option.render("options[#{option.name}]", {}) %></div>
+      <div class="clear"></div>
+    </div>
+<% end %>
+  </div>
+
+    <button class="submit" type="submit"><%= :save.l %></button>&nbsp;<button type="reset"><%= :reset.l %></button>
+</form>
+<% else %>
+<p><%= :config_category_empty.l %></p>
+<% end %>

@@ -1,0 +1,12 @@
+<% if !@categories.empty? %>
+<div class="sidebarBlock">
+  <h2><%= :configuration_categories.l %></h2>
+  <div class="blockContent">
+    <ul class="listWithDetails">
+<% @categories.each do |category| -%>
+      <li><%= link_to h(category.display_name), :controller => 'config', :action => 'update_category', :id => category.id %></li>
+<% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

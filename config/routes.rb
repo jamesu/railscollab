@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   
   # The rest of the simple controllers
   
-  ['dashboard', 'access', 'administration', 'comment', 'user'].each do |controller|
+  ['dashboard', 'access', 'administration', 'comment', 'user', 'config'].each do |controller|
   	map.connect "#{controller}/:action/:id", :controller => controller
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
