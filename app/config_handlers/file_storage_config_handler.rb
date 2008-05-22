@@ -19,31 +19,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-class ConfigHandler
-	include ActionView::Helpers
-	include ActionView::Helpers::FormTagHelper
-	include ActionView::Helpers::FormOptionsHelper
-	include ActionView::Helpers::TagHelper
-	
-	include ApplicationHelper
-	
-	attr_accessor :configOption, :rawValue
-	
-	def initialize
-		@configOption = nil
-		@rawValue = ""
-		@value = ""
-	end
+class FileStorageConfigHandler < ConfigHandler
 	
 	def value
-		return @rawValue
+		@rawValue
 	end
 	
 	def value=(val)
-		@rawValue = val
+		@rawValue = val unless !(['file_system', 'local_database'].include?(val))
 	end
 	
 	def render(name, options)
-		""
+		opts = options_for_select({:file_storage_file_system.l => 'file_system', 
+		                              :file_storage_local_database.l => 'local_database'}, self.value)
+		select_tag name, opts, options
 	end
 end

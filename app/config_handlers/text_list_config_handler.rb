@@ -19,31 +19,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-class ConfigHandler
-	include ActionView::Helpers
-	include ActionView::Helpers::FormTagHelper
-	include ActionView::Helpers::FormOptionsHelper
-	include ActionView::Helpers::TagHelper
-	
-	include ApplicationHelper
-	
-	attr_accessor :configOption, :rawValue
-	
-	def initialize
-		@configOption = nil
-		@rawValue = ""
-		@value = ""
-	end
+class TextListConfigHandler < ConfigHandler
 	
 	def value
-		return @rawValue
+		res = []
+		@rawValue.each_line { |l| res << l.strip }
+		return res
 	end
 	
 	def value=(val)
-		@rawValue = val
+		if val.class == Array:
+			@rawValue = val.join("\r\n")
+		else
+			# Clean input
+		    res = []
+		    val.to_s.each_line { |l| res << l.strip }
+			@rawValue = res.uniq.reject{ |el| !el.empty? }.join("\r\n")
+		end
 	end
 	
 	def render(name, options)
-		""
+		text_area_tag name, @rawValue, options.merge(:class => 'short', :rows => 10, :cols => 40)
 	end
 end

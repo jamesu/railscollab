@@ -68,7 +68,7 @@ class ConfigOption < ActiveRecord::Base
 			value = config.send(option.name)
 			if !value.nil?
 				puts "#{option.name} = #{value}"
-				option.value = value
+				option.handledValue = value
 				option.save
 			end
 		end
