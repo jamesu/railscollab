@@ -5,4 +5,76 @@ RailsCollab
 =end
 
 class ConfigOption < ActiveRecord::Base
+	#belongs_to :config_category
+	
+	def category
+		@config_category ||= ConfigCategory.find(:first, :conditions => ['name = ?', self.category_name])
+	end
+	
+	def display_name
+		("option_#{self.name}_name").to_sym.l
+	end
+	
+	def display_description
+		("option_#{self.name}_description").to_sym.l
+	end
+    
+	def handler
+		return @config_handler unless @config_handler.nil?
+		
+		# Grab class...
+		begin
+		   obj = Kernel.const_get(self.config_handler_class)
+		rescue Exception
+		   obj = StringConfigHandler
+		end
+		
+		# Initialize with current value
+		obj = obj.new
+		obj.configOption = self
+		obj.rawValue = self.value
+		@config_handler = obj
+		
+		return obj
+	end
+	
+	def handledValue
+		obj = self.handler
+		obj.rawValue = self.value
+		return obj.value
+	end
+	
+	def handledValue=(value)
+		obj = self.handler
+		obj.value = value
+		self.value = obj.rawValue
+	end
+	
+	def render(name, options)
+		obj = self.handler
+		return obj.render(name, options)
+	end
+	
+	def self.dump_config(config)
+		options = ConfigOption.find(:all)
+		options.each do |option|
+			config.send("#{option.name}=", option.handledValue)
+		end
+	end
+	
+	def self.load_config(config)
+		options = ConfigOption.find(:all)
+		options.each do |option|
+			value = config.send(option.name)
+			if !value.nil?
+				puts "#{option.name} = #{value}"
+				option.value = value
+				option.save
+			end
+		end
+	end
+	
+	def self.reload_all
+		FileUtils.touch("#{RAILS_ROOT}/tmp/restart.txt")
+	end
 end
