@@ -1,15 +1,39 @@
+require 'ostruct'
+require 'yaml'
+
 namespace :db do
 	namespace :railscollab do
 		desc 'Loads the database schema and inserts initial content'
 		task :install => :environment do
 			puts "\nLoading schema..."
 			Rake::Task["db:schema:load"].invoke
+			Rake::Task["db:railscollab:load_config_schema"].invoke
 			Rake::Task["db:railscollab:install_content"].invoke
 		end
 
 		task :install_content => :environment do
 			puts "\nLoading initial content..."
 			load("db/default_content.rb")
+		end
+		
+		task :load_config_schema => :environment do
+			puts "\Loading configuration schema..."
+			load("db/default_config.rb")
+		end
+		
+		task :dump_config => :environment do
+			puts "Dumping configuration to config/config.yml"
+			config = OpenStruct.new()
+			ConfigOption.dump_config(config)
+			File.open("#{RAILS_ROOT}/config/config.yml", 'w') do |file|
+				file.puts YAML::dump(config.marshal_dump)
+			end
+		end
+		
+		task :load_config => :environment do
+			puts "Loading configuration from config/config.yml"
+			config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.yml"))
+			ConfigOption.load_config(config)
 		end
 		
 		task :migrate_from_activecollab => :environment do
@@ -44,12 +68,14 @@ namespace :db do
 			
 			puts "Migrating..."
 			Rake::Task["db:migrate"].invoke
+			Rake::Task["db:railscollab:load_config_schema"].invoke
 			puts "\nDone.\n"
 		end
 		
 		task :migrate_from_basecamp => :environment do
 			puts "\nMigrating from BaseCamp..."
 			Rake::Task["db:schema:load"].invoke unless ENV['RAILSCOLLAB_SCHEMA_EXISTS']
+			Rake::Task["db:railscollab:load_config_schema"].invoke
 			load("db/migrate_basecamp.rb")
 		end
 		

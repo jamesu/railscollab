@@ -1,0 +1,192 @@
+system:
+  project_logs_per_page: 
+    handler: IntegerConfigHandler
+    default: 10
+    comment: ""
+    order: 0
+  logs_per_project: 
+    handler: IntegerConfigHandler
+    default: 5
+    comment: ""
+    order: 1
+  
+  messages_per_page: 
+    handler: IntegerConfigHandler
+    default: 10
+    comment: ""
+    order: 2
+  times_per_page: 
+    handler: IntegerConfigHandler
+    default: 10
+    comment: ""
+    order: 3
+  files_per_page: 
+    handler: IntegerConfigHandler
+    default: 10
+    comment: ""
+    order: 4
+  search_results_per_page: 
+    handler: IntegerConfigHandler
+    default: 20
+    comment: ""
+    order: 5
+  
+  max_avatar_width: 
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 6
+  max_avatar_height:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 7
+  max_logo_width:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 8
+  max_logo_height:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 9
+  max_thumbnail_width:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 10
+  max_thumbnail_height:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 11
+  
+  file_upload_directory:  
+    handler: StringConfigHandler
+    default: "public/uploads"
+    comment: ""
+    order: 12
+  file_thumbnail_width:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 13
+  file_thumbnail_height:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 14
+  file_thumbnail_quality:  
+    handler: IntegerConfigHandler
+    default: 50
+    comment: ""
+    order: 15
+
+  minutes_to_comment_edit_expire:  
+    handler: IntegerConfigHandler
+    default: 3
+    comment: ""
+    order: 16
+  minutes_to_activity_log_expire:   
+    handler: IntegerConfigHandler
+    default: 5
+    comment: ""
+    order: 17
+  
+  max_upload_size:   
+    handler: IntegerConfigHandler
+    default: 10485760
+    comment: ""
+    order: 18
+  max_attachments:   
+    handler: IntegerConfigHandler
+    default: 5
+    comment: ""
+    order: 19
+
+general:
+  site_name:   
+    handler: StringConfigHandler
+    default: "RailsCollab"
+    comment: ""
+    order: 0
+  
+  site_url:   
+    handler: StringConfigHandler
+    default: "http://localhost:3000"
+    comment: ""
+    order: 1
+  
+  default_project_folders:
+    handler: TextListConfigHandler
+    default: ['images', 'documents', 'other']
+    comment: ""
+    order: 2
+  
+  default_project_message_categories:
+    handler: TextListConfigHandler
+    default: ['General', 'Projects', 'Problems']
+    comment: ""
+    order: 3
+
+  default_project_message_category:
+    handler: StringConfigHandler
+    default: General
+    comment: ""
+    order: 4
+
+  allow_openid:
+    handler: BoolConfigHandler
+    default: false
+    comment: ""
+    order: 5
+  
+  # Localisation
+  default_language: 
+    handler: StringConfigHandler
+    default: en_US
+    comment: ""
+    order: 6
+
+  # Ferret search
+  search_enabled: 
+    handler: BoolConfigHandler
+    default: true
+    comment: ""
+    order: 7
+
+mailing:
+  notification_email_address:
+    handler: StringConfigHandler
+    default: "RailsCollab Notification <fill.this.in@localhost>"
+    comment: ""
+    order: 0
+  notification_email_method:
+    handler: NotificationMethodConfigHandler
+    default: test # smtp, sendmail, or test
+    comment: ""
+    order: 1
+  
+  # Overrides ActionMailer smtp_settings
+  notification_email_smtp:
+    handler: NotificationSMTPConfigHandler
+    comment: ""
+    order: 2
+    default:
+      address: localhost
+      port: 123
+      user_name: user
+      password: password
+      authentication: login
+  
+  # Overrides ActionMailer sendmail_settings
+  notification_email_sendmail:
+    handler: NotificationSendmailConfigHandler
+    comment: ""
+    order: 3
+    default:
+      location: "/usr/bin/sendmail"
+      arguments: "-i -t -O DeliveryMode='b'"
+    
+    

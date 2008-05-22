@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
   # config.plugins = %W( exception_notification ssl_requirement )
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  config.load_paths += %W( #{RAILS_ROOT}/app/config_handlers )
 
   # Force all environments to use the same logger level 
   # (by default production uses :info, the others :debug)
@@ -68,16 +68,31 @@ require 'ostruct'
 require 'yaml'
 
 # Courtesy of Dmytro Shteflyuk's blog post
-config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.yml"))
-env_config = config.send(RAILS_ENV)
-config.common.update(env_config) unless env_config.nil?
-::AppConfig = OpenStruct.new(config.common)
+begin
+	config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.override.yml"))
+	env_config = config.send(RAILS_ENV)
+	config.common.update(env_config) unless env_config.nil?
+rescue Exception
+	config = OpenStruct.new()
+end
+
+# Merge database & config.yml into ::AppConfig
+::AppConfig = OpenStruct.new()
+ConfigOption.dump_config(::AppConfig)
+unless config.common.nil?
+	config.common.keys.each do |key|
+		::AppConfig.send("#{config.common[key]}=", config.common[key])
+	end
+end
 
 # ActionMailer stuff
-ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
-ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
-ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
-ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail
+begin
+	ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
+	ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
+	ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
+	ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail
+rescue Exception
+end
 
 # Localisation
 Globalite.language = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym

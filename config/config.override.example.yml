@@ -1,0 +1,13 @@
+# Options here will override those presented by the database
+
+common:
+  # Overrides go here (without categories)
+
+# Environment specific configuration
+
+production:
+  
+development:
+  
+testing:
+  
