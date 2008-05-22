@@ -19,7 +19,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-require 'gd2'
+begin
+	require 'gd2'
+	no_gd2 = false
+rescue Exception
+	no_gd2 = true
+end
 
 class ProjectFileRevision < ActiveRecord::Base
 	include ActionController::UrlWriter
@@ -75,6 +80,7 @@ class ProjectFileRevision < ActiveRecord::Base
 	end
 	
 	def update_thumb
+		return if no_gd2
 		FileRepo.handle_delete(self.thumb_filename) unless self.thumb_filename.nil?
 		
 		# Check if we can make a thumbnail
