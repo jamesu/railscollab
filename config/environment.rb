@@ -98,7 +98,7 @@ rescue Exception
 end
 
 # Localisation
-Globalite.language = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym
+Globalite.locale = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym
 
 # Ferret search
 FERRETABLE_MODELS = %w[Tag Comment ProjectMessage ProjectTime ProjectTask ProjectTaskList ProjectMilestone ProjectFile ProjectFileRevision]
