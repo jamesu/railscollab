@@ -26,7 +26,11 @@ class BoolConfigHandler < ConfigHandler
 	end
 	
 	def value=(val)
-		@rawValue = val.to_i.to_s
+		if val.class == String
+			@rawValue = val
+		else
+			@rawValue = val ? '1' : '0'
+		end
 	end
 	
 	def render(name, options)

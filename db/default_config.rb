@@ -18,7 +18,11 @@ config.keys.each do |key|
 		end
 		
 		#puts "#{opt_key} => #{option.keys.each { |key| key }.join(',')}"
-		ConfigOption.new(:category_name => category.name, :name => opt_key, :value => option['default'], :config_handler_class => option['handler'], :is_system => category.is_system, :option_order => option['order'], :dev_comment => option['comment']).save
+		opt = ConfigOption.new(:category_name => category.name, :name => opt_key, :config_handler_class => option['handler'], :is_system => category.is_system, :option_order => option['order'], :dev_comment => option['comment'])
+		opt.handledValue = option['default']
+		opt.save
+		
+		puts "#{opt_key} handled by #{option['handler']}"
 		
 	end
 	
