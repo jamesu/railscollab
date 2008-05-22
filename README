@@ -2,7 +2,7 @@ RailsCollab
 -----------
 
 RailsCollab is a port of the project management tool
-ActiveCollab (which is written in PHP) to the Ruby on Rails framework,
+ProjectPier (previously known as ActiveCollab, written in PHP) to the Ruby on Rails framework, 
 obviously written in Ruby.
 
 For licensing details, refer to the LICENSE file in the root directory.
@@ -21,11 +21,12 @@ Requirements
 Along with a working installation of the Ruby on Rails Framework, you will need the 
 following to deploy & run RailsCollab:
     - iCalendar (http://icalendar.rubyforge.org/)
-    - Ruby/GD2 (http://gd2.rubyforge.org/)
+    - Ruby/GD2 (http://gd2.rubyforge.org/) [optional]
     - RedCloth (http://whytheluckystiff.net/ruby/redcloth/)
     - ruby-openid (gem install ruby-openid)
     - ActionMailer (gem install ActionMailer)
     - Ferret (gem install ferret)
+    - Phusion Passenger (http://www.modrails.com/) [optional, for easy deployment]
 
 Upgrading from ActiveCollab (or ProjectPier 0.8)
 ********************************************
@@ -72,19 +73,30 @@ File Storage
 ************
 
 RailsCollab allows the user to upload files, provided they have sufficient 
-permissions. Files are stored according to the "file_upload_storage" option.
-Note that the "local_database" storage option is currently the only implemented
+permissions. Files are stored according to the "File storage" option.
+Note that the "Database" storage option is currently the only implemented
 storage system in RailsCollab.
 
-When using the "local_database" storage option with MySQL, you might notice that files you 
+When using the "Database" storage option with MySQL, you might notice that files you 
 upload may be limited to 64kb. To solve this issue, run the "db:railscollab:fix_files" rake 
 task.
 
 Deployment
 **********
 
+RailsCollab can most optimally be deployed via Phusion Passenger. Simply point a 
+VirtualHost to "railscollab/public", and Passenger should do the rest, 
+with the exception of setting up the database. You will need to do that yourself.
+
+An example VirtualHost for Phusion Passenger deployment would be:
+
+<VirtualHost *:80>
+	ServerName megacorp.com
+	DocumentRoot /path/to/railscollab/public
+</VirtualHost>
+
 In order to facilitate deployment, a rake task called db:railscollab:install
-has been provided, which will create a minimal installation.
+has been provided, which will create an initial database.
 The rake task accepts the following environment variables:
 	RAILSCOLLAB_INITIAL_USER
 		The username of the administrative user
@@ -107,18 +119,11 @@ config/database.yml file present which contains the database connection
 settings. An example file is present at config/database.yml.template,
 which contains example settings for a rather insecure mysql database setup.
 
-In addition, RailsCollab reads various configuration options from 
-config/config.yml, which must be present in order to run the server or
-perform any of the rake tasks. An example file is present at
-config/config.yml.template, which contains example settings.
-
 So from scratch, you'd likely do something like to following to install:
 1) Create a 'railscollab' database
 2) Create a config/database.yml file based on config/database.yml.template, 
 using either the development or production environments as your basis.
-3) Create a 'config/config.yml' file based on config/config.yml.template,
-filling in options where applicable.
-4) Run 'RAILSCOLLAB_INITIAL_USER="billg" \
+3) Run 'RAILSCOLLAB_INITIAL_USER="billg" \
 RAILSCOLLAB_INITIAL_DISPLAYNAME="Bill Gates" \
 RAILSCOLLAB_INITIAL_PASSWORD="microsoft" \
 RAILSCOLLAB_INITIAL_EMAIL="billg@microsoft.com" \
@@ -126,11 +131,12 @@ RAILSCOLLAB_INITIAL_COMPANY="Microsoft" \
 rake db:railscollab:install'
 
 And to make sure it works:
-5) Run 'script/server -e <insert development or production here>'
-6) Go to http://localhost:3000 and login using your supplied credentials
+4) Insert the previously mentioned VirtualHost configuration into your 
+Phusion Passenger installation.
+5) Go to http://<server name> and login using your supplied credentials
 
-For proper deployment (e.g. using FastCGI or load balancing proxies), refer to 
-the Ruby on Rails documentation.
+For more advanced deployment (e.g. using FastCGI or load balancing proxies), 
+refer to the Ruby on Rails documentation.
 
 Finally
 *******
