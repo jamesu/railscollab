@@ -151,7 +151,7 @@ general:
   # Localisation
   default_language: 
     handler: StringConfigHandler
-    default: en_US
+    default: en-US
     comment: ""
     order: 6
 
