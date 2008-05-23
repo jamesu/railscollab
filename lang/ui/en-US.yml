@@ -384,6 +384,7 @@ action_yesterday: Yesterday
 forgot_password_sent_email: Further instructions have been sent to your e-mail address
 email_address: Email address
 send_password: Send password
+old_password: Old password
 repeat_password: Repeat password
 username: Username
 password: Password
