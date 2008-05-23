@@ -13,8 +13,8 @@
     
     if @user.profile_can_be_updated_by(@logged_user)
         @page_actions += [{:title => :update_profile, :url => "/account/edit_profile/#{@user.id}"},
-                          {:title => :change_password', :url => "/account/edit_password/#{@user.id}"},
-                          {:title => :update_avatar', :url => "/account/edit_avatar/#{@user.id}"}]
+                          {:title => :change_password, :url => "/account/edit_password/#{@user.id}"},
+                          {:title => :update_avatar, :url => "/account/edit_avatar/#{@user.id}"}]
     end
     
     if @user.permissions_can_be_updated_by(@logged_user)
