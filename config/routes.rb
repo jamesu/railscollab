@@ -98,10 +98,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'time/save_entry', :controller => 'basecamp', :action => 'time_save_entry'
   map.connect 'projects/:active_project/time/delete_entry/:id', :controller => 'basecamp', :action => 'projects_time_delete_entry'
   map.connect 'time/report/:id/:from/:to/:filter', :controller => 'basecamp', :action => 'time_report'
+  map.connect 'time/report//:from/:to/:filter', :controller => 'basecamp', :action => 'time_report' # Dodgy widget hack
   map.connect 'time/save_entry/:id', :controller => 'basecamp', :action => 'time_update_entry'
     
   # Useful BaseCamp RSS Feeds
   map.connect '/feed/recent_items_rss', :controller => 'basecamp', :action => 'recent_items_rss'
+  map.connect 'projects/:active_project/feed/recent_items_rss', :controller => 'basecamp', :action => 'recent_project_items_rss'
     
   # project & project object url's
   map.connect 'project/add', :controller => 'project', :action => 'add'

@@ -97,7 +97,7 @@ class ProjectTime < ActiveRecord::Base
 	
 	def open_task_id=(val)
         # Set open_task accordingly
-		if (val == '0')
+		if (val.nil? || val == '0')
 			self.open_task = nil
 			return
 		end
@@ -132,7 +132,7 @@ class ProjectTime < ActiveRecord::Base
 	
 	def assigned_to_id=(val)
         # Set assigned_to accordingly
-		if (val == '0' or val == 'c0')
+		if (val.nil? or val == '0' or val == 'c0')
 			self.assigned_to = nil
 			return
 		end

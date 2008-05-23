@@ -133,7 +133,7 @@ class ProjectMilestone < ActiveRecord::Base
 	
 	def assigned_to_id=(val)
         # Set assigned_to accordingly
-		if (val == '0' or val == 'c0')
+		if (val.nil? or val == '0' or val == 'c0')
 			self.assigned_to = nil
 			return
 		end

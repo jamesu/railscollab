@@ -26,7 +26,7 @@ class BasecampController < ApplicationController
   layout nil
 
   before_filter :login_required
-  before_filter :ensure_content, :except => [:recent_items_rss]
+  before_filter :ensure_content, :except => [:recent_items_rss, :recent_project_items_rss]
   before_filter :process_session
   #after_filter  :user_track
   
@@ -139,7 +139,7 @@ class BasecampController < ApplicationController
       return
     end
 	
-	@comments = @logged_user.member_of_owner ? @message.comments : @message.comments.public
+	@comments = @logged_user.member_of_owner? ? @message.comments : @message.comments.public
   end
   
   # /msg/create_comment
@@ -190,6 +190,7 @@ class BasecampController < ApplicationController
     		:is_private => post_attribs[:private]
     )
     
+    @message.is_private ||= false # Fix for dodgy widgets
     @message.project = @active_project
     @message.created_by = @logged_user
     
@@ -275,7 +276,7 @@ class BasecampController < ApplicationController
   # /projects/#{project_id}/msg/archive
   # /projects/#{project_id}/msg/cat/#{category_id}/archive
   def projects_msg_archive
-  	if @request_fields.has_key?(:project_id)
+  	if !@request_fields.nil? and @request_fields.has_key?(:project_id)
     	begin
   			project = Project.find(@request_fields[:project_id])
   		rescue ActiveRecord::RecordNotFound
@@ -286,11 +287,12 @@ class BasecampController < ApplicationController
   		project = @active_project
   	end
   	
-  	category_id = params[:cat_id].nil? ? @request_fields[:category_id] : params[:cat_id]
+  	category_id = params[:cat_id]
+  	category_id ||= @request_fields[:category_id] unless @request_fields.nil?
   	
   	# Base filter based on is_private and optional category_id
   	msg_conditions =  @logged_user.member_of_owner? ?
-  	                  ['project_id = ?', project.id, category_id.to_i] :
+  	                  ['project_id = ?', project.id] :
   	                  ['project_id = ? AND is_private = ?', project.id, false]
   	unless category_id.nil?
   		msg_conditions[0] += 'AND category_id = ?'
@@ -351,6 +353,7 @@ class BasecampController < ApplicationController
     		:is_private => post_attribs[:private]
     }
     
+    @message.is_private ||= false # Fix for dodgy widgets
     @message.updated_by = @logged_user
     
     if @message.save
@@ -888,7 +891,7 @@ class BasecampController < ApplicationController
   
   # /time/report/#{person-id}/#{from}/#{to}/#{filter}
   def time_report
-  	if params[:id] == '0'
+  	if params[:id].nil? || params[:id] == '0'
   		user_filter = ""
   	else
     	begin
@@ -912,15 +915,15 @@ class BasecampController < ApplicationController
   	
   	# Base filter based on is_private
   	time_conditions = @logged_user.member_of_owner? ?
-  	                  ["#{user_filter} done_date >= '#{start_time}' AND done_date <= '#{end_time}'"] :
-  	                  ["#{user_filter} is_private = ? AND done_date >= '#{start_time}' AND done_date <= '#{end_time}'", false]
+  	                  ["#{user_filter} done_date >= ? AND done_date <= ?", start_time, end_time] :
+  	                  ["#{user_filter} is_private = ? AND done_date >= ? AND done_date <= ?", false, start_time, end_time]
   	
   	# Now we can grab the times!
   	filter = params[:filter]
   	unless filter.nil?
   		filter_id = filter[1...filter.length]
   		
-  		if filter[0] == 'c'
+  		if filter[0] == 99 #'c'
   			# Filter by company
   			begin
   				company = Company.find(filter_id)
@@ -933,7 +936,7 @@ class BasecampController < ApplicationController
   			
   			time_conditions[0] += " AND project_id IN (#{projects})"
   			@times = ProjectTime.find(:all, :conditions => time_conditions)
-  		elsif filter[0] == 'p'
+  		elsif filter[0] == 112 #'p'
   			# Filter by project
   			begin
   				project = Project.find(filter_id)
@@ -943,12 +946,14 @@ class BasecampController < ApplicationController
   			end
   			
   			time_conditions[0] += " AND project_id = #{project.id}"
+  			#render :text => time_conditions[0]
+  			#return
   			@times = ProjectTime.find(:all, :conditions => time_conditions)
   		end
   	end
   	
   	# Just select everything
-  	@times = ProjectTime.find(:all, :conditions => base_filter)
+  	@times = ProjectTime.find(:all, :conditions => time_conditions)
   end
   
   # /time/save_entry/#{id}
@@ -1008,11 +1013,21 @@ class BasecampController < ApplicationController
   	render :template => 'feed/recent_activities'
   end
   
+  # /projects/#{id}/feed/recent_items_rss
+  def recent_project_items_rss
+  	@activity_log = ApplicationLog.logs_for(@active_project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+ 	@activity_url = AppConfig.site_url + "/projects/#{@active_project.id}/feed/recent_items_rss"
+  
+  	render :text => '404 Not found', :status => 404 unless @activity_log.length > 0
+  	render :template => 'feed/recent_activities'
+  end
+  
 private
 
   def ensure_content
   	if request.accepts.first == Mime::XML
   		@request_fields = params[:request]
+  		
   		true
   	else
   		render :text => 'Not found', :status => 404
