@@ -28,12 +28,12 @@ class AdministrationController < ApplicationController
   end
   
   def company
-  	@company = Company.owner
+  	@company = Company.owner(true)
   	render :template => 'company/view_client'
   end
   
   def members
-  	@company = Company.owner
+  	@company = Company.owner(true)
   	@users = @company.users
   end
   
@@ -42,7 +42,7 @@ class AdministrationController < ApplicationController
   end
   
   def clients
-  	@clients = Company.owner.clients
+  	@clients = Company.owner.clients(true)
   end
   
   def configuration

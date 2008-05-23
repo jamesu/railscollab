@@ -53,7 +53,8 @@ class Company < ActiveRecord::Base
 	  FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
 	end
 	
-	def self.owner
+	def self.owner(reload=false)
+		@@cached_owner = nil if reload
 		@@cached_owner ||= Company.find(:first, :conditions => 'client_of_id IS NULL')
 	end
 	
