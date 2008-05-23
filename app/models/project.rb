@@ -97,7 +97,7 @@ class Project < ActiveRecord::Base
 		def visible(include_private = true, reload=false)
 			ProjectForm.priv_scope(include_private) do
 			  # Grab visible forms only
-			  find(:all, :conditions => ['project_forms.is_visible = ?', true])
+			  find(:all)
 			end
 		end
 	end

@@ -17,7 +17,7 @@
         else
             # ADMINISTRATION_TAB_CLIENTS
             @tabbed_navigation_items = administration_tabbed_navigation(:clients)
-            @bread_crumbs = administration_crumbs(:update_profile, [{:title => :clients, :url => '/administration/clients'}, {:title => @user.company.name , :url => "/company/view_client/#{Company.owner.id}"}, {:title => @user.display_name , :url => "/user/edit_profile/#{@user.id}"}])
+            @bread_crumbs = administration_crumbs(:update_profile, [{:title => :clients, :url => '/administration/clients'}, {:title => @user.company.name , :url => "/company/view_client/#{Company.owner.id}"}, {:title => @user.display_name , :url => "/account/edit_profile/#{@user.id}"}])
         end
         
     end

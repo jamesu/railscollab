@@ -219,7 +219,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def can_be_deleted_by(user)
-		return false if (user.owner_of_owner? or user.id == self.id)
+		return false if (self.owner_of_owner? or user.id == self.id)
 		return user.is_admin
 	end
 	
@@ -363,7 +363,7 @@ class User < ActiveRecord::Base
 	  datetime = Time.now.utc
 	  datetime -= (active_in * 60)
 	  
-	  User.find(:all, :conditions => "last_activity > '#{datetime.strftime('%Y-%m-%d %H:%M:%S')}'")
+	  User.find(:all, :conditions => "last_activity > '#{datetime.strftime('%Y-%m-%d %H:%M:%S')}'", :select => "id, company_id, display_name")
 	end
 	
 	def self.select_list

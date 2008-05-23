@@ -92,7 +92,7 @@ class ProjectForm < ActiveRecord::Base
 	  if include_private
 	    yield
 	  else
-	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
+	    with_scope :find => { :conditions =>  ['is_visible = ?', true] } do 
 	      yield 
 	    end
 	  end

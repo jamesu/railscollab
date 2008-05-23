@@ -19,7 +19,7 @@
   <div class="header"><h2><%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></h2></div>
   <div class="content">
 <% if not project.description.nil? and project.description.strip.length > 0 %>
-    <div class="description"><%= project.description %></div>
+    <div class="description"><%= textilize project.description %></div>
 <% end %>
 <% if project.companies.length > 0 %>
     <div class="involvedCompanies"><em><%= "Companies involved in project" %>:</em> 

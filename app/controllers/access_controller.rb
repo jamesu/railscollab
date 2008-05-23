@@ -83,7 +83,7 @@ class AccessController < ApplicationController
           return
         end
         
-        user = User.find(:first, ['email = ?', @your_email])
+        user = User.find(:first, :conditions => ['email = ?', @your_email])
         if user.nil?
           error_status(false, :invalid_email_not_in_use)
           return
