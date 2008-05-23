@@ -13,7 +13,7 @@
 <div class="hint">
 
   <div class="header"><%= :welcome_to_new_account.l %></div>
-  <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name)) %></div>
+  <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name), :url => "<a href=\"#{AppConfig.site_url}\">#{AppConfig.site_url}</a>") %></div>
   
    <% new_account_steps(@logged_user).each do |step| %>
     <div class='header'><%= step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>
