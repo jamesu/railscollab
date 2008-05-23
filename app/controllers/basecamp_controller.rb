@@ -41,10 +41,11 @@ class BasecampController < ApplicationController
   		return
   	end
   	
+  	@companies = [Company.owner]
   	if @active_project.nil?
-  		@companies = Company.owner.clients
+  		@companies += Company.owner.clients
   	else
-  		@companies = Company.owner.clients.reject { |company| !company.is_part_of(@active_project) }
+  		@companies += Company.owner.clients.reject { |company| !company.is_part_of(@active_project) }
   	end
   end
   
@@ -418,7 +419,7 @@ class BasecampController < ApplicationController
     
     # TODO: notify?
     
-    @task.project = @active_project
+    #@task.project = @active_project
     @task.task_list = task_list
     @task.created_by = @logged_user
     
@@ -457,7 +458,7 @@ class BasecampController < ApplicationController
   end
   
   # /todos/delete_item/#{id}
-  def projects_todos_delete_item
+  def todos_delete_item
     begin
        @task = ProjectTask.find(params[:id])
     rescue ActiveRecord::RecordNotFound
