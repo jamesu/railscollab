@@ -326,6 +326,8 @@ description: Description
 is_private_list: Is private
 is_private_list_info: "(Private task lists are visible only to owner company members. Members of client companies will not be able to see them)"
 task_list: Task list
+or: or
+cancel: Cancel
 
 
 # Task view
