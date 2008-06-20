@@ -41,7 +41,7 @@ module ProjectHelper
 	
 	def project_crumbs(current, extras=[])
 	  [{:title => :dashboard, :url => '/dashboard'},
-	   {:title => (html_escape @active_project.name), :url => "/project/#{@active_project.id}/overview"}] + extras  << {:title => current}
+	   {:title => @active_project.name, :url => "/project/#{@active_project.id}/overview"}] + extras  << {:title => current}
 	end
 
 	def assign_select_options(project)
