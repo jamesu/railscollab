@@ -157,7 +157,8 @@ class ProjectFile < ActiveRecord::Base
 		
 		if !files.nil?
 			files.each do |file|
-				if file.class != StringIO
+				if file.class != StringIO and 
+				   file.class != ActionController::UploadedStringIO
 					count += 1
 					next
 				end
@@ -171,6 +172,7 @@ class ProjectFile < ActiveRecord::Base
 					attached_file.is_visible = true
 					attached_file.expiration_time = Time.now.utc
 					attached_file.project = to_object.project
+					attached_file.created_by = user
 					
 					if attached_file.save
 						# Upload revision
