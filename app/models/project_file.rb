@@ -36,7 +36,7 @@ class ProjectFile < ActiveRecord::Base
 			@public_comments ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 	end
-	has_many :tags, :as => 'rel_object', :dependent => :destroy
+	#has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
 	acts_as_ferret :fields => [:filename, :description, :project_id, :is_private, :tags_with_spaces], :store_class_name => true
 	
@@ -60,6 +60,7 @@ class ProjectFile < ActiveRecord::Base
 	end
 	
 	def process_destroy
+	  Tag.clear_by_object(self)
 	  AttachedFile.clear_files(self.id)
 	  ApplicationLog::new_log(@file, self.updated_by, :delete)
 	end

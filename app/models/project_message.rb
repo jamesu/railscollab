@@ -36,7 +36,7 @@ class ProjectMessage < ActiveRecord::Base
 			@public_comments ||= find(:all, :conditions => ['is_private = ?', false])
 		end
 	end
-	has_many :tags, :as => 'rel_object', :dependent => :destroy
+	#has_many :tags, :as => 'rel_object', :dependent => :destroy
 	has_many :attached_file, :as => 'rel_object', :dependent => :destroy
 	
 	has_many :project_file, :through => :attached_file
@@ -65,6 +65,7 @@ class ProjectMessage < ActiveRecord::Base
 	end
 	
 	def process_destroy
+	  Tag.clear_by_object(self)
 	  AttachedFile.clear_attachments(self)
 	  ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
 	end

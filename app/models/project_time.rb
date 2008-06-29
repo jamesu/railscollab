@@ -35,7 +35,7 @@ class ProjectTime < ActiveRecord::Base
 	
 	has_many :project_messages, :foreign_key => 'milestone_id'
 	
-	has_many :tags, :as => 'rel_object', :dependent => :destroy
+	#has_many :tags, :as => 'rel_object', :dependent => :destroy
 	
 	acts_as_ferret :fields => [:name, :description, :project_id, :is_private, :tags_with_spaces], :store_class_name => true
 	
@@ -73,6 +73,7 @@ class ProjectTime < ActiveRecord::Base
 	end
 	
 	def process_destroy
+	  Tag.clear_by_object(self)
 	  ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
 	end
 	
