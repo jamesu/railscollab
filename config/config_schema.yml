@@ -147,20 +147,26 @@ general:
     default: false
     comment: ""
     order: 5
+    
+  site_theme:
+    handler: ThemeConfigHandler
+    default: "default"
+    comment: ""
+    order: 6
   
   # Localisation
   default_language: 
     handler: StringConfigHandler
     default: en-US
     comment: ""
-    order: 6
+    order: 7
 
   # Ferret search
   search_enabled: 
     handler: BoolConfigHandler
     default: true
     comment: ""
-    order: 7
+    order: 8
 
 mailing:
   notification_email_address:
