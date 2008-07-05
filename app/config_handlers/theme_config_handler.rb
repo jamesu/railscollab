@@ -24,13 +24,7 @@ class ThemeConfigHandler < ConfigHandler
 		super
 		
 		begin
-		  @themes = Dir.entries("public/themes").reject do |theme|
-		  if File.directory?(theme) and theme != "." and theme != ".."
-		      false
-		  else
-		      true
-		  end
-		end
+		  @themes = Dir.entries("public/themes").reject { |theme| File.directory?(theme) }
 		rescue
 		  @themes = ['default']
 		end
@@ -41,11 +35,11 @@ class ThemeConfigHandler < ConfigHandler
 	end
 	
 	def value=(val)
-		@rawValue = val unless !(@themes.include?(val))
+		@rawValue = val if @themes.include?(val)
 	end
 	
 	def render(name, options)
-		opts = options_for_select(@themes.collect { |theme| [theme,theme] }, self.value)
+		opts = options_for_select(@themes, self.value)
 		select_tag name, opts, options
 	end
 end
