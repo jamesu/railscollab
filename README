@@ -5,6 +5,13 @@ RailsCollab is a port of the project management tool
 ProjectPier (previously known as ActiveCollab, written in PHP) to the Ruby on Rails framework, 
 obviously written in Ruby.
 
+RailsCollab is largely inspired by Basecamp, the communication-oriented project management 
+solution from 37signals. 
+It even goes so far as to implement the BaseCamp API, allowing integration with many 
+Basecamp integrated services and apps.
+(Keep in mind though that while RailsCollab is inspired by Basecamp, it is by no means 
+intended to be a clone of it)
+
 For licensing details, refer to the LICENSE file in the root directory.
 
 First and foremost
