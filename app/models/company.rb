@@ -140,7 +140,7 @@ class Company < ActiveRecord::Base
 	end
 	
 	def logo_url
-	 self.logo_file.nil? ? '/images/logo.gif' : "/company/logo/#{self.id}.png" 
+	 self.logo_file.nil? ? "/themes/#{AppConfig.site_theme}/images/logo.gif" : "/company/logo/#{self.id}.png" 
 	end
 	
 	def users_on_project(project)

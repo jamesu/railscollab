@@ -6,7 +6,7 @@
   <tr class="logOlder">
 <% end %>
 
-    <td class="logTypeIcon"><img src="/images/logtypes/<%= "#{application_logs.rel_object_type.downcase}s.gif" %>" alt="<%= application_logs.rel_object_type %>" title="<%= application_logs.rel_object_type %>" /></td>
+    <td class="logTypeIcon"><img src="/themes/<%=AppConfig.site_theme%>/images/logtypes/<%= "#{application_logs.rel_object_type.downcase}s.gif" %>" alt="<%= application_logs.rel_object_type %>" title="<%= application_logs.rel_object_type %>" /></td>
     <td class="logDetails">
       <span>
       <% if not ['Comment', 'ProjectMessage'].include?(application_logs.rel_object_type) %>

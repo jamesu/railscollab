@@ -100,7 +100,7 @@ class ProjectFile < ActiveRecord::Base
 	end
 	
 	def filetype_icon_url
-		return project_file_revisions.empty? ? "/images/filetypes/unknown.png" : project_file_revisions[0].filetype_icon_url
+		return project_file_revisions.empty? ? "/themes/#{AppConfig.site_theme}/images/filetypes/unknown.png" : project_file_revisions[0].filetype_icon_url
 	end
 	
 	def file_size

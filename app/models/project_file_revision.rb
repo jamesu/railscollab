@@ -100,7 +100,7 @@ class ProjectFileRevision < ActiveRecord::Base
 	def filetype_icon_url
 		if self.thumb_filename.nil?
 			ext = self.file_type ? self.file_type.icon : "unknown.png"
-			return "/images/filetypes/#{ext}"
+			return "/themes/#{AppConfig.site_theme}/images/filetypes/#{ext}"
 		else
 			return "/files/thumbnail/#{self.id}.jpg"
 		end

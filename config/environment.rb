@@ -105,6 +105,15 @@ begin
 rescue Exception
 end
 
+# Theming
+ActionController::Base.asset_host = Proc.new { |source|
+     if source.starts_with?('/images') or source.starts_with?('/stylesheets')
+       "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
+     else
+       "#{AppConfig.site_url}"
+     end
+}
+
 # Localisation
 Globalite.locale = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym
 

@@ -336,7 +336,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar_url
-		self.avatar_file.nil? ? '/images/avatar.gif' : "/account/avatar/#{self.id}.png"
+		self.avatar_file.nil? ? "/themes/#{AppConfig.site_theme}/images/avatar.gif" : "/account/avatar/#{self.id}.png"
 	end
 	
 	def object_name
