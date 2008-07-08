@@ -85,13 +85,7 @@ continue to function. This can be achieved by running the following command:
 
 Next you should reload your configuration schema, in case any new configuration options have 
 been added. This can be accomplished by running the following commands:
-	rake db:railscollab:dump_config
-	rake db:railscollab:load_config_schema
-	rake db:railscollab:load_config
-
-"dump_config" places your existing configuration information in "config/config.yml".
-"load_config_schema" recreates the configuration schema in the database.
-"load_config" re-loads your previous configuration information from "config/config.yml".
+	rake db:railscollab:reload_config
 
 If you are updating from alpha 2 and below, note that the preferred method for updating configuration 
 options is now from the administration interface.

@@ -16,8 +16,16 @@ namespace :db do
 			load("db/default_content.rb")
 		end
 		
+		task :reload_config => :environment do
+		    puts "\nRe-loading configuration..."
+		    Rake::Task["db:railscollab:dump_config"].invoke
+		    Rake::Task["db:railscollab:load_config_schema"].invoke
+		    Rake::Task["db:railscollab:load_config"].invoke
+		    puts "Done."
+		end
+		
 		task :load_config_schema => :environment do
-			puts "\Loading configuration schema..."
+			puts "\nLoading configuration schema..."
 			load("db/default_config.rb")
 		end
 		
