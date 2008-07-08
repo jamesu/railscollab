@@ -386,7 +386,7 @@ class ProjectController < ApplicationController
       return
     end
     
-    if not @project.completed_by.nil?
+    if not @project.is_active?
       error_status(true, :project_already_completed)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return
@@ -410,7 +410,7 @@ class ProjectController < ApplicationController
       return
     end
     
-    if @project.completed_by.nil?
+    if @project.is_active?
       error_status(true, :project_already_open)
       redirect_back_or_default :controller => 'administration', :action => 'projects'
       return

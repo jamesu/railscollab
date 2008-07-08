@@ -34,7 +34,7 @@ class FormController < ApplicationController
   after_filter  :user_track, :only => [:index, :submit]
   
   def index
-    if not ProjectForm.can_be_created_by(@logged_user, @active_project)
+    if not (@logged_user.is_admin and @logged_user.member_of_owner?)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'form'
       return
