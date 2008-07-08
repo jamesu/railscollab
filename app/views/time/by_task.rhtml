@@ -1,0 +1,70 @@
+<%
+  @page_title = :time.l
+  @tabbed_navigation_items = project_tabbed_navigation(:time)
+  @bread_crumbs = project_crumbs(:time)
+  
+  @page_actions = []
+  
+  if ProjectTime.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => :add_time, :url => "/project/#{@active_project.id}/time/add"}
+  end
+  
+  @page_actions << {:title => :sort_by_finished_date, :url => "/project/#{@active_project.id}/time/index?orderBy=done_date"}
+  @page_actions << {:title => :sort_by_hours, :url => "/project/#{@active_project.id}/time/index?orderBy=hours"}
+  @page_actions << {:title => :report_by_task, :url => "/project/#{@active_project.id}/time/by_task?orderBy=hours"}
+  
+  @additional_stylesheets = ['project/time']
+%>
+
+<% if not @tasks.empty? %>
+<div id="time">
+
+<% @tasks.each do |list| -%>
+
+<% total_time = 0
+list[:tasks].each { |task| total_time += task[:hours] } %>
+
+<% if total_time > 0 %>
+<div class="timeTaskList">
+<h2><%= :task_list_hours.l_with_args(:name => h(list[:list].object_name), :hours => total_time) %></h2>
+<h4><%= :task_list_hours_info.l %></h4>
+
+<% list[:tasks].each do |list_task| -%>
+<% task = list_task[:task] %>
+<h4><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => list_task[:hours]) %></h4>
+
+<table class="timeLogs blank"><tr><th>Date</th><th>Name</th><th>Details</th><th>Hours</th></tr>
+<% list_task[:list].each do |time| -%>
+    <tr>
+     <td class="timeDate">
+<% if time.done_date.year == Time.now.year %>
+      <%= format_usertime(time.done_date, "%b %d.") %>
+<% else %>
+      <%= format_usertime(time.done_date, "%b %d. %Y") %>
+<% end %>
+    </td>
+    <td class="timeUser">
+<% if time.assigned_to.nil? %>
+      	???
+<% else %>
+        <%= h time.assigned_to.object_name %>
+<% end %>
+    </td>
+    <td class="timeDetails">
+	    <%= h time.name %>
+    </td>
+    <td class="timeHours"><%= time.hours %></td>
+    </tr>
+<% end %>
+</table>
+
+<% end %>
+
+</div>
+<% end %>
+
+<% end %>
+</div>
+<% else %>
+<p><%= "This project has no time records" %></p>
+<% end %>

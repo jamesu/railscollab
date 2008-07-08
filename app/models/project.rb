@@ -29,7 +29,13 @@ class Project < ActiveRecord::Base
 	has_many :project_users
 	has_many :users, :through=> :project_users
 	
-	has_many :project_times, :dependent => :destroy
+	has_many :project_times, :dependent => :destroy do
+		def public(reload=false)
+			# Grab public logs only
+			@public_project_times = nil if reload
+			@public_project_times ||= find(:all, :conditions => ['is_private = ?', false])
+		end
+    end
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
 	
 	has_many :project_milestones, :dependent => :destroy do

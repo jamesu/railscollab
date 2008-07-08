@@ -20,10 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 require 'icalendar'
+require 'csv'
 
 class FeedController < ApplicationController
 
-  before_filter :token_login_required
+  before_filter :token_login_required, :except => [:export_times]
+  before_filter :login_required, :only => [:export_times]
   after_filter  :user_track
   
   def recent_activities
@@ -54,7 +56,7 @@ class FeedController < ApplicationController
   				end
   			end
   			
-  			render :text => ical.to_ical
+  			render :text => ical.to_ical, :content_type => 'text/calendar'
   		end
   	end
   end
@@ -99,7 +101,7 @@ class FeedController < ApplicationController
   				end
   			end
   			
-  			render :text => ical.to_ical
+  			render :text => ical.to_ical, :content_type => 'text/calendar'
   		end
   	end
   end
@@ -132,7 +134,7 @@ class FeedController < ApplicationController
   					description milestone.description
   				end
   			end
-  			render :text => ical.to_ical
+  			render :text => ical.to_ical, :content_type => 'text/calendar'
   		end
   	end
   end
@@ -177,7 +179,52 @@ class FeedController < ApplicationController
   					description milestone.description
   				end
   			end
-  			render :text => ical.to_ical
+  			render :text => ical.to_ical, :content_type => 'text/calendar'
+  		end
+  	end
+  end
+  
+  def export_times
+    if params.has_key?(:project)
+  	 begin
+  	     @project = Project.find(params[:project])
+  	 rescue ActiveRecord::RecordNotFound
+  	     render :text => '404 Not found', :status => 404
+  	     return
+  	 end
+  	 
+  	 @times = @logged_user.member_of_owner? ? @project.project_times : @project.project_times.open
+  	else
+  	 @times = ProjectTime.all_by_user(@logged_user)
+  	end
+
+  	respond_to do |format|
+  		format.html do
+  			render :text => '404 Not found', :status => 404
+  		end
+  		
+  		format.rss do
+  			render :text => '404 Not found', :status => 404
+  		end
+  		
+  		format.ics do
+  			render :text => '404 Not found', :status => 404
+  		end
+  		
+  		format.csv do
+  		    build_str = ''
+  		    CSV.generate_row(['Project', 'Date (UTC)', 'Attributed to', 'Hours', 'Name', 'Description', 'Task list', 'Task'], 8, build_str)
+  		    @times.each { |time| CSV.generate_row([time.project.name,
+  		                                           time.done_date.strftime("%m/%d/%Y"),
+  		                                           time.assigned_to.nil? ? 'Anyone' : time.assigned_to.display_name,
+  		                                           time.hours,
+  		                                           time.name,
+  		                                           time.description,
+  		                                           time.project_task_list.nil? ? '' : time.project_task_list.object_name,
+  		                                           time.project_task.nil? ? '' : time.project_task.object_name,
+  		                                           ], 8, build_str) }
+  		    
+  		    render :text => build_str, :content_type => "application/vnd.ms-excel"
   		end
   	end
   end

@@ -453,6 +453,13 @@ private_time: Private time
 private_time_info: "Private times are visible only to owner company members. Members of client companies will not be able to see them."
 billable_time: Billable time
 billable_time_info: "Billable times are those for which you expect payment from the client(s)."
+task_list_hours: "{name} [{hours} hours]"
+task_list_hours_info: "Tasks which have been logged with time"
+task_list_task_hours: "{name} [{hours} hours]"
+
+csv_export: "CSV Export"
+csv: CSV
+csv_export_times_info: "Use this link to bring time tracking data to your favourite spreadsheet application"
 
 # Files
 file: File

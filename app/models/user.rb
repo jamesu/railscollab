@@ -160,13 +160,17 @@ class User < ActiveRecord::Base
 	end
 	
 	def twisted_token_valid?(value)
-		return value if not value.valid_hash?
+		return false if not value.valid_hash?
 		
-		twist_array = self.twister_array
-		result = ''
-		(0..3).each do |i|
-			offs = i*10
-			result += value[offs..(offs+9)].untwist(twist_array)
+		begin
+		  twist_array = self.twister_array
+		  result = ''
+		  (0..3).each do |i|
+		  	offs = i*10
+		  	result += value[offs..(offs+9)].untwist(twist_array)
+		  end
+	    rescue
+	       return false
 		end
 		
 		return result == self.token
@@ -296,6 +300,14 @@ class User < ActiveRecord::Base
 			return (url_for :only_path => true, :controller => 'feed', :action => 'project_milestones', :user => self.id, :project => project.id, :format => format, :token => self.twisted_token())
 		else
 			return (url_for :only_path => true, :controller => 'feed', :action => 'recent_milestones', :user => self.id, :format => format, :token => self.twisted_token())
+		end
+	end
+	
+	def time_export_url(project=nil, format='csv')
+		if not project.nil?
+			return (url_for :only_path => true, :controller => 'feed', :action => 'export_times', :user => self.id, :project => project.id, :format => format, :token => '-')
+		else
+			return (url_for :only_path => true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-')
 		end
 	end
 	

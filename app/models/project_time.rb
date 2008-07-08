@@ -188,6 +188,69 @@ class ProjectTime < ActiveRecord::Base
 	  end
 	end
 	
+	def self.find_by_task_list(params, time_conds, time_order=nil)
+	   lists = []
+	   
+	   ProjectTaskList.find(:all, :params).each do |list|
+	       tasks = []
+	       list.project_tasks.each do |task|
+	         total = ProjectTime.sum(:hours, :conditions => ['task_list_id = ? AND task_id = ?', list.id, task.id])
+	         if (!total.nil? and total > 0)
+	           extra_conditions = time_conds.clone
+	           extra_conditions[0] += " AND task_list_id = ? AND task_id = ?"
+	           extra_conditions << list.id
+	           extra_conditions << task.id
+	           tasks << {:task => task, :hours => total, :list => ProjectTime.find(:all, :conditions => extra_conditions, :order => time_order)}
+	         end
+	       end
+	       
+	       lists << {:list => list, :tasks => tasks}
+	   end
+	   
+	   return lists
+	end
+	
+	def self.find_grouped(group_field, params)
+		grouped_fields = {}
+		found_times = ProjectTime.find(:all, params)
+		
+		group_type = ProjectTime if ['assigned_to','project','project_task','project_task_list'].include?(group_field)
+		group_type ||= String
+		
+		found_times.each do |time|
+			dest_str = nil
+			
+			if group_type == ProjectTime
+				dest_str = time[group_field].object_name
+			else
+				dest_str = time[group_field].to_s[0..0]
+			end
+			
+			grouped_fields[dest_str] ||= []
+			grouped_fields[dest_str] << file
+		end
+		
+		return found_times, grouped_fields
+	end
+	
+	def self.all_by_user(user)
+		projects = user.active_projects
+		
+		project_ids = projects.collect do |p|
+			p.id
+		end.join ','
+		
+		if project_ids.length == 0
+			return []
+		end
+		
+		time_conditions = user.member_of_owner? ?
+		                 ["project_id IN (#{project_ids})"] :
+		                 ["project_id IN (#{project_ids}) AND is_private = ?", false]
+		
+		return self.find(:all, :conditions => time_conditions)
+	end
+	
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)

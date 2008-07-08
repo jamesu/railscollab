@@ -311,3 +311,8 @@ a.iCalSubscribe {
   background: url('../../images/icons/icalendar.png') no-repeat;
   padding: 4px 0 0 20px;
 }
+
+a.csvExport {
+  background: url('../../images/icons/csv.png') no-repeat;
+  padding: 4px 0 0 20px;
+}

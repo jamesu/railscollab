@@ -31,22 +31,13 @@ class TimeController < ApplicationController
   before_filter :login_required
   before_filter :process_session
   before_filter :obtain_time, :except => [:index, :add, :by_task]
+  before_filter :prepare_times, :only => [:index, :by_task, :export]
   after_filter  :user_track, :only => [:index, :view, :by_task] 
   
   def index
     @project = @active_project
-
-    current_page = params[:page].to_i
-    current_page = 0 unless current_page > 0
     
-    time_conditions = @logged_user.member_of_owner? ? 
-                      ['project_id = ?', @project.id] : 
-                      ['project_id = ? AND is_private = ?', @project.id, false]
-    sort_type = params[:orderBy]
-    sort_type = 'created_on' unless ['done_date', 'hours'].include?(params[:orderBy])
-    sort_order = 'DESC'
-    
-    @times = ProjectTime.find(:all, :conditions => time_conditions, :page => {:size => AppConfig.times_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+    @times = ProjectTime.find(:all, :conditions => @time_conditions, :page => {:size => AppConfig.times_per_page, :current => @current_page}, :order => "#{@sort_type} #{@sort_order}")
     @pagination = []
     @times.page_count.times {|page| @pagination << page+1}
     
@@ -54,6 +45,11 @@ class TimeController < ApplicationController
   end
   
   def by_task
+    @project = @active_project
+    
+    @tasks = ProjectTime.find_by_task_list({:order => "#{@active_project.connection.quote_column_name 'order'} DESC"}, @time_conditions, "#{@sort_type} #{@sort_order}")
+    
+    @content_for_sidebar = 'index_sidebar'
   end
   
   def view
@@ -140,6 +136,18 @@ private
     end
     
     return true
+  end
+  
+  def prepare_times
+    @current_page = params[:page].to_i
+    @current_page = 0 unless @current_page > 0
+    
+    @time_conditions = @logged_user.member_of_owner? ? 
+                      ['project_id = ?', @active_project.id] : 
+                      ['project_id = ? AND is_private = ?', @active_project.id, false]
+    @sort_type = params[:orderBy]
+    @sort_type = 'created_on' unless ['done_date', 'hours'].include?(params[:orderBy])
+    @sort_order = 'DESC'
   end
   
 end
