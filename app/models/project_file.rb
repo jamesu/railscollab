@@ -230,11 +230,11 @@ class ProjectFile < ActiveRecord::Base
     # Core permissions
     
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_upload_files)
+	  project.is_active? and user.has_permission(project, :can_upload_files)
 	end
 	
 	def can_be_edited_by(user)
-	 return false if !(user.member_of(self.project) and user.has_permission(project, :can_manage_files))
+	 return false if (!project.is_active? or !(user.member_of(project) and user.has_permission(project, :can_manage_files)))
 	 
 	 return true if user.is_admin
 	 
@@ -242,9 +242,7 @@ class ProjectFile < ActiveRecord::Base
     end
 
 	def can_be_deleted_by(user)
-	 return false if (!user.member_of(self.project))
-	 
-	 return user.is_admin
+	 user.is_admin and project.is_active? and user.member_of(project)
     end
     
 	def can_be_seen_by(user)
@@ -256,19 +254,19 @@ class ProjectFile < ActiveRecord::Base
 	# Specific Permissions
 
     def can_be_managed_by(user)
-      user.has_permission(self.project, :can_manage_files)
+      project.is_active? and user.has_permission(project, :can_manage_files)
     end
     
     def can_be_downloaded_by(user)
-      self.can_be_seen_by(user)
+      can_be_seen_by(user)
     end
     
     def options_can_be_changed_by(user)
-      return (user.member_of_owner? and self.can_be_edited_by(user))
+      return (user.member_of_owner? and can_be_edited_by(user))
     end
     
     def comment_can_be_added_by(user)
-     return (self.comments_enabled and user.member_of(self.project) and !(self.is_private and !user.member_of_owner?))
+     return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
     end
     
 	# Accesibility

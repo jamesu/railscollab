@@ -123,25 +123,25 @@ class ProjectForm < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	 return (user.member_of(project) and user.is_admin)
+	 project.is_active? and (user.member_of(project) and user.is_admin)
 	end
 	
 	def can_be_edited_by(user)
-	 return (user.member_of(self.project) and user.is_admin)
+	 project.is_active? and user.member_of(project) and user.is_admin
     end
 
 	def can_be_deleted_by(user)
-	 return (user.member_of(self.project) and user.is_admin)
+	 project.is_active? and user.member_of(project) and user.is_admin
     end
     
 	def can_be_seen_by(user)
-	 user.member_of(self.project)
+	 user.member_of(project)
     end
 	
 	# Specific Permissions
 
 	def can_be_submitted_by(user)
-	 return (self.is_enabled and user.member_of(self.project))
+	 return (self.is_enabled and project.is_active? and user.member_of(project))
 	end
 	
 	# Helpers

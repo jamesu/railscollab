@@ -110,23 +110,23 @@ class ProjectTaskList < ActiveRecord::Base
 	end
 
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_tasks)
+	  project.is_active? and user.has_permission(project, :can_manage_tasks)
 	end
 	
 	def can_be_managed_by(user)
-	  user.has_permission(project, :can_manage_tasks)
+	  project.is_active? and user.has_permission(project, :can_manage_tasks)
 	end
 	
 	def can_be_changed_by(user)      
-	 return false if (!user.member_of(self.project))
+	 return false if ( !project.is_active? or !user.member_of(project) )
 	 
 	 return true if user.is_admin
 	 
-	 return (!(self.is_private and !user.member_of_owner?) and user.id == self.created_by.id)
+	 return (!(self.is_private and !user.member_of_owner?) and user.id == created_by.id)
 	end
 	
 	def can_be_deleted_by(user)
-	 return (user.member_of(self.project) and user.is_admin)
+	 project.is_active? and user.member_of(project) and user.is_admin
 	end
 	
 	def can_be_seen_by(user)
@@ -134,7 +134,7 @@ class ProjectTaskList < ActiveRecord::Base
 	end
 	
     def comment_can_be_added_by(user)
-	 return self.project.has_member(user)
+	 project.is_active? and project.has_member(user)
     end
 	
 	def open_tasks

@@ -191,21 +191,20 @@ class ProjectTime < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_time)
+	  project.is_active? and user.has_permission(project, :can_manage_time)
 	end
 	
 	def can_be_edited_by(user)
-	 return false if (!user.member_of(self.project))
-	 return (user.is_admin or self.created_by.id == user.id)
+	 return false if (!user.member_of(project))
+	 return ((user.is_admin or created_by.id == user.id) and project.is_active?)
 	end
 	
 	def can_be_deleted_by(user)
-	 return false if (!user.member_of(self.project))
-	 return user.is_admin
+	 project.is_active? and user.member_of(project) and user.is_admin
 	end
 	
 	def can_be_seen_by(user)
-	 if !self.project.has_member(user)
+	 if !project.has_member(user)
 	   return false
 	 end
 	 
@@ -223,7 +222,7 @@ class ProjectTime < ActiveRecord::Base
 	# Specific Permissions
 
     def can_be_managed_by(user)
-      return user.has_permission(self.project, :can_manage_time)
+      project.is_active? and user.has_permission(project, :can_manage_time)
     end
 	
 	# Accesibility

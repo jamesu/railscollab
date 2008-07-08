@@ -37,25 +37,25 @@ class ProjectFolder < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_files)
+	  project.is_active? and user.has_permission(project, :can_manage_files)
 	end
 	
 	def can_be_edited_by(user)
-	  user.has_permission(project, :can_manage_files)
+	  project.is_active? and user.has_permission(project, :can_manage_files)
 	end
 	
 	def can_be_deleted_by(user)
-	  user.has_permission(project, :can_manage_files)
+	  project.is_active? and user.has_permission(project, :can_manage_files)
 	end
 	
 	def can_be_seen_by(user)
-	 self.project.has_member(user)
+	  project.has_member(user)
 	end
 	
 	# Specific Permissions
 
     def can_be_managed_by(user)
-	 user.has_permission(project, :can_manage_files)
+	 project.is_active? and user.has_permission(project, :can_manage_files)
     end
     
     # Helpers

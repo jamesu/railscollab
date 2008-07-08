@@ -77,7 +77,7 @@ class Comment < ActiveRecord::Base
 	def can_be_edited_by(user)
 	  comment_project = self.rel_object.project
 	  
-	  if comment_project.has_member(user)
+	  if comment_project.is_active? and comment_project.has_member(user)
 	    return true if (user.member_of_owner? and user.is_admin)
 	  	
 	  	if self.created_by == user

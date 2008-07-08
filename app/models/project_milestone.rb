@@ -203,38 +203,37 @@ class ProjectMilestone < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	 user.has_permission(project, :can_manage_milestones)
+	 project.is_active? and user.has_permission(project, :can_manage_milestones)
 	end
 	
 	def can_be_edited_by(user)
-	 return false if (!user.member_of(self.project))
+	 return false if (!project.is_active? or !user.member_of(project))
 	 return (user.is_admin or self.created_by.id == user.id)
 	end
 	
 	def can_be_deleted_by(user)
-	 return false if (!user.member_of(self.project))
-	 return user.is_admin
+	 project.is_active? and user.member_of(project) and user.is_admin
 	end
 	
 	def can_be_seen_by(user)
-	 return (user.member_of(self.project) and !(self.is_private and !user.member_of_owner?))
+	 return (user.member_of(project) and !(self.is_private and !user.member_of_owner?))
 	end
 	
 	# Specific Permissions
 
     def can_be_managed_by(user)
-     user.has_permission(self.project, :can_manage_milestones)
+     project.is_active? and user.has_permission(project, :can_manage_milestones)
     end
     
     def status_can_be_changed_by(user)
-	 return true if self.can_be_edited_by(user)
+	 return true if can_be_edited_by(user)
 	 
 	 milestone_assigned_to = self.assigned_to
 	 return ((milestone_assigned_to == user) or (milestone_assigned_to == user.company))
     end
     
     def comment_can_be_added_by(user)
-	 return self.project.has_member(user)
+	 project.is_active? and project.has_member(user)
     end
 	
 	# Helpers

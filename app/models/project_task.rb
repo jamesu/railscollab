@@ -147,34 +147,34 @@ class ProjectTask < ActiveRecord::Base
 	end
 	
 	def self.can_be_created_by(user, task_list)
-	 return (user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and task_list.can_be_managed_by(user)))
+	 return (task_list.project.is_active? and user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and task_list.can_be_managed_by(user)))
 	end
 	
 	def can_be_changed_by(user)
-	 project = self.task_list.project
+	 project = task_list.project
 	 
-	 return false if !user.member_of(project)
+	 return false if !user.member_of(project) or !project.is_active?
 	 return true if user.is_admin
 	 
-	 task_assigned_to = self.assigned_to
+	 task_assigned_to = assigned_to
 	 return true if ((task_assigned_to == user) or (task_assigned_to == user.company) or task_assigned_to.nil?)
 	 
 	 # Owner editable for 3 mins
-	 return true if (self.created_by == user.id and (this.created_on+(60*3)) < Time.now.utc)
+	 return true if (self.created_by_id == user.id and (self.created_on+(60*3)) < Time.now.utc)
 	 
-	 return self.task_list.can_be_changed_by(user)
+	 return task_list.can_be_changed_by(user)
 	end
 	
 	def can_be_deleted_by(user)
-	 return self.task_list.can_be_deleted_by(user)
+	 task_list.can_be_deleted_by(user)
 	end
 	
 	def can_be_seen_by(user)
-	 return (self.can_be_changed_by(user) or self.task_list.can_be_seen_by(user))
+	 return (can_be_changed_by(user) or task_list.can_be_seen_by(user))
 	end
 	
     def comment_can_be_added_by(user)
-	 return user.member_of(self.task_list.project)
+	 task_list.comment_can_be_added_by(user)
     end
 	
 	# Accesibility

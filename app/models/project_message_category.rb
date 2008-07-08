@@ -37,15 +37,15 @@ class ProjectMessageCategory < ActiveRecord::Base
 	# Core Permissions
 	
 	def self.can_be_created_by(user, project)
-	  user.has_permission(project, :can_manage_messages)
+	  project.is_active? and user.has_permission(project, :can_manage_messages)
 	end
 	
 	def can_be_edited_by(user)
-	  user.has_permission(project, :can_manage_messages)
+	  self.project.is_active? and user.has_permission(project, :can_manage_messages)
 	end
 	
 	def can_be_deleted_by(user)
-	  user.has_permission(project, :can_manage_messages)
+	  self.project.is_active? and user.has_permission(project, :can_manage_messages)
 	end
 	
 	def can_be_seen_by(user)
@@ -55,7 +55,7 @@ class ProjectMessageCategory < ActiveRecord::Base
 	# Specific Permissions
 
     def can_be_managed_by(user)
-	 user.has_permission(project, :can_manage_messages)
+	 project.is_active? and user.has_permission(project, :can_manage_messages)
     end
     
     # Helpers
