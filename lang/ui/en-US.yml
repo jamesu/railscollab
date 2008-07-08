@@ -532,7 +532,7 @@ notification_smtp_authentication: "Authentication"
 notification_method_sendmail: "Sendmail"
 notification_sendmail_location: "Location"
 notification_sendmail_arguments: "Arguments"
-		                           		                              
+
 # mailing
 option_notification_email_address_name: "Notification identity"
 option_notification_email_address_description: "Identity of the email notifier, in the format 'Name <email@address>'"
@@ -542,6 +542,13 @@ option_notification_email_smtp_name: "SMTP transport settings"
 option_notification_email_smtp_description: "Settings used for the SMTP mail transport"
 option_notification_email_sendmail_name: "Sendmail transport settings"
 option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
+
+
+# Administration tools
+# administration_tool_<name>
+# administration_tool_<name>_description
+
+no_administration_tools: "No administration tools"
 
 # system
 

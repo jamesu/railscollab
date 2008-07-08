@@ -50,8 +50,7 @@ class AdministrationController < ApplicationController
   end
   
   def tools
-      error_status(true, :unimplemented)
-      redirect_back_or_default :controller => 'administration'
+      @tools = AdministrationTool.admin_list
   end
   
   def upgrade

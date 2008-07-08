@@ -5,4 +5,21 @@ RailsCollab
 =end
 
 class AdministrationTool < ActiveRecord::Base
+	include ActionController::UrlWriter
+	
+	def self.admin_list
+	   AdministrationTool.find(:all, :order => "#{self.connection.quote_column_name 'order'}")
+	end
+	
+	def display_name
+	    "administration_tool_#{self.name}".to_sym.l
+	end
+	
+	def display_description
+	    "administration_tool_#{self.name}_description".to_sym.l
+	end
+	
+	def object_url
+		url_for :only_path => true, :controller => self.controller, :action => self.action
+	end
 end
