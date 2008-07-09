@@ -56,7 +56,7 @@
 <% end %>
             <%= h task.text %> 
 <% if not task.task_list.nil? %>
-            (<%= :tasks_in_list.l_with_args(:list => link_to(h(task.task_list.name), :controller => 'task', :action => 'view_list', :id => task.task_list.id, :active_project => project[:id]) %>)
+            (<%= :tasks_in_list.l_with_args(:list => link_to(h(task.task_list.name), :controller => 'task', :action => 'view_list', :id => task.task_list.id, :active_project => project[:id])) %>)
 <% end %>
           </td>
         </tr>
