@@ -288,6 +288,9 @@ completed_task_lists: Completed task lists
 task_list_completed_time_with_user: "{time} | {user}"
 task_list_completed_time_format: "%b %d, %Y"
 tags_used_in_project: Tags used in project
+objects_tagged_with: {count} objects are tagged with {tag}
+no_objects_tagged_with: There are no objects are tagged with {tag}
+milestone_assigned_to: Assigned to {name}
 tag_object_count: "{count} objects."
 
 # Message form

@@ -7,15 +7,15 @@
 %>
 
 <% if @tagged_objects_count > 0 %>
-<p><%= "#{@tagged_objects_count} objects are tagged with '#{@tag_name}'" %>:</p>
+<p><%= :objects_tagged_with.l_with_args({:count => @tagged_objects_count, :tag => h(@tag_name)}) %>:</p>
 
 <% if not @tagged_objects[:messages].empty? %>
-<h2><%= "Messages" %></h2>
+<h2><%= :messages.l %></h2>
 <ul>
 <% @tagged_objects[:messages].each do |message| -%>
   <li><a href="<%= message.object_url %>"><%= h message.object_name %></a>
 <% if !message.created_by.nil? %>
-  <span class="desc">- <%= format_usertime(message.created_on, "%b %d. %Y %H:%M") %> | <%= link_to (h message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id %></span>
+  <span class="desc">- <%= format_usertime(message.created_on, :message_created_format.l) %> | <%= link_to (h message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id %></span>
 <% end %>
   </li>
 <% end %>
@@ -23,13 +23,13 @@
 <% end %>
 
 <% if not @tagged_objects[:milestones].empty? %>
-<h2><%= "Milestones" %></h2>
+<h2><%= :milestones.l %></h2>
 <ul>
 <% @tagged_objects[:milestones].each do |milestone| -%>
   <li>
     <a href="<%= milestone.object_url %>"><%= h milestone.object_name %></a>
 <% if !milestone.assigned_to.nil? %>
-    <span class="desc">- <%= "Assigned to #{h milestone.assigned_to.object_name}"%></span>
+    <span class="desc">- <%= :milestone_assigned_to.l_with_args({:name => h(milestone.assigned_to.object_name)})"%></span>
 <% end %>
 <% if milestone.is_completed? %>
     <%= render_icon 'ok', "Completed milestone" %>
@@ -40,7 +40,7 @@
 <% end %>
 
 <% if not @tagged_objects[:task_lists].empty? %>
-<h2><%= "Task lists" %></h2>
+<h2><%= :task_lists.l %></h2>
 <ul>
 <% @tagged_objects[:task_lists].each do |task_list| -%>
   <li>
@@ -54,7 +54,7 @@
 <% end %>
 
 <% if not @tagged_objects[:files].empty? %>
-<h2><%= "Files" %></h2>
+<h2><%= :files.l %></h2>
 <ul>
 <% @tagged_objects[:files].each do |file| -%>
   <li><a href="<%= file.object_url%>"><%= h file.filename %></a> <span class="desc">(<%= format_size file.file_size %>)</span></li>
@@ -63,5 +63,5 @@
 <% end %>
 
 <% else %>
-<p><%= "There are no objects tagged with '#{@tag_name}'" %></p>
+<p><%= :no_objects_tagged_with.l_with_args({:tag => h(@tag_name)}) %></p>
 <% end %>
