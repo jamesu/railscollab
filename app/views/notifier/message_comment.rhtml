@@ -1,14 +1,14 @@
 ------------------------------------------------------------
- <%= "DO NOT REPLY TO THIS MESSAGE" %>
+ <%= :notifier_donotreply.l %>
 ------------------------------------------------------------
 
-<%= "A new comment has been posted to the message '#{@message.title}'." %> <%= "To view this comment, visit the following URL:" %>
+<%= :notifier_new_comment.l_with_args(:title => @message.title) %>
 
 - <%= "#{AppConfig.site_url}#{@comment.object_url}" %>
 
-Company: <%= Company.owner.name %>
-Project: <%= @message.project.name %>
-Author: <%= @comment.created_by.display_name %>
+<%= :company.l %>: <%= Company.owner.name %>
+<%= :project.l %>: <%= @message.project.name %>
+<%= :author.l %>: <%= @comment.created_by.display_name %>
 
 --
 <%= AppConfig.site_url %>

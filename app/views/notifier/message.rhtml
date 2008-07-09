@@ -1,13 +1,13 @@
 ------------------------------------------------------------
- <%= "DO NOT REPLY TO THIS MESSAGE" %>
+ <%= :notifier_donotreply.l %>
 ------------------------------------------------------------
 
-<%= "A new message entitled '#{@message.title}' has been posted in the project #{@message.project.name}." %> <%= "To view this message, visit the following URL:" %>
+<%= :notifier_new_message.l_with_args(:title => @message.title, :project => @message.project.name) %>
 
 - <%= "#{AppConfig.site_url}#{@message.object_url}" %>
 
-Company: <%= Company.owner.name %>
-Project: <%= @message.project.name %>
+<%= :company.l %>: <%= Company.owner.name %>
+<%= :project.l %>: <%= @message.project.name %>
 
 --
 <%= AppConfig.site_url %>
