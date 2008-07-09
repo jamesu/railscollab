@@ -11,12 +11,15 @@
 <div id="searchForm">
   <%= form_tag :action => 'search' %>
     <%= text_field_tag 'search_id', @last_search %>
-    <button class="submit" type="submit">Search</button>
+    <button class="submit" type="submit"><%= :search.l %></button>
   </form>
 </div>
 
 <% if !@search_results.empty? %>
-<p><%= "Displaying #{@start_search_results}...#{@start_search_results+@search_results.length} out of #{@total_search_results} results for '#{h @last_search}'."%></p>
+<p><%= :search_displaying_results_for.l_with_args({:start => @start_search_results, 
+                                                   :finish => @start_search_results+@search_results.length, 
+                                                   :total => @total_search_results,
+                                                   :search => h(@last_search)}) %></p>
 <ul>
 <% @search_results.each do |obj| -%>
   <li><%= obj.class.to_s %>: <a href="<%= obj.object_url %>"><%= h obj.object_name %></a></li>
@@ -28,5 +31,5 @@
 </div>
 
 <% else %>
-<p><%= "There are no objects which match \"<strong>#{h @last_search}</strong>\"" %></p>
+<p><%= :search_no_matching_objects.l_with_args({:search => h(@last_seach)}) %></p>
 <% end %>

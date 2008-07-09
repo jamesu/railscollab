@@ -31,27 +31,27 @@
 <% end %>
 
 <% if @late_milestones.length > 0 || @today_milestones.length > 0 || @upcomming_milestones.length > 0 %>
-<h2><%= "Milestones" %></h2>
+<h2><%= :milestones.l %></h2>
 <% end %>
 
 <% if @late_milestones.length > 0 || @today_milestones.length > 0 %>
 <div id="lateMilestones" class="important">
-  <div class="header"><%= "Late milestones" %> / <%= "Todays milestones" %></div>
+  <div class="header"><%= :late_milestones.l %> / <%= :todays_milestones.l %></div>
   <div class="content">
     <ul>
 <% @late_milestones.each do |late_milestone| -%>
 <% if not late_milestone.assigned_to.nil? %>
-    <li><%= h late_milestone.assigned_to.object_name %>: <%= link_to (h late_milestone.name), :controller => 'milestone', :action => 'view', :id => late_milestone.id %> (<%= format_usertime(late_milestone.due_date, "%A, %d %B") %> - <%= "#{late_milestone.days_late} days late" %>)</li>
+    <li><%= h late_milestone.assigned_to.object_name %>: <%= link_to (h late_milestone.name), :controller => 'milestone', :action => 'view', :id => late_milestone.id %> (<%= format_usertime(late_milestone.due_date, :milestone_due_date_format.l) %> - <%= :milestone_days_late.l_with_args(:days => late_milestone.days_late) %>)</li>
 <% else %>
-    <li><%= link_to (h late_milestone.name), :controller => 'milestone', :action => 'view', :id => late_milestone.id %> (<%= format_usertime(late_milestone.due_date, "%A, %d %B") %> - <%= "#{late_milestone.days_late} days late" %>)</li>
+    <li><%= link_to (h late_milestone.name), :controller => 'milestone', :action => 'view', :id => late_milestone.id %> (<%= format_usertime(late_milestone.due_date, :milestone_due_date_format.l) %> - <%= :milestone_days_late.l_with_args(:days => late_milestone.days_late) %>)</li>
 <% end %>
 <% end %>
 
 <% @today_milestones.each do |today_milestone| -%>
 <% if not today_milestone.assigned_to.nil? %>
-    <li><%= h today_milestone.assigned_to.object_name %>: <%= link_to (h today_milestone.name), :controller => 'milestone', :action => 'view', :id => today_milestone.id %> (<%= "Today" %>)</li>
+    <li><%= h today_milestone.assigned_to.object_name %>: <%= link_to (h today_milestone.name), :controller => 'milestone', :action => 'view', :id => today_milestone.id %> (<%= :today.l %>)</li>
 <% else %>
-    <li><%= link_to (h today_milestone.name), :controller => 'milestone', :action => 'view', :id => today_milestone.id %> (<%= "Today" %>)</li>
+    <li><%= link_to (h today_milestone.name), :controller => 'milestone', :action => 'view', :id => today_milestone.id %> (<%= :today.l %>)</li>
 <% end %>
 <% end %>
 
@@ -62,7 +62,7 @@
 
 <% if @upcomming_milestones.length > 0 %>
 <div class="block">
-  <div class="header"><%= "Upcomming milestones" %></div>
+  <div class="header"><%= :upcomming_milestones.l %></div>
   <div class="content">
     <ul>
 <% @upcomming_milestones.each do |upcomming_milestone| -%>
@@ -70,14 +70,14 @@
 <% if upcomming_milestone.days_left <= 30 %>
 
 <% if not upcomming_milestone.assigned_to.nil? %>
-    <li><%= h upcomming_milestone.assigned_to.object_name %>: <%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, "%A, %d %B") %> - <%= "#{upcomming_milestone.days_late} days left" %>)</li>
+    <li><%= h upcomming_milestone.assigned_to.object_name %>: <%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, :milestone_due_date_format.l) %> - <%= :milestone_days_left.l_with_args(:days => upcomming_milestone.days_left) %>)</li>
 <% else %>
-    <li><%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, "%A, %d %B") %> - <%= "#{upcomming_milestone.days_left} days left" %>)</li>
+    <li><%= link_to (h upcomming_milestone.name), :controller => 'milestone', :action => 'view', :id => upcomming_milestone.id %> (<%= format_usertime(upcomming_milestone.due_date, :milestone_due_date_format.l) %> - <%= :milestone_days_left.l_with_args(:days => upcomming_milestone.days_left) %>)</li>
 <% end %>
 
 <% else %>
     </ul>
-    <p><%= link_to "&raquo; Show all #{@upcomming_milestones.length} upcomming milestones", :controller => 'milestone', :action => 'index', :active_project => @active_project.id %></p>
+    <p><%= link_to :milestone_show_all_upcomming.l_with_args(:count => @upcomming_milestones.length), :controller => 'milestone', :action => 'index', :active_project => @active_project.id %></p>
 <% break %>
 <% end %>
 
@@ -87,18 +87,18 @@
 </div>
 <% end %>
 
-<h2><%= "Recent activities" %></h2>
+<h2><%= :recent_activities.l %></h2>
 <% cache "user#{@logged_user.id}_#{@active_project.id}_dblog" do %>
 <% if @project_log_entries.length > 0 %>
 <table class="applicationLogs blank">
   <tr>
     <th></th>
-    <th><%= "Details" %></th>
-    <th class="right"><%= "Date" %></th>
+    <th><%= :details.l %></th>
+    <th class="right"><%= :date.l %></th>
   </tr>
 	<%= render :partial => 'layouts/application_logs', :collection => @project_log_entries, :locals => {:show_project_column => false} %>
 </table>
 <% else %>
-No recent activities
+<%= :no_recent_activities.l %>
 <% end %>
 <% end %>

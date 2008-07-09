@@ -47,7 +47,7 @@
 <% end %>
   
 <% if user.is_admin? %>
-              <span class="desc">(<%= "Administrator" %>)</span>
+              <span class="desc">(<%= :administrator.l %>)</span>
 <% end %>
             </td>
             <td>
@@ -69,7 +69,7 @@
 <% end %>
 <% else %>
           <tr>
-            <td colspan="2"><%= "There are no users in this company" %></td>
+            <td colspan="2"><%= :company_no_users.l %></td>
           </tr>
 <% end %>
         </table>
@@ -80,7 +80,7 @@
 <% end %>
 <% end %>
 
-<button class="submit" type="submit">Update people</button>
+<button class="submit" type="submit"><%= :update_people.l %></button>
 </div>
 </form>
 <% end %>

@@ -7,13 +7,13 @@
   @page_actions = []
 %>
 <% if @tag_list.length > 0 %>
-<p><%= "Tags used in this project" %>:</p>
+<p><%= :tags_used_in_project.l %>:</p>
 <ul>
 <% is_public = @logged_user.member_of_owner? %>
 <% @tag_list.each do |tag| -%>
-  <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag}" %>"><%= h tag %></a> <span class="desc"> - <%= "#{Tag.count_by(tag, @active_project, is_public)} objects."%></span></li>
+  <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag}" %>"><%= h tag %></a> <span class="desc"> - <%= :tag_object_count.l_with_args({:count => Tag.count_by(tag, @active_project, is_public)}) %></span></li>
 <% end %>
 </ul>
 <% else %>
-<p><%= "There are no tags used in this project" %></p>
+<p><%= :no_tags_used_in_project.l %></p>
 <% end %>
