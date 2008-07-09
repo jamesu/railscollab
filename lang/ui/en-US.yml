@@ -446,7 +446,10 @@ reset: Reset
 
 # Time
 summary: Summary
+date: Date
+person: Person
 hours: Hours
+details: Details
 open_tasks: Open tasks
 done_date: Done date
 private_time: Private time
@@ -456,6 +459,8 @@ billable_time_info: "Billable times are those for which you expect payment from 
 task_list_hours: "{name} [{hours} hours]"
 task_list_hours_info: "Tasks which have been logged with time"
 task_list_task_hours: "{name} [{hours} hours]"
+no_times_in_project: "This project has no time records"
+time_confirm_delete: "Are you sure you want to delete this time record?"
 
 csv_export: "CSV Export"
 csv: CSV

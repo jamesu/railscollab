@@ -1,7 +1,7 @@
 <div class="time block">
 
 <% if view_time.is_private %>
-    <div class="private" title="<%= "Private time" %>"><span><%= "Private time" %></span></div>
+    <div class="private" title="<%= :private_time.l %>"><span><%= :private_time.l %></span></div>
 <% end %>
 
     <div class="header">
@@ -22,8 +22,8 @@
 
 <%
 	temp_actions = [
-		{:name => 'Edit', :url => {:controller => 'time', :action => 'edit', :id => view_time.id}, :cond => view_time.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'time', :action => 'delete', :id => view_time.id}, :cond => view_time.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this this record?"}
+		{:name => :edit.l, :url => {:controller => 'time', :action => 'edit', :id => view_time.id}, :cond => view_time.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => view_time.id}, :cond => view_time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
