@@ -452,10 +452,16 @@ confirm_user_remove: "Are you sure you want to remove this user?"
 # Forms
 success_message: Success message
 action: Action
+unknown: Unknown
 enabled: Enabled
 visible: Visible
 save: Save
 reset: Reset
+submit: Submit
+form_action_add_to: "Add {object} to {link}"
+form_related_object_notfound: "Related object does not exist!"
+form_confirm_delete: "Are you sure you want to delete this form?"
+no_forms_in_project: There are no forms in this project
 
 # Time
 summary: Summary

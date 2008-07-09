@@ -19,31 +19,31 @@
 <% if !form.description.nil? and !form.description.empty? %>
       <div class="description"><%= textilize form.description %></div>
 <% end %>
-      <div class="successMessage"><em><%= "Success message" %>:</em> <%= h form.success_message %></div>
+      <div class="successMessage"><em><%= :success_message.l %>:</em> <%= h form.success_message %></div>
 
 <% if !form.in_object.nil? %>
 <%
 	rel_object = form.in_object
-	rel_object_name = rel_object.class == ProjectMessage ? 'comment' : 'task'
+	rel_object_name = rel_object.class == ProjectMessage ? :comment.l : :task.l
 %>
 <% if [:add_comment, :add_task].include? form.action %>
-      <div class="action"><em><%= "Action" %></em>: <%= "Add #{rel_object_name} to <a href=\"#{rel_object.object_url}\">#{rel_object.object_name}</a>" %></div>
+      <div class="action"><em><%= :action.l %></em>: <%= :form_action_add_to.l_with_args(:object => rel_object_name, :link => "<a href=\"#{rel_object.object_url}\">#{rel_object.object_name}</a>") %></div>
 <% else %>
-	  <div class="action"><em><%= "Action" %></em>: <%= "Unknown" %></div>
+	  <div class="action"><em><%= :action.l %></em>: <%= :unknown.l %></div>
 <% end %>
 
 <% else %>
-     <div class="action error"><%= "Related object does not exist!" %></div>
+     <div class="action error"><%= :form_related_object_notfound.l %></div>
 <% end %>
 
-      <div class="successMessage"><em><%= "Enabled" %>:</em> <%= form.is_enabled ? "Yes" : "No" %></div>
-      <div class="successMessage"><em><%= "Visible" %>:</em> <%= form.is_visible ? "Yes" : "No" %></div>
+      <div class="successMessage"><em><%= :enabled.l %>:</em> <%= form.is_enabled ? :yesno_yes.l : :yesno_no.l %></div>
+      <div class="successMessage"><em><%= :visible.l %>:</em> <%= form.is_visible ? :yesno_yes.l : :yesno_no.l %></div>
 
 <%
 	temp_actions = [
-		{:name => 'Submit', :url => {:controller => 'form', :action => 'submit', :id => form.id}, :cond => form.can_be_submitted_by(@logged_user)},
-		{:name => 'Edit', :url => {:controller => 'form', :action => 'edit', :id => form.id}, :cond => form.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'milestone', :action => 'delete', :id => form.id}, :cond => form.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this form?"}
+		{:name => :submit.l, :url => {:controller => 'form', :action => 'submit', :id => form.id}, :cond => form.can_be_submitted_by(@logged_user)},
+		{:name => :edit.l, :url => {:controller => 'form', :action => 'edit', :id => form.id}, :cond => form.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => form.id}, :cond => form.can_be_deleted_by(@logged_user), :method => :post, :confirm => :form_confirm_delete.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
@@ -54,5 +54,5 @@
 <% end %>
 </div>
 <% else %>
-<p><%= "There are no forms in this project" %></p>
+<p><%= :no_forms_in_project.l %></p>
 <% end %>

@@ -10,5 +10,5 @@
 
 <%= form_tag :controller => 'form', :action => 'edit', :id => @form.id %>
 <%= render :partial => 'form' %>
-    <button class="submit" type="submit">Edit form</button>
+    <button class="submit" type="submit"><%= :edit_form.l %></button>
 </form>
