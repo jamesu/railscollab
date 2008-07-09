@@ -70,9 +70,9 @@
 <% @revisions.each do |revision| -%>
 <% counter += 1 %>
   <% if revision == @last_revision %>
-  <div class="revision #{(counter % 2) == 1 ? 'even' : 'odd'} lastRevision" id="revision<%= revision.id %>">
+  <div class="revision <%= (counter % 2) == 1 ? 'even' : 'odd' %> lastRevision" id="revision<%= revision.id %>">
   <% else %>
-  <div class="revision #{(counter % 2) == 1 ? 'even' : 'odd'}" id="revision<%= revision.id %>">
+  <div class="revision <%= (counter % 2) == 1 ? 'even' : 'odd' %>" id="revision<%= revision.id %>">
   <% end %>
     <div class="revisionName">
 <% if !revision.created_by.nil? %>
