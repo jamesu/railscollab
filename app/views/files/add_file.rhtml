@@ -18,5 +18,5 @@
 %>
 <%= form_tag( {:controller => 'files', :action => 'add_file'}, :multipart => true ) %>
 <%= render :partial => 'file_form' %>
-    <button class="submit" type="submit">Add file</button>
+    <button class="submit" type="submit"><%= :add_file.l %></button>
 </form>

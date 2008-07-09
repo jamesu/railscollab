@@ -12,18 +12,18 @@
     <div class="userDetails">
       <div class="userName"><a href="<%= "/user/card/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
 <% if company.is_owner? %>
-      <div class="userIsAdmin"><span><%= "Administrator" %>:</span> <%= listed_user.is_admin ? "Yes" : "No" %></div>
-      <div class="userAutoAssign"><span><%= "Auto assign" %>:</span> <%= listed_user.auto_assign ? "Yes" : "No" %></div>
+      <div class="userIsAdmin"><span><%= :administrator.l %>:</span> <%= listed_user.is_admin ? :yesno_yes.l : :yesno_no.l %></div>
+      <div class="userAutoAssign"><span><%= :auto_assign.l %>:</span> <%= listed_user.auto_assign ? :yesno_yes.l : :yesno_no.l %></div>
 <% end %>
 <%
 profile_updateable = listed_user.profile_can_be_updated_by(@logged_user)
 %>
       <div class="userOptions"><%= action_list [
-      {:name => 'Update profile', :url => "/account/edit_profile/#{listed_user.id}", :cond => profile_updateable},
-      {:name => 'Change password', :url => "/account/edit_password/#{listed_user.id}", :cond => profile_updateable},
-      {:name => 'Update avatar', :url => "/account/edit_avatar/#{listed_user.id}", :cond => profile_updateable},
-      {:name => 'Permissions', :url => "/account/update_permissions/#{listed_user.id}", :cond => listed_user.permissions_can_be_updated_by(@logged_user)},
-      {:name => 'Delete', :url => "/user/delete/#{listed_user.id}", :cond => listed_user.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this user?"} ] %>
+      {:name => :update_profile.l, :url => "/account/edit_profile/#{listed_user.id}", :cond => profile_updateable},
+      {:name => :change_password.l, :url => "/account/edit_password/#{listed_user.id}", :cond => profile_updateable},
+      {:name => :update_avatar.l, :url => "/account/edit_avatar/#{listed_user.id}", :cond => profile_updateable},
+      {:name => :permissions.l, :url => "/account/update_permissions/#{listed_user.id}", :cond => listed_user.permissions_can_be_updated_by(@logged_user)},
+      {:name => :delete.l, :url => "/user/delete/#{listed_user.id}", :cond => listed_user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l} ] %>
       </div>
       <div class="clear"></div>
     </div>
@@ -32,5 +32,5 @@ profile_updateable = listed_user.profile_can_be_updated_by(@logged_user)
 </div>
 
 <% else %>
-<p><%= "No users in this company" %></p>
+<p><%= :company_no_users.l %></p>
 <% end %>

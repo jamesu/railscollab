@@ -18,5 +18,5 @@
 %>
 <%= form_tag :controller => 'files', :action => 'edit_folder', :id => @folder.id %>
 <%= render :partial => 'folder_form' %>
-    <button class="submit" type="submit">Edit folder</button>
+    <button class="submit" type="submit"><%= :edit_folder.l %></button>
 </form>

@@ -13,12 +13,12 @@
 <%= error_messages_for :company %>
   
   <fieldset>
-    <legend><%= "Current logo" %></legend>
+    <legend><%= :current_logo.l %></legend>
 <% if @company.has_logo? %>
     <img src="<%= @company.logo_url %>" alt="<%= h @company.name %> logo" />
-    <p><%= link_to "Delete current logo", {:action => 'delete_logo', :id => @company.id}, {:onclick => "Are you sure you want to delete this logo?", :method => :post} %></p>
+    <p><%= link_to :delete_current_logo.l, {:action => 'delete_logo', :id => @company.id}, {:onclick => :current_logo_confirm_delete.l, :method => :post} %></p>
 <% else %>
-    <%= "Logo is not uploaded" %>
+    <%= :logo_not_uploaded.l %>
 <% end %>
   </fieldset>
   
@@ -26,10 +26,10 @@
     <label for="logoFormLogo"><%= "New logo" %>: <span class="label_required">*</span></label>
     <div id="logoFormLogo"><input type="file" name="company[logo]" /></div>
 <% if @company.has_logo? %>
-    <p class="desc"><%= "Note that the current logo will be deleted and replaced with new one!" %></p>
+    <p class="desc"><%= :logo_replace_info.l %></p>
 <% end %>
   </div>
   
-    <button class="submit" type="submit">Update logo</button>
+    <button class="submit" type="submit"><%= :update_logo.l %></button>
   
 </form>

@@ -11,8 +11,8 @@
 <% if @projects.length > 0 %>
 <div id="companyPermissions">
   <div class="hint">
-    <div class="header"><%= "Hint" %></div>
-    <div class="content"><%= "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)." %></div>
+    <div class="header"><%= :hint.l %></div>
+    <div class="content"><%= :hint_permissions_info.l %></div>
   </div>
   <%= form_tag :controller => 'company', :action => 'update_permissions', :id => @company.id %>
     <table class="blank">
@@ -23,7 +23,7 @@
         <td>
           <label for="<%= "projectPermissionsCheckbox#{project.id}" %>" class="checkbox normal">
 <% if !project.is_active? %>
-          <del><span title="<%= "Completed on #{format_usertime(project.completed_on, '%b %d, %Y')} by #{project.completed_by.display_name}" %>"><%= h project.name %></span></del>
+          <del><span title="<%= :project_completed_on.l_with_args(:date => format_usertime(project.completed_on, :project_created_format.l), :user => h(project.completed_by.display_name) %>"><%= h project.name %></span></del>
 <% else %>
           <%= h project.name %>
 <% end %>
@@ -33,7 +33,7 @@
 <% end %>
     </table>
     
-    <button class="submit" type="submit">Update permissions</button>
+    <button class="submit" type="submit"><%= :update_permissions.l %></button>
   </form>
 </div>
 <% end %>

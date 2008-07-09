@@ -26,15 +26,15 @@
 <% if not milestone.assigned_to.nil? %>
             <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span> 
 <% else %>
-            <span class="assignedTo"><%= "Anyone" %>:</span> 
+            <span class="assignedTo"><%= :anyone.l %>:</span> 
 <% end %>
             <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => project[:id] %> - 
 <% if milestone.is_upcomming? %>
-            <span><%= "#{milestone.days_left} days left" %></span>
+            <span><%= :milestone_days_left.l_with_args(:days => milestone.days_left) %></span>
 <% elsif milestone.is_late? %>
-            <span class="error"><%= "#{milestone.days_late} days left" %></span>
+            <span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>
 <% elsif milestone.is_today? %>
-            <span><%= "Today" %></span>
+            <span><%= :today.l %></span>
 <% end %>
           </td>
         </tr>
@@ -47,16 +47,16 @@
       <table class="blank">
 <% project[:tasks].each do |task| -%>
         <tr>
-          <td class="taskCheckbox"><%= checkbox_link "/project/#{project[:id]}/task/complete_task/#{task.id}", false, "Mark task as completed" %></td>
+          <td class="taskCheckbox"><%= checkbox_link "/project/#{project[:id]}/task/complete_task/#{task.id}", false, :mark_task_completed.l %></td>
           <td class="taskText">
 <% if not task.assigned_to.nil? %>
             <span class="assignedTo"><%= h task.assigned_to.object_name  %>:</span>
 <% else %>
-            <span class="assignedTo"><%= "Anyone" %>:</span>
+            <span class="assignedTo"><%= :anyone.l %>:</span>
 <% end %>
             <%= h task.text %> 
 <% if not task.task_list.nil? %>
-            (In <%= link_to (h task.task_list.name), :controller => 'task', :action => 'view_list', :id => task.task_list.id, :active_project => project[:id] %>)
+            (<%= :tasks_in_list.l_with_args(:list => link_to(h(task.task_list.name), :controller => 'task', :action => 'view_list', :id => task.task_list.id, :active_project => project[:id]) %>)
 <% end %>
           </td>
         </tr>
@@ -70,9 +70,9 @@
 <% end %>
 </div>
 <% else %>
-<p><%= "There are no active projects" %></p>
+<p><%= :no_active_projects.l %></p>
 <% end  %>
 
 <% if not @has_assigned_tasks %>
-<p><%= "There are no tasks assigned to you" %></p>
+<p><%= :no_tasks_assigned_to_you.l %></p>
 <% end %>

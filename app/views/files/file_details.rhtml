@@ -20,7 +20,7 @@
 %>
 <div id="fileDetails" class="block">
 <% if @file.is_private %>
-  <div class="private" title="<%= "Private file" %>"><span><%= "Private file" %></span></div>
+  <div class="private" title="<%= :private_file.l %>"><span><%= :private_file.l %></span></div>
 <% end %>
   <div class="header"><%= h @file.filename %></div>
   <div class="content">
@@ -30,26 +30,29 @@
       <div id="fileDescription"><%= textilize @file.description %></div>
 <% end %>
 <% if !@folder.nil? %>
-      <div id="fileFolder"><span class="propertyName"><%= "Folder" %>:</span> <a href="<%= @folder.object_url %>"><%= h @folder.name %></a></div>
+      <div id="fileFolder"><span class="propertyName"><%= :folder.l %>:</span> <a href="<%= @folder.object_url %>"><%= h @folder.name %></a></div>
 <% end %>
 
 <% if !@last_revision.nil? %>
-      <div id="fileLastRevision"><span class="propertyName"><%= "Last revision" %>:</span> 
+      <div id="fileLastRevision"><span class="propertyName"><%= :last_revision.l %>:</span> 
 <% if !@last_revision.created_by.nil? %>
-		<%= "Revision \##{@last_revision.revision_number} (by <a href=\"#{@last_revision.created_by.object_url}\">#{h @last_revision.created_by.display_name}</a> on #{format_usertime(@last_revision.created_on, '%A, %d %B')})" %>
+		<%= :revision_created_by.l_with_args(:number => @last_revision.revision_number,
+		                                     :user => "<a href=\"#{@last_revision.created_by.object_url}\">#{h @last_revision.created_by.display_name}</a>",
+		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short.l)) %>
 <% else %>
-		<%= "Revision \##{@last_revision.revision_number} (created on #{format_usertime(@last_revision.created_on, '%A, %d %B')})" %>
+		<%= :revision_created_by.l_with_args(:number => @last_revision.revision_number,
+		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short.l)) %>
 <% end %>
       </div>
 <% end %>
 
-      <div id="fileTags"><span class="propertyName"><%= "Tags" %>:</span> <%= tag_list @file %></div>
+      <div id="fileTags"><span class="propertyName"><%= :tags.l %>:</span> <%= tag_list @file %></div>
 
 <%
 	temp_actions = [
-		{:name => "Download (#{format_size @last_revision.filesize})", :url => {:controller => 'files', :action => 'download_file', :id => @file.id}, :cond => @file.can_be_downloaded_by(@logged_user)},
-		{:name => 'Edit', :url => {:controller => 'files', :action => 'edit_file', :id => @file.id}, :cond => @file.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'files', :action => 'delete_file', :id => @file.id}, :cond => @file.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this file?"}
+		{:name => :download_size.l_with_args(:size => format_size(@last_revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => @file.id}, :cond => @file.can_be_downloaded_by(@logged_user)},
+		{:name => :edit.l, :url => {:controller => 'files', :action => 'edit_file', :id => @file.id}, :cond => @file.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'files', :action => 'delete_file', :id => @file.id}, :cond => @file.can_be_deleted_by(@logged_user), :method => :post, :confirm => :file_delete_confirmation.l}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
@@ -62,7 +65,7 @@
 
 <% if !@revisions.empty? %>
 <div id="revisions">
-  <h2><%= "Revisions" %></h2>
+  <h2><%= :revisions.l %></h2>
 <% counter = 0 %>
 <% @revisions.each do |revision| -%>
 <% counter += 1 %>
@@ -73,9 +76,12 @@
   <% end %>
     <div class="revisionName">
 <% if !revision.created_by.nil? %>
-		<%= "Revision \##{revision.revision_number} <span>(by <a href=\"#{revision.created_by.object_url}\">#{h revision.created_by.display_name}</a> on #{format_usertime(revision.created_on, '%b %d. %Y %H:%M')})</span>" %>
+		<%= :revision_created_by.l_with_args(:number => revision.revision_number,
+		                                     :user => "<a href=\"#{revision.created_by.object_url}\">#{h revision.created_by.display_name}</a>",
+		                                     :date => format_usertime(revision.created_on, :revision_date_format.l)) %>
 <% else %>
-		<%= "Revision \##{revision.revision_number} <span>(created on #{format_usertime(revision.created_on, '%b %d. %Y %H:%M')})</span>" %>
+		<%= :revision_created_by.l_with_args(:number => revision.revision_number,
+		                                     :date => format_usertime(revision.created_on, :revision_date_format.l)) %>
 <% end %>
     </div>
 <% if !revision.comment.empty? %>
@@ -83,8 +89,8 @@
 <% end %>
 <%
 	temp_actions = [
-		{:name => "Download (#{format_size revision.filesize})", :url => {:controller => 'files', :action => 'download_file', :id => @file.id, :revision => revision.revision_number}, :cond => @file.can_be_downloaded_by(@logged_user)},
-		{:name => 'Edit', :url => {:controller => 'files', :action => 'edit_file', :id => @file.id, :revision => revision.revision_number}, :cond => @file.can_be_edited_by(@logged_user)}
+		{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => @file.id, :revision => revision.revision_number}, :cond => @file.can_be_downloaded_by(@logged_user)},
+		{:name => :edit.l, :url => {:controller => 'files', :action => 'edit_file', :id => @file.id, :revision => revision.revision_number}, :cond => @file.can_be_edited_by(@logged_user)}
 	]
 %>
 <% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>

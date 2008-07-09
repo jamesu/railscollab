@@ -16,8 +16,8 @@
 <table id="projects">
   <tr>
     <th></th>
-    <th><%= "Name" %></th>
-    <th><%= "Options" %></th>
+    <th><%= :name.l %></th>
+    <th><%= :options.l %></th>
   </tr>
 
 <% @projects.each do |project| -%>
@@ -31,21 +31,21 @@
 <% end %>
 <% else %>
 <% if project.is_active? %>
-<img src="<%= icon_url('not-checked') %>" alt="" title="Active project" />
+<img src="<%= icon_url('not-checked') %>" alt="" title="<%= :active_project.l %>" />
 <% else %>
-<img src="<%= icon_url('checked') %>" alt="" title="Finished project" />
+<img src="<%= icon_url('checked') %>" alt="" title="<%= :finished_project.l %>" />
 <% end %>
 <% end %>
     </td>
     <td class="long middle"><a href="<%= "/project/#{project.id}/overview" %>"><%= h project.name %></a></td>
 <% temp_actions = [
-	{:name => 'Edit', :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
-	{:name => 'Delete', :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this project?"}
+	{:name => :edit.l, :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
+	{:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}
 ] %>
     <td class="middle"><%= action_list temp_actions %></td>
   </tr>
 <% end %>
 </table>
 <% else %>
-<%= "There are no projects owned by this company" %>
+<%= :no_projects_owned_by_company.l %>
 <% end %>

@@ -22,7 +22,7 @@
     <div class="description"><%= textilize project.description %></div>
 <% end %>
 <% if project.companies.length > 0 %>
-    <div class="involvedCompanies"><em><%= "Companies involved in project" %>:</em> 
+    <div class="involvedCompanies"><em><%= :companies_involved_in.l %>:</em> 
     <%=
     project.companies.collect do |company|
     link_to( (h company.name), :controller => 'company', :action => 'card', :id => company.id )
@@ -31,15 +31,15 @@
     </div>
 <% end %>
 <% if not project.created_by.nil? %>
-    <div class="startedOnBy"><em><%= "Started on" %>:</em> <%= "#{format_usertime(project.created_on, '%b %d, %Y')} | " %>
+    <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= "#{format_usertime(project.created_on, :project_created_format.l)} | " %>
     <%= link_to (h project.created_by.display_name), :controller => 'user', :action => 'card', :id => project.created_by.id %>
     </div>
 <% else %>
-    <div class="startedOnBy"><em><%= "Started on" %>:</em> <%= format_usertime(project.created_on, '%b %d, %Y')  %></div>
+    <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= format_usertime(project.created_on, :project_created_format.l)  %></div>
 <% end %>
   </div>
 </div>
 <% end %>
 <% else %>
-<p><%= "No Active Projects" %></p>
+<p><%= :no_active_projects.l %></p>
 <% end %>

@@ -8,21 +8,21 @@
 %>
 <%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :multipart => true) %>
 
-  <div class="hint">Use this form to attach files to <strong><a href="<%= @attach_object.object_url %>"><%= @attach_object.object_name %></a></strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>.</div>
+  <div class="hint"><%= :hint_attach_files.l_with_args(:link => "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name})</a>") %></div>
   <div>
-  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormExistingFile" class="checkbox"><%= "Attach existing file (from Files section)" %></label>
+  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormExistingFile" class="checkbox"><%= :attach_existing_file.l %></label>
   </div>
   
   <div id="attachFormExistingFileControls">
     <fieldset>
-      <legend><%= "Select file" %></legend>
+      <legend><%= :select_file.l %></legend>
       <!-- TODO: need to except existing files -->
       <%= select_tag 'attach[file_id]', options_for_select(ProjectFile.select_list(@active_project)), {:id => 'attachFormSelectFile', :style => 'width: 300px'} %>
     </fieldset>
   </div>
   
   <div>
-  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormNewFile" class="checkbox"><%= "Upload new file and attach it to message" %></label>
+  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormNewFile" class="checkbox"><%= :upload_attach_to_message.l %></label>
   </div>
   
   <div id="attachFormNewFileControls">
@@ -34,6 +34,6 @@
     file_form_attach_init(<%= AppConfig.max_attachments %>);
   </script>
   
-  <button class="submit" type="submit">Attach files</button>
+  <button class="submit" type="submit"><%= :attach_files.l %></button>
   
 </form>

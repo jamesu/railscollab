@@ -1,10 +1,10 @@
 <div class="filesOrderAndPagination">
   <div class="filesOrder">
-    <span><%= "Order by" %>:</span>
+    <span><%= :order_by.l %>:</span>
 <%
 	temp_actions = [
-		{:name => 'Filename', :url => {:page => (page == 0 ? nil : page), :orderBy => 'filename'}, :cond => true, :class => (order == 'filename' ? 'selected' : nil)},
-		{:name => 'Post time', :url => {:page => (page == 0 ? nil : page), :orderBy => 'created_on'}, :cond => true, :class => (order == 'created_on' ? 'selected' : nil)}
+		{:name => :filename.l, :url => {:page => (page == 0 ? nil : page), :orderBy => 'filename'}, :cond => true, :class => (order == 'filename' ? 'selected' : nil)},
+		{:name => :post_time.l, :url => {:page => (page == 0 ? nil : page), :orderBy => 'created_on'}, :cond => true, :class => (order == 'created_on' ? 'selected' : nil)}
 	]
 %>
 <%= action_list temp_actions %>

@@ -15,9 +15,9 @@
 <% if @clients.length > 0 %>
 <table>
   <tr>
-    <th><%= "Name" %></th>
-    <th><%= "Users" %></th>
-    <th><%= "Options" %></th>
+    <th><%= :name.l %></th>
+    <th><%= :users.l %></th>
+    <th><%= :options.l %></th>
   </tr>
 <% @clients.each do |client| -%>
   <tr>
@@ -25,10 +25,10 @@
     <td style="text-align: center"><%= client.users.length %></td>
 <%
 	temp_actions = [
-		{:name => 'Add user', :url => {:controller => 'user', :action => 'add', :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-		{:name => 'Permissions', :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-		{:name => 'Edit', :url => {:controller => 'company', :action => 'edit_client', :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
-		{:name => 'Delete', :url => {:controller => 'company', :action => 'delete_client', :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => "Are you sure you want to delete this client?"}
+		{:name => :add_user.l, :url => {:controller => 'user', :action => 'add', :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+		{:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+		{:name => :edit.l, :url => {:controller => 'company', :action => 'edit_client', :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
+		{:name => :delete.l, :url => {:controller => 'company', :action => 'delete_client', :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => :delete_client_confirm.l}
 	]
 %>
     <td><%= action_list temp_actions %></td>
@@ -36,5 +36,5 @@
 <% end %>
 </table>
 <% else %>
-<%= "No clients are present for this company" %>
+<%= :no_clients_in_company.l %>
 <% end %>

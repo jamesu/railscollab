@@ -18,5 +18,5 @@
 %>
 <%= form_tag( {:controller => 'files', :action => 'edit_file', :id => @file.id}, :multipart => true ) %>
 <%= render :partial => 'file_form' %>
-    <button class="submit" type="submit">Edit file</button>
+    <button class="submit" type="submit"><%= :edit_file.l %></button>
 </form>

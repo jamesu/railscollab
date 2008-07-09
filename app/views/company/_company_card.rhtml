@@ -5,18 +5,18 @@
     <h2><%= h company_card.name %></h2>
     
     <div class="cardBlock">
-      <div><span><%= "Email address" %>:</span> <a href="mailto:<%= company_card.email %>"><%= company_card.email %></a></div>
-      <div><span><%= "Phone number" %>:</span> <%= (not (company_card.phone_number.nil? or company_card.phone_number.empty?)) ? h(company_card.phone_number) : "N/A" %></div>
-      <div><span><%= "Fax number" %>:</span> <%= (not (company_card.fax_number.nil? or company_card.fax_number.empty?)) ? h(company_card.fax_number) : "N/A" %></div>
+      <div><span><%= :email_address.l %>:</span> <a href="mailto:<%= company_card.email %>"><%= company_card.email %></a></div>
+      <div><span><%= :phone_number.l %>:</span> <%= (not (company_card.phone_number.nil? or company_card.phone_number.empty?)) ? h(company_card.phone_number) : "N/A" %></div>
+      <div><span><%= :fax_number.l %>:</span> <%= (not (company_card.fax_number.nil? or company_card.fax_number.empty?)) ? h(company_card.fax_number) : "N/A" %></div>
 <% if company_card.homepage.nil? or company_card.homepage.empty? %>
-      <div><span><%= "Homepage" %>:</span> <%= "N/A" %></div>
+      <div><span><%= :homepage.l %>:</span> <%= "N/A" %></div>
 <% else %>
-      <div><span><%= "Homepage" %>:</span> <a href="<%= h company_card.homepage %>"><%= h company_card.homepage %></a></div>
+      <div><span><%= :homepage.l %>:</span> <a href="<%= h company_card.homepage %>"><%= h company_card.homepage %></a></div>
 <% end %>
     </div>
     
 
-    <h2><%= "Address" %></h2>
+    <h2><%= :address.l %></h2>
     
     <div class="cardBlock" style="margin-bottom: 0">
 <% if not (company_card.address.nil? or company_card.city.nil? or company_card.state.nil? or company_card.zipcode.nil?) %>

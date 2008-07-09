@@ -27,29 +27,19 @@
 <% if @today_milestones.length > 0 or @late_milestones.length > 0 %>
 <div id="lateOrTodayMilestones" class="important">
 <% if @late_milestones.length > 0 %>
-  <div class="header"><%= "Late milestones" %></div>
+  <div class="header"><%= :late_milestones.l %></div>
   <ul>
 <% @late_milestones.each do |milestone| %>
-<% if not milestone.assigned_to.nil? %>
-    <li><%= h milestone.assigned_to.object_name %>: <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %>
-    <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %> (<%= "#{milestone.days_late} days late" %>)</li>
-<% else %>
-    <li><%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %> <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %> (<%= "#{milestone.days_late} days late" %>)</li>
-<% end %>
+    <li><% if not milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project), :project => link_to(h(milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id)) %> (<%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>)</li>
 <% end %>
   </ul>
 <% end %>
 
 <% if @today_milestones.length > 0 %>
-  <div class="header"><%= "Todays milestones" %></div>
+  <div class="header"><%= :todays_milestones.l %></div>
   <ul>
 <% @today_milestones.each do |milestone| %>
-<% if not milestone.assigned_to.nil? %>
-    <li><%= h milestone.assigned_to.object_name %>: <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %>
-    <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %></li>
-<% else %>
-    <li><%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project %> <%= "IN".downcase %> <%= link_to (h milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id %></li>
-<% end %>
+    <li><% if not milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project), :project => link_to(h(milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id)) %></li>
 <% end %>
   </ul>
 <% end %>
@@ -61,11 +51,11 @@
 <table class="applicationLogs blank">
   <tr>
     <th></th>
-    <th><%= "Details" %></th>
-    <th class="right"><%= "Project" %></th>
+    <th><%= :details.l %></th>
+    <th class="right"><%= :project.l %></th>
 	<%= render :partial => 'layouts/application_logs', :collection => @activity_log, :locals => {:show_project_column => true} %>
 </table>
 <% else %>
-No recent activities
+<%= :no_recent_activities.l %>
 <% end %>
 <% end %>

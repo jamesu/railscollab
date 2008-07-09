@@ -29,6 +29,7 @@ administration: Administration
 index: Index
 
 # Actions
+order_by: Order by
 order_by_name: Order by name
 order_by_priority: Order by priority
 sort_by_finished_date: Sort by finished date
@@ -147,7 +148,6 @@ success_updated_avatar: Successfully updated avatar
 error_updating_avatar: Error uploading avatar
 success_deleted_avatar: Successfully deleted avatar
 invalid_user: Invalid user
-edit_config_yml_for_options: "Edit config/config.yml for configuration options"
 invalid_object: Invalid object
 invalid_comment: Invalid comment
 success_added_comment_error_files: Successfully added comment, some attachments failed validation
@@ -310,6 +310,12 @@ email_notification: Email notification
 email_notification_info: Notify selected people about this message via email
 tags_info: "List of comma separated tags (example: \"interface, javascript, public beta\")"
 name: Name
+current_logo: Current logo
+delete_current_logo: Delete current logo
+current_logo_confirm_delete: "Are you sure you want to delete this logo?"
+logo_not_uploaded: Logo is not uploaded
+logo_replace_info: "Note that the current logo will be deleted and replaced with new one!"
+milestone_in: "{milestone} in {project}"
 
 # Message view
 message_created_with_user: "{time} | {user}"
@@ -346,6 +352,7 @@ recent_completed_tasks: Recently completed tasks
 completed_tasks: Completed tasks
 task_mark_open: Mark task as open
 mark_task_completed: Mark task as completed
+no_tasks_assigned_to_you: There are no tasks assigned to you
 edit_tasks: Edit tasks
 task: Task
 
@@ -408,6 +415,7 @@ avatar_upload_info: "Note that the current avatar will be deleted and replaced w
 avatar_not_uploaded: "Avatar is not uploaded"
 administration_options_info: "Administration options (available only to administrators!)"
 administrator: Administrator
+auto_assign: Auto assign
 auto_assign_to_new_projects: "Auto assign to new projects?"
 openid_info: "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>."
 display_name: Display name
@@ -417,11 +425,36 @@ service: Service
 value: Value
 primary_im: Primary IM
 instant_messengers_info: "All IM addresses that you enter will be listed on your card page. Only the primary IM will be shown on other pages (like the people page of the project)."
+phone_number: Phone number
 phone_numbers: Phone numbers
 office: Office
 fax: Fax
 mobile: Mobile
 home: Home
+fax_number: Fax number
+homepage: Homepage
+address: Address
+address_2: Address 2
+city: City
+state: State
+zipcode: Zipcode
+country: Country
+
+# Dashboard
+started_on: Started on
+no_active_projects: There are no active projects
+project_created_format: "%b %d, %Y"
+companies_involved_in: "Companies involved in project"
+tasks_in_list: "In {list}"
+
+# Admin
+project_confirm_delete: "Are you sure you want to delete this project?"
+no_projects_owned_by_company: "There are no projects owned by this company"
+active_project: Active project
+finished_project: Finished project
+delete_client_confirm: "Are you sure you want to delete this client?"
+no_clients_in_company: "No clients are present for this company"
+users: Users
 
 # Comments
 add_comment: Add comment
@@ -448,6 +481,10 @@ permissions_info: "Using the {link} you can easily add or remove companies and u
 clients_involved_in: "{client} users involved in {project}"
 confirm_client_remove: "Are you sure you want to remove this company?"
 confirm_user_remove: "Are you sure you want to remove this user?"
+confirm_user_delete: "Are you sure you want to delete this user?"
+hint: Hint
+hint_permissions_info: "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)."
+project_completed_on: "Completed on {date} by {user}"
 
 # Forms
 success_message: Success message
@@ -499,6 +536,28 @@ private_file: Private file
 private_file_info: "Private files are visible only to owner company members. Members of client companies will not be able to see them."
 important_file: Important file
 important_file_info: "Important files are listed in the \"Important files\" sidebar on the project files page"
+revision_created_by: "Revision #{number} <span>(by {user} on {date})</span>"
+revision_created_on: "Revision #{number} <span>(created on {date})</span>"
+revision_date_format: "%b %d. %Y %H:%M"
+revision_date_format_short: "%A, %d %B"
+download_size: "Download ({size})"
+revisions: Revisions
+last_revision: Last revision
+file_delete_confirmation: "Are you sure you want to delete this file?"
+filename: Filename
+post_time: Post time
+created_by: Created by
+attached_files: Attached files
+detatch: Detatch
+detatch_file_confirm: "Are you sure you want to detatch this file?"
+attach_existing_file: "Attach existing file (from Files section)"
+attach_more_files: "&raquo; Attach more files"
+file_view_details: View file details
+no_files_attached: There are no files attached to this object
+no_files_in_location: There are no files in this location.
+hint_attach_files: "Use this form to attach files to <strong>{link}</strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>."
+upload_attach_to_message: Upload new file and attach it to message
+select_file: Select file
 
 yesno_yes: "Yes"
 yesno_no: "No"

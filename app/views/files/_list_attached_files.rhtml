@@ -4,14 +4,14 @@
 %>
 <% if attached_files.length > 0 %>
 <div class="objectFiles">
-  <div class="objectFilesTitle"><span><%= "Attached files" %>:</span></div>
+  <div class="objectFilesTitle"><span><%= :attached_files.l %>:</span></div>
   <ul>
 <% attached_files.each do |attached_file| -%>
     <li>
 <%
 	temp_actions = [
-		{:name => 'Details', :url => "/project/#{@active_project.id}/files/file_details/#{attached_file.id}", :cond => true},
-		{:name => 'Detatch', :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{attached_files_object.class.to_s}&object_id=#{attached_files_object.id}", :cond => attached_files_object.file_can_be_added_by(@logged_user), :method => :post, :confirm => "Are you sure you want to detatch this file?"}
+		{:name => :details.l, :url => "/project/#{@active_project.id}/files/file_details/#{attached_file.id}", :cond => true},
+		{:name => :detatch.l, :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{attached_files_object.class.to_s}&object_id=#{attached_files_object.id}", :cond => attached_files_object.file_can_be_added_by(@logged_user), :method => :post, :confirm => :detatch_file_confirm.l}
 	]
 %>
       <a href="<%= attached_file.download_url %>"><span><%= h attached_file.filename %></span> (<%= format_size attached_file.file_size %>)</a> | <%= action_list temp_actions %>
@@ -19,13 +19,13 @@
 <% end %>
   </ul>
 <% if attached_files_object.file_can_be_added_by(@logged_user) %>
-  <p><%= link_to "&raquo; Attach more files", :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %></p>
+  <p><%= link_to :attach_more_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %></p>
 <% end %>
 </div>
 <% else %>
 <% if attached_files_object.file_can_be_added_by(@logged_user) %>
 <div class="objectFiles">
-  <div class="objectFilesTitle"><span><%= "Attached files" %>:</span> <%= "There are no files attached to this object" %>. <%= link_to "Attach files", :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %>.</div>
+  <div class="objectFilesTitle"><span><%= :attached_files.l %>:</span> <%= :no_files_attached.l %>. <%= link_to :attach_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %>.</div>
 </div>
 <% end %>
 <% end %>
