@@ -447,6 +447,7 @@ project_created_format: "%b %d, %Y"
 companies_involved_in: "Companies involved in project"
 tasks_in_list: "In {list}"
 anyone: Anyone
+project: Project
 
 # Admin
 project_confirm_delete: "Are you sure you want to delete this project?"
