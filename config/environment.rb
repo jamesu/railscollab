@@ -5,12 +5,13 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.0.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.1.0' unless defined? RAILS_GEM_VERSION
 
 ENV['TZ'] = 'UTC'
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
+require 'config_system'
 
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here
@@ -64,44 +65,23 @@ end
 
 # Include your application configuration below
 
-require 'ostruct'
-require 'yaml'
-
-# Courtesy of Dmytro Shteflyuk's blog post
-begin
-	config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.override.yml"))
-	env_config = config.send(RAILS_ENV)
-	config.common.update(env_config) unless env_config.nil?
-rescue Exception
-	config = OpenStruct.new()
-end
-
-# Merge database & config.yml into ::AppConfig
-::AppConfig = OpenStruct.new()
+# Merge database & config.yml into AppConfig
 begin
 ConfigOption.dump_config(::AppConfig)
-	unless config.common.nil?
-		config.common.keys.each do |key|
-			::AppConfig.send("#{config.common[key]}=", config.common[key])
-		end
-	end
+        unless ConfigOverride.common.nil?
+                ConfigOverride.common.keys.each do |key|
+                        ::AppConfig.send("#{ConfigOverride.common[key]}=", ConfigOverride.common[key])
+                end
+        end
 rescue Exception
-end
-
-# Try loading gd2
-begin
-	require 'gd2'
-	AppConfig.no_gd2 = false
-rescue Exception
-	AppConfig.no_gd2 = true
 end
 
 # ActionMailer stuff
 begin
-	ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
-	ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
-	ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
-	ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail
+        ActionMailer::Base.delivery_method = AppConfig.notification_email_method.to_sym
+        ActionMailer::Base.smtp_settings = AppConfig.notification_email_smtp
+        ActionMailer::Base.smtp_settings['authentication'] = ActionMailer::Base.smtp_settings['authentication'].to_sym
+        ActionMailer::Base.sendmail_settings = AppConfig.notification_email_sendmail
 rescue Exception
 end
 
