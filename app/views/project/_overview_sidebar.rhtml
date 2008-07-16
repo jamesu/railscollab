@@ -55,7 +55,7 @@
 <% end %>
 
 <% if @active_project.status_can_be_changed_by(@logged_user) %>
-<% if @active_project.completed_on == nil %>
+<% if @active_project.is_active? %>
       <li><%= link_to :mark_project_as_finished.l, {:controller => 'project', :action => 'complete'}, :method => :post, :confirm => :mark_project_as_finished_confirmation.l %></li>
 <% else %>
       <li><%= link_to :mark_project_as_active.l, {:controller => 'project', :action => 'open'}, :method => :post, :confirm => :mark_project_as_active_confirmation.l %></li>
