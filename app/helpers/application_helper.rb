@@ -24,7 +24,7 @@ module ApplicationHelper
 	   "<a href=\"#{url}page=#{id}\">#{id}</a>"
 	 end.join ' | '
 	 
-	 "<div class=\"advancedPagination\"><span>Page: </span><span>(#{values})</span></div>"
+	 "<div class=\"advancedPagination\"><span>#{:page.l}: </span><span>(#{values})</span></div>"
 	end
 
 	def checkbox_link(link, checked=false, hint=nil, attrs={})
