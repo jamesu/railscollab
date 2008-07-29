@@ -589,7 +589,7 @@ success_updated_config_category: "Successfully updated configuration"
 category_system_name: System
 category_system_description: "System variables. Defaults should suffice"
 category_general_name: General
-category_general_description: "General RalsCollab Settings"
+category_general_description: "General RailsCollab Settings"
 category_mailing_name: Mailing
 category_mailing_description: "Options for handling email sending"
 
