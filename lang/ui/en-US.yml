@@ -439,6 +439,9 @@ city: City
 state: State
 zipcode: Zipcode
 country: Country
+contact_online: Contact online
+contact_offline: Contact offline
+not_applicable: "n/a"
 
 # Dashboard
 started_on: Started on

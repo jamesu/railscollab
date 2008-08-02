@@ -16,22 +16,17 @@
     </div>
     
 
+    <% if !company_card.address.nil? or !(company_card.city.nil? and company_card.state.nil?) %>
     <h2><%= :address.l %></h2>
     
-    <div class="cardBlock" style="margin-bottom: 0">
-<% if not (company_card.address.nil? or company_card.city.nil? or company_card.state.nil? or company_card.zipcode.nil?) %>
-      <%= h company_card.address %>
-<% if not company_card.address2.empty? %>
-      <br /><%= h company_card.address2 %>
-<% end %>
-      <br /><%= h company_card.city %>, <%= h company_card.state %> <%= h company_card.zipcode %>
-<% if (!company_card.country.nil?) and company_card.country.strip().length > 0 %>
-      <br /><%= h company_card.country_name %>
-<% end %>
-<% else %>
-      <%= "N/A" %>
-<% end %>
+    <div class="cardBlock">
+<% if !company_card.address.nil? and !company_card.address.empty? %><%= h company_card.address %><% end %>
+<% if !company_card.address2.nil? and !company_card.address2.empty? %><br /><%= h company_card.address2 %><% end %>
+<% if !company_card.city.nil? and !company_card.city.empty? and !company_card.state.nil? and !company_card.state.empty? %>
+<br /><%= h company_card.city %>, <%= h company_card.state %> <% if !company_card.zipcode.nil? and !company_card.zipcode.empty? %><%= h company_card.zipcode %><% end %><% end %>
+<% if !company_card.country.nil? and !company_card.country.empty? %><br /><%= h company_card.country_name %><% end %>
     </div>
+    <% end %>
   
   </div>
 </div>

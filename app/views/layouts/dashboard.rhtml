@@ -2,7 +2,7 @@
 <html>
   <head>
   	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title><%= h Company.owner.name %> - <%= h @page_title %></title>
+    <title><%= "#{h(Company.owner.name)} - #{h(@page_title)}" %></title>
 	<%= stylesheet_link_tag 'company_website' %>
 	<% if not @additional_stylesheets.nil?
 	  @additional_stylesheets.each do |ss| -%>
@@ -18,7 +18,6 @@
 <!-- head needs to go here? -->
   </head>
   <body id="body">
-<%= render :partial => 'system_notices', :collection => system_notices %>
     <div id="wrapper">
     
       <!-- header -->
@@ -28,7 +27,7 @@
           <div id="userboxWrapper"><%= render :partial => 'layouts/user_box', :locals => {:user => @logged_user, :projects => @active_projects} %></div>
         </div>
       </div>
-      <!-- /header -->
+      <!-- End header -->
 
       <%= render :partial => 'layouts/tabs' if not @tabbed_navigation_items.nil? %>
             
@@ -41,7 +40,6 @@
       <!-- content wrapper -->
       <div id="outerContentWrapper">
         <div id="innerContentWrapper">
-
 <% if flash[:message] %>
           <div id="status_bar" class="<%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
@@ -51,7 +49,7 @@
               <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
-              <!-- /Content -->
+              <!-- End Content -->
             </div>
 <% if not @content_for_sidebar.nil? %>
             <div id="sidebar"><%= render :partial => @content_for_sidebar %></div>
@@ -63,7 +61,7 @@
         <!--Footer -->
         <%= render :partial => 'layouts/footer' %>
       </div>
-      <!-- /content wrapper -->
+      <!-- End content wrapper -->
       
     </div>
   </body>

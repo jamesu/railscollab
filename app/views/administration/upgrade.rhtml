@@ -9,17 +9,8 @@
   @additional_stylesheets = []
 %>
 
-<% if @versions.length > 0 %>
-<div id="availableVersions">
-<% @versions.each do |version| -%>
-  <div class="availableVerion">
-    <h2>TODO</h2>
-    <div class="releaseNotes"><%= textilize "TODO" %></div>
-    <div class="downloadLinks"><strong><%= "Download" %>:</strong> TODO (TODO) | TODO (TODO)</div>
-  </div>
-<% end %>
-  </table>
-</div>
+<% if !@versions.empty? %>
+<p>TODO</p>
 <% else %>
 <p><%= "No new version of RailsCollab is available" %></p>
 <% end %>

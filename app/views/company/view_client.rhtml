@@ -30,7 +30,7 @@
   render :partial => 'company/company_card', :collection => [@company]
 %>
 
-<h2><%= "Users" %></h2>
+<h2><%= :users.l %></h2>
 <%=
-  render :partial => 'administration/list_users', :locals => {'users' => @company.users, 'company' => @company}
+  render :partial => 'administration/list_users', :locals => {:users => @company.users, :company=> @company}
 %>

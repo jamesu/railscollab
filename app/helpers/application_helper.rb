@@ -6,10 +6,6 @@ RailsCollab
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-
-	def system_notices
-	    []
-	end
 	
 	def site_name
 		html_escape AppConfig.site_name
@@ -109,6 +105,28 @@ module ApplicationHelper
 		" <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> " +
 		radio_button_tag(name, "0", !is_yes, options.merge({:id => "#{options[:id]}No"})) +
 		" <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>"
+	end
+	
+	def actions_for_user(user)
+	   profile_updateable = user.profile_can_be_updated_by(@logged_user)
+	   
+	   [{:name => :update_profile.l, :url => "/account/edit_profile/#{user.id}", :cond => profile_updateable},
+	    {:name => :change_password.l, :url => "/account/edit_password/#{user.id}", :cond => profile_updateable},
+	    {:name => :update_avatar.l, :url => "/account/edit_avatar/#{user.id}", :cond => profile_updateable},
+	    {:name => :permissions.l, :url => "/account/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)},
+	    {:name => :delete.l, :url => "/user/delete/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l}]
+	end
+	
+	def actions_for_client(client)
+	   [{:name => :add_user.l, :url => {:controller => 'user', :action => 'add', :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+	    {:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
+	    {:name => :edit.l, :url => {:controller => 'company', :action => 'edit_client', :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'company', :action => 'delete_client', :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => :delete_client_confirm.l}]
+	end
+	
+	def actions_for_project(project)
+	   [ {:name => :edit.l, :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
+	     {:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}] 
 	end
 	
 	#def textilize(text)

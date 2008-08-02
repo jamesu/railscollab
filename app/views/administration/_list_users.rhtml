@@ -1,4 +1,4 @@
-<% if users.length > 0 %>
+<% if !users.empty? %>
 <div id="usersList">
 <% counter = 0 %>
 <% users.each do |listed_user| -%>
@@ -8,22 +8,14 @@
   <% else %>
   <div class="listedUser odd">
   <% end %>
-    <div class="userAvatar"><img src="<%= listed_user.avatar_url %>" alt="<%= h listed_user.display_name %> <%= 'avatar' %>" /></div>
+    <div class="userAvatar"><img src="<%= listed_user.avatar_url %>" alt="<%= h listed_user.display_name %> avatar" /></div>
     <div class="userDetails">
       <div class="userName"><a href="<%= "/user/card/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
 <% if company.is_owner? %>
       <div class="userIsAdmin"><span><%= :administrator.l %>:</span> <%= listed_user.is_admin ? :yesno_yes.l : :yesno_no.l %></div>
       <div class="userAutoAssign"><span><%= :auto_assign.l %>:</span> <%= listed_user.auto_assign ? :yesno_yes.l : :yesno_no.l %></div>
 <% end %>
-<%
-profile_updateable = listed_user.profile_can_be_updated_by(@logged_user)
-%>
-      <div class="userOptions"><%= action_list [
-      {:name => :update_profile.l, :url => "/account/edit_profile/#{listed_user.id}", :cond => profile_updateable},
-      {:name => :change_password.l, :url => "/account/edit_password/#{listed_user.id}", :cond => profile_updateable},
-      {:name => :update_avatar.l, :url => "/account/edit_avatar/#{listed_user.id}", :cond => profile_updateable},
-      {:name => :permissions.l, :url => "/account/update_permissions/#{listed_user.id}", :cond => listed_user.permissions_can_be_updated_by(@logged_user)},
-      {:name => :delete.l, :url => "/user/delete/#{listed_user.id}", :cond => listed_user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l} ] %>
+      <div class="userOptions"><%= action_list actions_for_user(listed_user) %>
       </div>
       <div class="clear"></div>
     </div>

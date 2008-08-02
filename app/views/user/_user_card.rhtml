@@ -5,21 +5,21 @@
     <h2><%= h user_card.display_name %></h2>
     
     <div class="cardBlock">
-      <div><span><%= "Title" %>:</span> <%= user_card.title ? (h user_card.title) : "n/a" %></div>
-      <div><span><%= "Company" %>:</span> <%= link_to user_card.company.name, :controller => 'company', :action => 'card', :id => user_card.company.id %></div>
+      <div><span><%= :title.l %>:</span> <%= user_card.title ? (h user_card.title) : :not_applicable.l %></div>
+      <div><span><%= :company.l %>:</span> <%= link_to user_card.company.name, :controller => 'company', :action => 'card', :id => user_card.company.id %></div>
     </div>
     
-    <h2><%= "Contact online" %></h2>
+    <h2><%= :contact_online.l %></h2>
     
     <div class="cardBlock">
-      <div><span><%= "Email address" %>:</span> <a href="mailto:<%= h user_card.email %>"><%= h user_card.email %></a></div>
+      <div><span><%= :email_address.l %>:</span> <a href="mailto:<%= h user_card.email %>"><%= h user_card.email %></a></div>
       
-<% if user_card.im_values.length > 0 %>
+<% if !user_card.im_values.empty? %>
       <table class="imAddresses">
 <% user_card.im_values.each do |im_value| -%>
         <tr>
           <td><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %>" /></td>
-          <td><%= h im_value.value %> <% if im_value.is_default %><span class="desc">(<%= "Primary IM" %>)</span><% end %></td>
+          <td><%= h im_value.value %> <% if im_value.is_default %><span class="desc">(<%= :primary_im.l %>)</span><% end %></td>
         </tr>
 <% end %>
       </table>
@@ -27,14 +27,16 @@
 
     </div>
     
-    <h2><%= "Contact offline" %></h2>
+    <% if !user_card.office_number.nil? or !user_card.fax_number.nil? or !user_card.mobile_number.nil? or !user_card.home_number.nil? %>
+    <h2><%= :contact_offline.l %></h2>
     
-    <div class="cardBlock" style="margin-bottom: 0">
-      <div><span><%= "Office" %>:</span> <%= user_card.office_number ? (h user_card.office_number) : "n/a" %></div>
-      <div><span><%= "Fax" %>:</span> <%= user_card.fax_number ? (h user_card.fax_number) : "n/a" %></div>
-      <div><span><%= "Mobile" %>:</span> <%= user_card.mobile_number ? (h user_card.mobile_number) : "n/a" %></div>
-      <div><span><%= "Home" %>:</span> <%= user_card.home_number ? (h user_card.home_number) : "n/a" %></div>
+    <div class="cardBlock">
+      <% if !user_card.office_number.nil? and !user_card.office_number.empty? %><div><span><%= :office.l %>:</span><%= h(user_card.office_number) %></div><% end %>
+      <% if !user_card.fax_number.nil? and !user_card.fax_number.empty? %><div><span><%= :fax.l %>:</span><%= h(user_card.fax_number) %></div><% end %>
+      <% if !user_card.mobile_number.nil? and !user_card.mobile_number.empty? %><div><span><%= :mobile.l %>:</span><%= h(user_card.mobile_number) %></div><% end %>
+      <% if !user_card.home_number.nil? and !user_card.home_number.empty? %><div><span><%= :home.l %>:</span><%= h(user_card.home_number) %></div><% end %>
     </div>
+    <% end %>
   
   </div>
 </div>

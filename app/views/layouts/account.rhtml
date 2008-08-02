@@ -2,7 +2,7 @@
 <html>
   <head>
   	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title><%= h @page_title %> @ <%= h Company.owner.name %></title>
+    <title><%= "#{h(@page_title)} @ #{h(Company.owner.name)}" %></title>
 	<%= stylesheet_link_tag 'project_website' %>
 	<% if not @additional_stylesheets.nil?
 	  @additional_stylesheets.each do |ss| -%>
@@ -17,7 +17,6 @@
 	<%= javascript_include_tag 'application.js' %>
   </head>
   <body>
-<%= render :partial => 'layouts/system_notices' %>
     <div id="wrapper">
       <!-- header -->
       <div id="headerWrapper">
@@ -26,7 +25,7 @@
           <div id="userboxWrapper"><%= render :partial => 'layouts/user_box', :locals => {:user => @logged_user, :projects => @logged_user.active_projects} %></div>
         </div>
       </div>
-      <!-- /header -->
+      <!-- End header -->
 
       <%= render :partial => 'layouts/tabs' if not @tabbed_navigation_items.nil? %>
             
@@ -48,7 +47,7 @@
               <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
-              <!-- /Content -->
+              <!-- End Content -->
             </div>
 <% if not @content_for_sidebar.nil? %>
             <div id="sidebar"><%= render :partial => @content_for_sidebar %></div>
@@ -60,7 +59,7 @@
         <!--Footer -->
         <%= render :partial => 'layouts/footer' %>
       </div>
-      <!-- /content wrapper -->
+      <!-- End content wrapper -->
       
     </div>
   </body>

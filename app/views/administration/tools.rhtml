@@ -14,7 +14,7 @@
 <% @tools.each do |tool| -%>
   <div class="administrationTool">
     <div class="administrationToolName">
-      <h2><a href="<%= tool.object_url %>"><%= tool.display_name %></a></h2>
+      <h2><%= link_to tool.display_name, tool.object_url %></h2>
     </div>
     <div class="administrationToolDesc"><%= tool.display_description %></div>
   </div>

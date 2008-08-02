@@ -9,16 +9,7 @@
   @additional_stylesheets = []
 %>
 <div class="hint">
-  <div class="header"><%= :administration.l %></div>
   <div class="content">
     <%= :welcome_to_administration.l %>
-    <ul>
-      <li><a href="/administration/company"><%= :company.l %></a></li>
-      <li><a href="/administration/members"><%= :members.l %></a> (<%= link_to :add_user.l, :controller => 'user', :action => 'add', :company_id => Company.owner.id %>)</li>
-      <li><a href="/administration/clients"><%= :clients.l %></a> (<%= link_to :add_client.l, :controller => 'company', :action => 'add_client' %>)</li>
-      <li><a href="/administration/projects"><%= :projects.l %></a> (<%= link_to :add_project.l, :controller => 'project', :action => 'add' %>)</li>
-      <li><a href="/administration/configuration"><%= :configuration.l %></a></li>
-      <!-- <li><a href="/administration/upgrade"><%= :upgrade.l %></a></li> -->
-    </ul>
   </div>
 </div>

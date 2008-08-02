@@ -12,7 +12,7 @@
   
   @additional_stylesheets = []
 %>
-<% if @clients.length > 0 %>
+<% if !@clients.empty? %>
 <table>
   <tr>
     <th><%= :name.l %></th>
@@ -23,15 +23,7 @@
   <tr>
     <td><a href="<%= "/company/view_client/#{client.id}" %>"><%= h client.name %></a></td>
     <td style="text-align: center"><%= client.users.length %></td>
-<%
-	temp_actions = [
-		{:name => :add_user.l, :url => {:controller => 'user', :action => 'add', :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-		{:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-		{:name => :edit.l, :url => {:controller => 'company', :action => 'edit_client', :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'company', :action => 'delete_client', :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => :delete_client_confirm.l}
-	]
-%>
-    <td><%= action_list temp_actions %></td>
+    <td><%= action_list actions_for_client(client) %></td>
   </tr>
 <% end %>
 </table>
