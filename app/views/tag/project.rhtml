@@ -29,7 +29,7 @@
   <li>
     <a href="<%= milestone.object_url %>"><%= h milestone.object_name %></a>
 <% if !milestone.assigned_to.nil? %>
-    <span class="desc">- <%= :milestone_assigned_to.l_with_args({:name => h(milestone.assigned_to.object_name)})"%></span>
+    <span class="desc">- <%= :milestone_assigned_to.l_with_args({:name => h(milestone.assigned_to.object_name)}) %></span>
 <% end %>
 <% if milestone.is_completed? %>
     <%= render_icon 'ok', "Completed milestone" %>

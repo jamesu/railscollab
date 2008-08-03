@@ -59,14 +59,7 @@
 			<% if !time.open_task.nil? %><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= link_to (time.name, time.open_task.object_url, :class => 'assignedTo') %><% else %><%= h time.name %><% end %>
     </td>
 		<td class="timeEdit">
-<%
-	temp_actions = [
-		{:name => :details.l, :url => {:controller => 'time', :action => 'view', :id => time.id}, :cond => true},
-		{:name => :edit.l, :url => {:controller => 'time', :action => 'edit', :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}
-	]
-%>
-<%= action_list temp_actions %>
+<%= action_list actions_for_time(time) %>
 		</td>
   </tr>
 <% end %>

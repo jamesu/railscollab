@@ -20,15 +20,7 @@
       
       <div class="description"><% if !view_time.open_task.nil? %><p><%= link_to (view_time.open_task.text, view_time.open_task.object_url) %></p><% end %><%= textilize view_time.description %></div>
 
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => {:controller => 'time', :action => 'edit', :id => view_time.id}, :cond => view_time.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => view_time.id}, :cond => view_time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
-      <div class="timeOptions"><%= action_list temp_actions %></div>
-<% end %>
+      <div class="timeOptions"><%= action_list actions_for_time_short(view_time) %></div>
     </div>
     
 </div>

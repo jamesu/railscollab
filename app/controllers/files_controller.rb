@@ -122,7 +122,7 @@ class FilesController < ApplicationController
         if @folder.save
           ApplicationLog::new_log(@folder, @logged_user, :add)
           
-          error_status(false, :success_added_folder.l)
+          error_status(false, :success_added_folder)
           redirect_back_or_default :controller => 'files'
         end
     end
@@ -162,7 +162,7 @@ class FilesController < ApplicationController
     begin
       @folder ||= ProjectFolder.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_folder.l)
+      error_status(true, :invalid_folder)
       redirect_back_or_default :controller => 'files'
       return
     end

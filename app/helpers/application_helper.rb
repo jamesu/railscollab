@@ -178,6 +178,17 @@ module ApplicationHelper
 	    {:name => :detatch.l, :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{object.class.to_s}&object_id=#{object.id}", :cond => object.file_can_be_added_by(@logged_user), :method => :post, :confirm => :detatch_file_confirm.l}]
 	end
 	
+	def actions_for_time(time)
+	   [{:name => :details.l, :url => {:controller => 'time', :action => 'view', :id => time.id}, :cond => true},
+	    {:name => :edit.l, :url => {:controller => 'time', :action => 'edit', :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
+	end
+	
+	def actions_for_time_short(time)
+	   [{:name => :edit.l, :url => {:controller => 'time', :action => 'edit', :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
+	end
+	
 	#def textilize(text)
 	# "<p>#{text}</p>"
 	#end
