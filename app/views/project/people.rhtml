@@ -19,13 +19,11 @@
     <div class="projectCompanyMeta">
       <div class="projectCompanyInfo">
         <div class="projectCompanyName"><%= link_to (h company.name), {:controller => 'company', :action => 'card', :id => company.id}, :class => 'companyName'%></div>
-<% if not company.address.nil? %>
+<% if !company.address.nil? or !company.city.nil? %>
         <div class="projectCompanyAddress">
           <%= h company.address %>
-<% if not company.address2.nil? %>
-          <br /><%= h company.address2 %>
-<% end %>
-          <br /><%= h company.city %>, <%= h company.state %> <%= h company.zipcode %>
+<% if !company.address2.nil? and !company.address2.empty? %><br /><%= h company.address2 %><% end %>
+<% if !company.city.nil? and !company.city.empty? %><br /><%= h company.city %>, <%= h company.state %> <%= h company.zipcode %><% end %>
         </div>
 <% end %>
 <% if not company.homepage.nil? %>
