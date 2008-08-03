@@ -11,11 +11,9 @@
         # must be an admin
         @page_title = :update_profile.l
         if @user.member_of_owner?
-            # ADMINISTRATION_TAB_COMPANY
             @tabbed_navigation_items = administration_tabbed_navigation(:company)
             @bread_crumbs = administration_crumbs(:update_profile, [{:title => :company, :url => "/administration/company"}])
         else
-            # ADMINISTRATION_TAB_CLIENTS
             @tabbed_navigation_items = administration_tabbed_navigation(:clients)
             @bread_crumbs = administration_crumbs(:update_profile, [{:title => :clients, :url => '/administration/clients'}, {:title => @user.company.name , :url => "/company/view_client/#{Company.owner.id}"}, {:title => @user.display_name , :url => "/account/edit_profile/#{@user.id}"}])
         end

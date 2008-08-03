@@ -38,17 +38,7 @@
 
       <div class="successMessage"><em><%= :enabled.l %>:</em> <%= form.is_enabled ? :yesno_yes.l : :yesno_no.l %></div>
       <div class="successMessage"><em><%= :visible.l %>:</em> <%= form.is_visible ? :yesno_yes.l : :yesno_no.l %></div>
-
-<%
-	temp_actions = [
-		{:name => :submit.l, :url => {:controller => 'form', :action => 'submit', :id => form.id}, :cond => form.can_be_submitted_by(@logged_user)},
-		{:name => :edit.l, :url => {:controller => 'form', :action => 'edit', :id => form.id}, :cond => form.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => form.id}, :cond => form.can_be_deleted_by(@logged_user), :method => :post, :confirm => :form_confirm_delete.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
-<div class="options"><%= action_list temp_actions %></div>
-<% end %>
+      <div class="options"><%= action_list actions_for_form(form) %></div>
   </div>
   </div>
 <% end %>

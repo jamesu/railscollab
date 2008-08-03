@@ -8,13 +8,7 @@
   <ul>
 <% attached_files.each do |attached_file| -%>
     <li>
-<%
-	temp_actions = [
-		{:name => :details.l, :url => "/project/#{@active_project.id}/files/file_details/#{attached_file.id}", :cond => true},
-		{:name => :detatch.l, :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{attached_files_object.class.to_s}&object_id=#{attached_files_object.id}", :cond => attached_files_object.file_can_be_added_by(@logged_user), :method => :post, :confirm => :detatch_file_confirm.l}
-	]
-%>
-      <a href="<%= attached_file.download_url %>"><span><%= h attached_file.filename %></span> (<%= format_size attached_file.file_size %>)</a> | <%= action_list temp_actions %>
+      <a href="<%= attached_file.download_url %>"><span><%= h attached_file.filename %></span> (<%= format_size attached_file.file_size %>)</a> | <%= action_list actions_for_attached_file(attached_file, attached_files_object) %>
     </li>
 <% end %>
   </ul>

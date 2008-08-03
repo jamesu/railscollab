@@ -125,8 +125,57 @@ module ApplicationHelper
 	end
 	
 	def actions_for_project(project)
-	   [ {:name => :edit.l, :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
-	     {:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}] 
+	   [{:name => :edit.l, :url => {:controller => 'project', :action => 'edit', :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}] 
+	end
+	
+	def actions_for_form(form)
+	   [{:name => :submit.l, :url => {:controller => 'form', :action => 'submit', :id => form.id}, :cond => form.can_be_submitted_by(@logged_user)},
+	    {:name => :edit.l, :url => {:controller => 'form', :action => 'edit', :id => form.id}, :cond => form.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => form.id}, :cond => form.can_be_deleted_by(@logged_user), :method => :post, :confirm => :form_confirm_delete.l}]
+
+	end
+	
+	def actions_for_milestone(milestone)
+	   [{:name => :edit.l, :url => {:controller => 'milestone', :action => 'edit', :id => milestone.id}, :cond => milestone.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => milestone.id}, :cond => milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => :milestone_confirm_delete.l}]
+	end
+	
+	def actions_for_task_list(task_list)
+	   [{:name => :edit.l, :url => {:controller => 'task', :action => 'edit_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'task', :action => 'delete_list', :id => task_list.id}, :cond => task_list.can_be_deleted_by(@logged_user), :method => :post, :confirm => :task_list_confirm_delete.l},
+	    {:name => :reorder_tasks.l, :url => {:controller => 'task', :action => 'reorder_list', :id => task_list.id}, :onclick => "task_view_sort(#{task_list.id}, #{task_list.project.id}); return false", :id => "sortTaskList#{task_list.id}", :cond => task_list.can_be_changed_by(@logged_user)}]
+	end
+	
+	def actions_for_message(message)
+	   [{:name => :edit.l, :url => {:controller => 'message', :action => 'edit', :id => message.id}, :cond => message.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'message', :action => 'delete', :id => message.id}, :cond => message.can_be_deleted_by(@logged_user), :method => :post, :confirm => :message_confirm_delete.l}]
+	end
+	
+	def actions_for_company(company)
+	   [{:name => :edit.l, :url => {:controller => 'company', :action => 'edit', :id => @project.id, :company => company.id}, :cond => company.can_be_edited_by(@logged_user)},
+	    {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :company => company.id}, :cond => company.can_be_edited_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}]
+	end
+	
+	def actions_for_comment(comment)
+	   [{:name => :edit.l, :url => "/project/#{@active_project.id}/comment/edit/#{comment.id}", :cond => comment.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => "/project/#{@active_project.id}/comment/delete/#{comment.id}", :cond => comment.can_be_deleted_by(@logged_user), :method => :post, :confirm => :comment_delete_confirm.l}]
+	end
+	
+	def actions_for_file(file, last_revision)
+	   [{:name => :download_size.l_with_args(:size => format_size(last_revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
+	    {:name => :edit.l, :url => {:controller => 'files', :action => 'edit_file', :id => file.id}, :cond => file.can_be_edited_by(@logged_user)},
+	    {:name => :delete.l, :url => {:controller => 'files', :action => 'delete_file', :id => file.id}, :cond => file.can_be_deleted_by(@logged_user), :method => :post, :confirm => :file_delete_confirmation.l}]
+	end
+	
+	def actions_for_file_revision(file, revision)
+	   [{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => file.id, :revision => revision.revision_number}, :cond => file.can_be_downloaded_by(@logged_user)},
+	    {:name => :edit.l, :url => {:controller => 'files', :action => 'edit_file', :id => file.id, :revision => revision.revision_number}, :cond => file.can_be_edited_by(@logged_user)}]
+	end
+	
+	def actions_for_attached_files(attached_file, object)
+	   [{:name => :details.l, :url => "/project/#{@active_project.id}/files/file_details/#{attached_file.id}", :cond => true},
+	    {:name => :detatch.l, :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{object.class.to_s}&object_id=#{object.id}", :cond => object.file_can_be_added_by(@logged_user), :method => :post, :confirm => :detatch_file_confirm.l}]
 	end
 	
 	#def textilize(text)

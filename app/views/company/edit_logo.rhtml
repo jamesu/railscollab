@@ -23,7 +23,7 @@
   </fieldset>
   
   <div>
-    <label for="logoFormLogo"><%= "New logo" %>: <span class="label_required">*</span></label>
+    <label for="logoFormLogo"><%= :new_logo.l %>: <span class="label_required">*</span></label>
     <div id="logoFormLogo"><input type="file" name="company[logo]" /></div>
 <% if @company.has_logo? %>
     <p class="desc"><%= :logo_replace_info.l %></p>

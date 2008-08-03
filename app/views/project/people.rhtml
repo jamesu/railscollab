@@ -31,17 +31,9 @@
 <% if not company.homepage.nil? %>
         <div class="projectCompanyHomepage"><a href="<%= h company.homepage %>"><%= h company.homepage %></a></div>
 <% end %>
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => {:controller => 'company', :action => 'edit', :id => @project.id, :company => company.id}, :cond => company.can_be_edited_by(@logged_user)},
-		{:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :company => company.id}, :cond => company.can_be_edited_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
 <div class="projectCompanyOptions">
-<%= action_list temp_actions %>
+<%= action_list actions_for_company(company) %>
 </div>
-<% end %>
       </div>
 <% company_users = company.users_on_project(@project) %>
 <% if company_users.length > 0 %>

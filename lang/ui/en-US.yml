@@ -57,6 +57,7 @@ login: Login
 update_permissions: Update permissions
 update_people: Update people
 edit_client: Edit client
+new_logo: New logo
 update_logo: Update logo
 forms: Forms
 add_form: Add form
@@ -408,6 +409,7 @@ remember_me_for_days: "Remember me for {days} days"
 forgot_password_q: "Forgot password?"
 
 # Account
+new_avatar: New avatar
 current_avatar: Current avatar
 delete_current_avatar: Delete current avatar
 avatar_confirm_delete: "Are you sure you want to delete this avatar?"

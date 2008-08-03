@@ -28,15 +28,7 @@
       <div class="messageTags">
         <span><%= :tags.l %>:</span> <%= tag_list view_message %>
       </div>
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => {:controller => 'message', :action => 'edit', :id => view_message.id}, :cond => view_message.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'message', :action => 'delete', :id => view_message.id}, :cond => view_message.can_be_deleted_by(@logged_user), :method => :post, :confirm => :message_delete_confirm.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
-      <div class="messageOptions"><%= action_list temp_actions %></div>
-<% end %>
+      <div class="messageOptions"><%= action_list actions_for_message(view_message) %></div>
     </div>
   </div>
 </div>

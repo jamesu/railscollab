@@ -59,19 +59,10 @@
   </div>
 <% end %>
   <div class="taskListTags"><span><%= :tags.l %>:</span> <%= tag_list task_list %></div>
-  
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => {:controller => 'task', :action => 'edit_list', :id => task_list.id}, :cond => task_list.can_be_changed_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'task', :action => 'delete_list', :id => task_list.id}, :cond => task_list.can_be_deleted_by(@logged_user), :method => :post, :confirm => :task_list_confirm_delete.l},
-		{:name => :reorder_tasks.l, :url => {:controller => 'task', :action => 'reorder_list', :id => task_list.id}, :onclick => "task_view_sort(#{task_list.id}, #{task_list.project.id}); return false", :id => "sortTaskList#{task_list.id}", :cond => task_list.can_be_changed_by(@logged_user)}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
+
 <div class="options">
-<%= action_list temp_actions %>
+<%= action_list actions_for_task_list(task_list) %>
 </div>
-<% end %>
 
 </div>
 </div>

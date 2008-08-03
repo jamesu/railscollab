@@ -67,16 +67,7 @@
       <span><a href="<%= file.object_url %>#objectComments"><%= :comments.l %></a>:</span> <%= file.comments.length %> | <span><a href="<%= file.object_url %>#revisions"><%= :revisions.l %></a>:</span> <%= file.project_file_revisions.length %>
       </div>
       <div class="fileTags"><%= :tags.l %>: <%= tag_list file %></div>
-<%
-	temp_actions = [
-		{:name => :download_size.l_with_args(:size => format_size(last_revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
-		{:name => :edit.l, :url => {:controller => 'files', :action => 'edit_file', :id => file.id}, :cond => file.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'files', :action => 'delete_file', :id => file.id}, :cond => file.can_be_deleted_by(@logged_user), :method => :post, :confirm => :file_delete_confirmation.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] or temp_actions[2][:cond] %>
-<div class="fileOptions"><%= action_list temp_actions %></div>
-<% end %>
+<div class="fileOptions"><%= action_list actions_for_file(file, last_revision) %></div>
     </div>
   </div>
 <% end %>

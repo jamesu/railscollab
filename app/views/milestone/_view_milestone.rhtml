@@ -83,17 +83,9 @@
 
   <p><span><%= :tags.l %>:</span> <%= tag_list view_milestone %></p>
 
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => {:controller => 'milestone', :action => 'edit', :id => view_milestone.id}, :cond => view_milestone.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => view_milestone.id}, :cond => view_milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => :milestone_confirm_delete.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
 <div class="milestoneOptions">
-<%= action_list temp_actions %>
+<%= action_list actions_for_milestone(milestone) %>
 </div>
-<% end %>
 
 </div>
 

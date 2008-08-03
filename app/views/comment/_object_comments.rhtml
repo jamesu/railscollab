@@ -32,15 +32,7 @@
       <div class="clear"></div>
       <%= render :partial => 'files/list_attached_files', :locals => {:attached_files => comment.attached_files(@logged_user.member_of_owner?), :attached_files_object => comment} %>
     </div>
-<%
-	temp_actions = [
-		{:name => :edit.l, :url => "/project/#{@active_project.id}/comment/edit/#{comment.id}", :cond => comment.can_be_edited_by(@logged_user)},
-		{:name => :delete.l, :url => "/project/#{@active_project.id}/comment/delete/#{comment.id}", :cond => comment.can_be_deleted_by(@logged_user), :method => :post, :confirm => :comment_delete_confirm.l}
-	]
-%>
-<% if temp_actions[0][:cond] or temp_actions[1][:cond] %>
-    <div class="options"><%= action_list temp_actions %></div>
-<% end %>
+    <div class="options"><%= action_list actions_for_comment(comment) %></div>
   </div>
 <% end %>
 <% else %>
