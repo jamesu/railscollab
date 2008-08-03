@@ -1,18 +1,28 @@
 Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
 
 Project is covered under the GNU GPL with the exception of the following,
-which for various reasons are covered by the slightly modified version
-of the GNU GPL called the Honest Public License (HPL), unless explicitly
-stated otherwise.
+which should be considered derivative works of ActiveCollab 0.7.1 and thus are 
+covered by the slightly modified version of the GNU GPL called the 
+Honest Public License (HPL).
 
-- app/views/* (including subdirectories)
-- public/stylesheets/* (including subdirectories)
-- public/images/* (including subdirectories)
+- app/views/account/update_permissions.rhtml [0.7.1]
+- app/views/company/update_permissions.rhtml [0.7.1]
+- app/views/layouts/_applicaton_logs.rhtml [0.7.1]
+- app/views/project/_overview_sidebar.rhtml [0.7b + Several 0.7.1 blocks]
+- app/views/task/reorder_tasks.rhtml [0.7.1]
+- public/themes/default/images/logtypes/* [0.7.1]
+- public/themes/default/stylesheets/admin/user_permissions.css [0.7.1]
+- public/themes/default/stylesheets/application_logs.css [0.7.1]
+- public/themes/default/stylesheets/project/messages.css [0.7b + Extra styling]
+- public/themes/default/stylesheets/project/reorder_tasks.css [0.7.1]
 
-Copyright for these files is as follows, with the former being that of
-the original work:
+Any other files in "app/views" are either derivative works of 
+ActiveCollab 0.7 Beta, or original works of the RailsCollab project.
+
+Copyright for these files, as well as others in "app/views" is as follows, 
+with the former being that of the original work:
    Copyright (C) 2006 Ilija Studen
-   Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+   Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 In addition, anything in the "vendor" folder should not be considered
 part of the project.
