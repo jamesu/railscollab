@@ -102,7 +102,7 @@ module ActionView
         return @selector
       end
 
-      def select_month(date, options = {})
+      def select_month(date, options = {}, html_options = {})
         if options[:locale]
           @original_locale = Locale.code
           Locale.code = options[:locale]
