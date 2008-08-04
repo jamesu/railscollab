@@ -20,6 +20,8 @@
 	<%= javascript_include_tag 'controls.js' %>
 	<%= javascript_include_tag 'lowpro.js' %>
 	<%= javascript_include_tag 'application.js' %>
+	
+	<%= javascript_tag "const AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">

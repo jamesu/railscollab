@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
   # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_railscollab_session_id'
   
+  protect_from_forgery
+  
 protected
   
   def error_status(error, message, args={})
