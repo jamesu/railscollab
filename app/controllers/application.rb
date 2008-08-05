@@ -32,13 +32,20 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery
   
+  before_filter :login_required
+  before_filter :set_time_zone
+  
 protected
   
   def error_status(error, message, args={})
   	flash[:error] = error
   	flash[:message] = message.l_with_args(args)
   end
-  
+
+  def set_time_zone
+    Time.zone = @logged_user.time_zone if @logged_user
+  end
+    
   def process_session
     @active_project = nil
     

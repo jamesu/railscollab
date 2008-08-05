@@ -31,7 +31,6 @@ class ApplicationLog < ActiveRecord::Base
   @@action_id_lookup = @@action_lookup.invert
   
   def process_params
-    write_attribute("created_on", Time.now.utc)
   end
   
   def friendly_action

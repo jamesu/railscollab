@@ -359,18 +359,6 @@ class User < ActiveRecord::Base
 		url_for :only_path => true, :controller => 'user', :action => 'card', :id => self.id
 	end
 	
-	def timezone_obj
-		return TzinfoTimezone[(self.timezone*60*60).floor]
-	end
-	
-	def timezone_name
-		return TzinfoTimezone[(self.timezone*60*60).floor].name
-	end
-	
-	def timezone_name=(value)
-		self.timezone = (TzinfoTimezone[value].utc_offset).to_f / 60.0 / 60.0
-	end
-	
 	def self.get_online(active_in=15)
 	  datetime = Time.now.utc
 	  datetime -= (active_in * 60)
@@ -392,19 +380,17 @@ class User < ActiveRecord::Base
 	before_update :process_update_params
 	 
 	def process_params
-		write_attribute("created_on", Time.now.utc)
 		write_attribute("last_login", nil)
 		write_attribute("last_activity", nil)
 		write_attribute("last_visit", nil)
 	end
 	
 	def process_update_params
-		write_attribute("updated_on", Time.now.utc)
 	end
 	
 	# Accesibility
 	
-	attr_accessible :display_name, :email, :timezone_name, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
+	attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
 	
 	# Validation
 	

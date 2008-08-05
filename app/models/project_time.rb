@@ -45,8 +45,6 @@ class ProjectTime < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
-	  
 	  if self.assigned_to_user_id.nil?
 	   write_attribute("assigned_to_user_id", 0)
 	  end
@@ -60,8 +58,6 @@ class ProjectTime < ActiveRecord::Base
 	end
 	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
-	  
 	  if self.assigned_to_user_id.nil?
 		write_attribute("assigned_to_user_id", 0)
 	  end

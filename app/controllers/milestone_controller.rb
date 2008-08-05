@@ -27,8 +27,7 @@ class MilestoneController < ApplicationController
   		 :only => [ :delete, :complete, :open ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
-    
-  before_filter :login_required
+
   before_filter :process_session
   before_filter :obtain_milestone, :except => [:index, :add]
   after_filter  :user_track, :only => [:index, :view]

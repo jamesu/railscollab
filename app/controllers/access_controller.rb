@@ -135,5 +135,10 @@ class AccessController < ApplicationController
         return
     end
   end
-  
+
+protected
+
+  def protect?(action)
+    false
+  end  
 end

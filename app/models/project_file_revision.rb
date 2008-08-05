@@ -37,11 +37,9 @@ class ProjectFileRevision < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	end
 	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
 	  ApplicationLog::new_log(self, self.updated_by, :edit, self.project_file.is_private, self.project_file.project)
 	end
 	

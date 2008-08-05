@@ -27,8 +27,7 @@ class ProjectController < ApplicationController
   		 :only => [ :delete, :remove_user, :remove_company, :open, :complete ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
-  
-  before_filter :login_required
+
   before_filter :process_session
   before_filter :verify_project, :except => [:add]
   

@@ -42,11 +42,9 @@ class Company < ActiveRecord::Base
 	@@cached_owner = nil
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	end
 	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
 	end
 	
 	def process_destroy
@@ -160,18 +158,6 @@ class Company < ActiveRecord::Base
 		url_for :only_path => true, :controller => 'company', :action => 'card', :id => self.id
 	end
 	
-	def timezone_obj
-		return TzinfoTimezone[(self.timezone*60*60).floor]
-	end
-	
-	def timezone_name
-		return TzinfoTimezone[(self.timezone*60*60).floor].name
-	end
-	
-	def timezone_name=(value)
-		self.timezone = (TzinfoTimezone.new(value).utc_offset).to_f / 60.0 / 60.0
-	end
-	
 	def country_code
 		self.country
 	end
@@ -201,7 +187,7 @@ class Company < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :name, :timezone_name, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country_code
+	attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country_code
 	
 	# Validation
 	

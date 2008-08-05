@@ -28,7 +28,6 @@ class TimeController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
 
-  before_filter :login_required
   before_filter :process_session
   before_filter :obtain_time, :except => [:index, :add, :by_task]
   before_filter :prepare_times, :only => [:index, :by_task, :export]

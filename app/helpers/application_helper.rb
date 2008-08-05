@@ -89,8 +89,7 @@ module ApplicationHelper
 	
 	def format_usertime(time, format, user=@logged_user)
 		return '' if time.nil?
-		adjusted_time = time + ((user.timezone * 60.0 * 60.0).to_i)
-		adjusted_time.strftime(format)
+		time.strftime(format)
 	end
 	
 	def yesno_toggle(object_name, method, options = {})

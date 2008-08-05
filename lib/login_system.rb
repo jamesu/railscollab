@@ -51,6 +51,21 @@ module LoginSystem
   def protect?(action)
     true
   end
+  
+  # overwrite this method if you want to allow people to login via authentication tokens
+  # example:
+  # 
+  #  # don't protect the login and the about method
+  #  def protect_token?(action)
+  #    if ['feed', 'other_feed'].include?(action)
+  #       return true
+  #    else
+  #       return false
+  #    end
+  #  end
+  def protect_token?(action)
+    false
+  end
    
   # login_required filter. add 
   #
@@ -66,6 +81,10 @@ module LoginSystem
     if not protect?(action_name)
       return true  
     end
+    
+    if protect_token?(action_name)
+      return true if token_login_accepted
+    end
 	
 	do_action = false
 	
@@ -75,7 +94,6 @@ module LoginSystem
 		
 		authenticate_or_request_with_http_basic do |user_name, password|
 			@logged_user = User.authenticate(user_name, password)
-			
 		end
 	else
 		# Session authentication
@@ -108,11 +126,7 @@ module LoginSystem
     return false 
   end
   
-  def token_login_required
-    
-    if not protect?(action_name)
-      return true  
-    end
+  def token_login_accepted
     
     if not params[:user].nil?
       @logged_user = User.find(:first, :conditions => ['id = ?', params[:user]])
@@ -122,7 +136,6 @@ module LoginSystem
     
     # Don't exist? Not valid? what a pity!
     if @logged_user.nil? or (!@logged_user.twisted_token_valid?(params[:token]))
-      render :text => '404 Not found', :status => 404
       return false
     end
     

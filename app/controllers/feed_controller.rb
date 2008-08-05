@@ -24,8 +24,6 @@ require 'csv'
 
 class FeedController < ApplicationController
 
-  before_filter :token_login_required, :except => [:export_times]
-  before_filter :login_required, :only => [:export_times]
   after_filter  :user_track
   
   def recent_activities
@@ -227,6 +225,12 @@ class FeedController < ApplicationController
   		    render :text => build_str, :content_type => "application/vnd.ms-excel"
   		end
   	end
+  end
+
+protected
+
+  def protect_token?(action)
+    action != 'export_times'
   end
   
 end

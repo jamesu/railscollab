@@ -58,7 +58,6 @@ class ProjectMilestone < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
 	  
 	  if self.assigned_to_user_id.nil?
@@ -82,7 +81,6 @@ class ProjectMilestone < ActiveRecord::Base
 	  end
 	  
 	  if @update_completed.nil?
-		write_attribute("updated_on", Time.now.utc)
 		ApplicationLog::new_log(self, self.updated_by, :edit, self.is_private)
 	  else
 		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)

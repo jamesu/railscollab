@@ -28,7 +28,6 @@ class FilesController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'file', :action => 'index' }
 
-  before_filter :login_required
   before_filter :process_session, :except => [:thumbnail]
   before_filter :accept_folder_name, :only => [:browse_folder, :edit_folder, :delete_folder]
   after_filter  :user_track, :only => [:index, :browse_folder]

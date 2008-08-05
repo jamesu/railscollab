@@ -25,7 +25,6 @@ class BasecampController < ApplicationController
 
   layout nil
 
-  before_filter :login_required
   before_filter :ensure_content, :except => [:recent_items_rss, :recent_project_items_rss]
   before_filter :process_session
   #after_filter  :user_track

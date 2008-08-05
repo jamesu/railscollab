@@ -28,7 +28,6 @@ class CommentController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
 
-  before_filter :login_required
   before_filter :process_session
   before_filter :obtain_comment, :except => [:add]
   after_filter  :user_track

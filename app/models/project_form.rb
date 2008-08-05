@@ -36,7 +36,6 @@ class ProjectForm < ActiveRecord::Base
 	@@action_id_lookup = @@action_lookup.invert
 	
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	end
 	
 	def process_create
@@ -44,7 +43,6 @@ class ProjectForm < ActiveRecord::Base
 	end
 	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
 	  ApplicationLog::new_log(self, self.updated_by, :edit)
 	end
 	

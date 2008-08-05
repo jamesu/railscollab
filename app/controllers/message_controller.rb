@@ -28,7 +28,6 @@ class MessageController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
   
-  before_filter :login_required
   before_filter :process_session
   before_filter :obtain_message, :except => [:index, :add, :category, :add_category, :edit_category, :delete_category]
   after_filter  :user_track

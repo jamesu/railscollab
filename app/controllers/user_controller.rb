@@ -28,7 +28,6 @@ class UserController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'project' }
 
-  before_filter :login_required
   before_filter :process_session
   after_filter :user_track, :only => [:index, :card]
   
@@ -61,7 +60,7 @@ class UserController < ApplicationController
 	    end
 	    
 	    @user.company_id = @company.id
-	    @user.timezone = @company.timezone
+	    @user.time_zone = @company.time_zone
 
       when :post
         user_attribs = params[:user]

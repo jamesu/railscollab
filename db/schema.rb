@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 8) do
+ActiveRecord::Schema.define(:version => 9) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.integer  "created_by_id",        :limit => 10
     t.datetime "updated_on"
     t.integer  "updated_by_id",        :limit => 10
-    t.integer  "attached_files_count",                :default => 0
+    t.integer  "attached_files_count", :limit => 11,  :default => 0
   end
 
   add_index "comments", ["created_on"], :name => "index_comments_on_created_on"
@@ -77,12 +77,12 @@ ActiveRecord::Schema.define(:version => 8) do
     t.string   "phone_number",      :limit => 30
     t.string   "fax_number",        :limit => 30
     t.string   "logo_file",         :limit => 44
-    t.float    "timezone",                         :default => 0.0,   :null => false
     t.boolean  "hide_welcome_info",                :default => false, :null => false
     t.datetime "created_on",                                          :null => false
     t.integer  "created_by_id",     :limit => 10
     t.datetime "updated_on"
     t.integer  "updated_by_id",     :limit => 10
+    t.string   "time_zone",                        :default => "",    :null => false
   end
 
   add_index "companies", ["created_on"], :name => "index_companies_on_created_on"
@@ -112,15 +112,15 @@ ActiveRecord::Schema.define(:version => 8) do
   add_index "config_options", ["category_name"], :name => "index_config_options_on_category_name"
 
   create_table "file_repo", :force => true do |t|
-    t.binary  "content",               :default => "", :null => false
-    t.integer "order",   :limit => 10, :default => 0,  :null => false
+    t.binary  "content",                              :null => false
+    t.integer "order",   :limit => 10, :default => 0, :null => false
   end
 
   add_index "file_repo", ["order"], :name => "index_file_repo_on_order"
 
   create_table "file_repo_attributes", :force => true do |t|
     t.string "attribute", :limit => 50, :default => "", :null => false
-    t.text   "value",                   :default => "", :null => false
+    t.text   "value",                                   :null => false
   end
 
   create_table "file_types", :force => true do |t|
@@ -143,8 +143,8 @@ ActiveRecord::Schema.define(:version => 8) do
   end
 
   create_table "open_id_authentication_associations", :force => true do |t|
-    t.integer "issued"
-    t.integer "lifetime"
+    t.integer "issued",     :limit => 11
+    t.integer "lifetime",   :limit => 11
     t.string  "handle"
     t.string  "assoc_type"
     t.binary  "server_url"
@@ -152,9 +152,9 @@ ActiveRecord::Schema.define(:version => 8) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :limit => 11,                 :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",                     :default => "", :null => false
   end
 
   create_table "project_companies", :id => false, :force => true do |t|
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.integer  "created_by_id",              :limit => 10,  :default => 0
     t.datetime "updated_on"
     t.integer  "updated_by_id",              :limit => 10,  :default => 0
-    t.integer  "comments_count",                            :default => 0
+    t.integer  "comments_count",             :limit => 11,  :default => 0
     t.boolean  "can_time_track",                            :default => false, :null => false
   end
 
@@ -207,7 +207,7 @@ ActiveRecord::Schema.define(:version => 8) do
   create_table "project_folders", :force => true do |t|
     t.integer "project_id",          :limit => 10, :default => 0,  :null => false
     t.string  "name",                :limit => 50, :default => "", :null => false
-    t.integer "project_files_count",               :default => 0
+    t.integer "project_files_count", :limit => 11, :default => 0
   end
 
   add_index "project_folders", ["project_id", "name"], :name => "index_project_folders_on_project_id_and_name", :unique => true
@@ -215,8 +215,8 @@ ActiveRecord::Schema.define(:version => 8) do
   create_table "project_forms", :force => true do |t|
     t.integer  "project_id",      :limit => 10, :default => 0,     :null => false
     t.string   "name",            :limit => 50, :default => "",    :null => false
-    t.text     "description",                   :default => "",    :null => false
-    t.text     "success_message",               :default => "",    :null => false
+    t.text     "description",                                      :null => false
+    t.text     "success_message",                                  :null => false
     t.integer  "in_object_id",    :limit => 10, :default => 0,     :null => false
     t.datetime "created_on"
     t.integer  "created_by_id",   :limit => 10, :default => 0,     :null => false
@@ -231,7 +231,7 @@ ActiveRecord::Schema.define(:version => 8) do
   create_table "project_message_categories", :force => true do |t|
     t.integer "project_id",             :limit => 10,                 :null => false
     t.string  "name",                   :limit => 50, :default => "", :null => false
-    t.integer "project_messages_count",               :default => 0
+    t.integer "project_messages_count", :limit => 11, :default => 0
   end
 
   create_table "project_messages", :force => true do |t|
@@ -249,8 +249,8 @@ ActiveRecord::Schema.define(:version => 8) do
     t.datetime "updated_on"
     t.integer  "updated_by_id",              :limit => 10
     t.integer  "category_id",                :limit => 5,                      :null => false
-    t.integer  "comments_count",                            :default => 0
-    t.integer  "attached_files_count",                      :default => 0
+    t.integer  "comments_count",             :limit => 11,  :default => 0
+    t.integer  "attached_files_count",       :limit => 11,  :default => 0
   end
 
   add_index "project_messages", ["milestone_id"], :name => "index_project_messages_on_milestone_id"
@@ -279,7 +279,7 @@ ActiveRecord::Schema.define(:version => 8) do
   add_index "project_milestones", ["created_on"], :name => "index_project_milestones_on_created_on"
 
   create_table "project_task_lists", :force => true do |t|
-    t.integer  "priority"
+    t.integer  "priority",        :limit => 11
     t.integer  "milestone_id",    :limit => 10,  :default => 0,     :null => false
     t.integer  "project_id",      :limit => 10
     t.string   "name",            :limit => 100
@@ -320,8 +320,8 @@ ActiveRecord::Schema.define(:version => 8) do
 
   create_table "project_times", :force => true do |t|
     t.integer  "project_id",             :limit => 10
-    t.integer  "task_list_id"
-    t.integer  "task_id"
+    t.integer  "task_list_id",           :limit => 11
+    t.integer  "task_id",                :limit => 11
     t.string   "name",                   :limit => 100
     t.text     "description"
     t.datetime "done_date"
@@ -356,12 +356,12 @@ ActiveRecord::Schema.define(:version => 8) do
   end
 
   create_table "projects", :force => true do |t|
-    t.integer  "priority"
+    t.integer  "priority",                     :limit => 11
     t.string   "name",                         :limit => 50
     t.text     "description"
     t.boolean  "show_description_in_overview",               :default => false, :null => false
     t.datetime "completed_on"
-    t.integer  "completed_by_id"
+    t.integer  "completed_by_id",              :limit => 11
     t.datetime "created_on",                                                    :null => false
     t.integer  "created_by_id",                :limit => 10
     t.datetime "updated_on"
@@ -374,7 +374,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.string  "rel_object_type", :limit => 50
     t.integer "rel_object_id",   :limit => 10, :default => 0,     :null => false
     t.string  "column_name",     :limit => 50, :default => "",    :null => false
-    t.text    "content",                       :default => "",    :null => false
+    t.text    "content",                                          :null => false
     t.integer "project_id",      :limit => 10, :default => 0,     :null => false
     t.boolean "is_private",                    :default => false, :null => false
   end
@@ -419,7 +419,6 @@ ActiveRecord::Schema.define(:version => 8) do
     t.string   "fax_number",        :limit => 20
     t.string   "mobile_number",     :limit => 20
     t.string   "home_number",       :limit => 20
-    t.float    "timezone",                         :default => 0.0,   :null => false
     t.datetime "created_on",                                          :null => false
     t.integer  "created_by_id",     :limit => 10
     t.datetime "updated_on"
@@ -430,6 +429,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.boolean  "auto_assign",                      :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext", :limit => 5
+    t.string   "time_zone",                        :default => "",    :null => false
   end
 
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true

@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AdministrationController < ApplicationController
 
-  before_filter :login_required
   before_filter :process_session
   
   def index

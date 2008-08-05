@@ -26,7 +26,6 @@ class AccountController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'account' }
   
-  before_filter :login_required
   before_filter :process_session
   before_filter :obtain_user, :except => [:index, :avatar]
   after_filter :user_track, :only => [:index]

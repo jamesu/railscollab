@@ -7,7 +7,6 @@ RailsCollab
 class ConfigController < ApplicationController
   layout 'administration'
   
-  before_filter :login_required
   before_filter :process_session
   
   def update_category

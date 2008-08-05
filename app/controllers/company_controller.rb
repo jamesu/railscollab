@@ -27,8 +27,7 @@ class CompanyController < ApplicationController
   		 :only => [ :delete_client, :delete_logo, :hide_welcome_info ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
-  
-  before_filter :login_required
+
   before_filter :process_session
   before_filter :obtain_company, :except => [:add_client, :edit, :hide_welcome_info, :logo]
   after_filter  :user_track, :except => [:logo]

@@ -17,7 +17,6 @@ class Tag < ActiveRecord::Base
 	before_create :process_params
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	end
 	
 	def objects

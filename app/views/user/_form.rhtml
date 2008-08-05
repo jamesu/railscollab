@@ -34,7 +34,7 @@
   
   <div>
     <label for="profileFormTimezone"><%= :timezone.l %>: <span class="label_required">*</span></label>
-    <%= time_zone_select 'user', 'timezone_name', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
+    <%= time_zone_select 'user', 'time_zone', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
   </div>
   
 <% if @user.new_record? or @logged_user.is_admin? %>

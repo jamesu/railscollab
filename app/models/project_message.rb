@@ -51,7 +51,6 @@ class ProjectMessage < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	  self.comments_enabled = true unless self.created_by.member_of_owner?
 	end
 	
@@ -60,7 +59,6 @@ class ProjectMessage < ActiveRecord::Base
 	end
 	
 	def process_update_params
-	  write_attribute("updated_on", Time.now.utc)
 	  ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private)
 	end
 	

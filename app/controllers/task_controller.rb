@@ -28,7 +28,6 @@ class TaskController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
   
-  before_filter :login_required
   before_filter :process_session
   after_filter  :user_track, :only => [:index, :view_list]
   

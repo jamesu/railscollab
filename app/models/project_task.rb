@@ -43,7 +43,6 @@ class ProjectTask < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
 	  write_attribute("order", self.task_list.project_tasks.length)
 	end
@@ -55,7 +54,6 @@ class ProjectTask < ActiveRecord::Base
 	
 	def process_update_params
 	  if @update_completed.nil?
-		write_attribute("updated_on", Time.now.utc)
 		if @update_is_minor.nil?
 			ApplicationLog.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
 		end

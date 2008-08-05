@@ -141,7 +141,6 @@ class Project < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
-	  write_attribute("created_on", Time.now.utc)
 	  write_attribute("completed_on", nil)
 	end
 	
@@ -151,7 +150,6 @@ class Project < ActiveRecord::Base
 	
 	def process_update_params
 	  if @update_completed.nil?
-		write_attribute("updated_on", Time.now.utc)
 		ApplicationLog::new_log(self, self.updated_by, :edit, true)
 	  else
 		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
