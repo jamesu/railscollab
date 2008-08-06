@@ -5,7 +5,7 @@ category_count = 0
 config = YAML.load_file("#{RAILS_ROOT}/config/config_schema.yml")
 config.keys.each do |key|
 	options = config[key]
-	category = ConfigCategory.new(:name => key, :is_system => (:name == 'system'), :category_order => category_count)
+	category = ConfigCategory.new(:name => key, :is_system => (key == 'system'), :category_order => category_count)
 	category.save
 	
 	# Create options

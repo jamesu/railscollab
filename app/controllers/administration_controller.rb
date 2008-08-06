@@ -45,7 +45,8 @@ class AdministrationController < ApplicationController
   end
   
   def configuration
-      @categories = ConfigCategory.find(:all, :order => 'category_order DESC')
+      sys_conds = (params[:system].to_i == 1) ? [] : ['is_system = ?', false]
+      @categories = ConfigCategory.find(:all, :conditions => sys_conds, :order => 'category_order DESC')
   end
   
   def tools
