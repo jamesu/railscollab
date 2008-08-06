@@ -10,7 +10,7 @@
 <% end %>
   </ul>
   
-  <div class="PopupMenuWidgetDiv" id="account_more_menu">
+  <div class="PopupMenuWidgetDiv" id="account_more_menu" style="display:none">
     <p><%= :account.l %>:</p>
     <ul>
       <li><%= link_to :update_profile.l, :controller => 'account', :action => 'edit_profile', :id => user.id %></li>
@@ -25,7 +25,7 @@
   </div>
   
 <% if not projects.nil? and projects.length > 0 %>
-  <div class="PopupMenuWidgetDiv" id="projects_more_menu">
+  <div class="PopupMenuWidgetDiv" id="projects_more_menu"  style="display:none">
     <p><%= :projects.l %>:</p>
     <ul>
 <% projects.each do |project| -%>
@@ -36,7 +36,7 @@
 <% end %>
   
 <% if user.is_admin %>
-  <div class="PopupMenuWidgetDiv" id="administration_more_menu">
+  <div class="PopupMenuWidgetDiv" id="administration_more_menu"  style="display:none">
     <p><%= :administration.l %>:</p>
     <ul>
       <li><%= link_to :company.l, :controller => 'administration', :action => 'company' %></li>
