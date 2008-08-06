@@ -163,6 +163,10 @@ class TaskController < ApplicationController
     end
 
     case request.method
+      when :get
+        error_status(true, :insufficient_permissions)
+        redirect_back_or_default :controller => 'task'
+        return
       when :post
 		tasks = @task_list.project_tasks
 		if params.has_key? :list
@@ -188,8 +192,8 @@ class TaskController < ApplicationController
 		
 		@task_list.project_tasks(true) # Reload
     end
-	
-	render :template => 'task/reorder_tasks'
+    
+    render :text => ''
   end
   
   # Tasks

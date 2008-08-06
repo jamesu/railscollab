@@ -9,7 +9,6 @@ Honest Public License (HPL).
 - app/views/company/update_permissions.rhtml [0.7.1]
 - app/views/layouts/_applicaton_logs.rhtml [0.7.1]
 - app/views/project/_overview_sidebar.rhtml [0.7b + Several 0.7.1 blocks]
-- app/views/task/reorder_tasks.rhtml [0.7.1]
 - public/themes/default/images/logtypes/* [0.7.1]
 - public/themes/default/stylesheets/admin/user_permissions.css [0.7.1]
 - public/themes/default/stylesheets/application_logs.css [0.7.1]
