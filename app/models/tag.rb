@@ -73,13 +73,14 @@ class Tag < ActiveRecord::Base
 		end
 	end
 	
-	def self.list_by_project(project, is_public)
+	def self.list_by_project(project, is_public, to_text=true)
 		tag_conditions = is_public ?
 		                 ['project_id = ? AND is_private = ?', project.id, false] : 
 		                 ['project_id = ?', project.id]
 		
 		tags = Tag.find(:all, :group => 'tag', :conditions => tag_conditions, :order => 'tag', :select => 'tag')
 		
+		return tags unless to_text
 		return tags.collect do |tag|
 			tag.tag
 		end

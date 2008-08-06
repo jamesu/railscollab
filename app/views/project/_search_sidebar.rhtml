@@ -1,12 +1,12 @@
-<% if @tag_names.length > 0 %>
+<% if !@tag_names.empty? %>
 <div class="sidebarBlock">
   <h2><%= :tags.l %></h2>
   <div class="blockContent">
-    <p><%= :tags_used_in_project %>:</p>
+    <p><%= :tags_used_in_project.l %>:</p>
     <ul class="listWithDetails">
 <% is_public = @logged_user.member_of_owner? %>
     <% @tag_names.each do |tag| -%>
-      <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag.tag}" %>"><%= h tag.tag %></a> <span class="desc"> - <%= :tag_object_count.l_with_args(:count => Tag.count_by(tag.tag, @active_project, is_public)) %></span></li>
+      <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag.tag}" %>"><%= h tag.tag %></a> <span class="desc"> - <%= :tag_object_count.l_with_args(:count => Tag.count_by(tag.tag, @active_project, !@logged_user.member_of_owner?)) %></span></li>
     <% end %>
     </ul>
   </div>

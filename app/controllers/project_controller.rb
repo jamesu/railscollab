@@ -60,36 +60,28 @@ class ProjectController < ApplicationController
   
   def search
     @project = @active_project
-    @last_search = params[:search_id]
+    @current_search = params[:search_id]
     
-    if @last_search.nil?
-    	@last_search = "Search..."
+    unless @current_search.nil?
+        @last_search = @current_search
+        
+        current_page = params[:page].to_i
+        current_page = 1 unless current_page > 0
+    
+        @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => AppConfig.search_results_per_page})
+    
+        @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
+        @pagination = []
+        @start_search_results = AppConfig.search_results_per_page * (current_page-1)
+        (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
+    else
+        @last_search = "Search..."
+        @search_results = []
+        
+        @tag_names = Tag.list_by_project(@project, !@logged_user.member_of_owner?, false)
     end
-    
-    current_page = params[:page].to_i
-    current_page = 1 unless current_page > 0
-    
-    @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => AppConfig.search_results_per_page})
-    
-    @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
-    @pagination = []
-    @start_search_results = AppConfig.search_results_per_page * (current_page-1)
-    (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
-    
     
     @content_for_sidebar = 'search_sidebar'
-  end
-  
-  def tags
-    @project = @active_project
-    
-    if not @project.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-    
-    @tag_list = Tag.list_by_project(@project, !@logged_user.member_of_owner?)
   end
   
   def people

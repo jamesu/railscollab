@@ -15,6 +15,9 @@ class TagController < ApplicationController
   	@tag_name = params[:id]
   	tag_object_list = Tag.find_objects(@tag_name, @active_project, !@logged_user.member_of_owner?)
   	
+  	@tag_names = Tag.list_by_project(@active_project, !@logged_user.member_of_owner?, false)
+  	@content_for_sidebar = 'project/search_sidebar'
+  	
   	@tagged_objects_count = tag_object_list.length
   	@tagged_objects = {
   		:messages => tag_object_list.select { |obj| obj.class == ProjectMessage },

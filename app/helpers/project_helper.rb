@@ -31,7 +31,6 @@ module ProjectHelper
 	  items << {:id => :milestones, :url => "/project/#{act_proj}/milestone"} if true
 	  items << {:id => :time, :url => "/project/#{act_proj}/time"} if true
 	  items << {:id => :files, :url => "/project/#{act_proj}/files"} if true
-	  items << {:id => :tags, :url => "/project/#{act_proj}/tags"} if true
 	  items << {:id => :forms, :url => "/project/#{act_proj}/form"} if @logged_user.is_admin?
 	  items << {:id => :people, :url => "/project/#{act_proj}/people"} if true
 	  

@@ -19,7 +19,7 @@
 <p><%= :search_displaying_results_for.l_with_args({:start => @start_search_results, 
                                                    :finish => @start_search_results+@search_results.length, 
                                                    :total => @total_search_results,
-                                                   :search => h(@last_search)}) %></p>
+                                                   :search => h(@current_search)}) %></p>
 <ul>
 <% @search_results.each do |obj| -%>
   <li><%= obj.class.to_s %>: <a href="<%= obj.object_url %>"><%= h obj.object_name %></a></li>
@@ -30,6 +30,6 @@
   <%= pagination_links  "/project/#{@active_project.id}/search?search_id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
 </div>
 
-<% else %>
-<p><%= :search_no_matching_objects.l_with_args({:search => h(@last_seach)}) %></p>
+<% elsif !@current_search.nil? %>
+<p><%= :search_no_matching_objects.l_with_args({:search => h(@current_search)}) %></p>
 <% end %>
