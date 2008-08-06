@@ -286,7 +286,7 @@ function notify_form_select_company(id)
 }
 
 Event.addBehavior({
-	'#status_bar' : StatusBar(),
+	'.StatusMessage' : StatusBar(),
 	'.PopupMenuWidgetAttachTo' : PopupMenu(),
 	'a#messageFormAdditionalTextToggle:click': function(e) {
 	  var element = e.element();

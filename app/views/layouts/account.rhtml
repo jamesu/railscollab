@@ -41,7 +41,7 @@
       <div id="outerContentWrapper">
         <div id="innerContentWrapper">
 <% if flash[:message] %>
-          <div id="status_bar" class="<%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
+          <div id="<%= flash[:error] ? 'error' : 'success' %>" class="StatusMessage <%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
           <h1 id="pageTitle"><%= h @page_title %></h1>
           <div id="pageContent">
