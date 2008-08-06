@@ -32,6 +32,7 @@ following to deploy & run RailsCollab:
     - RedCloth (http://whytheluckystiff.net/ruby/redcloth/)
     - ruby-openid (gem install ruby-openid)
     - ActionMailer (gem install ActionMailer)
+    - AWS::S3 (gem install aws-s3) [optional, for Amazon S3 support]
     - Ferret (gem install ferret)
     - Phusion Passenger (http://www.modrails.com/) [optional, for easy deployment]
 
@@ -92,8 +93,13 @@ File Storage
 
 RailsCollab allows the user to upload files, provided they have sufficient 
 permissions. Files are stored according to the "File storage" option.
-Note that the "Database" storage option is currently the only implemented
-storage system in RailsCollab.
+
+The current options available are "Database" and "Amazon S3" storage. 
+
+"Database" will store your files directly in the database, and pull them out when required.
+"Amazon S3" will use Amazon's S3 service to store your files. Please note that you will need to 
+setup and Amazon account and enter the relevant details in the "Services" section in the configuration 
+for this to work.
 
 When using the "Database" storage option with MySQL, you might notice that files you 
 upload may be limited to 64kb. To solve this issue, run the "db:railscollab:fix_files" rake 
