@@ -50,6 +50,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # BaseCamp API
   map.connect 'project/list', :controller => 'basecamp', :action => 'projects_list'
+  map.connect 'project/show/:id', :controller => 'basecamp', :action => 'project_show'
   map.connect 'projects/:active_project/attachment_categories', :controller => 'basecamp', :action => 'projects_attachment_categories'
   map.connect 'projects/:active_project/post_categories', :controller => 'basecamp', :action => 'projects_post_categories'
   map.connect 'contacts/companies', :controller => 'basecamp', :action => 'contacts_companies'

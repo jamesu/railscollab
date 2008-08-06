@@ -33,6 +33,20 @@ class BasecampController < ApplicationController
   def projects_list
   end
   
+  def project_show
+    begin
+       @project = Project.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render :text => 'Error', :status => 404
+      return
+    end
+	
+	if not @project.can_be_seen_by(@logged_user)
+      render :text => 'Error', :status => 404
+      return
+    end
+  end
+  
   # /contacts/companies
   def contacts_companies
   	if !@logged_user.member_of_owner?
