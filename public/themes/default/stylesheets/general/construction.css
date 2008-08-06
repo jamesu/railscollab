@@ -80,10 +80,10 @@ body {
   margin-right: 10px;
 }
 
-#userbox .popup_menu_selector {
+#userbox .PopupMenuWidgetAttachTo {
 }
 
-#userbox .popup_menu {
+#userbox .PopupMenuWidgetDiv {
   position: absolute;
   border: 1px solid #666;
   background: white;
@@ -93,17 +93,17 @@ body {
   display: none;
 }
 
-#userbox .popup_menu p {
+#userbox .PopupMenuWidgetDiv p {
   margin: 0;
   font-weight: bolder;
 }
 
-#userbox .popup_menu ul {
+#userbox .PopupMenuWidgetDiv ul {
   margin-left: 12px;
   padding-left: 5px;
 }
 
-#userbox .popup_menu ul li {
+#userbox .PopupMenuWidgetDiv ul li {
   display: list-item;
   font-weight: normal;
   list-style: square;
