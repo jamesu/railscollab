@@ -1,0 +1,1 @@
+render :partial => 'basecamp/project', :collection => [@project], :locals => {:xml_instance => xml}
