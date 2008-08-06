@@ -597,6 +597,8 @@ category_general_name: General
 category_general_description: "General RailsCollab Settings"
 category_mailing_name: Mailing
 category_mailing_description: "Options for handling email sending"
+category_services_name: Services
+category_services_description: "Options for handling third party services"
 
 # Configuration options
 # option_<name>_name
@@ -623,7 +625,7 @@ option_search_enabled_name: "Search enabled"
 option_search_enabled_description: "Allow project searching"
 option_file_upload_storage_name: "File storage"
 option_file_upload_storage_description: "Select where you want to store attachments, avatars, logos and any other uploaded documents. Database storage engine is recommended."
-file_storage_file_system: "File system" 
+file_storage_amazon_s3: "Amazon S3" 
 file_storage_local_database: "Database"
 notification_method_test: "Test"
 notification_method_smtp: "SMTP"
@@ -646,6 +648,13 @@ option_notification_email_smtp_description: "Settings used for the SMTP mail tra
 option_notification_email_sendmail_name: "Sendmail transport settings"
 option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
 
+# services
+option_storage_s3_login_name: "Amazon S3 Login"
+option_storage_s3_login_description: "Used when file storage is set to Amazon S3"
+storage_s3_access_key_id: "Access Key"
+storage_s3_secret_access_key_id: "Secret Access Key"
+option_storage_s3_bucket_name: "Amazon S3 Bucket"
+option_storage_s3_bucket_description: "Bucket in which files are stored on S3"
 
 # Administration tools
 # administration_tool_<name>

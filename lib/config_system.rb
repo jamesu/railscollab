@@ -41,3 +41,11 @@ rescue Exception
 	AppConfig.no_gd2 = true
 end
 
+# Try loading AWS::S3
+begin
+	require 'aws/s3'
+	AppConfig.no_s3 = false
+rescue Exception
+	AppConfig.no_s3 = true
+end
+

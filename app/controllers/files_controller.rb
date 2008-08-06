@@ -247,7 +247,11 @@ class FilesController < ApplicationController
     content_data = FileRepo.get_data(@file_revision.repository_id)
     
     if !content_data.nil?
-    	send_data content_data, :type => @file_revision.type_string, :filename => @file.filename, :length => @file_revision.filesize
+        if content_data.class == Hash
+           redirect_to content_data[:url]
+        else
+    	   send_data content_data, :type => @file_revision.type_string, :filename => @file.filename, :length => @file_revision.filesize
+    	end
     else
     	render :text => '404 Not Found', :status => 404
     end

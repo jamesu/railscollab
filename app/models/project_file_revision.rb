@@ -68,9 +68,9 @@ class ProjectFileRevision < ActiveRecord::Base
 		
 		# Store to the repository
 		if self.new_record?
-			self.repository_id = FileRepo.handle_storage(value.read)
+			self.repository_id = FileRepo.handle_storage(value.read, value.original_filename, self.type_string, self.project_file.is_private)
 		else
-			self.repository_id = FileRepo.handle_update(self.repository_id, value.read)
+			self.repository_id = FileRepo.handle_update(self.repository_id, value.read, self.type_string, self.project_file.is_private)
 		end
 		
 		self.update_thumb if !self.repository_id.nil?
@@ -90,13 +90,13 @@ class ProjectFileRevision < ActiveRecord::Base
 		max_height = AppConfig.max_thumbnail_height
 				
 		# Now try to make it!
-		image_data = FileRepo.get_data(self.repository_id)
+		image_data = FileRepo.get_data(self.repository_id, false)
 		image = GD2::Image.load(image_data)
 		
 		image.resize!(image.width > max_width ? max_width : image.width,
 					  image.height > max_height ? max_height : image.height)
 		
-		self.thumb_filename = FileRepo.handle_storage(image.jpeg(AppConfig.file_thumbnail_quality))
+		self.thumb_filename = FileRepo.handle_storage(image.jpeg(AppConfig.file_thumbnail_quality), "thumbnail_#{self.id}.jpg",  'image/jpeg', self.project_file.is_private)
 	end
 	
 	def filetype_icon_url

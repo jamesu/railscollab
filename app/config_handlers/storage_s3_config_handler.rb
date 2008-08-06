@@ -19,19 +19,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-class FileStorageConfigHandler < ConfigHandler
+class StorageS3ConfigHandler < ConfigHandler
 	
 	def value
-		@rawValue
+		res = YAML.load(@rawValue)
+		return res.nil? ? {} : {:access_key_id => res['access_key_id'], 
+		                        :secret_access_key => res['secret_access_key']}
 	end
 	
 	def value=(val)
-		@rawValue = val unless !(['amazon_s3', 'local_database'].include?(val))
+		if val.class == String:
+		  @rawValue = val
+		else
+		  @rawValue = YAML.dump(val).to_s
+		end
 	end
 	
 	def render(name, options)
-		opts = options_for_select({:file_storage_amazon_s3.l => 'amazon_s3', 
-		                           :file_storage_local_database.l => 'local_database'}, self.value)
-		select_tag name, opts, options
+		values = self.value
+      
+		"<label for=\"#{name}[:access_key_id]\">#{:storage_s3_access_key_id.l}</label>" + text_field_tag("#{name}[access_key_id]", values[:access_key_id], options.merge(:class => 'middle') ) +
+		"<label for=\"#{name}[:secret_access_key]\">#{:storage_s3_secret_access_key_id.l}</label>" + text_field_tag("#{name}[secret_access_key]", values[:secret_access_key], options.merge(:class => 'middle'))
 	end
 end

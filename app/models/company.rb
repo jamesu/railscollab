@@ -134,7 +134,7 @@ class Company < ActiveRecord::Base
 			return
 		end
 		
-		self.logo_file = FileRepo.handle_storage(image.png)
+		self.logo_file = FileRepo.handle_storage(image.png, "logo_#{self.id}.png", 'image/png')
 	end
 	
 	def logo_url

@@ -344,7 +344,7 @@ class User < ActiveRecord::Base
 			return
 		end
 		
-		self.avatar_file = FileRepo.handle_storage(image.png)
+		self.avatar_file = FileRepo.handle_storage(image.png, "avatar_#{self.id}.png", 'image/png')
 	end
 	
 	def avatar_url

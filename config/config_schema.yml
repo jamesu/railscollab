@@ -200,5 +200,18 @@ mailing:
     default:
       location: "/usr/bin/sendmail"
       arguments: "-i -t -O DeliveryMode='b'"
-    
-    
+
+services:
+  storage_s3_login:  
+    handler: StorageS3ConfigHandler
+    comment: ""
+    order: 2
+    default:
+      access_key_id: "fill me in"
+      secret_access_key: "123"
+  
+  storage_s3_bucket:
+    handler: StringConfigHandler
+    default: "fill_me_in"
+    comment: ""
+    order: 0

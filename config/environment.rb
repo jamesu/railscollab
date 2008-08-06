@@ -96,6 +96,17 @@ ActionController::Base.asset_host = Proc.new { |source|
      end
 }
 
+# Amazon S3
+if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?
+require 'aws/s3'
+s3_opts = AppConfig.storage_s3_login
+begin
+    AWS::S3::Base.establish_connection!(s3_opts)
+rescue
+    AppConfig.no_s3 = true
+end
+end
+
 # Localisation
 Globalite.locale = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym
 
