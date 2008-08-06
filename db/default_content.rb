@@ -6,6 +6,7 @@ initial_user_displayname = ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME']
 initial_user_password = ENV['RAILSCOLLAB_INITIAL_PASSWORD']
 initial_user_email = ENV['RAILSCOLLAB_INITIAL_EMAIL']
 initial_company_name = ENV['RAILSCOLLAB_INITIAL_COMPANY']
+initial_site_url = ENV['RAILSCOLLAB_SITE_URL']
 
 initial_user_name ||= 'admin'
 initial_user_displayname ||= 'Administrator'
@@ -101,4 +102,11 @@ if FileType.count == 0
 	(FileType.new(:extension => 'qt', :icon => 'mov.png', :is_searchable => 0, :is_image => 0)).save!
 	(FileType.new(:extension => 'vob', :icon => 'video.png', :is_searchable => 0, :is_image => 0)).save!
 	(FileType.new(:extension => 'txt', :icon => 'doc.png', :is_searchable => 1, :is_image => 0)).save!
+end
+
+# Set site_url if available
+if !initial_site_url.nil?
+    opt = ConfigOption.find(:first, :conditions => ['name = ?', 'site_url'])
+    opt.value = initial_site_url
+    opt.save
 end

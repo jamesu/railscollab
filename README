@@ -131,6 +131,9 @@ The rake task accepts the following environment variables:
 	RAILSCOLLAB_INITIAL_COMPANY
 		The initial name of the owner company
 		(default='Company')
+	RAILSCOLLAB_SITE_URL
+		The url of your RailsCollab installation
+		(default='http://localhost:3000')
 
 Note that as with any other database rake task, you will need to have the 
 config/database.yml file present which contains the database connection
@@ -146,6 +149,7 @@ RAILSCOLLAB_INITIAL_DISPLAYNAME="Bill Gates" \
 RAILSCOLLAB_INITIAL_PASSWORD="microsoft" \
 RAILSCOLLAB_INITIAL_EMAIL="billg@microsoft.com" \
 RAILSCOLLAB_INITIAL_COMPANY="Microsoft" \
+RAILSCOLLAB_SITE_URL="projects.microsoft.com" \
 rake db:railscollab:install'
 
 And to make sure it works:
