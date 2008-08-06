@@ -223,7 +223,6 @@ class MessageController < ApplicationController
       when :post
         message_attribs = params[:message]
         
-        # TODO: set subscribers
         @message.attributes = message_attribs
         
         @message.project = @active_project
@@ -248,6 +247,9 @@ class MessageController < ApplicationController
 				@message.send_notification(user)
 			end
 		  end
+		  
+		  # Subscribe
+          @message.ensure_subscribed(@logged_user) if @message.class == ProjectMessage
           
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
 			error_status(false, :success_added_message_failed_attachments)
@@ -311,11 +313,7 @@ class MessageController < ApplicationController
       return
     end
 	
-	begin
-		@message.subscribers.find(@logged_user.id)
-	rescue ActiveRecord::RecordNotFound
-		@message.subscribers << @logged_user
-	end
+	@message.ensure_subscribed(@logged_user) if @message.class == ProjectMessage
 
     error_status(false, :success_subscribed_to_message)
     redirect_back_or_default :controller => 'message', :action => 'view', :id => @message.id

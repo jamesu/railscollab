@@ -30,7 +30,7 @@ class DateTimeConfigHandler < ConfigHandler
 	end
 	
 	def render(name, options)
-		# TODO: use fancy date select
+		# if only there was a date_select_tag...
 		text_field_tag name, self.value, options.merge(:class => 'short')
 	end
 end

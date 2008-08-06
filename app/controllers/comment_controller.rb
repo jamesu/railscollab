@@ -75,6 +75,9 @@ class CommentController < ApplicationController
           # Notify everyone
           @commented_object.send_comment_notifications(@comment)
           
+          # Subscribe if ProjectMessage
+          @commented_object.ensure_subscribed(@logged_user) if @commented_object.class == ProjectMessage
+          
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
 			error_status(false, :success_added_comment_error_files)
 		  else
@@ -102,8 +105,6 @@ class CommentController < ApplicationController
         @comment.updated_by = @logged_user
         
         if @comment.save
-          # TODO: notifications
-          
           if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
 			error_status(false, :success_edited_comment_error_files)
 		  else

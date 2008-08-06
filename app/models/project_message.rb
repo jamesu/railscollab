@@ -93,6 +93,14 @@ class ProjectMessage < ActiveRecord::Base
 		self.project_file
 	end
 	
+	def ensure_subscribed(user)
+		begin
+		  self.subscribers.find(user.id)
+		rescue ActiveRecord::RecordNotFound
+		  self.subscribers << user
+		end
+	end
+	
 	def send_comment_notifications(comment)
 		self.subscribers.each do |subscriber|
 			next if subscriber == comment.created_by
