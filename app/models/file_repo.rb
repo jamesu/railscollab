@@ -18,7 +18,7 @@ class FileRepo < ActiveRecord::Base
 	def self.handle_storage(value, id, content_type, is_private=false)
 		case AppConfig.file_upload_storage
 			when 'amazon_s3'
-				return nil if AppConfig.no_s3?
+				return nil if FileRepo.no_s3?
 				FileRepo.grab_ensure_s3_bucket
 				
 				# Grab a few random things...
@@ -58,7 +58,7 @@ class FileRepo < ActiveRecord::Base
 	def self.handle_update(id, value, content_type, is_private=false)
 		case AppConfig.file_upload_storage
 			when 'amazon_s3'
-				return nil if AppConfig.no_s3?
+				return nil if FileRepo.no_s3?
    				return FileRepo.handle_storage(value, id, content_type, is_private)
 			when 'local_database'
 			    begin
@@ -77,7 +77,7 @@ class FileRepo < ActiveRecord::Base
 	def self.handle_delete(id)
 		case AppConfig.file_upload_storage
 			when 'amazon_s3'
-				return false if AppConfig.no_s3?
+				return false if FileRepo.no_s3?
 				FileRepo.grab_ensure_s3_bucket
 				
 			    begin
