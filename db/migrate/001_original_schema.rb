@@ -317,7 +317,6 @@ class OriginalSchema < ActiveRecord::Migration
 	  end
 	
 	  add_index :searchable_objects, ["project_id"]
-	  # TODO: find alternative
 	  #add_index :searchable_objects, ["content"], :name => "content"
 	
 	  create_table :tags do |t|
