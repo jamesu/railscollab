@@ -31,14 +31,5 @@
      <label for="taskListFormTags"><%= :tags.l %>:</label>
      <%= text_field 'task_list', 'tags', :id => 'taskListFormTags', :class => 'long' %><br /><span class="desc"><%=:tags_info.l %></span>
   </div>
-  
-<% if false and @task_list.new_record? %>
-  <h2><%= :tasks.l %></h2>
-  <table class="blank">
-    <tr>
-      <th><%= :task.l %>:</th>
-      <th><%= :assign_to.l %>:</th>
-    </tr>
-<!-- TODO: tr with alterating background: #fff / #e8e8e8 & td's with short textarea & selection box -->
-  </table>
+
 <% end %>

@@ -295,5 +295,5 @@ Event.addBehavior({
 	  var target_element = $('messageFormAdditionalText');
 	  target_element.style.display = target_element.style.display == 'none' ? 'block' : 'none' ;
       $('messageFormAdditionalTextToggle').innerHTML = target_element.style.display == 'none' ? 'Expand' : 'Collapse';
-    },
+    }
 });
