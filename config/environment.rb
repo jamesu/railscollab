@@ -96,6 +96,17 @@ ActionController::Base.asset_host = Proc.new { |source|
      end
 }
 
+# Or, enable asset hosts. This will use asset[0-3].example.com, make sure to change the
+# URL appropriately.
+
+# ActionController::Base.asset_host = Proc.new { |source|
+#      if source.starts_with?('/images') or source.starts_with?('/stylesheets')
+#        "http://assets#{rand(3)}.example.com/themes/#{AppConfig.site_theme}"
+#      else
+#        "http://assets#{rand(3)}.example.com"
+#      end
+# }
+
 # Amazon S3
 if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?
 require 'aws/s3'
