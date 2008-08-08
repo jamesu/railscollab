@@ -8,6 +8,14 @@ class AccessController < ApplicationController
 
   layout 'dialog'
   
+  def index
+    if !@logged_user.nil?
+        redirect_to :controller => 'dashboard'
+    else
+        redirect_to :action => 'login'
+    end
+  end
+  
   def login
     case request.method
       when :post

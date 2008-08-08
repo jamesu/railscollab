@@ -329,7 +329,7 @@ delete: Delete
 remove: Remove
 read_more: "Read more..."
 message_seperator: "****"
-message_delete_confirm: "Are you sure you want to delete this message?"
+message_confirm_delete: "Are you sure you want to delete this message?"
 
 # Task form
 private_task_list: Private task list

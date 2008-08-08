@@ -177,9 +177,13 @@ class ProjectTask < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :text, :assigned_to_id
+	attr_accessible :text, :assigned_to_id, :task_list_id
 	
 	# Validation
 	
 	validates_presence_of :text
+	
+	validates_each :task_list, :allow_nil => false do |record, attr, value|
+		record.errors.add attr, :not_part_of_project.l if (value.project_id != record.project_id) or !(value.can_be_changed_by(record.updated_by)) 
+	end
 end
