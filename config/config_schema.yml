@@ -118,6 +118,18 @@ general:
     comment: ""
     order: 1
     
+  use_asset_hosts:
+    handler: BoolConfigHandler
+    default: false
+    comment: "Enable usage of asset hosts. Also see assets_host_url"
+    order: 1
+
+  asset_hosts_url:
+    handler: StringConfigHandler
+    default: "example.com"
+    comment: "'example.com' will enable assets[0-3].example.com as asset hosts."
+    order: 1    
+    
   file_upload_storage:   
     handler: FileStorageConfigHandler
     default: "local_database"

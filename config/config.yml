@@ -1,0 +1,52 @@
+--- 
+:minutes_to_activity_log_expire: 5
+:max_logo_height: 50
+:notification_email_smtp: 
+  authentication: login
+  port: 123
+  address: localhost
+  user_name: user
+  password: password
+:max_avatar_width: 50
+:files_per_page: 10
+:search_results_per_page: 20
+:messages_per_page: 10
+:allow_openid: 1
+:logs_per_project: 5
+:file_thumbnail_quality: 50
+:file_upload_storage: amazon_s3
+:times_per_page: 10
+:file_thumbnail_width: 50
+:search_enabled: 1
+:notification_email_sendmail: 
+  arguments: -i -t -O DeliveryMode='b'
+  location: /usr/bin/sendmail
+:storage_s3_login: 
+  :access_key_id: fill me in
+  :secret_access_key: "123"
+:max_upload_size: 10485760
+:max_logo_width: 50
+:max_avatar_height: 50
+:default_project_folders: 
+- images
+- documents
+- other
+:storage_s3_bucket: fill_me_in
+:max_thumbnail_width: 50
+:minutes_to_comment_edit_expire: 3
+:max_attachments: 5
+:default_project_message_categories: 
+- General
+- Projects
+- Problems
+:notification_email_method: test
+:file_thumbnail_height: 50
+:default_language: en-US
+:site_url: http://localhost:3000
+:project_logs_per_page: 10
+:max_thumbnail_height: 50
+:default_project_message_category: General
+:site_name: RailsCollab
+:file_upload_directory: public/uploads
+:site_theme: default
+:notification_email_address: RailsCollab Notification <fill.this.in@localhost>

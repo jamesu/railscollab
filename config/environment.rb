@@ -90,22 +90,11 @@ end
 # Theming
 ActionController::Base.asset_host = Proc.new { |source|
      if source.starts_with?('/images') or source.starts_with?('/stylesheets')
-       "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
+       AppConfig.use_asset_hosts ? "assets{rand(3)}.#{AppConfig.asset_hosts_url}/themes/#{AppConfig.site_theme}" : "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
      else
-       "#{AppConfig.site_url}"
+       AppConfig.use_asset_hosts ? "assets{rand(3)}.#{AppConfig.asset_hosts_url}" : "#{AppConfig.site_url}"
      end
 }
-
-# Or, enable asset hosts. This will use asset[0-3].example.com, make sure to change the
-# URL appropriately.
-
-# ActionController::Base.asset_host = Proc.new { |source|
-#      if source.starts_with?('/images') or source.starts_with?('/stylesheets')
-#        "http://assets#{rand(3)}.example.com/themes/#{AppConfig.site_theme}"
-#      else
-#        "http://assets#{rand(3)}.example.com"
-#      end
-# }
 
 # Amazon S3
 if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?

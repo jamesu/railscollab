@@ -3,3 +3,5 @@ tmp/restart.txt
 tmp/**/*
 index/**
 .DS_Store
+config/database.yml
+
