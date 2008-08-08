@@ -230,7 +230,7 @@ span.required {
 }
 
 input.openid_login {
-   background: url(/images/login-bg.gif) no-repeat;
+   background: url(../images/login-bg.gif) no-repeat;
    background-color: #fff;
    background-position: 0 50%;
    color: #000;
