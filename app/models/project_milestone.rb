@@ -235,7 +235,7 @@ class ProjectMilestone < ActiveRecord::Base
     end
     
     def comment_can_be_added_by(user)
-	 project.is_active? and project.has_member(user)
+	 project.is_active? and project.has_member(user) and !user.is_anonymous?
     end
 	
 	# Helpers

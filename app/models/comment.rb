@@ -36,6 +36,7 @@ class Comment < ActiveRecord::Base
 	before_destroy :process_destroy
 	 
 	def process_params
+	  self.is_anonymous = self.created_by.is_anonymous?
 	end
 	
 	def process_create
@@ -77,7 +78,7 @@ class Comment < ActiveRecord::Base
 	  if comment_project.is_active? and comment_project.has_member(user)
 	    return true if (user.member_of_owner? and user.is_admin)
 	  	
-	  	if self.created_by == user
+	  	if self.created_by == user and !user.is_anonymous?
 	  		now = Time.now.utc
 		    return (now <= (self.created_on + (60 * AppConfig.minutes_to_comment_edit_expire)))
 	    end
@@ -130,9 +131,12 @@ class Comment < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :text, :is_private
+	attr_accessible :text, :is_private, :author_name, :author_email
 	
 	# Validation
+	
+	validates_presence_of :author_name, :if => Proc.new { |obj| obj.is_anonymous }
+	validates_presence_of :author_email, :if => Proc.new { |obj| obj.is_anonymous }
 	
 	validates_presence_of :text
 	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|

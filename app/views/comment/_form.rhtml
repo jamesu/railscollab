@@ -1,5 +1,17 @@
 <%= error_messages_for :comment %>
 
+<% if @logged_user.is_anonymous? %>
+  <div>
+    <label for="commentFormName"><%= :name.l %>: <span class="label_required">*</span></label>
+    <%= text_field 'comment', 'author_name', :id => 'commentFormName', :class => 'long' %>
+  </div>
+  
+  <div>
+    <label for="commentFormEmail"><%= :email_address.l %>: <span class="label_required">*</span></label>
+    <%= text_field 'comment', 'author_email', :id => 'commentFormEmail', :class => 'long' %>
+  </div>
+<% end %>
+  
   <div class="formAddCommentText">
     <label for="addCommentText"><%= :text.l %>: <span class="label_required">*</span></label>
     <%= text_area 'comment', 'text', :id => 'addCommentText', :class => 'comment' %>

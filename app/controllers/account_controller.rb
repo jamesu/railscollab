@@ -39,10 +39,11 @@ class AccountController < ApplicationController
   end
   
   def edit_profile
-    if not @user.profile_can_be_updated_by(@logged_user)
+  	if not @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
-    end
+  	end
     
     case request.method
       when :post
@@ -100,17 +101,19 @@ class AccountController < ApplicationController
   end
   
   def edit_password
+    if @user.nil?
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
+    
+  	if not @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+  	end
+        
     case request.method
       when :post
-        if @user.nil?
-          redirect_back_or_default :controller => 'dashboard'
-          return
-        end
-        
-        if not @user.profile_can_be_updated_by(@logged_user)
-          @user.errors.add(:logged_user, :has_insufficient_permissions.l)
-          return
-        end
         
         @password_data = params[:user]
         if not @logged_user.is_admin?
@@ -145,11 +148,11 @@ class AccountController < ApplicationController
   end
   
   def update_permissions
-    if !@user.permissions_can_be_updated_by(@logged_user)
+  	if not @user.profile_can_be_updated_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return
-    end
+  	end
     
     @projects = @user.company.projects
     @permissions = ProjectUser.permission_names()

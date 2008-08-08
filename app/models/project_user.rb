@@ -87,6 +87,6 @@ class ProjectUser < ActiveRecord::Base
 	end
 	
 	def self.check_permission(user, project, permission)
-	 return ProjectUser.find(:first, :conditions => "project_id = #{project.id} AND user_id = #{user.id} AND #{permission} = 1", :select => :user_id)
+	 return ProjectUser.find(:first, :conditions => "project_id = #{project.id} AND user_id = #{user.id} AND #{permission} = 1", :select => [:user_id, :username])
 	end
 end

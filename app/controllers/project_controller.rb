@@ -161,7 +161,7 @@ class ProjectController < ApplicationController
         
         # Grab the user set
         
-        project_users = User.find(:all, :conditions => "company_id IN (#{real_companies_ids})", :select => ['id, company_id'])
+        project_users = User.find(:all, :conditions => "company_id IN (#{real_companies_ids})", :select => ['id, company_id, username'])
         
         # Destroy the ProjectUser entry for each non-active user
         

@@ -175,6 +175,7 @@ class BasecampController < ApplicationController
     @comment = Comment.new(:text => comment_attribs[:body])
     @comment.rel_object = message
     @comment.created_by = @logged_user
+    @comment.author_homepage = request.remote_ip
     
     if @comment.save
     	# Notify everyone

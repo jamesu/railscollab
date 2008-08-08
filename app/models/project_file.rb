@@ -270,7 +270,11 @@ class ProjectFile < ActiveRecord::Base
     end
     
     def comment_can_be_added_by(user)
-     return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
+     if user.is_anonymous?
+        return (self.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !self.is_private)
+     else
+        return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
+     end
     end
     
 	# Accesibility

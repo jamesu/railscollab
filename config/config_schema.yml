@@ -159,26 +159,32 @@ general:
     default: false
     comment: ""
     order: 8
+
+  allow_anonymous:
+    handler: BoolConfigHandler
+    default: false
+    comment: ""
+    order: 9
     
   site_theme:
     handler: ThemeConfigHandler
     default: "default"
     comment: ""
-    order: 9
+    order: 10
   
   # Localisation
   default_language: 
     handler: StringConfigHandler
     default: en-US
     comment: ""
-    order: 10
+    order: 11
 
   # Ferret search
   search_enabled: 
     handler: BoolConfigHandler
     default: true
     comment: ""
-    order: 11
+    order: 12
 
 mailing:
   notification_email_address:

@@ -15,7 +15,7 @@
 <% else %>
     <p><%= :no_subscribers.l %></p>
 <% end %>
-<% if !@subscribers.include?(@logged_user) %>
+<% if @message.can_subscribe(@logged_user) and !@subscribers.include?(@logged_user) %>
     <p><%= link_to :message_subscribe.l, {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:method => :post, :confirm => :message_subscription_confirmation.l} %></p>
 <% end %>
   </div>

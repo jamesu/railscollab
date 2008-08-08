@@ -28,7 +28,6 @@ class CommentController < ApplicationController
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
 
-  before_filter :process_session
   before_filter :obtain_comment, :except => [:add]
   after_filter  :user_track
   
@@ -52,6 +51,7 @@ class CommentController < ApplicationController
     end
 	
 	@active_project = @commented_object.project
+    @active_projects = @logged_user.active_projects
     
     if not @commented_object.comment_can_be_added_by(@logged_user)
       error_status(true, :insufficient_permissions)
@@ -70,6 +70,8 @@ class CommentController < ApplicationController
       	@comment.attributes = comment_attribs
       	@comment.rel_object = @commented_object
       	@comment.created_by = @logged_user
+      	@comment.is_anonymous = @logged_user.is_anonymous?
+      	@comment.author_homepage = request.remote_ip
       	
         if @comment.save
           # Notify everyone
@@ -84,6 +86,8 @@ class CommentController < ApplicationController
 			error_status(false, :success_added_comment)
           end
           redirect_back_or_default @commented_object.object_url
+        else
+          render :layout => 'dashboard'
         end
     end
   end
@@ -96,6 +100,7 @@ class CommentController < ApplicationController
     end
     
     @commented_object = @comment.rel_object
+	@active_project = @commented_object.project
     
     case request.method
       when :post
@@ -132,6 +137,8 @@ class CommentController < ApplicationController
 private
 
   def obtain_comment
+    @active_projects = @logged_user.active_projects
+     
     begin
        @comment = Comment.find(params[:id])
     rescue ActiveRecord::RecordNotFound

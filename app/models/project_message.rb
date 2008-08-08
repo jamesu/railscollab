@@ -152,6 +152,10 @@ class ProjectMessage < ActiveRecord::Base
     
     # Message permissions
     
+    def can_subscribe(user)
+     user.member_of_owner? and !user.is_anonymous?
+    end
+    
     def can_be_managed_by(user)
      project.is_active? and user.has_permission(project, :can_manage_messages)
     end
@@ -165,7 +169,11 @@ class ProjectMessage < ActiveRecord::Base
     end
     
     def comment_can_be_added_by(user)
-     return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
+     if user.is_anonymous?
+        return (self.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !self.is_private)
+     else
+        return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
+     end
     end
 
 	def self.select_list(project)

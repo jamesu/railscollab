@@ -108,9 +108,19 @@ module LoginSystem
     
     # Don't exist? what a pity!
     if @logged_user.nil?
-      session['user_id'] = nil
-      access_denied if do_action
-      return false
+      # Check to see if we accept anonymous logins...
+      if AppConfig.allow_anonymous
+        @logged_user = User.find(:first, :conditions => ['username = ?', 'Anonymous'])
+        if @logged_user.nil?
+          session['user_id'] = nil
+          access_denied if do_action
+          return false
+        end
+      else
+        session['user_id'] = nil
+        access_denied if do_action
+        return false
+      end
     end
     
     if authorize?(@logged_user)

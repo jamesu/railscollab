@@ -234,7 +234,7 @@ class User < ActiveRecord::Base
 	# Specific permissions
 	
     def profile_can_be_updated_by(user)
-      return (self.id == user.id or (user.member_of_owner? and user.is_admin))
+      return ((self.id == user.id and !user.is_anonymous?) or (user.member_of_owner? and user.is_admin))
     end
     
     def permissions_can_be_updated_by(user)
@@ -257,11 +257,15 @@ class User < ActiveRecord::Base
 	end
 	
 	def member_of_owner?
-		self.company.client_of.nil?
+		!self.is_anonymous? and self.company.client_of.nil?
 	end
 	
 	def owner_of_owner?
 		self.company.client_of.nil? and self.company.created_by.id == self.id
+	end
+	
+	def is_anonymous?
+	   AppConfig.allow_anonymous and self.username == 'Anonymous'
 	end
 	
 	def is_part_of(project)
@@ -273,11 +277,13 @@ class User < ActiveRecord::Base
 	end
 	
 	def has_all_permissions(project)
+	 return false if is_anonymous?
 	 perms = self.permissions_for(project)
 	 return perms.nil? ? false : (self.is_admin or perms.has_all_permissions?)
 	end
 	
 	def has_permission(project, pname)
+	 return false if is_anonymous?
 	 perms = self.permissions_for(project)
 	 return perms.nil? ? false : (self.is_admin or perms[pname])
 	end
@@ -367,7 +373,7 @@ class User < ActiveRecord::Base
 	  datetime = Time.now.utc
 	  datetime -= (active_in * 60)
 	  
-	  User.find(:all, :conditions => "last_activity > '#{datetime.strftime('%Y-%m-%d %H:%M:%S')}'", :select => "id, company_id, display_name")
+	  User.find(:all, :conditions => "last_activity > '#{datetime.strftime('%Y-%m-%d %H:%M:%S')}'", :select => "id, company_id, username, display_name")
 	end
 	
 	def self.select_list
