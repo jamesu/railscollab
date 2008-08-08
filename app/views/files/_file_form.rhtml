@@ -75,15 +75,15 @@
     <div class="optionControl"><%= yesno_toggle 'file', 'comments_enabled', :class => 'yes_no', :id => 'fileFormEnableComments' %></div>
     <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
-  
+<% if AppConfig.allow_anonymous %>  
   <div class="objectOption">
     <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'file', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'fileFormEnableAnonymousComments' %></div>
     <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
   </div>
+<% end %>
   </fieldset>
 <% end %>
-
   <fieldset>
     <legend><%= :tags.l %></legend>
     <%= text_field 'file', 'tags', :id => 'fileFormTags', :class => 'long' %><br /><span class="desc"><%= :tags_info.l %></span>

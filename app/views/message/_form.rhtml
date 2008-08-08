@@ -46,12 +46,14 @@
     <div class="optionControl"><%= yesno_toggle 'message', 'comments_enabled', :class => 'yes_no', :id => 'messageFormEnableComments' %></div>
     <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
-  
+
+<% if AppConfig.allow_anonymous %>    
   <div class="objectOption">
     <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'message', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'messageFormEnableAnonymousComments' %></div>
     <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
   </div>
+<% end %>
   </fieldset>
 <% end %>
   
