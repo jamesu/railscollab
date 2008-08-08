@@ -96,6 +96,10 @@ class Company < ActiveRecord::Base
 	  return (user.is_admin and user.member_of_owner?)
 	end
 	
+	def can_be_removed_by(user)
+	  return (!self.is_owner? and user.is_admin and user.member_of_owner?)
+	end
+	
 	def can_be_managed_by(user)
 	 return (user.is_admin? and !self.is_owner?)
 	end

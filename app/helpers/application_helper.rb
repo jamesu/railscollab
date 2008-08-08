@@ -153,7 +153,7 @@ module ApplicationHelper
 	
 	def actions_for_company(company)
 	   [{:name => :edit.l, :url => {:controller => 'company', :action => 'edit', :id => @project.id, :company => company.id}, :cond => company.can_be_edited_by(@logged_user)},
-	    {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :company => company.id}, :cond => company.can_be_edited_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}]
+	    {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :company => company.id}, :cond => company.can_be_removed_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}]
 	end
 	
 	def actions_for_comment(comment)
