@@ -25,7 +25,7 @@ class Comment < ActiveRecord::Base
 	
 	belongs_to :rel_object, :polymorphic => true, :counter_cache => true
 	
-	has_many :attached_file, :as => 'rel_object', :dependent => :destroy
+	has_many :attached_file, :as => 'rel_object'
 	has_many :project_file, :through => :attached_file
 	
 	acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true

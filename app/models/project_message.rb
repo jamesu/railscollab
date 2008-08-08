@@ -37,7 +37,7 @@ class ProjectMessage < ActiveRecord::Base
 		end
 	end
 	#has_many :tags, :as => 'rel_object', :dependent => :destroy
-	has_many :attached_file, :as => 'rel_object', :dependent => :destroy
+	has_many :attached_file, :as => 'rel_object'
 	
 	has_many :project_file, :through => :attached_file
 	
