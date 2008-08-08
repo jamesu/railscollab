@@ -90,9 +90,9 @@ end
 # Theming
 ActionController::Base.asset_host = Proc.new { |source|
      if source.starts_with?('/images') or source.starts_with?('/stylesheets')
-       AppConfig.use_asset_hosts ? "assets{rand(3)}.#{AppConfig.asset_hosts_url}/themes/#{AppConfig.site_theme}" : "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
+       AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}/themes/#{AppConfig.site_theme}" : "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
      else
-       AppConfig.use_asset_hosts ? "assets{rand(3)}.#{AppConfig.asset_hosts_url}" : "#{AppConfig.site_url}"
+       AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}" : "#{AppConfig.site_url}"
      end
 }
 
