@@ -122,63 +122,63 @@ general:
     handler: BoolConfigHandler
     default: false
     comment: "Enable usage of asset hosts. Also see assets_host_url"
-    order: 1
+    order: 2
 
   asset_hosts_url:
     handler: StringConfigHandler
     default: "example.com"
     comment: "'example.com' will enable assets[0-3].example.com as asset hosts."
-    order: 1    
+    order: 3   
     
   file_upload_storage:   
     handler: FileStorageConfigHandler
     default: "local_database"
     comment: ""
-    order: 1
+    order: 4
   
   default_project_folders:
     handler: TextListConfigHandler
     default: ['images', 'documents', 'other']
     comment: ""
-    order: 2
+    order: 5
   
   default_project_message_categories:
     handler: TextListConfigHandler
     default: ['General', 'Projects', 'Problems']
     comment: ""
-    order: 3
+    order: 6
 
   default_project_message_category:
     handler: StringConfigHandler
     default: General
     comment: ""
-    order: 4
+    order: 7
 
   allow_openid:
     handler: BoolConfigHandler
     default: false
     comment: ""
-    order: 5
+    order: 8
     
   site_theme:
     handler: ThemeConfigHandler
     default: "default"
     comment: ""
-    order: 6
+    order: 9
   
   # Localisation
   default_language: 
     handler: StringConfigHandler
     default: en-US
     comment: ""
-    order: 7
+    order: 10
 
   # Ferret search
   search_enabled: 
     handler: BoolConfigHandler
     default: true
     comment: ""
-    order: 8
+    order: 11
 
 mailing:
   notification_email_address:

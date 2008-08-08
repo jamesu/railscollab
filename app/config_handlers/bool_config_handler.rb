@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class BoolConfigHandler < ConfigHandler
 	
 	def value
-		@rawValue.to_i
+		@rawValue.to_i == 1
 	end
 	
 	def value=(val)
