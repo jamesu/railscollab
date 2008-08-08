@@ -159,7 +159,7 @@ class ProjectTask < ActiveRecord::Base
 	def can_be_changed_by(user)
 	 project = task_list.project
 	 
-	 return false if !user.member_of(project) or !project.is_active?
+	 return false if !user.member_of(project) or !project.is_active? or user.is_anonymous?
 	 return true if user.is_admin
 	 
 	 task_assigned_to = assigned_to

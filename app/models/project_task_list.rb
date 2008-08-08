@@ -116,7 +116,7 @@ class ProjectTaskList < ActiveRecord::Base
 	end
 	
 	def can_be_changed_by(user)      
-	 return false if ( !project.is_active? or !user.member_of(project) )
+	 return false if ( !project.is_active? or !user.member_of(project) or user.is_anonymous? )
 	 
 	 return true if user.is_admin
 	 
