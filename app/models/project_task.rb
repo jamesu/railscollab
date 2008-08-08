@@ -126,6 +126,10 @@ class ProjectTask < ActiveRecord::Base
 		end
 	end
 	
+	def last_editor
+	   self.updated_by || self.created_by
+	end
+	
 	def is_private
 		self.task_list.is_private
 	end
@@ -188,7 +192,7 @@ class ProjectTask < ActiveRecord::Base
 	validates_presence_of :text
 	
 	validates_each :task_list, :allow_nil => false do |record, attr, value|
-		record.errors.add attr, :not_part_of_project.l if (value.project_id != record.project_id) or !(value.can_be_changed_by(record.updated_by)) 
+		record.errors.add attr, :not_part_of_project.l if (value.project_id != record.project_id) or !(value.can_be_changed_by(record.last_editor)) 
 	end
 	
 	validates_each :assigned_to, :allow_nil => true do |record, attr, value|
