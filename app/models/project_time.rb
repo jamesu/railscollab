@@ -134,9 +134,13 @@ class ProjectTime < ActiveRecord::Base
 			return
 		end
 		
-		self.assigned_to = val[0] == 99 ? 
+		begin
+		  self.assigned_to = val[0] == 99 ? 
 		                   Company.find(val[1...val.length]) :
 						   User.find(val)
+		rescue ActiveRecord::RecordNotFound
+		  self.assigned_to = nil
+		end
 	end
 	
 	def assigned_to_id
@@ -293,6 +297,10 @@ class ProjectTime < ActiveRecord::Base
 	validates_presence_of :name
 	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
 		record.errors.add attr, :not_allowed.l if value == true
+	end
+	
+	validates_each :assigned_to, :allow_nil => true do |record, attr, value|
+		record.errors.add attr, :not_part_of_project.l if (!value.nil? and !value.is_part_of(record.project))
 	end
 end
 

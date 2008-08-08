@@ -264,6 +264,10 @@ class User < ActiveRecord::Base
 		self.company.client_of.nil? and self.company.created_by.id == self.id
 	end
 	
+	def is_part_of(project)
+	   self.member_of(project)
+	end
+	
 	def member_of(project)
 	 return ProjectUser.find(:all, :conditions => ["user_id = ? AND project_id = ?", self.id, project.id]).length > 0
 	end

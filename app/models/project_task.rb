@@ -107,9 +107,13 @@ class ProjectTask < ActiveRecord::Base
 			return
 		end
 		
-		self.assigned_to = val[0] == 99 ? 
+		begin
+		  self.assigned_to = val[0] == 99 ? 
 		                   Company.find(val[1...val.length]) :
 						   User.find(val)
+		rescue ActiveRecord::RecordNotFound
+		  self.assigned_to = nil
+		end
 	end
 	
 	def assigned_to_id
@@ -185,5 +189,9 @@ class ProjectTask < ActiveRecord::Base
 	
 	validates_each :task_list, :allow_nil => false do |record, attr, value|
 		record.errors.add attr, :not_part_of_project.l if (value.project_id != record.project_id) or !(value.can_be_changed_by(record.updated_by)) 
+	end
+	
+	validates_each :assigned_to, :allow_nil => true do |record, attr, value|
+		record.errors.add attr, :not_part_of_project.l if (!value.nil? and !value.is_part_of(record.task_list.project))
 	end
 end
