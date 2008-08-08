@@ -37,7 +37,7 @@ class MilestoneController < ApplicationController
   	
     @late_milestones = @active_project.project_milestones.late(include_private)
     @today_milestones = @active_project.project_milestones.todays(include_private)
-    @upcomming_milestones = @active_project.project_milestones.upcomming(include_private)
+    @upcoming_milestones = @active_project.project_milestones.upcoming(include_private)
     @completed_milestones = @active_project.project_milestones.completed(include_private)
     
     @content_for_sidebar = 'index_sidebar'

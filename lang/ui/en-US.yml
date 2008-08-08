@@ -367,10 +367,10 @@ send_email_notification_to_user: Send email notification to user
 no_active_milestones_in_project: There are no active milestones in this project
 late_milestones: Late milestones
 todays_milestones: Todays milestones
-upcomming_milestones: Upcomming milestones
+upcoming_milestones: Upcoming milestones
 milestone_days_left: "{days} days left"
 milestone_days_late: "{days} days late"
-milestone_show_all_upcomming: "&raquo; Show all {count} upcomming milestones"
+milestone_show_all_upcoming: "&raquo; Show all {count} upcoming milestones"
 today: Today
 milestone_due_date_extended_format: "%A, %d %B, %Y"
 milestone_due_date_format: "%A, %d %B"

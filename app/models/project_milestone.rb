@@ -156,7 +156,7 @@ class ProjectMilestone < ActiveRecord::Base
 		end
 	end
 	
-	def is_upcomming?
+	def is_upcoming?
 		return self.due_date.to_date > (Date.today+1)
 	end
 	

@@ -783,7 +783,7 @@ class BasecampController < ApplicationController
   					@milestones = @active_project.project_milestones.completed(include_private)
   					return
   				when 'upcoming'
-  					@milestones = @active_project.project_milestones.upcomming(include_private)
+  					@milestones = @active_project.project_milestones.upcoming(include_private)
   					return
   			end
   		end
@@ -842,7 +842,7 @@ class BasecampController < ApplicationController
     		:assigned_to_id => milestone_attribs[:responsible_party]
     }
     
-    # TODO: notify, move-upcomming-milestones, move-upcomming-milestones-off-weekends
+    # TODO: notify, move-upcoming-milestones, move-upcoming-milestones-off-weekends
     @milestone.updated_by = @logged_user
         
     unless @milestone.save

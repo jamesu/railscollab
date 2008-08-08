@@ -48,7 +48,7 @@ class ProjectController < ApplicationController
 	  
       @late_milestones = project.project_milestones.late(include_private)
       @today_milestones = project.project_milestones.todays(include_private)
-      @upcomming_milestones = project.project_milestones.upcomming(include_private)
+      @upcoming_milestones = project.project_milestones.upcoming(include_private)
       
       @visible_forms = project.project_forms.visible(include_private)
       @project_companies = project.companies(include_private)

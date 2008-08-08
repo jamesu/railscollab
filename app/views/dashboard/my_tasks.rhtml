@@ -29,7 +29,7 @@
             <span class="assignedTo"><%= :anyone.l %>:</span> 
 <% end %>
             <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => project[:id] %> - 
-<% if milestone.is_upcomming? %>
+<% if milestone.is_upcoming? %>
             <span><%= :milestone_days_left.l_with_args(:days => milestone.days_left) %></span>
 <% elsif milestone.is_late? %>
             <span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>

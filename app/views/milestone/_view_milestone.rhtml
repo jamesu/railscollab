@@ -25,7 +25,7 @@
         <span class="assignedTo"><%= h view_milestone.assigned_to.object_name %>:</span>
 <% end %>
       <%= link_to (h view_milestone.name), :controller => 'milestone', :action => 'view', :id => view_milestone.id %>
-<% if view_milestone.is_upcomming? %>
+<% if view_milestone.is_upcoming? %>
  (<%= :milestone_days_left.l_with_args(:days => view_milestone.days_left) %>)
 <% elsif view_milestone.is_late? %>
  (<%= :milestone_days_late.l_with_args(:days => view_milestone.days_late) %>)

@@ -12,7 +12,7 @@
   @additional_stylesheets = ['project/milestones']
 %>
 
-<% if @late_milestones.length > 0 or @today_milestones.length > 0 or @upcomming_milestones.length > 0 %>
+<% if @late_milestones.length > 0 or @today_milestones.length > 0 or @upcoming_milestones.length > 0 %>
 <div id="milestones">
 <% if @late_milestones.length > 0 %>
   <div id="lateMilestones">
@@ -28,10 +28,10 @@
   </div>
 <% end %>
 
-<% if @upcomming_milestones.length > 0 %>
+<% if @upcoming_milestones.length > 0 %>
   <div id="upcomingMilestones">
-  <h2><%= :upcomming_milestones.l %></h2>
-<%= render :partial => 'view_milestone', :collection => @upcomming_milestones %> 
+  <h2><%= :upcoming_milestones.l %></h2>
+<%= render :partial => 'view_milestone', :collection => @upcoming_milestones %> 
   </div>
 <% end %>
 

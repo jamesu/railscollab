@@ -64,7 +64,7 @@ class Project < ActiveRecord::Base
 			end
 		end
 		
-		def upcomming(include_private=true, reload=false)
+		def upcoming(include_private=true, reload=false)
 			ProjectMilestone.priv_scope(include_private) do
 			  find(:all, :conditions => "completed_on IS NULL AND due_date >= '#{Date.today+1}'")
 			end
