@@ -94,6 +94,8 @@ class ProjectMessage < ActiveRecord::Base
 	end
 	
 	def ensure_subscribed(user)
+		return if user.is_anonymous?
+	    
 		begin
 		  self.subscribers.find(user.id)
 		rescue ActiveRecord::RecordNotFound
