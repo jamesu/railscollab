@@ -142,7 +142,18 @@ class Company < ActiveRecord::Base
 	end
 	
 	def logo_url
-	 self.logo_file.nil? ? "/themes/#{AppConfig.site_theme}/images/logo.gif" : "/company/logo/#{self.id}.png" 
+	   unless FileRepo.no_s3?
+	       dat = FileRepo.get_data(self.logo_file)
+	       logo = dat.nil? ? nil : dat[:url]
+	   else
+	       logo = self.logo_file
+	   end
+	   
+	   if logo.nil? 
+		  "/themes/#{AppConfig.site_theme}/images/logo.gif"
+	   else
+		  "/company/logo/#{self.id}.png"
+	   end
 	end
 	
 	def users_on_project(project)

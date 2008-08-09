@@ -358,7 +358,18 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar_url
-		self.avatar_file.nil? ? "/themes/#{AppConfig.site_theme}/images/avatar.gif" : "/account/avatar/#{self.id}.png"
+	   unless FileRepo.no_s3?
+	       dat = FileRepo.get_data(self.logo_file)
+	       avatar = dat.nil? ? nil : dat[:url]
+	   else
+	       avatar = self.avatar_file
+	   end
+	   
+	   if avatar.nil? 
+		  "/themes/#{AppConfig.site_theme}/images/avatar.gif"
+	   else
+		  "/account/avatar/#{self.id}.png"
+	   end
 	end
 	
 	def object_name
