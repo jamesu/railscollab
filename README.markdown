@@ -29,11 +29,17 @@ Refer to the [INSTALL.markdown] [3] and [UPGRADE.markdown] [4] files
 
 Feel free to report any issues or feature requests you might have to the [tracker on LightHouse] [2].
 
+## Are there any screenshots or is there even a demo?
+
+Please refer to the project entry on [OpenSourceRails] [5] for any screenshots or demos.
+
 ## Licensing
 
-For licensing details, refer to the LICENSE file in the root directory.
+For licensing details, refer to the [LICENSE] [6] file in the root directory.
 
 [1]: http://www.basecamphq.com
 [2]: http://jamesu.lighthouseapp.com/projects/15349-railscollab/overview
 [3]: INSTALL.markdown
 [4]: UPGRADE.markdown
+[5]: http://www.opensourcerails.com/projects/111-RailsCollab
+[6]: LICENSE
