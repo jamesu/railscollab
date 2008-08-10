@@ -70,6 +70,7 @@ So from scratch, you'd likely do something like to following to install:
 4. Insert the previously mentioned VirtualHost configuration into your Phusion Passenger installation.
 5. Go to http://servername and login using your supplied credentials
 
+The snippit:
 
 	RAILSCOLLAB_INITIAL_USER="billg" \
 	RAILSCOLLAB_INITIAL_DISPLAYNAME="Bill Gates" \
