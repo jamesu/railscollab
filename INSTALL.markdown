@@ -68,18 +68,18 @@ So from scratch, you'd likely do something like to following to install:
 2. Create a config/database.yml file based on config/database.yml.template, using either the development or production environments as your basis.
 3. Run the following
 
-    RAILSCOLLAB_INITIAL_USER="billg" \
-    RAILSCOLLAB_INITIAL_DISPLAYNAME="Bill Gates" \
-    RAILSCOLLAB_INITIAL_PASSWORD="microsoft" \
-    RAILSCOLLAB_INITIAL_EMAIL="billg@microsoft.com" \
-    RAILSCOLLAB_INITIAL_COMPANY="Microsoft" \
-    RAILSCOLLAB_SITE_URL="projects.microsoft.com" \
-    rake db:railscollab:install
+	RAILSCOLLAB_INITIAL_USER="billg" \
+	RAILSCOLLAB_INITIAL_DISPLAYNAME="Bill Gates" \
+	RAILSCOLLAB_INITIAL_PASSWORD="microsoft" \
+	RAILSCOLLAB_INITIAL_EMAIL="billg@microsoft.com" \
+	RAILSCOLLAB_INITIAL_COMPANY="Microsoft" \
+	RAILSCOLLAB_SITE_URL="projects.microsoft.com" \
+	rake db:railscollab:install
 
 And to make sure it works:
-4) Insert the previously mentioned VirtualHost configuration into your 
+4. Insert the previously mentioned VirtualHost configuration into your 
 Phusion Passenger installation.
-5) Go to http://<server name> and login using your supplied credentials
+5. Go to http://servername and login using your supplied credentials
 
 For more advanced deployment (e.g. using FastCGI or load balancing proxies), refer to the Ruby on Rails documentation.
 
