@@ -11,12 +11,12 @@ which instead of Ruby is written in PHP.
 
 In RailsCollab, you have the following:
 
-# *Task lists* - to keep track of what needs to get done, and who is responsible
-# *Milestones* - to track what needs to get done and by whom
-# *Times* - to record how much time has been spent on a project or task
-# *Files* - to share data with your clients
-# *Messages* - for centralized communication
-# *Forms* - providing an obvious way for clients to report issues
+* *Task lists* - to keep track of what needs to get done, and who is responsible
+* *Milestones* - to track what needs to get done and by whom
+* *Times* - to record how much time has been spent on a project or task
+* *Files* - to share data with your clients
+* *Messages* - for centralized communication
+* *Forms* - providing an obvious way for clients to report issues
 
 You can add clients to your projects at any time. Each member of a client can have a login, 
 whose access can be restricted to certain elements of the project.
