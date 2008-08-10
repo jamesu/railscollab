@@ -278,14 +278,14 @@ class User < ActiveRecord::Base
 	
 	def has_all_permissions(project)
 	 return false if is_anonymous?
-	 perms = self.permissions_for(project)
-	 return perms.nil? ? false : (self.is_admin or perms.has_all_permissions?)
+	 @@cached_permissions ||= self.permissions_for(project)
+	 return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions.has_all_permissions?)
 	end
 	
 	def has_permission(project, pname)
 	 return false if is_anonymous?
-	 perms = self.permissions_for(project)
-	 return perms.nil? ? false : (self.is_admin or perms[pname])
+	 @@cached_permissions ||= self.permissions_for(project)
+	 return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions[pname])
 	end
 	
 	def permissions_for(project)

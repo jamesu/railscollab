@@ -29,7 +29,7 @@ module ProjectHelper
 	  items << {:id => :messages, :url => "/project/#{act_proj}/message"} if true
 	  items << {:id => :tasks, :url => "/project/#{act_proj}/task"} if true
 	  items << {:id => :milestones, :url => "/project/#{act_proj}/milestone"} if true
-	  items << {:id => :time, :url => "/project/#{act_proj}/time"} if true
+	  items << {:id => :time, :url => "/project/#{act_proj}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)
 	  items << {:id => :files, :url => "/project/#{act_proj}/files"} if true
 	  items << {:id => :forms, :url => "/project/#{act_proj}/form"} if @logged_user.is_admin?
 	  items << {:id => :people, :url => "/project/#{act_proj}/people"} if true

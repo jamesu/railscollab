@@ -34,6 +34,11 @@ class TimeController < ApplicationController
   after_filter  :user_track, :only => [:index, :view, :by_task] 
   
   def index
+    if not @logged_user.has_permission(@active_project, :can_manage_time)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'project'
+    end
+    
     @project = @active_project
     
     @times = ProjectTime.find(:all, :conditions => @time_conditions, :page => {:size => AppConfig.times_per_page, :current => @current_page}, :order => "#{@sort_type} #{@sort_order}")
@@ -44,6 +49,11 @@ class TimeController < ApplicationController
   end
   
   def by_task
+    if not @logged_user.has_permission(@active_project, :can_manage_time)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'project'
+    end
+    
     @project = @active_project
     
     @tasks = ProjectTime.find_by_task_list({:order => "#{@active_project.connection.quote_column_name 'order'} DESC"}, @time_conditions, "#{@sort_type} #{@sort_order}")
@@ -52,7 +62,7 @@ class TimeController < ApplicationController
   end
   
   def view
-    if not @time.can_be_seen_by(@logged_user)
+    if not @logged_user.can_be_seen_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
