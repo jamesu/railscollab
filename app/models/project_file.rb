@@ -157,7 +157,8 @@ class ProjectFile < ActiveRecord::Base
 		if !files.nil?
 			files.each do |file|
 				if file.class != StringIO and 
-				   file.class != ActionController::UploadedStringIO
+				   file.class != ActionController::UploadedStringIO and
+				   file.class != ActionController::UploadedTempfile
 					count += 1
 					next
 				end
