@@ -123,7 +123,7 @@ class FileRepo < ActiveRecord::Base
 				begin
 				  S3Object.delete(file_repo.content, @@s3_bucket)
 				rescue
-				  return false
+				  logger.error "Couldn't delete '#{file_repo.content}' from S3"
 				end
 				
 				file_repo.destroy

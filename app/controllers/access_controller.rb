@@ -8,6 +8,8 @@ class AccessController < ApplicationController
 
   layout 'dialog'
   
+  filter_parameter_logging :password
+  
   def index
     if !@logged_user.nil?
         redirect_to :controller => 'dashboard'

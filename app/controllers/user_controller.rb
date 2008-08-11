@@ -23,6 +23,8 @@ class UserController < ApplicationController
 
   layout 'dashboard'
   
+  filter_parameter_logging :password
+  
   verify :method => :post,
   		 :only => [ :delete ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },

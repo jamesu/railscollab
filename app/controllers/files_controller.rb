@@ -27,6 +27,8 @@ class FilesController < ApplicationController
   		 :only => [ :delete_folder, :delete_file, :detatch_from_object ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'file', :action => 'index' }
+  
+  filter_parameter_logging :file_data
 
   before_filter :process_session, :except => [:thumbnail]
   before_filter :accept_folder_name, :only => [:browse_folder, :edit_folder, :delete_folder]

@@ -27,7 +27,9 @@ class CommentController < ApplicationController
   		 :only => [ :delete ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
-
+  
+  filter_parameter_logging :uploaded_files
+  
   before_filter :obtain_comment, :except => [:add]
   after_filter  :user_track
   
