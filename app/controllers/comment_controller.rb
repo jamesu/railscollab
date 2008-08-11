@@ -67,12 +67,13 @@ class CommentController < ApplicationController
 	  when :get
 		render :layout => 'dashboard'
       when :post
+        Comment.transaction do
+        
       	comment_attribs = params[:comment]
       	
       	@comment.attributes = comment_attribs
       	@comment.rel_object = @commented_object
       	@comment.created_by = @logged_user
-      	@comment.is_anonymous = @logged_user.is_anonymous?
       	@comment.author_homepage = request.remote_ip
       	
         if @comment.save
@@ -91,6 +92,8 @@ class CommentController < ApplicationController
         else
           render :layout => 'dashboard'
         end
+        
+        end
     end
   end
   
@@ -106,6 +109,8 @@ class CommentController < ApplicationController
     
     case request.method
       when :post
+        Comment.transaction do
+        
         comment_attribs = params[:comment]
         
         @comment.attributes = comment_attribs
@@ -118,6 +123,8 @@ class CommentController < ApplicationController
 			error_status(false, :success_edited_comment)
           end
           redirect_back_or_default @commented_object.object_url
+        end
+        
         end
     end
   end

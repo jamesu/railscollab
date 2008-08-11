@@ -36,7 +36,7 @@ class ProjectTask < ActiveRecord::Base
 	
 	acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
 
-	before_create  :process_params
+	before_validation_on_create  :process_params
 	after_create   :process_create
 	before_update  :process_update_params
 	after_update   :update_task_list
