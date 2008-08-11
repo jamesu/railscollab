@@ -43,6 +43,8 @@
   text-align: center;
   font-size: 9px;
   font-weight: bolder;
+  background: #fafafa;
+  color: #fafafa;
 }
 
 .message .objectFilesTitle span, .message .messageCommentCount span, .message .messageTags span {

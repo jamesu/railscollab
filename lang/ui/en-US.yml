@@ -475,7 +475,7 @@ private_comment_info: "Private comments are visible only to owner company member
 comment_delete_confirm: "Are you sure you want to delete this comment?"
 no_comments_for_object: No comments are posted for this object
 comment_posted_with_user: "Posted on {time} by {user}"
-comment_posted: "Posted anonymously on {time} by <strong>{name}</strong>"
+comment_posted: "Posted on {time} by <strong>{name}</strong>"
 comment_posted_format: "%b %d. %Y %H:%M"
 
 # User

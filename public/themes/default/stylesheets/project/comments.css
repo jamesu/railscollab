@@ -22,3 +22,8 @@
   float: left;
   margin: 10px 10px 10px 0;
 }
+
+#objectComments .commentAddress {
+    color: red;
+    font-weight: bolder;
+}
