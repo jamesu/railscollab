@@ -358,9 +358,13 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar_url
-	   unless FileRepo.no_s3?
-	       dat = FileRepo.get_data(self.logo_file)
-	       avatar = dat.nil? ? nil : dat[:url]
+	   unless FileRepo.no_s3? or self.avatar_file.nil?
+	       dat = FileRepo.get_data(self.avatar_file)
+	       if !dat.nil?
+	           avatar = (dat.class == Hash) ? dat[:url] : self.avatar_file
+	       else
+	           avatar = nil
+	       end
 	   else
 	       avatar = self.avatar_file
 	   end

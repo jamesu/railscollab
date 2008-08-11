@@ -142,9 +142,13 @@ class Company < ActiveRecord::Base
 	end
 	
 	def logo_url
-	   unless FileRepo.no_s3?
+	   unless FileRepo.no_s3? or self.logo_file.nil?
 	       dat = FileRepo.get_data(self.logo_file)
-	       logo = dat.nil? ? nil : dat[:url]
+	       if !dat.nil?
+	           logo = (dat.class == Hash) ? dat[:url] : self.logo_file
+	       else
+	           logo = nil
+	       end
 	   else
 	       logo = self.logo_file
 	   end
