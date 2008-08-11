@@ -62,7 +62,7 @@ class TimeController < ApplicationController
   end
   
   def view
-    if not @logged_user.can_be_seen_by(@logged_user)
+    if not @time.can_be_seen_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'time'
       return
