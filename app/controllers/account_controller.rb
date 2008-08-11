@@ -271,6 +271,8 @@ class AccountController < ApplicationController
   	if data.empty?
   		render :text => 'Not found', :status => 404
   		return
+  	elsif data.class == Hash
+  		redirect_to data[:url], :status => 302
   	end
   	
   	send_data data, :type => 'image/png', :disposition => 'inline'

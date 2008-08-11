@@ -250,7 +250,7 @@ class FilesController < ApplicationController
     
     if !content_data.nil?
         if content_data.class == Hash
-           redirect_to content_data[:url]
+           redirect_to content_data[:url], :status => 302
         else
     	   send_data content_data, :type => @file_revision.type_string, :filename => @file.filename, :length => @file_revision.filesize
     	end
@@ -404,6 +404,8 @@ class FilesController < ApplicationController
   	if data.empty?
   		render :text => 'Not found', :status => 404
   		return
+  	elsif data.class == Hash
+  		redirect_to data[:url], :status => 302
   	end
   	
   	send_data data, :type => 'image/jpg', :disposition => 'inline'
