@@ -13,7 +13,7 @@ xml.company do
 	xml.tag!('web-address', h(company.homepage))
 	xml.tag!('phone-number-office', h(company.phone_number))
 	xml.tag!('phone-number-fax', h(company.fax_number))
-	xml.tag!('time-zone-id', h(company.timezone_name))
+	xml.tag!('time-zone-id', h(company.time_zone))
 	xml.tag!('can-see-private', company.is_owner?, :type => 'boolean')
 	
 	if company.is_owner?
