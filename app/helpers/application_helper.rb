@@ -188,7 +188,13 @@ module ApplicationHelper
 	    {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
 	end
 	
-	#def textilize(text)
-	# "<p>#{text}</p>"
-	#end
+	def textilize(text)
+	   if text.blank?
+	       ""
+	   else
+	       textilized = RedCloth.new(text, [ :hard_breaks, :filter_html ])
+	       textilized.hard_breaks = true if textilized.respond_to?("hard_breaks=")
+	       textilized.to_html
+	   end
+	end
 end
