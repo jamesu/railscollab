@@ -285,7 +285,7 @@ mark_project_as_finished: Mark project as finished
 mark_project_as_finished_confirmation: "Are you sure you want to mark this project as finished? All project actions will be locked"
 mark_project_as_active: Mark project as active
 mark_project_as_active_confirmation: "Are you sure you want to mark this project as open? This will unlock all project actions"
-involved_companies: Involved comapnies
+involved_companies: Involved companies
 open_task_lists: Open task lists
 num_tasks_open_in_task_list: "{num} open of {total} tasks in list"
 completed_task_lists: Completed task lists
