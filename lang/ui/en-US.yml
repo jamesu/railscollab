@@ -406,7 +406,6 @@ username: Username
 password: Password
 openid: OpenID
 use_openid: Use OpenID
-remember_me_for_days: "Remember me for {days} days"
 forgot_password_q: "Forgot password?"
 
 # Account
