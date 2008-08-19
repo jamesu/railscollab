@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 11) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -409,7 +409,7 @@ ActiveRecord::Schema.define(:version => 11) do
     t.datetime "last_login"
     t.datetime "last_visit"
     t.datetime "last_activity"
-    t.boolean  "is_admin"
+    t.boolean  "is_admin",                         :default => false, :null => false
     t.boolean  "auto_assign",                      :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext", :limit => 5
