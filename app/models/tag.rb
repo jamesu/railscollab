@@ -62,7 +62,7 @@ class Tag < ActiveRecord::Base
 		
 		Tag.transaction do
 		  	taglist.each do |tag_name|
-				Tag.create(:tag => tag_name, :project => object.project, :rel_object => object, :created_by => set_user, :is_private => set_private)
+				Tag.create(:tag => tag_name.strip, :project => object.project, :rel_object => object, :created_by => set_user, :is_private => set_private)
 			end
 		end
 	end
