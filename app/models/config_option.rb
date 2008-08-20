@@ -47,7 +47,7 @@ class ConfigOption < ActiveRecord::Base
 	def handledValue=(value)
 		obj = self.handler
 		obj.value = value
-		self.value = obj.rawValue
+		self.value = obj.rawValue.to_s
 	end
 	
 	def render(name, options)
