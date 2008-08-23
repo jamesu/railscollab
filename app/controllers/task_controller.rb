@@ -41,7 +41,7 @@ class TaskController < ApplicationController
   # Task lists
   def view_list
     begin
-      @task_list = ProjectTaskList.find(params[:id])
+      @task_list = @active_project.project_task_lists.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task', :action => 'index'
@@ -72,7 +72,7 @@ class TaskController < ApplicationController
     case request.method
       when :get
         begin
-          @task_list.project_milestone = ProjectMilestone.find(params[:milestone_id])
+          @task_list.project_milestone = @active_project.project_milestones.find(params[:milestone_id])
           @task_list.is_private = @task_list.project_milestone.is_private
         rescue ActiveRecord::RecordNotFound
           @task_list.milestone_id = 0
@@ -96,7 +96,7 @@ class TaskController < ApplicationController
   
   def edit_list
     begin
-      @task_list = ProjectTaskList.find(params[:id])
+      @task_list = @active_project.project_task_lists.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
@@ -127,7 +127,7 @@ class TaskController < ApplicationController
   
   def delete_list
     begin
-      @task_list = ProjectTaskList.find(params[:id])
+      @task_list = @active_project.project_task_lists.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
@@ -149,7 +149,7 @@ class TaskController < ApplicationController
   
   def reorder_list
     begin
-      @task_list = ProjectTaskList.find(params[:id])
+      @task_list = @active_project.project_task_lists.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task_list)
       redirect_back_or_default :controller => 'task'
@@ -199,7 +199,7 @@ class TaskController < ApplicationController
   # Tasks
   def add_task
     begin
-      @task_list = ProjectTaskList.find(params[:task_list_id])
+      @task_list = @active_project.project_task_lists.find(params[:task_list_id])
     rescue ActiveRecord::RecordNotFound
 	  error_status(true, :invalid_task)
 	  if params[:partial]

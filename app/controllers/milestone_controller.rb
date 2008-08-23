@@ -162,7 +162,7 @@ private
 
   def obtain_milestone
     begin
-      @milestone = ProjectMilestone.find(params[:id])
+      @milestone = @active_project.project_milestones.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_milestone)
       redirect_back_or_default :controller => 'milestone'

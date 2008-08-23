@@ -142,7 +142,7 @@ private
 
   def obtain_form
     begin
-      @form = ProjectForm.find(params[:id])
+      @form = @active_project.project_forms.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_form)
       redirect_back_or_default :controller => 'form'

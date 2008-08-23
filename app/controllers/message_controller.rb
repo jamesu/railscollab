@@ -37,20 +37,19 @@ class MessageController < ApplicationController
   def index
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
+    page = {:size => AppConfig.messages_per_page, :current => current_page}
     
-    msg_conditions = @logged_user.member_of_owner? ?
-                     ['project_id = ?', @active_project.id] : 
-                     ['project_id = ? AND is_private = ?', @active_project.id, false]
+    if @logged_user.member_of_owner?
+      @messages = @active_project.project_messages.find(:all, :page => page)
+    else
+      @messages = @active_project.project_messages.find(:all, :conditions => ['is_private = ?', false], :page => page)
+    end
     
-    @messages = ProjectMessage.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page}, :order => 'created_on DESC')
     @pagination = []
     @messages.page_count.times {|page| @pagination << page+1}
     
     @message_categories = @active_project.project_message_categories
-    important_conditions = msg_conditions.clone
-    important_conditions[0] += " AND is_important = ?"
-    important_conditions << true
-    @important_messages = ProjectMessage.find(:all, :conditions => important_conditions, :order => 'created_on DESC')
+    @important_messages = @active_project.project_messages.important(@logged_user.member_of_owner?)
     
     @content_for_sidebar = 'index_sidebar'
   end
@@ -70,7 +69,7 @@ class MessageController < ApplicationController
   
   def category
     begin
-      @category ||= ProjectMessageCategory.find(params[:id])
+      @category ||= @active_project.project_message_categories.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
@@ -85,21 +84,18 @@ class MessageController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     
-    msg_conditions = @logged_user.member_of_owner? ? 
-                     ['project_id = ? AND category_id = ?', @active_project.id, @category.id] : 
-                     ['project_id = ? AND category_id = ? AND is_private = ?', @active_project.id, @category.id, false]
-
-    @messages = ProjectMessage.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page}, :order => 'created_on DESC')
+    msg_conditions = {'category_id' => @category.id}
+    msg_conditions['is_private'] = false unless @logged_user.member_of_owner?
+    @messages = @active_project.project_messages.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page})
     @pagination = []
     @messages.page_count.times {|page| @pagination << page+1}
     
     @current_category = @category
     @page = current_page
     @message_categories = @active_project.project_message_categories
-    important_conditions = msg_conditions.clone
-    important_conditions[0] += " AND is_important = ?"
-    important_conditions << true
-    @important_messages = ProjectMessage.find(:all, :conditions => important_conditions, :order => 'created_on DESC')
+    important_conditions = {'is_important' => true}
+    important_conditions['is_private'] = false unless @logged_user.member_of_owner?
+    @important_messages = @active_project.project_messages.find(:all, :conditions => important_conditions)
        
     @content_for_sidebar = 'index_sidebar'
     
@@ -132,7 +128,7 @@ class MessageController < ApplicationController
   
   def edit_category
     begin
-      @category ||= ProjectMessageCategory.find(params[:id])
+      @category ||= @active_project.project_message_categories.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
@@ -162,7 +158,7 @@ class MessageController < ApplicationController
   
   def delete_category
     begin
-      @category ||= ProjectMessageCategory.find(params[:id])
+      @category ||= @active_project.project_message_categories.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_message_category)
       redirect_back_or_default :controller => 'message'
@@ -198,7 +194,7 @@ class MessageController < ApplicationController
       when :get
 	    # Grab default milestone
 	    begin
-	      @milestone = ProjectMilestone.find(params[:milestone_id])
+	      @milestone = @active_project.project_milestones.find(params[:milestone_id])
 	    rescue ActiveRecord::RecordNotFound
 	      @milestone = nil
 	    end
@@ -209,7 +205,7 @@ class MessageController < ApplicationController
 		
 		# Grab default category
 	    begin
-	      @category = ProjectMilestone.find(params[:category_id])
+	      @category = @active_project.project_message_categories.find(params[:category_id])
 	    rescue ActiveRecord::RecordNotFound
 	      @category = nil
 	    end
@@ -217,7 +213,7 @@ class MessageController < ApplicationController
 	    if @category
 	      @message.category_id = @category.id
 	    else
-	      @category = ProjectMessageCategory.find(:first, :conditions => ['project_id = ? AND name = ?', @active_project.id, AppConfig.default_project_message_category])
+	      @category = @active_project.project_message_categories.find(:first, :conditions => ['name = ?', AppConfig.default_project_message_category])
 	    end
 	    
 	    @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))
@@ -338,7 +334,7 @@ private
 
    def obtain_message
      begin
-        @message = ProjectMessage.find(params[:id])
+        @message = @active_project.project_messages.find(params[:id])
      rescue ActiveRecord::RecordNotFound
        error_status(true, :invalid_message)
        redirect_back_or_default :controller => 'message'

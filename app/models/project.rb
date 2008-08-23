@@ -116,13 +116,18 @@ class Project < ActiveRecord::Base
 			end
 		end
 	end
-	has_many :project_messages, :dependent => :destroy do
-		def important(include_private = true, reload=false)
-			ProjectMessage.priv_scope(include_private) do
-			  find(:all, :conditions => ['is_important = ?', true])
-			end
-		end
-	end
+  has_many :project_messages, :order => 'created_on DESC', :dependent => :destroy do
+    def important(include_private = true, reload=false)
+      ProjectMessage.priv_scope(include_private) do
+        find(:all, :conditions => ['is_important = ?', true])
+      end
+    end
+    
+    def public(conditions={}, reload=false)
+      @public_project_messages = nil if reload
+      @public_project_messages ||= find(:all, :conditions => ['is_private = ?', false])
+    end
+  end
 	has_many :project_message_categories, :dependent => :destroy
 	
 	has_many :application_logs, :order => 'created_on DESC, id DESC', :dependent => :destroy do

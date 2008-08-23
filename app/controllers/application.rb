@@ -53,7 +53,12 @@ protected
     
     if params[:active_project]
       begin
-      @active_project = Project.find(params[:active_project])
+        @active_project = Project.find(params[:active_project])
+        unless @active_project.can_be_seen_by(@logged_user)
+          error_status(false, :insufficient_permissions)
+          redirect_to :controller => 'dashboard'
+          return false
+        end
       rescue ActiveRecord::RecordNotFound
         @active_project = nil
       end
@@ -61,17 +66,6 @@ protected
     
     @active_projects = @logged_user.active_projects
     
-    return true
-  end
-  
-  def verify_project
-    if @active_project.nil?
-      redirect_to :controller => 'dashboard'
-      return false
-    elsif not (@logged_user.is_admin || @logged_user.member_of(@active_project))
-      redirect_to :controller => 'dashboard'
-      return false
-    end
     return true
   end
   

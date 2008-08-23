@@ -29,7 +29,6 @@ class ProjectController < ApplicationController
          :redirect_to => { :controller => 'project' }
 
   before_filter :process_session
-  before_filter :verify_project, :except => [:add]
   
   after_filter  :user_track, :only => [:index, :overview, :search, :tags, :people]
   

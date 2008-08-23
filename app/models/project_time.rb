@@ -196,10 +196,7 @@ class ProjectTime < ActiveRecord::Base
 	       list.project_tasks.each do |task|
 	         total = ProjectTime.sum(:hours, :conditions => ['task_list_id = ? AND task_id = ?', list.id, task.id])
 	         if (!total.nil? and total > 0)
-	           extra_conditions = time_conds.clone
-	           extra_conditions[0] += " AND task_list_id = ? AND task_id = ?"
-	           extra_conditions << list.id
-	           extra_conditions << task.id
+	           extra_conditions = time_conds.clone.merge({'task_list_id' => list.id, 'task_id' => task.id})
 	           tasks << {:task => task, :hours => total, :list => ProjectTime.find(:all, :conditions => extra_conditions, :order => time_order)}
 	         end
 	       end
