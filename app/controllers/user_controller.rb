@@ -34,9 +34,9 @@ class UserController < ApplicationController
   def index
   	render :text => 'Hahaha!'
   end
-  
+
   def add
-    if not User.can_be_created_by(@logged_user)
+    unless User.can_be_created_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
       return

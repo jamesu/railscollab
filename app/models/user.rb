@@ -336,7 +336,7 @@ class User < ActiveRecord::Base
 		
 		content_type = value.content_type.chomp
 		
-		if !['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(content_type)
+		unless ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(content_type)
 			self.errors.add(:avatar, "Unsupported format")
 			return
 		end

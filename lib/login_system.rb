@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-require_dependency "user"
+require_dependency 'user'
 
 module LoginSystem 
   
@@ -158,9 +158,9 @@ module LoginSystem
   # example use :
   # a popup window might just close itself for instance
   def access_denied
-    redirect_to :controller=>"access", :action =>"login"
+    redirect_to :controller => 'access', :action => 'login'
   end  
-  
+
   # store current uri in  the session.
   # we can return to this location by calling return_location
   def store_location

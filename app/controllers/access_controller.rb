@@ -1,7 +1,22 @@
 =begin
 RailsCollab
 -----------
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.You should have received a copy of the GNU General Public Licensealong with this program; if not, write to the Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 class AccessController < ApplicationController
@@ -9,10 +24,10 @@ class AccessController < ApplicationController
   layout 'dialog'
   
   def index
-    if !@logged_user.nil?
-        redirect_to :controller => 'dashboard'
+    if @logged_user.nil?
+      redirect_to :action => 'login'
     else
-        redirect_to :action => 'login'
+      redirect_to :controller => 'dashboard'
     end
   end
   
@@ -21,17 +36,17 @@ class AccessController < ApplicationController
       when :post
         login_params = params[:login]
         remember = login_params[:remember]
-              
+
         # Normal boring username + password
         @logged_user = User.authenticate(login_params['user'], login_params['password']) 
-        
-        if !@logged_user.nil?
-          error_status(false, :login_success)
-          redirect_back_or_default :controller => "dashboard"
-          
-          session['user_id'] = @logged_user.id
-        else
+
+        if @logged_user.nil?
           error_status(true, :login_failure)
+        else
+          error_status(false, :login_success)
+          redirect_back_or_default :controller => 'dashboard'
+
+          session['user_id'] = @logged_user.id
         end
     end
   end
