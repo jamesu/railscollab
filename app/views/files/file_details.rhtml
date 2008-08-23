@@ -56,14 +56,8 @@
 <% if !@revisions.empty? %>
 <div id="revisions">
   <h2><%= :revisions.l %></h2>
-<% counter = 0 %>
 <% @revisions.each do |revision| -%>
-<% counter += 1 %>
-  <% if revision == @last_revision %>
-  <div class="revision <%= (counter % 2) == 1 ? 'even' : 'odd' %> lastRevision" id="revision<%= revision.id %>">
-  <% else %>
-  <div class="revision <%= (counter % 2) == 1 ? 'even' : 'odd' %>" id="revision<%= revision.id %>">
-  <% end %>
+  <div class="revision <%= cycle('odd', 'even') %> <%= 'lastRevision' if revision == @last_revision %>" id="revision<%= revision.id %>">
     <div class="revisionName">
 <% if !revision.created_by.nil? %>
 		<%= :revision_created_by.l_with_args(:number => revision.revision_number,

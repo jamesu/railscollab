@@ -22,22 +22,21 @@
   
   @additional_stylesheets = ['project/files']
 %>
-<% if !@files.empty? %>
+<% if @files.empty? %>
+
+<p><%= :no_files_in_location.l %></p>
+
+<% else %>
+
 <div id="files">
 
 <%= render :partial => 'order_and_pagination', :locals => {:order => @order, :page => @page, :pagination => @pagination} %>
 
-<% counter = 0 %>
 <% @files.each do |group_by, grouped_files| -%>
 <h2><%= group_by %></h2>
 <div class="filesList">
 <% grouped_files.each do |file| -%>
-<% counter += 1 %>
-  <% if (counter % 2) == 1 %>
-  <div class="listedFile even">
-  <% else %>
-  <div class="listedFile odd">
-  <% end %>
+  <div class="listedFile <%= cycle('odd', 'even') %>">
 <% if file.is_private %>
     <div class="private" title="<%= :private_file.l %>"><span><%= :private_file.l %></span></div>
 <% end %>
@@ -67,7 +66,7 @@
       <span><a href="<%= file.object_url %>#objectComments"><%= :comments.l %></a>:</span> <%= file.comments.length %> | <span><a href="<%= file.object_url %>#revisions"><%= :revisions.l %></a>:</span> <%= file.project_file_revisions.length %>
       </div>
       <div class="fileTags"><%= :tags.l %>: <%= tag_list file %></div>
-<div class="fileOptions"><%= action_list actions_for_file(file, last_revision) %></div>
+      <div class="fileOptions"><%= action_list actions_for_file(file, last_revision) %></div>
     </div>
   </div>
 <% end %>
@@ -77,6 +76,5 @@
 <%= render :partial => 'order_and_pagination', :locals => {:order => @order, :page => @page, :pagination => @pagination} %>
 
 </div>
-<% else %>
-<p><%= :no_files_in_location.l %></p>
+
 <% end %>

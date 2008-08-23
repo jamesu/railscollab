@@ -1,13 +1,12 @@
-<% if !users.empty? %>
+<% if users.empty? %>
+
+<p><%= :company_no_users.l %></p>
+
+<% else %>
+
 <div id="usersList">
-<% counter = 0 %>
 <% users.each do |listed_user| -%>
-  <% counter += 1 %>
-  <% if (counter % 2) == 1 %>
-  <div class="listedUser even">
-  <% else %>
-  <div class="listedUser odd">
-  <% end %>
+  <div class="listedUser <%= cycle('odd', 'even') %>">
     <div class="userAvatar"><img src="<%= listed_user.avatar_url %>" alt="<%= h listed_user.display_name %> avatar" /></div>
     <div class="userDetails">
       <div class="userName"><a href="<%= "/user/card/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
@@ -19,10 +18,8 @@
       </div>
       <div class="clear"></div>
     </div>
-  </div>  
+  </div>
 <% end %>
 </div>
 
-<% else %>
-<p><%= :company_no_users.l %></p>
 <% end %>

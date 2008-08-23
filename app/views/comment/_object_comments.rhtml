@@ -4,31 +4,34 @@
 %>
 <div id="objectComments">
   <h2><%= :comments.l %></h2>
-<% if !comments.empty? %>
+<% if comments.empty? %>
+
+<p><%= :no_comments_for_object.l %></p>
+
+<% else %>
+
 <% counter = 0 %>
 <% comments.each do |comment| -%>
 <% counter += 1 %>
-  <% if (counter % 2) == 1 %>
-  <div class="comment even" id="comment<%= comment.id %>">
-  <% else %>
-  <div class="comment odd" id="comment<%= comment.id %>">
-  <% end %>
-<% if comment.is_private %>
+  <div class="comment <%= cycle('odd', 'even') %>" id="comment<%= comment.id %>">
+  <% if comment.is_private %>
     <div class="private" title="<%= :private_comment.l %>"><span><%= :private_comment.l %></span></div>
-<% end %>
-<% if !comment.is_anonymous? %>
-    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= :permalink.l %>">#<%= counter %></a>:</span> <%= :comment_posted_with_user.l_with_args(
-             :time => format_usertime(comment.created_on, :comment_posted_format.l),
-             :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>") %>:</div>
-<% else %>
-    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= :permalink.l %>">#<%= counter %></a>:</span> <%= :comment_posted.l_with_args(
+  <% end %>
+    <div class="commentHead"><span><a href="<%= "#{comment.rel_object.object_url}\#comment#{counter}" %>" title="<%= :permalink.l %>">#<%= counter %></a>:</span>
+    <% if comment.is_anonymous? %>
+        <%= :comment_posted.l_with_args(
              :name => comment.author_name,
-             :time => format_usertime(comment.created_on, :comment_posted_format.l)) %>:</div>
-<% end %>
+             :time => format_usertime(comment.created_on, :comment_posted_format.l)) %>:
+    <% else %>
+        <%= :comment_posted_with_user.l_with_args(
+             :time => format_usertime(comment.created_on, :comment_posted_format.l),
+             :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>") %>:
+    <% end %>
+    </div>
     <div class="commentBody">
-<% if (!comment.created_by.nil?) and comment.created_by.has_avatar? %>
+    <% if (!comment.created_by.nil?) and comment.created_by.has_avatar? %>
       <div class="commentUserAvatar"><img src="<%= comment.created_by.avatar_url %>" alt="<%= h comment.created_by.display_name %> Avatar" /></div>
-<% end %>
+    <% end %>
       <div class="commentText"><%= textilize comment.text %></div>
       <div class="clear"></div>
       <%= render :partial => 'files/list_attached_files', :locals => {:attached_files => comment.attached_files(@logged_user.member_of_owner?), :attached_files_object => comment} %>
@@ -36,8 +39,6 @@
     <div class="options"><%= action_list actions_for_comment(comment) %></div>
   </div>
 <% end %>
-<% else %>
-<p><%= :no_comments_for_object.l %></p>
-<% end %>
 
+<% end %>
 </div>
