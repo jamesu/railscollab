@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@ class FilesController < ApplicationController
   		 :only => [ :delete_folder, :delete_file, :detatch_from_object ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'file', :action => 'index' }
+  
+  filter_parameter_logging :file_data
 
   before_filter :process_session, :except => [:thumbnail]
   before_filter :accept_folder_name, :only => [:browse_folder, :edit_folder, :delete_folder]
@@ -248,7 +250,7 @@ class FilesController < ApplicationController
     
     if !content_data.nil?
         if content_data.class == Hash
-           redirect_to content_data[:url]
+           redirect_to content_data[:url], :status => 302
         else
     	   send_data content_data, :type => @file_revision.type_string, :filename => @file.filename, :length => @file_revision.filesize
     	end
@@ -402,6 +404,8 @@ class FilesController < ApplicationController
   	if data.empty?
   		render :text => 'Not found', :status => 404
   		return
+  	elsif data.class == Hash
+  		redirect_to data[:url], :status => 302
   	end
   	
   	send_data data, :type => 'image/jpg', :disposition => 'inline'

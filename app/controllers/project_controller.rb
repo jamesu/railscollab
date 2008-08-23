@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -191,17 +191,17 @@ class ProjectController < ApplicationController
           
           if found_id.nil? or !has_valid_company
             # Exterminate! (maybe better if this was a single query?)
-            ProjectUser.delete_all("user_id = #{user.id} AND project_id = #{@project.id}")
+            ProjectUser.delete_all(['user_id = ? AND project_id = ?', user.id, @project.id])
             
             if !found_id.nil? and !has_valid_company
               params[:project_user].delete(found_id)
             end
-          elsif ProjectUser.find(:all, :conditions => "user_id = #{user.id} AND project_id = #{@project.id}").length > 0
+          elsif ProjectUser.find(:all, :conditions => ['user_id = ? AND project_id = ?', user.id, @project.id]).length > 0
             # Re-apply permissions
             if params[:project_user_permissions] and params[:project_user_permissions][found_id]
               ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][found_id], user), "user_id = #{user.id} AND project_id = #{@project.id}")
             else
-              ProjectUser.update_all(ProjectUser.update_str({}, user), "user_id = #{user.id} AND project_id = #{@project.id}")
+              ProjectUser.update_all(ProjectUser.update_str({}, user), ['user_id = ? AND project_id = ?', user.id, @project.id])
             end
             
             params[:project_user].delete(found_id)

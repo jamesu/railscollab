@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -157,7 +157,8 @@ class ProjectFile < ActiveRecord::Base
 		if !files.nil?
 			files.each do |file|
 				if file.class != StringIO and 
-				   file.class != ActionController::UploadedStringIO
+				   file.class != ActionController::UploadedStringIO and
+				   file.class != ActionController::UploadedTempfile
 					count += 1
 					next
 				end

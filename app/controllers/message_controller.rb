@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@ class MessageController < ApplicationController
   		 :only => [ :delete, :subscribe, :unsubscribe, :delete_category ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
+  
+  filter_parameter_logging :uploaded_files
   
   before_filter :process_session
   before_filter :obtain_message, :except => [:index, :add, :category, :add_category, :edit_category, :delete_category]

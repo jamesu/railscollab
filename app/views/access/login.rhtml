@@ -18,12 +18,6 @@
     <%= password_field "login", "password", :size => 30, :id => 'loginPassword', :class => 'medium' %>
   </div>
   <div class="clean"></div>
-  <div style="margin-top: 6px">
-    <%= check_box "login", "remember", :id => 'loginRememberMe', :class => 'checkbox', :checked => false %>
-    <label class="checkbox" for="loginRememberMe"><%= :remember_me_for_days.l_with_args(:days => 14) %></label>
-  </div>
-  
-  <input type="hidden" name="login[k]" value="<?= $login_data[$k] ?>" />
   
   <span>(<%= link_to :forgot_password_q.l , :controller => 'access', :action => 'forgot_password' %>)</span>
   <div id="loginSubmit">

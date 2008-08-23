@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@ class AccountController < ApplicationController
   		 :only => [ :delete_avatar ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'account' }
+  
+  filter_parameter_logging :password
   
   before_filter :process_session
   before_filter :obtain_user, :except => [:index, :avatar]
@@ -269,6 +271,8 @@ class AccountController < ApplicationController
   	if data.empty?
   		render :text => 'Not found', :status => 404
   		return
+  	elsif data.class == Hash
+  		redirect_to data[:url], :status => 302
   	end
   	
   	send_data data, :type => 'image/png', :disposition => 'inline'

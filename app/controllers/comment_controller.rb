@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,7 +27,9 @@ class CommentController < ApplicationController
   		 :only => [ :delete ],
   		 :add_flash => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'dashboard' }
-
+  
+  filter_parameter_logging :uploaded_files
+  
   before_filter :obtain_comment, :except => [:add]
   after_filter  :user_track
   
@@ -65,12 +67,13 @@ class CommentController < ApplicationController
 	  when :get
 		render :layout => 'dashboard'
       when :post
+        Comment.transaction do
+        
       	comment_attribs = params[:comment]
       	
       	@comment.attributes = comment_attribs
       	@comment.rel_object = @commented_object
       	@comment.created_by = @logged_user
-      	@comment.is_anonymous = @logged_user.is_anonymous?
       	@comment.author_homepage = request.remote_ip
       	
         if @comment.save
@@ -89,6 +92,8 @@ class CommentController < ApplicationController
         else
           render :layout => 'dashboard'
         end
+        
+        end
     end
   end
   
@@ -104,6 +109,8 @@ class CommentController < ApplicationController
     
     case request.method
       when :post
+        Comment.transaction do
+        
         comment_attribs = params[:comment]
         
         @comment.attributes = comment_attribs
@@ -116,6 +123,8 @@ class CommentController < ApplicationController
 			error_status(false, :success_edited_comment)
           end
           redirect_back_or_default @commented_object.object_url
+        end
+        
         end
     end
   end

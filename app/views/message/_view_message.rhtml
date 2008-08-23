@@ -1,7 +1,7 @@
 <div class="message">
   <div class="block">
 <% if view_message.is_private? %>
-    <div class="private" title="<%= :private_message.l %>"><span><%= private_message.l %></span></div>
+    <div class="private" title="<%= :private_message.l %>"><span><%= :private_message.l %></span></div>
 <% end %>
     <div class="header"><%= link_to (h view_message.title), :controller => 'message', :action => 'view', :id => view_message.id %></div>
     <div class="content">

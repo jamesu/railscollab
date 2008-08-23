@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 10) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -112,16 +112,12 @@ ActiveRecord::Schema.define(:version => 10) do
   add_index "config_options", ["category_name"], :name => "index_config_options_on_category_name"
 
   create_table "file_repo", :force => true do |t|
-    t.binary  "content",                              :null => false
-    t.integer "order",   :limit => 10, :default => 0, :null => false
+    t.binary  "content",                                 :null => false
+    t.integer "order",      :limit => 10, :default => 0, :null => false
+    t.integer "storage_id", :limit => 1,  :default => 0, :null => false
   end
 
   add_index "file_repo", ["order"], :name => "index_file_repo_on_order"
-
-  create_table "file_repo_attributes", :force => true do |t|
-    t.string "attribute", :limit => 50, :default => "", :null => false
-    t.text   "value",                                   :null => false
-  end
 
   create_table "file_types", :force => true do |t|
     t.string  "extension",     :limit => 10, :default => "",    :null => false
@@ -413,7 +409,7 @@ ActiveRecord::Schema.define(:version => 10) do
     t.datetime "last_login"
     t.datetime "last_visit"
     t.datetime "last_activity"
-    t.boolean  "is_admin"
+    t.boolean  "is_admin",                         :default => false, :null => false
     t.boolean  "auto_assign",                      :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext", :limit => 5

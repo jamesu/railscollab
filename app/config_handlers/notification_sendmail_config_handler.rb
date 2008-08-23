@@ -23,7 +23,8 @@ class NotificationSendmailConfigHandler < ConfigHandler
 	
 	def value
 		res = YAML.load(@rawValue)
-		return res.nil? ? {} : res
+		return res.nil? ? {} : {:location => res['location'], 
+		                        :arguments => res['arguments']}
 	end
 	
 	def value=(val)

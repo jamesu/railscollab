@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -262,6 +262,8 @@ class CompanyController < ApplicationController
   	if data.empty?
   		render :text => 'Not found', :status => 404
   		return
+  	elsif data.class == Hash
+  		redirect_to data[:url], :status => 302
   	end
   	
   	send_data data, :type => 'image/png', :disposition => 'inline'

@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -54,19 +54,19 @@ class Project < ActiveRecord::Base
 		
 		def late(include_private=true, reload=false)
 			ProjectMilestone.priv_scope(include_private) do
-			  find(:all, :conditions => "due_date < '#{Date.today}' AND completed_on IS NULL")
+			  find(:all, :conditions => ['due_date < ? AND completed_on IS NULL', Date.today])
 			end
 		end
 		
 		def todays(include_private=true, reload=false)
 			ProjectMilestone.priv_scope(include_private) do
-			  find(:all, :conditions => "completed_on IS NULL AND (due_date >= '#{Date.today}' AND due_date < '#{Date.today+1}')")
+			  find(:all, :conditions => ['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1])
 			end
 		end
 		
 		def upcoming(include_private=true, reload=false)
 			ProjectMilestone.priv_scope(include_private) do
-			  find(:all, :conditions => "completed_on IS NULL AND due_date >= '#{Date.today+1}'")
+			  find(:all, :conditions => ['completed_on IS NULL AND due_date >= ?', Date.today+1])
 			end
 		end
 		

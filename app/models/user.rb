@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -278,14 +278,14 @@ class User < ActiveRecord::Base
 	
 	def has_all_permissions(project)
 	 return false if is_anonymous?
-	 perms = self.permissions_for(project)
-	 return perms.nil? ? false : (self.is_admin or perms.has_all_permissions?)
+	 @@cached_permissions ||= self.permissions_for(project)
+	 return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions.has_all_permissions?)
 	end
 	
 	def has_permission(project, pname)
 	 return false if is_anonymous?
-	 perms = self.permissions_for(project)
-	 return perms.nil? ? false : (self.is_admin or perms[pname])
+	 @@cached_permissions ||= self.permissions_for(project)
+	 return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions[pname])
 	end
 	
 	def permissions_for(project)
@@ -358,9 +358,13 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar_url
-	   unless FileRepo.no_s3?
-	       dat = FileRepo.get_data(self.logo_file)
-	       avatar = dat.nil? ? nil : dat[:url]
+	   unless FileRepo.no_s3? or self.avatar_file.nil?
+	       dat = FileRepo.get_data(self.avatar_file)
+	       if !dat.nil?
+	           avatar = (dat.class == Hash) ? dat[:url] : self.avatar_file
+	       else
+	           avatar = nil
+	       end
 	   else
 	       avatar = self.avatar_file
 	   end

@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,13 +30,15 @@ class Comment < ActiveRecord::Base
 	
 	acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
 
-	before_create :process_params
+	before_validation_on_create :process_params
 	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	 
 	def process_params
 	  self.is_anonymous = self.created_by.is_anonymous?
+	  
+	  true
 	end
 	
 	def process_create

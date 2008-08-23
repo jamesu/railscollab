@@ -23,7 +23,11 @@ class NotificationSMTPConfigHandler < ConfigHandler
 	
 	def value
 		res = YAML.load(@rawValue)
-		return res.nil? ? {} : res
+		return res.nil? ? {} : {:address => res['address'], 
+		                        :port => res['port'],
+		                        :user_name => res['user_name'],
+		                        :password => res['password'],
+		                        :authentication => res['authentication']}
 	end
 	
 	def value=(val)

@@ -2,7 +2,7 @@
 RailsCollab
 -----------
 
-Copyright (C) 2007 James S Urquhart (jamesu at gmail.com)
+Copyright (C) 2007 - 2008 James S Urquhart (jamesu at gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -142,9 +142,13 @@ class Company < ActiveRecord::Base
 	end
 	
 	def logo_url
-	   unless FileRepo.no_s3?
+	   unless FileRepo.no_s3? or self.logo_file.nil?
 	       dat = FileRepo.get_data(self.logo_file)
-	       logo = dat.nil? ? nil : dat[:url]
+	       if !dat.nil?
+	           logo = (dat.class == Hash) ? dat[:url] : self.logo_file
+	       else
+	           logo = nil
+	       end
 	   else
 	       logo = self.logo_file
 	   end
@@ -157,7 +161,7 @@ class Company < ActiveRecord::Base
 	end
 	
 	def users_on_project(project)
-	 proj_users = ProjectUser.find(:all, :conditions => "project_id = #{project.id}", :select => 'user_id')
+	 proj_users = ProjectUser.find(:all, :conditions => ['project_id = ?', project.id], :select => 'user_id')
 	 query_users = proj_users.collect do |pu|
 	   pu.user_id
 	 end.join(',')

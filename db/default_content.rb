@@ -23,7 +23,7 @@ if owner_company.nil?
 end
 
 # Ensure owner user exists
-unless User.first(:conditions => ['users.is_admin AND users.company_id = ?', owner_company.id])
+unless User.first(:conditions => ['users.is_admin = ? AND users.company_id = ?', true, owner_company.id])
 	puts 'Creating owner user...'
 	initial_user = User.new(:display_name => initial_user_displayname, :email => initial_user_email)
 	initial_user.username = initial_user_name
