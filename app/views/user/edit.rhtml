@@ -2,11 +2,11 @@
   @page_title = :edit_user.l
   if @company.is_owner?
 	  @tabbed_navigation_items = administration_tabbed_navigation(:company)
-	  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :company, :url => "/company/view/#{@company.id}"}])
+	  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :company, :url => '/administration/company'}])
   else
 	  @tabbed_navigation_items = administration_tabbed_navigation(:clients)
 	  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :clients, :url => '/administration/clients'},
-	                                                     {:title => :company, :url => "/company/view/#{@company.id}"}])
+	                                                     {:title => :company, :url => "/company/view_client/#{@company.id}"}])
   end
   
   @page_actions = []
