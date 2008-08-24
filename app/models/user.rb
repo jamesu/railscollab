@@ -392,7 +392,7 @@ class User < ActiveRecord::Base
 	  datetime = Time.now.utc
 	  datetime -= (active_in * 60)
 	  
-	  User.find(:all, :conditions => "last_activity > '#{datetime.strftime('%Y-%m-%d %H:%M:%S')}'", :select => "id, company_id, username, display_name")
+	  User.find(:all, :conditions => ['last_activity > ?', datetime], :select => "id, company_id, username, display_name")
 	end
 	
 	def self.select_list
