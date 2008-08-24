@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
 		FileRepo.handle_delete(self.avatar_file) unless self.avatar_file.nil?
 	end
 	
+	def display_name
+	  display_name? ? read_attribute(:display_name) : username
+	end
+	
 	def twister_array=(value)
 		self.twister = value.join()
 	end
