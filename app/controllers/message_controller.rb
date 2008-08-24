@@ -38,7 +38,7 @@ class MessageController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     page = {:size => AppConfig.messages_per_page, :current => current_page}
-    
+
     if @logged_user.member_of_owner?
       @messages = @active_project.project_messages.find(:all, :page => page)
     else
@@ -87,12 +87,14 @@ class MessageController < ApplicationController
     msg_conditions = {'category_id' => @category.id}
     msg_conditions['is_private'] = false unless @logged_user.member_of_owner?
     @messages = @active_project.project_messages.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page})
+    
     @pagination = []
     @messages.page_count.times {|page| @pagination << page+1}
     
     @current_category = @category
     @page = current_page
     @message_categories = @active_project.project_message_categories
+    
     important_conditions = {'is_important' => true}
     important_conditions['is_private'] = false unless @logged_user.member_of_owner?
     @important_messages = @active_project.project_messages.find(:all, :conditions => important_conditions)
