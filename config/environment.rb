@@ -20,6 +20,7 @@ Rails::Initializer.run do |config|
   config.gem 'ferret',       :version => '>=0.11.6'
   config.gem 'icalendar',    :version => '>=1.0.2'
   config.gem 'ruby-openid',  :version => '>=2.1.2', :lib => 'openid'
+  config.gem 'tzinfo',       :version => '>=0.3.9'
 
   # optional gems
   config.gem 'aws-s3',       :version => '>=0.5.1', :lib => 'aws/s3'
@@ -121,7 +122,7 @@ if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppCon
 end
 
 # Localisation
-Globalite.locale = AppConfig.default_language.nil? ? :en_US : AppConfig.default_language.to_sym
+Globalite.locale = AppConfig.default_language.nil? ? 'en-US' : AppConfig.default_language
 
 # Ferret search
 FERRETABLE_MODELS = %w[Tag Comment ProjectMessage ProjectTime ProjectTask ProjectTaskList ProjectMilestone ProjectFile ProjectFileRevision]
