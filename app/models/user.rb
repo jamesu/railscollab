@@ -66,10 +66,10 @@ class User < ActiveRecord::Base
     return [] if all_types.empty?
 
     # Get an id list
-    all_type_ids = all_types.collect{ |im_id| im_id.id }.join(',')
+    all_type_ids = all_types.collect{ |im_id| im_id.id }
 
     # Find all values
-    values = ImValue.all(:conditions => ['user_id = ? AND im_type_id IN (?)', self.id, all_type_ids])
+    values = ImValue.all(:conditions => { :user_id => self.id, :im_type_id => all_type_ids })
 
     # Add the missing values in as blank's
     all_types.each do |type|

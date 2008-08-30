@@ -236,14 +236,13 @@ class MessageController < ApplicationController
           valid_users = params[:notify_user].collect do |user_id|
             real_id = user_id.to_i
 
-            if ProjectUser.all(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id]).length > 0
-              real_id
-            else
-              nil
-            end
-          end
+            number_of_users = ProjectUser.count(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id])
+            next if number_of_users == 0
 
-          User.all(:conditions => "id IN (#{valid_users.compact.join(',')})").each do |user|
+            real_id
+          end.compact
+
+          User.all(:conditions => { :id => valid_users }).each do |user|
             @message.send_notification(user)
           end
         end

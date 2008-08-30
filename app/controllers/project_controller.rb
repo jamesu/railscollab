@@ -126,12 +126,12 @@ class ProjectController < ApplicationController
         owner_company = Company.owner
         owner_id = owner_company.id
 
-        valid_companies_ids = params[:project_company].collect do |id|
+        valid_company_ids = params[:project_company].collect do |id|
           has_owner = true if !has_owner and id.to_i == owner_id
           id
-        end.join ', '
+        end
 
-        valid_companies = Company.all(:conditions => "id IN (#{valid_companies_ids})", :select => 'id')
+        valid_companies = Company.all(:conditions => { :id => valid_company_ids }, :select => 'id')
 
         @project.companies.clear
         @project.companies << owner_company unless has_owner
@@ -144,18 +144,15 @@ class ProjectController < ApplicationController
       end
 
       # Grab a full list of companies for comparison
-
       real_companies = [Company.owner]
       clients = Company.owner.clients
       real_companies += clients unless clients.empty?
-      real_companies_ids = real_companies.collect{ |company| company.id }.join(', ')
+      real_companies_ids = real_companies.collect{ |company| company.id }
 
       # Grab the user set
-
-      project_users = User.all(:conditions => "company_id IN (#{real_companies_ids})", :select => ['id, company_id, username'])
+      project_users = User.all(:conditions => { :company_id => real_companies_ids }, :select => ['id, company_id, username'])
 
       # Destroy the ProjectUser entry for each non-active user
-
       project_users.each do |user|
         next if user.owner_of_owner?
 
@@ -163,22 +160,11 @@ class ProjectController < ApplicationController
 
         # Have a look to see if it is on our list
         if params[:project_user]
-          params[:project_user].each do |id|
-            if id.to_i == user.id
-              found_id = id
-              break
-            end
-          end
+          found_id = params[:project_user].detect{ |id| id.to_i == user.id }
         end
 
         # Have another look to see if his company is enabled
-        has_valid_company = false
-        valid_companies.each do |company|
-          if company.id == user.company_id
-            has_valid_company = true
-            break
-          end
-        end
+        has_valid_company = valid_companies.any?{ |company| company.id == user.company_id }
 
         if found_id.nil? or !has_valid_company
           # Exterminate! (maybe better if this was a single query?)
@@ -260,9 +246,8 @@ class ProjectController < ApplicationController
 
     company = Company.find(params[:company])
     unless company.is_owner?
-      company_user_ids = company.users.collect{ |user| user.id }.join(', ')
-
-      ProjectUser.delete_all("user_id IN (#{company_user_ids}) AND project_id = #{@project.id}")
+      company_user_ids = company.users.collect{ |user| user.id }
+      ProjectUser.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
       @project.companies.delete(company)
     end
 

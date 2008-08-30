@@ -30,13 +30,13 @@ class DashboardController < ApplicationController
       if @active_projects.length > 0
         include_private = @logged_user.member_of_owner?
 
-        project_ids = @active_projects.collect{ |project| project.id }.join(', ')
+        project_ids = @active_projects.collect{ |project| project.id }
 
         activity_conditions = include_private ?
-          ["project_id in (#{project_ids})"] :
-          ["project_id in (#{project_ids}) AND is_private = ?", false]
+          { :project_id => project_ids } :
+          { :project_id => project_ids, :is_private => false }
 
-        @activity_log = ApplicationLog.find(:all, :conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
+        @activity_log = ApplicationLog.all(:conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
       else
         @activity_log = []
       end

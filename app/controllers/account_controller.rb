@@ -203,7 +203,7 @@ class AccountController < ApplicationController
       end.compact
 
       unless delete_list.empty?
-        ProjectUser.delete_all("user_id = #{@user.id} AND project_id IN (#{delete_list.join(', ')})")
+        ProjectUser.delete_all({ :user_id => @user.id, :project_id => delete_list })
       end
 
       #ApplicationLog.new_log(@project, @logged_user, :edit, true)

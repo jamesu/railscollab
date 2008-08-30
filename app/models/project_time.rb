@@ -224,14 +224,12 @@ class ProjectTime < ActiveRecord::Base
 
   def self.all_by_user(user)
     projects = user.active_projects
-
-    project_ids = projects.collect{ |project| project.id }.join(',')
-
+    project_ids = projects.collect{ |project| project.id }
     return [] if project_ids.empty?
 
     time_conditions = user.member_of_owner? ?
-      ["project_id IN (#{project_ids})"] :
-      ["project_id IN (#{project_ids}) AND is_private = ?", false]
+      { :project_id => project_ids } :
+      { :project_id => project_ids, :is_private => false }
 
     self.all(:conditions => time_conditions)
   end

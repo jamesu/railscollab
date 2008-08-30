@@ -156,8 +156,8 @@ class Company < ActiveRecord::Base
 
   def users_on_project(project)
     proj_users = ProjectUser.all(:conditions => ['project_id = ?', project.id], :select => 'user_id')
-    query_users = proj_users.collect{ |pu| pu.user_id }.join(',')
-    User.all(:conditions => ['id in (?) and company_id = ?', query_users, self.id])
+    query_users = proj_users.collect{ |user| user.user_id }
+    User.all(:conditions => { :id => query_users, :company_id => self.id })
   end
 
   def object_name

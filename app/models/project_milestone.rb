@@ -234,14 +234,12 @@ class ProjectMilestone < ActiveRecord::Base
 
   def self.all_by_user(user)
     projects = user.active_projects
-
-    project_ids = projects.collect{ |project| project.id }.join(',')
-
+    project_ids = projects.collect{ |project| project.id }
     return [] if project_ids.emty?
 
     msg_conditions = user.member_of_owner? ?
-      ["completed_on IS NULL AND project_id IN (#{project_ids})"] :
-      ["completed_on IS NULL AND project_id IN (#{project_ids}) AND is_private = ?", false]
+      { :completed_on => nil, :project_id => project_ids } :
+      { :completed_on => nil, :project_id => project_ids, :is_private => false }
 
     self.all(:conditions => msg_conditions)
   end
@@ -251,9 +249,7 @@ class ProjectMilestone < ActiveRecord::Base
     to_date = Date.today + 1
 
     projects = user.active_projects
-
     project_ids = projects.collect{ |project| project.id}.join(',')
-
     return [] if project_ids.empty?
 
     msg_conditions = user.member_of_owner? ?
