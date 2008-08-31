@@ -172,7 +172,7 @@ class Project < ActiveRecord::Base
   end
 
   def tasks_by_user(user, completed=false)
-    ProjectTask.all(:conditions => ['((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on ? NULL', user.company_id, user.id, completed ? 'IS NOT' : 'IS'])
+    ProjectTask.all(:conditions => ["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
   end
 
   def is_active?
@@ -180,7 +180,7 @@ class Project < ActiveRecord::Base
   end
 
   def milestones_by_user(user, completed=false)
-    ProjectMilestone.all(:conditions => ['project_id = ? AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on ? NULL', self.id, user.company_id, user.id, completed ? 'IS NOT' : 'IS'])
+    ProjectMilestone.all(:conditions => ["project_id = ? AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", self.id, user.company_id, user.id])
   end
 
   def has_member(user)
