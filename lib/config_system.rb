@@ -24,28 +24,27 @@ require 'yaml'
 
 # Courtesy of Dmytro Shteflyuk's blog post
 begin
-	::ConfigOverride = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.override.yml"))
-	env_config = ConfigOverride.send(RAILS_ENV)
-	ConfigOverride.common.update(env_config) unless env_config.nil?
+  ::ConfigOverride = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.override.yml"))
+  env_config = ConfigOverride.send(RAILS_ENV)
+  ConfigOverride.common.update(env_config) unless env_config.nil?
 rescue Exception
-	::ConfigOverride = OpenStruct.new()
+  ::ConfigOverride = OpenStruct.new()
 end
 
 ::AppConfig = OpenStruct.new()
 
 # Try loading gd2
 begin
-	require 'gd2'
-	AppConfig.no_gd2 = false
+  require 'gd2'
+  AppConfig.no_gd2 = false
 rescue Exception
-	AppConfig.no_gd2 = true
+  AppConfig.no_gd2 = true
 end
 
 # Try loading AWS::S3
 begin
-	require 'aws/s3'
-	AppConfig.no_s3 = false
+  require 'aws/s3'
+  AppConfig.no_s3 = false
 rescue Exception
-	AppConfig.no_s3 = true
+  AppConfig.no_s3 = true
 end
-
