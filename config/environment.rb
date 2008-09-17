@@ -28,7 +28,7 @@ Rails::Initializer.run do |config|
   # optional gems
   config.gem 'aws-s3',       :version => '>=0.5.1', :lib => 'aws/s3'
   config.gem 'gd2',          :version => '>=1.1.1'
-  config.gem 'RedCloth',     :version => '3.0.4',   :lib => 'redcloth' # not v4.0.1 - it's not working (class RedCloth changed to module)
+  config.gem 'RedCloth',     :version => '>= 4.0.0',   :lib => 'redcloth'
 
   # Settings in config/environments/* take precedence over those specified here
 
