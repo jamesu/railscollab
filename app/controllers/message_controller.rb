@@ -38,7 +38,7 @@ class MessageController < ApplicationController
     current_page = params[:page].to_i
     current_page = 0 unless current_page > 0
     page = {:size => AppConfig.messages_per_page, :current => current_page}
-    
+
     if @logged_user.member_of_owner?
       @messages = @active_project.project_messages.find(:all, :page => page)
     else
