@@ -13,6 +13,9 @@ ENV['TZ'] = 'UTC'
 require File.join(File.dirname(__FILE__), 'boot')
 require 'config_system'
 
+::AppConfig = OpenStruct.new()
+ConfigSystem.init
+
 Rails::Initializer.run do |config|
   # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
@@ -81,48 +84,7 @@ end
 # Include your application configuration below
 
 # Merge database & config.yml into AppConfig
-begin
-  ConfigOption.dump_config(AppConfig)
-  unless ConfigOverride.common.nil?
-    ConfigOverride.common.keys.each do |key|
-      AppConfig.send("#{ConfigOverride.common[key]}=", ConfigOverride.common[key])
-    end
-  end
-rescue Exception
-end
-
-# ActionMailer stuff
-begin
-  ActionMailer::Base.delivery_method                 = AppConfig.notification_email_method.to_sym
-  ActionMailer::Base.smtp_settings                   = AppConfig.notification_email_smtp.symbolize_keys.delete_if{ |key, value| value.nil? or value.empty? }
-  ActionMailer::Base.smtp_settings[:authentication] = ActionMailer::Base.smtp_settings[:authentication].to_sym
-  ActionMailer::Base.sendmail_settings               = AppConfig.notification_email_sendmail
-rescue Exception
-end
-
-# Theming
-ActionController::Base.asset_host = Proc.new { |source|
-  if source.starts_with?('/images') or source.starts_with?('/stylesheets')
-    AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}/themes/#{AppConfig.site_theme}" : "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
-  else
-    AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}" : "#{AppConfig.site_url}"
-  end
-}
-
-# Amazon S3
-if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?
-  require 'aws/s3'
-  s3_opts = AppConfig.storage_s3_login
-
-  begin
-    AWS::S3::Base.establish_connection!(s3_opts)
-  rescue
-    AppConfig.no_s3 = true
-  end
-end
-
-# Localisation
-Globalite.locale = AppConfig.default_language.nil? ? 'en-US' : AppConfig.default_language
+ConfigSystem.load_config
 
 # Ferret search
 FERRETABLE_MODELS = %w[Tag Comment ProjectMessage ProjectTime ProjectTask ProjectTaskList ProjectMilestone ProjectFile ProjectFileRevision]
