@@ -1,7 +1,9 @@
+.DS_Store
+config/config.yml
+config/database.yml
+coverage
+index/**
 log/*.log
+nbproject
 tmp/restart.txt
 tmp/**/*
-index/**
-.DS_Store
-config/database.yml
-config/config.yml

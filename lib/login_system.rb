@@ -21,12 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_dependency 'user'
 
-module LoginSystem 
-  
+module LoginSystem
+
   protected
-  
+
   # overwrite this if you want to restrict access to only a few actions
-  # or if you want to check if the user has the correct rights  
+  # or if you want to check if the user has the correct rights
   # example:
   #
   #  # only allow nonbobs
@@ -34,12 +34,12 @@ module LoginSystem
   #    user.login != "bob"
   #  end
   def authorize?(user)
-     true
+    true
   end
-  
+
   # overwrite this method if you only want to protect certain actions of the controller
   # example:
-  # 
+  #
   #  # don't protect the login and the about method
   #  def protect?(action)
   #    if ['action', 'about'].include?(action)
@@ -51,10 +51,10 @@ module LoginSystem
   def protect?(action)
     true
   end
-  
+
   # overwrite this method if you want to allow people to login via authentication tokens
   # example:
-  # 
+  #
   #  # don't protect the login and the about method
   #  def protect_token?(action)
   #    if ['feed', 'other_feed'].include?(action)
@@ -66,51 +66,48 @@ module LoginSystem
   def protect_token?(action)
     false
   end
-   
-  # login_required filter. add 
+
+  # login_required filter. add
   #
   #   before_filter :login_required
   #
-  # if the controller should be under any rights management. 
+  # if the controller should be under any rights management.
   # for finer access control you can overwrite
-  #   
+  #
   #   def authorize?(user)
-  # 
+  #
   def login_required
-    
-    if not protect?(action_name)
-      return true  
-    end
-    
+    return true unless protect?(action_name)
+
     if protect_token?(action_name)
       return true if token_login_accepted
     end
-	
+
 	do_action = false
-	
+
 	if request.accepts.first == Mime::XML
-		# HTTP basic authentication for XML / YAML requests
-		@logged_user = nil
-		
-		authenticate_or_request_with_http_basic do |user_name, password|
-			@logged_user = User.authenticate(user_name, password)
-		end
+      # HTTP basic authentication for XML / YAML requests
+      @logged_user = nil
+
+      authenticate_or_request_with_http_basic do |user_name, password|
+        @logged_user = User.authenticate(user_name, password)
+      end
 	else
-		# Session authentication
-		if not session['user_id'].nil?
-			@logged_user = User.find(:first, :conditions => "id = #{session['user_id']}")
-		else
-			@logged_user = nil
-		end
-		
-		do_action = true
+      # Session authentication
+      if session['user_id'].nil?
+        @logged_user = nil
+      else
+        @logged_user = User.first(:conditions => ['id = ?', session['user_id']])
+      end
+
+      do_action = true
 	end
-    
+
     # Don't exist? what a pity!
     if @logged_user.nil?
       # Check to see if we accept anonymous logins...
       if AppConfig.allow_anonymous
-        @logged_user = User.find(:first, :conditions => ['username = ?', 'Anonymous'])
+        @logged_user = User.first(:conditions => ['username = ?', 'Anonymous'])
         if @logged_user.nil?
           session['user_id'] = nil
           access_denied if do_action
@@ -122,44 +119,41 @@ module LoginSystem
         return false
       end
     end
-    
-    if authorize?(@logged_user)
-      return true
-    end
 
-    # store current location so that we can 
-    # come back after the user logged in
+    return true if authorize?(@logged_user)
+
+    # store current location so that we can come back after the user logged in
     store_location
-  
+
     # call overwriteable reaction to unauthorized access
     access_denied if do_action
-    return false 
+
+    false
   end
-  
+
   def token_login_accepted
-    
-    if not params[:user].nil?
-      @logged_user = User.find(:first, :conditions => ['id = ?', params[:user]])
-    else
+    if params[:user].nil?
       @logged_user = nil
+    else
+      @logged_user = User.first(:conditions => ['id = ?', params[:user]])
     end
-    
+
     # Don't exist? Not valid? what a pity!
-    if @logged_user.nil? or (!@logged_user.twisted_token_valid?(params[:token]))
+    if @logged_user.nil? or !@logged_user.twisted_token_valid?(params[:token])
       return false
     end
-    
-    return true
+
+    true
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized
-  # to access the current operation. 
+  # to access the current operation.
   # the default action is to redirect to the login screen
   # example use :
   # a popup window might just close itself for instance
   def access_denied
     redirect_to :controller => 'access', :action => 'login'
-  end  
+  end
 
   # store current uri in  the session.
   # we can return to this location by calling return_location
@@ -176,5 +170,4 @@ module LoginSystem
       session['return-to'] = nil
     end
   end
-
 end

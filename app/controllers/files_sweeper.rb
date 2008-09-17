@@ -22,19 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class FilesSweeper < ActionController::Caching::Sweeper
 
   observe ProjectFileRevision
-  
+
   def after_create(data)
   	expire_thumbnail(data)
   end
-  
+
   def after_save(data)
   	expire_thumbnail(data)
   end
-  
+
   def after_destroy(data)
   	expire_thumbnail(data)
   end
-  
+
   def expire_thumbnail(data)
 	# This should clear out any existing thumbnail
   	expire_page(:controller => 'files', :action => 'thumbnail', :id => data.id, :format => 'jpg')

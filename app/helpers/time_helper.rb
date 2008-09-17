@@ -21,18 +21,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module TimeHelper
   include ProjectHelper
-  
-  def task_select_list(task_list)
-  	items = []
-  	task_list.each do |task_list|
-  		items << ['--', 0]
-  		list_name = html_escape(task_list.name)
-  		items += task_list.project_tasks.collect do |task|
-  			["#{list_name}: #{html_escape task.text}", task.id.to_s]
-  		end
-  	end
-  	
-  	items = [['None', 0]] + items
-  end
 
+  def task_select_list(task_list)
+    items = [['None', 0]]
+  	task_list.each do |task_list|
+      items << ['--', 0]
+  	  list_name = html_escape(task_list.name)
+  	  items += task_list.project_tasks.collect do |task|
+        ["#{list_name}: #{html_escape task.text}", task.id.to_s]
+  	  end
+  	end
+
+  	items
+  end
 end
