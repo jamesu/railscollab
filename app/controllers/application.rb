@@ -45,6 +45,10 @@ protected
   def set_time_zone
     Time.zone = @logged_user.time_zone if @logged_user
   end
+  
+  def reload_owner
+    Company.owner(true)
+  end
 
   def process_session
     # Set active project based on parameter or session

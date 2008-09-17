@@ -15,6 +15,7 @@ xml = REXML::Document.new(basecamp_dump_file.read)
 puts "Parsed dump file..."
 
 START_DATE = Date.parse(xml.elements['account/created-on'].text)
+OWNER_ID = xml.elements['account/account-holder-id'].text.to_i
 
 MAP_IDS = {
 	:companies => {},
@@ -121,7 +122,7 @@ def import_company(firm_attribs, owner=nil)
 		user.save!
 		
 		MAP_IDS[:users][user_attribs['id'].text.to_i] = user.id
-		MAP_IDS[:owner] ||= user
+		MAP_IDS[:owner] = user if user_attribs['id'].text.to_i == OWNER_ID
 	end
 end
 
@@ -258,7 +259,7 @@ xml.elements.each('account/projects/project') do |bproject|
 				task.completed_by = User.find(MAP_IDS[:users][todo_item_attribs['completer-id'].text.to_i])
 				
 				# Update completion date of task list if this is more recent 
-				if task_list.completed_by.nil? or (task_list.completed_on < task.completed_on)
+				if task_list.completed_by.nil? or (task_list.completed_on.nil? or (!task.completed_on.nil? and (task_list.completed_on < task.completed_on)))
 					task_list.completed_by = task.completed_by
 					task_list.completed_on = task.completed_on
 				end
@@ -335,7 +336,7 @@ xml.elements.each('account/projects/project') do |bproject|
 			comment.rel_object = message
 			
 			comment.save!
-			comment.created_on = Time.parse(comment_attribs['posted-on'].text)
+			comment.created_on = comment_attribs['posted-on'].nil? ? Time.parse(comment_attribs['created-at'].text) : Time.parse(comment_attribs['posted-on'].text)
 			comment.updated_by = MAP_IDS[:owner]
 			comment.save!
 			

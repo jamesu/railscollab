@@ -31,6 +31,7 @@ class CompanyController < ApplicationController
   before_filter :process_session
   before_filter :obtain_company, :except => [:add_client, :edit, :hide_welcome_info, :logo]
   after_filter  :user_track,     :except => [:logo]
+  after_filter :reload_owner
 
   # Caching
   caches_page :logo

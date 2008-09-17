@@ -32,6 +32,7 @@ class UserController < ApplicationController
 
   before_filter :process_session
   after_filter :user_track, :only => [:index, :card]
+  after_filter :reload_owner
 
   def index
   	render :text => 'Hahaha!'
