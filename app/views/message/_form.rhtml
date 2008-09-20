@@ -73,7 +73,6 @@
       };
     </script>
 <% users_on_project = company.users_on_project(@active_project) %>
-<% if users_on_project.length > 0 %>
    <div class="companyDetails">
       <div class="companyName"><%= check_box_tag "notify_company[]", "#{company.id}", false, {:id => "notifyCompany#{company.id}", :class => 'checkbox', :onclick => "notify_form_select_company(#{company.id})"} %> <label for="<%= "notifyCompany#{company.id}" %>" class="checkbox"><%= h company.name %></label></div> 
       <div class="companyMembers">
@@ -88,7 +87,9 @@
         </ul>
       </div>
     </div>
-<% end %>
+    <script type="text/javascript">
+      notify_form_set_company(<%= company.id %>);
+    </script>
 <% end %>
   </fieldset>
 <% end %>

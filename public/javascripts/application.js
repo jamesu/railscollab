@@ -277,12 +277,25 @@ function notify_form_select(company_id, id)
 
 function notify_form_select_company(id)
 {
-	if (!$('notifyCompany' + id).checked)
-		return;
+	var val = $('notifyCompany' + id).checked;
 	
 	notify_form_companies['company_' + id].users.each(function(user_id){
-		$('notifyUser' + user_id).checked = true;
+		$('notifyUser' + user_id).checked = val;
 	});
+}
+
+function notify_form_set_company(id)
+{
+	var count = 0;
+	var users = notify_form_companies['company_' + id].users;
+	
+	users.each(function(user_id){
+		if ($('notifyUser' + user_id).checked)
+		  count += 1;
+	});
+	
+	if (count == users.length)
+	  $('notifyCompany' + id).checked = true;
 }
 
 Event.addBehavior({
