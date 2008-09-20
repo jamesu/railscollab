@@ -134,12 +134,11 @@ function permissions_form_project_select_company(id)
 
 function permissions_form_project_select_all(id)
 {
-	if (!$('projectPermissions' + id + 'All').checked)
-		return;
+	var val = $('projectPermissions' + id + 'All').checked;
 	
 	// Select all items then!
 	permissions_form_items.each(function(permission){
-		$('projectPermission' + id + permission).checked = true;
+		$('projectPermission' + id + permission).checked = val;
 	});
 }
 
