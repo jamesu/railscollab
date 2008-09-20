@@ -27,52 +27,16 @@
         <%= check_box_tag "project_company[]", "#{company.id}", company.is_part_of(@active_project), {:id => "projectCompany#{@active_project.id}_#{company.id}", :class => 'checkbox', :onclick => "permissions_form_project_select_company('#{@active_project.id}_#{company.id}')"} %> <label for="<%= "project_company[]" %>" class="checkbox"><%= h company.name %></label>
 <% end %>
       </div>
-<% if company.is_part_of(@active_project) %>
-      <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>">
-<% else %>
-      <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>" style="display: none">
-<% end %>
+      <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>" <% unless company.is_part_of(@active_project) %>style="display: none"<% end %>>
         <table class="blank">
-<% if company.users.length > 0 %>
-<% company.users.each do |user| %>
-<% perm_id = "#{@active_project.id}_#{company.id}_#{user.id}" %>
-          <tr class="user">
-            <td>
-<% if user.owner_of_owner? %>
-              <%= render_icon 'ok', 'Ok' %> <label class="checkbox"><%= h user.display_name %></label>
-              <input type="hidden" name="<%= "project_user_#{user.id}" %>" value="checked" />
+<% unless company.users.empty? %>
+        <%= render :partial => 'project/permissions_users', :locals => {:project => @active_project, :company => company}, :collection => company.users %>
 <% else %>
-              <%= check_box_tag "project_user[]", "#{user.id}", user.member_of(@active_project), {:id => "projectPermissions#{perm_id}", :class => 'checkbox', :onclick => "permissions_form_project_select('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}" %>" class="checkbox"><%= h user.display_name %></label>
-
+        <tr>
+          <td colspan="2"><%= :company_no_users.l %></td>
+        </tr>
 <% end %>
-  
-<% if user.is_admin? %>
-              <span class="desc">(<%= :administrator.l %>)</span>
-<% end %>
-            </td>
-            <td>
-<% if !company.is_owner? %>
-<% if user.member_of(@active_project) %>
-            <div class="projectUserPermissions" id="projectPermissionsBlock<%= perm_id %>">
-<% else %>
-            <div class="projectUserPermissions" id="projectPermissionsBlock<%= perm_id %>" style="display: none">
-<% end %>
-                    <div><%= check_box_tag "project_user_#{user.id}_all", "1", user.has_all_permissions(@active_project), {:id => "projectPermissions#{perm_id}All", :class => 'checkbox', :onclick => "permissions_form_project_select_all('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}All" %>" class="checkbox" style="font-weight: bolder"><%= "All" %></label><div>
-<% user_permissions = user.permissions_for(@active_project) %>
-<% @permissions.keys.each do |permission| -%>           
-                <div><%= check_box_tag "project_user_permissions[#{user.id}][]", "#{permission}", user_permissions ? user_permissions[permission] : false, {:id => "projectPermission#{perm_id}#{permission}", :class => 'checkbox normal', :onclick => "permissions_form_project_select_item('#{perm_id}')"} %> <label for="<%= "projectPermissions#{perm_id}#{permission}" %>" class="checkbox normal"><%= @permissions[permission] %></label></div>
-<% end %>
-              </div>
-<% end %>
-            </td>
-          </tr>
-<% end %>
-<% else %>
-          <tr>
-            <td colspan="2"><%= :company_no_users.l %></td>
-          </tr>
-<% end %>
-        </table>
+         </table>
       </div>
       <div class="clear"></div>
     </div>

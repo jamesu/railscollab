@@ -31,40 +31,7 @@
 <div id="userPermissions">
   <%= form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
     <div id="userProjects">
-<% @projects.each do |project| -%>
-<%
-	user_permissions = ProjectUser.find(:all, :conditions => ['project_id = ? AND user_id = ?', project.id, @user.id])
-	user_permission = user_permissions.length > 0 ? user_permissions[0] : nil
-%>
-      <table class="blank">
-        <tr>
-          <td class="projectName">
-            <%= check_box_tag "user_project[]", "#{project.id}", @user.member_of(project), {:id => "projectPermissions#{project.id}", :class => 'checkbox normal', :onclick => "permissions_form_project_select(#{project.id})"} %>
-<% if !project.is_active? %>
-            <label for="projectPermissions<%= project.id %>" class="checkbox"><del class="help" title="<%= "Completed on #{format_usertime(project.completed_on, '%b %d, %Y')} by #{project.completed_by.display_name}" %>"><%= h project.name %></del></label>
-<% else %>
-            <label for="projectPermissions<%= project.id %>>" class="checkbox"><%= h project.name %></label>
-<% end %>
-          </td>
-          <td class="permissionsList">
-<% if @user.member_of(project) %>
-            <div id="projectPermissionsBlock<%= project.id %>">
-<% else %>
-            <div id="projectPermissionsBlock<%= project.id %>" style="display: none">
-<% end %>
-              <div class="projectPermission">
-                <%= check_box_tag "project_#{project.id}_all", "1", @user.has_all_permissions(project), {:id => "projectPermissions#{project.id}All", :class => 'checkbox', :onclick => "permissions_form_project_select_all(#{project.id})"} %> <label for="<%= "projectPermissions#{project.id}All" %>" class="checkbox" style="font-weight: bolder"><%= "All" %></label>
-              </div>
-<% @permissions.keys.each do |permission| -%>           
-                <div class="projectPermission">
-                <%= check_box_tag "project_permission[#{project.id}][]", "#{permission}", user_permission ? user_permission[permission] : false, {:id => "projectPermission#{project.id}#{permission}", :class => 'checkbox normal', :onclick => "permissions_form_project_select_item(#{project.id})"} %> <label for="<%= "projectPermission#{project.id}#{permission}" %>" class="checkbox normal"><%= @permissions[permission] %></label>
-                </div>
-<% end %>
-            </div>
-          </td>
-        </tr>
-      </table>
-<% end %>
+<%= render :partial => 'project/permissions.rhtml', :locals => {:user => @user}, :collection => @projects %>
     </div>
     <button class="submit" type="submit"><%= :update_permissions.l %></button>
   </form>

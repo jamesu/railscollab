@@ -49,6 +49,8 @@ class UserController < ApplicationController
     @company = @logged_user.company
 
     @send_email = params[:new_account_notification] == 'false' ? false : true
+    @permissions = ProjectUser.permission_names()
+    @projects = @active_projects
 
     case request.method
     when :get
@@ -115,6 +117,38 @@ class UserController < ApplicationController
       # Send it off
 
       if @user.save
+        # Time to update permissions
+        user_project = params[:user_project]
+        user_project ||= []
+
+        # Grab the list of project id's specified
+        project_list = user_project.select do |project_id|
+          begin
+            project = Project.find(project_id)
+            project.can_be_managed_by(@logged_user)
+          rescue ActiveRecord::RecordNotFound
+            false
+          end
+        end
+
+        # Associate project permissions with user
+        project_permission = params[:project_permission]
+        project_list.each do |project_id|
+          permission_list = project_permission.nil? ? nil : project_permission[project_id]
+          
+          next if permission_list.nil?
+
+          # Insert into permission list
+          Project.find(project_id).users << @user
+
+          # Reset and update permissions
+          if permission_list.nil?
+            ProjectUser.update_all(ProjectUser.update_str({}, @user), ['user_id = ? AND project_id = ?', @user.id, project_id])
+          else
+            ProjectUser.update_all(ProjectUser.update_str(permission_list, @user), ['user_id = ? AND project_id = ?', @user.id, project_id])
+          end
+        end
+
         #ApplicationLog.new_log(@user, @logged_user, :add, true)
         @user.send_new_account_info(new_account_password) if @send_email
 

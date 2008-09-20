@@ -85,3 +85,20 @@
   <label class="yes_no" for="userFormEmailNotificationNo"><%= :yesno_no.l %></label> <br /><span class="desc"><%= :send_account_email_notication_info.l %></span>
   </div>
 <% end %>
+
+<% if not @projects.empty? %>
+
+<script type="text/javascript">
+  permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
+</script>
+
+<fieldset>
+  <legend><%= :permissions.l %></legend>
+  <div id="userPermissions">
+    <div id="userProjects">
+<%= render :partial => 'project/permissions.rhtml', :locals => {:user => @user}, :collection => @projects %>
+    </div>
+  </div>
+</fieldset>
+<% end %>
+

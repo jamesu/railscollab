@@ -494,6 +494,7 @@ confirm_user_delete: "Are you sure you want to delete this user?"
 hint: Hint
 hint_permissions_info: "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)."
 project_completed_on: "Completed on {date} by {user}"
+all: All
 
 # Forms
 success_message: Success message

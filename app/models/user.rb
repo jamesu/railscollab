@@ -257,20 +257,26 @@ class User < ActiveRecord::Base
     return ProjectUser.all(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]).length > 0
   end
 
-  def has_all_permissions(project)
+  def has_all_permissions(project, reload=false)
     return false if is_anonymous?
-    @@cached_permissions ||= self.permissions_for(project)
-    return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions.has_all_permissions?)
+    
+    perms = self.permissions_for(project, reload)
+    return perms.nil? ? false : (self.is_admin or perms.has_all_permissions?)
   end
 
-  def has_permission(project, pname)
+  def has_permission(project, pname, reload=false)
     return false if is_anonymous?
-    @@cached_permissions ||= self.permissions_for(project)
-    return @@cached_permissions.nil? ? false : (self.is_admin or @@cached_permissions[pname])
+    
+    perms = self.permissions_for(project, reload)
+    return perms.nil? ? false : (self.is_admin or perms[pname])
   end
 
-  def permissions_for(project)
-    ProjectUser.first(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id])
+  def permissions_for(project, reload=false)
+    @@cached_permissions ||= {}
+    @@cached_permissions[project] = nil if reload
+    @@cached_permissions[project] = (ProjectUser.first(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]) || false)
+    
+    @@cached_permissions[project].class == FalseClass ? nil : @@cached_permissions[project]
   end
 
   def has_avatar?
