@@ -1,8 +1,8 @@
 <%
   @page_title = :search_results.l
   
-  @tabbed_navigation_items = project_tabbed_navigation(:overview)
-  @bread_crumbs = project_crumbs(:search_results)
+  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
+  @bread_crumbs = dashboard_crumbs(:search_results)
   
   @page_actions = []
   
@@ -22,8 +22,9 @@
                                                    :search => h(@current_search)}) %></p>
 <ul>
 <% @search_results.each do |obj| -%>
-  <li><%= :search_project.l_with_args(:type => obj.class.to_s.to_sym.l, 
-                                      :name => link_to(obj.object_name, obj.object_url)) %></li>
+  <li><%= :search_dashboard.l_with_args(:type => obj.class.to_s.to_sym.l, 
+                                        :name => link_to(obj.object_name, obj.object_url),
+                                        :project => link_to(obj.project.object_name, obj.project.object_url)) %></li>
 <% end %>
 </ul>
 

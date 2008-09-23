@@ -495,6 +495,7 @@ hint: Hint
 hint_permissions_info: "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)."
 project_completed_on: "Completed on {date} by {user}"
 all: All
+go: Go
 
 # Forms
 success_message: Success message
@@ -682,6 +683,20 @@ notifier_new_account_access_login: "Then login using the username '{login}'."
 notifier_new_account_credentials: "To access this account, simply visit {site} and login using the following credentials:"
 author: Author
 
+
+# Search models
+Tag: Tag
+Comment: Comment
+ProjectMessage: Message
+ProjectTime: Time 
+ProjectTask: Task
+ProjectTaskList: Task list
+ProjectMilestone: Milestone
+ProjectFile: File
+ProjectFileRevision: File revision
+
+search_dashboard: "{type}: {name} in {project}"
+search_project: "{type}: {name}"
 # system
 
 product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
