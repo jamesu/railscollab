@@ -228,7 +228,7 @@ success_added_time: Successfully added time record
 success_edited_time: Successfully updated time record
 success_deleted_time: Successfully deleted time record
 success_added_user: Successfully added user
-success_deleted_user: "Successfully deleted user #{name}"
+success_deleted_user: "Successfully deleted user {name}"
 unimplemented: Unimplemented
 invalid_request: Invalid request
 
