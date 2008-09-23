@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class ProjectTask < ActiveRecord::Base
   include ActionController::UrlWriter
 
+  def project; self.task_list.project; end
   belongs_to :task_list, :class_name => 'ProjectTaskList', :foreign_key => 'task_list_id'
 
   belongs_to :company, :foreign_key => 'assigned_to_company_id'

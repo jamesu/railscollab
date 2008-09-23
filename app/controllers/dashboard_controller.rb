@@ -93,7 +93,7 @@ class DashboardController < ApplicationController
 
       @search_results, @total_search_results = Project.search(@last_search, @logged_user, {:page => current_page, :per_page => AppConfig.search_results_per_page})
 
-      @tag_names, @total_search_tags = Project.search(@last_search, @logged_user, {}, true)
+      @tag_names = []
       @pagination = []
       @start_search_results = AppConfig.search_results_per_page * (current_page-1)
       (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
@@ -101,7 +101,7 @@ class DashboardController < ApplicationController
       @last_search = :search_box_default.l
       @search_results = []
 
-      @tag_names = Tag.find(:all, :conditions => (!@logged_user.member_of_owner? ? ['is_private = ?', false] : nil))
+      @tag_names = []
     end
 
     @content_for_sidebar = 'project/search_sidebar'
