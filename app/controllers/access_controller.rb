@@ -34,10 +34,12 @@ class AccessController < ApplicationController
   end
 
   def login
+    @use_openid = (AppConfig.allow_openid and params['use_openid'].to_i == 1)
+
     case request.method
     when :post
       login_params = params[:login]
-      remember = login_params[:remember]
+      remember = login_params['remember']
 
       # Normal boring username + password
       @logged_user = User.authenticate(login_params['user'], login_params['password'])

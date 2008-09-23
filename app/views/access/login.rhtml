@@ -2,12 +2,12 @@
 
 <% if AppConfig.allow_openid %>
 <div id="login_header">
-    <%= check_box "login", "use_openid", :size => 30, :id => 'loginOpenID', :class => 'checkbox', :onclick => 'login_toggle_openid();' %>
+    <%= check_box_tag "use_openid", "1", @use_openid, :size => 30, :id => 'loginOpenID', :class => 'checkbox', :onclick => 'login_toggle_openid();' %>
     <label class="checkbox" for="loginOpenID"><%= :use_openid.l %></label>
 </div>
 <% end %>
 
-<div id="normal_login" style="display: block;">
+<div id="normal_login" <% if @use_openid %>style="display: none;" <% end %>>
 <%= form_tag :controller => 'access', :action => 'login' %>
   <div id="loginUsernameDiv">
     <label class="leftl"  for="loginUsername"><%= :username.l %>:</label>
@@ -27,7 +27,7 @@
 </div>
     
 <% if AppConfig.allow_openid %>
-<div id="openid_login" style="display: none;">
+<div id="openid_login" <% unless @use_openid %>style="display: none;"<% end %>>
 <%= form_tag :controller => 'access', :action => 'openid_login' %>
   <div id="loginUsernameDiv">
     <label for="loginOpenIDIdentity"><%= :openid.l %>:</label>
