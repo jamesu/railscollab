@@ -118,25 +118,22 @@ class UserController < ApplicationController
 
       if @user.save
         # Time to update permissions
-        user_project = params[:user_project]
-        user_project ||= []
+        user_project = params[:user_project] || []
 
         # Grab the list of project id's specified
         project_list = user_project.select do |project_id|
           begin
             project = Project.find(project_id)
-            project.can_be_managed_by(@logged_user)
+            project.can_be_managed_by(@logged_user) ? project_id : nil
           rescue ActiveRecord::RecordNotFound
-            false
+            nil
           end
-        end
+        end.compact
 
         # Associate project permissions with user
         project_permission = params[:project_permission]
         project_list.each do |project_id|
           permission_list = project_permission.nil? ? nil : project_permission[project_id]
-          
-          next if permission_list.nil?
 
           # Insert into permission list
           Project.find(project_id).users << @user
