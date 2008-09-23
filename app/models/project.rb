@@ -220,7 +220,7 @@ class Project < ActiveRecord::Base
 	 
 	 project_ids = user.active_projects.collect { |project| project.id }.join('|')
 	 real_query = is_private ? 
-	              "is_private:false project_id:#{project_ids} #{query}" :
+	              "is_private:false project_id:\"#{project_ids}\" #{query}" :
 	              "project_id:\"#{project_ids}\" #{query}"
 	 
 	 real_opts = { }.merge(options)
