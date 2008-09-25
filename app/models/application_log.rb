@@ -87,6 +87,10 @@ class ApplicationLog < ActiveRecord::Base
       @log.taken_by = user
       @log.is_private = private
       @log.save
+    else
+      # Destroy all occurrences of this object from the log
+      # (assuming no audit trail is required here)
+      ApplicationLog.destroy_all({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id})
     end
   end
 
