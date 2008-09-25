@@ -32,7 +32,7 @@ class MessageController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_message, :except => [:index, :add, :category, :add_category, :edit_category, :delete_category]
-  after_filter  :user_track
+  after_filter  :user_track, :only => [:index, :view, :category]
 
   def index
     current_page = params[:page].to_i
