@@ -174,8 +174,6 @@ class ProjectFile < ActiveRecord::Base
           to_object.project_file << attached_file
 
           count += 1
-
-          ApplicationLog::new_log(attached_file, user, :add)
         end
       end
     end
