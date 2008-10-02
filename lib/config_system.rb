@@ -22,11 +22,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require 'ostruct'
 require 'yaml'
 
+
 module ConfigSystem
 
 # Courtesy of Dmytro Shteflyuk's blog post
   def self.init
     try_libs
+    
+    # Following for themeable assets
+    ActionView::Helpers::AssetTagHelper.module_eval do
+       def image_path(source)
+         compute_public_path(source, 'themes/#{AppConfig.site_theme}/images')
+       end
+       alias_method :path_to_image, :image_path
+       
+       def stylesheet_path(source)
+         compute_public_path(source, "themes/#{AppConfig.site_theme}/stylesheets", 'css')
+       end
+       alias_method :path_to_stylesheet, :stylesheet_path
+    end
+    
   end
   
   def self.load_overrides
@@ -58,6 +73,7 @@ module ConfigSystem
   end
   
   def self.load_sys
+    
     # ActionMailer stuff
     begin
       ActionMailer::Base.delivery_method                 = AppConfig.notification_email_method.to_sym
@@ -68,13 +84,9 @@ module ConfigSystem
     end
     
     # Theming
-    ActionController::Base.asset_host = Proc.new { |source|
-      if source.starts_with?('/images') or source.starts_with?('/stylesheets')
-        AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}/themes/#{AppConfig.site_theme}" : "#{AppConfig.site_url}/themes/#{AppConfig.site_theme}"
-      else
-        AppConfig.use_asset_hosts ? "assets#{rand(3)}.#{AppConfig.asset_hosts_url}" : "#{AppConfig.site_url}"
-      end
-    }
+    ActionController::Base.asset_host = AppConfig.use_asset_hosts ? Proc.new { |source|
+        "assets#{rand(3)}.#{AppConfig.asset_hosts_url}"
+    } : nil
     
     # Amazon S3
     if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?
