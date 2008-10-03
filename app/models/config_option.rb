@@ -91,5 +91,11 @@ class ConfigOption < ActiveRecord::Base
 
   def self.reload_all
     FileUtils.touch("#{RAILS_ROOT}/tmp/restart.txt")
+    
+    # Re-load provided we are not running passenger
+    # (also there is the dont_reload_config override)
+    unless AppConfig.server == :passenger or AppConfig.dont_reload_config
+      ConfigSystem.load_config
+    end
   end
 end

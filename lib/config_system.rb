@@ -28,6 +28,45 @@ module ConfigSystem
 # Courtesy of Dmytro Shteflyuk's blog post
   def self.init
     try_libs
+    
+    # Determine what we are running under
+    AppConfig.server = self.detect_server
+  end
+  
+  def self.detect_server
+    # For passenger, IN_PHUSION_PASSENGER is key
+    is_passenger = (defined?(IN_PHUSION_PASSENGER) and IN_PHUSION_PASSENGER)
+    
+    # Not sure about fastcgi, but this should do the trick
+    is_fastcgi = (Kernel.const_get('RailsFCGIHandler') if defined?(FCGI)) rescue false
+    
+    # Webrick is require'd only as a last resort
+    is_webrick = !defined?(WEBrick).nil?
+    
+    # For mongrel and thin, seems best to look for instances
+    is_mongrel = false
+    ObjectSpace.each_object(Mongrel::HttpHandler) { is_mongrel = true; break; } if defined?(Mongrel)
+    is_thin = false
+    ObjectSpace.each_object(Thin::Runner) { is_thin = true; break; } if defined?(Thin)
+    
+    # Earlier versions of passenger don't have IN_PHUSION_PASSENGER, so here's a workaround
+    unless is_fastcgi or is_mongrel or is_webrick or is_thin
+      is_passenger = defined?(Passenger) and Passenger.class == Module
+    end
+    
+    if is_passenger
+      :passenger
+    elsif is_fastcgi
+      :fastcgi
+    elsif is_mongrel
+      :mongrel
+    elsif is_webrick
+      :webrick
+    elsif is_thin
+      :thin
+    else
+      :unknown
+    end
   end
   
   def self.post_init  
