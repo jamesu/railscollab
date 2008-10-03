@@ -28,7 +28,9 @@ module ConfigSystem
 # Courtesy of Dmytro Shteflyuk's blog post
   def self.init
     try_libs
-    
+  end
+  
+  def self.post_init  
     # Following for themeable assets
     ActionView::Helpers::AssetTagHelper.module_eval do
        def image_path(source)
@@ -40,8 +42,7 @@ module ConfigSystem
          compute_public_path(source, "themes/#{AppConfig.site_theme}/stylesheets", 'css')
        end
        alias_method :path_to_stylesheet, :stylesheet_path
-    end
-    
+    end    
   end
   
   def self.load_overrides
