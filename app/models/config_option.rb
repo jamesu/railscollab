@@ -90,11 +90,15 @@ class ConfigOption < ActiveRecord::Base
   end
 
   def self.reload_all
-    FileUtils.touch("#{RAILS_ROOT}/tmp/restart.txt")
+    if AppConfig.server == :fastcgi
+      FileUtils.touch("#{RAILS_ROOT}/public/dispatch.fcgi")
+    else
+      FileUtils.touch("#{RAILS_ROOT}/tmp/restart.txt")
+    end
     
-    # Re-load provided we are not running passenger
+    # Re-load provided we are not running passenger or fastcgi
     # (also there is the dont_reload_config override)
-    unless AppConfig.server == :passenger or AppConfig.dont_reload_config
+    unless [:passenger, :fastcgi].include? AppConfig.server or AppConfig.dont_reload_config
       ConfigSystem.load_config
     end
   end
