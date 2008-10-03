@@ -235,7 +235,7 @@ class ProjectMilestone < ActiveRecord::Base
   def self.all_by_user(user)
     projects = user.active_projects
     project_ids = projects.collect{ |project| project.id }
-    return [] if project_ids.emty?
+    return [] if project_ids.empty?
 
     msg_conditions = user.member_of_owner? ?
       { :completed_on => nil, :project_id => project_ids } :
