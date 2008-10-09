@@ -83,6 +83,17 @@ The snippit:
 
 For more advanced deployment (e.g. using FastCGI or load balancing proxies), refer to the Ruby on Rails documentation.
 
+## Security warning
+
+If you are planning on deploying Railscollab in a production environment, **make sure you change the secret session key**. Otherwise unauthorized users will be able to make a fake session (e.g. logged in as the administrator) and compromise your installation.
+
+The relevant line is located in "config/environment.rb":
+
+    config.action_controller.session = {
+      :session_key => '_railscollab_session',
+      :secret      => 'CHANGE THIS TO SOMETHING LONG AND RANDOM'
+    } 
+
 ## File Storage
 
 RailsCollab allows the user to upload files, provided they have sufficient permissions. 
