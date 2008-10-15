@@ -109,11 +109,15 @@ ActionController::Routing::Routes.draw do |map|
   	map.connect "project/:active_project/#{action}/:id", :controller => 'project', :action => action
   end
 
-  %w[message task comment milestone time files tags form people].each do |controller|
+  %w[message comment milestone time files tags form people].each do |controller|
   	map.connect "project/:active_project/#{controller}/:action/:id",         :controller => controller
   	map.connect "project/:active_project/#{controller}/:action/:id.:format", :controller => controller
   	map.connect "project/:active_project/#{controller}",                     :controller => controller
   end
+  
+  # Nested routes don't seem to work with path_prefix...
+  map.resources :task_lists, :path_prefix => 'project/:active_project'
+  map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id'
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

@@ -90,7 +90,7 @@ class ProjectTaskList < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'task', :action => 'view_list', :id => self.id, :active_project => self.project_id
+    url_for :only_path => true, :controller => 'task_lists', :action => 'show', :id => self.id, :active_project => self.project_id
   end
 
   def tags
@@ -136,7 +136,7 @@ class ProjectTaskList < ActiveRecord::Base
     !(self.is_private and !user.member_of_owner?) and user.id == created_by.id
   end
   
-  alias :can_be_changed_by, :can_be_edited_by
+  alias :can_be_changed_by :can_be_edited_by
 
   def can_be_deleted_by(user)
     project.is_active? and user.member_of(project) and user.is_admin

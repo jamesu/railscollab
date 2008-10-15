@@ -147,7 +147,7 @@ class ProjectTask < ActiveRecord::Base
     task_list.project.is_active? and user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and task_list.can_be_managed_by(user))
   end
 
-  def can_be_changed_by(user)
+  def can_be_edited_by(user)
     project = task_list.project
 
     return false if !user.member_of(project) or !project.is_active? or user.is_anonymous?
@@ -161,6 +161,8 @@ class ProjectTask < ActiveRecord::Base
 
     return task_list.can_be_changed_by(user)
   end
+  
+  alias :can_be_changed_by :can_be_edited_by
 
   def can_be_deleted_by(user)
     task_list.can_be_deleted_by(user)
