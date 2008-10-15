@@ -37,7 +37,16 @@ class ProjectTaskList < ActiveRecord::Base
   before_validation_on_create  :process_params
   after_create   :process_create
   before_update  :process_update_params
+  after_update   :update_tags
   before_destroy :process_destroy
+
+  def update_tags
+    return true if @update_tags.nil?
+    Tag.clear_by_object(self)
+    Tag.set_to_object(self, @update_tags)
+    
+    true
+  end
 
   def process_params
     write_attribute("completed_on", nil)
@@ -45,6 +54,7 @@ class ProjectTaskList < ActiveRecord::Base
 
   def process_create
     ApplicationLog.new_log(self, self.created_by, :add, self.is_private)
+    update_tags
   end
 
   def process_update_params
@@ -84,7 +94,11 @@ class ProjectTaskList < ActiveRecord::Base
   end
 
   def tags
-    Tag.list_by_object(self).join(',')
+    return tags_list.join(',')
+  end
+  
+  def tags_list
+    @update_tags.nil? ? Tag.list_by_object(self) : @update_tags
   end
 
   def tags_with_spaces
@@ -92,8 +106,7 @@ class ProjectTaskList < ActiveRecord::Base
   end
 
   def tags=(val)
-    Tag.clear_by_object(self)
-    Tag.set_to_object(self, val.split(',')) unless val.nil?
+    @update_tags = val.split(',')
   end
 
   def is_completed?
@@ -115,13 +128,15 @@ class ProjectTaskList < ActiveRecord::Base
     project.is_active? and user.has_permission(project, :can_manage_tasks)
   end
 
-  def can_be_changed_by(user)
+  def can_be_edited_by(user)
     return false if !project.is_active? or !user.member_of(project) or user.is_anonymous?
 
     return true if user.is_admin
 
     !(self.is_private and !user.member_of_owner?) and user.id == created_by.id
   end
+  
+  alias :can_be_changed_by, :can_be_edited_by
 
   def can_be_deleted_by(user)
     project.is_active? and user.member_of(project) and user.is_admin
@@ -171,7 +186,7 @@ class ProjectTaskList < ActiveRecord::Base
 
   # Accesibility
 
-  attr_accessible :name, :priority, :description, :milestone_id, :is_private
+  attr_accessible :name, :priority, :description, :milestone_id, :is_private, :tags
 
   # Validation
 
