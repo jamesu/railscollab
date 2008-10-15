@@ -14,11 +14,9 @@
 	  <%= stylesheet_link_tag ss %>
 	  <% end %>
 	<% end %>
-	<%= javascript_include_tag 'prototype.js' %>
-	<%= javascript_include_tag 'effects.js' %>
-	<%= javascript_include_tag 'dragdrop.js' %>
-	<%= javascript_include_tag 'controls.js' %>
-	<%= javascript_include_tag 'lowpro.js' %>
+	<%= javascript_include_tag 'jquery.js' %>
+	<%= javascript_include_tag 'jquery-ui.js' %>
+	<%= javascript_include_tag 'jrails.js' %>
 	<%= javascript_include_tag 'application.js' %>
 	
 	<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
