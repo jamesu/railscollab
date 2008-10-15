@@ -1,0 +1,2 @@
+select_class = @task.is_completed? ? 'completedTasks' : 'openTasks'
+page.select("\#list_#{@task_list.id} .#{select_class} .taskItems:first").append(render({:partial => 'show', :collection => [@task]}))

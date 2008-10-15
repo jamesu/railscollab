@@ -1,122 +1,231 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-var StatusBar = Behavior.create({
-	onclick: function(e)
-	{
-		var source = Event.element(e);
-		Event.stop(e);
-		
-		Effect.Fade(source);
+// TODO: re-write and consolidate where needed
+
+// Quick jQuery extensions for missing prototype functions
+
+jQuery.fn.extend({
+  request: function( callback, type ) {
+   var el = $(this[0]);
+	 return jQuery.ajax({
+	   type: el.attr('method'),
+	   url: el.attr('action'),
+	   data: el.serialize(),
+	   success: callback,
+	   dataType: type
+	 });
+	},
+	
+	autofocus: function() {
+	  this.find('.autofocus:first').focus();
 	}
 });
 
-// Userbox stuff
+// jQuery object extensions
 
-var PopupMenu = Behavior.create({
-	initialize: function()
-	{
-		PopupMenu.current_popup = null;
+jQuery.extend({
+  del: function( url, data, callback, type ) {
+		if ( jQuery.isFunction( data ) ) {
+			callback = data;
+			data = {};
+		}
+		
+		data = data == null ? {} : data;
+		if (!data['_method'])
+		{
+		  if (typeof data == 'string')
+		    data += '&_method=DELETE';
+		  else
+		    data['_method'] = 'DELETE';
+		}
+
+		return jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: callback,
+			dataType: type
+		});
 	},
 	
-	onclick: function(e)
-	{
-		var element = e.element();
-		e.stop();
-		
-		var popup_menu = $(element.identify() + '_menu');
-		if (popup_menu && (popup_menu != PopupMenu.current_popup))
-		{
-			var offset = Position.cumulativeOffset(element);
-			offset[1] += element.offsetHeight;
-			this.switch_menu(offset, popup_menu);
-		}
-		else
-		{
-			this.switch_menu(null, null);
-		}
-	},
-	
-	switch_menu: function(new_pos, new_menu)
-	{
-		if (PopupMenu.current_popup)
-		{
-			PopupMenu.current_popup.style.display = 'none';
+	put: function( url, data, callback, type ) {
+		if ( jQuery.isFunction( data ) ) {
+			callback = data;
+			data = {};
 		}
 		
-		PopupMenu.current_popup = new_menu;
+		data = data == null ? {} : data;
+		if (!data['_method'])
+		{
+		  if (typeof data == 'string')
+		    data += '&_method=PUT';
+		  else
+		    data['_method'] = 'PUT';
+		}
 		
-		if (!new_menu)
-			return;
-		
-		new_menu.style.left = new_pos[0] + 'px';
-		new_menu.style.top = new_pos[1] + 'px';
-		new_menu.style.display = 'block';
+		return jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: callback,
+			dataType: type
+		});
 	}
 });
+
+// authenticity_token fix
+
+$(document).ajaxSend(function(event, request, settings) {
+  if (typeof(AUTH_TOKEN) == "undefined" || request.type == 'GET') return;
+  settings.data = settings.data ? (settings.data + '&') : "";
+  settings.data += "authenticity_token=" + encodeURIComponent(AUTH_TOKEN);
+});
+
+$(document).ready(function(){
+  bindStatic();
+  bindDynamic();
+});
+
+function bindStatic() {
+      
+      $('#statusBar').click(function(evt) {
+        $(this).hide('slow');
+        
+        return false;
+      });
+      
+	    $('a#messageFormAdditionalTextToggle').click(function(evt) {
+	      var element = evt.target();
+	      
+	      $('#messageFormAdditionalText').toggle();
+	      $('#messageFormAdditionalTextExpand').toggle();
+	      $('#messageFormAdditionalTextCollapse').toggle();
+	      
+	      return false;
+      });
+      
+}
+
+function bindDynamic() {
+      
+      // Popup form for Add Item
+      $('.addTask form').submit(function(evt) {
+        var form = $(this);
+        form.request(JustRebind, 'script')
+        form.reset();
+        return false;
+      });
+      
+      $('.addTask form .cancel').click(function(evt) {
+        var addItemInner = $(evt.target).parents('.inner:first');
+        var newItem = addItemInner.parents('.addTask:first').find('.newTask:first');
+        
+        addItemInner.hide();
+        addItemInner.children('form').reset();
+        newItem.show();
+        
+        return false;
+      });
+      
+      // Add Item link
+      $('.newTask a').click(function(evt) {
+        var newItem = $(evt.target.parentNode);
+        var addItemInner = newItem.parents('.addTask:first').find('.inner:first');
+        
+        addItemInner.show();
+        addItemInner.autofocus();
+        newItem.hide();
+        
+        return false;
+      });
+      
+      $('.taskItem form').submit(function(evt) {
+        $(this).request(JustRebind, 'script');
+        
+        return false;
+      });
+    
+      $('.taskItem form .cancel').click(function(evt) {
+        var el = $(evt.target);
+        var list_url = el.parents('.taskList:first').attr('url');
+        var task_id = el.parents('.taskItem:first').attr('task_id');
+        
+        //$.get(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
+        
+        return false;
+      });
+      
+      $('.taskList .checkbox').click(function(evt) {
+        var el = $(evt.target);
+        var list_url = el.parents('.taskList:first').attr('url');
+        var task_id = el.parents('.taskItem:first').attr('task_id');
+        
+        $.put(list_url + '/tasks/' + task_id + '/status', {'task[completed]': evt.target.checked}, JustRebind, 'script');
+        
+        return false;
+      });
+      
+      $('.taskList .taskEdit').click(function(evt) {
+        var el = $(this);
+        var list_url = el.parents('.taskList:first').attr('url');
+        var task_id = el.parents('.taskItem:first').attr('task_id');
+        
+        $.get(list_url + '/tasks/' + task_id + '/edit', null, JustRebind, 'script');
+        
+        return false;
+      });
+      
+      $('.taskList .taskDelete').click(function(evt) {
+        var el = $(this);
+        var list_url = el.parents('.taskList:first').attr('url');
+        var task_id = el.parents('.taskItem:first').attr('task_id');
+        
+        if (confirm(el.attr('confirm_l')))
+          $.del(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
+        
+        return false;
+      });
+}
+
+function JustRebind(data) {
+  rebindDynamic();
+}
+
+function rebindDynamic() {
+  
+  $('.addTask form').unbind();
+  $('.addTask form .cancel').unbind();
+  $('.newTask a').unbind();
+  $('.taskItem form').unbind();
+  $('.taskItem form .cancel').unbind();
+  $('.taskList .checkbox').unbind();
+  $('.taskList .itemDelete').unbind();
+  
+  bindDynamic();
+}
+
+var Project = {
+  buildUrl: function(resource) {
+    return ('/project' + PROJECT_ID + resource);
+  }
+};
 
 // Login form stuff
 
 function login_toggle_openid()
 {
-	var toggle_box = $('loginOpenID');
-	if (toggle_box.checked)
+	var toggle_box = $('#loginOpenID');
+	if (toggle_box.attr('checked'))
 	{
-		$('openid_login').style.display = 'block';
-		$('normal_login').style.display = 'none';
+		$('#openid_login').show();
+		$('#normal_login').hide();
 	}
 	else
 	{
-		$('openid_login').style.display = 'none';
-		$('normal_login').style.display = 'block';
+		$('#openid_login').hide();
+		$('#normal_login').show();
 	}
-}
-
-
-// Task form stuff
-
-function task_form_show_add(id)
-{
-	$('addTaskForm' + id).style.display = 'block';
-}
-
-function task_form_hide_add(id)
-{
-	$('addTaskForm' + id).style.display = 'none';
-}
-
-function task_form_loaded_add(id)
-{
-}
-
-function task_form_loading_add(id)
-{
-}
-
-function task_view_edit(id, pid)
-{
-    Sortable.destroy('openTasksList' + id);
-    $('editTaskList' + id).hide();
-    $('sortTaskList' + id).show();
-}
-
-function task_view_sort(id, pid)
-{
-	$('sortTaskList' + id).hide();
-	$('editTaskList' + id).show();
-	Sortable.create('openTasksList' + id, 
-	{
-		onUpdate:function() 
-		{ 
-			new Ajax.Request('/project/' + pid + '/task/reorder_list/' + id, 
-			{
-			asynchronous:true, evalScripts:false,
-			onComplete:function(request) {new Effect.Highlight('openTasksList' + id, {});},
-			parameters:Sortable.serialize('openTasksList' + id, {name: 'list'}) + "&authenticity_token=" + AUTH_TOKEN
-			})
-		}, 
-	ghosting: true}
-	)
 }
 
 // Permissions form stuff
@@ -124,21 +233,27 @@ var permissions_form_items = [];
 
 function permissions_form_project_select(id)
 {
-	$('projectPermissionsBlock' + id).style.display = $('projectPermissions' + id).checked ? 'block' : 'none';
+  if ($('#projectPermissions' + id).attr('checked'))
+	  $('#projectPermissionsBlock' + id).show();
+	else
+	  $('#projectPermissionsBlock' + id).hide();
 }
 
 function permissions_form_project_select_company(id)
 {
-	$('projectCompanyUsers' + id).style.display = $('projectCompany' + id).checked ? 'block' : 'none';
+  if ($('#projectCompany' + id).attr('checked'))
+	  $('#projectCompanyUsers' + id).show();
+	else
+	  $('#projectCompanyUsers' + id).hide();
 }
 
 function permissions_form_project_select_all(id)
 {
-	var val = $('projectPermissions' + id + 'All').checked;
+	var val = $('#projectPermissions' + id + 'All').attr('checked');
 	
 	// Select all items then!
-	permissions_form_items.each(function(permission){
-		$('projectPermission' + id + permission).checked = val;
+	$.each(permissions_form_items, function(){
+		$('#projectPermission' + id + this).attr('checked', val);
 	});
 }
 
@@ -147,12 +262,12 @@ function permissions_form_project_select_item(id)
 	var do_all = true;
 	
 	// Check to see if everything has been selected
-	permissions_form_items.each(function(permission){
-		if (!$('projectPermission' + id + permission).checked)
+	$.each(permissions_form_items, function(){
+		if (!$('#projectPermission' + id + this).attr('checked'))
 			do_all = false;
 	});
 	
-	$('projectPermissions' + id + 'All').checked = do_all;
+	$('#projectPermissions' + id + 'All').attr('checked', do_all);
 }
 
 function permissions_form_items_set(list)
@@ -164,15 +279,18 @@ function permissions_form_items_set(list)
 
 function form_form_update_action()
 {
-	$('projectFormActionSelectMessage').disabled = !$('projectFormActionAddComment').checked;
-	$('projectFormActionSelectTaskList').disabled =  !$('projectFormActionAddTask').checked;
+	$('#projectFormActionSelectMessage').attr('disabled', !$('#projectFormActionAddComment').attr('checked'));
+	$('#projectFormActionSelectTaskList').attr('disabled', !$('#projectFormActionAddTask').attr('checked'));
 }
 
 // User form stuff
 
 function user_form_update_passwordgen()
 {
-	userFormPasswordInputs.style.display = $('userFormGeneratePassword').checked ? 'none' : 'block';
+  if ($('#userFormGeneratePassword').attr('checked'))
+    userFormPasswordInputs.hide();
+  else
+    userFormPasswordInputs.show();
 }
 
 // File form stuff
@@ -180,18 +298,24 @@ var file_form_controls = null;
 
 function file_form_select_revision()
 {
-	$('fileFormRevisionCommentBlock').style.display = $('fileFormVersionChange').checked ? 'block' : 'none';
+  if ($('#fileFormVersionChange').attr('checked'))
+	  $('#fileFormRevisionCommentBlock').show();
+	else
+	  $('#fileFormRevisionCommentBlock').hide();
 }
 
 function file_form_select_update()
 {
-	$('updateFileForm').style.display = $('fileFormUpdateFile').checked ? 'block' : 'none';	
+  if ($('#fileFormUpdateFile').attr('checked'))
+	  $('#updateFileForm').show();
+	else
+	  $('#updateFileForm').hide();
 }
 
 function file_form_attach_update_action()
 {
-	$('attachFormSelectFile').disabled = !$('attachFormExistingFile').checked;
-	$('attachFilesInput_1').disabled = !$('attachFormNewFile').checked;
+	$('#attachFormSelectFile').attr('disabled', !$('#attachFormExistingFile').attr('checked'));
+	$('#attachFilesInput_1').attr('disabled', !$('#attachFormNewFile').attr('checked'));
 }
 
 function file_form_attach_init(limit)
@@ -202,16 +326,14 @@ function file_form_attach_init(limit)
 	file_form_controls = {'count' : 1, 'next_id' : 2, 'limit' : limit};
 	
 	var add_button = document.createElement('button');
-    add_button.setAttribute('type', 'button');
-    add_button.setAttribute('id', 'attachFilesAdd');
-    add_button.className = 'add_button';
-    add_button.appendChild(document.createTextNode( "Add file" ));
+  add_button.setAttribute('type', 'button');
+  add_button.setAttribute('id', 'attachFilesAdd');
+  add_button.className = 'add_button';
+  add_button.appendChild(document.createTextNode( "Add file" ));
 	
-	$('attachFiles').appendChild(add_button);
+	$('#attachFiles')[0].appendChild(add_button);
 	
-	add_button.observe('click', function(event){
-		file_form_attach_add();
-	});
+	$(add_button).click(file_form_attach_add);
 }
 
 function file_form_attach_add()
@@ -235,17 +357,17 @@ function file_form_attach_add()
 	remove_button.className = 'remove_button';
 	remove_button.appendChild(document.createTextNode("Remove"));
 	
-	remove_button.observe('click', function(event){
+	$(remove_button).click(function(event){
 		file_form_attach_remove(cur_id);
 	});
 	
 	attach_div.appendChild(file_input);
 	attach_div.appendChild(remove_button);
 
-	$('attachFilesControls').appendChild(attach_div);
+	$('#attachFilesControls')[0].appendChild(attach_div);
 	
 	if (cur_id >= file_form_controls.limit)
-		$('attachFilesAdd').disabled = true;
+		$('#attachFilesAdd').attr('disabled', true);
 	
 	file_form_controls.next_id += 1;
 	file_form_controls.count += 1;
@@ -253,9 +375,9 @@ function file_form_attach_add()
 
 function file_form_attach_remove(id)
 {
-	$('attachFilesControls').removeChild($('attachFiles_' + id));
-	$('attachFilesAdd').disabled = false;
-    file_form_controls.count -= 1;
+	$('#attachFiles_' + id).remove();
+	$('#attachFilesAdd').attr('disabled', false);
+  file_form_controls.count -= 1;
 }
 
 // Notification form stuff (mainly for message posting)
@@ -267,19 +389,19 @@ function notify_form_select(company_id, id)
 	
 	// Check to see if everything has been selected
 	notify_form_companies['company_' + company_id].users.each(function(user_id){
-		if (!$('notifyUser' + user_id).checked)
+		if (!$('notifyUser' + user_id).attr('checked'))
 			do_all = false;
 	});
 	
-	$('notifyCompany' + company_id).checked = do_all;
+	$('notifyCompany' + company_id).attr('checked', do_all);
 }
 
 function notify_form_select_company(id)
 {
-	var val = $('notifyCompany' + id).checked;
+	var val = $('notifyCompany' + id).attr('checked');
 	
 	notify_form_companies['company_' + id].users.each(function(user_id){
-		$('notifyUser' + user_id).checked = val;
+		$('#notifyUser' + user_id).attr('checked', val);
 	});
 }
 
@@ -289,23 +411,10 @@ function notify_form_set_company(id)
 	var users = notify_form_companies['company_' + id].users;
 	
 	users.each(function(user_id){
-		if ($('notifyUser' + user_id).checked)
+		if ($('#notifyUser' + user_id).attr('checked'))
 		  count += 1;
 	});
 	
 	if (count == users.length)
-	  $('notifyCompany' + id).checked = true;
+	  $('#notifyCompany' + id).attr('checked', true);
 }
-
-Event.addBehavior({
-	'.StatusMessage' : StatusBar(),
-	'.PopupMenuWidgetAttachTo' : PopupMenu(),
-	'a#messageFormAdditionalTextToggle:click': function(e) {
-	  var element = e.element();
-	  e.stop();
-	  
-	  var target_element = $('messageFormAdditionalText');
-	  target_element.style.display = target_element.style.display == 'none' ? 'block' : 'none' ;
-      $('messageFormAdditionalTextToggle').innerHTML = target_element.style.display == 'none' ? 'Expand' : 'Collapse';
-    }
-});

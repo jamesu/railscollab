@@ -1,0 +1,3 @@
+insert_into = @task.is_completed? ? 'completedTasks' : 'openTasks'
+page.remove "task_item_#{@task.id}" 
+page.select("\#list_#{@task_list.id} .#{insert_into} ul:first").append(render({:partial => 'show', :collection => [@task]})) 

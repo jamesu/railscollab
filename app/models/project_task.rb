@@ -136,6 +136,10 @@ class ProjectTask < ActiveRecord::Base
     @update_completed = value
     @update_completed_user = user
   end
+  
+  def is_completed?
+    return self.completed_on != nil
+  end
 
   def set_order(value, user=nil)
     @update_is_minor = true
@@ -170,6 +174,11 @@ class ProjectTask < ActiveRecord::Base
 
   def can_be_seen_by(user)
     can_be_changed_by(user) or task_list.can_be_seen_by(user)
+  end
+  
+  
+  def can_be_completed_by(user)
+    self.can_be_edited_by(user)
   end
 
   def comment_can_be_added_by(user)

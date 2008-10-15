@@ -1,14 +1,14 @@
 <%
   @page_title = h @task_list.name
   @tabbed_navigation_items = project_tabbed_navigation(:tasks)
-  @bread_crumbs = project_crumbs(@task_list.name, [{:title => :tasks, :url => "/project/#{@active_project.id}/task/index"}])
+  @bread_crumbs = project_crumbs(@task_list.name, [{:title => :tasks, :url => task_lists_path}])
   
   @page_actions = []
   
   if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_task_list, :url=> "/project/#{@active_project.id}/task/add_list"}
+    @page_actions << {:title => :add_task_list, :url=> new_task_list_path}
   end
   
   @additional_stylesheets = ['project/task_list']
 %>
-<%= render :partial => 'task_list', :collection => [@task_list], :locals => {:on_list_page => true} %>
+<%= render :partial => 'show', :object => @task_list, :locals => {:on_list_page => true} %>

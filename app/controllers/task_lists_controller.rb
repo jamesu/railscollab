@@ -43,7 +43,7 @@ class TaskListsController < ApplicationController
         @content_for_sidebar = 'index_sidebar'
       }
       format.js {}
-      format.xml  { render :xml => task_list.to_xml(:root => 'task-list') }
+      format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
     end
   end
 
@@ -143,11 +143,13 @@ class TaskListsController < ApplicationController
     end
     
     return error_status(true, :insufficient_permissions) unless (@task_list.can_be_deleted_by(@logged_user))
+    
+    @task_list.destroy
 
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_task_list)
-        redirect_to(lists_url)
+        redirect_to(task_lists_url)
       }
       format.js {}
       format.xml  { head :ok }

@@ -116,8 +116,10 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   # Nested routes don't seem to work with path_prefix...
-  map.resources :task_lists, :path_prefix => 'project/:active_project'
-  map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id'
+  map.resources :task_lists, :path_prefix => 'project/:active_project',
+                             :member => {:reorder => :any}
+  map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id',
+                        :member => {:status => :put}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

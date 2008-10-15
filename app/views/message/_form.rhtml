@@ -11,8 +11,17 @@
   </div>
   
   <div>
-    <label for="messageFormAdditionalText"><%= :additional_text.l %> (<a href="#" id="messageFormAdditionalTextToggle"><%= 'Expand' %></a>):<span class="desc"> - <%= :additional_text_info.l %></span></label>
-    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText', :class => 'editor', :style => 'display: none' %>
+    <% 
+      if @message.additional_text?
+        expand_style = 'display:none;'
+        compact_style = 'display:block;'
+      else
+        compact_style = 'display:none;'
+        expand_style = 'display:block;'
+      end
+    %>
+    <label for="messageFormAdditionalText"><%= :additional_text.l %> (<a href="#" id="messageFormAdditionalTextToggle"><span id="messageFormAdditionalTextExpand" style="<%= expand_style %>"><%= :expand.l %></span><span id="messageFormAdditionalTextCollapse" class="<%= compact_style %>"><%= :collapse.l %></span></a>):<span class="desc"> - <%= :additional_text_info.l %></span></label>
+    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText', :class => 'editor', :style => expand_style %>
   </div>
   
   <fieldset>

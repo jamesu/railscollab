@@ -1,0 +1,1 @@
+page.replace("task_item_#{@task.id}", :partial => 'show', :collection => [@task] )

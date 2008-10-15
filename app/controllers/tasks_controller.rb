@@ -36,7 +36,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.js
-      format.xml  { render :xml => @list_item }
+      format.xml  { render :xml => @task }
     end
   end
 
@@ -49,7 +49,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @list_item.to_xml(:root => 'task') }
+      format.xml  { render :xml => @task.to_xml(:root => 'task') }
     end
   end
 
@@ -77,11 +77,11 @@ class TasksController < ApplicationController
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_to(@task) }
         format.js
-        format.xml  { render :xml => @list_item.to_xml(:root => 'task'), :status => :created, :location => @task }
+        format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
       else
         format.html { render :action => "new" }
         format.js
-        format.xml  { render :xml => @list_item.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -100,15 +100,15 @@ class TasksController < ApplicationController
     @task.updated_by = @logged_user
 
     respond_to do |format|
-      if @task.update_attributes(params[:list_item])
+      if @task.update_attributes(params[:task])
         flash[:notice] = 'ListItem was successfully updated.'
-        format.html { redirect_to(@list_item) }
+        format.html { redirect_to(@task) }
         format.js
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
         format.js
-        format.xml  { render :xml => @list_item.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -124,12 +124,12 @@ class TasksController < ApplicationController
     
     return error_status(true, :insufficient_permissions) unless (@task.can_be_deleted_by(@logged_user))
     
-    @list_item.updated_by = @logged_user
-    @list_item.destroy
+    @task.updated_by = @logged_user
+    @task.destroy
 
     respond_to do |format|
-      format.html { redirect_to(list_items_url) }
-        format.js
+      format.html { redirect_back_or_default(task_lists_url) }
+      format.js
       format.xml  { head :ok }
     end
   end
@@ -145,11 +145,11 @@ class TasksController < ApplicationController
     return error_status(true, :insufficient_permissions) unless (@task.can_be_completed_by(@logged_user))
     
     @task.set_completed(params[:task][:completed] == 'true', @logged_user)
-    @task.position = @task_list.project_tasks.length
+    @task.order = @task_list.project_tasks.length
     @task.save
 
     respond_to do |format|
-      format.html { redirect_to(list_items_url) }
+      format.html { redirect_back_or_default(task_lists_url) }
       format.js
       format.xml  { head :ok }
     end

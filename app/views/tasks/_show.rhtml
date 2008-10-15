@@ -1,26 +1,19 @@
-<li id="<%="#{tprefix}_#{task_item.id}"%>">
-<% if task_item.completed_on.nil? %>
+<% task_item = show %>
 
+<li class="taskItem" id="task_item_<%= task_item.id %>" task_id="<%= task_item.id %>">
+<div class="taskItemContent">
 <% if task_item.can_be_changed_by(@logged_user) %>
-        <span class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/complete_task/#{task_item.id}", false, :mark_task_completed.l %></span>
+        <input class="checkbox" type="checkbox" <% if show.is_completed? %>checked="true"<% end %>/>
 <% else %>
-        <span class="taskCheckbox"><%= render_icon 'not-checked', :task_open.l %></span>
+        <span class="taskCheckbox"><%= render_icon( (task_item.completed_on.nil? ? 'not-checked' : 'checked'), :task_open.l) %></span>
 <% end %>
 
-<% else %>
-
-<% if task_item.can_be_changed_by(@logged_user) %>
-        <span class="taskCheckbox"><%= checkbox_link "/project/#{@active_project.id}/task/open_task/#{task_item.id}", true, :task_mark_open.l %> </td>
-<% else %>
-        <span class="taskCheckbox"><%= render_icon 'checked', :task_completed.l %></span>
-<% end %>
-
-<% end %>
         <span class="taskText">
 <% if not task_item.assigned_to.nil? %>
           <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
 <% end %>
-          <%= h task_item.text %> <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), {:controller => 'task', :action => 'edit_task', :id => task_item.id}, {:class => 'blank'} %><% end %>
-          <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:controller => 'task', :action => 'delete_task', :id => task_item.id}, {:method => :post, :confirm => :task_delete_confirm.l, :class => 'blank'} %><% end %><br />
+          <%= h task_item.text %> <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit'} %><% end %>
+          <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm_l => :task_delete_confirm.l, :class => 'blank taskDelete'} %><% end %><br />
         </span>
+</div>
 </li>

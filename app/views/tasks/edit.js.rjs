@@ -1,0 +1,3 @@
+@no_show_list = true
+page.replace_html("task_item_#{@task.id}", :partial => 'ajax_form' )
+page["task_item_#{@task.id}"].autofocus

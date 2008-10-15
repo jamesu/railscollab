@@ -1,47 +1,44 @@
-<div class="taskList">
-<div class="block" id="taskList<%= task_list.id %>">
+<% task_list = show %>
+
+<div class="taskList" id="list_<%= task_list.id %>" url="<%= task_list.object_url %>">
+<div class="block">
 <% if task_list.is_private? %>
     <div class="private" title="<%= :private_task_list.l %>"><span><%= :private_task_list.l %></span></div>
 <% end %>
-  <div class="header"><%= link_to (h task_list.name), :controller => 'task', :action => 'view_list', :id => task_list.id %></div>
+  <div class="header"><%= link_to (h task_list.name), task_list_path(:id => task_list.id) %></div>
 <% if task_list.description %>
   <div class="desc"><%= textilize task_list.description %></div>
 <% end %>
   <div class="openTasks">
     <ul class="taskItems" id="openTasksList<%= task_list.id %>">
 <% if task_list.open_tasks.length > 0 %>
-    <%= render :partial => 'task_item', :collection => task_list.open_tasks, :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
+    <%= render :partial => 'tasks/show', :collection => task_list.open_tasks, :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% end %>
     </ul>
   </div>
-  
-  <div class="addTask">
+
 <% if task_list.can_be_changed_by(@logged_user) %>
-<div id="addTaskForm<%= task_list.id %>ShowLink" style="display:block;"><%= link_to :add_task.l, {:controller => 'task', :action => 'add_task', :task_list_id => task_list.id}, {:onclick => "task_form_show_add(#{task_list.id}); return false"} %></div>
-    <div id="addTaskForm<%= task_list.id %>" style="display: none;">
-      <%= form_remote_tag :url => {:controller => 'task', :action => 'add_task', :task_list_id => task_list.id, :partial => 1}, 
-       :position => 'bottom',
-       :update =>  {:success => "openTasksList#{task_list.id}"},
-       :loading => "task_form_loading_add(#{task_list.id});",
-       :loaded => "task_form_loaded_add(#{task_list.id});",
-       :complete => "task_form_hide_add(#{task_list.id});" %>
+<%  show_form = @new_list.nil? ? false : true %>
+  <div class="addTask">
+    <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to :add_task.l, '#' %></div>
+    <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
+      <%= form_tag tasks_path(:task_list_id => task_list.id) %>
         <div class="taskListAddTaskText">
           <label for="addTaskText<%= task_list.id %>"><%= :text.l %>:</label>
-          <%= text_area 'task', 'text', :id => "addTaskText#{task_list.id}", :class => 'short', :rows => 10, :cols => 40  %>
+          <%= text_area 'task', 'text', :id => "addTaskText#{task_list.id}", :class => 'short autofocus', :rows => 10, :cols => 40  %>
         </div>
         <div class="taskListAddTaskAssignedTo">
           <label for="addTaskAssignTo<%= task_list.id %>"><%= :assign_to.l %>:</label>
           <%= select 'task', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => "addTaskAssignTo#{task_list.id}"} %>
         </div>
         
-        <button class="submit" type="submit" id="addTaskSubmit<%= task_list.id %>"><%= :add_task.l %></button> <%= :or.l %> <a href="#" onclick="task_form_hide_add(<%= task_list.id%>); return false"><%= :cancel.l %></a>
+        <button class="submit" type="submit"><%= :add_task.l %></button> <%= :or.l %> <a class="cancel" href="#"><%= :cancel.l %></a>
         
       </form>
     </div>
-<% end %>
   </div>
-  
-<% if task_list.completed_tasks.length > 0 %>
+<% end %>
+
   <div class="completedTasks">
 <% if on_list_page %>
 <%= :completed_tasks.l %>:
@@ -49,7 +46,7 @@
 <%= :recent_completed_tasks.l %>:
 <% end %>
     <ul class="taskItems">
-    <%= render :partial => 'task_item', :collection => task_list.completed_tasks[0...5], :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
+    <%= render :partial => 'tasks/show', :collection => task_list.completed_tasks[0...5], :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% if !on_list_page and task_list.completed_tasks.length > 5 %>
       <li>
         <%= link_to :view_all_completed_tasks.l, :controller => 'task', :action => 'view_list', :id => task_list.id %>
@@ -57,7 +54,6 @@
 <% end %>
     </ul>
   </div>
-<% end %>
   <div class="taskListTags"><span><%= :tags.l %>:</span> <%= tag_list task_list %></div>
 
 <div class="options">
