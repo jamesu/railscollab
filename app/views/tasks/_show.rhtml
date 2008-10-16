@@ -1,6 +1,11 @@
 <% task_item = show %>
 
 <li class="taskItem" id="task_item_<%= task_item.id %>" task_id="<%= task_item.id %>">
+<% if task_item.can_be_changed_by(@logged_user) %>
+<div class="taskItemHandle" style="display:none">
+  <div class="inner">[+]</div>
+</div>
+<% end %>
 <div class="taskItemContent">
 <% if task_item.can_be_changed_by(@logged_user) %>
         <input class="checkbox" type="checkbox" <% if show.is_completed? %>checked="true"<% end %>/>

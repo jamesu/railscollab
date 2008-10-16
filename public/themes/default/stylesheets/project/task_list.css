@@ -56,3 +56,29 @@ div.taskList .taskListTags {
 div.taskList .taskListTags span {
   font-weight: bolder;
 }
+
+div.taskList ul.taskItems {
+  padding-left: 0px;
+}
+
+div.taskList ul.taskItems li {
+  padding-left: 20px;
+}
+
+div.taskList .taskItemHandle {
+    position: relative;
+    left: 0pt;
+    width: 0pt;
+    height: 0pt;
+}
+
+div.taskList .taskItemHandle div.inner {
+    position: absolute;
+    right: 0px;
+    margin: 0px;
+    background: white;
+    width: 28px;
+    text-align: center;
+    
+    cursor: move;
+}

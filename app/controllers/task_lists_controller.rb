@@ -166,11 +166,11 @@ class TaskListsController < ApplicationController
     
     return error_status(true, :insufficient_permissions) unless (@task_list.can_be_edited_by(@logged_user))
     
-    order = params[:project_tasks].collect { |id| id.to_i }
+    order = params[:tasks].collect { |id| id.to_i }
     
     @task_list.project_tasks.each do |item|
         idx = order.index(item.id)
-        item.position = idx || @task_list.project_tasks.length
+        item.order = idx || @task_list.project_tasks.length
         item.save!
     end
     

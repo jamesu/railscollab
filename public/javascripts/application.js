@@ -151,7 +151,7 @@ function bindDynamic() {
         var list_url = el.parents('.taskList:first').attr('url');
         var task_id = el.parents('.taskItem:first').attr('task_id');
         
-        //$.get(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
+        $.get(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
         
         return false;
       });
@@ -186,6 +186,42 @@ function bindDynamic() {
         
         return false;
       });
+      
+      $('.doEditTaskList').click(function(evt) {
+        var el = $(this);
+        var list = el.parents('.taskList:first');
+        var list_url = list.attr('url');
+        
+        list.find('.openTasks:first ul').sortable('destroy');
+        list.find('.taskItemHandle').hide();
+         
+        $(this).hide();
+        $('.doSortTaskList').show();
+        
+        return false;
+      });
+      
+      $('.doSortTaskList').click(function(evt) {
+        var el = $(this);
+        var list = el.parents('.taskList:first');
+        var list_url = list.attr('url');
+        
+        list.find('.openTasks:first ul').sortable({
+          axis: 'y',
+          handle: '.taskItemHandle .inner',
+          opacity: 0.75,
+          update: function(e, ui) {
+            $.post(list_url + '/reorder', list.find('.openTasks:first ul').sortable('serialize', {key: 'tasks'}));
+          }
+        });
+        
+        list.find('.taskItemHandle').show();
+         
+        $(this).hide();
+        $('.doEditTaskList').show();
+        
+        return false;
+      });
 }
 
 function JustRebind(data) {
@@ -201,6 +237,9 @@ function rebindDynamic() {
   $('.taskItem form .cancel').unbind();
   $('.taskList .checkbox').unbind();
   $('.taskList .itemDelete').unbind();
+  
+  $('.doSortTaskList').unbind();
+  $('.doEditTaskList').unbind();
   
   bindDynamic();
 }

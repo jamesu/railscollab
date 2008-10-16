@@ -57,7 +57,7 @@
   <div class="taskListTags"><span><%= :tags.l %>:</span> <%= tag_list task_list %></div>
 
 <div class="options">
-<%= action_list actions_for_task_list(task_list) %><a style="display: none;" onclick="task_view_edit(<%= "#{task_list.id}, #{task_list.project_id}" %>); return false" id="editTaskList<%= task_list.id %>" href="#"><%= :edit_tasks.l %></a>
+<%= action_list actions_for_task_list(task_list) %><a style="display: none;" class="doEditTaskList" href="#"><%= :edit_tasks.l %></a>
 </div>
 
 </div>
