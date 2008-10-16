@@ -189,14 +189,14 @@ class ProjectTaskList < ActiveRecord::Base
   
   def to_xml(options = {}, &block)
     default_options = {
+      :methods => [ :tags ],
       :only => [ 
         :id,
         :milestone_id,
         :priority,
         :name,
         :description,
-        :is_private,
-        :tags
+        :is_private
       ]}
     self.ar_to_xml(options.merge(default_options), &block)
   end
