@@ -37,8 +37,9 @@ module ApplicationHelper
 
   def checkbox_link(link, checked=false, hint=nil, attrs={})
     icon_url = checked ? "/themes/#{AppConfig.site_theme}/images/icons/checked.gif" : "/themes/#{AppConfig.site_theme}/images/icons/not-checked.gif"
-
-    link_to "<img src='#{icon_url}' alt='' />", link, attrs.merge({:method => :post, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
+    
+    method = attrs[:method] || :post
+    link_to "<img src='#{icon_url}' alt='' />", link, attrs.merge({:method => method, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
   end
 
   def render_icon(filename, alt, attrs={})

@@ -105,6 +105,15 @@ function bindStatic() {
 	      return false;
       });
       
+      $('.taskCheckbox .checkbox').click(function(evt) {
+        var el = $(evt.target);
+        var url = el.attr('url');
+        
+        $.put(url, {'task[completed]': evt.target.checked}, JustReload, 'script');
+        
+        return false;
+      });
+      
 }
 
 function bindDynamic() {
@@ -222,6 +231,10 @@ function bindDynamic() {
         
         return false;
       });
+}
+
+function JustReload(data) {
+  window.location.reload();
 }
 
 function JustRebind(data) {

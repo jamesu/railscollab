@@ -34,7 +34,7 @@ class TasksController < ApplicationController
     end
     
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { redirect_back_or_default(task_lists_path) }
       format.js
       format.xml  { render :xml => @task }
     end
@@ -75,7 +75,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.save
         flash[:notice] = 'ListItem was successfully created.'
-        format.html { redirect_to(@task) }
+        format.html { redirect_back_or_default(task_lists_path) }
         format.js
         format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
       else
@@ -102,7 +102,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.update_attributes(params[:task])
         flash[:notice] = 'ListItem was successfully updated.'
-        format.html { redirect_to(@task) }
+        format.html { redirect_back_or_default(task_lists_path) }
         format.js
         format.xml  { head :ok }
       else
