@@ -184,6 +184,25 @@ class ProjectTask < ActiveRecord::Base
   def comment_can_be_added_by(user)
     task_list.comment_can_be_added_by(user)
   end
+  
+  # Serialization
+  alias_method :ar_to_xml, :to_xml
+  
+  def to_xml(options = {}, &block)
+    default_options = { 
+      :methods => [ :assigned_to_id ],
+      :only => [ 
+        :id,
+        :created_by_id,
+        :completed_by_id,
+        :completed_on,
+        :order,
+        :text,
+        :created_on,
+        :updated_on
+      ]}
+    self.ar_to_xml(options.merge(default_options), &block)
+  end
 
   # Accesibility
 

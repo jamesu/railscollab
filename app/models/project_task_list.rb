@@ -183,6 +183,23 @@ class ProjectTaskList < ActiveRecord::Base
       [tasklist.name, tasklist.id]
     end
   end
+  
+  # Serialization
+  alias_method :ar_to_xml, :to_xml
+  
+  def to_xml(options = {}, &block)
+    default_options = {
+      :only => [ 
+        :id,
+        :milestone_id,
+        :priority,
+        :name,
+        :description,
+        :is_private,
+        :tags
+      ]}
+    self.ar_to_xml(options.merge(default_options), &block)
+  end
 
   # Accesibility
 
