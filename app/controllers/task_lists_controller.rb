@@ -14,6 +14,7 @@ class TaskListsController < ApplicationController
       format.html {
         @open_task_lists = @active_project.project_task_lists.open(include_private)
         @completed_task_lists = @active_project.project_task_lists.completed(include_private)
+        @content_for_sidebar = 'index_sidebar'
       }
       format.xml  {
         conds = include_private ? {} : {'is_private', false}
