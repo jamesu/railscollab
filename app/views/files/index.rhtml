@@ -44,7 +44,8 @@
     <div class="fileInfo">
       <div class="fileName"><a href="<%= file.object_url %>" title="<%= :file_view_details.l %>"><%= h file.filename %></a></div>
 
-<% last_revision = file.last_revision %>      
+<% last_revision = file.last_revision %> 
+<% unless last_revision.nil? %>     
       <div class="fileLastRevision">
 <% if !last_revision.created_by.nil? %>
 		<%= :revision_created_by.l_with_args(:number => last_revision.revision_number,
@@ -55,7 +56,7 @@
 		                                     :date => format_usertime(last_revision.created_on, :revision_date_format_short.l)) %>
 <% end %>
       </div>
-
+<% end %>
 <% if file.description %>
       <div class="fileDescription"><%= textilize file.description %></div>
 <% end %>
