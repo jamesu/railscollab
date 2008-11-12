@@ -15,6 +15,7 @@ new_company = false
 if owner_company.nil?
 	puts 'Creating owner company...'
 	owner_company = Company.new(:name => initial_company_name)
+	owner_company.time_zone = 'UTC'
 	unless owner_company.save
 		puts "\nCouldn't create a new owner company!\n"
 		return
@@ -31,6 +32,7 @@ unless User.first(:conditions => ['users.is_admin = ? AND users.company_id = ?',
 	initial_user.company = Company.first
 	initial_user.is_admin = true
 	initial_user.auto_assign = true
+	initial_user.time_zone = 'UTC'
 
 	unless initial_user.save
 		puts 'User already exists, attempting to reset...'

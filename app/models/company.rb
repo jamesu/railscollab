@@ -19,8 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-require 'gd2' unless AppConfig.no_gd2
-
 class Company < ActiveRecord::Base
   include ActionController::UrlWriter
 
@@ -34,6 +32,8 @@ class Company < ActiveRecord::Base
   has_many :auto_assign_users, :class_name => 'User', :foreign_key => 'company_id', :conditions => ['auto_assign = ?', true]
 
   has_and_belongs_to_many :projects,  :join_table => :project_companies
+  
+  has_attached_file :logo, :styles => { :thumb => "50x50" }, :default_url => ''
 
   before_create :process_params
   before_update :process_update_params
@@ -48,7 +48,6 @@ class Company < ActiveRecord::Base
   end
 
   def process_destroy
-    FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
   end
 
   def self.owner(reload=false)
@@ -99,58 +98,14 @@ class Company < ActiveRecord::Base
   end
 
   def has_logo?
-    !self.logo_file.nil?
-  end
-
-  def logo=(value)
-    return if AppConfig.no_gd2
-
-    FileRepo.handle_delete(self.logo_file) unless self.logo_file.nil?
-
-    if value.nil?
-      self.logo_file = nil
-      return
-    end
-
-    content_type = value.content_type.chomp
-
-    if !['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(content_type)
-      self.errors.add(:avatar, 'Unsupported format')
-      return
-    end
-
-    max_width  = AppConfig.max_logo_width
-    max_height = AppConfig.max_logo_height
-
-    begin
-      data = value.read
-      image = GD2::Image.load(data)
-      image.resize!(image.width  > max_width  ? max_width  : image.width,
-                    image.height > max_height ? max_height : image.height)
-    rescue
-      self.errors.add(:avatar, "Invalid data")
-      return
-    end
-
-    self.logo_file = FileRepo.handle_storage(image.png, "logo_#{self.id}.png", 'image/png')
+    self.logo?
   end
 
   def logo_url
-    unless FileRepo.no_s3? or self.logo_file.nil?
-      dat = FileRepo.get_data(self.logo_file)
-      if dat.nil?
-        logo = nil
-      else
-        logo = (dat.class == Hash) ? dat[:url] : self.logo_file
-      end
-    else
-      logo = self.logo_file
-    end
-
-    if logo.nil?
+    if !logo?
       "/themes/#{AppConfig.site_theme}/images/logo.gif"
     else
-      "/company/logo/#{self.id}.png"
+      logo.url
     end
   end
 

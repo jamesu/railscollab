@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
 require 'digest/sha1'
-require 'gd2' unless AppConfig.no_gd2
 
 class User < ActiveRecord::Base
   include ActionController::UrlWriter
@@ -40,7 +39,8 @@ class User < ActiveRecord::Base
   has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
   has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
-
+  
+  has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
 
   before_destroy :process_destroy
 
@@ -48,8 +48,6 @@ class User < ActiveRecord::Base
     # Explicitly remove these
     ActiveRecord::Base.connection.execute("DELETE FROM project_users  WHERE user_id = #{self.id}")
     ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{self.id}")
-
-    FileRepo.handle_delete(self.avatar_file) unless self.avatar_file.nil?
   end
 
   def twister_array=(value)
@@ -280,7 +278,7 @@ class User < ActiveRecord::Base
   end
 
   def has_avatar?
-    !self.avatar_file.nil?
+    self.avatar?
   end
 
   def recent_activity_feed_url(project=nil, format='rss')
@@ -307,57 +305,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def avatar
-    nil
-  end
-
-  def avatar=(value)
-    return if AppConfig.no_gd2
-    FileRepo.handle_delete(self.avatar_file) unless self.avatar_file.nil?
-
-    if value.nil?
-      self.avatar_file = nil
-      return
-    end
-
-    content_type = value.content_type.chomp
-
-    unless ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(content_type)
-      self.errors.add(:avatar, 'Unsupported format')
-      return
-    end
-
-    begin
-      data = value.read
-      image = GD2::Image.load(data)
-
-      new_width  = [AppConfig.max_avatar_width, image.width].min
-      new_height = [AppConfig.max_avatar_height, image.height].min
-
-      image.resize!(new_width, new_height)
-    rescue
-      self.errors.add(:avatar, 'Invalid data')
-      return
-    end
-
-    self.avatar_file = FileRepo.handle_storage(image.png, "avatar_#{self.id}.png", 'image/png')
-  end
-
   def avatar_url
-    unless FileRepo.no_s3? or self.avatar_file.nil?
-      dat = FileRepo.get_data(self.avatar_file)
-      if dat.nil?
-        avatar = nil
-      else
-        avatar = (dat.class == Hash) ? dat[:url] : self.avatar_file
-      end
+    if !avatar?
+      "/themes/#{AppConfig.site_theme}/images/avatar.gif"
     else
-      avatar = self.avatar_file
+      avatar.url
     end
-
-    return "/themes/#{AppConfig.site_theme}/images/avatar.gif" if avatar.nil?
-
-    "/account/avatar/#{self.id}.png"
   end
 
   def display_name
