@@ -30,80 +30,28 @@ system:
     default: 20
     comment: ""
     order: 5
-  
-  max_avatar_width: 
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 6
-  max_avatar_height:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 7
-  max_logo_width:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 8
-  max_logo_height:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 9
-  max_thumbnail_width:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 10
-  max_thumbnail_height:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 11
-  
-  file_upload_directory:  
-    handler: StringConfigHandler
-    default: "public/uploads"
-    comment: ""
-    order: 12
-  file_thumbnail_width:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 13
-  file_thumbnail_height:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 14
-  file_thumbnail_quality:  
-    handler: IntegerConfigHandler
-    default: 50
-    comment: ""
-    order: 15
 
   minutes_to_comment_edit_expire:  
     handler: IntegerConfigHandler
     default: 3
     comment: ""
-    order: 16
+    order: 6
   minutes_to_activity_log_expire:   
     handler: IntegerConfigHandler
     default: 5
     comment: ""
-    order: 17
+    order: 7
   
   max_upload_size:   
     handler: IntegerConfigHandler
     default: 10485760
     comment: ""
-    order: 18
+    order: 8
   max_attachments:   
     handler: IntegerConfigHandler
     default: 5
     comment: ""
-    order: 19
+    order: 9
 
 general:
   site_name:   
@@ -128,63 +76,57 @@ general:
     handler: StringConfigHandler
     default: "example.com"
     comment: "'example.com' will enable assets[0-3].example.com as asset hosts."
-    order: 3   
-    
-  file_upload_storage:   
-    handler: FileStorageConfigHandler
-    default: "local_database"
-    comment: ""
-    order: 4
+    order: 3
   
   default_project_folders:
     handler: TextListConfigHandler
     default: ['images', 'documents', 'other']
     comment: ""
-    order: 5
+    order: 4
   
   default_project_message_categories:
     handler: TextListConfigHandler
     default: ['General', 'Projects', 'Problems']
     comment: ""
-    order: 6
+    order: 5
 
   default_project_message_category:
     handler: StringConfigHandler
     default: General
     comment: ""
-    order: 7
+    order: 6
 
   allow_openid:
     handler: BoolConfigHandler
     default: false
     comment: ""
-    order: 8
+    order: 7
 
   allow_anonymous:
     handler: BoolConfigHandler
     default: false
     comment: ""
-    order: 9
+    order: 8
     
   site_theme:
     handler: ThemeConfigHandler
     default: "default"
     comment: ""
-    order: 10
+    order: 9
   
   # Localisation
   default_language: 
     handler: StringConfigHandler
     default: en-US
     comment: ""
-    order: 11
+    order: 10
 
   # Ferret search
   search_enabled: 
     handler: BoolConfigHandler
     default: true
     comment: ""
-    order: 12
+    order: 11
 
 mailing:
   notification_email_address:
@@ -218,18 +160,3 @@ mailing:
     default:
       location: "/usr/bin/sendmail"
       arguments: "-i -t -O DeliveryMode='b'"
-
-services:
-  storage_s3_login:  
-    handler: StorageS3ConfigHandler
-    comment: ""
-    order: 2
-    default:
-      access_key_id: "fill me in"
-      secret_access_key: "123"
-  
-  storage_s3_bucket:
-    handler: StringConfigHandler
-    default: "fill_me_in"
-    comment: ""
-    order: 0
