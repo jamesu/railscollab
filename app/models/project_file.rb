@@ -60,7 +60,7 @@ class ProjectFile < ActiveRecord::Base
   def process_destroy
     Tag.clear_by_object(self)
     AttachedFile.clear_files(self.id)
-    ApplicationLog::new_log(@file, self.updated_by, :delete)
+    ApplicationLog::new_log(self, self.updated_by, :delete)
   end
 
   def tags
@@ -132,8 +132,8 @@ class ProjectFile < ActiveRecord::Base
     file_revision.upload_file = file
     file_revision.created_by = user
     file_revision.comment = comment
-    file_revision.update_thumb
     file_revision.save!
+    
     ApplicationLog::new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
   end
 
@@ -141,7 +141,6 @@ class ProjectFile < ActiveRecord::Base
     old_revision.upload_file = file
     old_revision.updated_by = user
     old_revision.comment = comment
-    old_revision.update_thumb
     old_revision.save!
   end
 

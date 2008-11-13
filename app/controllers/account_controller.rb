@@ -30,11 +30,7 @@ class AccountController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_user, :except => [:index, :avatar]
-  after_filter :user_track,   :only   => [:index]
-
-  # Caching
-  caches_page :avatar
-  cache_sweeper :account_sweeper, :only => [ :edit_profile, :edit_avatar, :delete_avatar ]
+  after_filter :user_track,   :only   => [:index]]
 
   def index
   	@user = @logged_user
@@ -252,27 +248,6 @@ class AccountController < ApplicationController
 
     error_status(false, :success_deleted_avatar)
     redirect_to :controller => 'account', :action => 'index'
-  end
-
-  def avatar
-    begin
-      user = User.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render :text => 'Not found', :status => 404
-      return
-    end
-
-  	# Get avatar data
-  	data = FileRepo.get_data(user.avatar_file)
-
-  	if data.empty?
-      render :text => 'Not found', :status => 404
-      return
-  	elsif data.class == Hash
-      redirect_to data[:url], :status => 302
-  	end
-
-  	send_data data, :type => 'image/png', :disposition => 'inline'
   end
 
   private

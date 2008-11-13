@@ -148,14 +148,6 @@ module ConfigSystem
     @@tried_libs ||= false
     return if @@tried_libs
     
-    # Try loading gd2
-    begin
-      require 'gd2'
-      AppConfig.no_gd2 = false
-    rescue Exception
-      AppConfig.no_gd2 = true
-    end
-    
     # Try loading AWS::S3
     begin
       require 'aws/s3'

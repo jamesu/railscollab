@@ -105,7 +105,7 @@ class Company < ActiveRecord::Base
     if !logo?
       "/themes/#{AppConfig.site_theme}/images/logo.gif"
     else
-      logo.url
+      logo.url(:thumb)
     end
   end
 

@@ -30,12 +30,8 @@ class CompanyController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_company, :except => [:add_client, :edit, :hide_welcome_info, :logo]
-  after_filter  :user_track,     :except => [:logo]
+  after_filter  :user_track
   after_filter :reload_owner
-
-  # Caching
-  caches_page :logo
-  cache_sweeper :company_sweeper, :only => [ :edit, :edit_client, :edit_logo, :delete_client, :delete_logo ]
 
   def card
     unless @company.can_be_seen_by(@logged_user)
@@ -242,27 +238,6 @@ class CompanyController < ApplicationController
 
     error_status(false, :success_deleted_logo)
     redirect_to :controller => 'company', :action => 'card', :id => @company.id
-  end
-
-  def logo
-    begin
-      company = Company.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render :text => 'Not found', :status => 404
-      return
-    end
-
-  	# Get avatar data
-  	data = FileRepo.get_data(company.logo_file)
-
-  	if data.empty?
-      render :text => 'Not found', :status => 404
-      return
-  	elsif data.class == Hash
-      redirect_to data[:url], :status => 302
-  	end
-
-  	send_data data, :type => 'image/png', :disposition => 'inline'
   end
 
   def hide_welcome_info

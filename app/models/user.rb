@@ -309,7 +309,7 @@ class User < ActiveRecord::Base
     if !avatar?
       "/themes/#{AppConfig.site_theme}/images/avatar.gif"
     else
-      avatar.url
+      avatar.url(:thumb)
     end
   end
 

@@ -30,13 +30,9 @@ class FilesController < ApplicationController
 
   filter_parameter_logging :file_data
 
-  before_filter :process_session,    :except => [:thumbnail]
+  before_filter :process_session
   before_filter :accept_folder_name, :only   => [:browse_folder, :edit_folder, :delete_folder]
   after_filter  :user_track,         :only   => [:index, :browse_folder]
-
-  # Caching
-  caches_page :thumbnail
-  cache_sweeper :files_sweeper, :only => [ :add_file, :edit_file, :delete_file ]
 
   def index
     current_page = params[:page].to_i
@@ -246,14 +242,8 @@ class FilesController < ApplicationController
       return
     end
 
-    content_data = FileRepo.get_data(@file_revision.repository_id)
-
-    unless content_data.nil?
-      if content_data.class == Hash
-        redirect_to content_data[:url], :status => 302
-      else
-        send_data content_data, :type => @file_revision.type_string, :filename => @file.filename, :length => @file_revision.filesize
-      end
+    if @file_revision.data?
+      redirect_to @file_revision.data.url, :status => 302
     else
       render :text => '404 Not Found', :status => 404
     end
@@ -388,27 +378,6 @@ class FilesController < ApplicationController
 
     error_status(false, :success_deleted_file)
     redirect_back_or_default :controller => 'files'
-  end
-
-  def thumbnail
-    begin
-      file = ProjectFileRevision.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render :text => 'Not found', :status => 404
-      return
-    end
-
-  	# Get thumbnail data
-  	data = FileRepo.get_data(file.thumb_filename)
-
-  	if data.empty?
-      render :text => 'Not found', :status => 404
-      return
-  	elsif data.class == Hash
-      redirect_to data[:url], :status => 302
-  	end
-
-  	send_data data, :type => 'image/jpg', :disposition => 'inline'
   end
 
   def attach_to_object

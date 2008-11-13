@@ -19,8 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-require 'gd2' unless AppConfig.no_gd2
-
 class ProjectFileRevision < ActiveRecord::Base
   include ActionController::UrlWriter
 
@@ -30,12 +28,21 @@ class ProjectFileRevision < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
+  has_attached_file :data, :styles => { :thumb => "50x50" }, 
+                           :default_url => ''
+
   acts_as_ferret :fields => [:comment, :project_id, :is_private], :store_class_name => true
 
   before_create :process_params
   before_update :process_update_params
   before_destroy :process_destroy
 
+
+  @@content_types = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png', 'image/jpg']
+  def thumbnailable?(file)
+    @@content_types.include?(file.content_type)
+  end
+    
   def process_params
   end
 
@@ -44,8 +51,6 @@ class ProjectFileRevision < ActiveRecord::Base
   end
 
   def process_destroy
-    # Destroy FileRepo entries
-    FileRepo.handle_delete(self.repository_id)
     ApplicationLog::new_log(self, self.updated_by, :delete, self.project_file.is_private, self.project_file.project)
   end
 
@@ -59,6 +64,7 @@ class ProjectFileRevision < ActiveRecord::Base
 
   def upload_file=(value)
     self.filesize = value.size
+    value.content_type ||= 'text/data'
     self.type_string = value.content_type.chomp
 
     # Figure out the intended file type
@@ -66,44 +72,17 @@ class ProjectFileRevision < ActiveRecord::Base
     self.file_type = FileType.first(:conditions => ['extension = ?', extension])
     self.file_type ||= FileType.first(:conditions => "extension = 'txt'")
 
-    # Store to the repository
-    if self.new_record?
-      self.repository_id = FileRepo.handle_storage(value.read, value.original_filename, self.type_string, self.project_file.is_private)
-    else
-      self.repository_id = FileRepo.handle_update(self.repository_id, value.read, self.type_string, self.project_file.is_private)
-    end
-
-    self.update_thumb if !self.repository_id.nil?
-  end
-
-  def update_thumb
-    return if AppConfig.no_gd2
-    FileRepo.handle_delete(self.thumb_filename) unless self.thumb_filename.nil?
-
-    # Check if we can make a thumbnail
-    if self.project_file.is_private || !['image/jpg', 'image/jpeg', 'image/gif', 'image/png'].include?(self.type_string)
-      self.thumb_filename = nil
-      return
-    end
-
-    # Now try to make it!
-    image_data = FileRepo.get_data(self.repository_id, false)
-    image = GD2::Image.load(image_data)
-
-    new_width  = [AppConfig.max_thumbnail_width, image.width].min
-    new_height = [AppConfig.max_thumbnail_height, image.height].min
-
-    image.resize!(new_width, new_height)
-
-    self.thumb_filename = FileRepo.handle_storage(image.jpeg(AppConfig.file_thumbnail_quality), "thumbnail_#{self.id}.jpg",  'image/jpeg', self.project_file.is_private)
+    # Store
+    self.data = value
+    self.has_thumbnail = thumbnailable?(value)
   end
 
   def filetype_icon_url
-    if self.thumb_filename.nil?
+    if !has_thumbnail
       ext = self.file_type ? self.file_type.icon : "unknown.png"
       return "/themes/#{AppConfig.site_theme}/images/filetypes/#{ext}"
     else
-      return "/files/thumbnail/#{self.id}.jpg"
+      data.url(:thumb)
     end
   end
 
