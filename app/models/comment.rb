@@ -50,7 +50,7 @@ class Comment < ActiveRecord::Base
 	end
 	
 	def process_destroy
-      AttachedFile.clear_attachments(self)
+	  AttachedFile.clear_attachments(self)
 	  ApplicationLog.new_log(self, self.updated_by, :delete, true,  self.rel_object.project)
 	end
 	

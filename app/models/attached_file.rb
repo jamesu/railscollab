@@ -26,11 +26,22 @@ class AttachedFile < ActiveRecord::Base
 	belongs_to :rel_object, :polymorphic => true, :counter_cache => true
 	
 	def self.clear_attachment(object, attach_id)
-		AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', object.class.to_s, object.id, attach_id])
+	  AttachedFile.find(:all, :conditions => ['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
+	                                          object.class.to_s, 
+	                                          object.id, 
+	                                          attach_id]).each do |attach|
+	    attach.project_file.destroy if attach.project_file.attach.attached_files.length <= 1
+	    attach.destroy
+	  end
 	end
 	
 	def self.clear_attachments(object)
-		AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
+	  AttachedFile.find(:all, :conditions => ['rel_object_type = ? AND rel_object_id = ?', 
+	                                          object.class.to_s, 
+	                                          object.id]).each do |attach|
+	    attach.project_file.destroy if attach.project_file.attach.attached_files.length <= 1
+	    attach.destroy
+	  end
 	end
 	
 	def self.clear_files(file_id)
