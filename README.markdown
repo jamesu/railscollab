@@ -26,10 +26,7 @@ whose access can be restricted to certain elements of the project.
 Refer to the [INSTALL.markdown] [3] and [UPGRADE.markdown] [4] files
 
 A word of warning however. If you are upgrading from an old version pre-0.8 stable 
-(database version 14 or lower), then MAKE SURE YOU BACK UP YOUR UPLOADED FILES AS 
-THE FILE STORAGE HAS BEEN RE-IMPLEMENTED AND YOUR OLD DATA WILL BE REMOVED. 
-
-Again, MAKE SURE YOU BACK UP YOUR UPLOADED FILES. 
+(database version 14 or lower), then MAKE SURE YOU BACK UP YOUR UPLOADED FILES. 
 
 ## I have an issue. Where can i report it?
 
