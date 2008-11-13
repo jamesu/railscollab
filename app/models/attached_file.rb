@@ -30,7 +30,7 @@ class AttachedFile < ActiveRecord::Base
 	                                          object.class.to_s, 
 	                                          object.id, 
 	                                          attach_id]).each do |attach|
-	    attach.project_file.destroy if attach.project_file.attach.attached_files.length <= 1
+	    attach.project_file.destroy if attach.project_file.attached_files.length <= 1
 	    attach.destroy
 	  end
 	end
@@ -39,7 +39,7 @@ class AttachedFile < ActiveRecord::Base
 	  AttachedFile.find(:all, :conditions => ['rel_object_type = ? AND rel_object_id = ?', 
 	                                          object.class.to_s, 
 	                                          object.id]).each do |attach|
-	    attach.project_file.destroy if attach.project_file.attach.attached_files.length <= 1
+	    attach.project_file.destroy if attach.project_file.attached_files.length <= 1
 	    attach.destroy
 	  end
 	end
