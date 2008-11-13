@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 13) do
+ActiveRecord::Schema.define(:version => 14) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -114,14 +114,6 @@ ActiveRecord::Schema.define(:version => 13) do
   add_index "config_options", ["option_order"], :name => "index_config_options_on_option_order"
   add_index "config_options", ["category_name"], :name => "index_config_options_on_category_name"
 
-  create_table "file_repo", :force => true do |t|
-    t.binary  "content",                                :null => false
-    t.integer "order",                   :default => 0, :null => false
-    t.integer "storage_id", :limit => 1, :default => 0, :null => false
-  end
-
-  add_index "file_repo", ["order"], :name => "index_file_repo_on_order"
-
   create_table "file_types", :force => true do |t|
     t.string  "extension",     :limit => 10, :default => "",    :null => false
     t.string  "icon",          :limit => 30, :default => "",    :null => false
@@ -163,18 +155,21 @@ ActiveRecord::Schema.define(:version => 13) do
   end
 
   create_table "project_file_revisions", :force => true do |t|
-    t.integer  "file_id",                       :default => 0,  :null => false
-    t.integer  "file_type_id",    :limit => 8,  :default => 0,  :null => false
-    t.string   "repository_id",   :limit => 40, :default => "", :null => false
-    t.string   "thumb_filename",  :limit => 44
-    t.integer  "revision_number",               :default => 0,  :null => false
+    t.integer  "file_id",                         :default => 0,     :null => false
+    t.integer  "file_type_id",      :limit => 8,  :default => 0,     :null => false
+    t.integer  "revision_number",                 :default => 0,     :null => false
     t.text     "comment"
-    t.string   "type_string",     :limit => 50, :default => "", :null => false
-    t.integer  "filesize",                      :default => 0,  :null => false
-    t.datetime "created_on",                                    :null => false
+    t.string   "type_string",       :limit => 50, :default => "",    :null => false
+    t.integer  "filesize",                        :default => 0,     :null => false
+    t.datetime "created_on",                                         :null => false
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
+    t.boolean  "has_thumbnail",                   :default => false
   end
 
   add_index "project_file_revisions", ["file_id"], :name => "index_project_file_revisions_on_file_id"
