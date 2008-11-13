@@ -30,7 +30,7 @@ class AccountController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_user, :except => [:index, :avatar]
-  after_filter :user_track,   :only   => [:index]]
+  after_filter :user_track,   :only   => [:index]
 
   def index
   	@user = @logged_user
