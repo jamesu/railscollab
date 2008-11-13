@@ -128,18 +128,6 @@ module ConfigSystem
         "assets#{rand(3)}.#{AppConfig.asset_hosts_url}"
     } : nil
     
-    # Amazon S3
-    if !AppConfig.no_s3 and AppConfig.file_upload_storage == 'amazon_s3' and !AppConfig.storage_s3_login.nil?
-      require 'aws/s3'
-      s3_opts = AppConfig.storage_s3_login
-      
-      begin
-        AWS::S3::Base.establish_connection!(s3_opts)
-      rescue
-        AppConfig.no_s3 = true
-      end
-    end
-    
     # Globalite
     Globalite.locale = AppConfig.default_language.nil? ? 'en-US' : AppConfig.default_language
   end
@@ -147,14 +135,6 @@ module ConfigSystem
   def self.try_libs
     @@tried_libs ||= false
     return if @@tried_libs
-    
-    # Try loading AWS::S3
-    begin
-      require 'aws/s3'
-      AppConfig.no_s3 = false
-    rescue Exception
-      AppConfig.no_s3 = true
-    end
     
     @@tried_libs = true
   end
