@@ -29,7 +29,7 @@ class ProjectFile < ActiveRecord::Base
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
   has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
-  has_many :attached_files, :dependent => :destroy
+  has_many :attached_files, :foreign_key => 'file_id'
   has_many :comments, :as => 'rel_object', :dependent => :destroy do
     def public(reload=false)
       # Grab public comments only
@@ -59,6 +59,7 @@ class ProjectFile < ActiveRecord::Base
   end
 
   def process_destroy
+    AttachedFile.clear_files(self.id)
     Tag.clear_by_object(self)
     ApplicationLog::new_log(self, self.updated_by, :delete)
   end

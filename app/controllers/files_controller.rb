@@ -24,7 +24,7 @@ class FilesController < ApplicationController
   layout 'project_website'
 
   verify :method      => :post,
-         :only        => [ :delete_folder, :delete_file, :detatch_from_object ],
+         :only        => [ :delete_folder, :delete_file, :detach_from_object ],
          :add_flash   => { :error => true, :message => :invalid_request.l },
          :redirect_to => { :controller => 'file', :action => 'index' }
 
