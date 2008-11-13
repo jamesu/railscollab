@@ -1,6 +1,6 @@
 <% if @logged_user.company.has_logo? %>
 <div class="sidebarBlock">
-  <div class="cardIcon"><img src="<%= @logged_user.company.logo_url %>" alt="<%= h @logged_user.company.name %> logo" /></div>
+  <div class="cardIcon"><img src="<%= @logged_user.company.logo.url %>" alt="<%= h @logged_user.company.name %> logo" /></div>
 </div>
 <% end %>
 
