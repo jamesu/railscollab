@@ -123,30 +123,13 @@ class Company < ActiveRecord::Base
     url_for :only_path => true, :controller => 'company', :action => 'card', :id => self.id
   end
 
-  def country_code
-    self.country
-  end
-
-  def country_code=(value)
-    self.country = value
-  end
-
-  def country_name
-    return TZInfo::Country.get(self.country).name
-  end
-
-  def country_name=(value)
-    found_country = TZInfo::Country.all.detect{ |country| country.name == value }
-    self.country = found_country.code unless found_country.nil?
-  end
-
   def self.select_list
     self.all.collect{ |company| [company.name, company.id] }
   end
 
   # Accesibility
 
-  attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country_code
+  attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country
 
   # Validation
 

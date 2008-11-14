@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 14) do
+ActiveRecord::Schema.define(:version => 15) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(:version => 14) do
     t.string   "city",              :limit => 50
     t.string   "state",             :limit => 50
     t.string   "zipcode",           :limit => 30
-    t.string   "country",           :limit => 10
+    t.string   "country",           :limit => 100
     t.string   "phone_number",      :limit => 30
     t.string   "fax_number",        :limit => 30
     t.boolean  "hide_welcome_info",                :default => false, :null => false

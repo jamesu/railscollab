@@ -23,7 +23,6 @@ Rails::Initializer.run do |config|
   config.gem 'ferret',       :version => '>=0.11.6'
   config.gem 'icalendar',    :version => '>=1.0.2'
   config.gem 'ruby-openid',  :version => '>=2.1.2', :lib => 'openid'
-  config.gem 'tzinfo',       :version => '>=0.3.9'
 
   # optional gems
   config.gem 'aws-s3',       :version => '>=0.5.1', :lib => 'aws/s3'

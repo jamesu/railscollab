@@ -69,7 +69,7 @@
     
     <div>
       <label for="clientFormCountry"><%= :country.l %>:</label>
-      <%= country_code_select 'company', 'country_code', :id => 'clientFormCountry' %>
+      <%= text_field 'company', 'country', :id => 'clientFormCountry', :limit => 100 %>
     </div>
     
   </fieldset>

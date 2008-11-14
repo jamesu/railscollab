@@ -75,12 +75,6 @@ module ApplicationHelper
     end.join(', ')
   end
 
-  def country_code_select(object_name, method, extra_options={})
-    countries = [TZInfo::Country.all.collect{ |x| x.name },
-                 TZInfo::Country.all_codes].transpose.sort
-    select(object_name, method, countries, extra_options)
-  end
-
   def format_size(value)
     kbs = value / 1024
     mbs = kbs / 1024
