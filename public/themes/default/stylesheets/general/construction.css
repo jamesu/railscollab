@@ -275,8 +275,13 @@ body {
 
 #content {
   float: left;
-  width: 530px;
+  width: 100%;
   min-height: 400px;
+}
+
+#content.sidebar {
+  width: 530px;
+  float: left;
 }
 
 /** Sidebar **/

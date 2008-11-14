@@ -39,7 +39,7 @@
       
       <!-- content wrapper -->
       <div id="outerContentWrapper">
-        <div id="innerContentWrapper">
+        <div id="innerContentWrapper" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
 <% if flash[:message] %>
           <div id="<%= flash[:error] ? 'error' : 'success' %>" class="StatusMessage <%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
