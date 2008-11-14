@@ -58,6 +58,14 @@ class String
   end
 end
 
+class Array
+  def degroupify
+    hash = {}
+    self.each {|group, elements| hash[group] = elements}
+    hash
+  end
+end
+
 #class RedCloth
 #  def filter_html; true; end
 #end

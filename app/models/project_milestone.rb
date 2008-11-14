@@ -243,6 +243,49 @@ class ProjectMilestone < ActiveRecord::Base
 
     self.all(:conditions => msg_conditions)
   end
+	
+  def self.all_assigned_to(user, assignee, start_time=nil, end_time=nil, real_projects=nil, exclude_inactive=false)
+    project_ids = (real_projects || user.active_projects).collect { |p| p.id }
+    return [] if project_ids.empty?
+
+    # Milestone not completed, visible, and part of project(s)?
+    msg_conditions = {'project_milestones.completed_on' => nil, 'project_id' => project_ids}
+    msg_conditions['is_private'] = false unless user.member_of_owner?
+
+    # Exclude inactive projects?
+    msg_joins = nil
+    if exclude_inactive
+      msg_conditions['projects.completed_on'] = nil
+      msg_joins = 'INNER JOIN projects ON projects.id = project_milestones.project_id'
+    end
+
+    # Restrict by time
+    unless start_time.nil?
+      time_conditions = ['due_date >= ?', start_time]
+    else
+      time_conditions = nil
+    end
+
+    unless end_time.nil?
+      if time_conditions.nil?
+        time_conditions = ['due_date <= ?', end_time]
+      else
+        time_conditions[0] += ' AND due_date <= ?'
+        time_conditions << end_time
+      end
+    end
+
+    # Limit by assignee
+    if assignee.class == User
+      msg_conditions['assigned_to_user_id'] = assignee.id
+    elsif assignee.class == Company
+      msg_conditions['assigned_to_company_id'] = assignee.id
+    end
+
+    with_scope(:find => {:conditions => time_conditions}) do
+      self.find(:all, :conditions => msg_conditions, :order => 'due_date ASC', :joins => msg_joins)
+    end
+  end
 
   def self.todays_by_user(user)
     from_date = Date.today

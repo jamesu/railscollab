@@ -184,6 +184,135 @@ module ApplicationHelper
     [{:name => :edit.l,   :url => {:controller => 'time', :action => 'edit',   :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
      {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
   end
+  
+  def cal_table(in_rows, tableclass)
+    rows = in_rows.map do |row|
+      columns = row.map do |column|
+        case column[0]
+          when :mday
+            "<td>#{column[1]}</td>"
+          when :bday
+            "<td class=\"blank\"></td>"
+          when :th
+            "<th>#{column[1]}</th>"
+          when :thm
+            "<th class=\"month\" rowspan=\"#{column[2]}\">#{column[1]}</th>"
+        end
+      end
+      "<tr>#{columns}</tr>"
+    end
+    "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>"
+  end
+  
+  def calendar_days
+    ['', :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l, :wday_7.l]
+  end
+  
+  def calendar_wdays
+    ['', :wday_7.l, :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l]
+  end
+  
+  def months_calendar(start_date, end_date, tableclass, days=calendar_days, offset=0, merge_month=false)
+    # Day header
+    rows = [days.map { |content| [:th, content]}]
+    
+    # Iterate until final month
+    cur_date = start_date
+    final_date = Date.civil(end_date.year, end_date.month, 1)
+    while cur_date < final_date
+      days_in_month = Date.civil(cur_date.year, cur_date.month, -1).day
+      start_of_month = (Date.civil(cur_date.year, cur_date.month, 1).cwday + offset) % 8
+      
+      # Month row
+      month_row = [:thm, "month_#{cur_date.month}".to_sym.l, 0]
+      day_rows = 1
+      rows << [month_row]
+      
+      # Blank days
+      cur_row = (1...start_of_month).map { |d| [:bday] }
+      
+      # Month days
+      wday_count = start_of_month
+      (1..days_in_month).each do |d|
+        cur_row << [:mday, yield(Date.civil(cur_date.year, cur_date.month, d))]
+        
+        wday_count += 1
+        if wday_count % 8 == 0
+          rows << cur_row
+          day_rows += 1
+          wday_count = 1
+          cur_row = []
+        end
+      end
+      
+      # Remaining blank days
+      unless wday_count == 1
+        if merge_month
+          # Add the days of the next month
+          (8-wday_count).times { cur_row << [:bday, yield(Date.civil(cur_date.year, cur_date.month, d))] }
+        else
+          # Just bank out the rest
+          (8-wday_count).times { cur_row << [:bday] }
+        end
+        rows << cur_row
+        day_rows += 1
+      end
+      
+      month_row[2] = day_rows
+      
+      cur_date += 1.month
+    end
+    
+    cal_table(rows, tableclass)
+  end
+
+  def days_calendar(start_date, end_date, tableclass)
+    # Day header
+    start_day = start_date.cwday
+    days = calendar_days
+    rows = [(days[start_day..7] + days[1...start_day]).map { |content| [:th, content] }]
+    cur_row = []
+    
+    # Iterate until final day
+    wday_count = 1
+    cur_date = start_date
+    while (cur_date < end_date)
+      cur_row << [:mday, yield(cur_date)]
+      
+      wday_count += 1
+      if wday_count % 8 == 0
+        rows << cur_row
+        wday_count = 1
+        cur_row = []
+      end
+            
+      last_day = cur_date.day
+      cur_date += 1
+    end
+    
+    # Finish off the rest of the week days
+    unless wday_count == 1
+      (8-wday_count).times { cur_date += 1; cur_row << [:mday, yield(cur_date)] }
+      rows << cur_row
+    end
+    
+    cal_table(rows, tableclass)
+  end
+    
+  def calendar_block(content, items, classname, force=false)
+    return content if items.nil? and !force
+    
+    list = unless items.nil?
+      mitems = items.collect { |item|
+        "<li><a href=\"#{item.object_url}\">#{item.object_name}</a></li>"
+      }.join
+      "<ul>#{mitems}</ul>"
+    else
+      ''
+    end
+    
+    "<div class=\"#{classname}\">#{content} #{list}</div>"
+  end
 
   def textilize(text)
     return '' if text.blank?

@@ -42,8 +42,24 @@ class DashboardController < ApplicationController
       end
     end
 
-    @today_milestones = @logged_user.todays_milestones
-    @late_milestones = @logged_user.late_milestones
+    @time_now = Time.zone.now
+    @late_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+                                                        nil,
+                                                        nil,
+                                                        (@time_now - 1.day).utc.to_date,
+                                                        nil,
+                                                        true)
+    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+                                                            nil,
+                                                            @time_now.utc.to_date,
+                                                            (@time_now.utc + 14.days).to_date,
+                                                            nil,
+                                                            true)
+    
+    @calendar_milestones = @upcoming_milestones.group_by do |obj|
+      date = obj.due_date.to_date
+      "#{date.month}-#{date.day}"
+    end.degroupify
 
     @online_users = User.get_online
     @my_projects = @active_projects
@@ -68,7 +84,8 @@ class DashboardController < ApplicationController
     @active_projects = @logged_user.active_projects
     @has_assigned_tasks = nil
     @projects_milestonestasks = @active_projects.collect do |project|
-      @has_assigned_tasks ||= true unless (project.milestones_by_user(@logged_user).empty? and project.tasks_by_user(@logged_user).empty?)
+    @has_assigned_tasks ||= true unless (project.milestones_by_user(@logged_user).empty? and 
+                                         project.tasks_by_user(@logged_user).empty?)
 
       {
         :name       => project.name,
@@ -80,6 +97,42 @@ class DashboardController < ApplicationController
     @has_assigned_tasks ||= false
 
     @content_for_sidebar = 'my_tasks_sidebar'
+  end
+
+  def milestones
+    @active_projects = @logged_user.active_projects
+        
+    @time_now = Time.zone.now
+    tstart = @time_now.utc
+    tend = tstart + 3.months
+    
+    @date_start = Date.civil(tstart.year, tstart.month, 1)
+    @date_end = Date.civil(tend.year, tend.month, -1)
+    
+    assignee = unless params[:assigned_to].nil? or params[:assigned_to].empty?
+      if params[:assigned_to][0] == 99 # c
+        Company.find(params[:assigned_to][1...(params[:assigned_to].length)].to_i)
+      else
+        User.find(params[:assigned_to])
+      end
+    else
+      nil
+    end
+    
+    @late_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+                                                        assignee,
+                                                        nil,
+                                                        @date_start-1,
+                                                        nil,
+                                                        true)
+
+    @milestones = ProjectMilestone.all_assigned_to(@logged_user, 
+                                                   assignee,
+                                                   @date_start, 
+                                                   @date_end, nil, true).group_by do |obj| 
+      date = obj.due_date.to_date
+      "#{date.month}-#{date.day}"
+    end.degroupify
   end
 
   def search

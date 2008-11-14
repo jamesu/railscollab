@@ -33,13 +33,19 @@ class MilestoneController < ApplicationController
   after_filter  :user_track,       :only   => [:index, :view]
 
   def index
-  	include_private = @logged_user.member_of_owner?
-
-    @late_milestones      = @active_project.project_milestones.late(include_private)
-    @today_milestones     = @active_project.project_milestones.todays(include_private)
-    @upcoming_milestones  = @active_project.project_milestones.upcoming(include_private)
+    @time_now = Time.zone.now
+    include_private = @logged_user.member_of_owner?
+  	
+    @late_milestones = @active_project.project_milestones.late(include_private)
+    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date)
     @completed_milestones = @active_project.project_milestones.completed(include_private)
-
+    
+    end_date = (@time_now + 14.days).to_date
+    @calendar_milestones = @upcoming_milestones.group_by do |obj| 
+      date = obj.due_date.to_date
+      "#{date.month}-#{date.day}"
+    end.degroupify
+    
     @content_for_sidebar = 'index_sidebar'
   end
 

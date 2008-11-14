@@ -21,9 +21,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module DashboardHelper
   def dashboard_tabbed_navigation(current)
-    items = [{:id => :overview,    :url => '/dashboard/index'},
-             {:id => :my_projects, :url => '/dashboard/my_projects'},
-             {:id => :my_tasks,    :url => '/dashboard/my_tasks'}]
+    items = [{:id => :overview,       :url => '/dashboard/index'},
+             {:id => :my_projects,    :url => '/dashboard/my_projects'},
+             {:id => :my_tasks,       :url => '/dashboard/my_tasks'},
+             {:id => :milestones,     :url => '/dashboard/milestones'}]
 
     @selected_navigation_item = current
     return items

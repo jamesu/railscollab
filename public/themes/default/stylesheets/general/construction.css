@@ -477,3 +477,63 @@ div.private {
 div.private span {
   display: none;
 }
+
+/** Calendar **/
+
+.monthsCal, .dayCal
+{
+  width: 100%;
+  background: #ffffff;
+  border-collapse: separate;
+  border: 2px solid #ccc;
+}
+
+.monthsCal .month
+{
+  font-size: 14px;
+  background: #fff;
+  width: 1%;
+}
+
+.monthsCal th, .dayCal th
+{
+  background: none;
+  color: #000;
+  border: 0px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+.monthsCal td, .dayCal td
+{
+  background: #ffffff;
+  color: #cecece;
+  border: 0px;
+  border-left: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 10px;
+}
+
+.monthsCal td.blank
+{
+  background: #F8F8F8;
+  border: 0px;
+}
+
+.monthsCal .today, .dayCal .today
+{
+  margin: -3px;
+  padding: 3px;
+  border: 2px solid #E9BE31;
+  background: #FFFFCC;
+  color: #000;
+}
+
+.monthsCal .day, .dayCal .day
+{
+  margin: -3px;
+  padding: 3px;
+  border: 2px solid #3131BE;
+  background: #FFFFFF;
+  color: #000;
+}

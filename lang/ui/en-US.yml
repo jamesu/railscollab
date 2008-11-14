@@ -275,6 +275,8 @@ enable_anonymous_comments: Anonymous comments
 update_options: Update options
 edit_message_sidebar_link: "&raquo; Edit message"
 completed_milestones: Completed milestones
+late: Late
+upcoming: Upcoming
 milestone_completed_time_with_user: "{time} | {user}"
 milestone_completed_time_format: "%b %d, %Y %H:%M"
 project_status_header: "Project status: {status}"
@@ -369,6 +371,7 @@ no_active_milestones_in_project: There are no active milestones in this project
 late_milestones: Late milestones
 todays_milestones: Todays milestones
 upcoming_milestones: Upcoming milestones
+all_upcoming_milestones: All upcoming milestones
 milestone_days_left: "{days} days left"
 milestone_days_late: "{days} days late"
 milestone_show_all_upcoming: "&raquo; Show all {count} upcoming milestones"
@@ -455,6 +458,28 @@ anyone: Anyone
 project: Project
 page: Page
 
+# Calendar
+wday_1: Monday
+wday_2: Tuesday
+wday_3: Wednesday
+wday_4: Thursday
+wday_5: Friday
+wday_6: Saturday
+wday_7: Sunday
+
+month_1: Janurary
+month_2: February
+month_3: March
+month_4: April
+month_5: May
+month_6: June
+month_7: July
+month_8: August
+month_9: September
+month_10: October
+month_11: November
+month_12: December
+
 # Admin
 project_confirm_delete: "Are you sure you want to delete this project?"
 no_projects_owned_by_company: "There are no projects owned by this company"
@@ -496,6 +521,7 @@ hint_permissions_info: "Check project to give access permissions for this compan
 project_completed_on: "Completed on {date} by {user}"
 all: All
 go: Go
+due_in_next_n_days: "Due in the next {num} days"
 
 # Forms
 success_message: Success message
