@@ -136,7 +136,7 @@ body {
 #tabs ul li a {
   border: 0;
   display: block;
-  padding: 0 10px;
+  padding: 2px 12px;
   background: url('../../images/layout/tab_left.gif') no-repeat top left;
   text-align: center;
   color: #333;
@@ -157,8 +157,6 @@ body {
 }
 
 #tabs ul li.active a {
-  /* padding: 0.1em 0.6em; */
-  padding: 0 10px;
   background: url('../../images/layout/tab_active_left.gif') no-repeat top left;
   color: white;
 }
