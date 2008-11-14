@@ -96,8 +96,6 @@ function bindStatic() {
       });
       
 	    $('a#messageFormAdditionalTextToggle').click(function(evt) {
-	      var element = evt.target();
-	      
 	      $('#messageFormAdditionalText').toggle();
 	      $('#messageFormAdditionalTextExpand').toggle();
 	      $('#messageFormAdditionalTextCollapse').toggle();
@@ -440,20 +438,20 @@ function notify_form_select(company_id, id)
 	var do_all = true;
 	
 	// Check to see if everything has been selected
-	notify_form_companies['company_' + company_id].users.each(function(user_id){
-		if (!$('notifyUser' + user_id).attr('checked'))
+	$.each(notify_form_companies['company_' + company_id].users, function(){
+		if (!$('#notifyUser' + this).attr('checked'))
 			do_all = false;
 	});
 	
-	$('notifyCompany' + company_id).attr('checked', do_all);
+	$('#notifyCompany' + company_id).attr('checked', do_all);
 }
 
 function notify_form_select_company(id)
 {
-	var val = $('notifyCompany' + id).attr('checked');
+	var val = $('#notifyCompany' + id).attr('checked');
 	
-	notify_form_companies['company_' + id].users.each(function(user_id){
-		$('#notifyUser' + user_id).attr('checked', val);
+	$.each(notify_form_companies['company_' + id].users, function(){
+		$('#notifyUser' + this).attr('checked', val);
 	});
 }
 
@@ -462,8 +460,8 @@ function notify_form_set_company(id)
 	var count = 0;
 	var users = notify_form_companies['company_' + id].users;
 	
-	users.each(function(user_id){
-		if ($('#notifyUser' + user_id).attr('checked'))
+	$.each(users, function(){
+		if ($('#notifyUser' + this).attr('checked'))
 		  count += 1;
 	});
 	

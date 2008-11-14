@@ -304,6 +304,8 @@ title: Title
 text: Text
 additional_text: Additional text
 additional_text_info: Additional message text is visible only on comments page
+collapse: Collapse
+expand: Expand
 milestone: Milestone
 category: Category
 private_message_info: "Private messages are visible only to owner company members. Members of client companies will not be able to see them."
