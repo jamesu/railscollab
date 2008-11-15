@@ -5,15 +5,17 @@
 <%= :notifier_greeting.l_with_args(:user => @user.display_name) %>
 
 <%= :notifier_new_account.l_with_args(:user => @user.created_by.display_name, :site => AppConfig.site_name) %>
-<% if @password.nil? %>
+
 <%= :notifier_new_account_access.l %>
 
+<% if @password.nil? %>
 <%= "#{AppConfig.site_url}/access/reset_password/#{@user.id}?confirm=#{@user.password_reset_key}&initial=1" %>
 
 <%= :notifier_new_account_access_login.l_with_args(:login => @user.username) %>
 <% else %>
-<%= :notifier_new_account_credentials.l_with_args(:site => AppConfig.site_name) %>
-<%= "To access this account, simply visit #{AppConfig.site_url} and login using the following credentials: "%>
+<%= AppConfig.site_url %>
+
+<%= :notifier_new_account_credentials.l %>
 
 <%= :username.l %>: <%= @user.username %>
 <%= :password.l %>: <%= @password %>

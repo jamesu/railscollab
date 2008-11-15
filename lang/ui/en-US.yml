@@ -697,7 +697,7 @@ notifier_reset_password: "A request to reset the password for your account has b
 notifier_new_account: "{user} has created new account for you at {site}."
 notifier_new_account_access: "To access this account, simply visit the following URL:"
 notifier_new_account_access_login: "Then login using the username '{login}'."
-notifier_new_account_credentials: "To access this account, simply visit {site} and login using the following credentials:"
+notifier_new_account_credentials: "Then login using the following credentials:"
 author: Author
 
 
