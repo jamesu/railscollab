@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 
   has_many :im_values, :order => 'im_type_id DESC'
+  has_many :application_logs, :foreign_key => 'created_by_id', :dependent => :destroy
 
   has_many :project_milestones, :foreign_key => 'assigned_to_user_id'
   has_many :project_tasks,      :foreign_key => 'assigned_to_user_id'
