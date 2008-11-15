@@ -29,7 +29,7 @@
 </ul>
 
 <div id="searchPagination">
-  <%= pagination_links  "/project/#{@active_project.id}/search?search_id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
+  <%= pagination_links  "/dashboard/search?search_id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1 %>
 </div>
 
 <% elsif !@current_search.nil? %>

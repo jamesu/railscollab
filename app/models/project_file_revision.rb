@@ -34,7 +34,8 @@ class ProjectFileRevision < ActiveRecord::Base
   before_create :process_params
   before_update :process_update_params
   before_destroy :process_destroy
-
+  
+  def project; self.project_file.project; end
 
   @@content_types = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png', 'image/jpg']
   def thumbnailable?(file)
