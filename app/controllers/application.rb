@@ -74,8 +74,8 @@ protected
 
   def user_track
     unless @logged_user.nil?
-      store_location
-	  @logged_user.update_attribute('last_visit', Time.now.utc)
+      store_location if request.method == :get and request.format == :html
+      @logged_user.update_attribute('last_visit', Time.now.utc)
     end
 
     true
