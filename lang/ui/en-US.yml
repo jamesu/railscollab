@@ -324,6 +324,7 @@ logo_replace_info: "Note that the current logo will be deleted and replaced with
 milestone_in: "{milestone} in {project}"
 
 # Message view
+from: From
 message_created_with_user: "{time} | {user}"
 message_created_format: "%b %d. %Y %H:%M"
 comments: Comments
@@ -655,14 +656,10 @@ option_default_language_name: "Default language"
 option_default_language_description: "Default language used for the interface"
 option_search_enabled_name: "Search enabled"
 option_search_enabled_description: "Allow project searching"
-option_file_upload_storage_name: "File storage"
-option_file_upload_storage_description: "Select where you want to store attachments, avatars, logos and any other uploaded documents. Database storage engine is recommended."
 option_use_asset_hosts_name: "Use asset hosts"
 option_use_asset_hosts_description: "Enable usage of asset hosts. Also see assets_host_url"
 option_asset_hosts_url_name: "Asset hosts url"
 option_asset_hosts_url_description: "e.g. 'example.com' will enable assets[0-3].example.com as asset hosts."
-file_storage_amazon_s3: "Amazon S3" 
-file_storage_local_database: "Database"
 notification_method_test: "Test"
 notification_method_smtp: "SMTP"
 notification_smtp_address: "Address"
@@ -683,14 +680,6 @@ option_notification_email_smtp_name: "SMTP transport settings"
 option_notification_email_smtp_description: "Settings used for the SMTP mail transport"
 option_notification_email_sendmail_name: "Sendmail transport settings"
 option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
-
-# services
-option_storage_s3_login_name: "Amazon S3 Login"
-option_storage_s3_login_description: "Used when file storage is set to Amazon S3"
-storage_s3_access_key_id: "Access Key"
-storage_s3_secret_access_key_id: "Secret Access Key"
-option_storage_s3_bucket_name: "Amazon S3 Bucket"
-option_storage_s3_bucket_description: "Bucket in which files are stored on S3"
 
 # Administration tools
 # administration_tool_<name>
