@@ -147,6 +147,13 @@ form div.formBlock label {
   list-style: square;
 }
 
+#userPermissions table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
 /** Options block, best to put it into fieldset **/
 
 .objectOption {

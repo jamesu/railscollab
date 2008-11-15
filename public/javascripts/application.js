@@ -338,9 +338,9 @@ function form_form_update_action()
 function user_form_update_passwordgen()
 {
   if ($('#userFormGeneratePassword').attr('checked'))
-    userFormPasswordInputs.hide();
+    $('#userFormPasswordInputs').hide();
   else
-    userFormPasswordInputs.show();
+    $('#userFormPasswordInputs').show();
 }
 
 // File form stuff

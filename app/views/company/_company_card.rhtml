@@ -24,7 +24,7 @@
 <% if !company_card.address2.nil? and !company_card.address2.empty? %><br /><%= h company_card.address2 %><% end %>
 <% if !company_card.city.nil? and !company_card.city.empty? and !company_card.state.nil? and !company_card.state.empty? %>
 <br /><%= h company_card.city %>, <%= h company_card.state %> <% if !company_card.zipcode.nil? and !company_card.zipcode.empty? %><%= h company_card.zipcode %><% end %><% end %>
-<% if !company_card.country.nil? and !company_card.country.empty? %><br /><%= h company_card.country_name %><% end %>
+<% if !company_card.country.nil? and !company_card.country.empty? %><br /><%= h company_card.country %><% end %>
     </div>
     <% end %>
   

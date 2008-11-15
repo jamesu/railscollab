@@ -21,17 +21,19 @@
         @page_actions << {:title => :permissions, :url => "/account/update_permissions/#{@user.id}"}
     end
     
-    @additional_stylesheets = ['admin/user_permissions.css']
+    @additional_stylesheets = []
 %>
 <script type="text/javascript">
   permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
 </script>
 
-<% if not @projects.empty? %>
+<% unless @projects.empty? %>
 <div id="userPermissions">
   <%= form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
     <div id="userProjects">
+      <table class="blank">
 <%= render :partial => 'project/permissions.rhtml', :locals => {:user => @user}, :collection => @projects %>
+      </table>
     </div>
     <button class="submit" type="submit"><%= :update_permissions.l %></button>
   </form>

@@ -1,14 +1,6 @@
-/*#userPermissions {
-  border-top: 1px solid #ccc;
-}*/
-
 #userPermissions table {
-  width: 500px;
-  border: 1px solid #ccc;
-  border-width: 1px 0;
+  width: 100%;
   border-collapse: collapse;
-}
-
-#userPermissions td.projectName {
-  width: 150px;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
 }

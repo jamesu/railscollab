@@ -60,6 +60,8 @@ class MessageController < ApplicationController
       redirect_back_or_default :controller => 'message'
       return
     end
+    
+    @private_object = @message.is_private
 
     @subscribers = @message.subscribers
     @content_for_sidebar = 'view_sidebar'

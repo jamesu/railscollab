@@ -1,7 +1,6 @@
 <% 
   user_permission = ProjectUser.find(:first, :conditions => {'project_id' => permissions.id, 'user_id' => user.id})
 %>
-      <table class="blank">
         <tr>
           <td class="projectName">
             <%= check_box_tag "user_project[]", "#{permissions.id}", user.member_of(permissions), {:id => "projectPermissions#{permissions.id}", :class => 'checkbox normal', :onclick => "permissions_form_project_select(#{permissions.id})"} %>
@@ -24,4 +23,3 @@
             </div>
           </td>
         </tr>
-      </table>

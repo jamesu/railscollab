@@ -32,7 +32,7 @@
         :</div>
 
         <div class="commentBody">
-        <% if (!comment.created_by.nil?) and comment.created_by.has_avatar? %>
+        <% unless comment.created_by.nil? %>
           <div class="commentUserAvatar"><img src="<%= comment.created_by.avatar_url %>" alt="<%= h comment.created_by.display_name %> Avatar" /></div>
         <% end %>
           <div class="commentText"><%= textilize comment.text %></div>

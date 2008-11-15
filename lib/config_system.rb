@@ -73,7 +73,7 @@ module ConfigSystem
     # Following for themeable assets
     ActionView::Helpers::AssetTagHelper.module_eval do
        def image_path(source)
-         compute_public_path(source, 'themes/#{AppConfig.site_theme}/images')
+         compute_public_path(source, "themes/#{AppConfig.site_theme}/images")
        end
        alias_method :path_to_image, :image_path
        

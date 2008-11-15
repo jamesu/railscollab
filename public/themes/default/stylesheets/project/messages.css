@@ -6,13 +6,8 @@
 }
 
 .message .messageDetails {
-  border: 1px solid #e8e8e8;
-  background: #f8f8f8;
-  padding: 2px 5px;
-}
-
-.message .messageDetails .private {
-  margin-top: 4px;
+  padding: 4px 5px;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .message h1, .message h2, .message h3 {
@@ -47,7 +42,7 @@
   color: #fafafa;
 }
 
-.message .objectFilesTitle span, .message .messageCommentCount span, .message .messageTags span {
+.message .objectFilesTitle span, .message .messageCommentCount span, .message .messageTags span, .message .messageMilestone span, .message .messageDate span, .message .messageAuthor span {
   color: #333;
   font-weight: bolder;
 }

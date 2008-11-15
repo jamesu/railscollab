@@ -39,13 +39,13 @@
       
       <!-- content wrapper -->
       <div id="outerContentWrapper">
-        <div id="innerContentWrapper" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
+        <div id="innerContentWrapper">
 <% if flash[:message] %>
           <div id="<%= flash[:error] ? 'error' : 'success' %>" class="StatusMessage <%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
           <h1 id="pageTitle"><%= h @page_title %></h1>
           <div id="pageContent">
-            <div id="content">
+            <div id="content" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
               <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>

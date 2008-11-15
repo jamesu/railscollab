@@ -474,6 +474,10 @@ div.private {
   background: url('../../images/icons/private.gif') no-repeat;
 }
 
+#pageTitle.private {
+  background: url('../../images/icons/private.gif') no-repeat;
+}
+
 div.private span {
   display: none;
 }
