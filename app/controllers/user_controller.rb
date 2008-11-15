@@ -174,11 +174,10 @@ class UserController < ApplicationController
       return
     end
 
-    old_id = @user.id
+    old_id = @user.company_id
     old_name = @user.display_name
 
     @user.destroy
-    ApplicationLog::new_log(@milestone, @logged_user, :delete, true)
 
     error_status(false, :success_deleted_user, {:name => old_name})
 
