@@ -175,12 +175,6 @@ class ProjectMessage < ActiveRecord::Base
     end
   end
 
-  def self.select_list(project)
-    ProjectMessage.all(:conditions => ['project_id = ?', project.id], :select => 'id, title').collect do |message|
-      [message.title, message.id]
-    end
-  end
-
   # Accesibility
 
   attr_accessible :title, :text, :additional_text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled

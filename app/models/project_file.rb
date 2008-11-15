@@ -209,18 +209,6 @@ class ProjectFile < ActiveRecord::Base
     return found_files, grouped_fields
   end
 
-  def self.select_list(project, current_object=nil)
-    file_ids = current_object.nil? ? [] : current_object.project_file_ids
-
-    [['--None--', 0]] + ProjectFile.all(:conditions => ['project_id = ?', project.id], :select => 'id, filename').collect do |file|
-      if file_ids.include?(file.id)
-        nil
-      else
-        [file.filename, file.id]
-      end
-    end.compact
-  end
-
   # Core permissions
 
   def self.can_be_created_by(user, project)

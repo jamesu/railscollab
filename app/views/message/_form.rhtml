@@ -30,7 +30,7 @@
   
   <fieldset>
     <legend><%= :milestone.l %></legend>
-    <%= select 'message', 'milestone_id', ProjectMilestone.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
+    <%= select 'message', 'milestone_id', select_milestone_options(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
   </fieldset>
 
   <fieldset>

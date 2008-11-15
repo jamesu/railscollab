@@ -317,13 +317,6 @@ class ProjectMilestone < ActiveRecord::Base
     self.all(:conditions => msg_conditions)
   end
 
-  def self.select_list(project)
-    items = [['-- None --', 0]]
-    items += ProjectMilestone.all(:conditions => ['project_id = ?', project.id]).collect do |milestone|
-      [milestone.name, milestone.id]
-    end
-  end
-
   # Accesibility
 
   attr_accessible :name, :description, :due_date, :assigned_to_id, :is_private

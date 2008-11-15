@@ -16,7 +16,7 @@
   <div id="attachFormExistingFileControls">
     <fieldset>
       <legend><%= :select_file.l %></legend>
-      <%= select_tag 'attach[file_id]', options_for_select(ProjectFile.select_list(@active_project, @attach_object)), {:id => 'attachFormSelectFile', :style => 'width: 300px'} %>
+      <%= select_tag 'attach[file_id]', options_for_select(select_file_options(@active_project, @attach_object)), {:id => 'attachFormSelectFile', :style => 'width: 300px'} %>
     </fieldset>
   </div>
   

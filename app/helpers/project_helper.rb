@@ -61,4 +61,37 @@ module ProjectHelper
 
     items
   end
+  
+  def select_file_options(project, current_object=nil)
+    file_ids = current_object.nil? ? [] : current_object.project_file_ids
+    
+    conds = {'project_id' => project.id, 'is_visible' => true}
+    conds['is_private'] = false unless @logged_user.member_of_owner?
+
+    [['-- None --', 0]] + ProjectFile.all(:conditions => conds, :select => 'id, filename').collect do |file|
+      if file_ids.include?(file.id)
+        nil
+      else
+        [file.filename, file.id]
+      end
+    end.compact
+  end
+  
+  def select_milestone_options(project)
+    conds = {'project_id' => project.id}
+    conds['is_private'] = false unless @logged_user.member_of_owner?
+    
+    [['-- None --', 0]] + ProjectMilestone.all(:conditions => conds).collect do |milestone|
+      [milestone.name, milestone.id]
+    end
+  end
+
+  def select_message_options(project)
+    conds = {'project_id' => project.id}
+    conds['is_private'] = false unless @logged_user.member_of_owner?
+    
+    ProjectMessage.all(:conditions => conds, :select => 'id, title').collect do |message|
+      [message.title, message.id]
+    end
+  end
 end

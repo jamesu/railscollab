@@ -21,7 +21,7 @@
       <table class="blank">
         <tr>
           <td><%= radio_button 'form', 'action', 'add_comment', {:id => 'projectFormActionAddComment', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddComment" class="checkbox"><%= :add_comment.l %></label></td>
-          <td><%= "to" %>: <%= select 'form_objects', 'add_comment_object', ProjectMessage.select_list(@active_project), {}, {:id => 'projectFormActionSelectMessage', :class => 'select_message'} %></td>
+          <td><%= "to" %>: <%= select 'form_objects', 'add_comment_object', select_message_options(@active_project), {}, {:id => 'projectFormActionSelectMessage', :class => 'select_message'} %></td>
         </tr>
         <tr>
           <td><%= radio_button 'form', 'action', 'add_task', {:id => 'projectFormActionAddTask', :class => 'checkbox', :onclick => 'form_form_update_action()'} %> <label for="projectFormActionAddTask" class="checkbox"><%= :add_task.l %></label></td>
