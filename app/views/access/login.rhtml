@@ -1,26 +1,20 @@
 <% @page_title = :login.l %>
 
-<% if AppConfig.allow_openid %>
-<div id="login_header">
-    <%= check_box_tag "use_openid", "1", @use_openid, :size => 30, :id => 'loginOpenID', :class => 'checkbox', :onclick => 'login_toggle_openid();' %>
-    <label class="checkbox" for="loginOpenID"><%= :use_openid.l %></label>
-</div>
-<% end %>
-
 <div id="normal_login" <% if @use_openid %>style="display: none;" <% end %>>
 <%= form_tag :controller => 'access', :action => 'login' %>
   <div id="loginUsernameDiv">
-    <label class="leftl"  for="loginUsername"><%= :username.l %>:</label>
+    <label for="loginUsername"><%= :username.l %></label>
     <%= text_field "login", "user", :size => 30, :id => 'loginUsername', :class => 'medium' %>
   </div>
   <div id="loginPasswordDiv">
-    <label class="leftl" for="loginPassword"><%= :password.l %>:</label>
+    <label for="loginPassword"><%= :password.l %></label>
     <%= password_field "login", "password", :size => 30, :id => 'loginPassword', :class => 'medium' %>
   </div>
   <div class="clean"></div>
   
-  <span>(<%= link_to :forgot_password_q.l , :controller => 'access', :action => 'forgot_password' %>)</span>
-  <div id="loginSubmit">
+  <span><%= link_to :forgot_password_q.l , :controller => 'access', :action => 'forgot_password' %>
+  <% if AppConfig.allow_openid %>| <a class="loginOpenID" href="#"><%= :use_openid.l %></a><% end %></span>
+  <div id="buttonSubmit">
   <button class="submit" type="submit" accesskey="s"><%= :login.l %></button>
   </div>
 </form>
@@ -30,10 +24,11 @@
 <div id="openid_login" <% unless @use_openid %>style="display: none;"<% end %>>
 <%= form_tag :controller => 'access', :action => 'openid_login' %>
   <div id="loginUsernameDiv">
-    <label for="loginOpenIDIdentity"><%= :openid.l %>:</label>
+    <label for="loginOpenIDIdentity"><%= :openid.l %></label>
     <%= text_field_tag "openid_url", "", :size => 30, :id => 'loginOpenIDIdentity', :class => 'openid_login' %>
   </div>
-  <div id="loginSubmit">
+  <% if AppConfig.allow_openid %><a class="loginOpenID" href="#"><%= :login.l %></a><% end %></span>
+  <div id="buttonSubmit">
   <button class="submit" type="submit" accesskey="s"><%= :login.l %></button>
   </div>
 </form>

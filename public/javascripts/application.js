@@ -112,6 +112,7 @@ function bindStatic() {
         return false;
       });
       
+      $('.loginOpenID').click(login_toggle_openid);
 }
 
 function bindDynamic() {
@@ -265,16 +266,17 @@ var Project = {
 
 function login_toggle_openid()
 {
-	var toggle_box = $('#loginOpenID');
-	if (toggle_box.attr('checked'))
+	if ($('#openid_login').css('display') == 'none')
 	{
 		$('#openid_login').show();
 		$('#normal_login').hide();
+		$('#loginOpenIDIdentity').focus();
 	}
 	else
 	{
 		$('#openid_login').hide();
 		$('#normal_login').show();
+		$('#loginUsername').focus();
 	}
 }
 
