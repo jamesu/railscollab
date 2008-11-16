@@ -36,7 +36,7 @@ class MilestoneController < ApplicationController
     include_private = @logged_user.member_of_owner?
   	
     @late_milestones = @active_project.project_milestones.late(include_private)
-    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date)
+    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@active_project])
     @completed_milestones = @active_project.project_milestones.completed(include_private)
     
     end_date = (@time_now + 14.days).to_date
