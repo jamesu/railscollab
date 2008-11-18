@@ -6,6 +6,6 @@ coverage
 index/**
 log/*.log
 nbproject
-public/logos/**/*
+public/logos/**
 tmp/restart.txt
 tmp/**/*
