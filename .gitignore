@@ -1,9 +1,11 @@
 .DS_Store
 config/config.yml
 config/database.yml
+config/deploy.rb
 coverage
 index/**
 log/*.log
 nbproject
+public/logos/**
 tmp/restart.txt
 tmp/**/*
