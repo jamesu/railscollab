@@ -1,0 +1,22 @@
+<%
+  @page_title = :people.l
+  
+  @tabbed_navigation_items = administration_tabbed_navigation(:people)
+  @bread_crumbs = administration_crumbs(:people)
+  
+  @page_actions = []
+  
+  if Company.can_be_created_by(@logged_user)
+  	@page_actions << {:title => :add_client, :url => '/company/add'}
+  end
+  
+  if User.can_be_created_by(@logged_user)
+  	@page_actions << {:title => :add_user, :url => '/user/add'}
+  end
+  
+  @additional_stylesheets = ['project/people.css']
+%>
+
+<div id="people">
+<%= render :partial => 'company/people_list', :collection => @companies %>
+</div>

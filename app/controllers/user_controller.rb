@@ -30,10 +30,9 @@ class UserController < ApplicationController
 
   before_filter :process_session
   after_filter :user_track, :only => [:index, :card]
-  after_filter :reload_owner
 
   def index
-  	render :text => 'Hahaha!'
+  	redirect_to :controller => 'administration', :action => 'people'
   end
 
   def add
@@ -45,6 +44,7 @@ class UserController < ApplicationController
 
     @user = User.new
     @company = @logged_user.company
+    @permissions = ProjectUser.permission_names()
 
     @send_email = params[:new_account_notification] == 'false' ? false : true
     @permissions = ProjectUser.permission_names()
@@ -68,30 +68,21 @@ class UserController < ApplicationController
     when :post
       user_attribs = params[:user]
 
-      # Process credentials
-
-      user_credentials = params[:credentials]
-      unless user_credentials[:password]
-        @user.errors.add(:password, 'Required')
-      else
-        unless user_credentials[:password] == user_credentials[:password_confirmation]
-          @user.errors.add(:password_confirmation, 'Does not match')
-        end
-      end
-
-      return unless @user.errors.empty?
-
       # Process extra parameters
 
       @user.username = user_attribs[:username]
       new_account_password = nil
 
-      if user_credentials.has_key?(:generate_password)
+      if user_attribs.has_key?(:generate_password)
         @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
       else
-        new_account_password = user_credentials[:password]
-        @user.password = new_account_password
+        if user_attribs.has_key? :password and !user_attribs[:password].empty?
+          @user.password = user_attribs[:password]
+          @user.password_confirmation = user_attribs[:password_confirmation]
+        end
       end
+      
+      new_account_password = @user.password
 
       if @logged_user.member_of_owner?
         @user.company_id = user_attribs[:company_id]
@@ -102,10 +93,8 @@ class UserController < ApplicationController
       else
         @user.company_id = @company.id
       end
-
-      if user_attribs[:identity_url]
-        @user.identity_url = user_attribs[:identity_url]
-      end
+      
+      @user.identity_url = user_attribs[:identity_url] if user_attribs[:identity_url]
 
       # Process core parameters
 
@@ -143,20 +132,102 @@ class UserController < ApplicationController
             ProjectUser.update_all(ProjectUser.update_str(permission_list, @user), ['user_id = ? AND project_id = ?', @user.id, project_id])
           end
         end
-
-        #ApplicationLog.new_log(@user, @logged_user, :add, true)
+        
         @user.send_new_account_info(new_account_password) if @send_email
 
         error_status(false, :success_added_user)
-        redirect_back_or_default :controller => 'company', :action => 'view_client', :id => @company.id
+        redirect_back_or_default :controller => 'administration', :action => 'people', :id => @company.id
       end
     end
   end
 
   def edit
-    # Note: doesn't seem to have been implemented in ActiveCollab
-    error_status(true, :unimplemented)
-    redirect_back_or_default :controller => 'dashboard'
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_user)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
+    
+  	unless @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+  	end
+  	
+  	@projects = @active_projects
+    @permissions = ProjectUser.permission_names()
+
+    case request.method
+    when :post
+      user_params = params[:user]
+
+      # Process IM Values
+      all_im_values = user_params[:im_values] || {}
+      all_im_values.reject! do |key, value|
+        value[:value].strip.length == 0
+      end
+
+      if user_params[:default_im_value].nil?
+        default_value = '-1'
+      else
+        default_value = user_params[:default_im_value]
+      end
+
+      real_im_values = all_im_values.collect do |type_id,value|
+        real_im_value = value[:value]
+        ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
+      end
+
+      # Process extra parameters
+
+      if @logged_user.is_admin?
+        @user.username = user_params[:username]
+
+        if @logged_user.member_of_owner?
+          @user.company_id = user_params[:company_id] unless user_params[:company_id].nil?
+          @user.is_admin = user_params[:is_admin]
+          @user.auto_assign = user_params[:auto_assign]
+        end
+      end
+
+      if user_params.has_key? :password and !user_params[:password].empty?
+        @user.password = user_attribs[:password]
+        @user.password_confirmation = user_attribs[:password_confirmation]
+      end
+      
+      @user.identity_url = user_params[:identity_url] if user_params[:identity_url]
+
+      # Process core parameters
+
+      @user.attributes = user_params
+
+      # Send it off
+
+      if @user.save
+        # Re-create ImValues for user
+        ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{@user.id}")
+        real_im_values.each do |im_value|
+          im_value.save
+        end
+        error_status(false, :success_updated_profile)
+        redirect_back_or_default :controller => 'dashboard'
+      end
+    end
+  end
+  
+  def current
+    @user = @logged_user
+    unless @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
+  	
+  	@projects = @active_projects
+    
+    render :action => 'edit'
   end
 
   def delete
@@ -182,6 +253,47 @@ class UserController < ApplicationController
     error_status(false, :success_deleted_user, {:name => old_name})
 
     redirect_back_or_default :controller => 'company', :action => 'view', :id => old_id
+  end
+  
+  def edit_avatar
+  	unless @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+  	end
+
+    case request.method
+    when :post
+      user_attribs = params[:user]
+
+      new_avatar = user_attribs[:avatar]
+      @user.errors.add(:avatar, 'Required') if new_avatar.nil?
+      @user.avatar = new_avatar
+
+      if @user.errors.empty?
+        if @user.save
+          error_status(false, :success_updated_avatar)
+        else
+          error_status(true, :error_updating_avatar)
+        end
+
+        redirect_to :controller => 'account', :action => 'edit_avatar', :id => @user.id
+      end
+    end
+  end
+
+  def delete_avatar
+  	unless @user.profile_can_be_updated_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+  	end
+
+    @user.avatar = nil
+    @user.save
+
+    error_status(false, :success_deleted_avatar)
+    redirect_to :controller => 'account', :action => 'index'
   end
 
   def card

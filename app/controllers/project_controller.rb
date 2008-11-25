@@ -215,7 +215,7 @@ class ProjectController < ApplicationController
       #  redirect_to :controller => 'project', :action => 'permissions'
       #else
       error_status(false, :success_updated_permissions)
-      redirect_to :controller => 'project', :action => 'permissions'
+      redirect_to :controller => 'project', :action => 'people'
       #end
     end
   end

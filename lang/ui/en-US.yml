@@ -40,7 +40,6 @@ report_by_task: Report by task
 add_project: Add project
 add_user: Add user
 add_client: Add client
-update_profile: Update profile
 change_password: Change password
 update_avatar: Update avatar
 permissions: Permissions
@@ -142,7 +141,6 @@ verification_cancelled: Verification cancelled
 unknown_response_status: "Unknown response status: {status}"
 invalid_email: Invalid email address
 invalid_email_not_in_use: Invalid email address
-success_updated_profile: Successfully updated profile
 password_changed: Password changed
 insufficient_permissions: Insufficient permissions
 success_updated_permissions: Successfully updated permissions
@@ -450,6 +448,7 @@ country: Country
 contact_online: Contact online
 contact_offline: Contact offline
 not_applicable: "n/a"
+contact_info: Contact info
 
 # Dashboard
 started_on: Started on
@@ -509,6 +508,7 @@ comment_posted_format: "%b %d. %Y %H:%M"
 generate_password: Generate password
 send_account_email_notification: "Send email notification?"
 send_account_email_notication_info:  "If you select \"Yes\" the user will receive an email with a welcome message and login parameters"
+owner: Owner
 
 # Project
 project_show_description_in_overview: Show description on project overview page

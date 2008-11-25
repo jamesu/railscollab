@@ -41,7 +41,12 @@ class User < ActiveRecord::Base
   
   has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
 
+  before_validation_on_create :process_create
   before_destroy :process_destroy
+
+  def process_create
+    @cached_password ||= ''
+  end
 
   def process_destroy
     # Explicitly remove these
@@ -113,12 +118,18 @@ class User < ActiveRecord::Base
       calc_twister.sort!{ rand(3) - 1 }
       break if (calc_twister[0] != '0')
     end
-
+    
+    @cached_password = value.clone
     self.twister_array = calc_twister
   end
-
+  
   def password
-    self.token
+    @cached_password
+  end
+  
+  def password_changed?
+    puts "CHANGED == #{@cached_password.class} (#{!@cached_password.nil?})"
+    !@cached_password.nil?
   end
 
   def password_reset_key
@@ -353,12 +364,16 @@ class User < ActiveRecord::Base
   attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
 
   # Validation
-
+  
+  validates_presence_of :username, :on => :create
   validates_length_of :username, :within => 3..40
-  validates_presence_of :username, :password
-  validates_uniqueness_of :username, :on => :create
-  #validates_length_of :display_name, :minimum => 1, :allow_blank => true
+
+  validates_presence_of :password, :if => :password_changed?
+  validates_length_of :password, :minimum => 4, :if => :password_changed?
+
+  validates_confirmation_of :password, :if => :password_changed?
+  
+  validates_uniqueness_of :username
   validates_uniqueness_of :email
   validates_uniqueness_of :identity_url, :if => Proc.new { |user| !(user.identity_url.nil? or user.identity_url.empty? ) }
-  #validates_confirmation_of :password, :on => :create
 end

@@ -27,7 +27,7 @@ class CompanyController < ApplicationController
          :redirect_to => { :controller => 'dashboard' }
 
   before_filter :process_session
-  before_filter :obtain_company, :except => [:add_client, :edit, :hide_welcome_info, :logo]
+  before_filter :obtain_company, :except => [:add, :hide_welcome_info, :logo]
   after_filter  :user_track
   after_filter :reload_owner
 
@@ -39,59 +39,7 @@ class CompanyController < ApplicationController
     end
   end
 
-  def view_client
-    unless @company.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    # Little bit of a hack, nothing to worry about
-    @active_projects = []
-    @finished_projects = []
-
-    @company.projects.each do |project|
-      if project.is_active?
-      	@active_projects << project
-      else
-      	@finished_projects << project
-      end
-    end
-
-    @content_for_sidebar = 'dashboard/my_projects_sidebar'
-  end
-
-  def edit
-    begin
-      @company = Company.owner
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_company)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    unless @company.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    case request.method
-    when :post
-      company_attribs = params[:company]
-
-      @company.attributes = company_attribs
-      @company.updated_by = @logged_user
-      if @company.save
-        #ApplicationLog.new_log(@company, @logged_user, :edit, true)
-
-        error_status(false, :success_added_company)
-        redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
-      end
-    end
-  end
-
-  def add_client
+  def add
     unless Company.can_be_created_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
@@ -117,7 +65,7 @@ class CompanyController < ApplicationController
     end
   end
 
-  def edit_client
+  def edit
     unless @company.can_be_edited_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
@@ -143,7 +91,7 @@ class CompanyController < ApplicationController
     render :template => 'company/edit'
   end
 
-  def delete_client
+  def delete
   	unless @company.can_be_deleted_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'

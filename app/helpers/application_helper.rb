@@ -100,23 +100,22 @@ module ApplicationHelper
       radio_button_tag(name, "0", !is_yes, options.merge({:id => "#{options[:id]}No"})) +
       " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>"
   end
-
-  def actions_for_user(user)
-    profile_updateable = user.profile_can_be_updated_by(@logged_user)
-
-    [{:name => :update_profile.l,  :url => "/account/edit_profile/#{user.id}",       :cond => profile_updateable},
-     {:name => :change_password.l, :url => "/account/edit_password/#{user.id}",      :cond => profile_updateable},
-     {:name => :update_avatar.l,   :url => "/account/edit_avatar/#{user.id}",        :cond => profile_updateable},
-     {:name => :permissions.l,     :url => "/account/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)},
-     {:name => :delete.l,          :url => "/user/delete/#{user.id}",                :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l}]
-  end
-
-  def actions_for_client(client)
-    [{:name => :add_user.l,    :url => {:controller => 'user',    :action => 'add',        :company_id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-     {:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => client.id}, :cond => client.can_be_managed_by(@logged_user)},
-     {:name => :edit.l,        :url => {:controller => 'company', :action => 'edit_client',        :id => client.id}, :cond => client.can_be_edited_by(@logged_user)},
-     {:name => :delete.l,      :url => {:controller => 'company', :action => 'delete_client',      :id => client.id}, :cond => client.can_be_deleted_by(@logged_user), :method => :post, :confirm => :delete_client_confirm.l}]
-  end
+	
+	def actions_for_user(user)
+	   profile_updateable = user.profile_can_be_updated_by(@logged_user)
+	   
+	   actions = [{:name => :edit.l, :url => "/user/edit/#{user.id}", :cond => profile_updateable}]
+	   
+	   if @active_project.nil?
+	     actions += [
+	       {:name => :delete.l, :url => "/user/delete/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l},
+	       {:name => :permissions.l, :url => "/account/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)}]
+	   else
+	     actions << {:name => :remove.l, :url => "/project/#{@active_project.id}/remove_user/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_remove.l}
+	   end
+	   
+	   actions
+	end
 
   def actions_for_project(project)
     [{:name => :edit.l,   :url => {:controller => 'project', :action => 'edit',   :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
@@ -147,8 +146,17 @@ module ApplicationHelper
   end
 
   def actions_for_company(company)
-    [{:name => :edit.l,   :url => {:controller => 'company', :action => 'edit', :id => @project.id, :company => company.id}, :cond => company.can_be_edited_by(@logged_user)},
-     {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company',           :company => company.id}, :cond => company.can_be_removed_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}]
+    actions = [
+      {:name => :add_user.l, :url => "/user/add?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
+      {:name => :edit.l,   :url => {:controller => 'company', :action => 'edit', :id => company.id}, :cond => company.can_be_edited_by(@logged_user)}]
+    
+    unless @active_project.nil?
+      actions << {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :id => company.id}, :cond => company.can_be_removed_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}
+    else
+      actions << {:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => company.id}, :cond => company.can_be_managed_by(@logged_user)}
+    end
+    
+    actions
   end
 
   def actions_for_comment(comment)

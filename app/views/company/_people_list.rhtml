@@ -1,0 +1,80 @@
+<% company = people_list; company_card = company %>
+<div class="peopleList">
+<h2><%= h company.name %></h2>
+
+<div class="card">
+  <div class="cardIcon"><img src="<%= company_card.logo_url %>" alt="<%= h company_card.name %> logo" /></div>
+  <div class="cardData">
+    <h3><%= h company_card.name %></h3>
+    <% if company_card.email? %>
+    <div class="cardBlock">
+      <a href="mailto:<%= h company_card.email %>"><%= h company_card.email %></a>
+    </div>
+    <% end %>
+    <div class="cardBlock">
+    <% if company_card.homepage? %><div><%= link_to h(company_card.homepage), company_card.homepage %></div><% end %>
+    <% if company_card.fax_number? %><div><span><%= :fax.l %>:</span><%= h(company_card.fax_number) %></div><% end %>
+    <% if company_card.phone_number? %><div><span><%= :home.l %>:</span><%= h(company_card.phone_number) %></div><% end %>
+    </div>
+    <div class="cardBlock">
+<% if company_card.address? %><%= h company_card.address %><% end %>
+<% if company_card.address2? %><br /><%= h company_card.address2 %><% end %>
+<% if company_card.city? and company_card.state? %>
+<br /><%= h company_card.city %>, <%= h company_card.state %> <% if company_card.zipcode? %><%= h company_card.zipcode %><% end %>
+<% if company_card.country? %><br /><%= h company_card.country %><% end %>
+<% end %>
+    </div>
+    
+    <% if company_card.can_be_edited_by(@logged_user) %>
+    <div class="cardBlock">
+      <%= action_list actions_for_company(company) %>
+    </div>
+    <% end %>
+  </div>
+</div>
+
+<% num_users = 1 %>
+<% users = @active_project.nil? ? company.users : @active_project.users  %>
+<% users.each do |user|
+   user_card = user %>
+<div class="card">
+  <div class="cardIcon"><img src="<%= user_card.avatar_url %>" alt="<%= h user_card.display_name %> avatar" /></div>
+  <div class="cardData">
+    <h3><%= h user_card.display_name %></h3>
+      <% if user_card.title? %><div class="detailsTitle"> <%= h user_card.title %></div><% end %>
+    <div class="cardBlock">
+      <a href="mailto:<%= h user_card.email %>"><%= h user_card.email %></a>
+    </div>
+    <div class="cardBlock">
+    <% user_card.im_values.each do |im_value| -%>
+    <div class="cardIM">
+        <img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %>" /><span> <%= h im_value.value %></span>
+    </div>
+    <% end %>
+    </div>
+    <div class="cardBlock">
+    <% if user_card.office_number? %><div class="cardOffice"><span><%= :office.l %>:</span><%= h(user_card.office_number) %></div><% end %>
+    <% if user_card.fax_number? %><div class="cardFax"><span><%= :fax.l %>:</span><%= h(user_card.fax_number) %></div><% end %>
+    <% if user_card.mobile_number? %><div class="cardMobile"><span><%= :mobile.l %>:</span><%= h(user_card.mobile_number) %></div><% end %>
+    <% if user_card.home_number? %><div class="cardHome"><span><%= :home.l %>:</span><%= h(user_card.home_number) %></div><% end %>
+    </div>
+    <div class="cardBlock">
+    <% if user_card.owner_of_owner? %><div class="cardOwner"><%= :owner.l %></div><% end %>
+    </div>
+    <% if user_card.profile_can_be_updated_by(@logged_user) %>
+    <div class="cardBlock">
+      <%= action_list actions_for_user(user_card) %>
+    </div>
+    <% end %>    
+  </div>
+</div>
+<% num_users += 1
+   if num_users % 3 == 0 %>
+<div class="clear"></div>
+<% end %>
+
+<% end %>
+<% unless num_users % 3 == 0 %> 
+<div class="clear"></div>
+<% end %>
+</div>

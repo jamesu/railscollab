@@ -1,25 +1,10 @@
 <%
     @page_title = :update_permissions.l
   
-    if @user.member_of_owner?
-        @tabbed_navigation_items = administration_tabbed_navigation(:company)
-        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :company , :url => "/company/card/#{@user.company.id}"}, {:title => @user.display_name, :url => "/user/card/#{@user.id}"}])
-    else
-        @tabbed_navigation_items = administration_tabbed_navigation(:clients)
-        @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :clients, :url => "/administration/clients"}, {:title => (h @user.company.name), :url => "/company/view_client/#{@user.company.id}"}, {:title => (h @user.display_name), :url => "/user/card/#{@user.id}"}])
-    end
+    @tabbed_navigation_items = administration_tabbed_navigation(:people)
+    @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :company , :url => "/company/card/#{@user.company.id}"}, {:title => @user.display_name, :url => "/user/card/#{@user.id}"}])
     
     @page_actions = []
-    
-    if @user.profile_can_be_updated_by(@logged_user)
-        @page_actions += [{:title => :update_profile, :url => "/account/edit_profile/#{@user.id}"},
-                          {:title => :change_password, :url => "/account/edit_password/#{@user.id}"},
-                          {:title => :update_avatar, :url => "/account/edit_avatar/#{@user.id}"}]
-    end
-    
-    if @user.permissions_can_be_updated_by(@logged_user)
-        @page_actions << {:title => :permissions, :url => "/account/update_permissions/#{@user.id}"}
-    end
     
     @additional_stylesheets = []
 %>

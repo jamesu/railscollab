@@ -6,7 +6,7 @@
   <% end %>
   <ul>
     <% unless user.is_anonymous? %>
-    <li><%= link_to :account.l, :controller => 'account' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :account.l, :controller => 'user', :action => 'current' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
     <% end %>
 <% if not projects.nil? and projects.length > 0 %>
     <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>

@@ -19,13 +19,11 @@
 module AdministrationHelper
   def administration_tabbed_navigation(current)
     items = [{:id => :index,         :url => '/administration/index'},
-	         {:id => :company,       :url => '/administration/company'},
-	         {:id => :members,       :url => '/administration/members'},
-	         {:id => :clients,       :url => '/administration/clients'},
-	         {:id => :projects,      :url => '/administration/projects'},
-	         {:id => :configuration, :url => '/administration/configuration'},
-	         {:id => :tools,         :url => '/administration/tools'}]
-	        #{:id => :upgrade,       :url => '/administration/upgrade'}]
+	           {:id => :people,       :url => '/administration/people'},
+	           {:id => :projects,      :url => '/administration/projects'},
+	           {:id => :configuration, :url => '/administration/configuration'},
+	           {:id => :tools,         :url => '/administration/tools'}]
+	          #{:id => :upgrade,       :url => '/administration/upgrade'}]
 
 	@selected_navigation_item = current
 	return items

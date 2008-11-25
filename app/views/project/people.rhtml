@@ -11,57 +11,9 @@
   
   @additional_stylesheets = ['project/people']
 %>
-<% if @project_companies.length > 0 %>
 <div id="people">
-<% @project_companies.each do |company| -%>
-  <div class="projectCompany">
-    <div class="projectCompanyLogo"><img src="<%= company.logo_url %>" alt="<%= h company.name %>" /></div>
-    <div class="projectCompanyMeta">
-      <div class="projectCompanyInfo">
-        <div class="projectCompanyName"><%= link_to (h company.name), {:controller => 'company', :action => 'card', :id => company.id}, :class => 'companyName'%></div>
-<% if !company.address.nil? or !company.city.nil? %>
-        <div class="projectCompanyAddress">
-          <%= h company.address %>
-<% if !company.address2.nil? and !company.address2.empty? %><br /><%= h company.address2 %><% end %>
-<% if !company.city.nil? and !company.city.empty? %><br /><%= h company.city %>, <%= h company.state %> <%= h company.zipcode %><% end %>
-        </div>
-<% end %>
-<% if not company.homepage.nil? %>
-        <div class="projectCompanyHomepage"><a href="<%= h company.homepage %>"><%= h company.homepage %></a></div>
-<% end %>
-<div class="projectCompanyOptions">
-<%= action_list actions_for_company(company) %>
+<%= render :partial => 'company/people_list', :collection => @project_companies %>
 </div>
-      </div>
-<% company_users = company.users_on_project(@project) %>
-<% if company_users.length > 0 %>
-      <div class="projectCompanyUsers">
-        <table>
-          <tr>
-            <th colspan="2"><%= :clients_involved_in.l_with_args(:company => h(company.name), :project => h(@project.name)) %>:</th>
-          </tr>
-<% company_users.each do |user| %>
-          <tr>
-            <td style="width: 200px">
-              <div class="projectUserDisplayName"><%= link_to (h user.display_name), :controller => 'user', :action => 'card', :id => user.id %></div>
-              <div class="projectUserEmail"><a href="mailto:<%= user.email %>"><%= user.email %></a></div>
-            </td>
-<% if @project.user_can_be_removed_by(user, @logged_user) %>
-            <td><%= link_to :remove.l, {:controller => 'project', :action => 'remove_user', :user => user.id}, {:method => :post, :confirm => :confirm_user_remove.l} %></td>
-<% end %>
-          </tr>
-<% end %>
-        </table>
-      </div>
-<% end %>
-    </div>
-
-    <div class="clear"></div>
-
-  </div>
-<% end %>
-</div>
-<% end %>
 
 <% if @project.can_be_managed_by(@logged_user) %>
 <div class="hint"><%= :permissions_info.l_with_args(:link => link_to(:permissions_form.l, :controller => 'project', :action => 'permissions')) %></div>

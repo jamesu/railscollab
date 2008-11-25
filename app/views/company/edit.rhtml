@@ -1,21 +1,10 @@
 <%
-  if @company.is_owner?
-    @page_title = :edit_company.l
-  	@tabbed_navigation_items = administration_tabbed_navigation(:company)
-  	@bread_crumbs = administration_crumbs(:edit_company, [{:title => :company, :url => '/administration/company'}])
-  else
-    @page_title = :edit_client.l
-  	@tabbed_navigation_items = administration_tabbed_navigation(:clients)
-  	@bread_crumbs = administration_crumbs(:edit_client, [{:title => :clients, :url => '/administration/clients'}])
-  end
-
+  @page_title = @company.is_owner? ? :edit_company.l : :edit_client.l
+  @tabbed_navigation_items = administration_tabbed_navigation(:people)
+  @bread_crumbs = administration_crumbs((@company.is_owner? ? :edit_company.l : :edit_client.l), [{:title => :people, :url => '/administration/people'}])
 %>
 
-<% if @company.is_owner? %>
-<%= form_tag :controller => 'company', :action => 'edit' %>
-<% else %>
-<%= form_tag :controller => 'company', :action => 'edit_client', :id => @company.id %>
-<% end %>
+<%= form_tag :controller => 'company', :action => 'edit', :id => @company.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_company.l %></button>
 </form>

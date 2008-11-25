@@ -1,8 +1,8 @@
 <%
   @page_title = :update_permissions.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation(:clients)
-  @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :clients, :url => "/administration/clients"}, {:title => @company.name, :url => "/company/card/#{@company.id}"}])
+  @tabbed_navigation_items = administration_tabbed_navigation(:people)
+  @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :people, :url => "/administration/people"}, {:title => @company.name, :url => "/company/card/#{@company.id}"}])
   
   @page_actions = []
   

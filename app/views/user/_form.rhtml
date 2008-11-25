@@ -1,92 +1,185 @@
 <%= error_messages_for :user %>
 
-<% if @logged_user.is_admin? %>
+<% if @logged_user.is_admin %>
+  <div class="hint">
+    <div class="header"><%= :administration_options_info.l %></div>
+    <div class="content">
+      <div>
+        <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
+        <%= text_field 'user', 'username', :id => 'userFormUsername' %>
+      </div>
+      
+<% if @logged_user.member_of_owner? %>
+      <div>
+        <label for="userFormCompany"><%= :company.l %>: <span class="label_required">*</span></label>
+        <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
+      </div>
+      
+      <fieldset>
+        <legend><%= :options.l %></legend>
+        
+        <div>
+          <label for="userFormIsAdmin"><%= :administrator.l %>: <span class="label_required">*</span></label>
+          <%= yesno_toggle 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
+        </div>
+    
+        <div>
+          <label for="userFormAutoAssign"><%= :auto_assign_to_new_projects.l %>: <span class="label_required">*</span></label>
+          <%= yesno_toggle 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
+        </div>
+      </fieldset>
+<% end %>
+    </div>
+  </div>
+<% else %>
   <div>
     <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
-    <%= text_field 'user', 'username', :id => 'userFormUsername', :class => 'medium' %>
+    <%= @user.username %>
+  </div>
+<% end %>
+
+  <div>
+    <label for="userFormDisplayName"><%= :display_name.l %></label>
+    <%= text_field 'user', 'display_name', :id => 'userFormDisplayName', :class => 'medium' %>
   </div>
   
-<% if @user.new_record? and @logged_user.member_of_owner? %>
   <div>
-    <label for="userFormCompany"><%= :company.l %>: <span class="label_required">*</span></label>
-    <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
+    <label for="profileFormEmail"><%= :email_address.l %> <span class="label_required">*</span></label>
+    <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
   </div>
-<% end %>
-<% end %>
+  
+  <div>
+    <label for="profileFormTimezone"><%= :timezone.l %> <span class="label_required">*</span></label>
+    <%= time_zone_select 'user', 'time_zone', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
+  </div>
 
 <% if AppConfig.allow_openid %>
   <div>
-    <label for="userFormOpenID"><%= :openid.l %>:</label>
+    <label for="userFormOpenID"><%= :openid.l %></label>
     <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
     <p class="desc"><%= :openid_info.l %></p>
   </div>
 <% end %>
 
-  <div>
-    <label for="userFormDisplayName"><%= :display_name.l %>:</label>
-    <%= text_field 'user', 'display_name', :id => 'userFormDisplayName', :class => 'medium' %>
-  </div>
-  
-  <div>
-    <label for="profileFormEmail"><%= :email_address.l %>: <span class="label_required">*</span></label>
-    <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
-  </div>
-  
-  <div>
-    <label for="profileFormTimezone"><%= :timezone.l %>: <span class="label_required">*</span></label>
-    <%= time_zone_select 'user', 'time_zone', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
-  </div>
-  
-<% if @user.new_record? or @logged_user.is_admin? %>
+<div class="formBlock">  
   <fieldset>
     <legend><%= :password.l %></legend>
+    <% if @user.new_record? %>
     <div>
-        <label for="userFormGeneratePassword"><%= :generate_password.l %>:</label>
-        <input type="checkbox" checked="true" name="credentials[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="user_form_update_passwordgen()"/>      
+        <label for="userFormGeneratePassword"><%= :generate_password.l %></label>
+        <input type="checkbox" checked="true" name="user[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="user_form_update_passwordgen()"/>      
     </div>
+    <% end %>
     <div id="userFormPasswordInputs">
       <div>
-        <label for="userFormPassword"><%= :password.l %>: <span class="label_required">*</span></label>
-        <input type="password" id="userFormPassword" name="credentials[password]" />
+        <label for="userFormPassword"><%= :password.l %> <span class="label_required">*</span></label>
+        <input type="password" id="userFormPassword" name="user[password]" />
       </div>
 
       <div>
-        <label for="userFormPasswordA"><%= :repeat_password.l %>: <span class="label_required">*</span></label>
-        <input type="password" id="userFormPasswordA" name="credentials[password_confirmation]" />
+        <label for="userFormPasswordA"><%= :repeat_password.l %> <span class="label_required">*</span></label>
+        <input type="password" id="userFormPasswordA" name="user[password_confirmation]" />
       </div>
     </div>
   </fieldset>
   <script type="text/javascript">
     user_form_update_passwordgen();
   </script>
-<% end %>
+  </div>
 
-<% if @logged_user.is_admin? and @logged_user.member_of_owner? %>
-  <div class="formBlock">
+<% if @user.new_record? %>
+<div class="formBlock"> 
+  <label><%= :send_account_email_notification.l %> <span class="label_required">*</span></label>
+  <%= yesno_toggle_tag 'new_account_notification', !!@send_email, :id => 'userFormEmailNotificationYes', :class => 'checkbox' %><br /><span class="desc"><%= :send_account_email_notication_info.l %></span>
+</div>
+<% else %>
+<div class="formBlock">
+  <fieldset>
+    <legend><%= :contact_info.l %></legend>
+  
     <div>
-      <label for="userFormIsAdmin"><%= :administrator.l %>: <span class="label_required">*</span></label>
-      <%= yesno_toggle 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'yes_no'  %>
+      <label for="userFormTitle"><%= :title.l %></label>
+      <%= text_field 'user', 'title', :id => 'userFormTitle' %>
+    </div>
+      
+    <div>
+      <label for="userFormOfficeNumber"><%= :office.l %></label>
+      <%= text_field 'user', 'office_number', :id => 'userFormOfficeNumber' %>
     </div>
     
     <div>
-      <label for="userFormAutoAssign"><%= :auto_assign_to_new_projects.l %>: <span class="label_required">*</span></label>
-      <%= yesno_toggle 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'yes_no'  %>
+      <label for="userFormFaxNumber"><%= :fax.l %></label>
+      <%= text_field 'user', 'fax_number', :id => 'userFormFaxNumber' %>
     </div>
-  </div>
+    
+    <div>
+      <label for="userFormMobileNumber"><%= :mobile.l %></label>
+      <%= text_field 'user', 'mobile_number', :id => 'userFormMobileNumber' %>
+    </div>
+    
+    <div>
+      <label for="userFormHomeNumber"><%= :home.l %></label>
+      <%= text_field 'user', 'home_number', :id => 'userFormHomeNumber' %>
+    </div>
+    
+  </fieldset>
+<% all_im_values = @user.im_info %>
+<% if all_im_values.length > 0 %>
+  <fieldset>
+    <legend><%= :instant_messengers.l %></legend>
+    <table class="blank">
+      <tr>
+        <th colspan="2"><%= :service.l %></th>
+        <th><%= :value.l %></th>
+        <th><%= :primary_im.l %></th>
+      </tr>
+<% @count = 0 %>
+<% all_im_values.each do |im_value| -%>
+      <tr>
+        <td style="vertical-align: middle"><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %> icon" /></td>
+        <td style="vertical-align: middle"><label class="checkbox" for="<%= "userFormIm#{@count}" %>"><%= im_value.im_type.name %></label></td>
+        <td style="vertical-align: middle"><%= text_field_tag "user[im_values][#{im_value.im_type_id}][value]", im_value.value, :id => "userFormIm#{@count}" %></td>
+        <td style="vertical-align: middle"><%= radio_button_tag "user[default_im_value]", im_value.im_type_id, im_value.is_default, :id => 'im_default', :class => 'checkbox' %></td>
+      </tr>
+<% @count += 1 %>
 <% end %>
-  
-<% if @user.new_record? %>
+    </table>
+    <p class="desc"><%= :instant_messengers_info.l %></p>
+  </fieldset>
+<% end %>
+</div>
+<% end %>
+
+<% unless @user.new_record? %>
   <div class="formBlock">
+  <%= form_tag( {:controller => 'user', :action => 'edit_avatar', :id => @user.id}, :multipart => true ) %>
+<%= error_messages_for :user %>
   
-  <label><%= :send_account_email_notification.l %>: <span class="label_required">*</span></label>
-  <input id="userFormEmailNotificationYes" class="yes_no" value="true" type="radio" <%= @send_email ? 'checked="checked"' : '' %> name="new_account_notification" />
-  <label class="yes_no" for="userFormEmailNotificationYes"><%= :yesno_yes.l %></label>
-  <input id="userFormEmailNotificationNo" class="yes_no" value="false" type="radio" <%= @send_email ? '' : 'checked="checked"' %> name="new_account_notification" />
-  <label class="yes_no" for="userFormEmailNotificationNo"><%= :yesno_no.l %></label> <br /><span class="desc"><%= :send_account_email_notication_info.l %></span>
+  <fieldset>
+    <legend><%= :current_avatar.l %></legend>
+<% if @user.has_avatar? %>
+    <img src="<%= @user.avatar_url %>" alt="<%= h @user.display_name %> avatar" />
+    <p><%= link_to :delete_current_avatar.l, {:action => 'delete_avatar', :id => @user.id}, {:onclick => :avatar_confirm_delete, :method => :post} %></p>
+<% else %>
+    <%= :avatar_not_uploaded.l %>
+<% end %>
+  </fieldset>
+  
+  <div>
+    <label for="avatarFormAvatar"><%= :new_avatar.l %> <span class="label_required">*</span></label>
+    <div id="avatarFormAvatar"><input type="file" name="user[avatar]" /></div>
+<% if @user.has_avatar? %>
+    <p class="desc"><%= :avatar_upload_info.l %></p>
+<% end %>
+  </div>
+  
+    <button class="submit" type="submit"><%= :update_avatar.l %></button>
+  
+</form>
   </div>
 <% end %>
 
-<% if not @projects.empty? %>
+<% if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty? %>
 
 <script type="text/javascript">
   permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);

@@ -18,6 +18,7 @@
 #++
 
 class AccountController < ApplicationController
+  layout 'administration'
 
   verify :method      => :post,
          :only        => [ :delete_avatar ],
@@ -32,115 +33,6 @@ class AccountController < ApplicationController
 
   def index
   	@user = @logged_user
-  end
-
-  def edit_profile
-  	unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
-    case request.method
-    when :post
-      user_params = params[:user]
-
-      # Process IM Values
-      all_im_values = params[:im_values]
-      all_im_values.reject! do |key, value|
-        value[:value].strip.length == 0
-      end
-
-      if params[:default_im_value].nil?
-        default_value = '-1'
-      else
-        default_value = params[:default_im_value]
-      end
-
-      real_im_values = all_im_values.collect do |type_id,value|
-        real_im_value = value[:value]
-        ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
-      end
-
-      # Process extra parameters
-
-      if @logged_user.is_admin?
-        @user.username = user_params[:username]
-
-        if @logged_user.member_of_owner?
-          @user.company_id = user_params[:company_id]
-          @user.is_admin = user_params[:is_admin]
-          @user.auto_assign = user_params[:auto_assign]
-        end
-      end
-
-      if user_params[:identity_url]
-        @user.identity_url = user_params[:identity_url]
-      end
-
-      # Process core parameters
-
-      @user.attributes = user_params
-
-      # Send it off
-
-      if @user.save
-        # Re-create ImValues for user
-        ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{@user.id}")
-        real_im_values.each do |im_value|
-          im_value.save
-        end
-        error_status(false, :success_updated_profile)
-        redirect_back_or_default :controller => 'dashboard'
-      end
-    end
-  end
-
-  def edit_password
-    if @user.nil?
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-  	unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
-    case request.method
-    when :post
-
-      @password_data = params[:user]
-      unless @logged_user.is_admin?
-        unless @password_data[:old_password]
-          @user.errors.add(:old_password, :required.l)
-          return
-        end
-
-        unless @user.valid_password(@password_data[:old_password])
-          @user.errors.add(:old_password, :is_incorrect.l)
-          return
-        end
-      end
-
-      unless @password_data[:password]
-        @user.errors.add(:password, :new_password_required.l)
-        return
-      end
-
-      unless @password_data[:password] == @password_data[:password_confirmation]
-        @user.errors.add(:password_confirmation, :does_not_match.l)
-        return
-      end
-
-      @user.password = @password_data[:password]
-      @user.save
-
-      error_status(false, :password_changed)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
   end
 
   def update_permissions
@@ -205,47 +97,6 @@ class AccountController < ApplicationController
       error_status(false, :success_updated_permissions)
       redirect_to :controller => 'account', :action => 'update_permissions', :id => @user.id
     end
-  end
-
-  def edit_avatar
-  	unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
-    case request.method
-    when :post
-      user_attribs = params[:user]
-
-      new_avatar = user_attribs[:avatar]
-      @user.errors.add(:avatar, 'Required') if new_avatar.nil?
-      @user.avatar = new_avatar
-
-      if @user.errors.empty?
-        if @user.save
-          error_status(false, :success_updated_avatar)
-        else
-          error_status(true, :error_updating_avatar)
-        end
-
-        redirect_to :controller => 'account', :action => 'edit_avatar', :id => @user.id
-      end
-    end
-  end
-
-  def delete_avatar
-  	unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
-    @user.avatar = nil
-    @user.save
-
-    error_status(false, :success_deleted_avatar)
-    redirect_to :controller => 'account', :action => 'index'
   end
 
   private

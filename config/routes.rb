@@ -23,9 +23,8 @@ ActionController::Routing::Routes.draw do |map|
 
   # Account routes
   map.connect 'account',                :controller => 'account'
-  map.connect 'account/avatar/:id.png', :controller => 'account', :action => 'avatar', :format => 'png'
 
-  %w[edit_profile edit_password update_permissions edit_avatar delete_avatar].each do |action|
+  %w[update_permissions].each do |action|
   	map.connect 'account/:action/:id',         :controller => 'account', :action => action
   	map.connect 'account/:action/:id.:format', :controller => 'account', :action => action
   end
@@ -33,7 +32,7 @@ ActionController::Routing::Routes.draw do |map|
   # Company routes
   map.connect 'company/logo/:id.png', :controller => 'company', :action => 'logo', :format => 'png'
 
-  %w[card view_client edit add_client edit_client delete_client
+  %w[card edit add delete
      update_permissions edit_logo delete_logo hide_welcome_info].each do |action|
   	map.connect 'company/:action/:id',         :controller => 'company', :action => action
   	map.connect 'company/:action/:id.:format', :controller => 'company', :action => action

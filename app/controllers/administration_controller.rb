@@ -24,23 +24,16 @@ class AdministrationController < ApplicationController
 
   def index
   end
-
-  def company
-  	@company = Company.owner(true)
-  	render :template => 'company/view_client'
-  end
-
-  def members
-  	@company = Company.owner(true)
-  	@users = @company.users
-  end
-
+  
   def projects
   	@projects = @logged_user.projects
   end
 
-  def clients
+  def people
+    @company = Company.owner
   	@clients = Company.owner.clients(true)
+  	
+  	@companies = [@company] + @clients
   end
 
   def configuration
