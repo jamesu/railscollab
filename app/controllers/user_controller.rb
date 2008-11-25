@@ -136,7 +136,7 @@ class UserController < ApplicationController
         @user.send_new_account_info(new_account_password) if @send_email
 
         error_status(false, :success_added_user)
-        redirect_back_or_default :controller => 'administration', :action => 'people', :id => @company.id
+        redirect_back_or_default :controller => 'administration', :action => 'people'
       end
     end
   end
@@ -212,7 +212,7 @@ class UserController < ApplicationController
           im_value.save
         end
         error_status(false, :success_updated_profile)
-        redirect_back_or_default :controller => 'dashboard'
+        redirect_back_or_default :controller => 'administration', :action => 'people'
       end
     end
   end
@@ -252,10 +252,18 @@ class UserController < ApplicationController
 
     error_status(false, :success_deleted_user, {:name => old_name})
 
-    redirect_back_or_default :controller => 'company', :action => 'view', :id => old_id
+    redirect_back_or_default :controller => 'administration', :action => 'people'
   end
   
   def edit_avatar
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_user)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
+    
   	unless @user.profile_can_be_updated_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
@@ -277,12 +285,20 @@ class UserController < ApplicationController
           error_status(true, :error_updating_avatar)
         end
 
-        redirect_to :controller => 'account', :action => 'edit_avatar', :id => @user.id
+        redirect_to :controller => 'user', :action => 'edit', :id => @user.id
       end
     end
   end
 
   def delete_avatar
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_user)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
+    
   	unless @user.profile_can_be_updated_by(@logged_user)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'dashboard'
@@ -293,7 +309,7 @@ class UserController < ApplicationController
     @user.save
 
     error_status(false, :success_deleted_avatar)
-    redirect_to :controller => 'account', :action => 'index'
+    redirect_to :controller => 'user', :action => 'edit', :id => @user.id
   end
 
   def card

@@ -8,3 +8,25 @@
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_company.l %></button>
 </form>
+
+<%= form_tag({:controller => 'company', :action => 'edit_logo', :id => @company.id}, :multipart => true) %>
+  <fieldset>
+    <legend><%= :current_logo.l %></legend>
+<% if @company.has_logo? %>
+    <img src="<%= @company.logo_url %>" alt="<%= h @company.name %> logo" />
+    <p><%= link_to :delete_current_logo.l, {:action => 'delete_logo', :id => @company.id}, {:onclick => :current_logo_confirm_delete.l, :method => :post} %></p>
+<% else %>
+    <%= :logo_not_uploaded.l %>
+<% end %>
+  </fieldset>
+  
+  <div>
+    <label for="logoFormLogo"><%= :new_logo.l %>: <span class="label_required">*</span></label>
+    <div id="logoFormLogo"><input type="file" name="company[logo]" /></div>
+<% if @company.has_logo? %>
+    <p class="desc"><%= :logo_replace_info.l %></p>
+<% end %>
+  </div>
+  
+    <button class="submit" type="submit"><%= :update_logo.l %></button>
+</form>

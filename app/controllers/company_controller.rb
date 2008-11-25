@@ -60,7 +60,7 @@ class CompanyController < ApplicationController
         #ApplicationLog.new_log(@company, @logged_user, :add, true)
 
         error_status(false, :success_added_client)
-        redirect_back_or_default :controller => 'administration', :action => 'clients'
+        redirect_back_or_default :controller => 'administration', :action => 'people'
       end
     end
   end
@@ -83,7 +83,7 @@ class CompanyController < ApplicationController
         #ApplicationLog.new_log(@company, @logged_user, :edit, true)
 
         error_status(false, :success_edited_client)
-        redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
+        redirect_back_or_default :controller => 'administration', :action => 'people'
         return
       end
     end
@@ -105,7 +105,7 @@ class CompanyController < ApplicationController
       error_status(true, :error_deleting_client)
   	end
 
-    redirect_back_or_default :controller => 'administration', :action => 'clients'
+    redirect_back_or_default :controller => 'administration', :action => 'people'
   end
 
   def update_permissions
@@ -118,7 +118,7 @@ class CompanyController < ApplicationController
   	@projects = Project.all(:order => 'name')
   	if @projects.empty?
       error_status(true, :no_projects)
-      redirect_back_or_default :controller => 'company', :action => 'card', :id => @company.id
+      redirect_back_or_default :controller => 'administration', :action => 'people'
       return
   	end
 
@@ -168,7 +168,7 @@ class CompanyController < ApplicationController
         error_status(true, :error_uploading_logo)
       end
 
-      redirect_to :controller => 'company', :action => 'card', :id => @company.id
+      redirect_to :controller => 'company', :action => 'edit', :id => @company.id
     end
   end
 
@@ -183,7 +183,7 @@ class CompanyController < ApplicationController
     @company.save
 
     error_status(false, :success_deleted_logo)
-    redirect_to :controller => 'company', :action => 'card', :id => @company.id
+    redirect_to :controller => 'company', :action => 'edit', :id => @company.id
   end
 
   def hide_welcome_info

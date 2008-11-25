@@ -150,35 +150,6 @@
 </div>
 <% end %>
 
-<% unless @user.new_record? %>
-  <div class="formBlock">
-  <%= form_tag( {:controller => 'user', :action => 'edit_avatar', :id => @user.id}, :multipart => true ) %>
-<%= error_messages_for :user %>
-  
-  <fieldset>
-    <legend><%= :current_avatar.l %></legend>
-<% if @user.has_avatar? %>
-    <img src="<%= @user.avatar_url %>" alt="<%= h @user.display_name %> avatar" />
-    <p><%= link_to :delete_current_avatar.l, {:action => 'delete_avatar', :id => @user.id}, {:onclick => :avatar_confirm_delete, :method => :post} %></p>
-<% else %>
-    <%= :avatar_not_uploaded.l %>
-<% end %>
-  </fieldset>
-  
-  <div>
-    <label for="avatarFormAvatar"><%= :new_avatar.l %> <span class="label_required">*</span></label>
-    <div id="avatarFormAvatar"><input type="file" name="user[avatar]" /></div>
-<% if @user.has_avatar? %>
-    <p class="desc"><%= :avatar_upload_info.l %></p>
-<% end %>
-  </div>
-  
-    <button class="submit" type="submit"><%= :update_avatar.l %></button>
-  
-</form>
-  </div>
-<% end %>
-
 <% if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty? %>
 
 <script type="text/javascript">
