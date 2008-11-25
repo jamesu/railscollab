@@ -28,7 +28,7 @@ class CompanyController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_company, :except => [:add, :hide_welcome_info, :logo]
-  after_filter  :user_track
+  after_filter  :user_track, :only => [:card]
   after_filter :reload_owner
 
   def card
