@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 15) do
+ActiveRecord::Schema.define(:version => 17) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(:version => 15) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
-    t.string   "time_zone",                        :default => "",    :null => false
+    t.string   "time_zone",                                           :null => false
     t.string   "logo_file_name"
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
@@ -143,9 +143,9 @@ ActiveRecord::Schema.define(:version => 15) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",       :null => false
   end
 
   create_table "project_companies", :id => false, :force => true do |t|
@@ -205,22 +205,6 @@ ActiveRecord::Schema.define(:version => 15) do
   end
 
   add_index "project_folders", ["project_id", "name"], :name => "index_project_folders_on_project_id_and_name", :unique => true
-
-  create_table "project_forms", :force => true do |t|
-    t.integer  "project_id",                    :default => 0,     :null => false
-    t.string   "name",            :limit => 50, :default => "",    :null => false
-    t.text     "description",                                      :null => false
-    t.text     "success_message",                                  :null => false
-    t.integer  "in_object_id",                  :default => 0,     :null => false
-    t.datetime "created_on"
-    t.integer  "created_by_id",                 :default => 0,     :null => false
-    t.datetime "updated_on"
-    t.integer  "updated_by_id",                 :default => 0,     :null => false
-    t.boolean  "is_visible",                    :default => false, :null => false
-    t.boolean  "is_enabled",                    :default => false, :null => false
-    t.integer  "order",           :limit => 8,  :default => 0,     :null => false
-    t.integer  "action_id",       :limit => 1
-  end
 
   create_table "project_message_categories", :force => true do |t|
     t.integer "project_id",                                           :null => false
@@ -305,6 +289,7 @@ ActiveRecord::Schema.define(:version => 15) do
     t.datetime "updated_on"
     t.integer  "updated_by_id"
     t.integer  "order",                               :default => 0, :null => false
+    t.integer  "comments_count",                      :default => 0
   end
 
   add_index "project_tasks", ["task_list_id"], :name => "index_project_tasks_on_task_list_id"
@@ -410,7 +395,7 @@ ActiveRecord::Schema.define(:version => 15) do
     t.boolean  "auto_assign",                        :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext",   :limit => 5
-    t.string   "time_zone",                          :default => "",    :null => false
+    t.string   "time_zone",                                             :null => false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
