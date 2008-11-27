@@ -52,7 +52,7 @@ class TasksController < ApplicationController
     end
     
     respond_to do |format|
-      format.html { redirect_back_or_default(task_lists_path) }
+      format.html { }
       format.js
       format.xml  { render :xml => @task.to_xml(:root => 'task') }
     end

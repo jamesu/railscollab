@@ -30,6 +30,14 @@ class ProjectTask < ActiveRecord::Base
   belongs_to :created_by,   :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by,   :class_name => 'User', :foreign_key => 'updated_by_id'
 
+  has_many :comments, :as => 'rel_object', :dependent => :destroy do
+    def public(reload=false)
+      # Grab public comments only
+      @public_comments = nil if reload
+      @public_comments ||= all(:conditions => ['is_private = ?', false])
+    end
+  end
+
   has_many :project_times, :foreign_key => 'task_id', :dependent => :nullify
 
   acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
@@ -79,7 +87,7 @@ class ProjectTask < ActiveRecord::Base
   end
 
   def object_url
-    "#{self.task_list.object_url}#openTasksList#{self.task_list_id}_#{self.id}"
+    "#{self.task_list.object_url}/tasks/#{self.id}"
   end
 
   def assigned_to=(obj)
