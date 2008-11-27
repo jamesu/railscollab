@@ -17,5 +17,7 @@ been added. This can be accomplished by running the following commands:
 
     rake db:railscollab:reload_config
 
+If you are updating from version 0.8 beta or lower, please note that Forms have been removed.
+
 If you are updating from alpha 2 and below, note that the preferred method for updating configuration 
 options is now from the administration interface.

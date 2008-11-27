@@ -16,7 +16,6 @@ In RailsCollab, you have the following:
 * *Times* - to record how much time has been spent on a project or task
 * *Files* - to share data with your clients
 * *Messages* - for centralized communication
-* *Forms* - providing an obvious way for clients to report issues
 
 You can add clients to your projects at any time. Each member of a client can have a login, 
 whose access can be restricted to certain elements of the project.
