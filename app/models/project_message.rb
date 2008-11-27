@@ -152,7 +152,7 @@ class ProjectMessage < ActiveRecord::Base
   # Message permissions
 
   def can_subscribe(user)
-    user.member_of_owner? and !user.is_anonymous?
+    self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?)
   end
 
   def can_be_managed_by(user)
