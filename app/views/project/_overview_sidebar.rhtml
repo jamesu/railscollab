@@ -1,16 +1,3 @@
-<% if @visible_forms.length > 0 %>
-<div class="sidebarBlock">
-  <h2><%= :forms.l %></h2>
-  <div class="blockContent">
-    <ul>
-<% @visible_forms.each do |visible_form| -%>
-      <li><%= link_to (h visible_form.name), :controller => 'form', :action => 'submit', :id => visible_form.id %></li>
-<% end %>
-    </ul>
-  </div>
-</div>
-<% end %>
-
 <% if @important_messages.length > 0 %>
 <div class="sidebarBlock">
   <h2><%= :important_messages.l %></h2>

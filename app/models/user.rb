@@ -28,9 +28,15 @@ class User < ActiveRecord::Base
   has_many :im_values, :order => 'im_type_id DESC'
   has_many :application_logs, :foreign_key => 'created_by_id', :dependent => :destroy
 
-  has_many :project_milestones, :foreign_key => 'assigned_to_user_id'
-  has_many :project_tasks,      :foreign_key => 'assigned_to_user_id'
-  has_many :project_times,      :foreign_key => 'assigned_to_user_id'
+  has_many :project_milestones, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_tasks,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_task_lists, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_times,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_file_revisions,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_files,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_messages,   :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :comments,           :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :tags,               :foreign_key => 'created_by_id', :dependent => :destroy
 
   has_many :project_users
   has_many :projects,          :through => :project_users

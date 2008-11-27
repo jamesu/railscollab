@@ -34,7 +34,7 @@
 </div>
 
 <% num_users = 1 %>
-<% users = @active_project.nil? ? company.users : @active_project.users  %>
+<% users = @active_project.nil? ? company.users : company.users_on_project(@active_project)  %>
 <% users.each do |user|
    user_card = user %>
 <div class="card">

@@ -17,7 +17,8 @@
 <% if not task_item.assigned_to.nil? %>
           <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
 <% end %>
-          <%= h task_item.text %> <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit'} %><% end %>
+          <%= h task_item.text %> <% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment',''), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
+          <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('edit',''), edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit'} %><% end %>
           <% if task_item.can_be_changed_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm_l => :task_delete_confirm.l, :class => 'blank taskDelete'} %><% end %><br />
         </span>
 </div>
