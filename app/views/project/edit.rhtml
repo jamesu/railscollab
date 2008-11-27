@@ -11,5 +11,5 @@
 
 <%= form_tag :controller => 'project', :action => 'edit' %>
 <%= render :partial => 'form' %>
-    <button class="submit" type="submit"><%= :edit_project.l %></button>
+    <button class="submit" type="submit"><%= :save_changes.l %></button> <%= :or.l %> <%= link_to :cancel.l, :controller => 'project', :action => 'overview', :active_project => @project.id %>
 </form>

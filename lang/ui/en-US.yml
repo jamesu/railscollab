@@ -86,6 +86,7 @@ folder_name: "Folder : {folder}"
 company_card: "Company card of {company}"
 reset_password: Reset password
 set_password: Set password
+save_changes: Save changes
 
 # Feeds
 recent_milestones_feed: Recent milestones feed
