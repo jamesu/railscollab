@@ -32,7 +32,6 @@ class User < ActiveRecord::Base
   has_many :project_tasks,      :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_task_lists, :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_times,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_forms,      :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_file_revisions,      :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_files,      :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_messages,   :foreign_key => 'created_by_id', :dependent => :destroy

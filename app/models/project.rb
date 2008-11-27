@@ -98,15 +98,6 @@ class Project < ActiveRecord::Base
 		end
 	end
 	
-	has_many :project_forms, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
-		def visible(include_private = true, reload=false)
-			ProjectForm.priv_scope(include_private) do
-			  # Grab visible forms only
-			  find(:all)
-			end
-		end
-	end
-	
 	has_many :project_folders, :dependent => :destroy
 	has_many :project_files, :dependent => :destroy do
 		def important(include_private = true, reload=false)

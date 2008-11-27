@@ -28,7 +28,6 @@ module ProjectHelper
     items << {:id => :milestones, :url => "/project/#{project_id}/milestone"}
     items << {:id => :time,       :url => "/project/#{project_id}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)
     items << {:id => :files,      :url => "/project/#{project_id}/files"}
-    items << {:id => :forms,      :url => "/project/#{project_id}/form"} if @logged_user.is_admin?
     items << {:id => :people,     :url => "/project/#{project_id}/people"}
 
     @selected_navigation_item = current

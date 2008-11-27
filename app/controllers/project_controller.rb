@@ -53,7 +53,6 @@ class ProjectController < ApplicationController
       "#{date.month}-#{date.day}"
     end.degroupify
 
-    @visible_forms = project.project_forms.visible(include_private)
     @project_companies = project.companies(include_private)
     @important_messages = project.project_messages.important(include_private)
     @important_files = project.project_files.important(include_private)

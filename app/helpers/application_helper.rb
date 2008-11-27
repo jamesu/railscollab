@@ -122,13 +122,6 @@ module ApplicationHelper
      {:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}]
   end
 
-  def actions_for_form(form)
-    [{:name => :submit.l, :url => {:controller => 'form', :action => 'submit', :id => form.id}, :cond => form.can_be_submitted_by(@logged_user)},
-     {:name => :edit.l,   :url => {:controller => 'form', :action => 'edit',   :id => form.id}, :cond => form.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'form', :action => 'delete', :id => form.id}, :cond => form.can_be_deleted_by(@logged_user), :method => :post, :confirm => :form_confirm_delete.l}]
-
-  end
-
   def actions_for_milestone(milestone)
     [{:name => :edit.l,   :url => {:controller => 'milestone', :action => 'edit',   :id => milestone.id}, :cond => milestone.can_be_edited_by(@logged_user)},
      {:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => milestone.id}, :cond => milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => :milestone_confirm_delete.l}]

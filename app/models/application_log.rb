@@ -70,7 +70,7 @@ class ApplicationLog < ActiveRecord::Base
       if real_project.nil?
         if obj.is_a?(Project)
           @log.project = obj unless action == :delete
-        elsif [ProjectMilestone, ProjectMessage, ProjectTaskList, ProjectTime, ProjectForm, ProjectFile, ProjectFolder, ProjectMessageCategory].include?(obj.class)
+        elsif [ProjectMilestone, ProjectMessage, ProjectTaskList, ProjectTime, ProjectFile, ProjectFolder, ProjectMessageCategory].include?(obj.class)
           @log.project = obj.project
         end
       else
