@@ -26,7 +26,7 @@
     <div class="completedTasks">
       <ul class="taskItems">
 <% if @task.is_completed? %>
-        <%= render :partial => 'tasks/show', :collection => [@task], :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
+        <%= render :partial => 'tasks/show', :collection => [@task], :locals => {:tprefix => "openTasksList#{@task_list.id}"} %>
 <% end %>
       </ul>
     </div>
