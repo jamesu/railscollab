@@ -131,7 +131,7 @@ class ProjectTaskList < ActiveRecord::Base
 
     return true if user.is_admin
 
-    !(self.is_private and !user.member_of_owner?) and user.id == created_by.id
+    !(self.is_private and !user.member_of_owner?) and user.id == created_by_id
   end
   
   alias :can_be_changed_by :can_be_edited_by
