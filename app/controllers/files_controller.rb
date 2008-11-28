@@ -37,7 +37,7 @@ class FilesController < ApplicationController
     current_page = 0 unless current_page > 0
     
     file_conditions = {'project_id' => @active_project.id, 'is_visible' => true}
-    file_conditions['is_private'] = true unless @logged_user.member_of_owner?
+    file_conditions['is_private'] = false unless @logged_user.member_of_owner?
     
     sort_type = params[:orderBy]
     sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
@@ -76,7 +76,7 @@ class FilesController < ApplicationController
     current_page = 0 unless current_page > 0
     
     file_conditions = {'folder_id' => @folder.id, 'project_id' => @active_project.id, 'is_visible' => true}
-    file_conditions['is_private'] = true unless @logged_user.member_of_owner?
+    file_conditions['is_private'] = false unless @logged_user.member_of_owner?
     
     sort_type = params[:orderBy]
     sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])

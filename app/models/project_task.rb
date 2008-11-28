@@ -30,7 +30,7 @@ class ProjectTask < ActiveRecord::Base
   belongs_to :created_by,   :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by,   :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :comments, :as => 'rel_object', :dependent => :destroy do
+  has_many :comments, :as => 'rel_object', :order => 'created_on ASC',  :dependent => :destroy do
     def public(reload=false)
       # Grab public comments only
       @public_comments = nil if reload

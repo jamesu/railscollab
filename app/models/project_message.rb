@@ -27,7 +27,7 @@ class ProjectMessage < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :comments, :as => 'rel_object', :dependent => :destroy do
+  has_many :comments, :as => 'rel_object', :order => 'created_on ASC', :dependent => :destroy do
     def public(reload=false)
       # Grab public comments only
       @public_comments = nil if reload
@@ -152,7 +152,7 @@ class ProjectMessage < ActiveRecord::Base
   # Message permissions
 
   def can_subscribe(user)
-    user.member_of_owner? and !user.is_anonymous?
+    self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?)
   end
 
   def can_be_managed_by(user)
