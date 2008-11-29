@@ -25,6 +25,16 @@
 <!-- head needs to go here? -->
   </head>
   <body id="body">
+	<% if !@active_project.is_active? %>
+		<div class="important center">
+			<h5>
+			  <%= :project_locked_header.l %>
+			  <% if @active_project.status_can_be_changed_by(@logged_user) %>
+			      <%= link_to :mark_project_as_active.l, {:controller => 'project', :action => 'open'}, :method => :post, :confirm => :mark_project_as_active_confirmation.l %>
+			<% end %>
+			</h5>
+		</div>
+	<% end %>
     <div id="wrapper">
       
       <!-- header -->

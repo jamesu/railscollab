@@ -526,6 +526,7 @@ project_completed_on: "Completed on {date} by {user}"
 all: All
 go: Go
 due_in_next_n_days: "Due in the next {num} days"
+project_locked_header: "This project has been marked as completed, and is locked."
 
 # Forms
 success_message: Success message
