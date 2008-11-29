@@ -35,7 +35,9 @@
       </li>
 <% end %>
     </ul>
+	<% if @active_project.is_active? %>
     <p><a href="<%= "/project/#{@active_project.id}/message/add_category" %>"><%= :add_category.l %></a></p>
+	<% end %>
   </div>
 </div>
 <% end %>
