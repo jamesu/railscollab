@@ -100,7 +100,7 @@ class Comment < ActiveRecord::Base
 	# Specific permissions
     
     def file_can_be_added_by(user)
-      return (self.can_be_edited_by(user) and user.has_permission(self.rel_object.project, :can_upload_files))
+      return (self.can_be_edited_by(user) and (self.new_record? and user.has_permission(self.rel_object.project, :can_upload_files)))
     end
     
     # Helpers

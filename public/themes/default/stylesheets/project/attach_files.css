@@ -22,6 +22,18 @@
 
 div.objectFiles {
   font-size: 10px;
+  margin: 5px 0 5px 2px;
+  border-left: 5px solid #e8e8e8;
+  padding: 0 0 0 10px;
+}
+
+.comment.odd div.objectFiles {
+  border-left: 5px solid #a9a9a9;
+}
+
+div.objectFiles ul {
+  list-style: none;
+  padding-left: 0px;
 }
 
 div.objectFiles ul li a span {

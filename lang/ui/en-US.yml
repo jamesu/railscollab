@@ -593,9 +593,7 @@ attached_files: Attached files
 detatch: Detatch
 detatch_file_confirm: "Are you sure you want to detatch this file?"
 attach_existing_file: "Attach existing file (from Files section)"
-attach_more_files: "&raquo; Attach more files"
 file_view_details: View file details
-no_files_attached: There are no files attached to this object
 no_files_in_location: There are no files in this location.
 hint_attach_files: "Use this form to attach files to <strong>{link}</strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>."
 upload_attach_to_message: Upload new file and attach it to message

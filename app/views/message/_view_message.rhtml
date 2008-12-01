@@ -17,7 +17,7 @@
         <% end %>
       </div>
     
-<%= render :partial => 'files/list_attached_files', :locals => {:attached_files => view_message.attached_files(@logged_user.member_of_owner?), :attached_files_object => view_message} %>
+<%= render :partial => 'files/list_attached_files', :locals => {:dont_add => @message.nil?, :attached_files => view_message.attached_files(@logged_user.member_of_owner?), :attached_files_object => view_message} %>
       <div class="messageCommentCount">
 <% if not view_message.comments.empty? %>
         <span><%= :comments.l %>:</span> <a href="<%= "/project/#{@active_project.id}/message/view/#{view_message.id}#objectComments" %>"><%= view_message.comments.length %></a>

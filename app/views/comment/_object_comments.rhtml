@@ -37,7 +37,7 @@
         <% end %>
           <div class="commentText"><%= textilize comment.text %></div>
           <div class="clear"></div>
-          <%= render :partial => 'files/list_attached_files', :locals => {:attached_files => comment.attached_files(@logged_user.member_of_owner?), :attached_files_object => comment} %>
+          <%= render :partial => 'files/list_attached_files', :locals => {:dont_add => false, :attached_files => comment.attached_files(@logged_user.member_of_owner?), :attached_files_object => comment} %>
         </div>
 
         <div class="options"><%= action_list actions_for_comment(comment) %></div>

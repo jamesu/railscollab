@@ -2,9 +2,8 @@
 	@additional_stylesheets ||= []
 	@additional_stylesheets << 'project/attach_files'
 %>
-<% if attached_files.length > 0 %>
+<% if !attached_files.empty? or (!dont_add and attached_files_object.file_can_be_added_by(@logged_user)) %>
 <div class="objectFiles">
-  <div class="objectFilesTitle"><span><%= :attached_files.l %>:</span></div>
   <ul>
 <% attached_files.each do |attached_file| -%>
     <li>
@@ -12,14 +11,8 @@
     </li>
 <% end %>
   </ul>
-<% if attached_files_object.file_can_be_added_by(@logged_user) %>
-  <p><%= link_to :attach_more_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %></p>
+<% if !dont_add and attached_files_object.file_can_be_added_by(@logged_user) %>
+  <p>&raquo; <%= link_to :attach_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %></p>
 <% end %>
 </div>
-<% else %>
-<% if attached_files_object.file_can_be_added_by(@logged_user) %>
-<div class="objectFiles">
-  <div class="objectFilesTitle"><span><%= :attached_files.l %>:</span> <%= :no_files_attached.l %>. <%= link_to :attach_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %>.</div>
-</div>
-<% end %>
 <% end %>
