@@ -193,8 +193,8 @@ class UserController < ApplicationController
       end
 
       if user_params.has_key? :password and !user_params[:password].empty?
-        @user.password = user_attribs[:password]
-        @user.password_confirmation = user_attribs[:password_confirmation]
+        @user.password = user_params[:password]
+        @user.password_confirmation = user_params[:password_confirmation]
       end
       
       @user.identity_url = user_params[:identity_url] if user_params[:identity_url]
