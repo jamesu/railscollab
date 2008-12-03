@@ -71,13 +71,15 @@ module ConfigSystem
   def self.post_init  
     # Following for themeable assets
     ActionView::Helpers::AssetTagHelper.module_eval do
+       alias_method :av_image_path, :image_path
        def image_path(source)
-         compute_public_path(source, "themes/#{AppConfig.site_theme}/images")
+         av_image_path("/themes/#{AppConfig.site_theme}/images/#{source}")
        end
        alias_method :path_to_image, :image_path
        
+       alias_method :av_stylesheet_path, :stylesheet_path
        def stylesheet_path(source)
-         compute_public_path(source, "themes/#{AppConfig.site_theme}/stylesheets", 'css')
+         av_stylesheet_path("/themes/#{AppConfig.site_theme}/stylesheets/#{source}.css")
        end
        alias_method :path_to_stylesheet, :stylesheet_path
     end    

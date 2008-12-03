@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '>=2.1.0' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '>=2.2.0' unless defined? RAILS_GEM_VERSION
 
 ENV['TZ'] = 'UTC'
 
@@ -25,7 +25,6 @@ Rails::Initializer.run do |config|
   config.gem 'ruby-openid',  :version => '>=2.1.2', :lib => 'openid'
 
   # optional gems
-  config.gem 'aws-s3',       :version => '>=0.5.1', :lib => 'aws/s3'
   config.gem 'RedCloth',     :version => '>= 4.0.0',   :lib => 'redcloth'
 
   # Settings in config/environments/* take precedence over those specified here
