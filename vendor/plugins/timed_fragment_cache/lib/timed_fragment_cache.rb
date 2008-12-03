@@ -1,4 +1,4 @@
-# Copyright (c) 2006 Richard Livsey
+# Copyright (c) 2006 Richard Livsey, 2008 Steffen Rusitschka
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -46,45 +46,39 @@ module ActionController
     # in the template, as 'when_fragment_expired' will expire the fragment for you.
     module TimedFragment
     
-      def cache_erb_fragment(block, name = {}, options = nil, expiry = nil)
-        unless perform_caching then block.call; return end
+      def self.included(base) # :nodoc:     
+        base.class_eval do 
+          alias_method :write_fragment_without_expiry, :write_fragment
+          alias_method :write_fragment, :write_fragment_with_expiry
+        end      
+      end
+            
+      def write_fragment_with_expiry(name, content, options = nil, expiry = nil)
+        unless perform_caching then return content end
 
-        fragment = get_fragment(name)
-        if expiry && !fragment
+        if expiry && fragment_expired?(name)
           expire_and_write_meta(name, expiry)  
         end
-
-        buffer = eval("_erbout", block.binding)
-
-        if fragment
-          buffer.concat(fragment)
-        else
-          pos = buffer.length
-          block.call
-          write_fragment(name, buffer[pos..-1], options)
-        end
-  
+        
+        write_fragment_without_expiry(name, content, options)          
       end
     
       def expiry_time(name)
         read_meta_fragment(name)
       end
     
-      def get_fragment(name)
-      	return fragments[name] if fragments[name]
-      	fragment = read_fragment(name)
-        return nil unless fragment
-        fragments[name] = fragment
+      def fragment_expired?(name)
+        return true unless read_fragment(name)
         expires = expiry_time(name)
-        return expires && expires > Time.now ? fragment : nil
+        expires.nil? || expires < Time.now
       end
-
+    
       def read_meta_fragment(name)
         YAML.load(read_fragment(meta_fragment_key(name))) rescue nil
       end    
     
       def write_meta_fragment(name, meta)
-        write_fragment(meta_fragment_key(name), YAML.dump(meta))
+        write_fragment_without_expiry(meta_fragment_key(name), YAML.dump(meta))
       end
     
       def meta_fragment_key(name)
@@ -92,7 +86,8 @@ module ActionController
       end
     
       def when_fragment_expired(name, expiry=nil)
-      	return if get_fragment( name )
+        return unless fragment_expired?(name)
+        
         yield
         expire_and_write_meta(name, expiry)
       end
@@ -102,9 +97,6 @@ module ActionController
         write_meta_fragment(name, expiry) if expiry
       end
     
-      def fragments
-      	@fragments ||= {}
-      end
     end
   end
 end
@@ -115,12 +107,16 @@ module ActionView
     
       def self.included(base) # :nodoc:     
         base.class_eval do 
+          alias_method :cache_without_expiry, :cache
           alias_method :cache, :cache_with_expiry
         end      
       end    
     
       def cache_with_expiry(name = {}, expires = nil, &block)
-        @controller.cache_erb_fragment(block, name, nil, expires)
+        if expires && @controller.fragment_expired?(name)
+          @controller.expire_and_write_meta(name, expires)
+        end
+        cache_without_expiry(name, &block)
       end
     
     end

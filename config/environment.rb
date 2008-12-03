@@ -16,6 +16,9 @@ require 'config_system'
 ::AppConfig = OpenStruct.new()
 ConfigSystem.init
 
+# Extensions
+require_dependency 'railscollab_extras'
+
 Rails::Initializer.run do |config|
   # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
@@ -87,6 +90,3 @@ ConfigSystem.load_config
 
 # Ferret search
 FERRETABLE_MODELS = %w[Tag Comment ProjectMessage ProjectTime ProjectTask ProjectTaskList ProjectMilestone ProjectFile ProjectFileRevision]
-
-# Extensions
-require_dependency 'railscollab_extras'

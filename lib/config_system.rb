@@ -79,7 +79,7 @@ module ConfigSystem
        
        alias_method :av_stylesheet_path, :stylesheet_path
        def stylesheet_path(source)
-         av_stylesheet_path("/themes/#{AppConfig.site_theme}/stylesheets/#{source}.css")
+         av_stylesheet_path("/themes/#{AppConfig.site_theme}/stylesheets/#{source}")
        end
        alias_method :path_to_stylesheet, :stylesheet_path
     end    
