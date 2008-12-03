@@ -715,6 +715,11 @@ en:
   
   search_dashboard: "{{type}}: {{name}} in {{project}}"
   search_project: "{{type}}: {{name}}"
+  
+  # rails fix (WTF?!)
+  date:
+    order: [:year, :month, :day]
+  
   # system
   
   product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
