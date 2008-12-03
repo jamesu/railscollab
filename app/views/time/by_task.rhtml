@@ -33,7 +33,7 @@ list[:tasks].each { |task| total_time += task[:hours] } %>
 <% task = list_task[:task] %>
 <h4><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => list_task[:hours]) %></h4>
 
-<table class="timeLogs blank"><tr><th><%= :date.l %></th><th><%= :name.l %></th><th><%= :details.l %></th><th><%= :hours.l %></th></tr>
+<table class="timeLogs blank"><tr><th><%= :log_date.l %></th><th><%= :name.l %></th><th><%= :details.l %></th><th><%= :hours.l %></th></tr>
 <% list_task[:list].each do |time| -%>
     <tr>
      <td class="timeDate">

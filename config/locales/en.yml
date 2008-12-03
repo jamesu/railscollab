@@ -545,7 +545,7 @@ en:
   
   # Time
   summary: Summary
-  date: Date
+  log_date: Date
   person: Person
   hours: Hours
   details: Details
@@ -715,10 +715,6 @@ en:
   
   search_dashboard: "{{type}}: {{name}} in {{project}}"
   search_project: "{{type}}: {{name}}"
-  
-  # rails fix (WTF?!)
-  date:
-    order: [:year, :month, :day]
   
   # system
   
