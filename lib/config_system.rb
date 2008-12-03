@@ -128,7 +128,7 @@ module ConfigSystem
     } : nil
     
     # Globalite
-    Globalite.locale = AppConfig.default_language.nil? ? 'en-US' : AppConfig.default_language
+    I18n.default_locale= AppConfig.default_language.nil? ? 'en' : AppConfig.default_language
   end
   
   def self.try_libs
