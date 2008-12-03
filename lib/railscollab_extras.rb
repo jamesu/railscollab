@@ -69,7 +69,6 @@ class Symbol # :nodoc:
   # Localizes the symbol into the current locale. 
   # If there is no translation available, the replacement string will be returned
   def localize(replacement_string = '__localization_missing__', args={})
-    puts args.inspect
     I18n.translate(self, {:default => "#{replacement_string}(#{self})"}.merge(args))
   end
   alias :l :localize
