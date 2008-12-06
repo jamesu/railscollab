@@ -9,9 +9,9 @@ set :application, "railscollab"
 #	Settings
 #############################################################
 
-default_run_options[:pty] = true
 set :use_sudo, false
 #ssh_options[:forward_agent] = true
+default_run_options[:pty] = true
 
 #############################################################
 #	Servers
@@ -58,6 +58,11 @@ namespace :deploy do
   task :copy_prod_configuration do
     run "cp /u/config/#{application}/database.yml #{release_path}/config/"
     run "cp /u/config/#{application}/app_keys.yml #{release_path}/config/"
+  end
+    
+  ["avatars", "datas", "logos"].each do |folder|
+    run "if [ ! -e /u/apps/#{application}/shared/#{folder} ]; then mkdir -p /u/apps/#{application}/shared/#{folder}; fi"
+    run "if [ ! -e #{release_path}/public/#{folder} ]; then ln -s /u/apps/#{application}/shared/#{folder} #{release_path}/public/#{folder}; fi"
   end
   
   after "deploy:update_code", "deploy:copy_prod_configuration"
