@@ -49,9 +49,13 @@ Rails::Initializer.run do |config|
   # (create the session table with 'rake db:sessions:create')
   # config.action_controller.session_store = :active_record_store
 
-  # Note: you should change this when deploying!
-  config.action_controller.session = { :session_key => "_railscollab_session", :secret => "08230582-5&6+_|~ vcx R918cAO!!||\"~'" }
-
+  # Note: make sure you have keys in config/app_keys.yml
+  temp_key_yaml = YAML.load_file(RAILS_ROOT + "/config/app_keys.yml")
+  config.action_controller.session = { 
+    :session_key => temp_key_yaml['session'],
+    :secret      => temp_key_yaml['secret']
+  }
+  
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
