@@ -665,6 +665,7 @@ en:
   notification_method_smtp: "SMTP"
   notification_smtp_address: "Address"
   notification_smtp_port: "Port"
+  notification_smtp_domain: "Domain"
   notification_smtp_username: "Username"
   notification_smtp_password: "Password"
   notification_smtp_authentication: "Authentication"
