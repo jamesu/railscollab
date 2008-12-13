@@ -19,6 +19,12 @@ ConfigSystem.init
 # Extensions
 require_dependency 'railscollab_extras'
 
+# SSL SMTP
+begin
+require 'smtp-tls'
+rescue
+end
+
 Rails::Initializer.run do |config|
   # Specify gems that this application depends on.
   # They can then be installed with "rake gems:install" on new installations.
