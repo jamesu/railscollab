@@ -22,7 +22,7 @@ require_dependency 'railscollab_extras'
 # SSL SMTP
 begin
 require 'smtp-tls'
-rescue
+rescue Exception
 end
 
 Rails::Initializer.run do |config|
