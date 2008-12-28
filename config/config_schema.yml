@@ -151,7 +151,7 @@ mailing:
       user_name: user
       password: password
       authentication: login
-      domain:domain.com
+      domain: domain.com
   
   # Overrides ActionMailer sendmail_settings
   notification_email_sendmail:
