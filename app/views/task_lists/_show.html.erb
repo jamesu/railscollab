@@ -49,7 +49,7 @@
     <%= render :partial => 'tasks/show', :collection => (!on_list_page ? task_list.completed_tasks[0...5] : task_list.completed_tasks), :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% if !on_list_page and task_list.completed_tasks.length > 5 %>
       <li>
-        <%= link_to :view_all_completed_tasks.l, :controller => 'task', :action => 'view_list', :id => task_list.id %>
+        <%= link_to :view_all_completed_tasks.l, :controller => 'task_lists', :action => 'show', :id => task_list.id %>
       </li>
 <% end %>
     </ul>
