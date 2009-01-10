@@ -74,13 +74,17 @@ class ProjectTaskList < ActiveRecord::Base
 
     # Ok now lets check if we are *really* complete
     if self.finished_all_tasks?
-      write_attribute('completed_on', Time.now.utc)
-      self.completed_by = completed_by
+      if self.completed_on.nil?
+        write_attribute('completed_on', Time.now.utc)
+        self.completed_by = completed_by
+        ApplicationLog::new_log(self, completed_by, :close, self.is_private)
+      end
     else
-      write_attribute('completed_on', nil)
+      unless self.completed_on.nil?
+        write_attribute('completed_on', nil)
+        ApplicationLog::new_log(self, completed_by, :open, self.is_private)
+      end
     end
-
-    ApplicationLog::new_log(self, completed_by, task_completed ? :close : :open, self.is_private)
   end
 
   def object_name
