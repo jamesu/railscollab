@@ -40,9 +40,14 @@ class FilesController < ApplicationController
     file_conditions['is_private'] = false unless @logged_user.member_of_owner?
     
     sort_type = params[:orderBy]
-    sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
-    sort_order = 'DESC'
-
+    
+    if ['filename'].include?(params[:orderBy])
+      sort_order = 'ASC'
+    else
+      sort_type = 'created_on'
+      sort_order = 'DESC'
+    end
+    
     result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
     @pagination = []
     result_set.page_count.times {|page| @pagination << page+1}

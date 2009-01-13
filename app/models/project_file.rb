@@ -188,7 +188,7 @@ class ProjectFile < ActiveRecord::Base
 
     today = Date.today
 
-    found_files.each do |file|
+    grouped_fields = found_files.group_by do |file|
       dest_str = nil
 
       if group_type == DateTime
@@ -202,8 +202,7 @@ class ProjectFile < ActiveRecord::Base
         dest_str = file[group_field].to_s[0..0]
       end
 
-      grouped_fields[dest_str] ||= []
-      grouped_fields[dest_str] << file
+      dest_str
     end
 
     return found_files, grouped_fields
