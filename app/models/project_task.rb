@@ -55,6 +55,7 @@ class ProjectTask < ActiveRecord::Base
 
   def process_create
     self.task_list.ensure_completed(!self.completed_on.nil?, self.created_by)
+    self.task_list.save!
     ApplicationLog.new_log(self, self.created_by, :add, self.task_list.is_private, self.task_list.project)
   end
 
@@ -66,7 +67,11 @@ class ProjectTask < ActiveRecord::Base
     else
       write_attribute('completed_on', @update_completed ? Time.now.utc : nil)
       self.completed_by = @update_completed_user
-      ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.task_list.is_private, self.task_list.project)
+      
+      # If closed, we log before the task list 
+      if @update_completed
+        ApplicationLog::new_log(self, @update_completed_user, :close, self.task_list.is_private, self.task_list.project)
+      end
     end
   end
 
@@ -80,6 +85,11 @@ class ProjectTask < ActiveRecord::Base
     task_list = self.task_list
     task_list.ensure_completed(@update_completed, self.completed_by)
     task_list.save!
+    
+    # If opened, we log after the task list
+    if !@update_completed
+     ApplicationLog::new_log(self, @update_completed_user, :open, self.task_list.is_private, self.task_list.project)
+    end
   end
 
   def object_name

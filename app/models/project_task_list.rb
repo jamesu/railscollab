@@ -70,8 +70,8 @@ class ProjectTaskList < ActiveRecord::Base
     # If the task isn't complete, and we don't think we are
     # complete either, exit (vice versa)
     @ensured_complete = true
-    return if self.is_completed? == task_completed
-
+    self.project_tasks(true)
+    
     # Ok now lets check if we are *really* complete
     if self.finished_all_tasks?
       if self.completed_on.nil?
