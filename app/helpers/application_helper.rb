@@ -158,7 +158,7 @@ module ApplicationHelper
   end
 
   def actions_for_file(file, last_revision)
-    [{:name => :download_size.l_with_args(:size => format_size(last_revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
+    [{:name => :details_size.l_with_args(:size => format_size(last_revision.filesize)), :url => {:controller => 'files', :action => 'file_details', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
      {:name => :edit.l,   :url => {:controller => 'files', :action => 'edit_file',   :id => file.id}, :cond => file.can_be_edited_by(@logged_user)},
      {:name => :delete.l, :url => {:controller => 'files', :action => 'delete_file', :id => file.id}, :cond => file.can_be_deleted_by(@logged_user), :method => :post, :confirm => :file_delete_confirmation.l}]
   end

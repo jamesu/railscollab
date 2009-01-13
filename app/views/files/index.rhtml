@@ -42,7 +42,7 @@
 <% end %>
     <div class="fileIcon"><img src="<%= file.filetype_icon_url %>" alt="<%= h file.filename %>" /></div>
     <div class="fileInfo">
-      <div class="fileName"><a href="<%= file.object_url %>" title="<%= :file_view_details.l %>"><%= h file.filename %></a></div>
+      <div class="fileName"><a href="<%= file.download_url %>" title="<%= :file_view_details.l %>"><%= h file.filename %></a></div>
 
 <% last_revision = file.last_revision %> 
 <% unless last_revision.nil? %>     

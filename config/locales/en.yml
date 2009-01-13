@@ -584,6 +584,7 @@ en:
   revision_date_format: "%b %e. %Y %H:%M"
   revision_date_format_short: "%A, %e %B"
   download_size: "Download ({{size}})"
+  details_size: "Details ({{size}})"
   revisions: Revisions
   last_revision: Last revision
   file_delete_confirmation: "Are you sure you want to delete this file?"
