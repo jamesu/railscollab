@@ -27,9 +27,9 @@ Refer to the [INSTALL.markdown] [3] and [UPGRADE.markdown] [4] files
 A word of warning however. If you are upgrading from an old version pre-0.8 stable 
 (database version 14 or lower), then MAKE SURE YOU BACK UP YOUR UPLOADED FILES. 
 
-## I have an issue. Where can i report it?
+## I do i do [x]?
 
-Feel free to report any issues or feature requests you might have to the [tracker on LightHouse] [2].
+Check out the [wiki on github] [2].
 
 ## Are there any screenshots or is there even a demo?
 
@@ -40,7 +40,7 @@ Please refer to the project entry on [OpenSourceRails] [5] for any screenshots o
 For licensing details, refer to the [LICENSE] [6] file in the root directory.
 
 [1]: http://www.basecamphq.com
-[2]: http://jamesu.lighthouseapp.com/projects/15349-railscollab/overview
+[2]: http://wiki.github.com/jamesu/railscollab
 [3]: INSTALL.markdown
 [4]: UPGRADE.markdown
 [5]: http://www.opensourcerails.com/projects/111-RailsCollab
