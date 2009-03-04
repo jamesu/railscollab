@@ -15,6 +15,25 @@ div.taskList .taskItems {
 	list-style-type: none;
 }
 
+div.taskList li.taskItem div.taskControls {
+	display: none;
+	position: absolute;
+	margin-left: -40px;
+}
+div.taskList li.taskItem:hover div.taskControls {
+	display: block;
+}
+div.taskList li.taskItem div.taskControls img {
+	margin-bottom: -4px;
+}
+
+div.taskList li.taskItem img.comment {
+	display: none;
+}
+div.taskList li.taskItem:hover img.comment {
+	display: inline;
+}
+
 div.taskList span.taskCheckbox {
   padding-top: 4px;
 }
