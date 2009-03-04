@@ -46,7 +46,7 @@
         <%= format_usertime(application_logs.created_on, :action_past_format.l) %>
     <% end %>
     <% if not application_logs.taken_by.nil? %>
-    , <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>
+    by <%= link_to (h application_logs.taken_by.display_name), :controller => 'user', :action => 'card', :id => application_logs.taken_by.id %>
     <% end %>
     </td>
 <% end %>
