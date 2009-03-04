@@ -40,7 +40,7 @@
       <!-- header -->
       <div id="headerWrapper">
         <div id="header">
-          <h1><%= link_to (h @active_project.name), :controller => 'project', :action => 'overview', :id => @active_project.id %></h1>
+          <h1><%= h @active_project.name %></h1>
           <div id="userboxWrapper"><%= render :partial => 'layouts/user_box', :locals => {:user => @logged_user, :projects => @active_projects} %></div>
         </div>
       </div>
