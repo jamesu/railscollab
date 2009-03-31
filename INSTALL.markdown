@@ -11,9 +11,9 @@ Along with a working installation of the Ruby on Rails Framework, you will need 
 following to deploy & run RailsCollab:
 
 * *iCalendar* - `sudo gem install icalendar`
-* *RedCloth* - `sudo gem install redcloth`
+* *RedCloth* - `sudo gem install RedCloth`
 * *ruby-openid* - `gem install ruby-openid`
-* *ActionMailer* - `gem install ActionMailer`
+* *ActionMailer* - `gem install actionmailer`
 * *Ferret* - `gem install ferret`
 
 Plus the following which are *optional*:
