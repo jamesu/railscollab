@@ -15,6 +15,7 @@ following to deploy & run RailsCollab:
 * *ruby-openid* - `gem install ruby-openid`
 * *ActionMailer* - `gem install actionmailer`
 * *Ferret* - `gem install ferret`
+* *Rspec* - `gem install rspec`
 
 Plus the following which are *optional*:
 
