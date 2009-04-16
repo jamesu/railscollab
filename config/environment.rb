@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '>=2.2.0' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '>=2.3.2' unless defined? RAILS_GEM_VERSION
 
 ENV['TZ'] = 'UTC'
 
@@ -17,7 +17,7 @@ require 'config_system'
 ConfigSystem.init
 
 # Extensions
-require_dependency 'railscollab_extras'
+require 'railscollab_extras'
 
 # SSL SMTP
 begin

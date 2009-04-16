@@ -43,7 +43,7 @@ class MilestoneController < ApplicationController
     @calendar_milestones = @upcoming_milestones.group_by do |obj| 
       date = obj.due_date.to_date
       "#{date.month}-#{date.day}"
-    end.degroupify
+    end
     
     @content_for_sidebar = 'index_sidebar'
   end

@@ -26,7 +26,7 @@ module ProjectHelper
     items << {:id => :messages,   :url => "/project/#{project_id}/message"}
     items << {:id => :tasks,      :url => "/project/#{project_id}/task_lists"}
     items << {:id => :milestones, :url => "/project/#{project_id}/milestone"}
-    items << {:id => :time,       :url => "/project/#{project_id}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)
+    items << {:id => :ptime,      :url => "/project/#{project_id}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)
     items << {:id => :files,      :url => "/project/#{project_id}/files"}
     items << {:id => :people,     :url => "/project/#{project_id}/people"}
 

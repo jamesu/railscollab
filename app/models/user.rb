@@ -134,7 +134,7 @@ class User < ActiveRecord::Base
   end
   
   def password_changed?
-    puts "CHANGED == #{@cached_password.class} (#{!@cached_password.nil?})"
+    #puts "CHANGED == #{@cached_password.class} (#{!@cached_password.nil?})"
     !@cached_password.nil?
   end
 

@@ -56,14 +56,6 @@ class String
   end
 end
 
-class Array
-  def degroupify
-    hash = {}
-    self.each {|group, elements| hash[group] = elements}
-    hash
-  end
-end
-
 # Taken from Globalite
 class Symbol # :nodoc:
   # Localizes the symbol into the current locale. 

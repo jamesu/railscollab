@@ -57,7 +57,7 @@ class DashboardController < ApplicationController
     @calendar_milestones = @upcoming_milestones.group_by do |obj|
       date = obj.due_date.to_date
       "#{date.month}-#{date.day}"
-    end.degroupify
+    end
 
     @online_users = User.get_online
     @my_projects = @active_projects
@@ -130,7 +130,7 @@ class DashboardController < ApplicationController
                                                    @date_end, nil, true).group_by do |obj| 
       date = obj.due_date.to_date
       "#{date.month}-#{date.day}"
-    end.degroupify
+    end
   end
 
   def search

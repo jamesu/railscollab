@@ -51,7 +51,7 @@ class ProjectController < ApplicationController
     @calendar_milestones = @upcoming_milestones.group_by do |obj| 
       date = obj.due_date.to_date
       "#{date.month}-#{date.day}"
-    end.degroupify
+    end
 
     @project_companies = project.companies(include_private)
     @important_messages = project.project_messages.important(include_private)
