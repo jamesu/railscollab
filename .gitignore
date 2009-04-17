@@ -8,6 +8,7 @@ index/**
 log/*.log
 nbproject
 public/logos/**
+public/avatars/**
 tmp/restart.txt
 tmp/**/*
 public/themes/*
