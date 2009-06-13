@@ -4,6 +4,10 @@
     <div class="private" title="<%= :private_time.l %>"><span><%= :private_time.l %></span></div>
 <% end %>
 
+<% if view_time.is_billable %>
+    <div class="billable" title="<%= :billable_time.l %>"><span><%= :billable_time.l %></span></div>
+<% end %>
+
     <div class="header">
 <% if !view_time.assigned_to.nil? %>
         <span class="assignedTo"><%= h view_time.assigned_to.object_name %>:</span>

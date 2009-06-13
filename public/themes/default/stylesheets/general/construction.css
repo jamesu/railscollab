@@ -471,6 +471,7 @@ div.private {
   height: 9px;
   width: 37px;
   overflow: hidden;
+  margin-left: 2px;
   background: url('../../images/icons/private.gif') no-repeat;
 }
 
@@ -479,6 +480,21 @@ div.private {
 }
 
 div.private span {
+  display: none;
+}
+
+/** Billable **/
+
+div.billable {
+  float: right;
+  height: 9px;
+  width: 37px;
+  overflow: hidden;
+  margin-left: 2px;
+  background: url('../../images/icons/billable.gif') no-repeat;
+}
+
+div.billable span {
   display: none;
 }
 
