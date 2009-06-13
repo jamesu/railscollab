@@ -44,6 +44,7 @@ table.timeLogs .timeDate {
 
 table.timeLogs .timeHours {
   font-weight: bold;
+  text-align: right;
 }
 
 h2

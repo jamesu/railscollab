@@ -558,6 +558,7 @@ en-US:
   task_list_hours: "{{name}} [{{hours}} hours]"
   task_list_hours_info: "Tasks which have been logged with time"
   task_list_task_hours: "{{name}} [{{hours}} hours]"
+  billable_hours: "[{{hours}} billable hours]"
   no_times_in_project: "This project has no time records"
   time_confirm_delete: "Are you sure you want to delete this time record?"
   

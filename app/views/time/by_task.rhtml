@@ -21,17 +21,17 @@
 
 <% @tasks.each do |list| -%>
 
-<% total_time = 0
-list[:tasks].each { |task| total_time += task[:hours] } %>
+<% total_time = list[:tasks].inject(0) { |total, task| total + task[:hours] } %>
+<% total_billable_time = list[:tasks].inject(0) { |total, task| total + task[:billable_hours] } %>
 
 <% if total_time > 0 %>
 <div class="timeTaskList">
-<h2><%= :task_list_hours.l_with_args(:name => h(list[:list].object_name), :hours => total_time) %></h2>
+<h2><%= :task_list_hours.l_with_args(:name => h(list[:list].object_name), :hours => total_time) %> <%= :billable_hours.l_with_args(:hours => total_time) if total_billable_time > 0 %></h2>
 <h4><%= :task_list_hours_info.l %></h4>
 
 <% list[:tasks].each do |list_task| -%>
 <% task = list_task[:task] %>
-<h4><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => list_task[:hours]) %></h4>
+<h4><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => list_task[:hours]) %> <%= :billable_hours.l_with_args(:hours => list_task[:billable_hours]) if list_task[:billable_hours] > 0 %></h4>
 
 <table class="timeLogs blank"><tr><th><%= :log_date.l %></th><th><%= :name.l %></th><th><%= :details.l %></th><th><%= :hours.l %></th></tr>
 <% list_task[:list].each do |time| -%>
@@ -53,7 +53,7 @@ list[:tasks].each { |task| total_time += task[:hours] } %>
     <td class="timeDetails">
 	    <%= h time.name %>
     </td>
-    <td class="timeHours"><%= time.hours %></td>
+    <td class="timeHours"><%= '* ' if time.is_billable %><%= time.hours %></td>
     </tr>
 <% end %>
 </table>

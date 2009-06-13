@@ -54,7 +54,7 @@
         <%= h time.assigned_to.object_name %>
       <% end %>
 		</td>
-    <td class="timeHours"><%= time.hours %></td>
+    <td class="timeHours"><%= '* ' if time.is_billable %><%= time.hours %></td>
     <td class="timeDetails">
 			<% if !time.open_task.nil? %><span><img src="/themes/<%= AppConfig.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= link_to(time.name, time.open_task.object_url, :class => 'assignedTo') %><% else %><%= h time.name %><% end %>
     </td>
