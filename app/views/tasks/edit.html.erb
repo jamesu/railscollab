@@ -2,7 +2,7 @@
   @page_title = :edit_task.l
   @tabbed_navigation_items = project_tabbed_navigation(:tasks)
   
-  extra_crumbs = [{:title => :tasks, :url => task_lists_path]
+  extra_crumbs = [{:title => :tasks, :url => task_lists_path}]
   if not @task_list.nil?
     extra_crumbs << {:title => @task_list.name, :url => task_list_path(:id => @task_list.id)}
   else
@@ -18,7 +18,7 @@
   
   @additional_stylesheets = []
 %>
-<%= form_tag :controller => 'task', :action => 'edit_task' %>
-<%= render :partial => 'task_form' %>
-    <button class="submit" type="submit"><%=:edit_task.l %></button>
-</form>
+<% form_tag task_path(@task), :method => :put do %>
+  <%= render :partial => 'form' %>
+  <button class="submit" type="submit"><%=:edit_task.l %></button>
+<% end %>
