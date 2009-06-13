@@ -82,7 +82,7 @@ class ProjectTime < ActiveRecord::Base
 	# Responsible party assignment
 	
 	def open_task=(obj)
-		self.project_task_list = obj.nil? ? nil : obj.task_list
+		self.project_task_list = obj.try(:task_list)
 		self.project_task = obj
 	end
 	
@@ -285,7 +285,7 @@ class ProjectTime < ActiveRecord::Base
 	
 	# Accesibility
 	
-	attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_important
+	attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable
 	
 	# Validation
 	
