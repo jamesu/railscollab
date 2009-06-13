@@ -74,7 +74,7 @@ class UserController < ApplicationController
       new_account_password = nil
 
       if user_attribs.has_key?(:generate_password)
-        @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
+        @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
       else
         if user_attribs.has_key? :password and !user_attribs[:password].empty?
           @user.password = user_attribs[:password]
@@ -86,7 +86,7 @@ class UserController < ApplicationController
 
       if @logged_user.member_of_owner?
         @user.company_id = user_attribs[:company_id]
-        unless @user.company.id == Company.owner.id
+        if @user.member_of_owner?
           @user.is_admin = user_attribs[:is_admin]
           @user.auto_assign = user_attribs[:auto_assign]
         end
@@ -187,8 +187,10 @@ class UserController < ApplicationController
 
         if @logged_user.member_of_owner?
           @user.company_id = user_params[:company_id] unless user_params[:company_id].nil?
-          @user.is_admin = user_params[:is_admin]
-          @user.auto_assign = user_params[:auto_assign]
+          if @user.member_of_owner?
+            @user.is_admin = user_params[:is_admin]
+            @user.auto_assign = user_params[:auto_assign]
+          end
         end
       end
 
