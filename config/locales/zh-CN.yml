@@ -27,7 +27,7 @@ zh-CN:
   dashboard: 工作台
   account: 帐号
   administration: 管理
-  index: Index
+  index: 首页
   
   # Actions
   order_by: Order by
@@ -65,29 +65,29 @@ zh-CN:
   add_time: Add time
   edit_time: Edit time
   edit_user: Edit user
-  add_message: Add message
+  add_message: 添加消息
   edit_message: Edit message
   add_message_category: Add message category
-  add_category: Add category
+  add_category: 添加分类
   edit_message_category: Edit message category
-  edit_category: Edit category
-  view_message: View message
-  add_milestone: Add milestone
-  edit_milestone: Edit milestone
-  add_task_list: Add task list
-  add_task: Add task
-  edit_task_list: Edit task list
-  edit_task: Edit task
+  edit_category: 编辑分类
+  view_message: 查看消息
+  add_milestone: 添加里程碑
+  edit_milestone: 编辑里程碑
+  add_task_list: 添加任务单
+  add_task: 添加任务
+  edit_task_list: 编辑任务单
+  edit_task: 编辑任务
   reorder_tasks: Reorder tasks
-  search_results: Search results
-  add_project: Add project
-  edit_project: Edit project
+  search_results: 搜索结果
+  add_project: 添加项目
+  edit_project: 编辑项目
   user_card: User card of {{user}}
   folder_name: "Folder : {{folder}}"
   company_card: "Company card of {{company}}"
   reset_password: Reset password
-  set_password: Set password
-  save_changes: Save changes
+  set_password: 设置密码
+  save_changes: 保存修改
   
   # Feeds
   recent_milestones_feed: Recent milestones feed
@@ -159,11 +159,11 @@ zh-CN:
   success_deleted_comment: Successfully deleted comment
   invalid_company: Invalid company
   success_added_company: Successfully added company
-  success_added_client: Successfully added client
-  success_edited_client: Successfully updated client
-  success_deleted_client: Successfully deleted client
+  success_added_client: 添加客户成功
+  success_edited_client: 更新客户信息成功
+  success_deleted_client: 删除客户成功
   error_deleting_client: Error deleting client
-  no_projects: No projects
+  no_projects: 无项目信息
   success_updated_logo: Successfully updated logo
   error_uploading_logo: Error uploading logo
   success_deleted_logo: Successfully deleted logo
@@ -494,12 +494,12 @@ zh-CN:
   users: Users
   
   # Comments
-  comment: Comment
-  add_comment: Add comment
-  edit_comment: Edit comment
-  post_comment: Post comment
-  private_comment: Private comment
-  private_comment_info: "Private comments are visible only to owner company members. Members of client companies will not be able to see them"
+  comment: 评论
+  add_comment: 添加评论
+  edit_comment: 编辑评论
+  post_comment: 发送评论
+  private_comment: 私有评论
+  private_comment_info: "私有评论仅公司内部成员可见.客户公司成员无法查看."
   comment_delete_confirm: "Are you sure you want to delete this comment?"
   no_comments_for_object: No comments are posted for this object
   comment_posted_with_user: "Posted on {{time}} by {{user}}"
@@ -535,24 +535,24 @@ zh-CN:
   unknown: Unknown
   enabled: Enabled
   visible: Visible
-  save: Save
-  reset: Reset
-  submit: Submit
+  save: 保存
+  reset: 重置
+  submit: 提交
   form_action_add_to: "Add {{object}} to {{link}}"
   form_related_object_notfound: "Related object does not exist!"
   form_confirm_delete: "Are you sure you want to delete this form?"
   no_forms_in_project: There are no forms in this project
   
   # Time
-  summary: Summary
-  log_date: Date
-  person: Person
-  hours: Hours
-  details: Details
-  open_tasks: Open tasks
-  done_date: Done date
-  private_time: Private time
-  private_time_info: "Private times are visible only to owner company members. Members of client companies will not be able to see them."
+  summary: 摘要
+  log_date: 日期
+  person: 用户
+  hours: 小时
+  details: 详情
+  open_tasks: 打开任务
+  done_date: 结束日期
+  private_time: 私有时间
+  private_time_info: "私有时间仅公司内部成员可见.客户公司成员无法查看."
   billable_time: Billable time
   billable_time_info: "Billable times are those for which you expect payment from the client(s)."
   task_list_hours: "{{name}} [{{hours}} hours]"
@@ -561,15 +561,15 @@ zh-CN:
   no_times_in_project: "This project has no time records"
   time_confirm_delete: "Are you sure you want to delete this time record?"
   
-  csv_export: "CSV Export"
+  csv_export: "CSV导出"
   csv: CSV
   csv_export_times_info: "Use this link to bring time tracking data to your favourite spreadsheet application"
   
   # Files
   file: File
-  folder: Folder
-  update_file: Update file
-  new_file: New file
+  folder: 文件夹
+  update_file: 更新文件
+  new_file: 新文件
   new_revision: New revision
   existing_file: Existing file
   file_upload_info: "You can upload files of any type. Maximum filesize is {{max}}"
@@ -619,45 +619,45 @@ zh-CN:
   # Configuration messages
   invalid_category: Invalid category
   config_category_empty: Category empty
-  success_updated_config_category: "Successfully updated configuration"
+  success_updated_config_category: "更新配置信息成功"
   
   # Configuration categories
   # category_<name>_name
   # category_<name>_description
-  category_system_name: System
+  category_system_name: 系统
   category_system_description: "System variables. Defaults should suffice"
-  category_general_name: General
-  category_general_description: "General RailsCollab Settings"
-  category_mailing_name: Mailing
-  category_mailing_description: "Options for handling email sending"
-  category_services_name: Services
-  category_services_description: "Options for handling third party services"
+  category_general_name: 基本设置
+  category_general_description: "RailsCollab系统的基本设置"
+  category_mailing_name: 邮件设置
+  category_mailing_description: "处理邮件发送的相关选项"
+  category_services_name: 服务设置
+  category_services_description: "第三方服务配置选项"
   
   # Configuration options
   # option_<name>_name
   # option_<name>_description
   
   # general
-  option_site_name_name: "Site name"
+  option_site_name_name: "站点名称"
   option_site_name_description: "This value will be displayed as the site name on the Dashboard page"
-  option_site_url_name: "Site URL"
+  option_site_url_name: "站点URL"
   option_site_url_description: "The base URL from which your RailsCollab is hosted"
-  option_site_theme_name: "Site Theme"
-  option_site_theme_description: "The theme used to display content"
-  option_default_project_folders_name: "Default folders"
+  option_site_theme_name: "站点皮肤"
+  option_site_theme_description: "用于显示内容的样式"
+  option_default_project_folders_name: "默认文件夹"
   option_default_project_folders_description: "Folders that will be created when project is created. Every folder name should be in a new line. Duplicate or empty lines will be ignored"
-  option_default_project_message_categories_name: "Default message categories"
+  option_default_project_message_categories_name: "默认消息分类"
   option_default_project_message_categories_description: "Message categories that will be created when project is created. Every category name should be in a new line. Duplicate or empty lines will be ignored"
-  option_default_project_message_category_name: "Default message category"
-  option_default_project_message_category_description: "Message category that will be selected by default"
-  option_allow_openid_name: "Allow OpenID logins"
-  option_allow_openid_description: "Allow logging in via OpenID"
-  option_allow_anonymous_name: "Allow anonymous login"
+  option_default_project_message_category_name: "默认消息分类选项"
+  option_default_project_message_category_description: "消息分类的默认选项"
+  option_allow_openid_name: "是否允许OpenID登录"
+  option_allow_openid_description: "允许通过OpenID登录"
+  option_allow_anonymous_name: "是否允许匿名登录"
   option_allow_anonymous_description: "You will need to make a user of the owner company called 'Anonymous' for this to work"
-  option_default_language_name: "Default language"
-  option_default_language_description: "Default language used for the interface"
-  option_search_enabled_name: "Search enabled"
-  option_search_enabled_description: "Allow project searching"
+  option_default_language_name: "默认语言"
+  option_default_language_description: "用户界面的默认语言"
+  option_search_enabled_name: "是否允许搜索"
+  option_search_enabled_description: "允许对项目进行检索"
   option_use_asset_hosts_name: "Use asset hosts"
   option_use_asset_hosts_description: "Enable usage of asset hosts. Also see assets_host_url"
   option_asset_hosts_url_name: "Asset hosts url"
@@ -675,20 +675,20 @@ zh-CN:
   notification_sendmail_arguments: "Arguments"
   
   # mailing
-  option_notification_email_address_name: "Notification identity"
-  option_notification_email_address_description: "Identity of the email notifier, in the format 'Name <email@address>'"
-  option_notification_email_method_name: "Mail transport"
-  option_notification_email_method_description: "The method in which email will be sent"
-  option_notification_email_smtp_name: "SMTP transport settings"
-  option_notification_email_smtp_description: "Settings used for the SMTP mail transport"
-  option_notification_email_sendmail_name: "Sendmail transport settings"
-  option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
+  option_notification_email_address_name: "通知标识"
+  option_notification_email_address_description: "邮件通知标识符，例如 'Name <email@address>'"
+  option_notification_email_method_name: "邮件发送方式"
+  option_notification_email_method_description: "邮件以何种方式进行发送"
+  option_notification_email_smtp_name: "SMTP传输设置"
+  option_notification_email_smtp_description: "SMTP邮件发送的设置"
+  option_notification_email_sendmail_name: "Sendmail传输设置"
+  option_notification_email_sendmail_description: "Sendmail邮件发送的设置"
   
   # Administration tools
   # administration_tool_<name>
   # administration_tool_<name>_description
   
-  no_administration_tools: "No administration tools"
+  no_administration_tools: "没有管理工具"
   
   
   # Mailing views
@@ -705,14 +705,14 @@ zh-CN:
   
   
   # Search models
-  Tag: Tag
-  Comment: Comment
-  ProjectMessage: Message
+  Tag: 标签
+  Comment: 评论
+  ProjectMessage: 消息
   ProjectTime: Time 
-  ProjectTask: Task
-  ProjectTaskList: Task list
-  ProjectMilestone: Milestone
-  ProjectFile: File
+  ProjectTask: 任务
+  ProjectTaskList: 任务列表
+  ProjectMilestone: 里程碑
+  ProjectFile: 文件
   ProjectFileRevision: File revision
   
   search_dashboard: "{{type}}: {{name}} in {{project}}"
