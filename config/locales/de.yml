@@ -7,15 +7,15 @@
   index: Startseite
   company: Firma
   members: Mitarbeiter
-  clients: Firmen
+  clients: Kunden
   projects: Projekte
   configuration: Einstellungen
-  tools: Tools
+  tools: Werkzeuge
   upgrade: Upgrade
   messages: Nachrichten
   tasks: Aufgaben
   milestones: Meilensteine
-  ptime: Zeit
+  ptime: Dauer
   files: Dateien
   tags: Schlagwörter
   forms: Formulare
@@ -33,32 +33,32 @@
   order_by: Sortieren nach
   order_by_name: Sortieren nach Name
   order_by_priority: Sortieren nach Priorität
-  sort_by_finished_date: Nach Enddatum sortieren
-  sort_by_hours: Nach Stunden Sortieren
-  report_by_task: Report by task
+  sort_by_finished_date: Sortieren nach Enddatum
+  sort_by_hours: Sortieren nach Stunden
+  report_by_task: Aufschlüsseln nach Aufgaben
   
   # Page titles & actions
   add_project: Projekt hinzufügen
   add_user: Mitarbeiter hinzufügen
-  add_client: Firma hinzufügen
+  add_client: Kunde hinzufügen
   change_password: Passwort ändern
-  update_avatar: Update avatar
+  update_avatar: Foto aktualsieren
   permissions: Rechte
   edit_company: Firma bearbeiten
   edit_company_logo: Firmenlogo bearbeiten
   add_file: Datei hinzufügen
   edit_file: Datei bearbeiten
-  attach_files: Datei anhängen
+  attach_files: Dateien anhängen
   file_details: Dateidetails
   add_folder: Ordner hinzufügen
   edit_folder: Ordner bearbeiten
-  forgot_password: Forgot password
+  forgot_password: Passwort vergessen
   login: Anmelden
-  update_permissions: Rechte bearbeiten
-  update_people: Personen bearbeiten
-  edit_client: Firma bearbeiten
+  update_permissions: Rechte aktualisieren
+  update_people: Personen aktualisieren
+  edit_client: Kunde bearbeiten
   new_logo: Neues Logo
-  update_logo: Logo bearbeiten
+  update_logo: Logo aktualisieren
   forms: Forms
   add_form: Add form
   edit_form: Edit form
@@ -76,16 +76,16 @@
   edit_milestone: Meilenstein bearbeiten
   add_task_list: Aufgabenliste hinzufügen
   add_task: Aufgabe hinzufügen
-  edit_task_list: Aufgabenliszte bearbeiten
+  edit_task_list: Aufgabenliste bearbeiten
   edit_task: Aufgabe bearbeiten
-  reorder_tasks: Reorder tasks
+  reorder_tasks: Aufgaben anordnen
   search_results: Suchergebnisse
   add_project: Projekt hinzufügen
   edit_project: Projekt bearbeiten
   user_card: User card of {{user}}
   folder_name: "Folder : {{folder}}"
   company_card: "Company card of {{company}}"
-  reset_password: Passwort neusetzen
+  reset_password: Passwort zurücksetzen
   set_password: Passwort festlegen
   save_changes: Änderungen speichern
   
@@ -119,7 +119,7 @@
   welcome_anonymous: "Willkommen <strong>Anonymous</strong>"
   welcome_back: "Willkommen zurück <strong>{{user}}</strong>"
   logout: Abmelden
-  are_you_sure_logout: Sind sie sicher das sie sich ausloggen wollen?
+  are_you_sure_logout: Sind sie sicher, daß Sie sich ausloggen wollen?
   
   # Permission names
   can_manage_messages: Manage messages
