@@ -12,3 +12,4 @@ public/avatars/**
 tmp/restart.txt
 tmp/**/*
 public/themes/*
+*.sqlite3
