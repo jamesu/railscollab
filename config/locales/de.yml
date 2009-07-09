@@ -1,0 +1,751 @@
+de:
+  # Tabs
+  overview: Übersicht
+  my_projects: Meine Projekte
+  my_tasks: Meine Aufgaben
+  my_account: Mein Profil
+  index: Startseite
+  company: Firma
+  members: Mitarbeiter
+  clients: Firmen
+  projects: Projekte
+  configuration: Einstellungen
+  tools: Tools
+  upgrade: Upgrade
+  messages: Nachrichten
+  tasks: Aufgaben
+  milestones: Meilensteine
+  ptime: Zeit
+  files: Dateien
+  tags: Schlagwörter
+  forms: Formulare
+  people: Personen
+  
+  userbox_more: Mehr
+  
+  # Crumbs
+  dashboard: Überblick
+  account: Profil
+  administration: Administration
+  index: Startseite
+  
+  # Actions
+  order_by: Sortieren nach
+  order_by_name: Sortieren nach Name
+  order_by_priority: Sortieren nach Priorität
+  sort_by_finished_date: Nach Enddatum sortieren
+  sort_by_hours: Nach Stunden Sortieren
+  report_by_task: Report by task
+  
+  # Page titles & actions
+  add_project: Projekt hinzufügen
+  add_user: Mitarbeiter hinzufügen
+  add_client: Firma hinzufügen
+  change_password: Passwort ändern
+  update_avatar: Update avatar
+  permissions: Rechte
+  edit_company: Firma bearbeiten
+  edit_company_logo: Firmenlogo bearbeiten
+  add_file: Datei hinzufügen
+  edit_file: Datei bearbeiten
+  attach_files: Datei anhängen
+  file_details: Dateidetails
+  add_folder: Ordner hinzufügen
+  edit_folder: Ordner bearbeiten
+  forgot_password: Forgot password
+  login: Anmelden
+  update_permissions: Rechte bearbeiten
+  update_people: Personen bearbeiten
+  edit_client: Firma bearbeiten
+  new_logo: Neues Logo
+  update_logo: Logo bearbeiten
+  forms: Forms
+  add_form: Add form
+  edit_form: Edit form
+  add_time: Zeit hinzufügen
+  edit_time: Zeit bearbeiten
+  edit_user: Benutzer bearbeiten
+  add_message: Nachricht verfassen
+  edit_message: Nachricht bearbeiten
+  add_message_category: Add message category
+  add_category: Kategorie hinzufügen
+  edit_message_category: Edit message category
+  edit_category: Kategorie bearbeiten
+  view_message: Nachricht ansehen
+  add_milestone: Meilenstein hinzufügen
+  edit_milestone: Meilenstein bearbeiten
+  add_task_list: Aufgabenliste hinzufügen
+  add_task: Aufgabe hinzufügen
+  edit_task_list: Aufgabenliszte bearbeiten
+  edit_task: Aufgabe bearbeiten
+  reorder_tasks: Reorder tasks
+  search_results: Suchergebnisse
+  add_project: Projekt hinzufügen
+  edit_project: Projekt bearbeiten
+  user_card: User card of {{user}}
+  folder_name: "Folder : {{folder}}"
+  company_card: "Company card of {{company}}"
+  reset_password: Passwort neusetzen
+  set_password: Passwort festlegen
+  save_changes: Änderungen speichern
+  
+  # Feeds
+  recent_milestones_feed: Recent milestones feed
+  recent_milestones_feed_info: Recent milestones for all projects
+  recent_activities_feed: Recent activities feed
+  recent_activities_feed_info: Recent activities for all projects
+  recent_project_milestones_feed: "{{project}} Recent milestones feed"
+  recent_project_milestones_feed_info: "Recent milestones for the {{project}} project"
+  recent_project_activities_feed: "{{project}} Recent activities feed"
+  recent_project_activities_feed_info: "Recent activities for the {{project}} project"
+  
+  # New account steps
+  welcome_to_new_account: Welcome to your newly created account
+  welcome_to_new_account_info: "{{user}}, welcome to your new account. From now on it will always be available on {{url}} (you can bookmark this link). You can get started in a minute following these easy steps:"
+  new_account_step1: "Step 1: Update your company info"
+  new_account_step1_info: "<a href='{{url}}'>Set your company details</a> such as phone and fax number, address, email, homepage etc"
+  new_account_step2: "Step 2: Add team members"
+  new_account_step2_info: "You can <a href='{{url}}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system"
+  new_account_step3: "Step 3: Add client companies and their members"
+  new_account_step3_info: "Now it's time to <a href='{{url}}'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)"
+  new_account_step4: "Step 4: Start a project"
+  new_account_step4_info: "Defining a <a href='{{url}}'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients."
+  
+  hide_welcome_info: "&raquo; Hide this info permanently"
+  
+  welcome_to_administration: Welcome to the administration panel. Using this tool you can manage your company data, members, clients and projects you are involved in.
+  
+  # User box
+  welcome_anonymous: "Willkommen <strong>Anonymous</strong>"
+  welcome_back: "Willkommen zurück <strong>{{user}}</strong>"
+  logout: Abmelden
+  are_you_sure_logout: Sind sie sicher das sie sich ausloggen wollen?
+  
+  # Permission names
+  can_manage_messages: Manage messages
+  can_manage_tasks: Manage tasks
+  can_manage_milestones: Manage milestones
+  can_manage_time: Manage times
+  can_upload_files: Upload files
+  can_manage_files: Manage files
+  can_assign_to_owners: Assign tasks to members of owner company
+  can_assign_to_other: Assign tasks to members of other clients
+  
+  # Status messages
+  login_success: Anmeldung erfolgreich
+  login_failure: Anmelden fehlgeschlagen
+  invalid_openid_server: "Unable to find openid server for <q>{{openid_url}}</q>"
+  failed_verification_openid_url: "Verification of {{openid_url}} failed"
+  failed_login_openid_url: "Failed login with identity {{openid_url}}"
+  success_login_openid_url: "You have successfully logged in with {{openid_url}} as your identity"
+  verification_failed: Verification failed
+  verification_cancelled: Verification cancelled
+  unknown_response_status: "Unknown response status: {{status}}"
+  invalid_email: Invalid email address
+  invalid_email_not_in_use: Invalid email address
+  password_changed: Password changed
+  insufficient_permissions: Insufficient permissions
+  success_updated_permissions: Successfully updated permissions
+  success_updated_avatar: Successfully updated avatar
+  error_updating_avatar: Error uploading avatar
+  success_deleted_avatar: Successfully deleted avatar
+  invalid_user: Invalid user
+  invalid_object: Invalid object
+  invalid_comment: Invalid comment
+  success_added_comment_error_files: Successfully added comment, some attachments failed validation
+  success_added_comment: Successfully added comment
+  success_edited_comment_error_files: Successfully updated comment, some attachments failed validation
+  success_edited_comment: Successfully updated comment
+  success_deleted_comment: Successfully deleted comment
+  invalid_company: Invalid company
+  success_added_company: Successfully added company
+  success_added_client: Successfully added client
+  success_edited_client: Successfully updated client
+  success_deleted_client: Successfully deleted client
+  error_deleting_client: Error deleting client
+  no_projects: No projects
+  success_updated_logo: Successfully updated logo
+  error_uploading_logo: Error uploading logo
+  success_deleted_logo: Successfully deleted logo
+  welcome_info_hidden: Welcome info hidden
+  invalid_folder: Invalid folder
+  success_added_folder: Successfully added folder
+  success_edited_folder: Successfully updated folder
+  success_deleted_folder: Successfully deleted folder
+  invalid_file: Invalid file
+  invalid_file_revision: Invalid file revision
+  no_file_revisions: No file revisions
+  success_added_file: Successfully added file
+  success_edited_file: Successfully updated file
+  success_deleted_file: Successfully deleted file
+  success_added_new_file_to_object: Successfully attached new file to object
+  error_adding_file_to_object: Error attaching new file to object
+  success_added_file_to_object: Successfully attached file to object
+  error_adding_file_to_object: Error attaching file to object
+  success_removed_file_from_object: Successfully removed file from object
+  invalid_form: Invalid form
+  error_submitting_form: Error submitting form
+  success_added_form: Successfully added form
+  success_edited_form: Successfully updated form
+  success_deleted_form: Successfully deleted form
+  invalid_message_category: Invalid message category
+  success_added_message_category: Successfully added message category
+  success_edited_message_category: Successfully updated message category
+  success_deleted_message_category: Successfully deleted message category
+  invalid_message: Invalid message
+  success_added_message_failed_attachments: Successfully added message, some attachments failed validation
+  success_added_message: Successfully added message
+  success_edited_message: Successfully updated message
+  success_edited_message_failed_attachments: Successfully updated message, some attachments failed validation
+  success_deleted_message: Successfully deleted message
+  success_subscribed_to_message: Subscribed to message
+  success_unsubscribed_from_message: Unsubscribed from message
+  invalid_milestone: Invalid milestone
+  success_added_milestone: Successfully added milestone
+  success_edited_milestone: Successfully updated milestone
+  success_deleted_milestone: Successfully deleted milestone
+  milestone_already_completed: Milestone already completed
+  milestone_already_open: Milestone already open
+  error_saving: Error saving
+  invalid_project: Invalid project
+  success_added_project: Successfully added project
+  success_edited_project: Successfully updated project
+  success_deleted_project: Successfully deleted project
+  project_already_completed: Project already completed
+  project_already_open: Project already open
+  invalid_task_list: Invalid task list
+  success_added_task_list: Successfully added task list
+  success_edited_task_list: Successfully updated task list
+  success_deleted_task_list: Successfully deleted task list
+  invalid_task: Invalid task
+  success_added_task: Successfully added task
+  success_edited_task: Successfully updated task
+  success_deleted_task: Successfully deleted task
+  task_already_completed: Task already completed
+  task_already_open: Task already open
+  invalid_time: Invalid time record
+  success_added_time: Successfully added time record
+  success_edited_time: Successfully updated time record
+  success_deleted_time: Successfully deleted time record
+  success_added_user: Successfully added user
+  success_deleted_user: "Successfully deleted user {{name}}"
+  unimplemented: Unimplemented
+  invalid_request: Invalid request
+  
+  # Stuff which appears in the sidebar
+  online_users: Online users
+  users_active_in_last_n_minutes: "Users who were active in last {{number}} minutes:"
+  my_projects_sidebar_link: "&raquo; My projects"
+  update_feeds: RSS feeds
+  recent_activities: Recent activities
+  no_recent_activities: No recent activities
+  recent_milestones: Recent milestones
+  active_projects: Active projects
+  finished_projects: Finished projects
+  archived_projects_list_info: "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them."
+  project_completed_time_with_user: "{{time}} | {{user}}"
+  project_completed_time_format: "%b %e, %Y"
+  calendar_feeds: iCalendar
+  ical: iCalendar
+  calendar_feed_milestone_info: Use this link to bring milestone data to your favorite calendar application.
+  calendar_feeds_password_warning: "<strong>Note:</strong> if you change your password the link to the calendar data will also change! You'll need to resubscribe."
+  folders: Folders
+  folder_delete_confirmation: "Are you sure you want to delete this folder?"
+  all_files: All files
+  important_files: Important files
+  important_file_revisions_count: "{{count}} revision(s)"
+  important_messages: Important messages
+  important_messages_comments_count: "{{count}} comment(s)"
+  categories: Categories
+  all_categories: All categories
+  configuration_categories: Configuration categories
+  category_delete_confirmation: "Are you sure you want to delete this category?"
+  message_subscribers: Message subscribers
+  message_subscribers_email_notification_info: "Subscribers will receive an email notification whenever someone (except themselves) posts a comment on this message"
+  message_unsubscribe: Unsubscribe from this message
+  message_unsubscription_confirmation: "Are you sure you want to unsubscribe from this message?"
+  no_subscribers: There are no subscribers
+  message_subscribe: Subscribe to message
+  message_subscription_confirmation: "Are you sure you want to subscribe to this message?"
+  options: Options
+  private_message: Private message
+  important_message: Important message
+  enable_comments: Enable comments
+  enable_anonymous_comments: Anonymous comments
+  update_options: Update options
+  edit_message_sidebar_link: "&raquo; Edit message"
+  completed_milestones: Completed milestones
+  late: Late
+  upcoming: Upcoming
+  milestone_completed_time_with_user: "{{time}} | {{user}}"
+  milestone_completed_time_format: "%b %e, %Y %H:%M"
+  project_status_header: "Project status: {{status}}"
+  active: Active
+  completed: Completed
+  edit_project_details: Edit project details
+  mark_project_as_finished: Mark project as finished
+  mark_project_as_finished_confirmation: "Are you sure you want to mark this project as finished? All project actions will be locked"
+  mark_project_as_active: Mark project as active
+  mark_project_as_active_confirmation: "Are you sure you want to mark this project as open? This will unlock all project actions"
+  involved_companies: Involved companies
+  open_task_lists: Open task lists
+  num_tasks_open_in_task_list: "{{num}} open of {{total}} tasks in list"
+  completed_task_lists: Completed task lists
+  task_list_completed_time_with_user: "{{time}} | {{user}}"
+  task_list_completed_time_format: "%b %e, %Y"
+  tags_used_in_project: Tags used in this project
+  no_tags_used_in_project: There are no tags used in this project
+  objects_tagged_with: "{{count}} objects are tagged with <strong>{{tag}}</strong>"
+  no_objects_tagged_with: "There are no objects are tagged with <strong>{{tag}}</strong>"
+  milestone_assigned_to: "Assigned to {{name}}"
+  tag_object_count: "{{count}} objects."
+  # Message form
+  title: Title
+  text: Text
+  additional_text: Additional text
+  additional_text_info: Additional message text is visible only on comments page
+  collapse: Collapse
+  expand: Expand
+  milestone: Milestone
+  category: Category
+  private_message_info: "Private messages are visible only to owner company members. Members of client companies will not be able to see them."
+  important_message_info: "Important messages are listed in the \"Important messages\" sidebar on the project messages page"
+  enable_comments_info: "Users that can view this object can post comments on it. Select \"No\" to lock comments"
+  enable_anonymous_comments_info: "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged."
+  email_notification: Email notification
+  email_notification_info: Notify selected people about this message via email
+  tags_info: "List of comma separated tags (example: \"interface, javascript, public beta\")"
+  name: Name
+  current_logo: Current logo
+  delete_current_logo: Delete current logo
+  current_logo_confirm_delete: "Are you sure you want to delete this logo?"
+  logo_not_uploaded: Logo is not uploaded
+  logo_replace_info: "Note that the current logo will be deleted and replaced with new one!"
+  milestone_in: "{{milestone}} in {{project}}"
+  
+  # Message view
+  from: From
+  message_created_with_user: "{{time}} | {{user}}"
+  message_created_format: "%b %e. %Y %H:%M"
+  comments: Comments
+  no_messages_in_project: There are no messages in this project
+  no_messages_in_category: There are no messages in this category
+  edit: Edit
+  delete: Delete
+  remove: Remove
+  read_more: "Read more..."
+  message_seperator: "****"
+  message_confirm_delete: "Are you sure you want to delete this message?"
+  
+  # Task form
+  private_task_list: Private task list
+  assign_to: Assign to
+  priority: Priority
+  description: Description
+  is_private_list: Is private
+  is_private_list_info: "(Private task lists are visible only to owner company members. Members of client companies will not be able to see them)"
+  task_list: Task list
+  or: or
+  cancel: Cancel
+  
+  
+  # Task view
+  no_open_task_lists_for_project: There are no open task lists for this project
+  order: Order
+  task_list_confirm_delete: "Are you sure you want to delete this task list?"
+  task_delete_confirm: "Are you sure you want to delete this task?"
+  view_all_completed_tasks: View all completed tasks
+  recent_completed_tasks: Recently completed tasks
+  completed_tasks: Completed tasks
+  task_mark_open: Mark task as open
+  mark_task_completed: Mark task as completed
+  no_tasks_assigned_to_you: There are no tasks assigned to you
+  edit_tasks: Edit tasks
+  task: Task
+  
+  # Milestone form
+  private_milestone: Private milestone
+  milestones_private_info: "(Private milestones are visible only to owner company members. Members of client companies will not be able to see them.)"
+  due_date: Due date
+  send_email_notification_to_user: Send email notification to user
+  
+  # Milestone view
+  no_active_milestones_in_project: There are no active milestones in this project
+  late_milestones: Late milestones
+  todays_milestones: Todays milestones
+  upcoming_milestones: Upcoming milestones
+  all_upcoming_milestones: All upcoming milestones
+  milestone_days_left: "{{days}} days left"
+  milestone_days_late: "{{days}} days late"
+  milestone_show_all_upcoming: "&raquo; Show all {{count}} upcoming milestones"
+  today: Today
+  milestone_due_date_extended_format: "%A, %e %B, %Y"
+  milestone_due_date_format: "%A, %e %B"
+  milestone_empty_info: "This milestone is empty. You can add a {{message}} or a {{task_list}} to it at any time"
+  task_lists: Task lists
+  message: Message
+  milestone_messages_created_with_user: "{{time}} | {{user}}"
+  milestone_messages_created_format: "%b %e. %Y %H:%M"
+  milestone_confirm_delete: "Are you sure you want to delete this milestone?"
+  
+  # Activity
+  action_add: Added
+  action_delete: Deleted
+  action_modified: Modified
+  action_reopened: Reopened
+  action_open: Opened
+  action_edit: Modified
+  action_close: Closed
+  action_upload: Uploaded
+  action_today_with_time: "Today {{time}}"
+  action_today_fomat: "%H:%M"
+  action_past_format: "%b %e %Y"
+  action_yesterday: Yesterday
+  
+  # Access
+  forgot_password_sent_email: Further instructions have been sent to your e-mail address
+  email_address: Email address
+  send_password: Send password
+  old_password: Old password
+  repeat_password: Repeat password
+  username: Username
+  password: Password
+  openid: OpenID
+  use_openid: Use OpenID
+  forgot_password_q: "Forgot password?"
+  
+  # Account
+  new_avatar: New avatar
+  current_avatar: Current avatar
+  delete_current_avatar: Delete current avatar
+  avatar_confirm_delete: "Are you sure you want to delete this avatar?"
+  avatar_upload_info: "Note that the current avatar will be deleted and replaced with new one!"
+  avatar_not_uploaded: "Avatar is not uploaded"
+  administration_options_info: "Administration options (available only to administrators!)"
+  administrator: Administrator
+  auto_assign: Auto assign
+  auto_assign_to_new_projects: "Auto assign to new projects?"
+  openid_info: "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>."
+  display_name: Display name
+  timezone: Timezone
+  instant_messengers: Instant Messengers
+  service: Service
+  value: Value
+  primary_im: Primary IM
+  instant_messengers_info: "All IM addresses that you enter will be listed on your card page. Only the primary IM will be shown on other pages (like the people page of the project)."
+  phone_number: Phone number
+  phone_numbers: Phone numbers
+  office: Office
+  fax: Fax
+  mobile: Mobile
+  home: Home
+  fax_number: Fax number
+  homepage: Homepage
+  address: Address
+  address_2: Address 2
+  city: City
+  state: State
+  zipcode: Zipcode
+  country: Country
+  contact_online: Contact online
+  contact_offline: Contact offline
+  not_applicable: "n/a"
+  contact_info: Contact info
+  
+  # Dashboard
+  started_on: Started on
+  no_active_projects: There are no active projects
+  project_created_format: "%b %e, %Y"
+  companies_involved_in: "Companies involved in project"
+  tasks_in_list: "In {{list}}"
+  anyone: Anyone
+  project: Project
+  page: Page
+  
+  # Calendar
+  wday_1: Monday
+  wday_2: Tuesday
+  wday_3: Wednesday
+  wday_4: Thursday
+  wday_5: Friday
+  wday_6: Saturday
+  wday_7: Sunday
+  
+  month_1: January
+  month_2: February
+  month_3: March
+  month_4: April
+  month_5: May
+  month_6: June
+  month_7: July
+  month_8: August
+  month_9: September
+  month_10: October
+  month_11: November
+  month_12: December
+  
+  # Admin
+  project_confirm_delete: "Are you sure you want to delete this project?"
+  no_projects_owned_by_company: "There are no projects owned by this company"
+  active_project: Active project
+  finished_project: Finished project
+  delete_client_confirm: "Are you sure you want to delete this client?"
+  no_clients_in_company: "No clients are present for this company"
+  users: Users
+  
+  # Comments
+  comment: Comment
+  add_comment: Add comment
+  edit_comment: Edit comment
+  post_comment: Post comment
+  private_comment: Private comment
+  private_comment_info: "Private comments are visible only to owner company members. Members of client companies will not be able to see them"
+  comment_delete_confirm: "Are you sure you want to delete this comment?"
+  no_comments_for_object: No comments are posted for this object
+  comment_posted_with_user: "Posted on {{time}} by {{user}}"
+  comment_posted: "Posted on {{time}} by <strong>{{name}}</strong>"
+  comment_posted_format: "%b %e. %Y %H:%M"
+  
+  # User
+  generate_password: Generate password
+  send_account_email_notification: "Send email notification?"
+  send_account_email_notication_info:  "If you select \"Yes\" the user will receive an email with a welcome message and login parameters"
+  owner: Owner
+  
+  # Project
+  project_show_description_in_overview: Show description on project overview page
+  company_no_users: There are no users in this company
+  permissions_form: Permissions form
+  permissions_info: "Using the {{link}} you can easily add or remove companies and users and control their access permissions."
+  clients_involved_in: "{{company}} users involved in {{project}}"
+  confirm_client_remove: "Are you sure you want to remove this company?"
+  confirm_user_remove: "Are you sure you want to remove this user?"
+  confirm_user_delete: "Are you sure you want to delete this user?"
+  hint: Hint
+  hint_permissions_info: "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)."
+  project_completed_on: "Completed on {{date}} by {{user}}"
+  all: All
+  go: Go
+  due_in_next_n_days: "Due in the next {{num}} days"
+  project_locked_header: "This project has been marked as completed, and is locked."
+  
+  # Forms
+  success_message: Success message
+  action: Action
+  unknown: Unknown
+  enabled: Enabled
+  visible: Visible
+  save: Save
+  reset: Reset
+  submit: Submit
+  form_action_add_to: "Add {{object}} to {{link}}"
+  form_related_object_notfound: "Related object does not exist!"
+  form_confirm_delete: "Are you sure you want to delete this form?"
+  no_forms_in_project: There are no forms in this project
+  
+  # Time
+  summary: Summary
+  log_date: Date
+  person: Person
+  hours: Hours
+  details: Details
+  open_tasks: Open tasks
+  done_date: Done date
+  private_time: Private time
+  private_time_info: "Private times are visible only to owner company members. Members of client companies will not be able to see them."
+  billable_time: Billable time
+  billable_time_info: "Billable times are those for which you expect payment from the client(s)."
+  task_list_hours: "{{name}} [{{hours}} hours]"
+  task_list_hours_info: "Tasks which have been logged with time"
+  task_list_task_hours: "{{name}} [{{hours}} hours]"
+  billable_hours: "[{{hours}} billable hours]"
+  no_times_in_project: "This project has no time records"
+  time_confirm_delete: "Are you sure you want to delete this time record?"
+  
+  csv_export: "CSV Export"
+  csv: CSV
+  csv_export_times_info: "Use this link to bring time tracking data to your favourite spreadsheet application"
+  
+  # Files
+  file: File
+  folder: Folder
+  update_file: Update file
+  new_file: New file
+  new_revision: New revision
+  existing_file: Existing file
+  file_upload_info: "You can upload files of any type. Maximum filesize is {{max}}"
+  file_update_info: "You can replace an existing file by specifying a new one. If you don't want to replace it simply leave this field blank."
+  revision_comment: Revision comment
+  private_file: Private file
+  private_file_info: "Private files are visible only to owner company members. Members of client companies will not be able to see them."
+  important_file: Important file
+  important_file_info: "Important files are listed in the \"Important files\" sidebar on the project files page"
+  revision_created_by: "Revision #{{number}} <span>(by {{user}} on {{date}})</span>"
+  revision_created_on: "Revision #{{number}} <span>(created on {{date}})</span>"
+  revision_date_format: "%b %e. %Y %H:%M"
+  revision_date_format_short: "%A, %e %B"
+  download_size: "Download ({{size}})"
+  details_size: "Details ({{size}})"
+  revisions: Revisions
+  last_revision: Last revision
+  file_delete_confirmation: "Are you sure you want to delete this file?"
+  filename: Filename
+  post_time: Post time
+  created_by: Created by
+  attached_files: Attached files
+  detatch: Detatch
+  detatch_file_confirm: "Are you sure you want to detatch this file?"
+  attach_existing_file: "Attach existing file (from Files section)"
+  file_view_details: View file details
+  no_files_in_location: There are no files in this location.
+  hint_attach_files: "Use this form to attach files to <strong>{{link}}</strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>."
+  upload_attach_to_message: Upload new file and attach it to message
+  select_file: Select file
+  
+  yesno_yes: "Yes"
+  yesno_no: "No"
+  new_password_required: New password requires
+  does_not_match: Does not match
+  has_insufficient_permissions: Has insufficient permissions
+  required: Required
+  is_incorrect: Is incorrect
+  not_allowed: Not allowed
+  not_part_of_project: Not part of project
+  search: Search
+  search_box_default: "Search..."
+  search_displaying_results_for: "Displaying {{start}}...{{finish}} out of {{total}} results for {{search}}."
+  search_no_matching_objects: "There are no objects which match '<strong>{{search}}</strong>'"
+  
+  
+  # Configuration messages
+  invalid_category: Invalid category
+  config_category_empty: Category empty
+  success_updated_config_category: "Successfully updated configuration"
+  
+  # Configuration categories
+  # category_<name>_name
+  # category_<name>_description
+  category_system_name: System
+  category_system_description: "System variables. Defaults should suffice"
+  category_general_name: General
+  category_general_description: "General RailsCollab Settings"
+  category_mailing_name: Mailing
+  category_mailing_description: "Options for handling email sending"
+  category_services_name: Services
+  category_services_description: "Options for handling third party services"
+  
+  # Configuration options
+  # option_<name>_name
+  # option_<name>_description
+  
+  # general
+  option_site_name_name: "Site name"
+  option_site_name_description: "This value will be displayed as the site name on the Dashboard page"
+  option_site_url_name: "Site URL"
+  option_site_url_description: "The base URL from which your RailsCollab is hosted"
+  option_site_theme_name: "Site Theme"
+  option_site_theme_description: "The theme used to display content"
+  option_default_project_folders_name: "Default folders"
+  option_default_project_folders_description: "Folders that will be created when project is created. Every folder name should be in a new line. Duplicate or empty lines will be ignored"
+  option_default_project_message_categories_name: "Default message categories"
+  option_default_project_message_categories_description: "Message categories that will be created when project is created. Every category name should be in a new line. Duplicate or empty lines will be ignored"
+  option_default_project_message_category_name: "Default message category"
+  option_default_project_message_category_description: "Message category that will be selected by default"
+  option_allow_openid_name: "Allow OpenID logins"
+  option_allow_openid_description: "Allow logging in via OpenID"
+  option_allow_anonymous_name: "Allow anonymous login"
+  option_allow_anonymous_description: "You will need to make a user of the owner company called 'Anonymous' for this to work"
+  option_default_language_name: "Default language"
+  option_default_language_description: "Default language used for the interface"
+  option_search_enabled_name: "Search enabled"
+  option_search_enabled_description: "Allow project searching"
+  option_use_asset_hosts_name: "Use asset hosts"
+  option_use_asset_hosts_description: "Enable usage of asset hosts. Also see assets_host_url"
+  option_asset_hosts_url_name: "Asset hosts url"
+  option_asset_hosts_url_description: "e.g. 'example.com' will enable assets[0-3].example.com as asset hosts."
+  notification_method_test: "Test"
+  notification_method_smtp: "SMTP"
+  notification_smtp_address: "Address"
+  notification_smtp_port: "Port"
+  notification_smtp_domain: "Domain"
+  notification_smtp_username: "Username"
+  notification_smtp_password: "Password"
+  notification_smtp_authentication: "Authentication"
+  notification_method_sendmail: "Sendmail"
+  notification_sendmail_location: "Location"
+  notification_sendmail_arguments: "Arguments"
+  
+  # mailing
+  option_notification_email_address_name: "Notification identity"
+  option_notification_email_address_description: "Identity of the email notifier, in the format 'Name <email@address>'"
+  option_notification_email_method_name: "Mail transport"
+  option_notification_email_method_description: "The method in which email will be sent"
+  option_notification_email_smtp_name: "SMTP transport settings"
+  option_notification_email_smtp_description: "Settings used for the SMTP mail transport"
+  option_notification_email_sendmail_name: "Sendmail transport settings"
+  option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
+  
+  # Administration tools
+  # administration_tool_<name>
+  # administration_tool_<name>_description
+  
+  no_administration_tools: "No administration tools"
+  
+  
+  # Mailing views
+  notifier_donotreply: "DO NOT REPLY TO THIS MESSAGE"
+  notifier_greeting: "Hi {{user}}"
+  notifier_new_message: "A new message entitled '{{title}}' has been posted in the project {{project}}. To view this message, visit the following URL:"
+  notifier_new_comment: "A new comment has been posted to the message {{title}}. To view this comment, visit the following URL:"
+  notifier_reset_password: "A request to reset the password for your account has been made at {{site}}. Provided you wish to continue with this request, please visit the following url:"
+  notifier_new_account: "{{user}} has created new account for you at {{site}}."
+  notifier_new_account_access: "To access this account, simply visit the following URL:"
+  notifier_new_account_access_login: "Then login using the username '{{login}}'."
+  notifier_new_account_credentials: "Then login using the following credentials:"
+  author: Author
+  
+  
+  # Search models
+  Tag: Tag
+  Comment: Comment
+  ProjectMessage: Message
+  ProjectTime: Time 
+  ProjectTask: Task
+  ProjectTaskList: Task list
+  ProjectMilestone: Milestone
+  ProjectFile: File
+  ProjectFileRevision: File revision
+  
+  search_dashboard: "{{type}}: {{name}} in {{project}}"
+  search_project: "{{type}}: {{name}}"
+  
+  # system
+  
+  product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
+  
+  # rails
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%Y-%m-%d" 
+      short: "%b %d" 
+      long: "%B %d, %Y" 
+
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    # Used in date_select and datime_select.
+    order: [ :year, :month, :day ]
+
+  time:
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z" 
+      short: "%d %b %H:%M" 
+      long: "%B %d, %Y %H:%M" 
+    am: "am" 
+    pm: "pm"
