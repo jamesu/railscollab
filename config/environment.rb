@@ -32,6 +32,7 @@ Rails::Initializer.run do |config|
   config.gem 'ferret',       :version => '>=0.11.6'
   config.gem 'icalendar',    :version => '>=1.0.2'
   config.gem 'ruby-openid',  :version => '>=2.1.2', :lib => 'openid'
+  config.gem 'acts_as_ferret',    :version => '>=0.4.4'
 
   # optional gems
   config.gem 'RedCloth',     :version => '>= 4.0.0',   :lib => 'redcloth'
