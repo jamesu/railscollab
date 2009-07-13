@@ -128,6 +128,8 @@ class Project < ActiveRecord::Base
 		end
 	end
 	
+  has_many :wiki_pages, :dependent => :destroy
+	
 	has_and_belongs_to_many :companies, :join_table => :project_companies
 	
 	before_create  :process_params
@@ -198,7 +200,7 @@ class Project < ActiveRecord::Base
 	 real_opts = { }.merge(options)
 	 real_opts[:multi] = FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) } unless tag_search
 	 
-	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_by_contents(real_query, real_opts)
+	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_with_ferret(real_query, real_opts)
 
 	 return results, results.total_hits
 	end
@@ -216,7 +218,7 @@ class Project < ActiveRecord::Base
 	 real_opts = { }.merge(options)
 	 real_opts[:multi] = FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) } unless tag_search
 	 
-	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_by_contents(real_query, real_opts)
+	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_with_ferret(real_query, real_opts)
 
 	 return results, results.total_hits
 	end

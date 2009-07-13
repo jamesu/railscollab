@@ -18,4 +18,8 @@
 
 module MilestoneHelper
   include ProjectHelper
+
+  def current_tab
+    :milestones
+  end
 end

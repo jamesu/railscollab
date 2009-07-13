@@ -18,4 +18,8 @@
 
 module TagHelper
   include ProjectHelper
+
+  def current_tab
+    :tags
+  end
 end

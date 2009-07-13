@@ -18,4 +18,8 @@
 
 module MessageHelper
   include ProjectHelper
+
+  def current_tab
+    :messages
+  end
 end

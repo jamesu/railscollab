@@ -2,14 +2,14 @@
 <html>
   <head>
   	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <% if not @active_project.nil? %>
+    <% unless @active_project.nil? %>
     <title><%= h @active_project.name %> - <%= h @page_title %> @ <%= h Company.owner.name %></title>
     <% else %>
     <title><%= h @page_title %> @ <%= h Company.owner.name %></title>
     <% end %>
     
 	<%= stylesheet_link_tag 'project_website' %>
-	<% if not @additional_stylesheets.nil?
+	<% unless @additional_stylesheets.nil?
 	  @additional_stylesheets.each do |ss| -%>
 	  <%= stylesheet_link_tag ss %>
 	  <% end %>
@@ -25,7 +25,7 @@
 <!-- head needs to go here? -->
   </head>
   <body id="body">
-	<% if !@active_project.is_active? %>
+	<% unless @active_project.is_active? %>
 		<div class="important center">
 			<h5>
 			  <%= :project_locked_header.l %>
@@ -46,11 +46,11 @@
       </div>
       <!-- /header -->
 
-      <%= render :partial => 'layouts/tabs' if not @tabbed_navigation_items.nil? %>
+      <%= render :partial => 'layouts/tabs', :object => project_tabbed_navigation %>
             
       <div id="crumbsWrapper">
         <div id="crumbsBlock">
-          <%= render :partial => 'layouts/crumbs' if not @bread_crumbs.nil? %> 
+          <%= render :partial => 'layouts/crumbs' unless @bread_crumbs.nil? %> 
           
           <% if AppConfig.search_enabled %>
           <div id="searchBox">
@@ -60,16 +60,15 @@
   @search_field_default_value = :search_box_default.l
   @last_search ||= @search_field_default_value
   @search_field_attrs = {
-	  :onfocus => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''",
-      :onblur => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''"
+    :onfocus => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''",
+    :onblur => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''"
   }
 %>
                 <%= text_field_tag 'search_id', (h @last_search), @search_field_attrs %><button type="submit"><%= :go.l %></button>
               </div>
             </form>
           </div>
-         <% end %>
-           
+          <% end %>
         </div>
       </div>
       
@@ -82,12 +81,12 @@
           <h1 id="pageTitle"><%= h @page_title %> <% if @private_object %><img src="<%= image_path('icons/private.gif') %>" alt="private"/><% end %></h1>
           <div id="pageContent">
             <div id="content" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
-              <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
+              <%= render :partial => 'layouts/actions' unless @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
               <!-- /Content -->
             </div>
-<% if not @content_for_sidebar.nil? %>
+<% unless @content_for_sidebar.nil? %>
             <div id="sidebar"><%= render :partial => @content_for_sidebar %></div>
 <% end %>
             <div class="clear"></div>

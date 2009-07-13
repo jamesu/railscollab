@@ -2,9 +2,9 @@
 <html>
   <head>
   	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title><%= "#{h(Company.owner.name)} - #{h(@page_title)}" %></title>
+    <title><%= "#{h(@page_title)} @ #{h(Company.owner.name)}" %></title>
 	<%= stylesheet_link_tag 'company_website' %>
-	<% if not @additional_stylesheets.nil?
+	<% unless @additional_stylesheets.nil?
 	  @additional_stylesheets.each do |ss| -%>
 	  <%= stylesheet_link_tag ss %>
 	  <% end %>
@@ -27,13 +27,13 @@
           <div id="userboxWrapper"><%= render :partial => 'layouts/user_box', :locals => {:user => @logged_user, :projects => @active_projects} %></div>
         </div>
       </div>
-      <!-- End header -->
+      <!-- /header -->
 
-      <%= render :partial => 'layouts/tabs' if not @tabbed_navigation_items.nil? %>
+      <%= render :partial => 'layouts/tabs', :object => @tabbed_navigation_items %>
             
       <div id="crumbsWrapper">
         <div id="crumbsBlock">
-          <%= render :partial => 'layouts/crumbs' if not @bread_crumbs.nil? %>    
+          <%= render :partial => 'layouts/crumbs' unless @bread_crumbs.nil? %>    
           
           <% if AppConfig.search_enabled %>
           <div id="searchBox">
@@ -43,7 +43,7 @@
   @search_field_default_value = :search_box_default.l
   @last_search ||= @search_field_default_value
   @search_field_attrs = {
-	  :onfocus => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''",
+    :onfocus => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''",
     :onblur => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''"
   }
 %>
@@ -51,8 +51,8 @@
               </div>
             </form>
           </div>
-         <% end %>
-       </div>
+          <% end %>
+        </div>
       </div>
       
       <!-- content wrapper -->
@@ -64,12 +64,12 @@
           <h1 id="pageTitle"><%= h @page_title %></h1>
           <div id="pageContent">
             <div id="content" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
-              <%= render :partial => 'layouts/actions' if not @page_actions.nil? %>
+              <%= render :partial => 'layouts/actions' unless @page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
-              <!-- End Content -->
+              <!-- /Content -->
             </div>
-<% if not @content_for_sidebar.nil? %>
+<% unless @content_for_sidebar.nil? %>
             <div id="sidebar"><%= render :partial => @content_for_sidebar %></div>
 <% end %>
             <div class="clear"></div>
@@ -79,7 +79,7 @@
         <!--Footer -->
         <%= render :partial => 'layouts/footer' %>
       </div>
-      <!-- End content wrapper -->
+      <!-- /content wrapper -->
       
     </div>
   </body>

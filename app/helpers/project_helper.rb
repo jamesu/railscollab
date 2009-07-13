@@ -20,7 +20,7 @@
 module ProjectHelper
   include AdministrationHelper
 
-  def project_tabbed_navigation(current)
+  def project_tabbed_navigation(current = nil)
     project_id = @active_project.id
     items = [{:id => :overview,   :url => "/project/#{project_id}/overview"}]
     items << {:id => :messages,   :url => "/project/#{project_id}/message"}
@@ -28,10 +28,17 @@ module ProjectHelper
     items << {:id => :milestones, :url => "/project/#{project_id}/milestone"}
     items << {:id => :ptime,      :url => "/project/#{project_id}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)
     items << {:id => :files,      :url => "/project/#{project_id}/files"}
+    items << {:id => :wiki,       :url => "/project/#{project_id}/wiki_pages"}
     items << {:id => :people,     :url => "/project/#{project_id}/people"}
 
-    @selected_navigation_item = current
     items
+  end
+
+  def current_tab
+    case action_name
+      when 'people' then :people
+      else :overview
+    end
   end
 
   def project_crumbs(current, extras=[])

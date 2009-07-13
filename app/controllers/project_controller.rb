@@ -391,6 +391,6 @@ class ProjectController < ApplicationController
   protected
 
   def project_layout
-    ['add', 'edit'].include?(action_name) ? 'administration' : 'project_website'
+    ['add', 'edit', 'permissions'].include?(action_name) ? 'administration' : 'project_website'
   end
 end

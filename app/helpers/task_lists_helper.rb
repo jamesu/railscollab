@@ -18,4 +18,8 @@
 
 module TaskListsHelper
   include ProjectHelper
+
+  def current_tab
+    :tasks
+  end
 end

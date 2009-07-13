@@ -119,6 +119,9 @@ ActionController::Routing::Routes.draw do |map|
                              :member => {:reorder => :any}
   map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id',
                         :member => {:status => :put}
+  map.with_options :path_prefix => 'project/:active_project' do |project|
+    WikiEngine.draw_for project
+  end
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

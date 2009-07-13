@@ -18,4 +18,8 @@
 
 module TasksHelper
   include ProjectHelper
+
+  def current_tab
+    :tasks
+  end
 end

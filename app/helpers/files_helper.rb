@@ -18,4 +18,8 @@
 
 module FilesHelper
   include ProjectHelper
+
+  def current_tab
+    :files
+  end
 end

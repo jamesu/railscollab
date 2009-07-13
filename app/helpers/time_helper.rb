@@ -20,6 +20,10 @@
 module TimeHelper
   include ProjectHelper
 
+  def current_tab
+    :ptime
+  end
+
   def task_select_list(task_list)
     items = [['None', 0]]
   	task_list.each do |task_list|

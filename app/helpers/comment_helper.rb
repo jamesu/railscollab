@@ -18,4 +18,8 @@
 
 module CommentHelper
   include ProjectHelper
+
+  def current_tab
+    nil
+  end
 end

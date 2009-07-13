@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 17) do
+ActiveRecord::Schema.define(:version => 20090711161621) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(:version => 17) do
     t.datetime "logo_updated_at"
   end
 
-  add_index "companies", ["created_on"], :name => "index_companies_on_created_on"
   add_index "companies", ["client_of_id"], :name => "index_companies_on_client_of_id"
+  add_index "companies", ["created_on"], :name => "index_companies_on_created_on"
 
   create_table "config_categories", :force => true do |t|
     t.string  "name",           :limit => 50, :default => "",    :null => false
@@ -97,8 +97,8 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer "category_order", :limit => 3,  :default => 0,     :null => false
   end
 
-  add_index "config_categories", ["name"], :name => "index_config_categories_on_name", :unique => true
   add_index "config_categories", ["category_order"], :name => "index_config_categories_on_category_order"
+  add_index "config_categories", ["name"], :name => "index_config_categories_on_name", :unique => true
 
   create_table "config_options", :force => true do |t|
     t.string  "category_name",        :limit => 30, :default => "",    :null => false
@@ -110,9 +110,9 @@ ActiveRecord::Schema.define(:version => 17) do
     t.string  "dev_comment"
   end
 
+  add_index "config_options", ["category_name"], :name => "index_config_options_on_category_name"
   add_index "config_options", ["name"], :name => "index_config_options_on_name", :unique => true
   add_index "config_options", ["option_order"], :name => "index_config_options_on_option_order"
-  add_index "config_options", ["category_name"], :name => "index_config_options_on_category_name"
 
   create_table "file_types", :force => true do |t|
     t.string  "extension",     :limit => 10, :default => "",    :null => false
@@ -173,8 +173,8 @@ ActiveRecord::Schema.define(:version => 17) do
   end
 
   add_index "project_file_revisions", ["file_id"], :name => "index_project_file_revisions_on_file_id"
-  add_index "project_file_revisions", ["updated_on"], :name => "index_project_file_revisions_on_updated_on"
   add_index "project_file_revisions", ["revision_number"], :name => "index_project_file_revisions_on_revision_number"
+  add_index "project_file_revisions", ["updated_on"], :name => "index_project_file_revisions_on_updated_on"
 
   create_table "project_files", :force => true do |t|
     t.integer  "project_id",                                :default => 0,     :null => false
@@ -231,9 +231,9 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer  "attached_files_count",                      :default => 0
   end
 
+  add_index "project_messages", ["created_on"], :name => "index_project_messages_on_created_on"
   add_index "project_messages", ["milestone_id"], :name => "index_project_messages_on_milestone_id"
   add_index "project_messages", ["project_id"], :name => "index_project_messages_on_project_id"
-  add_index "project_messages", ["created_on"], :name => "index_project_messages_on_created_on"
 
   create_table "project_milestones", :force => true do |t|
     t.integer  "project_id"
@@ -251,10 +251,10 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer  "updated_by_id"
   end
 
-  add_index "project_milestones", ["project_id"], :name => "index_project_milestones_on_project_id"
-  add_index "project_milestones", ["due_date"], :name => "index_project_milestones_on_due_date"
   add_index "project_milestones", ["completed_on"], :name => "index_project_milestones_on_completed_on"
   add_index "project_milestones", ["created_on"], :name => "index_project_milestones_on_created_on"
+  add_index "project_milestones", ["due_date"], :name => "index_project_milestones_on_due_date"
+  add_index "project_milestones", ["project_id"], :name => "index_project_milestones_on_project_id"
 
   create_table "project_task_lists", :force => true do |t|
     t.integer  "priority"
@@ -272,10 +272,10 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer  "order",           :limit => 3,   :default => 0,     :null => false
   end
 
-  add_index "project_task_lists", ["milestone_id"], :name => "index_project_task_lists_on_milestone_id"
-  add_index "project_task_lists", ["project_id"], :name => "index_project_task_lists_on_project_id"
   add_index "project_task_lists", ["completed_on"], :name => "index_project_task_lists_on_completed_on"
   add_index "project_task_lists", ["created_on"], :name => "index_project_task_lists_on_created_on"
+  add_index "project_task_lists", ["milestone_id"], :name => "index_project_task_lists_on_milestone_id"
+  add_index "project_task_lists", ["project_id"], :name => "index_project_task_lists_on_project_id"
 
   create_table "project_tasks", :force => true do |t|
     t.integer  "task_list_id"
@@ -292,10 +292,10 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer  "comments_count",                      :default => 0
   end
 
-  add_index "project_tasks", ["task_list_id"], :name => "index_project_tasks_on_task_list_id"
   add_index "project_tasks", ["completed_on"], :name => "index_project_tasks_on_completed_on"
   add_index "project_tasks", ["created_on"], :name => "index_project_tasks_on_created_on"
   add_index "project_tasks", ["order"], :name => "index_project_tasks_on_order"
+  add_index "project_tasks", ["task_list_id"], :name => "index_project_tasks_on_task_list_id"
 
   create_table "project_times", :force => true do |t|
     t.integer  "project_id"
@@ -315,9 +315,9 @@ ActiveRecord::Schema.define(:version => 17) do
     t.integer  "updated_by_id"
   end
 
-  add_index "project_times", ["project_id"], :name => "index_project_times_on_project_id"
-  add_index "project_times", ["done_date"], :name => "index_project_times_on_done_date"
   add_index "project_times", ["created_on"], :name => "index_project_times_on_created_on"
+  add_index "project_times", ["done_date"], :name => "index_project_times_on_done_date"
+  add_index "project_times", ["project_id"], :name => "index_project_times_on_project_id"
 
   create_table "project_users", :id => false, :force => true do |t|
     t.integer  "project_id",            :default => 0,     :null => false
@@ -349,6 +349,18 @@ ActiveRecord::Schema.define(:version => 17) do
 
   add_index "projects", ["completed_on"], :name => "index_projects_on_completed_on"
 
+  create_table "slugs", :force => true do |t|
+    t.string   "name"
+    t.integer  "sluggable_id"
+    t.integer  "sequence",                     :default => 1, :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.string   "scope",          :limit => 40
+    t.datetime "created_at"
+  end
+
+  add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_name_and_sluggable_type_and_scope_and_sequence", :unique => true
+  add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
   create_table "tags", :force => true do |t|
     t.integer  "project_id",                    :default => 0,     :null => false
     t.string   "tag",             :limit => 30, :default => "",    :null => false
@@ -360,8 +372,8 @@ ActiveRecord::Schema.define(:version => 17) do
   end
 
   add_index "tags", ["project_id"], :name => "index_tags_on_project_id"
-  add_index "tags", ["tag"], :name => "index_tags_on_tag"
   add_index "tags", ["rel_object_id", "rel_object_type"], :name => "index_tags_on_rel_object_id_and_rel_object_type"
+  add_index "tags", ["tag"], :name => "index_tags_on_tag"
 
   create_table "user_im_values", :id => false, :force => true do |t|
     t.integer "user_id",                  :default => 0,     :null => false
@@ -402,10 +414,38 @@ ActiveRecord::Schema.define(:version => 17) do
     t.datetime "avatar_updated_at"
   end
 
-  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["last_visit"], :name => "index_users_on_last_visit"
   add_index "users", ["company_id"], :name => "index_users_on_company_id"
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["last_login"], :name => "index_users_on_last_login"
+  add_index "users", ["last_visit"], :name => "index_users_on_last_visit"
+  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
+
+  create_table "wiki_page_versions", :force => true do |t|
+    t.integer  "wiki_page_id"
+    t.integer  "version"
+    t.string   "title"
+    t.text     "content"
+    t.boolean  "main",          :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "project_id"
+    t.integer  "created_by_id"
+  end
+
+  add_index "wiki_page_versions", ["wiki_page_id"], :name => "index_wiki_page_versions_on_wiki_page_id"
+
+  create_table "wiki_pages", :force => true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.boolean  "main",          :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "version"
+    t.integer  "project_id"
+    t.integer  "created_by_id"
+  end
+
+  add_index "wiki_pages", ["main"], :name => "index_wiki_pages_on_main"
+  add_index "wiki_pages", ["project_id"], :name => "index_wiki_pages_on_project_id"
 
 end

@@ -1,0 +1,22 @@
+WikiEngine
+==========
+
+Needs the following plugins:
+* friendly_id: git://github.com/norman/friendly_id.git
+* acts_as_versioned: git://github.com/technoweenie/acts_as_versioned.git
+
+And the following gems:
+* RedCloth
+
+You have to add wiki_pages routes to your routes.rb:
+  WikiEngine.draw_for map
+
+Generate the migrations:
+  script/generate wiki_engine
+
+If you need extend or override something of model or controller, create it
+in your app and include WikiPageBehaviour for the model, or
+WikiPageBehaviour for the controller, and add your code.
+
+Based in ActsAsWiki from http://github.com/3scale/acts_as_wiki
+Copyright (c) 2009 Sergio Cambra, released under the MIT license
