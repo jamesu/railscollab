@@ -1,13 +1,3 @@
-<%
-  @page_title = :edit_project.l
-  
-  @bread_crumbs = administration_crumbs(:edit_project, [{:title => :projects, :url => "/administration/projects"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = []
-%>
-
 <%= form_tag :controller => 'project', :action => 'edit' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :save_changes.l %></button> <%= :or.l %> <%= link_to :cancel.l, :back %>

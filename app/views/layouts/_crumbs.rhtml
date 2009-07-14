@@ -1,11 +1,13 @@
+<% unless crumbs.nil? -%>
           <div id="crumbs">
             <ul>
-<% @bread_crumbs.each do |crumb| -%>
+<% crumbs.each do |crumb| -%>
 <% if crumb[:url] %>
-              <li>&raquo; <a href="<%= crumb[:url] %>"><%= crumb[:title].class == Symbol ? crumb[:title].l : h(crumb[:title]) %></a></li>
+              <li>&raquo; <a href="<%= crumb[:url] %>"><%= crumb[:title].is_a?(Symbol) ? crumb[:title].l : h(crumb[:title]) %></a></li>
 <% else %>
-              <li>&raquo; <span><%= crumb[:title].class == Symbol ? crumb[:title].l : h(crumb[:title]) %></span></li>
+              <li>&raquo; <span><%= crumb[:title].is_a?(Symbol) ? crumb[:title].l : h(crumb[:title]) %></span></li>
 <% end %>
 <% end %>
             </ul>
           </div>
+<% end -%>

@@ -1,8 +1,3 @@
-<%
-  @page_title = :add_client.l
-  @bread_crumbs = administration_crumbs(:add_client, [{:title => :people, :url => '/administration/people'}])
-%>
-
 <%= form_tag :controller => 'company', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_client.l %></button>

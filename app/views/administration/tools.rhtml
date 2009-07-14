@@ -1,13 +1,3 @@
-<%
-  @page_title = :tools.l
-  
-  @bread_crumbs = administration_crumbs(:tools)
-  
-  @page_actions = []
-  
-  @additional_stylesheets = []
-%>
-
 <% if !@tools.empty? %>
 <div id="administrationTools">
 <% @tools.each do |tool| -%>

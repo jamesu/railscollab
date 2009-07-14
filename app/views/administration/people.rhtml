@@ -1,8 +1,4 @@
 <%
-  @page_title = :people.l
-  
-  @bread_crumbs = administration_crumbs(:people)
-  
   @page_actions = []
   
   if Company.can_be_created_by(@logged_user)
@@ -12,8 +8,6 @@
   if User.can_be_created_by(@logged_user)
   	@page_actions << {:title => :add_user, :url => '/user/add'}
   end
-  
-  @additional_stylesheets = ['project/people.css']
 %>
 
 <div id="people">

@@ -1,12 +1,3 @@
-<%
-  @page_title = :add_time.l
-  @bread_crumbs = project_crumbs(:add_time, [{:title => :ptime, :url => "/project/#{@active_project.id}/time/index"}])
-  
-  @page_actions = []
-
-  @additional_stylesheets = ['project/time']
-%>
-
 <%= form_tag :controller => 'time', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_time.l %></button>

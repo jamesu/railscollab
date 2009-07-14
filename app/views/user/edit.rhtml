@@ -1,13 +1,3 @@
-<%
-  @page_title = :edit_user.l
-  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :people, :url => '/administration/people'},
-                                                     {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = []
-%>
-
 <%= form_tag :controller => 'user', :action => 'edit', :id => @user.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_user.l %></button>

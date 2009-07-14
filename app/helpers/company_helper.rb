@@ -17,10 +17,29 @@
 #++
 
 module CompanyHelper
-  include DashboardHelper
-  include AdministrationHelper
+  def page_title
+    case action_name
+      when 'card' then :company_card.l_with_args(:company => @company.name)
+      else super
+    end
+  end
 
   def current_tab
     :people
+  end
+
+  def current_crumb
+    case action_name
+      when 'add' then :add_client
+      when 'card' then @company.name
+      when 'edit' then @company.is_owner? ? :edit_company : :edit_client
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = [{:title => :people, :url => '/administration/people'}]
+    crumbs << {:title => @company.name, :url => "/company/card/#{@company.id}"} if action_name == 'update_permissions'
+    crumbs
   end
 end

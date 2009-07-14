@@ -20,6 +20,7 @@
 class FilesController < ApplicationController
 
   layout 'project_website'
+  helper 'project_items'
 
   verify :method      => :post,
          :only        => [ :delete_folder, :delete_file, :detach_from_object ],
@@ -236,7 +237,7 @@ class FilesController < ApplicationController
         redirect_back_or_default :controller => 'files'
         return
       end
-	else
+    else
       @file_revision = @file.project_file_revisions[0]
     end
 
@@ -447,7 +448,7 @@ class FilesController < ApplicationController
   end
 
   def detach_from_object
-  	# params: manager, file_id, object_id
+    # params: manager, file_id, object_id
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
 

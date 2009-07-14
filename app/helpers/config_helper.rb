@@ -17,9 +17,19 @@
 #++
 
 module ConfigHelper
-  include AdministrationHelper
-
   def current_tab
     :configuration
+  end
+
+  def current_crumb
+    @category.display_name
+  end
+
+  def extra_crumbs
+    [{:title => :configuration, :url => "/administration/configuration"}]
+  end
+
+  def additional_stylesheets
+    ['admin/config']
   end
 end

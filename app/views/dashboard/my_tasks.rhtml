@@ -1,13 +1,3 @@
-<% 
-  @page_title = :my_tasks.l
-  @bread_crumbs = dashboard_crumbs(:my_tasks)
-  
-  if nil
-      @page_actions = [{:title => :add_project, :url=> '/project/add'}]
-  end
-  
-  @additional_stylesheets = ['dashboard/my_tasks']
-%>
 <% if @projects_milestonestasks.length > 0 %>
 <div id="myTasks">
 <% @projects_milestonestasks.each do |project| -%>

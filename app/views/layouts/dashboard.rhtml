@@ -1,20 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
   <head>
-  	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title><%= "#{h(@page_title)} @ #{h(Company.owner.name)}" %></title>
-	<%= stylesheet_link_tag 'company_website' %>
-	<% unless @additional_stylesheets.nil?
-	  @additional_stylesheets.each do |ss| -%>
-	  <%= stylesheet_link_tag ss %>
-	  <% end %>
-	<% end %>
-	<%= javascript_include_tag 'jquery.js' %>
-	<%= javascript_include_tag 'jquery-ui.js' %>
-	<%= javascript_include_tag 'jrails.js' %>
-	<%= javascript_include_tag 'application.js' %>
-	
-	<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title><%= "#{h(page_title)} @ #{h(Company.owner.name)}" %></title>
+    <%= stylesheet_link_tag 'company_website' %>
+<% additional_stylesheets.each do |ss| -%>
+    <%= stylesheet_link_tag ss %>
+<% end unless additional_stylesheets.nil? -%>
+    <%= javascript_include_tag 'jquery.js' %>
+    <%= javascript_include_tag 'jquery-ui.js' %>
+    <%= javascript_include_tag 'jrails.js' %>
+    <%= javascript_include_tag 'application.js' %>
+
+    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">
@@ -33,7 +31,7 @@
             
       <div id="crumbsWrapper">
         <div id="crumbsBlock">
-          <%= render :partial => 'layouts/crumbs' unless @bread_crumbs.nil? %>    
+          <%= render :partial => 'layouts/crumbs', :object => dashboard_crumbs %>
           
           <% if AppConfig.search_enabled %>
           <div id="searchBox">
@@ -61,10 +59,10 @@
 <% if flash[:message] %>
           <div id="<%= flash[:error] ? 'error' : 'success' %>" class="StatusMessage <%= flash[:error] ? 'flash_error' : 'flash_success' %>"><%= h flash[:message] %></div>
 <% end %>
-          <h1 id="pageTitle"><%= h @page_title %></h1>
+          <h1 id="pageTitle"><%= h page_title %></h1>
           <div id="pageContent">
             <div id="content" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
-              <%= render :partial => 'layouts/actions' unless @page_actions.nil? %>
+              <%= render :partial => 'layouts/actions' unless page_actions.nil? %>
               <!-- Content -->
               <%= yield %>
               <!-- /Content -->

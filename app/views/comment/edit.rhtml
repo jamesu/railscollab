@@ -1,8 +1,3 @@
-<%
-  @page_title = :edit_comment.l
-  @bread_crumbs = project_crumbs(:comments, [{:title => @commented_object.object_name, :url => @commented_object.object_url}])
-%>
-
 <%= form_tag( {:controller => 'comment', :action => 'edit', :id => @comment.id}, :multipart => true ) %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_comment.l %></button>

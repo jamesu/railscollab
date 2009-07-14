@@ -1,14 +1,9 @@
 <%
-  @page_title = :milestones.l
-  @bread_crumbs = project_crumbs(:milestones)
-  
   @page_actions = []
   
   if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
     @page_actions << {:title => :add_milestone, :url => "/project/#{@active_project.id}/milestone/add"}
   end
-  
-  @additional_stylesheets = ['project/milestones']
 %>
 
 <% unless @late_milestones.empty? and @calendar_milestones.empty? and @upcoming_milestones.empty? %>

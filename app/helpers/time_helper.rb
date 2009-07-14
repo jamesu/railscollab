@@ -18,22 +18,27 @@
 #++
 
 module TimeHelper
-  include ProjectHelper
-
   def current_tab
     :ptime
   end
 
-  def task_select_list(task_list)
-    items = [['None', 0]]
-  	task_list.each do |task_list|
-      items << ['--', 0]
-  	  list_name = html_escape(task_list.name)
-  	  items += task_list.project_tasks.collect do |task|
-        ["#{list_name}: #{html_escape task.text}", task.id.to_s]
-  	  end
-  	end
+  def current_crumb
+    case action_name
+      when 'index', 'by_task' then :ptime
+      when 'add' then :add_time
+      when 'edit' then :edit_time
+      when 'view' then @time.name
+      else super
+    end
+  end
 
-  	items
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :ptime, :url => "/project/#{@active_project.id}/time"} unless ['index', 'by_task'].include? action_name
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/time']
   end
 end

@@ -13,5 +13,5 @@
   </div>
   <div>
     <label for="taskAssignedTo"><%= :assign_to.l %>:</label>
-    <%= select 'task', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'taskAssignedTo'} %>
+    <%= assign_project_select 'task', 'assigned_to_id', @active_project, :id => 'taskAssignedTo' %>
   </div>

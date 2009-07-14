@@ -1,12 +1,3 @@
-<%
-  @page_title = :update_permissions.l
-  
-  @bread_crumbs = administration_crumbs(:update_permissions, [{:title => :people, :url => "/administration/people"}, {:title => @company.name, :url => "/company/card/#{@company.id}"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = ['project/permissions.css']
-%>
 <% if @projects.length > 0 %>
 <div id="companyPermissions">
   <div class="hint">

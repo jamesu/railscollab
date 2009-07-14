@@ -1,15 +1,3 @@
-<%
-  @page_title = :add_user.l
-  if @logged_user.company.is_owner?
-	  @bread_crumbs = administration_crumbs(:add_user, [{:title => :people, :url => '/administration/people'},
-	                                                     {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}])
-  end
-  
-  @page_actions = []
-  
-  @additional_stylesheets = []
-%>
-
 <%= form_tag :controller => 'user', :action => 'add' %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_user.l %></button>

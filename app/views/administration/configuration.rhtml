@@ -1,13 +1,3 @@
-<%
-  @page_title = :configuration.l
-  
-  @bread_crumbs = administration_crumbs(:configuration)
-  
-  @page_actions = []
-  
-  @additional_stylesheets = []
-%>
-
 <div id="configuration">
 <% @categories.each do |category| -%>
 <% if !category.options.empty? %>

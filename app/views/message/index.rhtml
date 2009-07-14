@@ -1,8 +1,4 @@
 <%
-  @page_title = :messages.l
-  
-  @bread_crumbs = project_crumbs(:messages)
-  
   @page_actions = []
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
     @page_actions += [
@@ -12,8 +8,6 @@
     	{:title => :add_category, :url => "/project/#{@active_project.id}/message/add_category"},
     ]
   end
-  
-  @additional_stylesheets = ['project/messages']
 %>
 
 <% if not @messages.empty? %>

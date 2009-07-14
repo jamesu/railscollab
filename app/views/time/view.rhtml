@@ -1,11 +1,3 @@
-<%
-  @page_title = (h @time.name)
-  @bread_crumbs = project_crumbs(@time.name, [{:title => :ptime, :url => "/project/#{@active_project.id}/time"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = ['project/time']
-%>
 <div id="times">
 <%= render :partial => 'time/view_time', :collection => [@time] %>
 </div>

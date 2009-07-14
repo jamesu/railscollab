@@ -1,8 +1,4 @@
 <%
-  @page_title = :edit_message_category.l
-  
-  @bread_crumbs = project_crumbs(:edit_category, [{:title => :messages, :url => "/project/#{@active_project.id}/message"}])
-  
   @page_actions = []
   
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
@@ -12,8 +8,6 @@
   if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
     @page_actions << {:title => :add_category, :url => "/project/#{@active_project.id}/message/add_category"}
   end
-  
-  @additional_stylesheets = ['project/messages']
 %>
 <%= form_tag :controller => 'message', :action => 'edit_category', :id => @category.id %>
 <%= render :partial => 'category_form' %>

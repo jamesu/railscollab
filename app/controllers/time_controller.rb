@@ -20,6 +20,7 @@
 class TimeController < ApplicationController
 
   layout 'project_website'
+  helper 'project_items'
 
   verify :method      => :post,
   		 :only        => :delete,

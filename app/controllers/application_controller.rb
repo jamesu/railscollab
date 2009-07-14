@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   include LoginSystem
 
   protect_from_forgery
+  helper :navigation
 
   before_filter :reload_owner
   before_filter :login_required

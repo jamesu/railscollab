@@ -17,9 +17,28 @@
 #++
 
 module TaskListsHelper
-  include ProjectHelper
-
   def current_tab
     :tasks
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :tasks
+      when 'new' then :add_task_list
+      when 'edit' then :edit_task_list
+      when 'show' then @task_list.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :tasks, :url => task_lists_path} unless action_name == 'index'
+    crumbs << {:title => @message.project_message_category.name, :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"} if action_name == 'view'
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/task_list']
   end
 end

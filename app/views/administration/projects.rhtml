@@ -1,15 +1,9 @@
 <%
-  @page_title = :projects.l
-  
-  @bread_crumbs = administration_crumbs(:projects)
-  
   @page_actions = []
   
   if Project.can_be_created_by(@logged_user)
   	@page_actions << {:title => :add_project, :url => '/project/add'}
   end
-  
-  @additional_stylesheets = []
 %>
 <% if @projects.length > 0 %>
 <table id="projects">

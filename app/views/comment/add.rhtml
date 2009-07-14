@@ -1,9 +1,3 @@
-<%
-
-  @page_title = :add_comment.l
-  @bread_crumbs = project_crumbs(:add_comment, [{:title => @commented_object.object_name, :url => @commented_object.object_url}])
-%>
-
 <%= form_tag( {:controller => 'comment', :action => 'add', :object_type => @commented_object.class.to_s , :object_id => @commented_object.id}, :multipart => true ) %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_comment.l %></button>

@@ -1,8 +1,3 @@
-<%
-  @page_title = @company.is_owner? ? :edit_company.l : :edit_client.l
-  @bread_crumbs = administration_crumbs((@company.is_owner? ? :edit_company.l : :edit_client.l), [{:title => :people, :url => '/administration/people'}])
-%>
-
 <%= form_tag :controller => 'company', :action => 'edit', :id => @company.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_company.l %></button>

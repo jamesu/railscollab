@@ -1,19 +1,13 @@
 <%
-  @page_title = :edit_file.l
-  
-  @bread_crumbs = project_crumbs(:edit_file, [{:title => :files, :url => "/project/#{@active_project.id}/files"}])
-  
   @page_actions = []
   
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
-	@page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
+    @page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
   end
 
   if ProjectFolder.can_be_created_by(@logged_user, @active_project)
     @page_actions << {:title => :add_folder, :url => "/project/#{@active_project.id}/files/add_folder"}
   end
-  
-  @additional_stylesheets = ['project/files']
 %>
 <%= form_tag( {:controller => 'files', :action => 'edit_file', :id => @file.id}, :multipart => true ) %>
 <%= render :partial => 'file_form' %>

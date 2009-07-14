@@ -17,10 +17,29 @@
 #++
 
 module WikiPagesHelper
-  include ProjectHelper
   include WikiEngine::Helper
 
   def current_tab
     :wiki
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :wiki
+      when 'new' then :add_page
+      when 'edit' then :edit_page
+      when 'show' then @wiki_page.title
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :wiki, :url => wiki_pages_path} unless action_name == 'index'
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/wiki']
   end
 end

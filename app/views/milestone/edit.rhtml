@@ -1,12 +1,3 @@
-<%
-  @page_title = :edit_milestone.l
-  @bread_crumbs = project_crumbs(:edit_milestone, [{:title => :milestones, :url => "/project/#{@active_project.id}/milestone/index"}])
-  
-  @page_actions = []
-
-  @additional_stylesheets = ['project/milestones']
-%>
-
 <%= form_tag :controller => 'milestone', :action => 'edit', :id => @milestone.id %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_milestone.l %></button>

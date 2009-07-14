@@ -1,10 +1,4 @@
 <%
-  @page_title = @current_folder.nil? ? :files.l : :folder_name.l_with_args(:folder => @current_folder.name) 
-  
-  crumb_list = [{:title => :files, :url => "/project/#{@active_project.id}/files"}]
-  crumb_list << {:title => @current_folder.name, :url => url_for({:controller => 'files', :action => 'browse_folder', :id => @current_folder.id})} unless @current_folder.nil?
-  @bread_crumbs = project_crumbs(:index, crumb_list)
-  
   @page_actions = []
   
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
@@ -18,8 +12,6 @@
   if ProjectFolder.can_be_created_by(@logged_user, @active_project)
     @page_actions << {:title => :add_folder, :url => "/project/#{@active_project.id}/files/add_folder"}
   end
-  
-  @additional_stylesheets = ['project/files']
 %>
 <% if @files.empty? %>
 

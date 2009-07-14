@@ -4,12 +4,12 @@
     <%= text_field 'time', 'name', :id => 'timeFormName', :class => 'long' %>
   </div>
 
-<div id="openTaskLists">
+  <div id="openTaskLists">
 <% if @open_task_lists.length > 0 %>
-	<label for="timeOpenTasks"><%= :open_tasks.l %>:</label>
-    <%= select 'time', 'open_task_id', task_select_list(@open_task_lists), {}, {:id => 'timeOpenTasks'} %>
+    <label for="timeOpenTasks"><%= :open_tasks.l %>:</label>
+    <%= task_collection_select 'time', 'open_task_id', @open_task_lists, :id => 'timeOpenTasks' %>
 <% end %>
-</div>
+  </div>
 
   <div>
     <label for="timeFormHours"><%= :hours.l %>: <span class="label_required">*</span></label>
@@ -40,6 +40,6 @@
   <div class="formBlock">
     <div>
       <label for="timeFormAssignedTo"><%= :assign_to.l %>:</label>
-      <%= select 'time', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'timeFormAssignedTo'} %>
+      <%= assign_project_select 'time', 'assigned_to_id', @active_project, :id => 'timeFormAssignedTo' %>
     </div>
   </div>

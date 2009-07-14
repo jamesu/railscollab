@@ -1,15 +1,3 @@
-<%
-  @page_title = :permissions.l
-  
-  @bread_crumbs = administration_crumbs(:permissions, [{:title => :people, :url => "/project/#{@active_project.id}/people"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = ['project/permissions.css']
-  
-  company_list = []
-%>
-
 <% if @companies.length > 0%>
 <%= form_tag :controller => 'project', :action => 'permissions' %>
 <div id="projectCompanies">

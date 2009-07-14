@@ -17,9 +17,15 @@
 #++
 
 module CommentHelper
-  include ProjectHelper
-
   def current_tab
     nil
+  end
+
+  def current_crumb
+    "#{action_name}_comment".to_sym
+  end
+
+  def extra_crumbs
+    [{:title => @commented_object.object_name, :url => @commented_object.object_url}]
   end
 end

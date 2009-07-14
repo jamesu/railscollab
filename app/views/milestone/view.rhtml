@@ -1,7 +1,4 @@
 <%
-  @page_title = @milestone.name
-  @bread_crumbs = project_crumbs(@milestone.name, [{:title => :milestones, :url => "/project/#{@active_project.id}/milestone/index"}])
-  
   @page_actions = []
   
   if not @milestone.is_completed?
@@ -12,8 +9,6 @@
         @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
       end
   end
-
-  @additional_stylesheets = ['project/milestones']
 %>
 <div id="milestones">
 <%= render :partial => 'view_milestone', :collection => [@milestone] %>

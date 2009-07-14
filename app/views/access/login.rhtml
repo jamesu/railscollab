@@ -1,5 +1,3 @@
-<% @page_title = :login.l %>
-
 <div id="normal_login" <% if @use_openid %>style="display: none;" <% end %>>
 <%= form_tag :controller => 'access', :action => 'login' %>
   <div id="loginUsernameDiv">

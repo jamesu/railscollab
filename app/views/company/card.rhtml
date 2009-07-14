@@ -1,8 +1,1 @@
-<%
-
-  @page_title = :company_card.l_with_args(:company => h(@company.name))
-  @bread_crumbs = administration_crumbs(@company.name, [{:title => :people, :url => '/administration/people'}])
-%>
-<%=
-  render :partial => 'company/company_card', :collection => [@company]
-%>
+<%= render :partial => 'company/company_card', :collection => [@company] %>

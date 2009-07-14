@@ -73,6 +73,7 @@ en-US:
   edit_message_category: Edit message category
   edit_category: Edit category
   view_message: View message
+  category_messages: "Messages of category {{category}}"
   add_milestone: Add milestone
   edit_milestone: Edit milestone
   add_task_list: Add task list
@@ -85,6 +86,8 @@ en-US:
   edit_project: Edit project
   user_card: User card of {{user}}
   folder_name: "Folder : {{folder}}"
+  add_page: Add page
+  edit_page: Edit page
   company_card: "Company card of {{company}}"
   reset_password: Reset password
   set_password: Set password
@@ -460,6 +463,7 @@ en-US:
   companies_involved_in: "Companies involved in project"
   tasks_in_list: "In {{list}}"
   anyone: Anyone
+  none: None
   project: Project
   page: Page
   

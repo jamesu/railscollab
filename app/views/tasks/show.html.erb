@@ -1,14 +1,8 @@
 <%
-  @page_title = @task.text
-  
   @bread_crumbs = project_crumbs(@task.text, [
   	{:title => :tasks, :url => "/project/#{@active_project.id}/task_lists"},
   	{:title => @task.task_list.name, :url => "/project/#{@active_project.id}/task_lists/#{@task_list.id}"}
   ])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = ['project/task_list', 'project/task']
 %>
 
 <div class="task">

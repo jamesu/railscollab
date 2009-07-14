@@ -20,6 +20,7 @@
 class MessageController < ApplicationController
 
   layout 'project_website'
+  helper 'project_items'
 
   verify :method      => :post,
          :only        => [ :delete, :subscribe, :unsubscribe, :delete_category ],

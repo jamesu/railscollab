@@ -1,12 +1,7 @@
 <%
-  @page_title = :dashboard.l
-  @bread_crumbs = dashboard_crumbs(:overview)
-  
   if @logged_user.is_admin?
       @page_actions = [{:title => :add_project, :url=> '/project/add'}]
   end
-  
-  @additional_stylesheets = ['project/project_log', 'application_logs']
 %>
 <% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
 <div class="hint">

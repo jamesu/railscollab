@@ -17,23 +17,27 @@
 #++
 
 module DashboardHelper
-  def dashboard_tabbed_navigation
-    items = [{:id => :overview,       :url => '/dashboard/index'},
-             {:id => :my_projects,    :url => '/dashboard/my_projects'},
-             {:id => :my_tasks,       :url => '/dashboard/my_tasks'},
-             {:id => :milestones,     :url => '/dashboard/milestones'}]
-  end
-
   def current_tab
     case action_name
-      when 'index' then :overview
+      when 'index', 'search' then :overview
       else action_name.to_sym
     end
   end
 
-  def dashboard_crumbs(current)
-    [{:title => :dashboard, :url => '/dashboard'},
-     {:title => current}]
+  def current_crumb
+    case action_name
+      when 'index' then :overview
+      when 'search' then :search_results
+      else super
+    end
+  end
+
+  def additional_stylesheets
+    case action_name
+      when 'index' then ['project/project_log', 'application_logs']
+      when 'milestones', 'my_tasks' then ['dashboard/my_tasks']
+      when 'search' then ['project/search_results']
+    end
   end
 
   def new_account_steps(user)

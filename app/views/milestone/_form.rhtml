@@ -24,7 +24,7 @@
   <div class="formBlock">
     <div>
       <label for="milestoneFormAssignedTo"><%= :assign_to.l %>:</label>
-      <%= select 'milestone', 'assigned_to_id', assign_select_options(@active_project), {}, {:id => 'milestoneFormAssignedTo'} %>
+      <%= assign_project_select 'milestone', 'assigned_to_id', @active_project, :id => 'milestoneFormAssignedTo' %>
     </div>
     <div><%= check_box_tag 'send_notification', '1', params[:send_notification], :id => 'milestoneFormSendNotification', :class => 'checkbox'  %> <label for="milestoneFormSendNotification" class="checkbox"><%= :send_email_notification_to_user.l %></label></div>
   </div>

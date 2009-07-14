@@ -17,9 +17,27 @@
 #++
 
 module MilestoneHelper
-  include ProjectHelper
-
   def current_tab
     :milestones
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :milestones
+      when 'add' then :add_milestone
+      when 'edit' then :edit_milestone
+      when 'view' then @milestone.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :milestones, :url => "/project/#{@active_project.id}/milestone"} unless action_name == 'index'
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/milestones']
   end
 end

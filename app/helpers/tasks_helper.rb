@@ -17,9 +17,31 @@
 #++
 
 module TasksHelper
-  include ProjectHelper
-
   def current_tab
     :tasks
+  end
+
+  def current_crumb
+    case action_name
+      when 'new' then :add_task
+      when 'edit' then :edit_task
+      when 'show' then truncate(@task.text, 25)
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :tasks, :url => task_lists_path}
+    unless @task_list.nil?
+      crumbs << {:title => @task_list.name, :url => task_list_path(:id => @task_list.id)}
+    else
+      crumbs << {:title => @logged_user.display_name, :url => "/dashboard/my_tasks"}
+    end
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/task_list', 'project/task'] if action_name == 'show'
   end
 end

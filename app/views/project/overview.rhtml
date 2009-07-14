@@ -1,7 +1,4 @@
 <%
-  @page_title = :overview.l
-  @bread_crumbs = project_crumbs(:overview)
-  
   @page_actions = []
   
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
@@ -19,8 +16,6 @@
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
     @page_actions << {:title => :add_file, :url=> "/project/#{@active_project.id}/files/add_file"}
   end
-  
-  @additional_stylesheets = ['project/project_log', 'application_logs']
 %>
 <% if @active_project.description.chop and @active_project.show_description_in_overview %>
 <div class="hint">

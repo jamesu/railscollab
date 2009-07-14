@@ -1,14 +1,9 @@
 <%
-  @page_title = :people.l
-  @bread_crumbs = project_crumbs(:people)
-  
   @page_actions = []
   
   if @project.can_be_managed_by(@logged_user)
     @page_actions << {:title => :permissions, :url=> "/project/#{@active_project.id}/permissions"}
   end
-  
-  @additional_stylesheets = ['project/people']
 %>
 <div id="people">
 <%= render :partial => 'company/people_list', :collection => @project_companies %>

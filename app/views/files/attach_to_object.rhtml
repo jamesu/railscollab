@@ -1,10 +1,3 @@
-<%
-  @page_title = :attach_files.l
-  
-  @bread_crumbs = project_crumbs(:attach_files, [{:title => :files, :url => "/project/#{@active_project.id}/files"}])
-  
-  @additional_stylesheets = ['project/attach_files']
-%>
 <%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :multipart => true) %>
 
   <div class="hint"><%= :hint_attach_files.l_with_args(:link => "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name)}</a>") %></div>

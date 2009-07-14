@@ -17,8 +17,12 @@
 #++
 
 module UserHelper
-  include AdministrationHelper
-  include DashboardHelper
+  def page_title
+    case action_name
+      when 'card' then :user_card.l_with_args(:user => @user.display_name)
+      else super
+    end
+  end
 
   def administration_tabbed_navigation
     super if @logged_user.company.is_owner?
@@ -26,5 +30,27 @@ module UserHelper
 
   def current_tab
     :people
+  end
+
+  def administration_crumbs
+    super if @logged_user.company.is_owner?
+  end
+
+  def current_crumb
+    case action_name
+      when 'add' then :add_user
+      when 'card' then @user.display_name
+      when 'edit' then :edit_user
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = [
+      {:title => :people, :url => '/administration/people'},
+      {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}
+    ]
+    crumbs << {:title => @user.display_name, :url => "/user/card/#{@user.id}"} if action_name == 'update_permissions'
+    crumbs
   end
 end

@@ -17,9 +17,38 @@
 #++
 
 module MessageHelper
-  include ProjectHelper
+  def page_title
+    case action_name
+      when 'category' then :category_messages.l_with_args(:category => @current_category.name)
+      else super
+    end
+  end
 
   def current_tab
     :messages
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :messages
+      when 'add_category' then :add_message_category
+      when 'add' then :add_message
+      when 'edit_category' then :edit_message_category
+      when 'edit' then :edit_message
+      when 'view' then @message.title
+      when 'category' then @current_category.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :messages, :url => "/project/#{@active_project.id}/message"} unless action_name == 'index'
+    crumbs << {:title => @message.project_message_category.name, :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"} if action_name == 'view'
+    crumbs
+  end
+
+  def additional_stylesheets
+    ['project/messages']
   end
 end

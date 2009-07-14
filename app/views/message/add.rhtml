@@ -1,13 +1,3 @@
-<%
-  @page_title = :add_message.l
-  
-  @bread_crumbs = project_crumbs(:add_message, [{:title => :messages, :url => "/project/#{@active_project.id}/message"}])
-  
-  @page_actions = []
-  
-  @additional_stylesheets = ['project/messages']
-%>
-
 <%= form_tag( {:controller => 'message', :action => 'add'}, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => true} %>
     <button class="submit" type="submit"><%= :add_message.l %></button>

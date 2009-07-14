@@ -17,21 +17,18 @@
 #++
 
 module AdministrationHelper
-  def administration_tabbed_navigation
-    items = [{:id => :index,         :url => '/administration/index'},
-	           {:id => :people,       :url => '/administration/people'},
-	           {:id => :projects,      :url => '/administration/projects'},
-	           {:id => :configuration, :url => '/administration/configuration'},
-	           {:id => :tools,         :url => '/administration/tools'}]
-	          #{:id => :upgrade,       :url => '/administration/upgrade'}]
+  def page_title
+    case action_name
+      when 'index' then :administration.l
+      else super
+    end
   end
 
   def current_tab
     action_name.to_sym
   end
 
-  def administration_crumbs(current, extras=[])
-    [{:title => :dashboard,      :url => '/dashboard'},
-	 {:title => :administration, :url => '/administration'}] + extras + [{:title => current}]
+  def additional_stylesheets
+    ['project/people'] if action_name == 'people'
   end
 end
