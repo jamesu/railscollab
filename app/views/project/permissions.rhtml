@@ -1,7 +1,6 @@
 <%
   @page_title = :permissions.l
   
-  @tabbed_navigation_items = administration_tabbed_navigation(:projects)
   @bread_crumbs = administration_crumbs(:permissions, [{:title => :people, :url => "/project/#{@active_project.id}/people"}])
   
   @page_actions = []

@@ -1,7 +1,6 @@
 <%
   @page_title = @task.text
   
-  @tabbed_navigation_items = project_tabbed_navigation(:tasks)
   @bread_crumbs = project_crumbs(@task.text, [
   	{:title => :tasks, :url => "/project/#{@active_project.id}/task_lists"},
   	{:title => @task.task_list.name, :url => "/project/#{@active_project.id}/task_lists/#{@task_list.id}"}

@@ -1,6 +1,5 @@
 <%
   @page_title = :dashboard.l
-  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
   @bread_crumbs = dashboard_crumbs(:overview)
   
   if @logged_user.is_admin?

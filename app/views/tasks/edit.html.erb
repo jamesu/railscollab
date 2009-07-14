@@ -1,6 +1,5 @@
 <%
   @page_title = :edit_task.l
-  @tabbed_navigation_items = project_tabbed_navigation(:tasks)
   
   extra_crumbs = [{:title => :tasks, :url => task_lists_path}]
   if not @task_list.nil?

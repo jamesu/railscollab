@@ -1,6 +1,5 @@
 <%
   @page_title = :edit_milestone.l
-  @tabbed_navigation_items = project_tabbed_navigation(:milestones)
   @bread_crumbs = project_crumbs(:edit_milestone, [{:title => :milestones, :url => "/project/#{@active_project.id}/milestone/index"}])
   
   @page_actions = []

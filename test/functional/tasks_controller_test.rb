@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class FeedControllerTest < ActionController::TestCase
+class TasksControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   def test_truth
     assert true

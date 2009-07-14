@@ -1,7 +1,6 @@
 <%
   @page_title = @category.display_name
   
-  @tabbed_navigation_items = administration_tabbed_navigation(:configuration)
   @bread_crumbs = administration_crumbs(@category.display_name, [{:title => :configuration, :url => "/administration/configuration"}])
   
   @page_actions = []

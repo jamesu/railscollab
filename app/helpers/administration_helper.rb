@@ -17,16 +17,17 @@
 #++
 
 module AdministrationHelper
-  def administration_tabbed_navigation(current)
+  def administration_tabbed_navigation
     items = [{:id => :index,         :url => '/administration/index'},
 	           {:id => :people,       :url => '/administration/people'},
 	           {:id => :projects,      :url => '/administration/projects'},
 	           {:id => :configuration, :url => '/administration/configuration'},
 	           {:id => :tools,         :url => '/administration/tools'}]
 	          #{:id => :upgrade,       :url => '/administration/upgrade'}]
+  end
 
-	@selected_navigation_item = current
-	return items
+  def current_tab
+    action_name.to_sym
   end
 
   def administration_crumbs(current, extras=[])

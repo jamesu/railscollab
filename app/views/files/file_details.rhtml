@@ -1,6 +1,5 @@
 <%
   @page_title = @file.filename
-  @tabbed_navigation_items = project_tabbed_navigation(:files)
   
   calc_crumbs = [{:title => :files, :url => "/project/#{@active_project.id}/files"}]
   calc_crumbs << {:title => (h @folder.name), :url => @folder.object_url} unless @folder.nil?

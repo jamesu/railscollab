@@ -1,6 +1,5 @@
 <%
   @page_title = @company.is_owner? ? :edit_company.l : :edit_client.l
-  @tabbed_navigation_items = administration_tabbed_navigation(:people)
   @bread_crumbs = administration_crumbs((@company.is_owner? ? :edit_company.l : :edit_client.l), [{:title => :people, :url => '/administration/people'}])
 %>
 

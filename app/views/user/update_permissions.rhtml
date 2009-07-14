@@ -1,7 +1,6 @@
 <%
     @page_title = :update_permissions.l
   
-    @tabbed_navigation_items = administration_tabbed_navigation(:people)
     @bread_crumbs = administration_crumbs(:update_permissions, [{:title => (@user.company.is_owner? ? :company : :clients) , :url => "/company/card/#{@user.company.id}"}, {:title => @user.display_name, :url => "/user/card/#{@user.id}"}])
     
     @page_actions = []
@@ -14,7 +13,7 @@
 
 <% unless @projects.empty? %>
 <div id="userPermissions">
-  <%= form_tag :controller => 'account', :action => 'update_permissions', :id => @user.id %>
+  <%= form_tag :action => 'update_permissions', :id => @user.id %>
     <div id="userProjects">
       <table class="blank">
 <%= render :partial => 'project/permissions.rhtml', :locals => {:user => @user}, :collection => @projects %>

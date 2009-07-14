@@ -1,6 +1,5 @@
 <%
   @page_title = @current_folder.nil? ? :files.l : :folder_name.l_with_args(:folder => @current_folder.name) 
-  @tabbed_navigation_items = project_tabbed_navigation(:files)
   
   crumb_list = [{:title => :files, :url => "/project/#{@active_project.id}/files"}]
   crumb_list << {:title => @current_folder.name, :url => url_for({:controller => 'files', :action => 'browse_folder', :id => @current_folder.id})} unless @current_folder.nil?

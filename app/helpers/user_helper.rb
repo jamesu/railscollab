@@ -19,4 +19,12 @@
 module UserHelper
   include AdministrationHelper
   include DashboardHelper
+
+  def administration_tabbed_navigation
+    super if @logged_user.company.is_owner?
+  end
+
+  def current_tab
+    :people
+  end
 end

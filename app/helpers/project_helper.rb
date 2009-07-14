@@ -20,7 +20,7 @@
 module ProjectHelper
   include AdministrationHelper
 
-  def project_tabbed_navigation(current = nil)
+  def project_tabbed_navigation
     project_id = @active_project.id
     items = [{:id => :overview,   :url => "/project/#{project_id}/overview"}]
     items << {:id => :messages,   :url => "/project/#{project_id}/message"}
@@ -37,6 +37,7 @@ module ProjectHelper
   def current_tab
     case action_name
       when 'people' then :people
+      when 'add', 'edit', 'permissions' then :projects
       else :overview
     end
   end

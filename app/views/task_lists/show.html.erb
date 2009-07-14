@@ -1,6 +1,5 @@
 <%
   @page_title = h @task_list.name
-  @tabbed_navigation_items = project_tabbed_navigation(:tasks)
   @bread_crumbs = project_crumbs(@task_list.name, [{:title => :tasks, :url => task_lists_path}])
   
   @page_actions = []

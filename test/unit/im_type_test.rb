@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class IMTypeTest < ActiveSupport::TestCase
   fixtures :im_types

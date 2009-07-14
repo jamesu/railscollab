@@ -18,4 +18,8 @@
 
 module ConfigHelper
   include AdministrationHelper
+
+  def current_tab
+    :configuration
+  end
 end

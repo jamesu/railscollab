@@ -1,7 +1,8 @@
 <%
   @page_title = :user_card.l_with_args({:user => @user.display_name})
-  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
-  @bread_crumbs = dashboard_crumbs(h @logged_user.display_name)
+  @bread_crumbs = administration_crumbs(h(@user.display_name), [
+                                    {:title => :people, :url => '/administration/people'},
+                                    {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}])
   
   @page_actions = []
   if @user.profile_can_be_updated_by(@logged_user)
@@ -9,7 +10,7 @@
   end
   
   if @user.permissions_can_be_updated_by(@logged_user)
-  	@page_actions << {:title => :update_permissions, :url => "/account/update_permissions/#{@user.id}"}
+  	@page_actions << {:title => :update_permissions, :url => "/user/update_permissions/#{@user.id}"}
   end
   
   @additional_stylesheets = []

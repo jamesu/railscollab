@@ -109,7 +109,7 @@ module ApplicationHelper
 	   if @active_project.nil?
 	     actions += [
 	       {:name => :delete.l, :url => "/user/delete/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l},
-	       {:name => :permissions.l, :url => "/account/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)}]
+	       {:name => :permissions.l, :url => "/user/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)}]
 	   else
 	     actions << {:name => :remove.l, :url => "/project/#{@active_project.id}/remove_user/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_remove.l}
 	   end

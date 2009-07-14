@@ -19,4 +19,8 @@
 module CompanyHelper
   include DashboardHelper
   include AdministrationHelper
+
+  def current_tab
+    :people
+  end
 end

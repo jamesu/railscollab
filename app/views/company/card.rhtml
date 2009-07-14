@@ -1,8 +1,7 @@
 <%
 
   @page_title = :company_card.l_with_args(:company => h(@company.name))
-  @tabbed_navigation_items = dashboard_tabbed_navigation(:overview)
-  @bread_crumbs = dashboard_crumbs(@company.name)
+  @bread_crumbs = administration_crumbs(@company.name, [{:title => :people, :url => '/administration/people'}])
 %>
 <%=
   render :partial => 'company/company_card', :collection => [@company]

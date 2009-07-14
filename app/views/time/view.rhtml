@@ -1,6 +1,5 @@
 <%
   @page_title = (h @time.name)
-  @tabbed_navigation_items = project_tabbed_navigation(:ptime)
   @bread_crumbs = project_crumbs(@time.name, [{:title => :ptime, :url => "/project/#{@active_project.id}/time"}])
   
   @page_actions = []

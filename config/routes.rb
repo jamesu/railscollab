@@ -21,13 +21,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'feed/:user/:token/:action.:format',          :controller => 'feed'
   map.connect 'feed/:user/:token/:action.:project.:format', :controller => 'feed'
 
-  # Account routes
-  map.connect 'account',                :controller => 'account'
-
-  %w[update_permissions].each do |action|
-  	map.connect 'account/:action/:id',         :controller => 'account', :action => action
-  	map.connect 'account/:action/:id.:format', :controller => 'account', :action => action
-  end
 
   # Company routes
   map.connect 'company/logo/:id.png', :controller => 'company', :action => 'logo', :format => 'png'

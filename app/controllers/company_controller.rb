@@ -19,7 +19,7 @@
 
 class CompanyController < ApplicationController
 
-  layout 'dashboard'
+  layout 'administration'
 
   verify :method      => :post,
          :only        => [ :delete_client, :delete_logo, :hide_welcome_info ],

@@ -1,7 +1,6 @@
 <%
   @page_title = @message.title
   
-  @tabbed_navigation_items = project_tabbed_navigation(:messages)
   @bread_crumbs = project_crumbs(@message.title, [
   	{:title => :messages, :url => "/project/#{@active_project.id}/message"},
   	{:title => @message.project_message_category.name, :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"}

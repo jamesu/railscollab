@@ -17,14 +17,18 @@
 #++
 
 module DashboardHelper
-  def dashboard_tabbed_navigation(current)
+  def dashboard_tabbed_navigation
     items = [{:id => :overview,       :url => '/dashboard/index'},
              {:id => :my_projects,    :url => '/dashboard/my_projects'},
              {:id => :my_tasks,       :url => '/dashboard/my_tasks'},
              {:id => :milestones,     :url => '/dashboard/milestones'}]
+  end
 
-    @selected_navigation_item = current
-    return items
+  def current_tab
+    case action_name
+      when 'index' then :overview
+      else action_name.to_sym
+    end
   end
 
   def dashboard_crumbs(current)

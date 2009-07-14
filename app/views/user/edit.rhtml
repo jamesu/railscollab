@@ -1,7 +1,7 @@
 <%
   @page_title = :edit_user.l
-  @tabbed_navigation_items = administration_tabbed_navigation(:people)
-  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :people, :url => '/administration/people'}])
+  @bread_crumbs = administration_crumbs(:edit_user, [{:title => :people, :url => '/administration/people'},
+                                                     {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}])
   
   @page_actions = []
   

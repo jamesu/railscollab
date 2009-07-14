@@ -1,7 +1,6 @@
 <%
   @page_title = :add_client.l
-  @tabbed_navigation_items = administration_tabbed_navigation(:clients)
-  @bread_crumbs = administration_crumbs(:add_client, [{:title => :clients, :url => '/administration/clients'}])
+  @bread_crumbs = administration_crumbs(:add_client, [{:title => :people, :url => '/administration/people'}])
 %>
 
 <%= form_tag :controller => 'company', :action => 'add' %>

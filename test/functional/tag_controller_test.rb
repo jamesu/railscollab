@@ -1,16 +1,6 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'tag_controller'
+require 'test_helper'
 
-# Re-raise errors caught by the controller.
-class TagController; def rescue_action(e) raise e end; end
-
-class TagControllerTest < Test::Unit::TestCase
-  def setup
-    @controller = TagController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-  end
-
+class TagControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   def test_truth
     assert true
