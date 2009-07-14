@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class IMTypeTest < Test::Unit::TestCase
+class IMTypeTest < ActiveSupport::TestCase
   fixtures :im_types
 
   # Replace this with your real tests.

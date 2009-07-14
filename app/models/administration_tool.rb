@@ -19,6 +19,7 @@
 
 class AdministrationTool < ActiveRecord::Base
   include ActionController::UrlWriter
+  validates_uniqueness_of :name
 
   def self.admin_list
     AdministrationTool.all(:order => "#{self.connection.quote_column_name 'order'}")

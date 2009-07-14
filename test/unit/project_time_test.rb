@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ProjectTimeTest < Test::Unit::TestCase
+class ProjectTimeTest < ActiveSupport::TestCase
   fixtures :project_times
 
   # Replace this with your real tests.

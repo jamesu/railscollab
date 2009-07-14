@@ -19,6 +19,7 @@ Spec::Runner.configure do |config|
   @logged_user = User.create! do |o|
     o.username = 'mock username'
     o.password = 'mock password'
+    o.time_zone = 'UTC'
   end
 
   # == Fixtures

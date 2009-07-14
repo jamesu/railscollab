@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class AttachedFileTest < Test::Unit::TestCase
+class AttachedFileTest < ActiveSupport::TestCase
   fixtures :attached_files
 
   # Replace this with your real tests.

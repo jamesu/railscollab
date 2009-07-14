@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ProjectMessageCategoryTest < Test::Unit::TestCase
+class ProjectMessageCategoryTest < ActiveSupport::TestCase
   fixtures :project_message_categories
 
   # Replace this with your real tests.

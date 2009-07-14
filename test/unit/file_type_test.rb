@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class FileTypeTest < Test::Unit::TestCase
+class FileTypeTest < ActiveSupport::TestCase
   fixtures :file_types
 
   # Replace this with your real tests.

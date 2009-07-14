@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class AdministrationToolTest < Test::Unit::TestCase
+class AdministrationToolTest < ActiveSupport::TestCase
   fixtures :administration_tools
 
   # Replace this with your real tests.
