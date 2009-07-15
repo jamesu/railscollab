@@ -151,6 +151,7 @@ en-US:
   invalid_email_not_in_use: Invalid email address
   password_changed: Password changed
   insufficient_permissions: Insufficient permissions
+  success_updated_profile: Successfully updated profile
   success_updated_permissions: Successfully updated permissions
   success_updated_avatar: Successfully updated avatar
   error_updating_avatar: Error uploading avatar
