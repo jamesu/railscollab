@@ -2,9 +2,9 @@
   <%= render :partial => form %>
 
   <div class="operations">
-    <%= form.submit 'Update' %> |
+    <%= form.submit t('wiki_engine.update') %> |
     <%= preview_button %> |
-    <%= link_to 'Cancel', wiki_page_path(:id => @wiki_page) %>
+    <%= link_to t('wiki_engine.cancel'), wiki_page_path(:id => @wiki_page) %>
   </div>
 <% end %>
 

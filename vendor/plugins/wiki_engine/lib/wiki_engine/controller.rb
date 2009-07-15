@@ -33,7 +33,7 @@ module WikiEngine::Controller
     @wiki_page = wiki_pages.new(params[:wiki_page])
 
     if @wiki_page.save
-      flash[:notice] = 'New wiki page has been created.'
+      flash[:message] = I18n.t :success_creating_wiki_page, :scope => :wiki_engine
       redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'new'
@@ -45,7 +45,7 @@ module WikiEngine::Controller
 
   def update
     if @wiki_page.update_attributes(params[:wiki_page])
-      flash[:notice] = 'The wiki page has been updated.'
+      flash[:message] = I18n.t :success_updating_wiki_page, :scope => :wiki_engine
       redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'edit'
@@ -55,7 +55,7 @@ module WikiEngine::Controller
   def destroy
     @wiki_page.destroy
 
-    flash[:notice] = 'The wiki page has been deleted.'
+    flash[:message] = I18n.t :success_deleting_wiki_page, :scope => :wiki_engine
     redirect_to wiki_pages_path
   end
 

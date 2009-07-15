@@ -1,5 +1,5 @@
 <p>
-  <%= link_to 'New page', new_wiki_page_path %>
+  <%= link_to t('wiki_engine.new'), new_wiki_page_path %>
 </p>
 
 <%= render :partial => 'list', :object => @wiki_pages unless @wiki_pages.empty? %>

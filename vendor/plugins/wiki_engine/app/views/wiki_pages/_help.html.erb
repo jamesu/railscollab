@@ -1,14 +1,13 @@
 <div class="help">
-  <p><%= link_to 'Textile', 'http://hobix.com/textile/quick.html' %> is supported. You can also use
-  raw HTML.</p>
+  <p><%= t 'wiki_engine.help.link_to_format', :link => link_to('Textile', 'http://hobix.com/textile/quick.html') %></p>
 
-  <p>Links to other wiki pages:
+  <p><%= t 'wiki_engine.help.links_to_wiki_pages' %>:
   <code>[[wiki-page-id]]</code> or
   <code>[[Wiki page title]]</code> or
   <code>"Text of link":[[wiki-page-id]]</code> or
   <code>"Text of link":[[Wiki page title]]</code>.</p>
 
-  <p>Format source code samples like this:</p>
+  <p><%= t 'wiki_engine.help.format_code' %>:</p>
 
   <div class="usercontent">
     <pre><code class="html">
@@ -20,6 +19,5 @@
     </code></pre>
   </div>
 
-  <p>Specify programming language the sample is in with <code>class="language"</code> on
-  <code>code</code> element.</p>
+  <p><%= t 'wiki_engine.help.highlight_language' %></p>
 </div>

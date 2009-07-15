@@ -30,20 +30,16 @@ module WikiEngine::Helper
   end
 
   def preview_button
-    button_to_remote 'Preview', {:url => preview_wiki_pages_path, :method => :put, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'}, :class => 'preview'
-  end
-
-  def version_edited_by(version)
-    'by ' + version.user_name unless version.user_name.blank?
+    button_to_remote t('wiki_engine.preview'), {:url => preview_wiki_pages_path, :method => :put, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'}, :class => 'preview'
   end
 
   def current_version(version)
-    ["Current #{version_edited_by(version)}", wiki_page_path(:id => version.wiki_page)]
+    [t("wiki_engine.current_version#{'_edited_by' unless version.user_name.blank?}", :user => version.user_name), wiki_page_path(:id => version.wiki_page)]
   end
 
   def versions(versions)
     versions.collect do |version|
-      ["Version #{version.version} #{version_edited_by(version)}", version_wiki_page_path(:id => version.wiki_page, :version => version.version)]
+      [t("wiki_engine.version#{'_edited_by' unless version.user_name.blank?}", :version => version.version, :user => version.user_name), version_wiki_page_path(:id => version.wiki_page, :version => version.version)]
     end
   end
 

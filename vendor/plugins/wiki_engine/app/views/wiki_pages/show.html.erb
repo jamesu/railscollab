@@ -1,8 +1,8 @@
 <%= render :partial => 'wiki_page', :object => @version %>
 
 <div class="operations">
-  <%= link_to 'Edit', edit_wiki_page_path(:id => @wiki_page) %> |
-  <%= button_to 'Delete', wiki_page_path(:id => @wiki_page), :method => :delete, :confirm => 'Are you sure?' %> |
-  <%= link_to 'Main', wiki_pages_path %>
+  <%= link_to t('wiki_engine.edit'), edit_wiki_page_path(:id => @wiki_page) %> |
+  <%= button_to t('wiki_engine.delete'), wiki_page_path(:id => @wiki_page), :method => :delete, :confirm => t('wiki_engine.confirm_deletion') %> |
+  <%= link_to t('wiki_engine.main_page'), wiki_pages_path %>
   <%= select_tag :versions, options_for_versions_select(@versions), :onchange => 'document.location.href = this.value;' %>
 </div>
