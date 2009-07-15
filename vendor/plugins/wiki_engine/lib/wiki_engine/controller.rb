@@ -11,7 +11,7 @@ module WikiEngine::Controller
 
   def index
     unless @wiki_page.nil?
-      @versions = @wiki_page.versions.all
+      @versions = @wiki_page.versions.all.reverse!
       render :action => 'show'
     end
   end
@@ -25,7 +25,7 @@ module WikiEngine::Controller
 
   def show
     @versions = @wiki_page.versions.all.reverse!
-    @version = @wiki_page.versions.find(params[:version]) if params[:version]
+    @version = @wiki_page.versions.find_by_version(params[:version]) if params[:version]
     @version ||= @wiki_page
   end
 
@@ -34,7 +34,7 @@ module WikiEngine::Controller
 
     if @wiki_page.save
       flash[:notice] = 'New wiki page has been created.'
-      redirect_to wiki_pages_path
+      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'new'
     end
@@ -46,7 +46,7 @@ module WikiEngine::Controller
   def update
     if @wiki_page.update_attributes(params[:wiki_page])
       flash[:notice] = 'The wiki page has been updated.'
-      redirect_to wiki_page_path(:id => @wiki_page)
+      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'edit'
     end
@@ -105,7 +105,7 @@ module WikiEngine::Controller
 
   # Find main wiki page. This is by default used only for index action.
   def find_main_wiki_page
-    @wiki_page = wiki_pages.first(:conditions => {:main => true})
+    @wiki_page = wiki_pages.main.first
   end
 
   # Find all wiki pages. This is by default used only for list action.

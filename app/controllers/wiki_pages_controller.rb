@@ -29,6 +29,10 @@ class WikiPagesController < ApplicationController
     @active_project.wiki_pages
   end
 
+  def find_main_wiki_page
+    @wiki_page = wiki_pages.main(@active_project).first
+  end
+
   def find_wiki_page
     @wiki_page = wiki_pages.find(params[:id], :scope => @active_project)
   end

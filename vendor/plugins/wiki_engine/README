@@ -18,5 +18,11 @@ If you need extend or override something of model or controller, create it
 in your app and include WikiPageBehaviour for the model, or
 WikiPageBehaviour for the controller, and add your code.
 
+TODO
+====
+* Add diff between versions
+* Document user support
+* Lock pages
+
 Based in ActsAsWiki from http://github.com/3scale/acts_as_wiki
 Copyright (c) 2009 Sergio Cambra, released under the MIT license

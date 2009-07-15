@@ -1,3 +1,8 @@
+<% if form.object.new_record? -%>
 <%= render :partial => 'title_field', :locals => {:form => form} %>
+<% else -%>
+<%= content_tag :h2, h(form.object.title) %>
+<% end -%>
 <%= render :partial => 'content_field', :locals => {:form => form} %>
+<%= render :partial => 'main_field', :locals => {:form => form} %>
 <%= render :partial => 'help' %>
