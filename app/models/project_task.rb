@@ -40,8 +40,6 @@ class ProjectTask < ActiveRecord::Base
 
   has_many :project_times, :foreign_key => 'task_id', :dependent => :nullify
 
-  acts_as_ferret :fields => [:text, :project_id, :is_private], :store_class_name => true
-
   before_validation_on_create  :process_params
   after_create   :process_create
   before_update  :process_update_params

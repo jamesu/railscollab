@@ -176,52 +176,46 @@ class Project < ActiveRecord::Base
 	    return self.completed_on == nil
 	end
 	
-	def milestones_by_user(user, completed=false)
-		ProjectMilestone.find(:all, :conditions => ["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
-	end
-	
-	def has_member(user)
-	 return ProjectUser.find(:first, :conditions => "project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
-	end
-	
-	def set_completed(value, user=nil)
-	 @update_completed = value
-	 @update_completed_user = user
-	end
-	
-	def search(query, is_private, options={}, tag_search=false)
-	 results = []
-	 return results, 0 unless AppConfig.search_enabled
-	 
-	 real_query = is_private ? 
-	              "is_private:false project_id:#{self.id} #{query}" :
-	              "project_id:#{self.id} #{query}"
-	 
-	 real_opts = { }.merge(options)
-	 real_opts[:multi] = FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) } unless tag_search
-	 
-	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_with_ferret(real_query, real_opts)
+  def milestones_by_user(user, completed=false)
+    ProjectMilestone.find(:all, :conditions => ["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
+  end
 
-	 return results, results.total_hits
-	end
-	
-	def self.search(query, user, options={}, tag_search=false)
-	 results = []
-	 is_private = user.member_of_owner?
-	 return results, 0 unless AppConfig.search_enabled
-	 
-	 project_ids = user.active_projects.collect { |project| project.id }.join('|')
-	 real_query = is_private ? 
-	              "is_private:false project_id:\"#{project_ids}\" #{query}" :
-	              "project_id:\"#{project_ids}\" #{query}"
-	 
-	 real_opts = { }.merge(options)
-	 real_opts[:multi] = FERRETABLE_MODELS[1...FERRETABLE_MODELS.length].map { |model_name| Kernel.const_get(model_name) } unless tag_search
-	 
-	 results = Kernel.const_get(FERRETABLE_MODELS[tag_search ? 0 : 1]).find_with_ferret(real_query, real_opts)
+  def has_member(user)
+    return ProjectUser.find(:first, :conditions => "project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
+  end
 
-	 return results, results.total_hits
-	end
+  def set_completed(value, user=nil)
+    @update_completed = value
+    @update_completed_user = user
+  end
+
+  def search(query, is_private, options={}, tag_search=false)
+    self.class.search(query, is_private, [self], options, tag_search)
+  end
+
+  def self.search_for_user(query, user, options={}, tag_search=false)
+    self.search(query, !user.member_of_owner?, user.active_projects, options, tag_search)
+  end
+
+  def self.search(query, is_private, projects, options={}, tag_search=false)
+    results = []
+    return results, 0 unless AppConfig.search_enabled
+
+    project_ids = projects.collect { |project| project.id }.join('|')
+    real_query = if is_private
+      "is_private:false project_id:\"#{project_ids}\" #{query}"
+    else
+      "project_id:\"#{project_ids}\" #{query}"
+    end
+
+    results = if tag_search
+      Tag.find_with_ferret(real_query, options)
+    else
+      ActsAsFerret::find(real_query, :shared, options)
+    end
+
+    return results, results.total_hits
+  end
 	
 	# Core Permissions
 	

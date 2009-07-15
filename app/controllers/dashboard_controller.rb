@@ -142,7 +142,7 @@ class DashboardController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = Project.search(@last_search, @logged_user, {:page => current_page, :per_page => AppConfig.search_results_per_page})
+      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => AppConfig.search_results_per_page})
 
       @tag_names = []
       @pagination = []

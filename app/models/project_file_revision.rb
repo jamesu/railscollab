@@ -26,10 +26,7 @@ class ProjectFileRevision < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_attached_file :data, :styles => { :thumb => "50x50" }, 
-                           :default_url => ''
-
-  acts_as_ferret :fields => [:comment, :project_id, :is_private], :store_class_name => true
+  has_attached_file :data, :styles => { :thumb => "50x50" }, :default_url => ''
 
   before_create :process_params
   before_update :process_update_params

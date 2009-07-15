@@ -41,8 +41,6 @@ class ProjectMessage < ActiveRecord::Base
 
   has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
 
-  acts_as_ferret :fields => [:title, :text, :additional_text, :project_id, :is_private, :tags_with_spaces], :store_class_name => true
-
   before_validation_on_create :process_params
   after_create  :process_create
   before_update :process_update_params

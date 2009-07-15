@@ -1,10 +1,18 @@
 class WikiPage < ActiveRecord::Base
+  include ActionController::UrlWriter
   include WikiEngine::Model
   belongs_to :project
-  acts_as_ferret :fields => [:title, :content, :project_id], :store_class_name => true
   self.friendly_id_options[:scope] = :project
   self.non_versioned_columns << :project_id
   named_scope :main, lambda{ |project| {:conditions => {:main => true, :project_id => project.id}} }
+
+  def object_name
+    self.title
+  end
+
+  def object_url
+    url_for :only_path => true, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => self.project_id
+  end
 
   def self.can_be_created_by(user, project)
     project.is_active? and user.member_of(project) and user.has_permission(project, :can_manage_wiki_pages)

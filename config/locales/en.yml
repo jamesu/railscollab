@@ -725,6 +725,7 @@ en-US:
   ProjectMilestone: Milestone
   ProjectFile: File
   ProjectFileRevision: File revision
+  WikiPage: Wiki page
   
   search_dashboard: "{{type}}: {{name}} in {{project}}"
   search_project: "{{type}}: {{name}}"
