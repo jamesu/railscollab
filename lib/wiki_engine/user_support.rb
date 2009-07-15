@@ -8,6 +8,6 @@ module WikiEngine::UserSupport
   end
 
   def user_name
-    self.user ? user.name : 'anonymous'
+    self.user ? user.display_name : 'anonymous'
   end
 end

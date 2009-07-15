@@ -6,6 +6,22 @@ class WikiPage < ActiveRecord::Base
   self.non_versioned_columns << :project_id
   named_scope :main, lambda{ |project| {:conditions => {:main => true, :project_id => project.id}} }
 
+  after_create  :process_create
+  before_update :process_update_params
+  before_destroy :process_destroy
+
+  def process_create
+    ApplicationLog.new_log(self, self.created_by, :add)
+  end
+
+  def process_update_params
+    ApplicationLog.new_log(self, self.created_by, :edit)
+  end
+
+  def process_destroy
+    ApplicationLog.new_log(self, self.created_by, :delete)
+  end
+
   def object_name
     self.title
   end

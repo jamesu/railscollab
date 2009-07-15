@@ -20,11 +20,16 @@ class WikiPagesController < ApplicationController
   layout 'project_website'
 
   before_filter :process_session
+  before_filter :set_created_by, :only => [:create, :update]
   after_filter  :user_track, :only => [:index, :show]
 
   include WikiEngine::Controller
 
   protected
+  def set_created_by
+    params[:wiki_page][:created_by] = @logged_user
+  end
+
   def wiki_pages
     @active_project.wiki_pages
   end
