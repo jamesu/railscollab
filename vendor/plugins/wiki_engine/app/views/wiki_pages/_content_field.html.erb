@@ -1,30 +1,4 @@
 <div class="field wiki_content">
   <%= form.label :content %>
   <%= form.text_area :content, :rows => 40 %>
-
-  <div class="help">
-    <p><%= link_to 'Textile', 'http://hobix.com/textile/quick.html' %> is supported. You can also use
-    raw HTML.</p>
-
-    <p>Links to other wiki pages:
-    <code>[[wiki-page-id]]</code> or
-    <code>[[Wiki page title]]</code> or
-    <code>"Text of link":[[wiki-page-id]]</code> or
-    <code>"Text of link":[[Wiki page title]]</code>.</p>
-
-    <p>Format source code samples like this:</p>
-
-    <div class="usercontent">
-      <pre><code class="html">
-      &lt;pre&gt;&lt;code class="javascript"&gt;
-        function helloWorld() {
-          alert("Hello world");
-        }
-      &lt;/code&gt;&lt;pre&gt;
-      </code></pre>
-    </div>
-
-    <p>Specify programming language the sample is in with <code>class="language"</code> on
-    <code>code</code> element.</p>
-  </div>
 </div>

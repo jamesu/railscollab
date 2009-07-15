@@ -1,6 +1,8 @@
 <% form_for(@wiki_page, :url => wiki_pages_path) do |form| %>
   <%= render :partial => form %>
-  <button class="submit" type="submit"><%= :add_page.l %></button>
-  <%= preview_button %>
+  <div class="buttons">
+    <button class="submit" type="submit"><%= :add_page.l %></button>
+    <%= preview_button %>
+  </div>
 <% end %>
 <div id="preview"></div>
