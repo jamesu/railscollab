@@ -128,6 +128,13 @@ general:
     comment: ""
     order: 11
 
+  # Remove logs on destroying an object
+  log_really_silent: 
+    handler: BoolConfigHandler
+    default: false
+    comment: ""
+    order: 12
+
 mailing:
   notification_email_address:
     handler: StringConfigHandler

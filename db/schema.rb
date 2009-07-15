@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090715081348) do
+ActiveRecord::Schema.define(:version => 20090715153225) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20090715081348) do
   create_table "application_logs", :force => true do |t|
     t.integer  "taken_by_id"
     t.integer  "project_id",                    :default => 0,     :null => false
-    t.integer  "rel_object_id",                 :default => 0,     :null => false
+    t.integer  "rel_object_id",                 :default => 0
     t.text     "object_name"
     t.string   "rel_object_type", :limit => 50, :default => "",    :null => false
     t.datetime "created_on",                                       :null => false

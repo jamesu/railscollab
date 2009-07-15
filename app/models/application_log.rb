@@ -52,7 +52,7 @@ class ApplicationLog < ActiveRecord::Base
   end
 
   def self.new_log(obj, user, action, private=false, real_project=nil)
-    really_silent = action == :delete
+    really_silent = AppConfig.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
       @log = ApplicationLog.new()
@@ -70,7 +70,7 @@ class ApplicationLog < ActiveRecord::Base
       if real_project.nil?
         if obj.is_a?(Project)
           @log.project = obj unless action == :delete
-        elsif [ProjectMilestone, ProjectMessage, ProjectTaskList, ProjectTime, ProjectFile, ProjectFolder, ProjectMessageCategory].include?(obj.class)
+        elsif obj.respond_to? :project
           @log.project = obj.project
         end
       else

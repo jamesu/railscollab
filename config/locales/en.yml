@@ -673,6 +673,8 @@ en-US:
   option_use_asset_hosts_description: "Enable usage of asset hosts. Also see assets_host_url"
   option_asset_hosts_url_name: "Asset hosts url"
   option_asset_hosts_url_description: "e.g. 'example.com' will enable assets[0-3].example.com as asset hosts."
+  option_log_really_silent_name: "Log really silent"
+  option_log_really_silent_description: "Remove log entries when an object is deleted"
   notification_method_test: "Test"
   notification_method_smtp: "SMTP"
   notification_smtp_address: "Address"
