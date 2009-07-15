@@ -24,8 +24,32 @@ class WikiPagesController < ApplicationController
   after_filter  :user_track, :only => [:index, :show]
 
   include WikiEngine::Controller
+  before_filter :check_create_permissions, :only => [:new, :create]
+  before_filter :check_update_permissions, :only => [:edit, :update]
+  before_filter :check_delete_permissions, :only => :destroy
 
   protected
+  def check_create_permissions
+    unless WikiPage.can_be_created_by(@logged_user, @active_project)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'wiki_pages'
+    end
+  end
+
+  def check_update_permissions
+    unless @wiki_page.can_be_edited_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'wiki_pages'
+    end
+  end
+
+  def check_delete_permissions
+    unless @wiki_page.can_be_deleted_by(@logged_user)
+      error_status(true, :insufficient_permissions)
+      redirect_back_or_default :controller => 'wiki_pages'
+    end
+  end
+
   def set_created_by
     params[:wiki_page][:created_by] = @logged_user
   end
