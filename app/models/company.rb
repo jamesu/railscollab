@@ -54,7 +54,7 @@ class Company < ActiveRecord::Base
   end
 
   def is_owner?
-    self.client_of == nil
+    self.client_of.nil?
   end
 
   def updated?

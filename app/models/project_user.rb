@@ -46,25 +46,17 @@ class ProjectUser < ActiveRecord::Base
     end
   end
 
-  def self.update_str(vals={}, user=nil)
-    member_of_owner = !user.nil? ?  user.member_of_owner? : false
-
-    mvals = {}
-    @@permission_fields.each{ |field| mvals[field] = member_of_owner }
-
-    # Override mvals with vals if we are not a member of the owner
-    unless member_of_owner
-      vals.each do |val|
-        intern_val = val.intern
-        mvals[intern_val] = true if !mvals[intern_val].nil?
-      end
+  def update_str(vals)
+    vals.each do |val|
+      self[val] = true
     end
 
-    return [(mvals.keys.collect { |key| "#{key} = ?" }.join ', ')] + mvals.keys.collect { |key| mvals[key] }
+    self
   end
 
   def reset_permissions
     @@permission_fields.each{ |field| self[field] = false }
+    self
   end
 
   def has_all_permissions?

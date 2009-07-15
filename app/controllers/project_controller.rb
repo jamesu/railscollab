@@ -119,72 +119,41 @@ class ProjectController < ApplicationController
         @companies += clients
       end
     when :post
-      project_attribs = params[:project]
-
       # Sort out changes to the company set
 
+      @project.companies.clear
+      @project.companies << Company.owner
       if params[:project_company]
-        has_owner = false
-        owner_company = Company.owner
-        owner_id = owner_company.id
-
-        valid_company_ids = params[:project_company].collect do |id|
-          has_owner = true if !has_owner and id.to_i == owner_id
-          id
-        end
-
-        valid_companies = Company.all(:conditions => { :id => valid_company_ids }, :select => 'id')
-
-        @project.companies.clear
-        @project.companies << owner_company unless has_owner
-
-        valid_companies.each{ |valid_company| @project.companies << valid_company }
-      else
-        # No member companies except the owner
-        @project.companies.clear
-        @project.companies << Company.owner
+        valid_companies = Company.all(:conditions => { :id => params[:project_company] }, :select => 'id')
+        valid_companies.each{ |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
       end
 
-      # Grab a full list of companies for comparison
-      real_companies = [Company.owner]
-      clients = Company.owner.clients
-      real_companies += clients unless clients.empty?
-      real_companies_ids = real_companies.collect{ |company| company.id }
+      valid_user_ids = params[:project_user] || []
 
-      # Grab the user set
-      project_users = User.all(:conditions => { :company_id => real_companies_ids }, :select => ['id, company_id, username'])
+      # Grab the old user set
+      project_users = @project.project_users.all :include => {:user => :company}
 
       # Destroy the ProjectUser entry for each non-active user
-      project_users.each do |user|
+      project_users.each do |project_user|
+        user = project_user.user
         next if user.owner_of_owner?
 
-        found_id = nil
-
         # Have a look to see if it is on our list
-        if params[:project_user]
-          found_id = params[:project_user].detect{ |id| id.to_i == user.id }
-        end
-
+        has_valid_user = valid_user_ids.include? user.id.to_s
         # Have another look to see if his company is enabled
-        has_valid_company = valid_companies.any?{ |company| company.id == user.company_id }
+        has_valid_company = valid_companies.include? user.company
 
-        if found_id.nil? or !has_valid_company
+        if has_valid_user and has_valid_company
+          permissions = params[:project_user_permissions] ? params[:project_user_permissions][user.id.to_s] : nil
+          project_user.reset_permissions
+          project_user.update_str permissions unless permissions.nil?
+          project_user.ensure_permissions if project_user.user.member_of_owner?
+          project_user.save
+        else
           # Exterminate! (maybe better if this was a single query?)
-          ProjectUser.delete_all(['user_id = ? AND project_id = ?', user.id, @project.id])
-
-          if !found_id.nil? and !has_valid_company
-            params[:project_user].delete(found_id)
-          end
-        elsif ProjectUser.all(:conditions => ['user_id = ? AND project_id = ?', user.id, @project.id]).length > 0
-          # Re-apply permissions
-          if params[:project_user_permissions] and params[:project_user_permissions][found_id]
-            ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][found_id], user), "user_id = #{user.id} AND project_id = #{@project.id}")
-          else
-            ProjectUser.update_all(ProjectUser.update_str({}, user), ['user_id = ? AND project_id = ?', user.id, @project.id])
-          end
-
-          params[:project_user].delete(found_id)
+          project_user.destroy
         end
+        valid_user_ids.delete user.id.to_s if has_valid_user
 
         # Also check if he is activated
         #
@@ -192,30 +161,22 @@ class ProjectController < ApplicationController
 
       # Create new ProjectUser entries for new users
 
-      if params[:project_user]
-        params[:project_user].each do |id|
-          proj_user = User.find(id.to_i)
-          next if proj_user.owner_of_owner?
-
-          @project.users << proj_user
-          if params[:project_user_permissions] && params[:project_user_permissions][id]
-            ProjectUser.update_all(ProjectUser.update_str(params[:project_user_permissions][id], proj_user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
-          else
-            ProjectUser.update_all(ProjectUser.update_str({}, proj_user), "user_id = #{proj_user.id} AND project_id = #{@project.id}")
-          end
-        end
+      users = User.all :conditions => {:id => valid_user_ids}, :include => :company
+      users.each do |user|
+        next unless valid_companies.include? user.company
+        project_user = @project.project_users.create :user => user
+        permissions = params[:project_user_permissions] ? params[:project_user_permissions][id] : nil
+        project_user.reset_permissions
+        project_user.update_str permissions unless permissions.nil?
+        project_user.ensure_permissions if project_user.user.member_of_owner?
+        project_user.save
       end
 
       # Now we can do the log keeping!
       #@project.updated_by = @logged_user
 
-      #if @project.save
-      #  flash[:flash_success] = "Error updating permissions"
-      #  redirect_to :controller => 'project', :action => 'permissions'
-      #else
       error_status(false, :success_updated_permissions)
       redirect_to :controller => 'project', :action => 'people'
-      #end
     end
   end
 

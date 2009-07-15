@@ -252,11 +252,11 @@ class User < ActiveRecord::Base
   end
 
   def member_of_owner?
-    !self.is_anonymous? and self.company.client_of.nil?
+    !self.is_anonymous? and self.company.is_owner?
   end
 
   def owner_of_owner?
-    self.company.client_of.nil? and self.company.created_by.id == self.id
+    self.company.is_owner? and self.company.created_by_id == self.id
   end
 
   def is_anonymous?
