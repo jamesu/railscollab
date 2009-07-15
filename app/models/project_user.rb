@@ -36,7 +36,8 @@ class ProjectUser < ActiveRecord::Base
     :can_upload_files,
     :can_manage_files,
     :can_assign_to_owners,
-    :can_assign_to_other
+    :can_assign_to_other,
+    :can_manage_wiki_pages
   ]
 
   def ensure_permissions(set_val=true)

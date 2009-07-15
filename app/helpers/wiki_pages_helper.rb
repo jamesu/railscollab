@@ -29,6 +29,7 @@ module WikiPagesHelper
       when 'new' then :add_page
       when 'edit' then :edit_page
       when 'show' then @wiki_page.title
+      when 'list' then :all_pages
       else super
     end
   end

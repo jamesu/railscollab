@@ -40,7 +40,7 @@ module UserHelper
     case action_name
       when 'add' then :add_user
       when 'card' then @user.display_name
-      when 'edit' then :edit_user
+      when 'edit', 'current' then :edit_user
       else super
     end
   end

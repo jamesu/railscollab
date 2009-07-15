@@ -30,7 +30,7 @@ module WikiEngine::Helper
   end
 
   def preview_button
-    button_to_remote 'Preview', :url => preview_wiki_pages_path, :method => :put, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'
+    button_to_remote 'Preview', {:url => preview_wiki_pages_path, :method => :put, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'}, :class => 'preview'
   end
 
   def version_edited_by(version)

@@ -183,6 +183,11 @@ module ApplicationHelper
     [{:name => :edit.l,   :url => {:controller => 'time', :action => 'edit',   :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
      {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
   end
+
+  def actions_for_wiki_page(page)
+    [{:name => :edit.l,    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page.id}, :cond => page.can_be_edited_by(@logged_user)},
+     {:name => :delete.l,  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page.id}, :cond => page.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :wiki_page_confirm_delete.l}]
+  end
   
   def cal_table(in_rows, tableclass)
     rows = in_rows.map do |row|

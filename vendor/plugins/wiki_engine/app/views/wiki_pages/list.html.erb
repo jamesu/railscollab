@@ -2,29 +2,4 @@
   <%= link_to 'New page', new_wiki_page_path %>
 </p>
 
-<% unless @wiki_pages.empty? %>
-  <table class="data wiki_pages">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Id</th>
-        <th>Last modified</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @wiki_pages.each do |wiki_page| %>
-        <tr class="<%= cycle('odd', 'even') %>">
-          <td><%= h wiki_page.title %></td>
-          <td><%= wiki_page.to_param %></td>
-          <td><%= wiki_page.updated_at.to_s(:long) %></td>
-          <td class="operations">
-            <%= link_to 'Show', wiki_page_path(:id => wiki_page) %>  |
-            <%= link_to 'Edit', edit_wiki_page_path(:id => wiki_page) %> |
-            <%= button_to 'Delete', wiki_page_path(:id => wiki_page), :method => :delete, :confirm => 'Are you sure?' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<%= render :partial => 'list', :object => @wiki_pages unless @wiki_pages.empty? %>

@@ -1,0 +1,12 @@
+<%
+  @page_actions = []
+  if WikiPage.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => :add_page, :url => new_wiki_page_path}
+  end
+-%>
+<%= render :partial => 'wiki_page', :object => @version %>
+
+<div class="options">
+  <%= action_list actions_for_wiki_page(@wiki_page) %>
+  <%= select_tag :versions, options_for_versions_select(@versions), :onchange => 'document.location.href = this.value;' %>
+</div>

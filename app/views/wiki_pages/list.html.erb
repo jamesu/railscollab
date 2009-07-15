@@ -1,0 +1,7 @@
+<%
+  @page_actions = []
+  if WikiPage.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => :add_page, :url => new_wiki_page_path}
+  end
+-%>
+<%= render :partial => 'list', :object => @wiki_pages unless @wiki_pages.empty? %>

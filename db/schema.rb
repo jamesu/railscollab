@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090711161621) do
+ActiveRecord::Schema.define(:version => 20090715081348) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(:version => 20090711161621) do
     t.boolean  "can_assign_to_owners",  :default => false, :null => false
     t.boolean  "can_assign_to_other",   :default => false, :null => false
     t.boolean  "can_manage_time",       :default => false, :null => false
+    t.boolean  "can_manage_wiki_pages", :default => false, :null => false
   end
 
   create_table "projects", :force => true do |t|
