@@ -1,4 +1,4 @@
-en-US:
+en:
   wiki_engine:
     success_creating_wiki_page: 'New wiki page has been created'
     success_updating_wiki_page: 'The wiki page has been updated'
