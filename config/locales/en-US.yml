@@ -1,4 +1,5 @@
-en:
+# NOTE: PLEASE USE THE "en" LOCALE. THIS IS HERE ONLY FOR COMPATIBILITY WITH PREVIOUS VERSIONS.
+en-US:
   # Tabs
   overview: Overview
   my_projects: My projects
