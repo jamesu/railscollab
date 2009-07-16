@@ -143,18 +143,16 @@ class ProjectFile < ActiveRecord::Base
 
   def self.handle_files(files, to_object, user, is_private)
     return 0 if files.nil?
-
+    
     count = 0
     files.each do |file|
-      if file.class != StringIO and
-          file.class != ActionController::UploadedStringIO and
-          file.class != ActionController::UploadedTempfile
+      if !file.respond_to?(:original_filename)
         count += 1
         next
       end
 
       filename = file.original_filename.sanitize_filename
-
+      
       ProjectFile.transaction do
         attached_file = ProjectFile.new()
         attached_file.filename = filename
@@ -167,7 +165,13 @@ class ProjectFile < ActiveRecord::Base
         if attached_file.save
           # Upload revision
           attached_file.add_revision(file, 1, user, '')
-          to_object.project_file << attached_file
+          
+          # Attach to object
+          AttachedFile.create!(:created_on => attached_file.created_on, 
+                               :created_by => user, 
+                               :rel_object => to_object, 
+                               :project_file => attached_file)
+          #to_object.project_file << attached_file
 
           count += 1
         end
