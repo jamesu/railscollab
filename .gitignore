@@ -6,6 +6,7 @@ config/deploy.rb
 coverage
 index/**
 log/*.log
+log/ferret_server.*
 nbproject
 public/logos/**
 public/avatars/**
