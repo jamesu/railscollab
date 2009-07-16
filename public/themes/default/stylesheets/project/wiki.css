@@ -1,0 +1,23 @@
+#content form {
+  position: relative
+}
+form div.wiki_main label {
+  display: inline;
+  vertical-align: text-bottom;
+}
+form div.wiki_main input {
+  margin-top: 3px;
+  width: auto;
+}
+form div.help {
+  position: absolute;
+  width: 300px;
+  right: 0px;
+  top: 0px;
+}
+form div.help code, form div.help pre {
+  font-size: 1em;
+}
+form input.preview {
+  width: auto;
+}
