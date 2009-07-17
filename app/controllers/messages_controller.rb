@@ -230,6 +230,7 @@ class MessagesController < ApplicationController
   def destroy
     return error_status(true, :insufficient_permissions) unless (@message.can_be_deleted_by(@logged_user))
     
+    @message.updated_by = @logged_user
     @message.destroy
     
     respond_to do |format|

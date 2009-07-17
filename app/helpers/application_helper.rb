@@ -153,8 +153,8 @@ module ApplicationHelper
   end
 
   def actions_for_comment(comment)
-    [{:name => :edit.l,   :url => "/project/#{@active_project.id}/comment/edit/#{comment.id}",   :cond => comment.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => "/project/#{@active_project.id}/comment/delete/#{comment.id}", :cond => comment.can_be_deleted_by(@logged_user), :method => :post, :confirm => :comment_delete_confirm.l}]
+    [{:name => :edit.l,   :url => edit_comment_path(:id => comment.id),   :cond => comment.can_be_edited_by(@logged_user)},
+     {:name => :delete.l, :url => comment_path(:id => comment.id), :cond => comment.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :comment_delete_confirm.l}]
   end
 
   def actions_for_file(file, last_revision)

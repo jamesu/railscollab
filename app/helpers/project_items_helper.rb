@@ -86,4 +86,9 @@ module ProjectItemsHelper
 
     content_tag(:option, :none.l, :value => 0) + grouped_options_for_select(items, options)
   end
+  
+  def object_comments_url(object)
+    # comments 
+    "#{object.object_url}/comments"
+  end
 end

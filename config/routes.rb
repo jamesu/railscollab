@@ -111,15 +111,19 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :task_lists, :path_prefix => 'project/:active_project',
                              :member => {:reorder => :any}
   map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id',
-                        :member => {:status => :put}
+                        :member => {:status => :put},
+                        :has_many => [:comments]
   map.with_options :path_prefix => 'project/:active_project' do |project|
     WikiEngine.draw_for project
   end
   
+  map.resources :comments, :path_prefix => 'project/:active_project'
+  
   # Note: filter by category is done via "posts" on the category controller
   map.resources :messages, :path_prefix => 'project/:active_project',
                            :member => {:unsubscribe => :put,
-                                       :subscribe => :put}
+                                       :subscribe => :put},
+                           :has_many => [:comments]
   
   map.resources :categories, :path_prefix => 'project/:active_project',
                            :member => {:posts => :any}

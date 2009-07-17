@@ -164,6 +164,7 @@ class TaskListsController < ApplicationController
     
     return error_status(true, :insufficient_permissions) unless (@task_list.can_be_deleted_by(@logged_user))
     
+    @task_list.updated_by = @logged_user
     @task_list.destroy
 
     respond_to do |format|

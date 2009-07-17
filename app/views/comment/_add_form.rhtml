@@ -1,6 +1,6 @@
 <fieldset>
 <legend><%= :post_comment.l %></legend>
-<%= form_tag( {:controller => 'comment', :action => 'add', :object_type => commented_object.class.to_s , :object_id => commented_object.id}, :multipart => true ) %>
+<%= form_tag( object_comments_url(commented_object), :multipart => true ) %>
 <%= render :partial => 'comment/form' %>
     <button class="submit" type="submit"><%= :add_comment.l %></button>
 </form>
