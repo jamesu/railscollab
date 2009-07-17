@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -16,28 +16,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module TaskListsHelper
+module CategoriesHelper
+  def page_title
+    case action_name
+      when 'posts' then  @category.name
+      else super
+    end
+  end
+
   def current_tab
-    :tasks
+    :messages
   end
 
   def current_crumb
     case action_name
-      when 'index' then :tasks
-      when 'new' then :add_task_list
-      when 'edit' then :edit_task_list
-      when 'show' then @task_list.name
+      when 'new' then :add_message_category
+      when 'edit' then :edit_message_category
+      when 'index' then :messages
+      when 'posts' then @category.name
       else super
     end
   end
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :tasks, :url => task_lists_path} unless action_name == 'index'
+    crumbs << {:title => :messages, :url => "/project/#{@active_project.id}/messages"}
     crumbs
-  end
-
-  def additional_stylesheets
-    ['project/task_list']
   end
 end

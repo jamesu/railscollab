@@ -101,7 +101,7 @@ ActionController::Routing::Routes.draw do |map|
   	map.connect "project/:active_project/#{action}/:id", :controller => 'project', :action => action
   end
 
-  %w[message comment milestone time files tags people].each do |controller|
+  %w[comment milestone time files tags people].each do |controller|
   	map.connect "project/:active_project/#{controller}/:action/:id",         :controller => controller
   	map.connect "project/:active_project/#{controller}/:action/:id.:format", :controller => controller
   	map.connect "project/:active_project/#{controller}",                     :controller => controller
@@ -115,6 +115,14 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :path_prefix => 'project/:active_project' do |project|
     WikiEngine.draw_for project
   end
+  
+  # Note: filter by category is done via "posts" on the category controller
+  map.resources :messages, :path_prefix => 'project/:active_project',
+                           :member => {:unsubscribe => :put,
+                                       :subscribe => :put}
+  
+  map.resources :categories, :path_prefix => 'project/:active_project',
+                           :member => {:posts => :any}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

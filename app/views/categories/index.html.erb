@@ -1,0 +1,18 @@
+<%
+  @page_actions = []
+  
+  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+	@page_actions << {:title => :add_message, :url => "/project/#{@active_project.id}/categories/#{@category.id}/messages/new"}
+  end
+
+  if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
+    @page_actions << {:title => :add_category, :url => new_categories_path}
+  end
+%>
+<% if @categories.length > 0 %>
+<div id="categoryList">
+<%= render :partial => 'show', :collection => @categories %>
+</div>
+<% else %>
+<p><%= :config_category_empty.l %></p>
+<% end %>

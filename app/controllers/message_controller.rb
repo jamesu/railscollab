@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -65,122 +65,6 @@ class MessageController < ApplicationController
     @subscribers = @message.subscribers
     @content_for_sidebar = 'view_sidebar'
   end
-
-  # Categories
-
-  def category
-    begin
-      @category ||= @active_project.project_message_categories.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_message_category)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    unless @category.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'message'
-    end
-
-    current_page = params[:page].to_i
-    current_page = 0 unless current_page > 0
-    
-    msg_conditions = {'category_id' => @category.id}
-    msg_conditions['is_private'] = false unless @logged_user.member_of_owner?
-    @messages = @active_project.project_messages.find(:all, :conditions => msg_conditions, :page => {:size => AppConfig.messages_per_page, :current => current_page})
-    
-    @pagination = []
-    @messages.page_count.times {|page| @pagination << page+1}
-
-    @current_category = @category
-    @page = current_page
-    @message_categories = @active_project.project_message_categories
-    
-    important_conditions = {'is_important' => true}
-    important_conditions['is_private'] = false unless @logged_user.member_of_owner?
-    @important_messages = @active_project.project_messages.find(:all, :conditions => important_conditions)
-    
-    @content_for_sidebar = 'index_sidebar'
-
-    render :template => 'message/index'
-  end
-
-  def add_category
-    @category = ProjectMessageCategory.new
-
-    unless ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    case request.method
-    when :post
-      category_attribs = params[:category]
-      @category.attributes = category_attribs
-      @category.project = @active_project
-
-      if @category.save
-        ApplicationLog::new_log(@category, @logged_user, :add)
-
-        error_status(false, :success_added_message_category)
-        redirect_back_or_default :controller => 'message'
-      end
-    end
-  end
-
-  def edit_category
-    begin
-      @category ||= @active_project.project_message_categories.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_message_category)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    unless @category.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    case request.method
-    when :post
-      category_attribs = params[:category]
-
-      @category.attributes = category_attribs
-
-      if @category.save
-        ApplicationLog::new_log(@category, @logged_user, :edit)
-
-        error_status(false, :success_edited_message_category)
-        redirect_back_or_default :controller => 'message'
-      end
-    end
-  end
-
-  def delete_category
-    begin
-      @category ||= @active_project.project_message_categories.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_message_category)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    unless @category.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'message'
-      return
-    end
-
-    ApplicationLog::new_log(@category, @logged_user, :delete)
-    @category.destroy
-
-    error_status(false, :success_deleted_message_category)
-    redirect_back_or_default :controller => 'message'
-  end
-
 
   # Messages
 

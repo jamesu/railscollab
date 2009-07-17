@@ -82,7 +82,7 @@ class ProjectMessage < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'message', :action => 'view', :id => self.id, :active_project => self.project_id
+    url_for hash_for_message_path(:id => self.id, :active_project => self.project_id, :only_path => true)
   end
 
   def attached_files(with_private)

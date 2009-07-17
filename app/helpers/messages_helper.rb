@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module MessageHelper
+module MessagesHelper
   def page_title
     case action_name
       when 'category' then :category_messages.l_with_args(:category => @current_category.name)
@@ -31,11 +31,9 @@ module MessageHelper
   def current_crumb
     case action_name
       when 'index' then :messages
-      when 'add_category' then :add_message_category
-      when 'add' then :add_message
-      when 'edit_category' then :edit_message_category
+      when 'new' then :add_message
       when 'edit' then :edit_message
-      when 'view' then @message.title
+      when 'show' then @message.title
       when 'category' then @current_category.name
       else super
     end
@@ -43,8 +41,8 @@ module MessageHelper
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => "/project/#{@active_project.id}/message"} unless action_name == 'index'
-    crumbs << {:title => @message.project_message_category.name, :url => "/project/#{@active_project.id}/message/category/#{@message.category_id}"} if action_name == 'view'
+    crumbs << {:title => :messages, :url => messages_path} unless action_name == 'index'
+    crumbs << {:title => @message.project_message_category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show'
     crumbs
   end
 

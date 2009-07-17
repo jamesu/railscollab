@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @important_messages.each do |important_message| -%>
-      <li><%= link_to (h important_message.title), :controller => 'message', :action => 'view' %><br />
+      <li><%= link_to (h important_message.title), message_path(:id => important_message.id) %><br />
       <span class="desc"><%= :important_messages_comments_count.l_with_args(:count => important_message.comments.length) %></span></li>
 <% end %>
     </ul>

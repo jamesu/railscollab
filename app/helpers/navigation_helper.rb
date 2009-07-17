@@ -70,7 +70,7 @@ module NavigationHelper
   def project_tabbed_navigation
     project_id = @active_project.id
     items = [{:id => :overview,   :url => "/project/#{project_id}/overview"}]
-    items << {:id => :messages,   :url => "/project/#{project_id}/message"}
+    items << {:id => :messages,   :url => "/project/#{project_id}/messages"}
     items << {:id => :tasks,      :url => "/project/#{project_id}/task_lists"}
     items << {:id => :milestones, :url => "/project/#{project_id}/milestone"}
     items << {:id => :ptime,      :url => "/project/#{project_id}/time"} if @logged_user.has_permission(@active_project, :can_manage_time)

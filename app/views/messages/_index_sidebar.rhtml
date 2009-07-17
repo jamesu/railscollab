@@ -12,31 +12,31 @@
 </div>
 <% end %>
 
-<% if !@message_categories.empty? %>
+<% if !@active_project.project_message_categories.empty? %>
 <div class="sidebarBlock">
   <h2><%= :categories.l %></h2>
   <div class="blockContent" id="sidebarMessageCategoryList">
     <ul>
-<% if !@current_category.nil? %>
+<% if !@category.nil? %>
       <li><%= link_to :all_categories.l, :action => 'index' %></li>
 <% else %>
       <li><%= link_to :all_categories.l, {:action => 'index'}, :class => 'selected' %></li>
 <% end %>
     
-<% @message_categories.each do |category| -%>
+<% @active_project.project_message_categories.each do |category| -%>
 <% if !@current_category.nil? and @current_category.id == category.id %>
 <% selected_class = {:class => 'selected'} %>
 <% else %>
 <% selected_class = {} %>
 <% end %>
-      <li><%= link_to (h category.name), {:action => 'category', :id => category.id}, selected_class %> 
-      <% if category.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), :action => 'edit_category', :id => category.id %><% end %>
-      <% if category.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:action => 'delete_category', :id => category.id}, :method => :post, :confirm => :category_delete_confirmation.l %><% end %>
+      <li><%= link_to (h category.name), posts_category_path(:id => category.id), selected_class %> 
+      <% if category.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), edit_category_path(:id => category.id) %><% end %>
+      <% if category.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => :category_delete_confirmation.l %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= "/project/#{@active_project.id}/message/add_category" %>"><%= :add_category.l %></a></p>
+    <p><a href="<%= new_category_path %>"><%= :add_category.l %></a></p>
 	<% end %>
   </div>
 </div>

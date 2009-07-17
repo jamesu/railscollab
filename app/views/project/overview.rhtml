@@ -2,7 +2,7 @@
   @page_actions = []
   
   if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_message, :url=> "/project/#{@active_project.id}/message/add"}
+    @page_actions << {:title => :add_message, :url=> new_message_path}
   end
 
   if ProjectTaskList.can_be_created_by(@logged_user, @active_project)

@@ -6,7 +6,7 @@
     <ul>
 <% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, {:controller => 'message', :action => 'unsubscribe', :id => @message.id}, {:method => :post, :confirm => :message_unsubscription_confirmation.l} %>)</li>
+      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, unsubscribe_message_path(:id => @message.id), {:method => :put, :confirm => :message_unsubscription_confirmation.l} %>)</li>
 <% else %>
       <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %></li>
 <% end %>
@@ -16,7 +16,7 @@
     <p><%= :no_subscribers.l %></p>
 <% end %>
 <% if @message.can_subscribe(@logged_user) and !@subscribers.include?(@logged_user) %>
-    <p><%= link_to :message_subscribe.l, {:controller => 'message', :action => 'subscribe', :id => @message.id}, {:method => :post, :confirm => :message_subscription_confirmation.l} %></p>
+    <p><%= link_to :message_subscribe.l, subscribe_message_path(:id => @message.id), {:method => :put, :confirm => :message_subscription_confirmation.l} %></p>
 <% end %>
   </div>
 </div>
@@ -25,7 +25,7 @@
 <div class="sidebarBlock">
   <h2><%= :options.l %></h2>
   <div class="blockContent">
-    <%= form_tag :controller => 'message', :action => 'update_options', :id => @message.id %>
+    <%= form_tag message_path(:id => @message.id), :method => :put %>
       <div class="formBlock">
         <div>
           <label><%= :private_message.l %>:</label>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <button class="submit" type="submit"><%= :update_options.l %></button>
-      <p><%= link_to :edit_message_sidebar_link.l, :controller => 'message', :action => 'edit', :id => @message.id %></p>
+      <p><%= link_to :edit_message_sidebar_link.l, edit_message_path(:id => @message.id) %></p>
     </form>
   </div>
 </div>

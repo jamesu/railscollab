@@ -134,8 +134,8 @@ module ApplicationHelper
   end
 
   def actions_for_message(message)
-    [{:name => :edit.l,   :url => {:controller => 'message', :action => 'edit',   :id => message.id}, :cond => message.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'message', :action => 'delete', :id => message.id}, :cond => message.can_be_deleted_by(@logged_user), :method => :post, :confirm => :message_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_message_path(:id => message.id), :cond => message.can_be_edited_by(@logged_user)},
+     {:name => :delete.l, :url => message_path(:id => message.id), :cond => message.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :message_confirm_delete.l}]
   end
 
   def actions_for_company(company)
