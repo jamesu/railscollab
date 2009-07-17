@@ -36,8 +36,6 @@ ActionController::Routing::Routes.draw do |map|
   	map.connect "#{controller}/:action/:id",        :controller => controller
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
-  
-  map.connect "comment/add/:object_id.:object_type", :controller => 'comment', :action => 'add'
 
   # BaseCamp API
   map.connect 'project/list',                                       :controller => 'basecamp', :action => 'projects_list'

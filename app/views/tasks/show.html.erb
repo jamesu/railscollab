@@ -29,9 +29,9 @@
 
 <!-- Comments -->
 <div id="taskComments">
-<%= render :partial => 'comment/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @task.comments : @task.comments.public} %>
+<%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @task.comments : @task.comments.public} %>
 
 <% if @task.comment_can_be_added_by(@logged_user) %>
-<%= render :partial => 'comment/add_form', :locals => {:commented_object => @task} %>
+<%= render :partial => 'comments/add_form', :locals => {:commented_object => @task} %>
 <% end %>
 </div>
