@@ -1,14 +1,3 @@
-<%
-  @page_actions = []
-  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-    @page_actions += [
-    	{:title => :add_message, :url => (@current_category.nil? ? 
-    										new_message_path : new_message_path(:category_id => @current_category.id))},
-    	{:title => :add_category, :url => new_category_path },
-    ]
-  end
-%>
-
 <% if not @messages.empty? %>
 <div id="messages">
   <div id="messagesPaginationTop">
@@ -20,7 +9,7 @@
 </div>
 <% else %>
 <p>
-<% if @current_category.nil? %>
+<% if @category.nil? %>
 <%= :no_messages_in_project.l %>
 <% else %>
 <%= :no_messages_in_category.l %>

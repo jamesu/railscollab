@@ -194,10 +194,10 @@ class CategoriesController < ApplicationController
         render :template => 'messages/index'
       }
       format.xml  { 
-        @messages = @active_project.project_messages.find(:all, 
-                                                          :conditions => msg_conditions, 
-                                                          :offset => params[:offset],
-                                                          :limit => params[:limit] || AppConfig.messages_per_page)
+        @messages = @category.project_messages.find(:all, 
+                                                    :conditions => msg_conditions, 
+                                                    :offset => params[:offset],
+                                                    :limit => params[:limit] || AppConfig.messages_per_page)
         
         render :xml => @messages.to_xml(:only => [:id,
                                                   :title,

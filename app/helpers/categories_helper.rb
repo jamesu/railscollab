@@ -43,4 +43,18 @@ module CategoriesHelper
     crumbs << {:title => :messages, :url => "/project/#{@active_project.id}/messages"}
     crumbs
   end
+
+  def page_actions
+    @page_actions = []
+    
+    if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
+      @page_actions << {:title => :add_category, :url => new_category_path } if action_name == 'index'
+    end
+    
+    if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+      @page_actions << {:title => :add_message, :url => new_message_path(:category_id => @category.id)} if action_name == 'posts'
+    end
+    
+    @page_actions
+  end
 end

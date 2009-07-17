@@ -1,14 +1,3 @@
-<%
-  @page_actions = []
-
-  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-	  @page_actions << {:title => :add_message, :url => "/project/#{@active_project.id}/message/add"}
-  end
-
-  if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_category, :url => new_category_path }
-  end
-%>
 <%= form_tag categories_path %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_category.l %></button>

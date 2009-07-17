@@ -19,7 +19,7 @@
 module MessagesHelper
   def page_title
     case action_name
-      when 'category' then :category_messages.l_with_args(:category => @current_category.name)
+      when 'category' then :category_messages.l_with_args(:category => @category.name)
       else super
     end
   end
@@ -34,7 +34,6 @@ module MessagesHelper
       when 'new' then :add_message
       when 'edit' then :edit_message
       when 'show' then @message.title
-      when 'category' then @current_category.name
       else super
     end
   end
@@ -44,6 +43,17 @@ module MessagesHelper
     crumbs << {:title => :messages, :url => messages_path} unless action_name == 'index'
     crumbs << {:title => @message.project_message_category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show'
     crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+    
+    if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+      @page_actions << {:title => :add_message, :url => (@category.nil? ? 
+    	  								  new_message_path : new_message_path(:category_id => @category.id))} if action_name == 'index'
+    end
+    
+    @page_actions
   end
 
   def additional_stylesheets
