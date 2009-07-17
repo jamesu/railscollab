@@ -88,7 +88,8 @@ class CategoriesController < ApplicationController
     return error_status(true, :insufficient_permissions) unless (ProjectMessageCategory.can_be_created_by(@logged_user, @active_project))
     
     @category = @active_project.project_message_categories.build(params[:category])
-
+    @category.created_by = @logged_user
+    
     respond_to do |format|
       if @category.save
         format.html {
@@ -115,7 +116,9 @@ class CategoriesController < ApplicationController
     end
     
     return error_status(true, :insufficient_permissions) unless (@category.can_be_edited_by(@logged_user))
-
+    
+    @category.updated_by = @logged_user
+    
     respond_to do |format|
       if @category.update_attributes(params[:category])
         format.html {
@@ -143,6 +146,7 @@ class CategoriesController < ApplicationController
     
     return error_status(true, :insufficient_permissions) unless (@category.can_be_deleted_by(@logged_user))
     
+    @category.updated_by = @logged_user
     @category.destroy
 
     respond_to do |format|
