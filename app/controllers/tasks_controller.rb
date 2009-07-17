@@ -25,8 +25,8 @@ class TasksController < ApplicationController
   before_filter :grab_list
   after_filter  :user_track, :only => [:index, :show]
   
-  # GET /list_items
-  # GET /list_items.xml
+  # GET /tasks
+  # GET /tasks.xml
   def index
     include_private = @logged_user.member_of_owner?
 
@@ -43,8 +43,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /list_items/1
-  # GET /list_items/1.xml
+  # GET /tasks/1
+  # GET /tasks/1.xml
   def show
     begin
       @task = @task_list.project_tasks.find(params[:id])
@@ -59,8 +59,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /list_items/new
-  # GET /list_items/new.xml
+  # GET /tasks/new
+  # GET /tasks/new.xml
   def new
     return error_status(true, :insufficient_permissions) unless (ProjectTask.can_be_created_by(@logged_user, @task_list))
     
@@ -72,7 +72,7 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /list_items/1/edit
+  # GET /tasks/1/edit
   def edit
     begin
       @task = @task_list.project_tasks.find(params[:id])
@@ -83,8 +83,8 @@ class TasksController < ApplicationController
     return error_status(true, :insufficient_permissions) unless (@task.can_be_edited_by(@logged_user))
   end
 
-  # POST /list_items
-  # POST /list_items.xml
+  # POST /tasks
+  # POST /tasks.xml
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectTask.can_be_created_by(@logged_user, @task_list))
     
@@ -105,8 +105,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # PUT /list_items/1
-  # PUT /list_items/1.xml
+  # PUT /tasks/1
+  # PUT /tasks/1.xml
   def update
     begin
       @task = @task_list.project_tasks.find(params[:id])
@@ -132,8 +132,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # DELETE /list_items/1
-  # DELETE /list_items/1.xml
+  # DELETE /tasks/1
+  # DELETE /tasks/1.xml
   def destroy
     begin
       @task = @task_list.project_tasks.find(params[:id])
@@ -152,8 +152,9 @@ class TasksController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
-  # PUT /list_items/1
+
+  # PUT /tasks/1/status
+  # PUT /tasks/1/status.xml
   def status
     begin
       @task = @task_list.project_tasks.find(params[:id])

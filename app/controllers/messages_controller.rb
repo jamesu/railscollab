@@ -25,8 +25,8 @@ class MessagesController < ApplicationController
   before_filter :obtain_message, :except => [:index, :new, :create]
   after_filter  :user_track, :only => [:index, :show]
   
-  # GET /lists
-  # GET /lists.xml
+  # GET /messages
+  # GET /messages.xml
   def index
     begin
       @category = @active_project.project_message_categories.find(params[:category_id])
@@ -77,8 +77,8 @@ class MessagesController < ApplicationController
     end
   end
 
-  # GET /lists/1
-  # GET /lists/1.xml
+  # GET /messages/1
+  # GET /messages/1.xml
   def show
     return error_status(true, :insufficient_permissions) unless @message.can_be_seen_by(@logged_user)
     
@@ -95,8 +95,8 @@ class MessagesController < ApplicationController
     end
   end
 
-  # GET /lists/new
-  # GET /lists/new.xml
+  # GET /messages/new
+  # GET /messages/new.xml
   def new
     return error_status(true, :insufficient_permissions) unless (ProjectMessage.can_be_created_by(@logged_user, @active_project))
     
@@ -126,13 +126,13 @@ class MessagesController < ApplicationController
     end
   end
 
-  # GET /lists/1/edit
+  # GET /messages/1/edit
   def edit
     return error_status(true, :insufficient_permissions) unless @message.can_be_edited_by(@logged_user)
   end
 
-  # POST /lists
-  # POST /lists.xml
+  # POST /messages
+  # POST /messages.xml
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectMessage.can_be_created_by(@logged_user, @active_project))
     
@@ -188,8 +188,8 @@ class MessagesController < ApplicationController
     end
   end
 
-  # PUT /lists/1
-  # PUT /lists/1.xml
+  # PUT /messages/1
+  # PUT /messages/1.xml
   def update
     return error_status(true, :insufficient_permissions) unless (@message.can_be_edited_by(@logged_user))
     
@@ -225,8 +225,8 @@ class MessagesController < ApplicationController
     end
   end
 
-  # DELETE /lists/1
-  # DELETE /lists/1.xml
+  # DELETE /messages/1
+  # DELETE /messages/1.xml
   def destroy
     return error_status(true, :insufficient_permissions) unless (@message.can_be_deleted_by(@logged_user))
     
@@ -242,6 +242,7 @@ class MessagesController < ApplicationController
     end
   end
 
+  # PUT /messages/1/subscribe
   def subscribe
     unless @message.can_be_seen_by(@logged_user)
       error_status(true, :insufficient_permissions)
@@ -261,6 +262,7 @@ class MessagesController < ApplicationController
     end
   end
 
+  # PUT /messages/1/unsubscribe
   def unsubscribe
     unless @message.can_be_seen_by(@logged_user)
       error_status(true, :insufficient_permissions)

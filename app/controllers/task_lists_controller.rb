@@ -24,8 +24,8 @@ class TaskListsController < ApplicationController
   before_filter :process_session
   after_filter  :user_track, :only => [:index, :show]
   
-  # GET /lists
-  # GET /lists.xml
+  # GET /task_lists
+  # GET /task_lists.xml
   def index
     include_private = @logged_user.member_of_owner?
     
@@ -43,8 +43,8 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # GET /lists/1
-  # GET /lists/1.xml
+  # GET /task_lists/1
+  # GET /task_lists/1.xml
   def show
     begin
       @task_list = @active_project.project_task_lists.find(params[:id])
@@ -67,8 +67,8 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # GET /lists/new
-  # GET /lists/new.xml
+  # GET /task_lists/new
+  # GET /task_lists/new.xml
   def new
     return error_status(true, :insufficient_permissions) unless (ProjectTaskList.can_be_created_by(@logged_user, @active_project))
     
@@ -87,7 +87,7 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # GET /lists/1/edit
+  # GET /task_lists/1/edit
   def edit
     begin
       @task_list = @active_project.project_task_lists.find(params[:id])
@@ -98,8 +98,8 @@ class TaskListsController < ApplicationController
     return error_status(true, :insufficient_permissions) unless (@task_list.can_be_edited_by(@logged_user))
   end
 
-  # POST /lists
-  # POST /lists.xml
+  # POST /task_lists
+  # POST /task_lists.xml
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectTaskList.can_be_created_by(@logged_user, @active_project))
     
@@ -123,8 +123,8 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # PUT /lists/1
-  # PUT /lists/1.xml
+  # PUT /task_lists/1
+  # PUT /task_lists/1.xml
   def update
     begin
       @task_list = @active_project.project_task_lists.find(params[:id])
@@ -153,8 +153,8 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # DELETE /lists/1
-  # DELETE /lists/1.xml
+  # DELETE /task_lists/1
+  # DELETE /task_lists/1.xml
   def destroy
     begin
       @task_list = @active_project.project_task_lists.find(params[:id])
@@ -176,7 +176,7 @@ class TaskListsController < ApplicationController
     end
   end
   
-  # POST /lists/1/reorder
+  # POST /task_lists/1/reorder
   def reorder
     begin
       @task_list = @active_project.project_task_lists.find(params[:id])

@@ -24,8 +24,8 @@ class CategoriesController < ApplicationController
   before_filter :process_session
   after_filter  :user_track, :only => [:index, :show]
   
-  # GET /lists
-  # GET /lists.xml
+  # GET /categories
+  # GET /categories.xml
   def index
     @categories = @active_project.project_message_categories
     
@@ -37,8 +37,8 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET /lists/1
-  # GET /lists/1.xml
+  # GET /categories/1
+  # GET /categories/1.xml
   def show
     begin
       @category = @active_project.project_message_categories.find(params[:id])
@@ -58,8 +58,8 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET /lists/new
-  # GET /lists/new.xml
+  # GET /categories/new
+  # GET /categories/new.xml
   def new
     return error_status(true, :insufficient_permissions) unless (ProjectMessageCategory.can_be_created_by(@logged_user, @active_project))
     
@@ -71,7 +71,7 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET /lists/1/edit
+  # GET /categories/1/edit
   def edit
     begin
       @category = @active_project.project_message_categories.find(params[:id])
@@ -82,8 +82,8 @@ class CategoriesController < ApplicationController
     return error_status(true, :insufficient_permissions) unless @category.can_be_edited_by(@logged_user)
   end
 
-  # POST /lists
-  # POST /lists.xml
+  # POST /categories
+  # POST /categories.xml
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectMessageCategory.can_be_created_by(@logged_user, @active_project))
     
@@ -106,8 +106,8 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # PUT /lists/1
-  # PUT /lists/1.xml
+  # PUT /categories/1
+  # PUT /categories/1.xml
   def update
     begin
       @category = @active_project.project_message_categories.find(params[:id])
@@ -135,8 +135,8 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # DELETE /lists/1
-  # DELETE /lists/1.xml
+  # DELETE /categories/1
+  # DELETE /categories/1.xml
   def destroy
     begin
       @category = @active_project.project_message_categories.find(params[:id])
@@ -159,7 +159,7 @@ class CategoriesController < ApplicationController
     end
   end
   
-  
+  # /categories/1/posts
   # /categories/1/posts.xml
   def posts
     begin
