@@ -1,15 +1,4 @@
-<%
-  @page_actions = []
-  
-  if ProjectFile.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
-  end
-
-  if ProjectFolder.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_folder, :url => "/project/#{@active_project.id}/files/add_folder"}
-  end
-%>
-<%= form_tag :controller => 'files', :action => 'add_folder' %>
-<%= render :partial => 'folder_form' %>
+<%= form_tag folders_path %>
+<%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :add_folder.l %></button>
 </form>
