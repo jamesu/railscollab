@@ -6,18 +6,18 @@
     <div class="header"><h2><%= link_to (h project[:name]), :controller => 'project', :action => 'overview', :active_project => project[:id] %></h2></div>
     <div class="content">
 <% if project[:milestones].length > 0 %>
-      <p><%= link_to 'Milestones', :controller => 'milestone', :action => 'index', :active_project => project[:id] %>:</p>
+      <p><%= link_to 'Milestones', milestones_path(:active_project => project[:id]) %>:</p>
       <table class="blank">
 <% project[:milestones].each do |milestone| -%>
         <tr>
-          <td class="milestoneCheckbox"><%= checkbox_link "/project/#{project[:id]}/milestone/complete/#{milestone.id}", false %></td>
+          <td class="milestoneCheckbox"><%= checkbox_link complete_milestone_path(:id => milestone.id, :active_project => milestone.project_id), false, nil, {:method => :put} %></td>
           <td class="milestoneText">
 <% if not milestone.assigned_to.nil? %>
             <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span> 
 <% else %>
             <span class="assignedTo"><%= :anyone.l %>:</span> 
 <% end %>
-            <%= link_to (h milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => project[:id] %> - 
+            <%= link_to (h milestone.name), milestone_path(:id => milestone.id, :active_project => project[:id]) %> - 
 <% if milestone.is_upcoming? %>
             <span><%= :milestone_days_left.l_with_args(:days => milestone.days_left) %></span>
 <% elsif milestone.is_late? %>

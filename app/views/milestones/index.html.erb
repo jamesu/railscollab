@@ -11,7 +11,7 @@
 <% unless @late_milestones.empty? %>
   <div id="lateMilestones">
     <h2><%= :late_milestones.l %></h2>
-<%= render :partial => 'view_milestone', :collection => @late_milestones %>
+<%= render :partial => 'show', :collection => @late_milestones %>
   </div>
 <% end %>
 

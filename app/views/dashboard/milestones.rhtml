@@ -4,7 +4,7 @@
 <% if @late_milestones.length > 0 %>
   <ul>
 <% @late_milestones.each do |milestone| %>
-    <li><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>: <%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), :controller => 'milestone', :action => 'view', :id => milestone.id, :active_project => milestone.project), :project => link_to(h(milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id)) %> <% unless milestone.assigned_to.nil? %>(<%= h milestone.assigned_to.object_name %>)<% end %></li>
+    <li><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>: <%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id)) %> <% unless milestone.assigned_to.nil? %>(<%= h milestone.assigned_to.object_name %>)<% end %></li>
 <% end %>
   </ul>
 <% end %>
