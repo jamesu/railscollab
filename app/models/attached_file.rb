@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -34,8 +34,9 @@ class AttachedFile < ActiveRecord::Base
              attach_id]
 	                                          
 	  AttachedFile.find(:all, :conditions => conds).each do |attach|
-	    ok_delete = !attach.project_file.nil? and !attach.project_file.is_visible
-	    attach.project_file.destroy if ok_delete and attach.project_file.attached_files.length <= 1
+	    if !attach.project_file.nil? and !attach.project_file.is_visible and attach.project_file.attached_files.length <= 1
+	      attach.project_file.destroy
+	    end
 	  end
 	  
 	  AttachedFile.delete_all(conds)
@@ -47,12 +48,11 @@ class AttachedFile < ActiveRecord::Base
              object.id]
 	                                 
 	  AttachedFile.find(:all, :conditions => conds).each do |attach|
-	    ok_delete = !attach.project_file.nil? and !attach.project_file.is_visible
-	    attach.project_file.destroy if ok_delete and attach.project_file.attached_files.length <= 1
-	    
-	    AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
-             object.class.to_s, 
-             object.id, attach.file_id])
+	    if !attach.project_file.nil? and !attach.project_file.is_visible and attach.project_file.attached_files.length <= 1
+	      AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
+               object.class.to_s, 
+               object.id, attach.file_id])
+      end
 	  end
 	end
 	

@@ -22,7 +22,7 @@ class FilesController < ApplicationController
   helper 'project_items'
 
   before_filter :process_session
-  before_filer  :obtain_file, :except => [:index, :new, :create]
+  before_filter  :obtain_file, :except => [:index, :new, :create]
   after_filter  :user_track, :only => [:index, :show]
 
   filter_parameter_logging :file_data
@@ -52,7 +52,7 @@ class FilesController < ApplicationController
         @page = params[:page].to_i
         @page = 0 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => @page}, :order => "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.page_count.times {|page| @pagination << page+1}
         
@@ -137,7 +137,8 @@ class FilesController < ApplicationController
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectFile.can_be_created_by(@logged_user, @active_project))
 
-    @file = @active_project.project_files.build(params[:file])
+    file_attribs = params[:file]
+    @file = @active_project.project_files.build(file_attribs)
     @file.created_by = @logged_user
 
     # verify file data
@@ -190,7 +191,8 @@ class FilesController < ApplicationController
       end
     end
 
-    @file.attributes = params[:file]
+    file_attribs = params[:file]
+    @file.attributes = file_attribs
     @file.updated_by = @logged_user
     @file.is_visible = true
     
@@ -241,7 +243,7 @@ class FilesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_file)
-        redirect_back_or_default(files_url)
+        redirect_to files_url
       }
       format.js {}
       format.xml  { head :ok }
@@ -303,7 +305,7 @@ class FilesController < ApplicationController
     end
 
     case request.method
-    when :post
+    when :put
       attach_attribs = params[:attach]
 
       if attach_attribs[:what] == 'new_file'
@@ -327,8 +329,14 @@ class FilesController < ApplicationController
 
         # Make sure its unique
         does_exist = @attach_object.project_file.any?{ |file| file == existing_file }
-        @attach_object.project_file << existing_file unless does_exist
-
+        if !does_exist
+          AttachedFile.create!(:created_on => existing_file.created_on, 
+                               :created_by => @logged_user, 
+                               :rel_object => @attach_object, 
+                               :project_file => existing_file)
+          #@attach_object.project_file << existing_file
+        end
+        
         error_status(false, :success_added_file_to_object)
         redirect_back_or_default @attach_object.object_url
         return

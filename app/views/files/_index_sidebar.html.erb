@@ -3,14 +3,14 @@
   <h2><%= :folders.l %></h2>
   <div class="blockContent" id="sidebarFolderList">
     <ul>
-<% if !@current_folder.nil? %>
+<% if !@folder.nil? %>
       <li><%= link_to :all_files.l, files_path %></li>
 <% else %>
       <li><%= link_to :all_files.l, files_path, :class => 'selected' %></li>
 <% end %>
     
 <% @folders.each do |folder| -%>
-<% if !@current_folder.nil? and @current_folder.id == folder.id %>
+<% if !@folder.nil? and @folder.id == folder.id %>
 <% selected_class = {:class => 'selected'} %>
 <% else %>
 <% selected_class = {} %>

@@ -2,15 +2,15 @@
   @page_actions = []
   
   if ProjectFile.can_be_created_by(@logged_user, @active_project)
-  	if @current_folder.nil?
-	    @page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
+  	if @folder.nil?
+	    @page_actions << {:title => :add_file, :url => new_file_path}
     else
-    	@page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file?folder_id=#{@current_folder.id}"}
+    	@page_actions << {:title => :add_file, :url => new_file_path(:folder_id => @folder.id)}
     end
   end
 
   if ProjectFolder.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_folder, :url => "/project/#{@active_project.id}/files/add_folder"}
+    @page_actions << {:title => :add_folder, :url => new_folder_path}
   end
 %>
 <% if @files.empty? %>

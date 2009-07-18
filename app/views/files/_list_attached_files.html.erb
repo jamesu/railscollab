@@ -12,7 +12,7 @@
 <% end %>
   </ul>
 <% if !dont_add and attached_files_object.file_can_be_added_by(@logged_user) %>
-  <p>&raquo; <%= link_to :attach_files.l, :controller => 'files', :action => 'attach_to_object', :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id %></p>
+  <p>&raquo; <%= link_to :attach_files.l, attach_file_path(:object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id) %></p>
 <% end %>
 </div>
 <% end %>

@@ -20,6 +20,8 @@ module FilesHelper
   def page_title
     case action_name
       when 'index' then @current_folder.nil? ? :files.l : :folder_name.l_with_args(:folder => @current_folder.name)
+      when 'new' then :add_file.l
+      when 'edit' then :edit_file.l
       else super
     end
   end
@@ -32,7 +34,7 @@ module FilesHelper
     case action_name
       when 'index' then :files
       when 'attach' then :attach_files
-      when 'detatch' then :attach_files
+      when 'new' then :add_file
       when 'edit' then :edit_file
       when 'show' then @file.filename
       else super
@@ -49,7 +51,6 @@ module FilesHelper
   def additional_stylesheets
     case action_name
       when 'attach' then ['project/attach_files']
-      when 'detatch' then ['project/attach_files']
       else ['project/files']
     end
   end

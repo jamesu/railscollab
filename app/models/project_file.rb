@@ -87,11 +87,11 @@ class ProjectFile < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'files', :action => 'file_details', :id => self.id, :active_project => self.project_id
+    url_for hash_for_file_path(:only_path => true, :id => self.id, :active_project => self.project_id)
   end
 
   def download_url
-    url_for :only_path => true, :controller => 'files', :action => 'download_file', :id => self.id, :active_project => self.project_id
+    url_for hash_for_download_file_path(:only_path => true, :id => self.id, :active_project => self.project_id)
   end
 
   def filetype_icon_url

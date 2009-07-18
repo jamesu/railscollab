@@ -158,19 +158,19 @@ module ApplicationHelper
   end
 
   def actions_for_file(file, last_revision)
-    [{:name => :details_size.l_with_args(:size => format_size(last_revision.filesize)), :url => {:controller => 'files', :action => 'file_details', :id => file.id}, :cond => file.can_be_downloaded_by(@logged_user)},
-     {:name => :edit.l,   :url => {:controller => 'files', :action => 'edit_file',   :id => file.id}, :cond => file.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'files', :action => 'delete_file', :id => file.id}, :cond => file.can_be_deleted_by(@logged_user), :method => :post, :confirm => :file_delete_confirmation.l}]
+    [{:name => :details_size.l_with_args(:size => format_size(last_revision.filesize)), :url => file_path(:id => file.id), :cond => file.can_be_downloaded_by(@logged_user)},
+     {:name => :edit.l,   :url => edit_file_path(:id => file.id), :cond => file.can_be_edited_by(@logged_user)},
+     {:name => :delete.l, :url => file_path(:id => file.id), :cond => file.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :file_delete_confirmation.l}]
   end
 
   def actions_for_file_revision(file, revision)
-    [{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => {:controller => 'files', :action => 'download_file', :id => file.id, :revision => revision.revision_number}, :cond => file.can_be_downloaded_by(@logged_user)},
-     {:name => :edit.l,                                                             :url => {:controller => 'files', :action => 'edit_file',     :id => file.id, :revision => revision.revision_number}, :cond => file.can_be_edited_by(@logged_user)}]
+    [{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => download_file_path(:id => file.id, :revision => revision.revision_number), :cond => file.can_be_downloaded_by(@logged_user)},
+     {:name => :edit.l,                                                             :url => edit_file_path(:id => file.id, :revision => revision.revision_number), :cond => file.can_be_edited_by(@logged_user)}]
   end
 
   def actions_for_attached_files(attached_file, object)
-    [{:name => :details.l, :url => "/project/#{@active_project.id}/files/file_details/#{attached_file.id}", :cond => true},
-     {:name => :detatch.l, :url => "/project/#{@active_project.id}/files/detach_from_object/#{attached_file.id}?object_type=#{object.class.to_s}&object_id=#{object.id}", :cond => object.file_can_be_added_by(@logged_user), :method => :post, :confirm => :detatch_file_confirm.l}]
+    [{:name => :details.l, :url => file_path(:id => attached_file.id), :cond => true},
+     {:name => :detatch.l, :url => detatch_file_path(:id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => object.file_can_be_added_by(@logged_user), :method => :put, :confirm => :detatch_file_confirm.l}]
   end
 
   def actions_for_time(time)

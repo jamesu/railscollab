@@ -20,6 +20,8 @@ module FoldersHelper
   def page_title
     case action_name
       when 'files' then :folder_name.l_with_args(:folder => @current_folder.name)
+      when 'new' then :add_folder.l
+      when 'edit' then :edit_folder.l
       else super
     end
   end
@@ -31,6 +33,7 @@ module FoldersHelper
   def current_crumb
     case action_name
       when 'show' then @folder.nil? ? :files : @folder.name
+      when 'new' then :add_folder
       when 'edit' then :edit_folder
       else super
     end
@@ -39,7 +42,7 @@ module FoldersHelper
   def extra_crumbs
     crumbs = []
     crumbs << {:title => :files, :url => "/project/#{@active_project.id}/files"}
-    crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil?
+    crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil? or @folder.new_record?
     crumbs
   end
 

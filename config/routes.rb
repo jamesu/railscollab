@@ -93,13 +93,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'project/:active_project/tags',     :controller => 'project', :action => 'tags'
   map.connect 'project/:active_project/tags/:id', :controller => 'tag',     :action => 'project'
   
-  map.connect '/files/thumbnail/:id.jpg', :controller => 'files', :action => 'thumbnail', :format => 'jpg'
-  
   %w[search people permissions remove_user remove_company edit delete complete open].each do |action|
   	map.connect "project/:active_project/#{action}/:id", :controller => 'project', :action => action
   end
 
-  %w[comment milestone time files tags people].each do |controller|
+  %w[comment milestone time tags people].each do |controller|
   	map.connect "project/:active_project/#{controller}/:action/:id",         :controller => controller
   	map.connect "project/:active_project/#{controller}/:action/:id.:format", :controller => controller
   	map.connect "project/:active_project/#{controller}",                     :controller => controller
@@ -132,7 +130,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :files, :path_prefix => 'project/:active_project',
                         :member => {:download => :get,
                                     :attach => [:get, :put],
-                                    :detatch => [:get, :put]}
+                                    :detatch => :put},
+                        :has_many => [:comments]
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   
