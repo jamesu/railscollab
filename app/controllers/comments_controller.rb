@@ -27,6 +27,7 @@ class CommentsController < ApplicationController
   COMMENT_ROUTE_MAP = {
     :message_id => :ProjectMessage,
     :milestone_id => :ProjectMilestone,
+    :file_id => :ProjectFile,
     :task_id => ProjectTask,
     :task_list_id => ProjectTaskList
   }

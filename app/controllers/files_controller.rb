@@ -1,7 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
-# Portions Copyright (C) René Scheibe
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -22,21 +21,15 @@ class FilesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  verify :method      => :post,
-         :only        => [ :delete_folder, :delete_file, :detach_from_object ],
-         :add_flash   => { :error => true, :message => :invalid_request.l },
-         :redirect_to => { :controller => 'file', :action => 'index' }
+  before_filter :process_session
+  before_filer  :obtain_file, :except => [:index, :new, :create]
+  after_filter  :user_track, :only => [:index, :show]
 
   filter_parameter_logging :file_data
-
-  before_filter :process_session
-  before_filter :accept_folder_name, :only   => [:browse_folder, :edit_folder, :delete_folder]
-  after_filter  :user_track,         :only   => [:index, :browse_folder]
-
+  
+  # GET /files
+  # GET /files.xml
   def index
-    current_page = params[:page].to_i
-    current_page = 0 unless current_page > 0
-    
     file_conditions = {'project_id' => @active_project.id, 'is_visible' => true}
     file_conditions['is_private'] = false unless @logged_user.member_of_owner?
     
@@ -49,106 +42,214 @@ class FilesController < ApplicationController
       sort_order = 'DESC'
     end
     
-    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
-    @pagination = []
-    result_set.page_count.times {|page| @pagination << page+1}
-
     @current_folder = nil
     @order = sort_type
-    @page = current_page
-    @folders = @active_project.project_folders
-    @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
-
-    @content_for_sidebar = 'index_sidebar'
+    
+    respond_to do |format|
+      format.html {
+        @content_for_sidebar = 'index_sidebar'
+    
+        @page = params[:page].to_i
+        @page = 0 unless @page > 0
+        
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
+        @pagination = []
+        result_set.page_count.times {|page| @pagination << page+1}
+        
+        # Important files and folders (html only)
+        @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
+        @folders = @active_project.project_folders
+      }
+      format.xml  {
+        @files = ProjectFile.find(:all,
+                                  :conditions => file_conditions,
+                                  :offset => params[:offset],
+                                  :limit => params[:limit] || AppConfig.files_per_page)
+        
+        render :xml => @files.to_xml(:only => [:id,
+                                               :filename,
+                                               :created_by_id, 
+                                               :created_on,
+                                               :updated_on,
+                                               :is_private,
+                                               :is_important,
+                                               :is_locked,
+                                               :comments_count, 
+                                               :comments_enabled], :root => 'files')
+      }
+    end
   end
 
-  # Folders
+  # GET /files/1
+  # GET /files/1.xml
+  def show
+    return error_status(true, :insufficient_permissions) unless @file.can_be_seen_by(@logged_user)
+    
+    respond_to do |format|
+      format.html {
+        @revisions = @file.project_file_revisions
+        
+        if @revisions.empty?
+          error_status(true, :no_file_revisions)
+          redirect_back_or_default :controller => 'files'
+        end
+        
+        @content_for_sidebar = 'index_sidebar'
+        @pagination = []
 
-  def browse_folder
-    begin
-      @folder ||= @active_project.project_folders.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_folder)
-      redirect_back_or_default :controller => 'files'
-      return
+        @folder = @file.project_folder
+        @last_revision = @revisions[0]
+
+        @current_folder = @file.project_folder
+        @order = nil
+        @page = nil
+        @folders = @active_project.project_folders
+        
+        # Important files (html only)
+        @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
+      }
+      format.xml  { 
+        render :xml => @file.to_xml(:include => [:project_file_revisions])
+      }
+    end
+  end
+
+  # GET /files/new
+  # GET /files/new.xml
+  def new
+    return error_status(true, :insufficient_permissions) unless (ProjectFile.can_be_created_by(@logged_user, @active_project))
+    
+    @file = @active_project.project_files.build()
+    
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @file.to_xml(:root => 'file') }
+    end
+  end
+
+  # GET /files/1/edit
+  def edit
+    return error_status(true, :insufficient_permissions) unless @file.can_be_edited_by(@logged_user)
+  end
+
+  # POST /files
+  # POST /files.xml
+  def create
+    return error_status(true, :insufficient_permissions) unless (ProjectFile.can_be_created_by(@logged_user, @active_project))
+
+    @file = @active_project.project_files.build(params[:file])
+    @file.created_by = @logged_user
+
+    # verify file data
+    file_data = params[:file_data]
+    if file_data.nil? or file_data[:file].nil?
+      @file.errors.add(:file, :required.l)
+    end
+    
+    # sort out other attributes
+    @file.filename = file_data[:file] ? (file_data[:file].original_filename).sanitize_filename : nil
+    @file.expiration_time = 0
+    @file.is_visible = true
+
+    saved = false
+
+    ProjectFile.transaction do
+      saved = @file.save
+
+      if saved
+        @file.add_revision(file_data[:file], 1, @logged_user, '')
+        @file.tags = file_attribs[:tags]
+      end
     end
 
-    unless @folder.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
+    respond_to do |format|
+      if saved
+        format.html {
+          error_status(false, :success_added_file)
+          redirect_back_or_default(@file)
+        }
+        format.js {}
+        format.xml  { render :xml => @file.to_xml(:root => 'file'), :status => :created, :location => @file }
+      else
+        format.html { render :action => "new" }
+        format.js {}
+        format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /files/1
+  # PUT /files/1.xml
+  def update
+    return error_status(true, :insufficient_permissions) unless (@file.can_be_edited_by(@logged_user))
+
+    file_data = params[:file_data]
+    unless file_data.nil?
+      if file_data[:updated_file] and !file_data[:file]
+        @file.errors.add(:file, :required.l)
+      end
     end
 
-    current_page = params[:page].to_i
-    current_page = 0 unless current_page > 0
+    @file.attributes = params[:file]
+    @file.updated_by = @logged_user
+    @file.is_visible = true
     
-    file_conditions = {'folder_id' => @folder.id, 'project_id' => @active_project.id, 'is_visible' => true}
-    file_conditions['is_private'] = false unless @logged_user.member_of_owner?
+    saved = false
+
+    ProjectFile.transaction do
+      saved = @file.save
+      
+      if saved
+        if file_data[:updated_file]
+          if file_data[:version_file_change]
+            @file.add_revision(file_data[:file], @file.project_file_revisions[0].revision_number+1, @logged_user, file_data[:revision_comment])
+          else
+            @file.update_revision(file_data[:file], @file.project_file_revisions[0], @logged_user, file_data[:revision_comment])
+          end
+
+          @file.filename = (file_data[:file].original_filename).sanitize_filename
+        end
+
+        @file.tags = file_attribs[:tags]
+      end
+    end
     
-    sort_type = params[:orderBy]
-    sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
-    sort_order = 'DESC'
+    respond_to do |format|
+      if saved
+        format.html {
+          error_status(false, :success_edited_file)
+          redirect_back_or_default(@file)
+        }
+        format.js {}
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.js {}
+        format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
 
-    result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => current_page}, :order => "#{sort_type} #{sort_order}")
-    @pagination = []
-    result_set.page_count.times {|page| @pagination << page+1}
+  # DELETE /files/1
+  # DELETE /files/1.xml
+  def destroy
+    return error_status(true, :insufficient_permissions) unless (@file.can_be_deleted_by(@logged_user))
+    
+    @file.updated_by = @logged_user
+    @file.destroy
 
-    @current_folder = @folder
-    @order = sort_type
-    @page = current_page
-    @folders = @active_project.project_folders
-    @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
-
-    @content_for_sidebar = 'index_sidebar'
-
-    render :template => 'files/index'
+    respond_to do |format|
+      format.html {
+        error_status(false, :success_deleted_file)
+        redirect_back_or_default(files_url)
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
   
-  # Files
-
-  def file_details
-    begin
-      @file ||= @active_project.project_files.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_file)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    unless @file.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-    end
-
-    @revisions = @file.project_file_revisions
-    if @revisions.empty?
-      error_status(true, :no_file_revisions)
-      redirect_back_or_default :controller => 'files'
-    end
-
-    @pagination = []
-
-    @folder = @file.project_folder
-    @revisions = @file.project_file_revisions
-    @last_revision = @revisions[0]
-
-    @current_folder = @file.project_folder
-    @order = nil
-    @page = nil
-    @folders = @active_project.project_folders
-    @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
-
-    @content_for_sidebar = 'index_sidebar'
-  end
-
-  def download_file
-    begin
-      @file ||= @active_project.project_files.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_file)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
+  # GET /files/1/download
+  def download
     revision_id = params[:revision]
 
     unless revision_id.nil?
@@ -156,7 +257,7 @@ class FilesController < ApplicationController
         @file_revision = ProjectFileRevision.first(:conditions => ['file_id = ? AND revision_number = ?', @file.id, revision_id])
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_file_revision)
-        redirect_back_or_default :controller => 'files'
+        redirect_back_or_default files_path
         return
       end
     else
@@ -174,139 +275,9 @@ class FilesController < ApplicationController
       render :text => '404 Not Found', :status => 404
     end
   end
-
-  def add_file
-    @file = ProjectFile.new
-
-    unless ProjectFile.can_be_created_by(@logged_user, @active_project)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    case request.method
-    when :get
-      if params[:folder_name]
-        begin
-          @folder = @active_project.project_folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
-        rescue ActiveRecord::RecordNotFound
-        end
-      elsif params[:folder_id]
-        begin
-          @folder = @active_project.project_folders.find(params[:folder_id])
-        rescue ActiveRecord::RecordNotFound
-        end
-      end
-
-      @file.project_folder = @folder unless @folder.nil?
-      @file.comments_enabled = true unless (params[:file] and params[:file].has_key?(:comments_enabled))
-    when :post
-      file_attribs = params[:file]
-      file_data = params[:file_data]
-
-      if file_data.nil? or file_data[:file].nil?
-        @file.errors.add(:file, :required.l)
-      end
-
-      do_abort = !@file.errors.empty?
-
-      @file.attributes = file_attribs
-
-      @file.created_by = @logged_user
-      @file.project = @active_project
-      @file.filename = file_data[:file] ? (file_data[:file].original_filename).sanitize_filename : nil
-      @file.expiration_time = 0
-      @file.is_visible = true
-
-      ProjectFile.transaction do
-        return unless @file.save
-
-        @file.add_revision(file_data[:file], 1, @logged_user, '')
-
-        @file.tags = file_attribs[:tags]
-
-        error_status(false, :success_added_file)
-        redirect_back_or_default :controller => 'files'
-      end
-    end
-  end
-
-  def edit_file
-    begin
-      @file = @active_project.project_files.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_file)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    unless @file.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    case request.method
-    when :post
-      file_attribs = params[:file]
-      file_data = params[:file_data]
-
-      unless file_data.nil?
-        if file_data[:updated_file] and !file_data[:file]
-          @file.errors.add(:file, :required.l)
-        end
-      end
-
-      @file.attributes = file_attribs
-
-      @file.project = @active_project
-      @file.is_visible = true
-      @file.updated_by = @logged_user
-
-      ProjectFile.transaction do
-        return unless @file.save
-
-        if file_data[:updated_file]
-          if file_data[:version_file_change]
-            @file.add_revision(file_data[:file], @file.project_file_revisions[0].revision_number+1, @logged_user, file_data[:revision_comment])
-          else
-            @file.update_revision(file_data[:file], @file.project_file_revisions[0], @logged_user, file_data[:revision_comment])
-          end
-
-          @file.filename = (file_data[:file].original_filename).sanitize_filename
-        end
-
-        @file.tags = file_attribs[:tags]
-
-        error_status(false, :success_edited_file)
-        redirect_back_or_default :controller => 'files'
-      end
-    end
-  end
-
-  def delete_file
-    begin
-      @file = @active_project.project_files.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_file)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    unless @file.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    @file.updated_by = @logged_user
-    @file.destroy
-
-    error_status(false, :success_deleted_file)
-    redirect_back_or_default :controller => 'files'
-  end
-
-  def attach_to_object
+  
+  # PUT /files/1/attach
+  def attach
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
 
@@ -368,15 +339,16 @@ class FilesController < ApplicationController
       return
     end
   end
-
-  def detach_from_object
+  
+  # PUT /files/1/detatch
+  def detatch
     # params: manager, file_id, object_id
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
 
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'ProjectMessage'].include?(rel_object_type))
       error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'files'
+      redirect_back_or_default files_path
       return
     end
 
@@ -385,7 +357,7 @@ class FilesController < ApplicationController
       @attach_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_object)
-      redirect_back_or_default :controller => 'files'
+      redirect_back_or_default files_path
       return
     end
 
@@ -409,6 +381,18 @@ class FilesController < ApplicationController
     redirect_back_or_default @attach_object.object_url
   end
 
-  protected
+private
 
+  def obtain_file
+     begin
+        @file = @active_project.project_files.find(params[:id])
+     rescue ActiveRecord::RecordNotFound
+       error_status(true, :invalid_file)
+       redirect_back_or_default files_path
+       return false
+     end
+     
+     return true
+  end
+  
 end

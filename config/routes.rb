@@ -129,6 +129,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :folders, :path_prefix => 'project/:active_project',
                           :member => {:files => :get}
   
+  map.resources :files, :path_prefix => 'project/:active_project',
+                        :member => {:download => :get,
+                                    :attach => [:get, :put],
+                                    :detatch => [:get, :put]}
+  
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   
   # Install the default route as the lowest priority.

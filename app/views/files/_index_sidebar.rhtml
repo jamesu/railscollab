@@ -4,9 +4,9 @@
   <div class="blockContent" id="sidebarFolderList">
     <ul>
 <% if !@current_folder.nil? %>
-      <li><%= link_to :all_files.l, :action => 'index' %></li>
+      <li><%= link_to :all_files.l, files_path %></li>
 <% else %>
-      <li><%= link_to :all_files.l, {:action => 'index'}, :class => 'selected' %></li>
+      <li><%= link_to :all_files.l, files_path, :class => 'selected' %></li>
 <% end %>
     
 <% @folders.each do |folder| -%>
@@ -15,14 +15,14 @@
 <% else %>
 <% selected_class = {} %>
 <% end %>
-      <li><%= link_to (h folder.name), {:action => 'browse_folder', :id => folder.id}, selected_class %> 
-      <% if folder.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), :action => 'edit_folder', :id => folder.id %><% end %>
-      <% if folder.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), {:action => 'delete_folder', :id => folder.id}, :method => :post, :confirm => :folder_delete_confirmation.l %><% end %>
+      <li><%= link_to (h folder.name), files_folder_path(:id => folder.id), selected_class %> 
+      <% if folder.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), edit_folder_path(:id => folder.id) %><% end %>
+      <% if folder.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => :folder_delete_confirmation.l %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= "/project/#{@active_project.id}/files/add_folder" %>"><%= :add_folder.l %></a></p>
+    <p><a href="<%= new_folder_path %>"><%= :add_folder.l %></a></p>
 	<% end %>
   </div>
 </div>

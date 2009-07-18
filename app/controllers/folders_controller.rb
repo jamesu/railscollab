@@ -23,7 +23,7 @@ class FoldersController < ApplicationController
 
   before_filter :process_session
   before_filter :obtain_folder, :except => [:index, :create, :new]
-  after_filter  :user_track, :only => [:index, :show]
+  after_filter  :user_track, :only => [:files]
   
   # GET /folders
   # GET /folders.xml
@@ -31,7 +31,7 @@ class FoldersController < ApplicationController
     @folders = @active_project.project_folders
     
     respond_to do |format|
-      format.html {}
+      format.html { redirect_to(files_path) }
       format.xml  {
         render :xml => @folders.to_xml(:root => 'folders')
       }
@@ -45,7 +45,7 @@ class FoldersController < ApplicationController
     
     respond_to do |format|
       format.html {
-        @content_for_sidebar = 'messages/index_sidebar'
+        redirect_to(files_folder_path)
       }
       format.xml  { 
         render :xml => @folder.to_xml
