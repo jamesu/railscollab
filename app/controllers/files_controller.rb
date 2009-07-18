@@ -102,85 +102,7 @@ class FilesController < ApplicationController
 
     render :template => 'files/index'
   end
-
-  def add_folder
-    @folder = ProjectFolder.new
-
-    unless ProjectFolder.can_be_created_by(@logged_user, @active_project)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    case request.method
-    when :post
-      folder_attribs = params[:folder]
-
-      @folder.attributes = folder_attribs
-
-      @folder.project = @active_project
-
-      return unless @folder.save
-
-      ApplicationLog::new_log(@folder, @logged_user, :add)
-
-      error_status(false, :success_added_folder)
-      redirect_back_or_default :controller => 'files'
-    end
-  end
-
-  def edit_folder
-    begin
-      @folder ||= @active_project.project_folders.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_folder)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    unless @folder.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    case request.method
-    when :post
-      folder_attribs = params[:folder]
-
-      @folder.attributes = folder_attribs
-
-      return unless @folder.save
-
-      ApplicationLog::new_log(@folder, @logged_user, :edit)
-
-      error_status(false, :success_edited_folder)
-      redirect_back_or_default :controller => 'files'
-    end
-  end
-
-  def delete_folder
-    begin
-      @folder ||= @active_project.project_folders.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_folder)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    unless @folder.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'files'
-      return
-    end
-
-    ApplicationLog::new_log(@folder, @logged_user, :delete)
-    @folder.destroy
-
-    error_status(false, :success_deleted_folder)
-    redirect_back_or_default :controller => 'files'
-  end
-
+  
   # Files
 
   def file_details
@@ -489,27 +411,4 @@ class FilesController < ApplicationController
 
   protected
 
-  def accept_folder_name
-    @folder = nil
-
-    if params[:folder_name]
-      begin
-        @folder = @active_project.project_folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
-      rescue ActiveRecord::RecordNotFound
-        error_status(true, :invalid_folder)
-        redirect_back_or_default :controller => 'files'
-        return false
-      end
-    elsif params[:folder_id]
-      begin
-        @folder = @active_project.project_folders.find(params[:folder_id])
-      rescue ActiveRecord::RecordNotFound
-        error_status(true, :invalid_folder)
-        redirect_back_or_default :controller => 'files'
-        return false
-      end
-    end
-
-    true
-  end
 end

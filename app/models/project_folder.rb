@@ -24,6 +24,30 @@ class ProjectFolder < ActiveRecord::Base
 
   has_many :project_files, :foreign_key => 'folder_id'
 
+  after_create  :process_create
+  before_update :process_update_params
+  before_destroy :process_destroy
+
+  def process_create
+    ApplicationLog.new_log(self, @created_by, :add, false) unless @created_by.nil?
+  end
+
+  def process_update_params
+    ApplicationLog.new_log(self, @updated_by, :edit, false) unless @updated_by.nil?
+  end
+
+  def process_destroy
+    ApplicationLog.new_log(self, @updated_by, :delete, false) unless @updated_by.nil?
+  end
+  
+  def created_by=(user)
+    @created_by = user
+  end
+  
+  def updated_by=(user)
+    @updated_by = user
+  end
+
   def object_name
     self.name
   end

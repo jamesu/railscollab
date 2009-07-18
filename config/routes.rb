@@ -124,7 +124,10 @@ ActionController::Routing::Routes.draw do |map|
                            :has_many => [:comments]
   
   map.resources :categories, :path_prefix => 'project/:active_project',
-                           :member => {:posts => :any}
+                             :member => {:posts => :get}
+  
+  map.resources :folders, :path_prefix => 'project/:active_project',
+                          :member => {:files => :get}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   
