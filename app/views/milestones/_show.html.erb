@@ -1,61 +1,62 @@
-<% if view_milestone.is_completed? %>
+<% milestone = show %>
+<% if milestone.is_completed? %>
 <div class="milestone success">
-<% elsif view_milestone.is_today? %>
+<% elsif milestone.is_today? %>
 <div class="milestone important">
-<% elsif view_milestone.is_late? %>
+<% elsif milestone.is_late? %>
 <div class="milestone important">
 <% else %>
 <div class="milestone hint">
 <% end %>
 
-<% if view_milestone.is_private %>
+<% if milestone.is_private %>
     <div class="private" title="<%= :private_milestone.l %>"><span><%= :private_milestone.l %></span></div>
 <% end %>
 
     <div class="header">
-<% if view_milestone.status_can_be_changed_by(@logged_user) %>
-<% if view_milestone.is_completed? %>
-<%= checkbox_link "/project/#{@active_project.id}/milestone/open/#{view_milestone.id}", true %>
+<% if milestone.status_can_be_changed_by(@logged_user) %>
+<% if milestone.is_completed? %>
+<%= checkbox_link open_milestone_path(:id => milestone.id), true, nil, {:method => :put} %>
 <% else %>
-<%= checkbox_link "/project/#{@active_project.id}/milestone/complete/#{view_milestone.id}", false %>
+<%= checkbox_link complete_milestone_path(:id => milestone.id), false, nil, {:method => :put} %>
 <% end %>
 <% end %>
 
-<% if not view_milestone.assigned_to.nil? %>
-        <span class="assignedTo"><%= h view_milestone.assigned_to.object_name %>:</span>
+<% if not milestone.assigned_to.nil? %>
+        <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span>
 <% end %>
-      <%= link_to (h view_milestone.name), :controller => 'milestone', :action => 'view', :id => view_milestone.id %>
-<% if view_milestone.is_upcoming? %>
- (<%= :milestone_days_left.l_with_args(:days => view_milestone.days_left) %>)
-<% elsif view_milestone.is_late? %>
- (<%= :milestone_days_late.l_with_args(:days => view_milestone.days_late) %>)
-<% elsif view_milestone.is_today? %>
+      <%= link_to (h milestone.name), milestone_path(:id => milestone.id) %>
+<% if milestone.is_upcoming? %>
+ (<%= :milestone_days_left.l_with_args(:days => milestone.days_left) %>)
+<% elsif milestone.is_late? %>
+ (<%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>)
+<% elsif milestone.is_today? %>
  (<%= :today.l %>)
 <% end %>
     </div>
     
     <div class="content">
-<% if view_milestone.due_date.year > Date.today.year %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(view_milestone.due_date, :milestone_due_date_extended_format.l) %></div>
+<% if milestone.due_date.year > Date.today.year %>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_extended_format.l) %></div>
 <% else %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(view_milestone.due_date, :milestone_due_date_format.l) %></div>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_format.l) %></div>
 <% end %>
       
-<% if not view_milestone.description.nil? %>
-      <div class="description"><%= textilize view_milestone.description %></div>
+<% if not milestone.description.nil? %>
+      <div class="description"><%= textilize milestone.description %></div>
 <% end %>
 
 <!-- Milestones -->
-<% if not (view_milestone.project_messages.length > 0 or view_milestone.project_task_lists.length > 0) %>
+<% if not (milestone.project_messages.length > 0 or milestone.project_task_lists.length > 0) %>
       <p><%= :milestone_empty_info.l_with_args(
-               :message => link_to(:message.l, :controller => 'message', :action => 'add', :milestone_id => view_milestone.id),
-               :task_list => link_to(:task_list.l, new_task_list_path(:milestone_id => view_milestone.id))) %></p>
+               :message => link_to(:message.l, new_message_path(:milestone_id => milestone.id)),
+               :task_list => link_to(:task_list.l, new_task_list_path(:milestone_id => milestone.id))) %></p>
 <% else %>
-<% if view_milestone.project_messages.length > 0 %>
+<% if milestone.project_messages.length > 0 %>
       <p><%= :messages.l %>:</p>
       <ul>
-<% (@logged_user.member_of_owner? ? view_milestone.project_messages : view_milestone.project_messages.public).each do |message| -%>
-        <li><%= link_to (h message.title), :controller => 'message', :action => 'view', :id => message.id %>
+<% (@logged_user.member_of_owner? ? milestone.project_messages : milestone.project_messages.public).each do |message| -%>
+        <li><%= link_to (h message.title), message_path(:id => message.id) %>
 <% if not message.created_by.nil? %>
       <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
              :time => format_usertime(message.created_on, :milestone_messages_created_format.l),
@@ -66,10 +67,10 @@
 <% end %>
 
 <!-- Task lists -->
-<% if view_milestone.project_task_lists.length > 0 %>
+<% if milestone.project_task_lists.length > 0 %>
       <p><%= :task_lists.l %>:</p>
       <ul>
-<% (@logged_user.member_of_owner? ? view_milestone.project_task_lists : view_milestone.project_task_lists.public).each do |task_list| -%>
+<% (@logged_user.member_of_owner? ? milestone.project_task_lists : milestone.project_task_lists.public).each do |task_list| -%>
 <% if task_list.is_completed? %>
         <li><del datetime="<%= task_list.completed_on.iso8601 %>"><%= link_to (h task_list.name), task_list_path(:id => task_list.id) %></del></li>
 <% else %>
@@ -81,10 +82,10 @@
 
 <% end %>
 
-  <p><span><%= :tags.l %>:</span> <%= tag_list view_milestone %></p>
+  <p><span><%= :tags.l %>:</span> <%= tag_list milestone %></p>
 
 <div class="milestoneOptions">
-<%= action_list actions_for_milestone(view_milestone) %>
+<%= action_list actions_for_milestone(milestone) %>
 </div>
 
 </div>

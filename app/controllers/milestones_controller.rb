@@ -103,7 +103,7 @@ class MilestonesController < ApplicationController
     @milestone.updated_by = @logged_user
     @milestone.tags = milestone_attribs[:tags]
 
-    saved = @milstone.save
+    saved = @milestone.save
     
     respond_to do |format|
       if saved

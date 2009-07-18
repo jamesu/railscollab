@@ -2,7 +2,7 @@
   @page_actions = []
   
   if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_milestone, :url => "/project/#{@active_project.id}/milestone/add"}
+    @page_actions << {:title => :add_milestone, :url => new_milestone_path}
   end
 %>
 
@@ -34,7 +34,7 @@
         end
   end %>
   <h3><%= :all_upcoming_milestones.l %></h3>
-<%= render :partial => 'view_milestone', :collection => @upcoming_milestones %> 
+<%= render :partial => 'show', :collection => @upcoming_milestones %> 
   </div>
 <% end %>
 

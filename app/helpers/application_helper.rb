@@ -123,8 +123,8 @@ module ApplicationHelper
   end
 
   def actions_for_milestone(milestone)
-    [{:name => :edit.l,   :url => {:controller => 'milestone', :action => 'edit',   :id => milestone.id}, :cond => milestone.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'milestone', :action => 'delete', :id => milestone.id}, :cond => milestone.can_be_deleted_by(@logged_user), :method => :post, :confirm => :milestone_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_milestone_path(:id => milestone.id), :cond => milestone.can_be_edited_by(@logged_user)},
+     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :milestone_confirm_delete.l}]
   end
 
   def actions_for_task_list(task_list)

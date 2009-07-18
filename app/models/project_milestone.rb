@@ -96,7 +96,7 @@ class ProjectMilestone < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'milestone', :action => 'view', :id => self.id, :active_project => self.project_id
+    url_for hash_for_milestone_path(:only_path => true, :id => self.id, :active_project => self.project_id)
   end
 
   def tags

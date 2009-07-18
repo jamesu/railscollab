@@ -24,16 +24,18 @@ module MilestonesHelper
   def current_crumb
     case action_name
       when 'index' then :milestones
-      when 'add' then :add_milestone
+      when 'new' then :add_milestone
+      when 'create' then :add_milestone
       when 'edit' then :edit_milestone
-      when 'view' then @milestone.name
+      when 'update' then :edit_milestone
+      when 'show' then @milestone.name
       else super
     end
   end
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :milestones, :url => "/project/#{@active_project.id}/milestone"} unless action_name == 'index'
+    crumbs << {:title => :milestones, :url => milestones_path} unless action_name == 'index'
     crumbs
   end
 
