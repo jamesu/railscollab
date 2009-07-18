@@ -72,7 +72,7 @@ class MessagesController < ApplicationController
                                                           :conditions => msg_conditions, 
                                                           :offset => params[:offset],
                                                           :limit => params[:limit] || AppConfig.messages_per_page)
-        render :xml => @messages.to_xml
+        render :xml => @messages.to_xml(:root => 'messages')
       }
     end
   end

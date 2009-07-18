@@ -28,8 +28,8 @@ class CommentsController < ApplicationController
     :message_id => :ProjectMessage,
     :milestone_id => :ProjectMilestone,
     :file_id => :ProjectFile,
-    :task_id => ProjectTask,
-    :task_list_id => ProjectTaskList
+    :task_id => :ProjectTask,
+    :task_list_id => :ProjectTaskList
   }
   
   # GET /comments
@@ -44,13 +44,13 @@ class CommentsController < ApplicationController
     end
     
     # Find object
-    obj = object_class.find(object_id)
+    @commented_object = object_class.find(object_id)
     return error_status(true, :invalid_object) if @commented_object.nil?
     
     # Check permissions
     return error_status(true, :insufficient_permissions) unless (@commented_object.can_be_seen_by(@logged_user))
     
-    @comments = @logged_user.member_of_owner? ? obj.comments : obj.comments.public
+    @comments = @logged_user.member_of_owner? ? @commented_object.comments : @commented_object.comments.public
     
     respond_to do |format|
       format.html {}
@@ -129,7 +129,6 @@ class CommentsController < ApplicationController
   def create
     # Grab related object class + id
     object_class, object_id = find_comment_object
-    puts "CLASS: #{object_class}, #{object_id}"
     if object_class.nil?
       error_status(true, :invalid_request)
       redirect_back_or_default :controller => 'dashboard', :action => 'index'
