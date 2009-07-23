@@ -1,4 +1,4 @@
-<%= form_tag :controller => 'time', :action => 'edit', :id => @time.id %>
+<%= form_tag time_path(:id => @time.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_time.l %></button>
 </form>

@@ -23,36 +23,58 @@ class TimesController < ApplicationController
   helper 'project_items'
 
   before_filter :process_session
-  before_filter :obtain_time,     :except => [:index, :by_task, :add]
+  before_filter :obtain_time,     :except => [:index, :by_task, :new, :create]
   before_filter :prepare_times,   :only   => [:index, :by_task, :export]
   after_filter  :user_track,      :only   => [:index, :by_task, :view]
 
   def index
+    return error_status(true, :insufficient_permissions) unless @logged_user.has_permission(@active_project, :can_manage_time)
+      
     unless @logged_user.has_permission(@active_project, :can_manage_time)
       error_status(true, :insufficient_permissions)
       redirect_back_or_default :controller => 'project'
     end
-
-    @project = @active_project
     
-    @times = @project.project_times.find(:all, :conditions => @time_conditions, :page => {:size => AppConfig.times_per_page, :current => @current_page}, :order => "#{@sort_type} #{@sort_order}")
-    @pagination = []
-    @times.page_count.times {|page| @pagination << page+1}
-
-    @content_for_sidebar = 'index_sidebar'
+    respond_to do |format|
+      format.html {
+        @project = @active_project
+        @content_for_sidebar = 'index_sidebar'
+    
+        @times = @project.project_times.find(:all, 
+                                             :conditions => @time_conditions, 
+                                             :page => {:size => AppConfig.times_per_page, :current => @current_page}, 
+                                             :order => "#{@sort_type} #{@sort_order}")
+        
+        @pagination = []
+        @times.page_count.times {|page| @pagination << page+1}
+    
+      }
+      format.xml  {
+        @times = @project.project_times.find(:all, :conditions => @time_conditions,
+                                                   :offset => params[:offset],
+                                                   :limit => params[:limit] || AppConfig.times_per_page, 
+                                                   :order => "#{@sort_type} #{@sort_order}")
+        
+        render :xml => @times.to_xml(:root => 'times')
+      }
+    end
   end
 
   def by_task
-    unless @logged_user.has_permission(@active_project, :can_manage_time)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'project'
+    return error_status(true, :insufficient_permissions) unless @logged_user.has_permission(@active_project, :can_manage_time)
+
+    respond_to do |format|
+      format.html {
+        @project = @active_project
+        @tasks = ProjectTime.find_by_task_list({:order => "#{@active_project.connection.quote_column_name 'order'} DESC"}, @time_conditions, "#{@sort_type} #{@sort_order}")
+        @content_for_sidebar = 'index_sidebar'
+    
+        @times = @project.project_times.find(:all, 
+                                             :conditions => @time_conditions, 
+                                             :page => {:size => AppConfig.times_per_page, :current => @current_page}, 
+                                             :order => "#{@sort_type} #{@sort_order}")
+      }
     end
-
-    @project = @active_project
-
-    @tasks = ProjectTime.find_by_task_list({:order => "#{@active_project.connection.quote_column_name 'order'} DESC"}, @time_conditions, "#{@sort_type} #{@sort_order}")
-
-    @content_for_sidebar = 'index_sidebar'
   end
 
   def show
@@ -97,7 +119,7 @@ class TimesController < ApplicationController
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
   end
 
-  def edit
+  def update
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
@@ -121,7 +143,7 @@ class TimesController < ApplicationController
     end
   end
 
-  def delete
+  def destroy
     return error_status(true, :insufficient_permissions) unless (@time.can_be_deleted_by(@logged_user))
 
     @time.updated_by = @logged_user

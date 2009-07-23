@@ -97,7 +97,7 @@ ActionController::Routing::Routes.draw do |map|
   	map.connect "project/:active_project/#{action}/:id", :controller => 'project', :action => action
   end
 
-  %w[comment time tags people].each do |controller|
+  %w[tags people].each do |controller|
   	map.connect "project/:active_project/#{controller}/:action/:id",         :controller => controller
   	map.connect "project/:active_project/#{controller}/:action/:id.:format", :controller => controller
   	map.connect "project/:active_project/#{controller}",                     :controller => controller
@@ -136,6 +136,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :milestones, :path_prefix => 'project/:active_project',
                              :member => {:open => :put,
                                          :complete => :put}
+  
+  map.resources :times, :path_prefix => 'project/:active_project',
+                        :collection => {:by_task => :get}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

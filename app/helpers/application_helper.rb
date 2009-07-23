@@ -174,14 +174,14 @@ module ApplicationHelper
   end
 
   def actions_for_time(time)
-    [{:name => :details.l, :url => {:controller => 'time', :action => 'view',   :id => time.id}, :cond => true},
-     {:name => :edit.l,    :url => {:controller => 'time', :action => 'edit',   :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
-     {:name => :delete.l,  :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
+    [{:name => :details.l, :url => time_path(:id => time.id), :cond => true},
+     {:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => time.can_be_edited_by(@logged_user)},
+     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => time.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :time_confirm_delete.l}]
   end
 
   def actions_for_time_short(time)
-    [{:name => :edit.l,   :url => {:controller => 'time', :action => 'edit',   :id => time.id}, :cond => time.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'time', :action => 'delete', :id => time.id}, :cond => time.can_be_deleted_by(@logged_user), :method => :post, :confirm => :time_confirm_delete.l}]
+    [{:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => time.can_be_edited_by(@logged_user)},
+     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => time.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :time_confirm_delete.l}]
   end
 
   def actions_for_wiki_page(page)

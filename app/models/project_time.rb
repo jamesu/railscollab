@@ -74,7 +74,7 @@ class ProjectTime < ActiveRecord::Base
 	end
 	
 	def object_url
-		url_for :only_path => true, :controller => 'time', :action => 'view', :id => self.id, :active_project => self.project_id
+		url_for hash_for_time_path(:only_path => true, :id => self.id, :active_project => self.project_id)
 	end
 	
 	# Responsible party assignment
