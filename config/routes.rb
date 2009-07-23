@@ -23,13 +23,7 @@ ActionController::Routing::Routes.draw do |map|
 
 
   # Company routes
-  map.connect 'company/logo/:id.png', :controller => 'company', :action => 'logo', :format => 'png'
-
-  %w[card edit add delete
-     update_permissions edit_logo delete_logo hide_welcome_info].each do |action|
-  	map.connect 'company/:action/:id',         :controller => 'company', :action => action
-  	map.connect 'company/:action/:id.:format', :controller => 'company', :action => action
-  end
+  map.connect 'company/logo/:id.png', :controller => 'companies', :action => 'logo', :format => 'png'
   
   # The rest of the simple controllers
   %w[dashboard access administration config].each do |controller|
@@ -142,6 +136,10 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :users, :member => {:avatar => [:get, :put, :delete],
                                     :permissions => [:get, :put]},
+                        :collection => {:current => :get}
+  
+  map.resources :companies, :member => {:avatar => [:get, :put, :delete],
+                                       :permissions => [:get, :put]},
                         :collection => {:current => :get}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
