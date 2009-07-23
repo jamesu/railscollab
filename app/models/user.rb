@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'user', :action => 'card', :id => self.id
+    url_for hash_for_user_path(:only_path => true, :id => self.id)
   end
 
   def self.get_online(active_in=15)
@@ -349,6 +349,23 @@ class User < ActiveRecord::Base
   def self.select_list
     items = [['None', 0]]
     items += self.all.collect{ |user| [user.username, user.id] }
+  end
+
+  # Serialization
+  alias_method :ar_to_xml, :to_xml
+  
+  def to_xml(options = {}, &block)
+    default_options = {
+      :except => [
+        :salt,
+        :token,
+        :twister,
+        :last_login,
+        :last_visit,
+        :last_activity,
+        :identity_url
+      ]}
+    self.ar_to_xml(options.merge(default_options), &block)
   end
 
   protected

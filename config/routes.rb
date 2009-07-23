@@ -32,7 +32,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   # The rest of the simple controllers
-  %w[dashboard access administration comment user config].each do |controller|
+  %w[dashboard access administration config].each do |controller|
   	map.connect "#{controller}/:action/:id",        :controller => controller
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
@@ -139,6 +139,10 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :times, :path_prefix => 'project/:active_project',
                         :collection => {:by_task => :get}
+  
+  map.resources :users, :member => {:avatar => [:get, :put, :delete],
+                                    :permissions => [:get, :put]},
+                        :collection => {:current => :get}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

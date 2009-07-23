@@ -28,7 +28,7 @@
 <% end %>
 <% if not project.created_by.nil? %>
     <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= "#{format_usertime(project.created_on, :project_created_format.l)} | " %>
-    <%= link_to (h project.created_by.display_name), :controller => 'user', :action => 'card', :id => project.created_by.id %>
+    <%= link_to (h project.created_by.display_name), user_path(:id => project.created_by.id) %>
     </div>
 <% else %>
     <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= format_usertime(project.created_on, :project_created_format.l)  %></div>

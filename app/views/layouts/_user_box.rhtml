@@ -6,7 +6,7 @@
   <% end %>
   <ul>
     <% unless user.is_anonymous? %>
-    <li><%= link_to :account.l, :controller => 'user', :action => 'current' %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to :account.l, current_users_path %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
     <% end %>
 <% if not projects.nil? and projects.length > 0 %>
     <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
@@ -20,8 +20,8 @@
   <div class="PopupMenuWidgetDiv" id="account_more_menu" style="display:none">
     <p><%= :account.l %>:</p>
     <ul>
-      <li><%= link_to :update_profile.l, :controller => 'user', :action => 'edit', :id => user.id %></li>
-      <li><%= link_to :update_avatar.l, :controller => 'user', :action => 'edit_avatar', :id => user.id %></li>
+      <li><%= link_to :update_profile.l, edit_user_path(:id => user.id) %></li>
+      <li><%= link_to :update_avatar.l, avatar_user_path(:id => user.id) %></li>
     </ul>
     <p><%= :userbox_more.l %></p>
     <ul>

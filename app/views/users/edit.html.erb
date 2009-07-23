@@ -1,16 +1,16 @@
-<%= form_tag :controller => 'user', :action => 'edit', :id => @user.id %>
+<%= form_tag user_path(:id => @user.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_user.l %></button>
 </form>
 
-<%= form_tag( {:controller => 'user', :action => 'edit_avatar', :id => @user.id}, :multipart => true ) %>
+<%= form_tag( avatar_user_path(:id => @user.id), :multipart => true, :method => :put ) %>
 <%= error_messages_for :user %>
   
   <fieldset>
     <legend><%= :current_avatar.l %></legend>
 <% if @user.has_avatar? %>
     <img src="<%= @user.avatar_url %>" alt="<%= h @user.display_name %> avatar" />
-    <p><%= link_to :delete_current_avatar.l, {:action => 'delete_avatar', :id => @user.id}, {:onclick => :avatar_confirm_delete, :method => :post} %></p>
+    <p><%= link_to :delete_current_avatar.l, avatar_user_path(:id => @user.id), {:onclick => :avatar_confirm_delete, :method => :delete} %></p>
 <% else %>
     <%= :avatar_not_uploaded.l %>
 <% end %>

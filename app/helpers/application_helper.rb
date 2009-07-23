@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -104,12 +104,12 @@ module ApplicationHelper
 	def actions_for_user(user)
 	   profile_updateable = user.profile_can_be_updated_by(@logged_user)
 	   
-	   actions = [{:name => :edit.l, :url => "/user/edit/#{user.id}", :cond => profile_updateable}]
+	   actions = [{:name => :edit.l, :url => edit_user_path(:id => user.id), :cond => profile_updateable}]
 	   
 	   if @active_project.nil?
 	     actions += [
-	       {:name => :delete.l, :url => "/user/delete/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_delete.l},
-	       {:name => :permissions.l, :url => "/user/update_permissions/#{user.id}", :cond => user.permissions_can_be_updated_by(@logged_user)}]
+	       {:name => :delete.l, :url => user_path(:id => user.id), :cond => user.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :confirm_user_delete.l},
+	       {:name => :permissions.l, :url => permissions_user_path(:id => user.id), :cond => user.permissions_can_be_updated_by(@logged_user)}]
 	   else
 	     actions << {:name => :remove.l, :url => "/project/#{@active_project.id}/remove_user/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_remove.l}
 	   end
@@ -140,7 +140,7 @@ module ApplicationHelper
 
   def actions_for_company(company)
     actions = [
-      {:name => :add_user.l, :url => "/user/add?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
+      {:name => :add_user.l, :url => "/user/new?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
       {:name => :edit.l,   :url => {:controller => 'company', :action => 'edit', :id => company.id}, :cond => company.can_be_edited_by(@logged_user)}]
     
     unless @active_project.nil?

@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -16,10 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module UserHelper
+module UsersHelper
   def page_title
     case action_name
-      when 'card' then :user_card.l_with_args(:user => @user.display_name)
+      when 'show' then :user_card.l_with_args(:user => @user.display_name)
       else super
     end
   end
@@ -38,9 +38,9 @@ module UserHelper
 
   def current_crumb
     case action_name
-      when 'add' then :add_user
-      when 'card' then @user.display_name
-      when 'edit', 'current' then :edit_user
+      when 'new', 'create' then :add_user
+      when 'show' then @user.display_name
+      when 'edit', 'update', 'current' then :edit_user
       else super
     end
   end
@@ -50,7 +50,7 @@ module UserHelper
       {:title => :people, :url => '/administration/people'},
       {:title => @user.company.name, :url => "/company/card/#{@user.company.id}"}
     ]
-    crumbs << {:title => @user.display_name, :url => "/user/card/#{@user.id}"} if action_name == 'update_permissions'
+    crumbs << {:title => @user.display_name, :url => user_path(:id => @user.id)} if action_name == 'update_permissions'
     crumbs
   end
 end

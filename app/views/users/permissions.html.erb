@@ -4,10 +4,10 @@
 
 <% unless @projects.empty? %>
 <div id="userPermissions">
-  <%= form_tag :action => 'update_permissions', :id => @user.id %>
+  <%= form_tag permissions_user_path(:id => @user.id), :method => :put %>
     <div id="userProjects">
       <table class="blank">
-<%= render :partial => 'project/permissions.rhtml', :locals => {:user => @user}, :collection => @projects %>
+<%= render :partial => 'project/permissions', :locals => {:user => @user}, :collection => @projects %>
       </table>
     </div>
     <button class="submit" type="submit"><%= :update_permissions.l %></button>

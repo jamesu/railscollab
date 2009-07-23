@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,31 +17,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class UserController < ApplicationController
+class UsersController < ApplicationController
 
   layout 'administration'
 
   filter_parameter_logging :password
-
-  verify :method      => :post,
-         :only        => [ :delete ],
-         :add_flash   => { :error => true, :message => :invalid_request.l },
-         :redirect_to => { :controller => 'project' }
-
+  
   before_filter :process_session
-  before_filter :obtain_user, :except => [:index, :add, :current]
-  after_filter :user_track, :only => [:index, :card]
+  before_filter :obtain_user, :except => [:index, :create, :new, :current]
+  after_filter :user_track, :only => [:index, :show]
 
   def index
-    redirect_to :controller => 'administration', :action => 'people'
+    respond_to do |format|
+      format.html {
+        redirect_to :controller => 'administration', :action => 'people'
+      }
+      format.xml  {
+        if @logged_user.is_admin
+          @users = User.find(:all)
+          render :xml => @users.to_xml(:root => 'user')
+        else
+          return error_status(true, :insufficient_permissions)
+        end
+      }
+    end
   end
 
-  def add
-    unless User.can_be_created_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+  def new
+    return error_status(true, :insufficient_permissions) unless (User.can_be_created_by(@logged_user))
 
     @user = User.new
     @company = @logged_user.company
@@ -50,181 +53,212 @@ class UserController < ApplicationController
     @send_email = params[:new_account_notification] == 'false' ? false : true
     @permissions = ProjectUser.permission_names()
     @projects = @active_projects
-
-    case request.method
-    when :get
-      begin
-        if @logged_user.member_of_owner? and !params[:company_id].nil?
-          @company = Company.find(params[:company_id])
-        end
-      rescue ActiveRecord::RecordNotFound
-        error_status(true, :invalid_company)
-        redirect_back_or_default :controller => 'dashboard'
-        return
+    
+    begin
+      if @logged_user.member_of_owner? and !params[:company_id].nil?
+        @company = Company.find(params[:company_id])
       end
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_company)
+      redirect_back_or_default :controller => 'dashboard'
+      return
+    end
 
+    @user.company_id = @company.id
+    @user.time_zone = @company.time_zone
+    
+    respond_to do |format|
+      format.html {}
+      format.xml  { 
+        render :xml => @user.to_xml(:root => 'user')
+      }
+    end
+  end
+  
+  def create
+    return error_status(true, :insufficient_permissions) unless (User.can_be_created_by(@logged_user))
+
+    @user = User.new
+    @company = @logged_user.company
+    @permissions = ProjectUser.permission_names()
+
+    @send_email = params[:new_account_notification] == 'false' ? false : true
+    @permissions = ProjectUser.permission_names()
+    @projects = @active_projects
+    
+    user_attribs = params[:user]
+
+    # Process extra parameters
+
+    @user.username = user_attribs[:username]
+    new_account_password = nil
+
+    if user_attribs.has_key?(:generate_password)
+      @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
+    else
+      if user_attribs.has_key? :password and !user_attribs[:password].empty?
+        @user.password = user_attribs[:password]
+        @user.password_confirmation = user_attribs[:password_confirmation]
+      end
+    end
+      
+    new_account_password = @user.password
+
+    if @logged_user.member_of_owner?
+      @user.company_id = user_attribs[:company_id]
+      if @user.member_of_owner?
+        @user.is_admin = user_attribs[:is_admin]
+        @user.auto_assign = user_attribs[:auto_assign]
+      end
+    else
       @user.company_id = @company.id
-      @user.time_zone = @company.time_zone
-
-    when :post
-      user_attribs = params[:user]
-
-      # Process extra parameters
-
-      @user.username = user_attribs[:username]
-      new_account_password = nil
-
-      if user_attribs.has_key?(:generate_password)
-        @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
-      else
-        if user_attribs.has_key? :password and !user_attribs[:password].empty?
-          @user.password = user_attribs[:password]
-          @user.password_confirmation = user_attribs[:password_confirmation]
-        end
-      end
+    end
       
-      new_account_password = @user.password
+    @user.identity_url = user_attribs[:identity_url] if user_attribs[:identity_url]
 
-      if @logged_user.member_of_owner?
-        @user.company_id = user_attribs[:company_id]
-        if @user.member_of_owner?
-          @user.is_admin = user_attribs[:is_admin]
-          @user.auto_assign = user_attribs[:auto_assign]
-        end
+    # Process core parameters
+
+    @user.attributes = user_attribs
+    @user.created_by = @logged_user
+
+    # Send it off
+    saved = @user.save
+    if saved
+      # Time to update permissions
+      update_project_permissions(@user, params[:user_project], params[:project_permission])
+      # ... and send details!
+      @user.send_new_account_info(new_account_password) if @send_email
+    end
+    
+    respond_to do |format|
+      if saved
+        format.html {
+          error_status(false, :success_added_user)
+          redirect_back_or_default :controller => 'administration', :action => 'people'
+        }
+        format.js {}
+        format.xml  { render :xml => @user.to_xml(:root => 'user'), :status => :created, :location => @user }
       else
-        @user.company_id = @company.id
-      end
-      
-      @user.identity_url = user_attribs[:identity_url] if user_attribs[:identity_url]
-
-      # Process core parameters
-
-      @user.attributes = user_attribs
-      @user.created_by = @logged_user
-
-      # Send it off
-
-      if @user.save
-        # Time to update permissions
-        update_project_permissions(@user, params[:user_project], params[:project_permission])
-
-        @user.send_new_account_info(new_account_password) if @send_email
-
-        error_status(false, :success_added_user)
-        redirect_back_or_default :controller => 'administration', :action => 'people'
+        format.html { render :action => "new" }
+        format.js {}
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
 
   def edit
-    unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @user.profile_can_be_updated_by(@logged_user)
   	
     @projects = @active_projects
     @permissions = ProjectUser.permission_names()
+  end
+  
+  def update
+    return error_status(true, :insufficient_permissions) unless @user.profile_can_be_updated_by(@logged_user)
+  	
+    @projects = @active_projects
+    @permissions = ProjectUser.permission_names()
+    
+    user_params = params[:user]
 
-    case request.method
-    when :post
-      user_params = params[:user]
+    # Process IM Values
+    all_im_values = user_params[:im_values] || {}
+    all_im_values.reject! do |key, value|
+      value[:value].strip.length == 0
+    end
 
-      # Process IM Values
-      all_im_values = user_params[:im_values] || {}
-      all_im_values.reject! do |key, value|
-        value[:value].strip.length == 0
-      end
+    if user_params[:default_im_value].nil?
+      default_value = '-1'
+    else
+      default_value = user_params[:default_im_value]
+    end
 
-      if user_params[:default_im_value].nil?
-        default_value = '-1'
-      else
-        default_value = user_params[:default_im_value]
-      end
+    real_im_values = all_im_values.collect do |type_id,value|
+      real_im_value = value[:value]
+      ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
+    end
 
-      real_im_values = all_im_values.collect do |type_id,value|
-        real_im_value = value[:value]
-        ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
-      end
+    # Process extra parameters
 
-      # Process extra parameters
+    if @logged_user.is_admin?
+      @user.username = user_params[:username]
 
-      if @logged_user.is_admin?
-        @user.username = user_params[:username]
-
-        if @logged_user.member_of_owner?
-          @user.company_id = user_params[:company_id] unless user_params[:company_id].nil?
-          if @user.member_of_owner?
-            @user.is_admin = user_params[:is_admin]
-            @user.auto_assign = user_params[:auto_assign]
-          end
+      if @logged_user.member_of_owner?
+        @user.company_id = user_params[:company_id] unless user_params[:company_id].nil?
+        if @user.member_of_owner?
+          @user.is_admin = user_params[:is_admin]
+          @user.auto_assign = user_params[:auto_assign]
         end
       end
+    end
 
-      if user_params.has_key? :password and !user_params[:password].empty?
-        @user.password = user_params[:password]
-        @user.password_confirmation = user_params[:password_confirmation]
-      end
+    if user_params.has_key? :password and !user_params[:password].empty?
+      @user.password = user_params[:password]
+      @user.password_confirmation = user_params[:password_confirmation]
+    end
       
-      @user.identity_url = user_params[:identity_url] if user_params[:identity_url]
+    @user.identity_url = user_params[:identity_url] if user_params[:identity_url]
 
-      # Process core parameters
+    # Process core parameters
 
-      @user.attributes = user_params
+    @user.attributes = user_params
 
-      # Send it off
+    # Send it off
+    saved = @user.save
+    if saved
+      # Re-create ImValues for user
+      ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{@user.id}")
+      real_im_values.each do |im_value|
+        im_value.save
+      end
+    end
 
-      if @user.save
-        # Re-create ImValues for user
-        ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{@user.id}")
-        real_im_values.each do |im_value|
-          im_value.save
-        end
-        error_status(false, :success_updated_profile)
-        redirect_back_or_default :controller => 'administration', :action => 'people'
+    respond_to do |format|
+      if saved
+        format.html {
+          error_status(false, :success_updated_profile)
+          redirect_back_or_default :controller => 'administration', :action => 'people'
+        }
+        format.js {}
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.js {}
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
 
   def current
     @user = @logged_user
-    unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
     @projects = @active_projects
+    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
 
     render :action => 'edit'
   end
 
-  def delete
-    unless @user.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    old_id = @user.company_id
+  def destroy
+    return error_status(true, :insufficient_permissions) unless (@user.can_be_deleted_by(@logged_user))
+    
     old_name = @user.display_name
-
+    @user.updated_by = @logged_user
     @user.destroy
-
-    error_status(false, :success_deleted_user, {:name => old_name})
-
-    redirect_back_or_default :controller => 'administration', :action => 'people'
+    
+    respond_to do |format|
+      format.html {
+        error_status(false, :success_deleted_user, {:name => old_name})
+        redirect_back_or_default :controller => 'administration', :action => 'people'
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
-  def edit_avatar
-    unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+  def avatar
+    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
 
     case request.method
-    when :post
+    when :put
       user_attribs = params[:user]
 
       new_avatar = user_attribs[:avatar]
@@ -237,46 +271,54 @@ class UserController < ApplicationController
         else
           error_status(true, :error_updating_avatar)
         end
-
-        redirect_to :controller => 'user', :action => 'edit', :id => @user.id
+        
+        redirect_to edit_user_path(:id => @user.id)
       end
+    when :delete
+      @user.avatar = nil
+      @user.save
+
+      error_status(false, :success_deleted_avatar)
+      redirect_to edit_user_path(:id => @user.id)
     end
   end
 
-  def delete_avatar
-    unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
+  def show
+    return error_status(true, :insufficient_permissions) unless (@user.can_be_viewed_by(@logged_user))
+    
+    respond_to do |format|
+      format.html { }
+      format.js {}
+      format.xml  {
+        if @user.is_admin
+          render :xml => @user.to_xml
+        else
+          attribs = [:id,
+                     :company_id,
+                     :avatar_file_name,
+                     :display-name,
+                     :email,
+                     :fax,
+                     :home_number,
+                     :mobile_number,
+                     :office_number,
+                     :office_number_ext,
+                     :time_zone,
+                     :title]
+          render :xml => @user.to_xml(:only => attribs)
+        end  
+      }
     end
-
-    @user.avatar = nil
-    @user.save
-
-    error_status(false, :success_deleted_avatar)
-    redirect_to :controller => 'user', :action => 'edit', :id => @user.id
   end
 
-  def card
-    unless @user.can_be_viewed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-  end
-
-  def update_permissions
-    unless @user.profile_can_be_updated_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+  def permissions
+    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
 
     @projects = @user.company.projects
     @permissions = ProjectUser.permission_names()
 
     case request.method
-    when :post
+    when :put
       update_project_permissions(@user, params[:user_project], params[:project_permission], @projects)
       #ApplicationLog.new_log(@project, @logged_user, :edit, true)
       error_status(false, :success_updated_permissions)
