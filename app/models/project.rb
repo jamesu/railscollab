@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # Portions Copyright (C) Ariejan de Vroom
 # 
@@ -165,7 +165,7 @@ class Project < ActiveRecord::Base
 	end
 	
 	def object_url
-		url_for :only_path => true, :controller => 'project', :action => 'overview', :active_project => self.id
+		url_for hash_for_project_path(:only_path => true, :id => self.id)
 	end
 	
 	def tasks_by_user(user, completed=false)

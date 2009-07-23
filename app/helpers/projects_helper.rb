@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -17,27 +17,35 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module ProjectHelper
+module ProjectsHelper
   def current_tab
     case action_name
       when 'people', 'permissions' then :people
-      when 'add', 'edit' then :projects
+      when 'new', 'create', 'edit', 'update' then :projects
       else :overview
     end
   end
 
   def current_crumb
     case action_name
-      when 'add' then :add_project
-      when 'edit' then :edit_project
+      when 'new', 'create' then :add_project
+      when 'edit', 'update' then :edit_project
       when 'search' then :search_results
+      when 'show' then :overview
       else super
     end
   end
 
   def extra_crumbs
     case action_name
-      when 'add', 'edit', 'permissions' then [{:title => :projects, :url => "/administration/projects"}]
+      when 'new', 'create', 'edit', 'update', 'permissions' then [{:title => :projects, :url => "/administration/projects"}]
+      else super
+    end
+  end
+
+  def page_title
+    case action_name
+      when 'show' then :overview.l
       else super
     end
   end
@@ -47,7 +55,7 @@ module ProjectHelper
       when 'permissions' then ['project/permissions']
       when 'people' then ['project/people']
       when 'search' then ['project/search_results']
-      when 'overview' then ['project/project_log', 'application_logs']
+      when 'show' then ['project/project_log', 'application_logs']
     end
   end
 end

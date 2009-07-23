@@ -91,7 +91,7 @@ class FilesController < ApplicationController
         
         if @revisions.empty?
           error_status(true, :no_file_revisions)
-          redirect_back_or_default :controller => 'files'
+          redirect_back_or_default files_path
         end
         
         @content_for_sidebar = 'index_sidebar'

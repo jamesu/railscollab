@@ -33,7 +33,7 @@
 <% if show_project_column %>
     <td class="logProject">
 <% if not application_logs.project.nil? %>
-      <%= link_to (h application_logs.project.name), :controller => 'project', :action => 'overview', :active_project => application_logs.project.id %>
+      <%= link_to (h application_logs.project.name), project_path(:id => application_logs.project.id) %>
 <% end %>
     </td>
 <% else %>

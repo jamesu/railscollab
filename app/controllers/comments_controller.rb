@@ -246,7 +246,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_comment)
-        redirect_back_or_default(:controller => 'project', :action => 'overview')
+        redirect_back_or_default(project_path(:id => @active_project.id))
       }
       format.js {}
       format.xml  { head :ok }
@@ -273,7 +273,7 @@ private
       @comment = Comment.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_comment)
-      redirect_back_or_default :controller => 'project', :action => 'overview'
+      redirect_back_or_default project_path(:id => @active_project.id)
       return false
     end
 

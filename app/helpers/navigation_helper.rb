@@ -69,7 +69,7 @@ module NavigationHelper
 
   def project_tabbed_navigation
     project_id = @active_project.id
-    items = [{:id => :overview,   :url => "/project/#{project_id}/overview"}]
+    items = [{:id => :overview,   :url => "/project/#{project_id}"}]
     items << {:id => :messages,   :url => "/project/#{project_id}/messages"}
     items << {:id => :tasks,      :url => "/project/#{project_id}/task_lists"}
     items << {:id => :milestones, :url => "/project/#{project_id}/milestones"}
@@ -84,7 +84,7 @@ module NavigationHelper
   def project_crumbs(current=nil, extras=[])
     [
       {:title => :dashboard,           :url => '/dashboard'},
-      {:title => @active_project.name, :url => "/project/#{@active_project.id}/overview"}
+      {:title => @active_project.name, :url => project_path(:id => @active_project.id)}
     ] + extra_crumbs + [{:title => current_crumb}]
   end
 end

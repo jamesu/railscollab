@@ -9,7 +9,7 @@
   <div class="listedUser <%= cycle('odd', 'even') %>">
     <div class="userAvatar"><img src="<%= listed_user.avatar_url %>" alt="<%= h listed_user.display_name %> avatar" /></div>
     <div class="userDetails">
-      <div class="userName"><a href="<%= "/user/card/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
+      <div class="userName"><a href="<%= "/users/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
 <% if company.is_owner? %>
       <div class="userIsAdmin"><span><%= :administrator.l %>:</span> <%= listed_user.is_admin ? :yesno_yes.l : :yesno_no.l %></div>
       <div class="userAutoAssign"><span><%= :auto_assign.l %>:</span> <%= listed_user.auto_assign ? :yesno_yes.l : :yesno_no.l %></div>

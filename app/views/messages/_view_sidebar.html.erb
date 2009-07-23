@@ -6,9 +6,9 @@
     <ul>
 <% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %> (<%= link_to :message_unsubscribe.l, unsubscribe_message_path(:id => @message.id), {:method => :put, :confirm => :message_unsubscription_confirmation.l} %>)</li>
+      <li><%= link_to (h subscriber.display_name), user_path(:id => subscriber.id) %> (<%= link_to :message_unsubscribe.l, unsubscribe_message_path(:id => @message.id), {:method => :put, :confirm => :message_unsubscription_confirmation.l} %>)</li>
 <% else %>
-      <li><%= link_to (h subscriber.display_name), :controller => 'user', :action => 'card', :id => subscriber.id %></li>
+      <li><%= link_to (h subscriber.display_name), user_path(:id => subscriber.id) %></li>
 <% end %>
 <% end %>
     </ul>

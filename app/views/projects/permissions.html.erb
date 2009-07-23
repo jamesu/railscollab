@@ -1,5 +1,5 @@
 <% if @companies.length > 0%>
-<%= form_tag :controller => 'project', :action => 'permissions' %>
+<%= form_tag permissions_project_path(:id => @active_project.id), :method => :put %>
 <div id="projectCompanies">
 <% @companies.each do |company| -%>
 <% if company.users.length > 0 %>
@@ -17,7 +17,7 @@
       <div class="projectCompanyUsers" id="projectCompanyUsers<%= "#{@active_project.id}_#{company.id}" %>" <% unless company.is_part_of(@active_project) %>style="display: none"<% end %>>
         <table class="blank">
 <% unless company.users.empty? %>
-        <%= render :partial => 'project/permissions_users', :locals => {:project => @active_project, :company => company}, :collection => company.users %>
+        <%= render :partial => 'projects/permissions_users', :locals => {:project => @active_project, :company => company}, :collection => company.users %>
 <% else %>
         <tr>
           <td colspan="2"><%= :company_no_users.l %></td>

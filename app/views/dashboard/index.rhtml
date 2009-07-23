@@ -1,6 +1,6 @@
 <%
   if @logged_user.is_admin?
-      @page_actions = [{:title => :add_project, :url=> '/project/add'}]
+      @page_actions = [{:title => :add_project, :url=> new_project_path}]
   end
 %>
 <% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
@@ -27,7 +27,7 @@
   <h2><%= :late_milestones.l %></h2>
   <ul>
 <% @late_milestones.each do |milestone| %>
-    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), :controller => 'project', :action => 'overview', :active_project => milestone.project.id)) %> (<span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>)</li>
+    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:active_project => milestone.project.id))) %> (<span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>)</li>
 <% end %>
   </ul>
 <% end %>

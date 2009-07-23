@@ -36,7 +36,7 @@
     <p><%= :projects.l %>:</p>
     <ul>
 <% projects.each do |project| -%>
-      <li><%= link_to h(project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></li>
+      <li><%= link_to h(project.name), project_path(:id => project.id) %></li>
 <% end %>
     </ul>
   </div>

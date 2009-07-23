@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # Portions Copyright (C) Ariejan de Vroom
 # 
@@ -18,50 +18,57 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectController < ApplicationController
+class ProjectsController < ApplicationController
 
   layout :project_layout
 
-  verify :method      => :post,
-         :only        => [ :delete, :remove_user, :remove_company, :open, :complete ],
-         :add_flash   => { :error => true, :message => :invalid_request.l },
-         :redirect_to => { :controller => 'project' }
-
   before_filter :process_session
-  
-  after_filter  :user_track, :only => [:index, :overview, :search, :tags, :people]
-
+  before_filter :obtain_project, :except => [:index, :new, :create]
+  after_filter  :user_track, :only => [:index, :search, :people]
 
   def index
-    overview
-    render :template => 'project/overview'
+    respond_to do |format|
+      format.html {
+        redirect_to(:controller => 'dashboard', :action => 'index')
+      }
+      format.xml  { 
+        @projects = @logged_user.is_admin ? Project.find(:all) : @logged_user.projects
+        render :xml => @projects.to_xml(:root => 'projects')
+      }
+    end
   end
-
-  def overview
-    project = @active_project
+  
+  def show
     include_private = @logged_user.member_of_owner?
-    when_fragment_expired "user#{@logged_user.id}_#{@active_project.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
-      @project_log_entries = (@logged_user.member_of_owner? ? project.application_logs : project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
+
+    respond_to do |format|
+      format.html {
+        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.application_logs : @project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
+        end
+
+        @time_now = Time.zone.now
+        @late_milestones = @project.project_milestones.late(include_private)
+        @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@project])
+
+        @calendar_milestones = @upcoming_milestones.group_by do |obj| 
+          date = obj.due_date.to_date
+          "#{date.month}-#{date.day}"
+        end
+
+        @project_companies = @project.companies(include_private)
+        @important_messages = @project.project_messages.important(include_private)
+        @important_files = @project.project_files.important(include_private)
+
+        @content_for_sidebar = 'overview_sidebar'
+      }
+      format.xml  { 
+        render :xml => @project.to_xml(:root => 'project')
+      }
     end
-
-    @time_now = Time.zone.now
-    @late_milestones = project.project_milestones.late(include_private)
-    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@active_project])
-
-    @calendar_milestones = @upcoming_milestones.group_by do |obj| 
-      date = obj.due_date.to_date
-      "#{date.month}-#{date.day}"
-    end
-
-    @project_companies = project.companies(include_private)
-    @important_messages = project.project_messages.important(include_private)
-    @important_files = project.project_files.important(include_private)
-
-    @content_for_sidebar = 'overview_sidebar'
   end
 
   def search
-    @project = @active_project
     @current_search = params[:search_id]
 
     unless @current_search.nil?
@@ -82,30 +89,33 @@ class ProjectController < ApplicationController
 
       @tag_names = Tag.list_by_project(@project, !@logged_user.member_of_owner?, false)
     end
-
-    @content_for_sidebar = 'search_sidebar'
+    
+    respond_to do |format|
+      format.html {
+        @content_for_sidebar = 'search_sidebar' 
+      }
+      format.xml {
+        render :xml => [].to_xml(:root => 'results') 
+      }
+    end
   end
 
   def people
-    @project = @active_project
-
-    unless @project.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @project.can_be_seen_by(@logged_user)
 
     @project_companies = @project.companies
+
+    respond_to do |format|
+      format.html {
+      }
+      format.xml {
+        render :xml => @project_companies.to_xml(:root => 'companies') 
+      }
+    end
   end
 
   def permissions
-    @project = @active_project
-
-    unless @project.can_be_managed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
     case request.method
     when :get
@@ -118,7 +128,7 @@ class ProjectController < ApplicationController
       if clients.length > 0
         @companies += clients
       end
-    when :post
+    when :put
       # Sort out changes to the company set
 
       @project.companies.clear
@@ -176,182 +186,202 @@ class ProjectController < ApplicationController
       #@project.updated_by = @logged_user
 
       error_status(false, :success_updated_permissions)
-      redirect_to :controller => 'project', :action => 'people'
+      redirect_to people_project_path(:id => @project.id)
     end
   end
 
-  def remove_user
-    @project = @active_project
-
-    unless @project.can_be_managed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    user = User.find(params[:user])
-    unless user.owner_of_owner?
-      ProjectUser.delete_all(['user_id = ? AND project_id = ?', params[:user], @project.id])
-    end
-
-    redirect_back_or_default :controller => 'project', :action => 'people'
-  end
-
-  def remove_company
-    @project = @active_project
-
-    unless @project.can_be_managed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-
-    company = Company.find(params[:company])
-    unless company.is_owner?
-      company_user_ids = company.users.collect{ |user| user.id }
-      ProjectUser.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
-      @project.companies.delete(company)
-    end
-
-    redirect_back_or_default :controller => 'project', :action => 'people'
-  end
-
-  def add
-    unless Project.can_be_created_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
-
-    @project = Project.new
+  def users
+    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
     case request.method
-    when :post
-      project_attribs = params[:project]
+    when :delete
+      user = User.find(params[:user_id])
+      unless user.owner_of_owner?
+        ProjectUser.delete_all(['user_id = ? AND project_id = ?', params[:user], @project.id])
+      end
+    end
 
-      @project.attributes = project_attribs
-      @project.created_by = @logged_user
-      @project.companies << Company.owner
+    respond_to do |format|
+      format.html { redirect_back_or_default people_project_path(:id => @project.id) }
+      format.xml  { render :xml => :ok }
+    end
+  end
 
-      @auto_assign_users = Company.owner.auto_assign_users
+  def companies
+    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
-      if @project.save
-        # Add auto assigned people (note: we assume default permissions are all access)
-        @auto_assign_users.each do |user|
-          @project.users << user unless (user == @logged_user)
-        end
+    case request.method
+    when :delete
+      company = Company.find(params[:company_id])
+      unless company.is_owner?
+        company_user_ids = company.users.collect{ |user| user.id }
+        ProjectUser.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
+        @project.companies.delete(company)
+      end
+    end
+    
+    respond_to do |format|
+      format.html { redirect_back_or_default people_project_path(:id => @project.id) }
+      format.xml  { render :xml => :ok }
+    end
+  end
 
-        @project.users << @logged_user
+  def new
+    return error_status(true, :insufficient_permissions) unless Project.can_be_created_by(@logged_user)
 
-        # Add default folders
-        AppConfig.default_project_folders.each do |folder_name|
-          folder = ProjectFolder.new(:name => folder_name)
-          folder.project = @project
+    @project = Project.new
+    
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @project.to_xml(:root => 'project') }
+    end
+  end
 
-          ApplicationLog::new_log(folder, @logged_user, :add) if folder.save
-        end
+  def create
+    return error_status(true, :insufficient_permissions) unless Project.can_be_created_by(@logged_user)
 
-        # Add default message categories
-        AppConfig.default_project_message_categories.each do |category_name|
-          category = ProjectMessageCategory.new(:name => category_name)
-          category.project = @project
+    @project = Project.new
+    
+    project_attribs = params[:project]
 
-          ApplicationLog::new_log(category, @logged_user, :add) if category.save
-        end
+    @project.attributes = project_attribs
+    @project.created_by = @logged_user
+    @project.companies << Company.owner
 
-        error_status(false, :success_added_project)
-        redirect_to :controller => 'project', :action => 'permissions', :active_project => @project.id
+    @auto_assign_users = Company.owner.auto_assign_users
+    saved = @project.save
+
+    if saved
+      # Add auto assigned people (note: we assume default permissions are all access)
+      @auto_assign_users.each do |user|
+        @project.users << user unless (user == @logged_user)
+      end
+
+      @project.users << @logged_user
+
+      # Add default folders
+      AppConfig.default_project_folders.each do |folder_name|
+        folder = ProjectFolder.new(:name => folder_name)
+        folder.project = @project
+        folder.save
+      end
+
+      # Add default message categories
+      AppConfig.default_project_message_categories.each do |category_name|
+        category = ProjectMessageCategory.new(:name => category_name)
+        category.project = @project
+        category.save
+      end
+    end
+    
+    respond_to do |format|
+      if saved
+        format.html {
+          error_status(false, :success_added_project)
+          redirect_to permissions_project_path(:id => @project.id)
+        }
+        format.js {}
+        format.xml  { render :xml => @project.to_xml(:root => 'project'), :status => :created, :location => @project }
+      else
+        format.html { render :action => "new" }
+        format.js {}
+        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
       end
     end
   end
 
   def edit
-    @project = @active_project
+    return error_status(true, :insufficient_permissions) unless @project.can_be_edited_by(@logged_user)
+  end
 
-    unless @project.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+  def update
+    return error_status(true, :insufficient_permissions) unless @project.can_be_edited_by(@logged_user)
 
-    case request.method
-    when :post
-      project_attribs = params[:project]
-
-      @project.attributes = project_attribs
-      @project.updated_by = @logged_user
-
+    @project.attributes = params[:project]
+    @project.updated_by = @logged_user
+    
+    respond_to do |format|
       if @project.save
-        error_status(false, :success_edited_project)
-        redirect_back_or_default :controller => 'project'
+        format.html {
+          error_status(false, :success_edited_project)
+          redirect_back_or_default(@project)
+        }
+        format.js {}
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.js {}
+        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  def delete
-    @project = @active_project
-
-    unless @project.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+  def destroy
+    return error_status(true, :insufficient_permissions) unless @project.can_be_deleted_by(@logged_user)
 
     @project.updated_by = @logged_user
     @project.destroy
-
-    error_status(false, :success_deleted_project)
-    redirect_back_or_default :controller => 'dashboard'
+    
+    respond_to do |format|
+      format.html {
+        error_status(false, :success_deleted_project)
+        redirect_back_or_default(:controller => 'dashboard')
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
   def complete
-    @project = @active_project
-
-    unless @project.status_can_be_changed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'administration', :action => 'projects'
-      return
-    end
-
-    unless @project.is_active?
-      error_status(true, :project_already_completed)
-      redirect_back_or_default :controller => 'administration', :action => 'projects'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @project.status_can_be_changed_by(@logged_user)
+    return error_status(true, :project_already_completed) unless @project.is_active?
 
     @project.set_completed(true, @logged_user)
-
-    error_status(true, :error_saving) unless @project.save
-
-    redirect_back_or_default :controller => 'administration', :action => 'projects'
+    saved = @project.save
+    
+    respond_to do |format|
+      format.html {
+        error_status(false, :error_saving) unless saved
+        redirect_back_or_default :controller => 'administration', :action => 'projects'
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
   def open
-    @project = @active_project
-
-    unless @project.status_can_be_changed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'administration', :action => 'projects'
-      return
-    end
-
-    if @project.is_active?
-      error_status(true, :project_already_open)
-      redirect_back_or_default :controller => 'administration', :action => 'projects'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @project.status_can_be_changed_by(@logged_user)
+    return error_status(true, :project_already_open) if @project.is_active?
 
     @project.set_completed(false, @logged_user)
+    saved = @project.save
 
-    error_status(true, :error_saving) unless @project.save
-
-    redirect_back_or_default :controller => 'administration', :action => 'projects'
+    respond_to do |format|
+      format.html {
+        error_status(false, :error_saving) unless saved
+        redirect_back_or_default :controller => 'administration', :action => 'projects'
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
-  protected
+protected
 
   def project_layout
-    ['add', 'edit'].include?(action_name) ? 'administration' : 'project_website'
+    ['new', 'create', 'edit' 'update'].include?(action_name) ? 'administration' : 'project_website'
+  end
+
+   def obtain_project
+     begin
+        @project = Project.find(params[:id])
+        @active_project = @project
+     rescue ActiveRecord::RecordNotFound
+       error_status(true, :invalid_project)
+       redirect_back_or_default :controller => 'dashboard'
+       return false
+     end
+     
+     return true
   end
 end

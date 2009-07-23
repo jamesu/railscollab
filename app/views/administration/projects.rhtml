@@ -2,7 +2,7 @@
   @page_actions = []
   
   if Project.can_be_created_by(@logged_user)
-  	@page_actions << {:title => :add_project, :url => '/project/add'}
+  	@page_actions << {:title => :add_project, :url => new_project_path}
   end
 %>
 <% if @projects.length > 0 %>
@@ -17,7 +17,7 @@
   <tr>
     <td class="middle">
 <% if project.status_can_be_changed_by(@logged_user) %>
-<%= project.is_active? ? checkbox_link("/project/#{project.id}/complete", false) : checkbox_link("/project/#{project.id}/open", true) %>
+<%= project.is_active? ? checkbox_link(complete_project_path(:id => project.id), false, nil, {:method => :put}) : checkbox_link(open_project_path(:id => project.id), true, nil, {:method => :put}) %>
 <% else %>
 <% if project.is_active? %>
 <img src="<%= icon_url('not-checked') %>" alt="" title="<%= :active_project.l %>" />
@@ -26,7 +26,7 @@
 <% end %>
 <% end %>
     </td>
-    <td class="long middle"><%= link_to h(project.name), "/project/#{project.id}/overview" %></td>
+    <td class="long middle"><%= link_to h(project.name), project_path(:id => project.id) %></td>
     <td class="middle"><%= action_list actions_for_project(project) %></td>
   </tr>
 <% end %>

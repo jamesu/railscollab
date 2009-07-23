@@ -16,8 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module TagHelper
+module TagsHelper
   def current_tab
+    :tags
+  end
+  
+  def page_title
+    :tags.l
+  end
+
+  def current_crumb
     :tags
   end
 end

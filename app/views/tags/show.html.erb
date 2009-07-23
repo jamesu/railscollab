@@ -1,6 +1,6 @@
 <%
   @page_title = :tags.l
-  @bread_crumbs = project_crumbs(@tag_name, [{:title => :search, :url => "/project/#{@active_project.id}/search"}])
+  @bread_crumbs = project_crumbs(@tag_name, [{:title => :search, :url => search_project_path(:id => @active_project.id)}])
 %>
 
 <% if @tagged_objects_count > 0 %>
@@ -12,7 +12,7 @@
 <% @tagged_objects[:messages].each do |message| -%>
   <li><a href="<%= message.object_url %>"><%= h message.object_name %></a>
 <% if !message.created_by.nil? %>
-  <span class="desc">- <%= format_usertime(message.created_on, :message_created_format.l) %> | <%= link_to (h message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id %></span>
+  <span class="desc">- <%= format_usertime(message.created_on, :message_created_format.l) %> | <%= link_to (h message.created_by.display_name), user_path(:id => message.created_by.id) %></span>
 <% end %>
   </li>
 <% end %>

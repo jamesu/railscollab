@@ -2,7 +2,7 @@
   <div class="messageDetails">
     <div class="messageUserAvatar" style="float:right"><img src="<%= @message.created_by.avatar_url %>" alt="<%= h @message.created_by.display_name %> Avatar" /></div>
 <% if not @message.created_by.nil? %>
-    <div class="messageAuthor"><span><%= :from.l %>:</span> <%= link_to( h(@message.created_by.display_name), :controller => 'user', :action => 'card', :id => @message.created_by.id) %></div>
+    <div class="messageAuthor"><span><%= :from.l %>:</span> <%= link_to( h(@message.created_by.display_name), user_path(:id => @message.created_by.id)) %></div>
     <div class="messageDate"><span><%= :log_date.l %>:</span> <%= format_usertime(@message.created_on, :message_created_format.l) %></div>
 <% unless @message.project_milestone.nil? %>    
     <div class="messageMilestone"><span><%= :milestone.l %>:</span> <%= link_to h(@message.project_milestone.object_name), @message.project_milestone.object_url %></div>

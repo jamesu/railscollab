@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @important_messages.each do |important_message| -%>
-      <li><%= link_to (h important_message.title), message_path(:id => important_message.id) %><br />
+      <li><%= link_to (h important_message.title), message_path(:id => important_message.id, :active_project => @active_project.id) %><br />
       <span class="desc"><%= :important_messages_comments_count.l_with_args(:count => important_message.comments.length) %></span></li>
 <% end %>
     </ul>
@@ -38,14 +38,14 @@
   <div class="blockContent">
     <ul>
 <% if @active_project.can_be_edited_by(@logged_user) %>
-      <li><%= link_to :edit_project_details.l, :controller => 'project', :action => 'edit' %></li>
+      <li><%= link_to :edit_project_details.l, edit_project_path(:id => @active_project.id) %></li>
 <% end %>
 
 <% if @active_project.status_can_be_changed_by(@logged_user) %>
 <% if @active_project.is_active? %>
-      <li><%= link_to :mark_project_as_finished.l, {:controller => 'project', :action => 'complete'}, :method => :post, :confirm => :mark_project_as_finished_confirmation.l %></li>
+      <li><%= link_to :mark_project_as_finished.l, complete_project_path(:id => @active_project.id), :method => :put, :confirm => :mark_project_as_finished_confirmation.l %></li>
 <% else %>
-      <li><%= link_to :mark_project_as_active.l, {:controller => 'project', :action => 'open'}, :method => :post, :confirm => :mark_project_as_active_confirmation.l %></li>
+      <li><%= link_to :mark_project_as_active.l, open_project_path(:id => @active_project.id), :method => :put, :confirm => :mark_project_as_active_confirmation.l %></li>
 <% end %>
 <% end %>
 

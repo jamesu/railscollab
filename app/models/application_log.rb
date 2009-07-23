@@ -69,7 +69,11 @@ class ApplicationLog < ActiveRecord::Base
       @log.project = nil
       if real_project.nil?
         if obj.is_a?(Project)
-          @log.project = obj unless action == :delete
+          if action == :delete
+            @log.project_id = 0
+          else
+            @log.project = obj
+          end
         elsif obj.respond_to? :project
           @log.project = obj.project
         end

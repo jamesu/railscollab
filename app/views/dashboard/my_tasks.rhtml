@@ -3,7 +3,7 @@
 <% @projects_milestonestasks.each do |project| -%>
 <% if project[:milestones].length > 0 or project[:tasks].length > 0 %>
   <div class="block">
-    <div class="header"><h2><%= link_to (h project[:name]), :controller => 'project', :action => 'overview', :active_project => project[:id] %></h2></div>
+    <div class="header"><h2><%= link_to (h project[:name]), project_path(:id => project[:id]) %></h2></div>
     <div class="content">
 <% if project[:milestones].length > 0 %>
       <p><%= link_to 'Milestones', milestones_path(:active_project => project[:id]) %>:</p>

@@ -197,7 +197,7 @@ private
         @folder = @active_project.project_folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
-        redirect_back_or_default :controller => 'files'
+        redirect_back_or_default files_path
         return false
       end
     elsif params[:id]
@@ -205,7 +205,7 @@ private
         @folder = @active_project.project_folders.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
-        redirect_back_or_default :controller => 'files'
+        redirect_back_or_default files_path
         return false
       end
     end

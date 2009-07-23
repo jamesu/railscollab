@@ -60,7 +60,7 @@
 <% if not message.created_by.nil? %>
       <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
              :time => format_usertime(message.created_on, :milestone_messages_created_format.l),
-             :user => link_to(h(message.created_by.display_name), :controller => 'user', :action => 'card', :id => message.created_by.id )) %>)</span>
+             :user => link_to(h(message.created_by.display_name), user_path(:id => message.created_by.id) )) %>)</span>
 <% end %>
 <% end %>
       </ul>

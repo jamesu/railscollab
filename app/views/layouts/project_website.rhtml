@@ -27,7 +27,7 @@
 			<h5>
 			  <%= :project_locked_header.l %>
 			  <% if @active_project.status_can_be_changed_by(@logged_user) %>
-			      <%= link_to :mark_project_as_active.l, {:controller => 'project', :action => 'open'}, :method => :post, :confirm => :mark_project_as_active_confirmation.l %>
+			      <%= link_to :mark_project_as_active.l, open_project_path(:id => @active_project.id), :method => :put, :confirm => :mark_project_as_active_confirmation.l %>
 			<% end %>
 			</h5>
 		</div>
@@ -51,7 +51,7 @@
           
           <% if AppConfig.search_enabled %>
           <div id="searchBox">
-            <%= form_tag :controller => 'project', :action => 'search' %>
+            <%= form_tag search_project_path(:id => @active_project.id) %>
               <div>
 <%
   @search_field_default_value = :search_box_default.l

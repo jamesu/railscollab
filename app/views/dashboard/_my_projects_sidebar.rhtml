@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul>
 <% @active_projects.each do |project| -%>
-      <li><%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></li>
+      <li><%= link_to (h project.name), project_path(:id => project.id) %></li>
 <% end %>
     </ul>
   </div>
@@ -19,7 +19,7 @@
     <ul class="listWithDetails">
 <% @finished_projects.each do |project| -%>
       <li>
-      	<%= link_to (h project.name), :controller => 'project', :action => 'overview', :active_project => project.id %><br />
+      	<%= link_to (h project.name), project_path(:id => project.id) %><br />
         <span class="desc">(<%= :project_completed_time_with_user.l_with_args(
                     :time => format_usertime(project.completed_on, :project_completed_time_format.l),
                     :user => link_to(h(project.completed_by.display_name), user_path(:id => project.completed_by.id))

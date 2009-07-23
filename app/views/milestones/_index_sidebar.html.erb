@@ -18,7 +18,7 @@
         <br /><span class="desc"><%= 
           :milestone_completed_time_with_user.l_with_args(
                :time => format_usertime(milestone.completed_on, :milestone_completed_time_format.l),
-               :user => (link_to milestone.completed_by.display_name, :controller => 'user', :action => 'card', :id => milestone.completed_by.id)) %></span>
+               :user => (link_to milestone.completed_by.display_name, user_path(:id => milestone.completed_by.id))) %></span>
 <% end %>
       </li>
 <% end %>

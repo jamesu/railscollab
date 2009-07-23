@@ -111,15 +111,15 @@ module ApplicationHelper
 	       {:name => :delete.l, :url => user_path(:id => user.id), :cond => user.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :confirm_user_delete.l},
 	       {:name => :permissions.l, :url => permissions_user_path(:id => user.id), :cond => user.permissions_can_be_updated_by(@logged_user)}]
 	   else
-	     actions << {:name => :remove.l, :url => "/project/#{@active_project.id}/remove_user/#{user.id}", :cond => user.can_be_deleted_by(@logged_user), :method => :post, :confirm => :confirm_user_remove.l}
+	     actions << {:name => :remove.l, :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => user.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :confirm_user_remove.l}
 	   end
 	   
 	   actions
 	end
 
   def actions_for_project(project)
-    [{:name => :edit.l,   :url => {:controller => 'project', :action => 'edit',   :active_project => project.id}, :cond => project.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => {:controller => 'project', :action => 'delete', :active_project => project.id}, :cond => project.can_be_deleted_by(@logged_user), :method => :post, :confirm => :project_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_project_path(:id => project.id), :cond => project.can_be_edited_by(@logged_user)},
+     {:name => :delete.l, :url => project_path(:id => project.id), :cond => project.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :project_confirm_delete.l}]
   end
 
   def actions_for_milestone(milestone)
@@ -144,7 +144,7 @@ module ApplicationHelper
       {:name => :edit.l,   :url => edit_company_path(:id => company.id), :cond => company.can_be_edited_by(@logged_user)}]
     
     unless @active_project.nil?
-      actions << {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :id => company.id}, :cond => company.can_be_removed_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}
+      actions << {:name => :remove.l, :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => company.can_be_removed_by(@logged_user), :method => :delete, :confirm => :confirm_client_remove.l}
     else
       actions << {:name => :permissions.l, :url => permissions_company_path(:id => company.id), :cond => company.can_be_managed_by(@logged_user)}
     end

@@ -78,18 +78,14 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects/:active_project/feed/recent_items_rss', :controller => 'basecamp', :action => 'recent_project_items_rss'
     
   # project & project object url's
-  
-  map.connect 'project/:active_project/tags',     :controller => 'project', :action => 'tags'
-  map.connect 'project/:active_project/tags/:id', :controller => 'tag',     :action => 'project'
-  
-  map.resources :project, :as => 'project',
+  map.resources :projects, :as => 'project',
                           :member => { :people => :get,
                                        :search => [:get, :post],
                                        :users => [:delete],
                                        :companies => [:delete],
                                        :complete => :put,
                                        :open => :put,
-                                       :permissions => [:get, :put]}
+                                       :permissions => [:get, :put]},
                           :has_many => [:tags]
   
   # Nested routes don't seem to work with path_prefix...
@@ -135,8 +131,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :companies, :member => {:logo => [:get, :put, :delete],
                                        :permissions => [:get, :put]}
-  
-  map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   
   # Install the default route as the lowest priority.
   #map.connect ':controller/:action/:id.:format'

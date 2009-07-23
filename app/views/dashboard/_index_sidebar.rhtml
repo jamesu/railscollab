@@ -26,7 +26,7 @@
   <div class="blockContent">
     <ul>
 <% @my_projects.each do |project| -%>
-      <li><%= link_to h(project.name), :controller => 'project', :action => 'overview', :active_project => project.id %></li>
+      <li><%= link_to h(project.name), project_path(:id => project.id) %></li>
 <% end %>
     </ul>
     <p><%= link_to :my_projects_sidebar_link.l, :controller => 'dashboard', :action => 'my_projects' %></p>

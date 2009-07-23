@@ -1,4 +1,4 @@
-<%= form_tag :controller => 'project', :action => 'edit' %>
+<%= form_tag project_path(:id => @active_project.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :save_changes.l %></button> <%= :or.l %> <%= link_to :cancel.l, :back %>
 </form>
