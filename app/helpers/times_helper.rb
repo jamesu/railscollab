@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module TimeHelper
+module TimesHelper
   def current_tab
     :ptime
   end
@@ -25,7 +25,7 @@ module TimeHelper
   def current_crumb
     case action_name
       when 'index', 'by_task' then :ptime
-      when 'add' then :add_time
+      when 'create' then :add_time
       when 'edit' then :edit_time
       when 'view' then @time.name
       else super
@@ -34,7 +34,7 @@ module TimeHelper
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :ptime, :url => "/project/#{@active_project.id}/time"} unless ['index', 'by_task'].include? action_name
+    crumbs << {:title => :ptime, :url => times_url} unless ['index', 'by_task'].include? action_name
     crumbs
   end
 

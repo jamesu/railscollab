@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -17,15 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class TimeController < ApplicationController
+class TimesController < ApplicationController
 
   layout 'project_website'
   helper 'project_items'
-
-  verify :method      => :post,
-  		 :only        => :delete,
-  		 :add_flash   => { :error => true, :message => :invalid_request.l },
-         :redirect_to => { :controller => 'project' }
 
   before_filter :process_session
   before_filter :obtain_time,     :except => [:index, :by_task, :add]
@@ -60,76 +55,86 @@ class TimeController < ApplicationController
     @content_for_sidebar = 'index_sidebar'
   end
 
-  def view
-    unless @time.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'time'
-      return
-    end
+  def show
+    return error_status(true, :insufficient_permissions) unless @time.can_be_seen_by(@logged_user)
   end
 
-  def add
-    @time = ProjectTime.new
+  def new
+    return error_status(true, :insufficient_permissions) unless (ProjectTime.can_be_created_by(@logged_user, @active_project))
 
-    unless ProjectTime.can_be_created_by(@logged_user, @active_project)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'time'
-      return
-    end
-
+    @time = @active_project.project_times.build
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+  end
+  
+  def create
+    return error_status(true, :insufficient_permissions) unless (ProjectTime.can_be_created_by(@logged_user, @active_project))
 
-    case request.method
-      when :post
-        time_attribs = params[:time]
-
-        @time.attributes = time_attribs
-
-        @time.project = @active_project
-        @time.created_by = @logged_user
-
-        if @time.save
+    @time = @active_project.project_times.build
+    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+    
+    @time.attributes = params[:time]
+    @time.created_by = @logged_user
+    
+    respond_to do |format|
+      if @time.save
+        format.html {
           error_status(false, :success_added_time)
-          redirect_back_or_default :controller => 'time'
-        end
+          redirect_back_or_default(@time)
+        }
+        format.js {}
+        format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
+      else
+        format.html { render :action => "new" }
+        format.js {}
+        format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
   def edit
-    unless @time.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'time'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+  end
 
-    case request.method
-      when :post
-        time_attribs = params[:time]
+  def edit
+    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
-        @time.attributes = time_attribs
-        @time.updated_by = @logged_user
-
-        if @time.save
+    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+    
+    @time.attributes = params[:time]
+    @time.updated_by = @logged_user
+    
+    respond_to do |format|
+      if @time.save
+        format.html {
           error_status(false, :success_edited_time)
-          redirect_back_or_default :controller => 'time', :id => @time.id
-        end
+          redirect_back_or_default(@time)
+        }
+        format.js {}
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.js {}
+        format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
   def delete
-    unless @time.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'time'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless (@time.can_be_deleted_by(@logged_user))
 
     @time.updated_by = @logged_user
     @time.destroy
 
-    error_status(false, :success_deleted_time)
-    redirect_back_or_default :controller => 'time'
+    respond_to do |format|
+      format.html {
+        error_status(false, :success_deleted_time)
+        redirect_back_or_default(times_url)
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
 private
