@@ -21,7 +21,7 @@
     <div class="involvedCompanies"><em><%= :companies_involved_in.l %>:</em> 
     <%=
     project.companies.collect do |company|
-    link_to( (h company.name), :controller => 'company', :action => 'card', :id => company.id )
+    link_to( (h company.name), company_path(:id => company.id) )
     end.join(', ') 
     %>
     </div>

@@ -118,7 +118,7 @@ class Company < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'company', :action => 'card', :id => self.id
+    url_for hash_for_company_path(:only_path => true, :id => self.id)
   end
 
   def self.select_list

@@ -20,10 +20,6 @@ ActionController::Routing::Routes.draw do |map|
   # feed url's
   map.connect 'feed/:user/:token/:action.:format',          :controller => 'feed'
   map.connect 'feed/:user/:token/:action.:project.:format', :controller => 'feed'
-
-
-  # Company routes
-  map.connect 'company/logo/:id.png', :controller => 'companies', :action => 'logo', :format => 'png'
   
   # The rest of the simple controllers
   %w[dashboard access administration config].each do |controller|
@@ -138,9 +134,8 @@ ActionController::Routing::Routes.draw do |map|
                                     :permissions => [:get, :put]},
                         :collection => {:current => :get}
   
-  map.resources :companies, :member => {:avatar => [:get, :put, :delete],
-                                       :permissions => [:get, :put]},
-                        :collection => {:current => :get}
+  map.resources :companies, :member => {:logo => [:get, :put, :delete],
+                                       :permissions => [:get, :put]}
   
   map.connect 'project/:active_project/:id', :controller => 'project', :action => 'overview'
   

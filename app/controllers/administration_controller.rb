@@ -22,6 +22,11 @@ class AdministrationController < ApplicationController
   before_filter :process_session
   before_filter :user_track
 
+  verify :method      => :post,
+         :only        => [ :hide_welcome_info ],
+         :add_flash   => { :error => true, :message => :invalid_request.l },
+         :redirect_to => { :controller => 'dashboard' }
+
   def index
   end
   
@@ -51,5 +56,26 @@ class AdministrationController < ApplicationController
 
   def authorize?(user)
   	user.is_admin
+  end
+  
+  def hide_welcome_info
+    begin
+      owner = Company.owner
+
+      unless owner.can_be_edited_by(@logged_user)
+        error_status(true, :insufficient_permissions)
+        redirect_back_or_default :controller => 'dashboard'
+        return
+      end
+
+      owner.hide_welcome_info = true
+      owner.save
+
+      error_status(false, :welcome_info_hidden)
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_company)
+    end
+
+    redirect_back_or_default :controller => 'dashboard'
   end
 end

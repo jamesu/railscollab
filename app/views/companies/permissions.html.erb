@@ -4,7 +4,7 @@
     <div class="header"><%= :hint.l %></div>
     <div class="content"><%= :hint_permissions_info.l %></div>
   </div>
-  <%= form_tag :controller => 'company', :action => 'update_permissions', :id => @company.id %>
+  <%= form_tag permissions_company_path(:id => @company.id), :method => :put %>
     <table class="blank">
 <% @projects.each do |project| -%>
       <tr>

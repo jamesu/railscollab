@@ -2,7 +2,7 @@
   @page_actions = []
   
   if Company.can_be_created_by(@logged_user)
-  	@page_actions << {:title => :add_client, :url => '/company/add'}
+  	@page_actions << {:title => :add_client, :url => new_company_path}
   end
   
   if User.can_be_created_by(@logged_user)
@@ -11,5 +11,5 @@
 %>
 
 <div id="people">
-<%= render :partial => 'company/people_list', :collection => @companies %>
+<%= render :partial => 'companies/people_list', :collection => @companies %>
 </div>

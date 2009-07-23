@@ -140,13 +140,13 @@ module ApplicationHelper
 
   def actions_for_company(company)
     actions = [
-      {:name => :add_user.l, :url => "/user/new?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
-      {:name => :edit.l,   :url => {:controller => 'company', :action => 'edit', :id => company.id}, :cond => company.can_be_edited_by(@logged_user)}]
+      {:name => :add_user.l, :url => "/users/new?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
+      {:name => :edit.l,   :url => edit_company_path(:id => company.id), :cond => company.can_be_edited_by(@logged_user)}]
     
     unless @active_project.nil?
       actions << {:name => :remove.l, :url => {:controller => 'project', :action => 'remove_company', :id => company.id}, :cond => company.can_be_removed_by(@logged_user), :method => :post, :confirm => :confirm_client_remove.l}
     else
-      actions << {:name => :permissions.l, :url => {:controller => 'company', :action => 'update_permissions', :id => company.id}, :cond => company.can_be_managed_by(@logged_user)}
+      actions << {:name => :permissions.l, :url => permissions_company_path(:id => company.id), :cond => company.can_be_managed_by(@logged_user)}
     end
     
     actions

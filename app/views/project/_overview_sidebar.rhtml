@@ -60,7 +60,7 @@
   <div class="blockContent">
     <ul>
 <% @project_companies.each do |project_company| -%>
-      <li><%= link_to (h project_company.name), :controller => 'company', :action => 'card', :id => project_company.id %></li>
+      <li><%= link_to (h project_company.name), company_path(:id => project_company.id) %></li>
 <% end %>
     </ul>
   </div>

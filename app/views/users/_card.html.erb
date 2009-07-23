@@ -6,7 +6,7 @@
     
     <div class="cardBlock">
       <div><span><%= :title.l %>:</span> <%= card.title ? (h card.title) : :not_applicable.l %></div>
-      <div><span><%= :company.l %>:</span> <%= link_to card.company.name, :controller => 'company', :action => 'card', :id => card.company.id %></div>
+      <div><span><%= :company.l %>:</span> <%= link_to card.company.name, company_path(:id => card.company.id) %></div>
     </div>
     
     <h2><%= :contact_online.l %></h2>

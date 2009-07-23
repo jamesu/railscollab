@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -17,103 +17,122 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class CompanyController < ApplicationController
+class CompaniesController < ApplicationController
 
   layout 'administration'
 
-  verify :method      => :post,
-         :only        => [ :delete_client, :delete_logo, :hide_welcome_info ],
-         :add_flash   => { :error => true, :message => :invalid_request.l },
-         :redirect_to => { :controller => 'dashboard' }
-
   before_filter :process_session
-  before_filter :obtain_company, :except => [:add, :hide_welcome_info, :logo]
+  before_filter :obtain_company, :except => [:index, :create, :new]
   after_filter  :user_track, :only => [:card]
-  after_filter :reload_owner
+  after_filter  :reload_owner
 
-  def card
-    unless @company.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
+  def show
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_seen_by(@logged_user))
+    
+    respond_to do |format|
+      format.html { }
+      format.js {}
+      format.xml  {
+        render :xml => @company.to_xml 
+      }
     end
   end
 
-  def add
-    unless Company.can_be_created_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
+  def index
+    respond_to do |format|
+      format.html {
+        redirect_to :controller => 'administration', :action => 'people'
+      }
+      format.xml  {
+        if @logged_user.is_admin
+          @companies = Company.find(:all)
+          render :xml => @users.to_xml(:root => 'user')
+        else
+          return error_status(true, :insufficient_permissions)
+        end
+      }
     end
+  end
+
+  def new
+    return error_status(true, :insufficient_permissions) unless (Company.can_be_created_by(@logged_user))
+    
+    @company = Company.new
+  end
+
+  def create
+    return error_status(true, :insufficient_permissions) unless (Company.can_be_created_by(@logged_user))
 
     @company = Company.new
 
-    case request.method
-    when :post
-      company_attribs = params[:company]
+    @company.attributes = params[:company]
+    @company.client_of = Company.owner
+    @company.created_by = @logged_user
 
-      @company.attributes = company_attribs
-      @company.client_of = Company.owner
-      @company.created_by = @logged_user
-
+    respond_to do |format|
       if @company.save
-        #ApplicationLog.new_log(@company, @logged_user, :add, true)
-
-        error_status(false, :success_added_client)
-        redirect_back_or_default :controller => 'administration', :action => 'people'
+        format.html {
+          error_status(false, :success_added_client)
+          redirect_back_or_default :controller => 'administration', :action => 'people'
+        }
+        format.js {}
+        format.xml  { render :xml => @company.to_xml(:root => 'company'), :status => :created, :location => @company }
+      else
+        format.html { render :action => "new" }
+        format.js {}
+        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
       end
     end
   end
 
   def edit
-    unless @company.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-    end
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
+  end
+  
+  def update
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
 
-    case request.method
-    when :post
-      company_attribs = params[:company]
+    @company.attributes = params[:company]
+    @company.updated_by = @logged_user
 
-      @company.attributes = company_attribs
-      @company.updated_by = @logged_user
-
+    respond_to do |format|
       if @company.save
-        #ApplicationLog.new_log(@company, @logged_user, :edit, true)
-
-        error_status(false, :success_edited_client)
-        redirect_back_or_default :controller => 'administration', :action => 'people'
-        return
+        format.html {
+          error_status(false, :success_edited_client)
+          redirect_back_or_default :controller => 'administration', :action => 'people'
+        }
+        format.js {}
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.js {}
+        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
       end
     end
-
-    render :template => 'company/edit'
   end
 
-  def delete
-  	unless @company.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
+  def destroy
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_deleted_by(@logged_user))
 
+    estatus = :success_deleted_client
   	begin
       @company.destroy
-      error_status(false, :success_deleted_client)
   	rescue
-      error_status(true, :error_deleting_client)
+      estatus = :error_deleting_client
   	end
 
-    redirect_back_or_default :controller => 'administration', :action => 'people'
+    respond_to do |format|
+      format.html {
+        error_status(false, estatus)
+        redirect_back_or_default :controller => 'administration', :action => 'people'
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
   end
 
-  def update_permissions
-  	unless @company.can_be_managed_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
+  def permissions
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_managed_by(@logged_user))
 
   	@projects = Project.all(:order => 'name')
   	if @projects.empty?
@@ -123,7 +142,7 @@ class CompanyController < ApplicationController
   	end
 
     case request.method
-    when :post
+    when :put
       project_list = params[:project]
       project_list ||= []
       project_ids = project_list.collect{ |ids| ids.to_i }
@@ -145,15 +164,11 @@ class CompanyController < ApplicationController
     end
   end
 
-  def edit_logo
-  	unless @company.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
+  def logo
+    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
+    
     case request.method
-    when :post
+    when :put
       company_attribs = params[:company]
 
       new_logo = company_attribs[:logo]
@@ -167,44 +182,16 @@ class CompanyController < ApplicationController
       else
         error_status(true, :error_uploading_logo)
       end
+      
+      redirect_to edit_company_path(:id => @company.id)
+      
+    when :delete
+      @company.logo = nil
+      @company.save
 
-      redirect_to :controller => 'company', :action => 'edit', :id => @company.id
+      error_status(false, :success_deleted_logo)
+      redirect_to edit_company_path(:id => @company.id)
     end
-  end
-
-  def delete_logo
-  	unless @company.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'dashboard'
-      return
-  	end
-
-    @company.logo = nil
-    @company.save
-
-    error_status(false, :success_deleted_logo)
-    redirect_to :controller => 'company', :action => 'edit', :id => @company.id
-  end
-
-  def hide_welcome_info
-    begin
-      owner = Company.owner
-
-      unless owner.can_be_edited_by(@logged_user)
-        error_status(true, :insufficient_permissions)
-        redirect_back_or_default :controller => 'dashboard'
-        return
-      end
-
-      owner.hide_welcome_info = true
-      owner.save
-
-      error_status(false, :welcome_info_hidden)
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_company)
-    end
-
-    redirect_back_or_default :controller => 'dashboard'
   end
 
   private
