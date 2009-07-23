@@ -1,0 +1,775 @@
+es-ES:
+  # Tabs
+  overview: Resumen
+  my_projects: Mis proyectos
+  my_tasks: Mis tareas
+  my_account: Mi cuenta
+  index: Índice
+  company: Compañia
+  members: Miembros
+  clients: Clientes
+  projects: Proyectos
+  configuration: Configuración
+  tools: Herramientas
+  upgrade: Actualizar
+  messages: Mensajes
+  tasks: Tareas
+  milestones: Hitos
+  ptime: Tiempos
+  files: Archivos
+  wiki: Wiki
+  tags: Etiquetas
+  forms: Formularios
+  people: Gente
+  
+  userbox_more: Más
+  
+  # Crumbs
+  dashboard: Pizarra
+  account: Cuenta
+  administration: Administración
+  index: Índice
+  
+  # Actions
+  order_by: Ordenar por
+  order_by_name: Ordenar por nombre
+  order_by_priority: Ordenar por prioridad
+  sort_by_finished_date: Ordenar por fecha de fin
+  sort_by_hours: Ordenar por horas
+  report_by_task: Informe por tarea
+  
+  # Page titles & actions
+  add_project: Añadir proyecto
+  add_user: Añadir usuario
+  add_client: Añadir cliente
+  edit_profile: Editar perfil
+  update_avatar: Actalizar avatar
+  permissions: Permisos
+  edit_company: Editar compañía
+  edit_company_logo: Editar logo de compañia
+  add_file: Añadir archivo
+  edit_file: Editar archivo
+  attach_files: Adjuntar archivo
+  file_details: Detalles de archivo
+  add_folder: Añadir carpeta
+  edit_folder: Editar carpeta
+  forgot_password: Olvidé mi contraseña
+  login: Iniciar sesión
+  update_permissions: Actualizar permisos
+  update_people: Actualizar gente
+  edit_client: Editar cliente
+  new_logo: Nuevo logo
+  update_logo: Actualizar logo
+  forms: Formularios
+  add_form: Añadir formulario
+  edit_form: Editar formulario
+  add_time: Añadir tiempo
+  edit_time: Editar tiempo
+  edit_user: Editar usuario
+  add_message: Añadir mensaje
+  edit_message: Editar mensaje
+  add_message_category: Añadir categoría de mensaje
+  add_category: Añadir categoría
+  edit_message_category: Editar categoría de mensaje
+  edit_category: Editar categoría
+  view_message: Ver mensaje
+  category_messages: "Mensajes de categoría {{category}}"
+  add_milestone: Añadir hito
+  edit_milestone: Editar hito
+  add_task_list: Añadir lista de tareas
+  add_task: Añadir tarea
+  edit_task_list: Editar lista de tareas
+  edit_task: Editar tareas
+  reorder_tasks: Reordenar tareas
+  search_results: Resultados de búsqueda
+  add_project: Añadir proyecto
+  edit_project: Editar proyecto
+  user_card: Tarjeta de usuario de {{user}}
+  folder_name: "Carpeta : {{folder}}"
+  add_page: Añadir página
+  edit_page: Editar página
+  all_pages: Todas las páginas
+  company_card: "Tarjeta de compañía de {{company}}"
+  reset_password: Restaurar contraseña
+  set_password: Establecer contraseña
+  save_changes: Guardar cambios
+  
+  # Feeds
+  recent_milestones_feed: Feed de hitos recientes
+  recent_milestones_feed_info: Hitos recientes de todos los proyectos
+  recent_activities_feed: Feed de actividades recientes
+  recent_activities_feed_info: Actividades recientes de todos los proyectos
+  recent_project_milestones_feed: "Feed de hitos recientes del proyecto {{project}}"
+  recent_project_milestones_feed_info: "Hitos recientes del proyecto {{project}}"
+  recent_project_activities_feed: "Feed de actividades recientes del proyecto {{project}}"
+  recent_project_activities_feed_info: "Actividades recientes para el proyecto {{project}}"
+  
+  # New account steps
+  welcome_to_new_account: Bienvenido a tu nueva cuenta
+  welcome_to_new_account_info: "{{user}}, bienvenido a tu nueva cuenta. A partir de ahora siempre estará disponible en {{url}} (puedes guardar en favoritos éste enlace). Puedes ponerte en marcha siguiendo estos fáciles pasos:"
+  new_account_step1: "Paso 1: Actualizar la información de tu compañia"
+  new_account_step1_info: "<a href='{{url}}'>Establece los datos de tu compañía</a> como teléfono, fax, dirección, correo electrónico, página web, etc"
+  new_account_step2: "Paso 2: Añadir miembros a tu equipo"
+  new_account_step2_info: "Puedes <a href='{{url}}'>crear cuentas de usuario</a> para todos los miembros de tu equipo (ilimitados). Cada miembro tendrá su propio nombre y contraseña para acceder al sistema"
+  new_account_step3: "Paso 3: Añadir compañías cliente y sus miembros"
+  new_account_step3_info: "Ahora es el momento para <a href='{{url}}'>definir compañías cliente</a> (ilimitados). Cuando hayas acabado podrás añadir sus miembros o definir un líder de equipo. Los miembros de los clientes son similares a los de tu compañía pero tienen acceso limitado al contenido y las funciones (puedes configurar qué pueden ver por proyecto o miembro)"
+  new_account_step4: "Paso 4: Empezar un proyecto"
+  new_account_step4_info: "Definir un <a href='{{url}}'>nuevo proyecto</a> es muy fácil: agrega un nombre y una descripción (opcional) y haz click en enviar. Después puedes configurar los permisos para los miembros de tu equipo y del cliente."
+  
+  hide_welcome_info: "&raquo; Ocultar ésta información permanentemente"
+  
+  welcome_to_administration: Bienvenido al panel de administración. Usando ésta herramienta podrás gestionar los datos de tu compañía, los miembros, los clientes y los proyectos en los que estés involucrado.
+  
+  # User box
+  welcome_anonymous: "Bienvenido <strong>Anónimo</strong>"
+  welcome_back: "Bienvenido de nuevo <strong>{{user}}</strong>"
+  logout: Cerrar sesión
+  are_you_sure_logout: ¿Estás seguro de que quieres cerrar sesión?
+  
+  # Permission names
+  can_manage_messages: Gestionar mensajes
+  can_manage_tasks: Gestionar tareas
+  can_manage_milestones:  Gestionar hitos
+  can_manage_time: Gestionar tiempos
+  can_upload_files: Subir archivos
+  can_manage_files: Gestionar archivos
+  can_assign_to_owners: Asignar tareas a miembros de la compañía propietaria
+  can_assign_to_other: Asignar tareas a miembros de otros clientes
+  can_manage_wiki_pages: Gestionar páginas del wiki
+  
+  # Status messages
+  login_success: Inicio de sesión correcto
+  login_failure: Falló el inicio de sesión
+  invalid_openid_server: "No pude encontrar el servidor openid para <q>{{openid_url}}</q>"
+  failed_verification_openid_url: "Verificación de {{openid_url}} fallida"
+  failed_login_openid_url: "Falló el inicio de sesión con la identidad {{openid_url}}"
+  success_login_openid_url: "Has iniciado con éxito la sesión con {{openid_url}} como tu identidad"
+  verification_failed: Verificación fallida
+  verification_cancelled: Verificación cancelada
+  unknown_response_status: "Respuesta de estado desconocida: {{status}}"
+  invalid_email: Dirección de correo inválida
+  invalid_email_not_in_use: Dirección de correo inválida
+  password_changed: Contraseña cambiada
+  insufficient_permissions: Permisos insuficientes
+  success_updated_profile: Perfil actualizado con éxito
+  success_updated_permissions: Permisos actualizados con éxito
+  success_updated_avatar: Avatar actualizado con éxito
+  error_updating_avatar: Error actualizando avatar
+  success_deleted_avatar: Avatar borrado con éxito
+  invalid_user: Usuario no válido
+  invalid_object: Objeto no válido
+  invalid_comment: Comentario no válido
+  success_added_comment_error_files: Comentario añadido con éxito aunque algunos adjuntos fallaron al verificarse
+  success_added_comment: Comentario añadido con éxito
+  success_edited_comment_error_files: Comentario actualizado con éxito aunque algunos adjuntos fallaron al verificarse
+  success_edited_comment: Comentario actualizado con éxito
+  success_deleted_comment: Comentario borrado con éxito
+  invalid_company: Compañia no válida
+  success_added_company: Compañía añadida con éxito
+  success_added_client: Cliente añadido con éxito
+  success_edited_client: Cliente actualizado con éxito
+  success_deleted_client: Cliente borrado con éxito
+  error_deleting_client: Error al borrar el cliente
+  no_projects: No hay proyectos
+  success_updated_logo: Logo actualizado con éxito
+  error_uploading_logo: Error al actulizar el logo
+  success_deleted_logo: Logo borrado con éxito
+  welcome_info_hidden: Mensaje de bienvenida escondido
+  invalid_folder: Carpéta no válida
+  success_added_folder: Carpeta añadida con éxito
+  success_edited_folder: Carpeta actualizada con éxito
+  success_deleted_folder: Carpeta borrada con éxito
+  invalid_file: Archivo no válido
+  invalid_file_revision: Revisión de archivo no válida
+  no_file_revisions: No hay revisiones de archivo
+  success_added_file: Archivo añadido con éxito
+  success_edited_file: Archivo actualizado con éxito
+  success_deleted_file: Archivo borrado con éxito
+  success_added_new_file_to_object: Se añadió un nuevo archivo al objeto con éxito
+  error_adding_file_to_object: Error añadiendo archivo al objeto
+  success_added_file_to_object: Archivo adjuntado al objeto con éxito
+  error_adding_file_to_object: Error adjuntando archivo al objeto
+  success_removed_file_from_object: Archivo borrado del objeto con éxito
+  invalid_form: Formulario no válido
+  error_submitting_form: Error enviando el formulario
+  success_added_form: Formulario añadido con éxito
+  success_edited_form: Formulario actualizado con éxito
+  success_deleted_form: Formulario borrado con éxito
+  invalid_message_category: Categoría de mensaje no válida
+  success_added_message_category: Categoría de mensaje añadida con éxito
+  success_edited_message_category: Categoría de mensaje editada con éxito
+  success_deleted_message_category: Categoría de mensaje borrada con éxito
+  invalid_message: Mensaje no válido
+  success_added_message_failed_attachments: Mensaje añadido con éxito aunque algunos adjuntos fallaron al verificarse
+  success_added_message: Mensaje añadido con éxito
+  success_edited_message: Mensaje actualizado con éxito
+  success_edited_message_failed_attachments: Mensaje actualizado con éxito aunque algunos adjuntos fallaron al verificarse
+  success_deleted_message: Mensaje borrado con éxito
+  success_subscribed_to_message: Suscrito al mensaje con éxito
+  success_unsubscribed_from_message: Desuscrito del mensaje con éxito
+  invalid_milestone: Hito no válido
+  success_added_milestone: Hito añadido con éxito
+  success_edited_milestone: Hito actualizado con éxito
+  success_deleted_milestone: Hito borrado con éxito
+  milestone_already_completed: El hito ya está completado
+  milestone_already_open: El hito ya está abierto
+  error_saving: Error al guardar
+  invalid_project: Proyecto no válido
+  success_added_project: Proyecto añadido con éxito
+  success_edited_project: Proyecto actualizado con éxito
+  success_deleted_project: Proyecto borrado con éxito
+  project_already_completed: El proyecto ya está completado
+  project_already_open: El proyecto ya está abierto
+  invalid_task_list: Lista de tareas no válida
+  success_added_task_list: Lista de tareas añadida con éxito
+  success_edited_task_list: Lista de tareas editada con éxito
+  success_deleted_task_list: Lista de tareas borrada con éxito
+  invalid_task: Tarea no válida
+  success_added_task: Tarea añadida con éxito
+  success_edited_task: Tarea actualizada con éxito
+  success_deleted_task: Tarea borrada con éxito
+  task_already_completed: La tarea ya está completada
+  task_already_open: La tarea ya está abierta
+  invalid_time: Registro de tiempo no válido
+  success_added_time: Registro de tiempo añadido con éxito
+  success_edited_time: Actualización de registro de tiempo con éxito
+  success_deleted_time: Registro de tiempo borrado con éxito
+  success_added_user: Usuario añadido con éxito
+  success_deleted_user: "Usuario {{name}} borrado con éxito"
+  unimplemented: No implementado
+  invalid_request: Petición no válida
+  
+  # Stuff which appears in the sidebar
+  online_users: Usuarios conectados
+  users_active_in_last_n_minutes: "Usuarios activos en los últimos {{number}} minutos:"
+  my_projects_sidebar_link: "&raquo; Mis proyectos"
+  update_feeds: RSS feeds
+  recent_activities: Actividades recientes
+  no_recent_activities: No hay actividades recientes
+  recent_milestones: Hitos recientes
+  active_projects: Proyectos activos
+  finished_projects: Proyectos finalizados
+  archived_projects_list_info: "Lista de proyectos finalizados (archivados). Todas las acciones para el proyecto están bloqueados pero puedes navegar por ellos."
+  project_completed_time_with_user: "{{time}} | {{user}}"
+  project_completed_time_format: "%e de %b de %Y"
+  calendar_feeds: iCalendar
+  ical: iCalendar
+  calendar_feed_milestone_info: Usa éste enlace para llevar los hitos a tu aplicación de calendario favorita.
+  calendar_feeds_password_warning: "<strong>Nota:</strong> ¡Si cambias tu contraseña el enlace al calendario también cambiará y necesitarás volverte a suscribir!."
+  folders: Carpetas
+  folder_delete_confirmation: "¿Estás seguro de que quieres borrar ésta carpeta?"
+  all_files: Todos los archivos
+  important_files: Archivos importantes
+  important_file_revisions_count:
+    one: "{{count}} revisión"
+    other: "{{count}} revisiones"
+  important_messages: Mensajes importantes
+  important_messages_comments_count:
+    one: "{{count}} comentario"
+    other: "{{count}} comentarios"
+  categories: Categorías
+  all_categories: Todas las categorías
+  configuration_categories: Configuración de categorías
+  category_delete_confirmation: "¿Estás seguro de que quieres borrar la categoría?"
+  message_subscribers: Suscriptores del mensaje
+  message_subscribers_email_notification_info: "Los suscriptores recibirán un correo de confirmación cuando alguien haga un comentario a éste mensaje (excepto él mismo)"
+  message_unsubscribe: Desuscribirse de éste mensaje
+  message_unsubscription_confirmation: "¿Estás seguro de que quieres desuscribirte de éste mensaje?"
+  no_subscribers: No hay suscriptores
+  message_subscribe: Suscribirse al mensaje
+  message_subscription_confirmation: "¿Estás seguro de que quieres suscribirte a éste mensaje?"
+  options: Opciones
+  private_message: Mensaje Privado
+  important_message: Mensaje Importante
+  enable_comments: Habilitar comentarios
+  enable_anonymous_comments: Comentarios anónimos
+  update_options: Actualizar opciones
+  edit_message_sidebar_link: "&raquo; Editar mensaje"
+  completed_milestones: Hitos completados
+  late: Atrasado
+  upcoming: Próximo
+  milestone_completed_time_with_user: "{{time}} | {{user}}"
+  milestone_completed_time_format: "%e de %b de %Y %H:%M"
+  project_status_header: "Estado del proyecto: {{status}}"
+  active: Activo
+  completed: Completado
+  edit_project_details: Editar detalles del proyecto
+  mark_project_as_finished: Marcar proyecto como finalizado
+  mark_project_as_finished_confirmation: "¿Estás seguro de que quieres marcar el proyecto como finalizado? Todas las acciones del proyecto estarán bloqueadas"
+  mark_project_as_active: Marcar proyecto como activo
+  mark_project_as_active_confirmation: "¿Estás seguro de que quieres marcar el proyecto como activo? Ésto habilitará todas las acciones en el proyecto"
+  involved_companies: Compañías involucradas
+  open_task_lists: Lista de tareas abiertas
+  num_tasks_open_in_task_list: "{{num}} tareas abiertas de {{total}} en la lista"
+  completed_task_lists: Lista de tareas completa
+  task_list_completed_time_with_user: "{{time}} | {{user}}"
+  task_list_completed_time_format: "%e de %b de %Y"
+  tags_used_in_project:  Etiquetas usadas en el proyecto
+  no_tags_used_in_project: No se han usado etiquetas en el proyecto
+  objects_tagged_with:
+    one: "{{count}} objeto se ha etiquetado con <strong>{{tag}}</strong>"
+    other: "{{count}} objetos se han etiquetado con <strong>{{tag}}</strong>"
+  no_objects_tagged_with: "No hay objetos etiquetados con <strong>{{tag}}</strong>"
+  milestone_assigned_to: "Asignado a {{name}}"
+  tag_object_count:
+    one: "{{count}} objeto."
+    other: "{{count}} objetos."
+  # Message form
+  title: Título
+  text: Texto
+  additional_text: Texto adicional
+  additional_text_info: El mensaje adicional sólo se ve en la página de comentarios
+  collapse: Contraer
+  expand: Expandir
+  milestone: Hito
+  category: Categoría
+  private_message_info: "Los mensajes privados sólo pueden verlos los miembros de la compañía y no los miembros del cliente."
+  important_message_info: "Los mensajes importantes se listan en la barra lateral \"Mensajes importantes\" en la página del proyecto"
+  enable_comments_info: "Los usuarios que pueden ver éste objeto pueden dejar comentarios. Selecciona \"No\" para bloquear los comentarios"
+  enable_anonymous_comments_info: "Permitir comentarios anónimos para éste proyecto. Los comentarios anónimos se pueden publicar a través de la API u otros medios (si se habilitan). El autor debe proveer un nombre y una dirección de correo válido. Se registrará la dirección IP."
+  email_notification: Notificación por correo electrónico
+  email_notification_info: Notificar a las personas sobre éste mensaje por correo electrónico
+  tags_info: "Lista de etiquetas separadas por coma (ejemplo: \"interfaz, javascript, beta pública\")"
+  name: Nombre
+  current_logo: Logo actual
+  delete_current_logo: Borrar logo actual
+  current_logo_confirm_delete: "¿Estás seguro de que quieres borrar el logo actual?"
+  logo_not_uploaded: El logo no está subido
+  logo_replace_info: "¡Ten en cuenta que el logo actual se borrará y se reemplazará con el nuevo!"
+  milestone_in: "{{milestone}} en {{project}}"
+  
+  # Message view
+  from: De
+  message_created_with_user: "{{time}} | {{user}}"
+  message_created_format: "%e de %b de %Y %H:%M"
+  comments: Comentarios
+  no_messages_in_project: No hay mensajes en éste proyecto
+  no_messages_in_category: No hay mensajes en ésta categoría
+  edit: Editar
+  delete: Borrar
+  remove: Quitar
+  read_more: "Leer más..."
+  message_seperator: "****"
+  message_confirm_delete: "¿Estás seguro de que quieres borrar éste mensaje?"
+  
+  # Task form
+  private_task_list: Lista de tareas privada
+  assign_to: Asignar a
+  priority: Prioridad
+  description: Descripción
+  is_private_list: Es privada
+  is_private_list_info: "(Las listas de tareas privadas sólo pueden verlas los miembros de la compañía propietaria. Los miembros de otras compañías no podrán verlas.)"
+  task_list: Lista de tareas
+  or: o
+  cancel: Cancelar
+  
+  
+  # Task view
+  no_open_task_lists_for_project: No hay listas de tareas abiertas para éste proyecto
+  order: Orden
+  task_list_confirm_delete: "¿Estás seguro de que queires borrar ésta lista de tareas?"
+  task_delete_confirm: "¿Estás seguro de que quieres borrar ésta tarea?"
+  view_all_completed_tasks: Ver todas las tareas completadas
+  recent_completed_tasks: Tareas completadas recientemente
+  completed_tasks: Tareas completadas
+  task_mark_open: Marcar tarea como abierta
+  mark_task_completed: Marcar tarea como completada
+  no_tasks_assigned_to_you: No tienes tareas asignadas
+  edit_tasks: Editar tareas
+  task: Tarea
+  
+  # Milestone form
+  private_milestone: Hitos privados
+  milestones_private_info: "(Los hitos privados sólo pueden verlos los miembros de la compañía propietaria. Los miembros de las compañías clientes no podrán verlos.)"
+  due_date: Fecha de vencimiento
+  send_email_notification_to_user: Enviar notificación por correo electrónico al usuario
+  
+  # Milestone view
+  no_active_milestones_in_project: No hay hitos activos en éste proyecto
+  late_milestones: Hitos atrasados
+  todays_milestones: Hitos para hoy
+  upcoming_milestones: Próximos hitos
+  all_upcoming_milestones: Todos los hitos próximos
+  milestone_days_left: "Quedan {{days}} días"
+  milestone_days_late: "{{days}} días tarde"
+  milestone_show_all_upcoming:
+    one: "&raquo; Mostrar el próximo {{count}} hito"
+    other: "&raquo; Mostrar los próximos {{count}} hitos"
+  today: Hoy
+  milestone_due_date_extended_format: "%A, %e de %B de %Y"
+  milestone_due_date_format: "%A, %e de %B"
+  milestone_empty_info: "Éste hito está vacio. Puedes añadir un {{message}} o una {{task_list}} cuando quieras"
+  task_lists: Listas de tareas
+  message: Mensaje
+  milestone_messages_created_with_user: "{{time}} | {{user}}"
+  milestone_messages_created_format: "%e de %b %Y %H:%M"
+  milestone_confirm_delete: "¿Estás seguro de que quieres borrar éste hito?"
+  
+  # Wiki page view
+  wiki_page_confirm_delete: "¿Estás seguro de que quieres borrar ésta página?"
+  
+  # Activity
+  action_add: Añadido
+  action_delete: Borrado
+  action_modified: Modificado
+  action_reopened: Reabierto
+  action_open: Abierto
+  action_edit: Editado
+  action_close: Cerrado
+  action_upload: Subido
+  action_today_with_time: "Hoy {{time}}"
+  action_today_fomat: "%H:%M"
+  action_past_format: "%e de %B de %Y"
+  action_yesterday: Ayer
+  
+  # Access
+  forgot_password_sent_email: Se han enviado más intrucciones a tu dirección de correo electrónico.
+  email_address: Dirección de correo electrónico
+  send_password: Enviar contraseña
+  old_password: Contraseña vieja
+  repeat_password: Repetir contraseña
+  username: Nombre de usuario
+  password: Contraseña
+  openid: OpenID
+  use_openid: Usar OpenID
+  forgot_password_q: "¿Olvidaste la contraseña?"
+  
+  # Account
+  new_avatar: Nuevo avatar
+  current_avatar: Avatar actual
+  delete_current_avatar: Borrar el avatar actual
+  avatar_confirm_delete: "¿Estás seguro de que quiere borrar éste avatar?"
+  avatar_upload_info: "¡Ten en cuenta que tu avatar actual se borrará y será reemplazado con el nuevo!"
+  avatar_not_uploaded: "El avatar no está subido"
+  administration_options_info: "Opciones de administración (¡disponible sólo para administradores!)"
+  administrator: Administrador
+  auto_assign: Asignar automáticamente
+  auto_assign_to_new_projects: "¿Asignar automáticamente a los nuevos proyectos?"
+  openid_info: "Para más información sobre OpenID, por favor visita <a href=\"http://openid.net/\">OpenID</a>."
+  display_name: Nombre a mostrar
+  timezone: Zona horaria
+  instant_messengers: Mensajería instantánea
+  service: Servicio
+  value: Valor
+  primary_im: Dirección Principal
+  instant_messengers_info: "Todas las direcciones de mensajería instantánea que introduzcas se verán en la página de tu tarjeta. Sólo la principal será visible en otras páginas (como la página de gente del proyecto)."
+  phone_number: Número de teléfono
+  phone_numbers: Números de teléfono
+  office: Oficina
+  fax: Fax
+  mobile: Móvil
+  home: Casa
+  fax_number: Número de fax
+  homepage: Página web
+  address: Dirección
+  address_2: Dirección 2
+  city: Ciudad
+  state: Provincia
+  zipcode: Código Postal
+  country: País
+  contact_online: Contacto conectado
+  contact_offline: Contacto desconectado
+  not_applicable: "n/a"
+  contact_info: Información de contacto
+  
+  # Dashboard
+  started_on: Iniciado a las
+  no_active_projects: No hay proyectos activos
+  project_created_format: "%e de %b de %Y"
+  companies_involved_in: "Compañías involucradas en el proyecto"
+  tasks_in_list: "En {{list}}"
+  anyone: Cualquiera
+  none: Ninguno
+  project: Proyecto
+  page: Página
+  
+  # Calendar
+  wday_1: Lunes
+  wday_2: Martes
+  wday_3: Miércoles
+  wday_4: Jueves
+  wday_5: Viernes
+  wday_6: Sábado
+  wday_7: Domingo
+  
+  month_1: Enero
+  month_2: Febrero
+  month_3: Marzo
+  month_4: Abril
+  month_5: Mayo
+  month_6: Junio
+  month_7: Julio
+  month_8: Agosto
+  month_9: Septiembre
+  month_10: Octubre
+  month_11: Noviembre
+  month_12: Diciembre
+  
+  # Admin
+  project_confirm_delete: "¿Estás seguro de que quieres borrar éste proyecto?"
+  no_projects_owned_by_company: "Tu compañía no tiene proyectos"
+  active_project: Proyecto activo
+  finished_project: Proyecto finalizado
+  delete_client_confirm: "¿Estás seguro de que quiere borrar éste cliente?"
+  no_clients_in_company: "Tu compañía no tiene clientes"
+  users: Usuarios
+  
+  # Comments
+  comment: Comentario
+  add_comment: Añadir comentario
+  edit_comment: Editar comentario
+  post_comment: Publicar comentario
+  private_comment: Comentario privado
+  private_comment_info: "Los comentarios privados sólo puede verlos la compañia propietaria. Los miembros de las compañías cliente no podrán verlos."
+  comment_delete_confirm: "¿Estás seguro de que quieres borrar éste comentario?"
+  no_comments_for_object: No se han publicado comentarios en éste objeto
+  comment_posted_with_user: "Publicado en {{time}} por {{user}}"
+  comment_posted: "Publicado en {{time}} por <strong>{{name}}</strong>"
+  comment_posted_format: "%e de %b de %Y %H:%M"
+  
+  # User
+  generate_password: Generar contraseña
+  send_account_email_notification: "Enviar correo de notificación."
+  send_account_email_notication_info: "Si seleccionas \"Sí\" el usuario recibirá un correo electrónico con un mensaje de bienvenida y los parámetros de acceso"
+  owner: Propietario
+  
+  # Project
+  project_show_description_in_overview: Mostrar descripción en la página resumen del proyecto
+  company_no_users: No hay usuarios en la compañía
+  permissions_form: formulario de permisos
+  permissions_info: "Usando el {{link}} podrás añadir o quitar compañías y usuarios y controlar sus permisos de acceso fácilmente."
+  clients_involved_in: "Los usuarios de {{company}} están involucrados en {{project}}"
+  confirm_client_remove: "¿Estás seguro de que quieres borrar el cliente?"
+  confirm_user_remove: "¿Estás seguro de que quieres quitar el usuario?"
+  confirm_user_delete: "¿Estás seguro de que quieres borrar el usuario?"
+  hint: Pista
+  hint_permissions_info: "Marca el proyecto para dar permisos de acceso para ésta compañía. Ten en cuenta que necesitarás especificar los permisos para los miembros de la compañía que quieres que sean capaces de acceder y gestionar los proyectos seleccionados (puedes hacerlo a través de la página de gente o los perfiles de usuarios)."
+  project_completed_on: "Completado el {{date}} por {{user}}"
+  all: Todos
+  go: Ir
+  due_in_next_n_days: "Vence en los siguientes {{num}} días"
+  project_locked_header: "Éste proyecto se ha marcado como finalizado y está bloqueado."
+  
+  # Forms
+  success_message: Mensaje de éxito
+  action: Acción
+  unknown: Desconocido
+  enabled: Habilitado
+  visible: Visible
+  save: Guardar
+  reset: Reiniciar
+  submit: Enviar
+  form_action_add_to: "Añadir {{object}} a {{link}}"
+  form_related_object_notfound: "¡El objeto relacionado no existe!"
+  form_confirm_delete: "¿Estás seguro de que quieres borrar éste formulario?"
+  no_forms_in_project: No hay formularios en éste proyecto
+  
+  # Time
+  summary: Resumen
+  log_date: Fecha
+  person: Persona
+  hours: Horas
+  details: Detalles
+  open_tasks: Tareas abiertas
+  done_date: Fecha de realización
+  private_time: Tiempo privado
+  private_time_info: "Los tiempos privados sólo pueden verlos la compañía propietaria. Los miembros de las compañías cliente no podrán verlos."
+  billable_time: Tiempo facturable
+  billable_time_info: "Los tiempos facturables son aquellos por los que habrá que cobrar al cliente."
+  task_list_hours: "{{name}} [{{hours}} horas]"
+  task_list_hours_info: "Tareas con tiempos registrados"
+  task_list_task_hours: "{{name}} [{{hours}} horas]"
+  billable_hours: "[{{hours}} horas facturables]"
+  no_times_in_project: "Éste proyecto no tiene registros de tiempo"
+  time_confirm_delete: "¿Estás seguro de que quieres borrar éste registro de tiempo?"
+  
+  csv_export: "Exportación a CSV"
+  csv: CSV
+  csv_export_times_info: "Usa éste enlace para llevar los datos de tiempos a tu aplicación de hoja de calculo favorita"
+  
+  # Files
+  file: Archivo
+  folder: Carpeta
+  update_file: Archivo subido
+  new_file: Nuevo archivo
+  new_revision: Nueva revisión
+  existing_file: Archivo existente
+  file_upload_info: "Puedes subir cualquier tipo de archivo. El tamaño máximo es de {{max}}"
+  file_update_info: "Puedes reemplazar un archivo existente especificando uno nuevo. Si no quieres que se reemplace deja éste campo vacio."
+  revision_comment: Comentario de revisión
+  private_file: Archivo privado
+  private_file_info: "Los archivos privados sólo puede verlos la compañía propietaria. Los miembros de las compañías cliente no podrán verlos."
+  important_file: Archivo importante
+  important_file_info: "Los archivos importantes se listan en la barra lateral \"Archivos importantes\" de la página del proyecto"
+  revision_created_by: "Revisión #{{number}} <span>(por {{user}} el {{date}})</span>"
+  revision_created_on: "Revisión #{{number}} <span>(creada el {{date}})</span>"
+  revision_date_format: "%e de %b de %Y %H:%M"
+  revision_date_format_short: "%A, %e de %B"
+  download_size: "Descargar ({{size}})"
+  details_size: "Detalles ({{size}})"
+  revisions: Revisiones
+  last_revision: Última revisión
+  file_delete_confirmation: "¿Estás seguro de que quieres borrar éste archivo?"
+  filename: Nombre de archivo
+  post_time: Hora de publicación
+  created_by: Creado por
+  attached_files: Archivos adjuntados
+  detatch: Desadjuntar
+  detatch_file_confirm: "¿Estás seguro de que quiere desadjuntar éste archivo?"
+  attach_existing_file: "Adjuntar archivo existente (desde la sección de Archivos)"
+  file_view_details: Ver detalles del archivo
+  no_files_in_location: No hay archivos en ésta localización.
+  hint_attach_files: "Usa éste formulario para adjuntar archivos a <strong>{{link}}</strong>. Puedes adjuntar uno o más archivos. Puedes seleccionar cualquier archivo existente desde la sección de archivos o subir nuevos.<strong>Los nuevos archivos estarán disponibles también desde la sección de archivos cuando los hayas subido</strong>."
+  upload_attach_to_message: Subir nuevo archivo y adjuntarlo al mensaje
+  select_file: Seleccionar archivo
+  
+  yesno_yes: "Sí"
+  yesno_no: "No"
+  new_password_required: Se requiere nueva contraseña
+  does_not_match: No concuerdan
+  has_insufficient_permissions: No tiene permisos suficientes
+  required: Obligatorios
+  is_incorrect: Es incorrecto
+  not_allowed: No está permitido
+  not_part_of_project: No es parte del proyecto
+  search: Búsqueda
+  search_box_default: "Buscar..."
+  search_displaying_results_for: "Mostrando {{start}}...{{finish}} de {{total}} resultados para {{search}}."
+  search_no_matching_objects: "No hay objetos que concuerden con la búsqueda '<strong>{{search}}</strong>'"
+  
+  
+  # Configuration messages
+  invalid_category: Categoría no válida
+  config_category_empty: Categoría vacía
+  success_updated_config_category: "Se actualizó la configuración con éxito"
+  
+  # Configuration categories
+  # category_<name>_name
+  # category_<name>_description
+  category_system_name: Sistema
+  category_system_description: "Variables de sistema. Los valores por defecto deberían funcionar"
+  category_general_name: General
+  category_general_description: "Ajustes generales de RailsCollab"
+  category_mailing_name: Envío de correo
+  category_mailing_description: "Opciones de gestión de envío de correo electrónico"
+  category_services_name: Servicios
+  category_services_description: "Opciones para gestionar servicios de terceros"
+  
+  # Configuration options
+  # option_<name>_name
+  # option_<name>_description
+  
+  # general
+  option_site_name_name: "Nombre del sitio"
+  option_site_name_description: "Éste valor será mostrado como el nombre del sitio en la pizarra"
+  option_site_url_name: "URL del sitio"
+  option_site_url_description: "La URL base donde RailsCollab está hospedado"
+  option_site_theme_name: "Tema del sitio"
+  option_site_theme_description: "El tema usado para mostrar el contenido"
+  option_default_project_folders_name: "Carpetas por defecto"
+  option_default_project_folders_description: "Las carpetas que se crearán automáticamente cuando se cree un proyecto. Cada carpeta debe ir en una línea nueva. Las duplicadas o vacías se ignorarán"
+  option_default_project_message_categories_name: "Categoría por defecto de los mensajes"
+  option_default_project_message_categories_description: "Las categorías de mensajes que se crearán cuando se cree un proyecto. Cada nombre de categoría debe ir en una línea. Las duplicadas o vacías se ignorarán."
+  option_default_project_message_category_name: "Categoría por defecto de los mensajes"
+  option_default_project_message_category_description: "Categoría de los mensajes que se seleccionará por defecto"
+  option_allow_openid_name: "Permitir iniciar sesión con OpenID"
+  option_allow_openid_description: "Permite iniciar sesión mediante OpenID"
+  option_allow_anonymous_name: "Permitir iniciar sesión de forma anónima"
+  option_allow_anonymous_description: "Necesitarás crear un usuario de la compañía propietaria con el nombre 'Anonymous' para que ésto funcione"
+  option_default_language_name: "Lenguaje por defecto"
+  option_default_language_description: "Lenguaje por defecto usado en la interfaz de usuario"
+  option_search_enabled_name: "Habilitar búsquedas"
+  option_search_enabled_description: "Permite buscar en los proyectos"
+  option_use_asset_hosts_name: "Usar servidores de recursos"
+  option_use_asset_hosts_description: "Habilitar el uso de servidores de recursos. Ver también URL de servidores de recursos"
+  option_asset_hosts_url_name: "URL de servidores de recursos"
+  option_asset_hosts_url_description: "e.g. 'example.com' habilitará assets[0-3].example.com como servidores de recursos."
+  option_log_really_silent_name: "Registro silencioso"
+  option_log_really_silent_description: "Borrar las entradas del registro cuando se elimina un elemento"
+  notification_method_test: "Prueba"
+  notification_method_smtp: "SMTP"
+  notification_smtp_address: "Dirección"
+  notification_smtp_port: "Puerto"
+  notification_smtp_domain: "Dominio"
+  notification_smtp_username: "Usuario"
+  notification_smtp_password: "Contraseña"
+  notification_smtp_authentication: "Autenticación"
+  notification_method_sendmail: "Sendmail"
+  notification_sendmail_location: "Ruta"
+  notification_sendmail_arguments: "Argumentos"
+  
+  # mailing
+  option_notification_email_address_name: "Identidad de las notificaciones"
+  option_notification_email_address_description: "Identidad de las notificaciones por correo electrónico, con el formato 'Nombre <direccion@correo>'"
+  option_notification_email_method_name: "Transporte de Correo"
+  option_notification_email_method_description: "El método con el que se enviará el correo electrónico"
+  option_notification_email_smtp_name: "Ajustes del transporte SMTP"
+  option_notification_email_smtp_description: "Ajustes usados por el transporte de correo SMTP"
+  option_notification_email_sendmail_name: "Ajustes de Sendmail"
+  option_notification_email_sendmail_description: "Ajustes usados para el transporte de correo Sendmail "
+  
+  # Administration tools
+  # administration_tool_<name>
+  # administration_tool_<name>_description
+  
+  no_administration_tools: "No hay herramientas administrativas"
+  
+  
+  # Mailing views
+  notifier_donotreply: "NO CONTESTE A ÉSTE MENSAJE"
+  notifier_greeting: "Hola {{user}}"
+  notifier_new_message: "Un nuevo mensaje con el título '{{title}}' se ha publicado en el proyecto {{project}}. Para ver éste mensaje visite la siguiente dirección URL:"
+  notifier_new_comment: "Un nuevo comentario se ha publicado en el mensaje {{title}}. Para verlo, visite la siguiente URL:"
+  notifier_reset_password: "Se ha solicitado restablecer su contraseña para su cuenta en {{site}}. Si quiere seguir con el procedimiento visite la siguiente URL:"
+  notifier_new_account: "{{user}} ha creado una nueva cuenta de usuario para ti en {{site}}."
+  notifier_new_account_access: "Para acceder a su cuenta, visite la siguiente URL:"
+  notifier_new_account_access_login: "Entonces inicie sesión con el usuario '{{login}}'."
+  notifier_new_account_credentials: "Inicie sesión utilizando las siguientes credenciales:"
+  author: Autor
+  
+  
+  # Search models
+  Tag: Etiqueta
+  Comment: Comentario
+  ProjectMessage: Mensaje
+  ProjectTime: Tiempo
+  ProjectTask: Tarea
+  ProjectTaskList: Lista de tareas
+  ProjectMilestone: Hito
+  ProjectFile: Archivo
+  ProjectFileRevision: Revisión de archivo
+  WikiPage: Página de wiki
+  
+  search_dashboard: "{{type}}: {{name}} en {{project}}"
+  search_project: "{{type}}: {{name}}"
+  
+  # system
+  
+  product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
+  
+  # rails
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%Y-%m-%d"
+      short: "%d %b"
+      long: "%d de %B de %Y"
+
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
+    # Used in date_select and datime_select.
+    order: [ :day, :month, :year ]
+
+  time:
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%d de %b %H:%M"
+      long: "%d de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
