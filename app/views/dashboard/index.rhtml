@@ -21,8 +21,8 @@
 
 <% if @late_milestones.length > 0 or !@calendar_milestones.empty? %>
 <div id="lateOrTodayMilestones" class="block">
-  <div class="header"><%= [!@late_milestones.empty? ? :late.l : nil,
-                           !@calendar_milestones.empty? ? :upcoming.l : nil].compact.join(' & ') %> <%= :milestones.l %></div>
+  <div class="header"><%= :milestones_summary.l_with_args :adjetives => [!@late_milestones.empty? ? :late.l : nil,
+                           !@calendar_milestones.empty? ? :upcoming.l : nil].compact.to_sentence %></div>
 <% if @late_milestones.length > 0 %>
   <h2><%= :late_milestones.l %></h2>
   <ul>
