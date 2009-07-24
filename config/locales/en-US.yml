@@ -285,6 +285,7 @@ en-US:
   completed_milestones: Completed milestones
   late: Late
   upcoming: Upcoming
+  milestones_summary: "{{adjetives}} milestones"
   milestone_completed_time_with_user: "{{time}} | {{user}}"
   milestone_completed_time_format: "%b %e, %Y %H:%M"
   project_status_header: "Project status: {{status}}"
@@ -764,3 +765,10 @@ en-US:
       long: "%B %d, %Y %H:%M" 
     am: "am" 
     pm: "pm"
+
+# Used in array.to_sentence.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " & "
+      last_word_connector: " & "

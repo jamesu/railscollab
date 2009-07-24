@@ -286,8 +286,9 @@ es:
   update_options: Actualizar opciones
   edit_message_sidebar_link: "&raquo; Editar mensaje"
   completed_milestones: Hitos completados
-  late: Atrasado
-  upcoming: Próximo
+  late: Atrasados
+  upcoming: Próximos
+  milestones_summary: "Hitos {{adjetives}}"
   milestone_completed_time_with_user: "{{time}} | {{user}}"
   milestone_completed_time_format: "%e de %b de %Y %H:%M"
   project_status_header: "Estado del proyecto: {{status}}"
@@ -773,3 +774,10 @@ es:
       long: "%d de %B de %Y %H:%M"
     am: "am"
     pm: "pm"
+
+# Used in array.to_sentence.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " y "
+      last_word_connector: " y "
