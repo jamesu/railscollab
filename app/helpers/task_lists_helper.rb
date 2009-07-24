@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,8 +24,8 @@ module TaskListsHelper
   def current_crumb
     case action_name
       when 'index' then :tasks
-      when 'new' then :add_task_list
-      when 'edit' then :edit_task_list
+      when 'new', 'create' then :add_task_list
+      when 'edit', 'update' then :edit_task_list
       when 'show' then @task_list.name
       else super
     end

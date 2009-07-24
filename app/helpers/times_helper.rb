@@ -25,10 +25,8 @@ module TimesHelper
   def current_crumb
     case action_name
       when 'index', 'by_task' then :ptime
-      when 'new' then :add_time
-      when 'create' then :add_time
-      when 'edit' then :edit_time
-      when 'update' then :edit_time
+      when 'new', 'create' then :add_time
+      when 'edit', 'update' then :edit_time
       when 'show' then @time.name
       else super
     end

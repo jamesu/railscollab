@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -31,8 +31,8 @@ module MessagesHelper
   def current_crumb
     case action_name
       when 'index' then :messages
-      when 'new' then :add_message
-      when 'edit' then :edit_message
+      when 'new', 'create' then :add_message
+      when 'edit', 'update' then :edit_message
       when 'show' then @message.title
       else super
     end

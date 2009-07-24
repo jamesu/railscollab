@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -20,8 +20,8 @@ module FilesHelper
   def page_title
     case action_name
       when 'index' then @current_folder.nil? ? :files.l : :folder_name.l_with_args(:folder => @current_folder.name)
-      when 'new' then :add_file.l
-      when 'edit' then :edit_file.l
+      when 'new', 'create' then :add_file.l
+      when 'edit', 'update' then :edit_file.l
       else super
     end
   end
@@ -34,8 +34,8 @@ module FilesHelper
     case action_name
       when 'index' then :files
       when 'attach' then :attach_files
-      when 'new' then :add_file
-      when 'edit' then :edit_file
+      when 'new', 'create' then :add_file
+      when 'edit', 'update' then :edit_file
       when 'show' then @file.filename
       else super
     end
