@@ -30,8 +30,8 @@ module CategoriesHelper
 
   def current_crumb
     case action_name
-      when 'new' then :add_message_category
-      when 'edit' then :edit_message_category
+      when 'new', 'create' then :add_message_category
+      when 'edit', 'update' then :edit_message_category
       when 'index' then :messages
       when 'posts' then @category.name
       else super

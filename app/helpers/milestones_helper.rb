@@ -24,10 +24,8 @@ module MilestonesHelper
   def current_crumb
     case action_name
       when 'index' then :milestones
-      when 'new' then :add_milestone
-      when 'create' then :add_milestone
-      when 'edit' then :edit_milestone
-      when 'update' then :edit_milestone
+      when 'new', 'create' then :add_milestone
+      when 'edit', 'update' then :edit_milestone
       when 'show' then @milestone.name
       else super
     end

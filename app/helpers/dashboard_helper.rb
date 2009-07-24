@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -42,19 +42,19 @@ module DashboardHelper
 
   def new_account_steps(user)
     [{:title   => :new_account_step1.l,
-	  :content => :new_account_step1_info.l_with_args(:url => '/company/edit'),
+	  :content => :new_account_step1_info.l_with_args(:url => edit_company_path(:id => Company.owner.id)),
 	  :del     => Company.owner.updated?},
 
       {:title   => :new_account_step2.l,
-	   :content => :new_account_step1_info.l_with_args(:url => "/user/add?company_id=#{user.company.id}"),
+	   :content => :new_account_step1_info.l_with_args(:url => "/users/new?company_id=#{user.company.id}"),
 	   :del     => (Company.owner.users.length > 1)},
 
       {:title   => :new_account_step3.l,
-	   :content => :new_account_step3_info.l_with_args(:url => '/company/add_client'),
+	   :content => :new_account_step3_info.l_with_args(:url => new_company_path),
 	   :del     => (Company.owner.clients.length > 0)},
 
       {:title   => :new_account_step4.l,
-	   :content => :new_account_step4_info.l_with_args(:url => '/project/add'),
+	   :content => :new_account_step4_info.l_with_args(:url => new_project_path),
 	   :del     => (Company.owner.projects.length > 0)}]
   end
 end

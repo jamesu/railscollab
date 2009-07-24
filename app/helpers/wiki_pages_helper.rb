@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2009 James S Urquhart
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -26,8 +26,8 @@ module WikiPagesHelper
   def current_crumb
     case action_name
       when 'index' then :wiki
-      when 'new' then :add_page
-      when 'edit' then :edit_page
+      when 'new', 'create' then :add_page
+      when 'edit', 'update' then :edit_page
       when 'show' then @wiki_page.title if @wiki_page
       when 'list' then :all_pages
       else super
