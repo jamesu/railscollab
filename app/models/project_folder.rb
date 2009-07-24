@@ -53,7 +53,7 @@ class ProjectFolder < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'files', :action => 'browse_folder', :id => self.id, :active_project => self.project_id
+    url_for :only_path => true, :controller => 'folders', :action => 'files', :id => self.id, :active_project => self.project_id
   end
 
   # Core Permissions
