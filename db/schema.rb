@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090715153225) do
+ActiveRecord::Schema.define(:version => 20090727115904) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -393,7 +393,7 @@ ActiveRecord::Schema.define(:version => 20090715153225) do
     t.string   "salt",                :limit => 13,  :default => "",    :null => false
     t.string   "twister",             :limit => 10,  :default => "",    :null => false
     t.string   "display_name",        :limit => 50
-    t.string   "title",               :limit => 30
+    t.string   "title"
     t.string   "office_number",       :limit => 20
     t.string   "fax_number",          :limit => 20
     t.string   "mobile_number",       :limit => 20
