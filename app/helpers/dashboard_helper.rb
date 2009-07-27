@@ -46,7 +46,7 @@ module DashboardHelper
 	  :del     => Company.owner.updated?},
 
       {:title   => :new_account_step2.l,
-	   :content => :new_account_step1_info.l_with_args(:url => "/users/new?company_id=#{user.company.id}"),
+	   :content => :new_account_step2_info.l_with_args(:url => "/users/new?company_id=#{user.company.id}"),
 	   :del     => (Company.owner.users.length > 1)},
 
       {:title   => :new_account_step3.l,
