@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   belongs_to :company
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 
-  has_many :im_values, :order => 'im_type_id DESC'
+  has_many :im_values, :order => 'im_type_id DESC', :dependent => :delete_all
   has_many :application_logs, :foreign_key => 'created_by_id', :dependent => :destroy
 
   has_many :project_milestones, :foreign_key => 'created_by_id', :dependent => :destroy
@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   has_many :comments,           :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :tags,               :foreign_key => 'created_by_id', :dependent => :destroy
 
-  has_many :project_users
+  has_many :project_users,     :dependent => :delete_all
   has_many :projects,          :through => :project_users
   has_many :active_projects,   :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC'
   has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
@@ -48,16 +48,9 @@ class User < ActiveRecord::Base
   has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
 
   before_validation_on_create :process_create
-  before_destroy :process_destroy
 
   def process_create
     @cached_password ||= ''
-  end
-
-  def process_destroy
-    # Explicitly remove these
-    ActiveRecord::Base.connection.execute("DELETE FROM project_users  WHERE user_id = #{self.id}")
-    ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{self.id}")
   end
 
   def twister_array=(value)
@@ -77,7 +70,7 @@ class User < ActiveRecord::Base
     all_type_ids = all_types.collect{ |im_id| im_id.id }
 
     # Find all values
-    values = ImValue.all(:conditions => { :user_id => self.id, :im_type_id => all_type_ids })
+    values = self.im_values
 
     # Add the missing values in as blank's
     all_types.each do |type|
