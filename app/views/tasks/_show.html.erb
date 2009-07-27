@@ -13,7 +13,7 @@
 			</div>
 			<% end %>
 <% if task_item.can_be_changed_by(@logged_user) %>
-        <input class="checkbox" type="checkbox" <% if show.is_completed? %>checked="true"<% end %>/>
+        <input class="checkbox" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
 <% else %>
         <span class="taskCheckbox"><%= render_icon( (task_item.completed_on.nil? ? 'not-checked' : 'checked'), :task_open.l) %></span>
 <% end %>
@@ -21,7 +21,12 @@
 					<% if not task_item.assigned_to.nil? %>
           <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
 					<% end %>
-          <%= h task_item.text %> 
+          <%= h task_item.text %>
+<% if task_item.is_completed? -%>
+          <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
+                              :time => format_usertime(task_item.completed_on, :task_list_completed_time_format.l),
+                              :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))) %>)</span>
+<% end -%>
 					<% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
 	<br />
   </span>
