@@ -54,6 +54,6 @@ module WikiEngine::Helper
   end
 
   def wiki_title_to_id(title)
-    Slug.normalize(title)
+    WikiPage.new(:title => title).slug_text
   end
 end
