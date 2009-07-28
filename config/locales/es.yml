@@ -408,6 +408,7 @@ es:
   
   # Wiki page view
   wiki_page_confirm_delete: "¿Estás seguro de que quieres borrar ésta página?"
+  wiki_page_updated_format: "%e de %B de %Y %H:%M"
   
   # Activity
   action_add: Añadido

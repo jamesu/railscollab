@@ -20,6 +20,7 @@ es:
     confirm_deletion: '¿Estás seguro?'
     no_main_page: 'No hay página principal todavía'
     last_modified: 'Última modificación'
+    last_modified_with_time: 'Ultima modificación {{time}}'
     not_found: 'Página no encontrada'
     non_existing_page: 'Esta página del wiki no existe todavía.'
     create_it: 'Créala'
