@@ -599,6 +599,8 @@ en-US:
   revision_created_on: "Revision #{{number}} <span>(created on {{date}})</span>"
   revision_date_format: "%b %e. %Y %H:%M"
   revision_date_format_short: "%A, %e %B"
+  grouped_files_date_format: "%A, %e %B"
+  grouped_files_date_format_with_year: "%A, %e %B %Y"
   download_size: "Download ({{size}})"
   details_size: "Details ({{size}})"
   revisions: Revisions

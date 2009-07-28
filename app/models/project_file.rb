@@ -188,18 +188,12 @@ class ProjectFile < ActiveRecord::Base
     group_type = DateTime if ['created_on', 'updated_on'].include?(group_field)
     group_type ||= String
 
-    today = Date.today
-
     grouped_fields = found_files.group_by do |file|
       dest_str = nil
 
       if group_type == DateTime
         file_time = file[group_field]
-        if file_time.year == today.year
-          dest_str = file_time.strftime('%A, %d %B')
-        else
-          dest_str = file_time.strftime('%A, %d %B %Y')
-        end
+        dest_str = file_time
       else
         dest_str = file[group_field].to_s[0..0]
       end
