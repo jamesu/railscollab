@@ -423,6 +423,7 @@ es:
   action_today_fomat: "%H:%M"
   action_past_format: "%e de %B de %Y"
   action_yesterday: Ayer
+  action_by: 'por {{user}}'
   
   # Access
   forgot_password_sent_email: Se han enviado más intrucciones a tu dirección de correo electrónico.
