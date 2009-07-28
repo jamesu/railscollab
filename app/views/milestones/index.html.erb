@@ -22,11 +22,11 @@
     <h3><%= :due_in_next_n_days.l_with_args(:num => 14) %></h3>
   <%= now = @time_now.to_date
       prev_month = now.month
-      days_calendar now, now + 14.days, 'dayCal' do |date|
+      days_calendar now, now + 13.days, 'dayCal' do |date|
         unless date == now
           if date.month != prev_month 
             prev_month = date.month
-            calendar_block(date.strftime("%b %d"), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
+            calendar_block(I18n.l(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
           else
             calendar_block(date.day, @calendar_milestones["#{date.month}-#{date.day}"], 'day') 
           end
