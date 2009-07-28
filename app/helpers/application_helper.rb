@@ -208,15 +208,12 @@ module ApplicationHelper
     "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>"
   end
   
-  def calendar_days
-    ['', :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l, :wday_7.l]
-  end
-  
   def calendar_wdays
     ['', :wday_7.l, :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l]
   end
   
-  def months_calendar(start_date, end_date, tableclass, days=calendar_days, offset=0, merge_month=false)
+  def months_calendar(start_date, end_date, tableclass, offset=0, merge_month=false)
+    days = calendar_wdays
     # Day header
     rows = [days.map { |content| [:th, content]}]
     
@@ -273,31 +270,11 @@ module ApplicationHelper
   def days_calendar(start_date, end_date, tableclass)
     # Day header
     start_day = start_date.cwday
-    days = calendar_days
-    rows = [(days[start_day..7] + days[1...start_day]).map { |content| [:th, content] }]
-    cur_row = []
+    header = (Date.today..Date.today+6.days).map { |date| [:th, I18n.l(date, :format => '%A')] }
     
     # Iterate until final day
-    wday_count = 1
-    cur_date = start_date
-    while (cur_date < end_date)
-      cur_row << [:mday, yield(cur_date)]
-      
-      wday_count += 1
-      if wday_count % 8 == 0
-        rows << cur_row
-        wday_count = 1
-        cur_row = []
-      end
-            
-      last_day = cur_date.day
-      cur_date += 1
-    end
-    
-    # Finish off the rest of the week days
-    unless wday_count == 1
-      (8-wday_count).times { cur_date += 1; cur_row << [:mday, yield(cur_date)] }
-      rows << cur_row
+    rows = (start_date..end_date).to_a.in_groups_of(7).inject([header]) do |rows, week|
+      rows << week.collect {|cur_date| [:mday, cur_date.nil? ? '' : yield(cur_date)]}
     end
     
     cal_table(rows, tableclass)
