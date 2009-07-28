@@ -18,6 +18,7 @@
 <% unless @upcoming_milestones.empty? %>
   <div id="upcomingMilestones">
     <h2><%= :upcoming_milestones.l %></h2>
+<% unless @calendar_milestones.empty? %>
     <h3><%= :due_in_next_n_days.l_with_args(:num => 14) %></h3>
   <%= now = @time_now.to_date
       prev_month = now.month
@@ -33,6 +34,7 @@
           calendar_block(:today.l, @calendar_milestones["#{date.month}-#{date.day}"], 'today', true) 
         end
   end %>
+<% end -%>
   <h3><%= :all_upcoming_milestones.l %></h3>
 <%= render :partial => 'show', :collection => @upcoming_milestones %> 
   </div>

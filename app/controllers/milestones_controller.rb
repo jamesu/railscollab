@@ -36,11 +36,11 @@ class MilestonesController < ApplicationController
         @time_now = Time.zone.now
   	
         @late_milestones = @active_project.project_milestones.late(include_private)
-        @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@active_project])
+        @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
         @completed_milestones = @active_project.project_milestones.completed(include_private)
 
         end_date = (@time_now + 14.days).to_date
-        @calendar_milestones = @upcoming_milestones.group_by do |obj| 
+        @calendar_milestones = @upcoming_milestones.select{|m| m.due_date < end_date}.group_by do |obj| 
           date = obj.due_date.to_date
           "#{date.month}-#{date.day}"
         end
