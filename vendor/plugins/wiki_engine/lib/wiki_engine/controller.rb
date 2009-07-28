@@ -11,6 +11,7 @@ module WikiEngine::Controller
 
   def index
     unless @wiki_page.nil?
+      @version = @wiki_page
       @versions = @wiki_page.versions.all.reverse!
       render :action => 'show'
     end
