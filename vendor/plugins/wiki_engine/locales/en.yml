@@ -20,6 +20,7 @@ en:
     confirm_deletion: 'Are you sure?'
     no_main_page: 'There is no main page yet'
     last_modified: 'Last modified'
+    last_modified_with_time: 'Last modified {{time}}'
     not_found: 'Page not found'
     non_existing_page: 'This wiki page does not exist yet.'
     create_it: 'Create it'

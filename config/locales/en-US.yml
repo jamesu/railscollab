@@ -399,6 +399,7 @@ en-US:
   
   # Wiki page view
   wiki_page_confirm_delete: "Are you sure you want to delete this page?"
+  wiki_page_updated_format: "%B %e, %Y %H:%M"
   
   # Activity
   action_add: Added
