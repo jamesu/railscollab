@@ -97,6 +97,7 @@ class Project < ActiveRecord::Base
 			end
 		end
 	end
+        has_many :project_tasks, :through => :project_task_lists
 	
 	has_many :project_folders, :dependent => :destroy
 	has_many :project_files, :dependent => :destroy do
@@ -169,7 +170,7 @@ class Project < ActiveRecord::Base
 	end
 	
 	def tasks_by_user(user, completed=false)
-		ProjectTask.find(:all, :conditions => ["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
+		self.project_tasks.all(:conditions => ["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND project_tasks.completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
 	end
 	
 	def is_active?
