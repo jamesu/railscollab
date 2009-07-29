@@ -23,6 +23,9 @@ div.taskList li.taskItem div.taskControls {
 div.taskList li.taskItem:hover div.taskControls {
 	display: block;
 }
+div.reorder li.taskItem:hover div.taskControls {
+  display: none;
+}
 div.taskList li.taskItem div.taskControls img {
 	margin-bottom: -4px;
 }
