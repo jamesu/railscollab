@@ -208,15 +208,16 @@ module ApplicationHelper
     "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>"
   end
   
-  def calendar_wdays(offset = 0)
-    start_week = Date.today.beginning_of_week + offset.days
+  # offset: Use date.wday, so use 0 to start the week in sunday
+  def calendar_wdays(starting_day = 0)
+    start_week = Date.today.beginning_of_week + (starting_day - 1).days # In rails week start in monday and monday.wday is 1
     (start_week...start_week+7.days).collect { |day| I18n.l(day, :format => '%A') }
   end
   
-  # offset: -1 to start the week in sunday
-  def months_calendar(start_date, end_date, tableclass, offset=0, merge_month=false)
+  # offset: Use date.wday, so use 0 to start the week in sunday
+  def months_calendar(start_date, end_date, tableclass, starting_day=0, merge_month=false)
     # Day header
-    header = ['', *calendar_wdays(offset)].map { |content| [:th, content]}
+    header = ['', *calendar_wdays(starting_day)].map { |content| [:th, content]}
 
     end_date = end_date.end_of_month
     months = []
@@ -228,7 +229,7 @@ module ApplicationHelper
     # Iterate until final month
     rows = months.inject([header]) do |all_rows, month_dates|
       first_day = month_dates.first
-      start_of_month = (first_day - (first_day.beginning_of_week + offset.days)) % 7
+      start_of_month = (first_day - (first_day.beginning_of_week + (starting_day - 1).days)) % 7
       month_dates = month_dates.to_a
 
       if merge_month

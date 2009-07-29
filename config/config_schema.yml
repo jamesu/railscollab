@@ -135,6 +135,12 @@ general:
     comment: ""
     order: 12
 
+  first_day_of_week:
+    handler: DayConfigHandler
+    default: "7"
+    comment: ""
+    order: 13
+  
 mailing:
   notification_email_address:
     handler: StringConfigHandler

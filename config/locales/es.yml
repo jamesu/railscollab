@@ -669,6 +669,8 @@ es:
   option_asset_hosts_url_description: "e.g. 'example.com' habilitará assets[0-3].example.com como servidores de recursos."
   option_log_really_silent_name: "Registro silencioso"
   option_log_really_silent_description: "Borrar las entradas del registro cuando se elimina un elemento"
+  option_first_day_of_week_name: "Primer día de la semana"
+  option_first_day_of_week_description: "El día que se mostrará como primer día de la semana en la vista de calendario"
   notification_method_test: "Prueba"
   notification_method_smtp: "SMTP"
   notification_smtp_address: "Dirección"
