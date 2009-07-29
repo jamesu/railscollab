@@ -94,8 +94,8 @@ class ProjectTask < ActiveRecord::Base
     self.text
   end
 
-  def object_url
-    "#{self.task_list.object_url}/tasks/#{self.id}"
+  def object_url(host = nil)
+    url_for hash_for_task_path(:id => self.id, :task_list_id => self.task_list_id, :active_project => self.project_id, :only_path => host.nil?, :host => host)
   end
 
   def assigned_to=(obj)

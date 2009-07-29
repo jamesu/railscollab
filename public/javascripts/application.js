@@ -103,7 +103,7 @@ function bindStatic() {
 	      return false;
       });
       
-      $('.taskCheckbox .checkbox').click(function(evt) {
+      $('.taskCheckbox .completion').click(function(evt) {
         var el = $(evt.target);
         var url = el.attr('url');
         
@@ -164,7 +164,7 @@ function bindDynamic() {
         return false;
       });
       
-      $('.taskList .checkbox').click(function(evt) {
+      $('.taskList .completion').click(function(evt) {
         var el = $(evt.target);
         var list_url = el.parents('.taskList:first').attr('url');
         var task_id = el.parents('.taskItem:first').attr('task_id');
@@ -249,7 +249,7 @@ function rebindDynamic() {
   $('.newTask a').unbind();
   $('.taskItem form').unbind();
   $('.taskItem form .cancel').unbind();
-  $('.taskList .checkbox').unbind();
+  $('.taskList .completion').unbind();
   $('.taskList .itemDelete').unbind();
   
   $('.doSortTaskList').unbind();

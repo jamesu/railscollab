@@ -1,0 +1,14 @@
+------------------------------------------------------------
+ <%= :notifier_donotreply.l %>
+------------------------------------------------------------
+
+<%= :notifier_new_task.l_with_args(:project => @task.project.name) %>
+
+- <%= @task.object_url(AppConfig.site_url) %>
+
+<%= :company.l %>: <%= Company.owner.name %>
+<%= :project.l %>: <%= @task.project.name %>
+
+<%= @task.text %>
+--
+<%= AppConfig.site_url %>

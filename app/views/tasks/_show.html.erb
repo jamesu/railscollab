@@ -13,7 +13,7 @@
 			</div>
 			<% end %>
 <% if task_item.can_be_changed_by(@logged_user) %>
-        <input class="checkbox" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
+        <input class="checkbox completion" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
 <% else %>
         <span class="taskCheckbox"><%= render_icon( (task_item.completed_on.nil? ? 'not-checked' : 'checked'), :task_open.l) %></span>
 <% end %>

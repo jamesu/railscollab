@@ -703,7 +703,9 @@ es:
   # Mailing views
   notifier_donotreply: "NO CONTESTE A ÉSTE MENSAJE"
   notifier_greeting: "Hola {{user}}"
-  notifier_new_message: "Un nuevo mensaje con el título '{{title}}' se ha publicado en el proyecto {{project}}. Para ver éste mensaje visite la siguiente dirección URL:"
+  notifier_new_message: "Un nuevo mensaje con el título '{{title}}' se ha publicado en el proyecto {{project}}. Para verlo visite la siguiente dirección URL:"
+  notifier_new_task: "Una nueva tarea se ha publicado en el proyecto {{project}}. Para verla visite la siguiente dirección URL:"
+  notifier_new_milestone: "Un nuevo hito llamado '{{name}}' se ha publicado en el proyecto {{project}}. Para verlo visite la siguiente dirección URL:"
   notifier_new_comment: "Un nuevo comentario se ha publicado en el mensaje {{title}}. Para verlo, visite la siguiente URL:"
   notifier_reset_password: "Se ha solicitado restablecer su contraseña para su cuenta en {{site}}. Si quiere seguir con el procedimiento visite la siguiente URL:"
   notifier_new_account: "{{user}} ha creado una nueva cuenta de usuario para ti en {{site}}."

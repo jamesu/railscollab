@@ -1,0 +1,13 @@
+------------------------------------------------------------
+ <%= :notifier_donotreply.l %>
+------------------------------------------------------------
+
+<%= :notifier_new_milestone.l_with_args(:name => @milestone.name, :project => @milestone.project.name) %>
+
+- <%= @milestone.object_url(AppConfig.site_url) %>
+
+<%= :company.l %>: <%= Company.owner.name %>
+<%= :project.l %>: <%= @milestone.project.name %>
+
+--
+<%= AppConfig.site_url %>

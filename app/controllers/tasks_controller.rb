@@ -93,6 +93,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
+        Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_back_or_default(task_lists_path) }
         format.js
@@ -120,6 +121,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.update_attributes(params[:task])
+        Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(task_lists_path) }
         format.js

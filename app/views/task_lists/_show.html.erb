@@ -22,19 +22,10 @@
   <div class="addTask">
     <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to :add_task.l, new_task_path(:task_list_id => task_list.id) %></div>
     <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
-      <%= form_tag tasks_path(:task_list_id => task_list.id) %>
-        <div class="taskListAddTaskText">
-          <label for="addTaskText<%= task_list.id %>"><%= :text.l %>:</label>
-          <%= text_area 'task', 'text', :id => "addTaskText#{task_list.id}", :class => 'short autofocus', :rows => 10, :cols => 40  %>
-        </div>
-        <div class="taskListAddTaskAssignedTo">
-          <label for="addTaskAssignTo<%= task_list.id %>"><%= :assign_to.l %>:</label>
-          <%= assign_project_select 'task', 'assigned_to_id', @active_project, :id => "addTaskAssignTo#{task_list.id}" %>
-        </div>
-        
+      <% form_tag tasks_path(:task_list_id => task_list.id) do %>
+        <%= render :partial => 'tasks/form', :object => task_list.project_tasks.build %>
         <button class="submit" type="submit"><%= :add_task.l %></button> <%= :or.l %> <a class="cancel" href="#"><%= :cancel.l %></a>
-        
-      </form>
+      <% end %>
     </div>
   </div>
 <% end %>
