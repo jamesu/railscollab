@@ -89,7 +89,7 @@ $(document).ready(function(){
 
 function bindStatic() {
       
-      $('#statusBar').click(function(evt) {
+      $('.flash_success, .flash_error').click(function(evt) {
         $(this).hide('slow');
         
         return false;
