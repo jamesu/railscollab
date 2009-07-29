@@ -199,6 +199,7 @@ function bindDynamic() {
         var el = $(this);
         var list = el.parents('.taskList:first');
         var list_url = list.attr('url');
+        list.removeClass('reorder');
         
         list.find('.openTasks:first ul').sortable('destroy');
         list.find('.taskItemHandle').hide();
@@ -213,6 +214,7 @@ function bindDynamic() {
         var el = $(this);
         var list = el.parents('.taskList:first');
         var list_url = list.attr('url');
+        list.addClass('reorder');
         
         list.find('.openTasks:first ul').sortable({
           axis: 'y',
