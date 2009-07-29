@@ -81,8 +81,8 @@ class ProjectMessage < ActiveRecord::Base
     self.title
   end
 
-  def object_url
-    url_for hash_for_message_path(:id => self.id, :active_project => self.project_id, :only_path => true)
+  def object_url(host = nil)
+    url_for hash_for_message_path(:id => self.id, :active_project => self.project_id, :only_path => host.nil?, :host => host)
   end
 
   def attached_files(with_private)

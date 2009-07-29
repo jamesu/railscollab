@@ -4,7 +4,7 @@
 
 <%= :notifier_new_comment.l_with_args(:title => @message.title) %>
 
-- <%= "#{AppConfig.site_url}#{@comment.object_url}" %>
+- <%= @comment.object_url(AppConfig.site_url) %>
 
 <%= :company.l %>: <%= Company.owner.name %>
 <%= :project.l %>: <%= @message.project.name %>
