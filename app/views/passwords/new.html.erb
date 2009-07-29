@@ -1,9 +1,9 @@
-<%= form_tag :controller => 'access', :action => 'forgot_password' %>
+<% form_tag password_path, :method => :post do %>
   <div>
     <label for="forgotPasswordEmail"><%= :email_address.l %></label>
     <%= text_field_tag 'your_email', '', :id => 'forgotPasswordEmail', :class => 'medium' %>
   </div>
   <input type="hidden" name="submited" value="submited" />
   <div id="buttonSubmit">
-  <button class="submit" type="submit" accesskey="s"><%= :send_password.l %></button><span> | <%= link_to :cancel.l, :controller => 'access', :action => 'login' %></span></div>
-</form>
+  <button class="submit" type="submit" accesskey="s"><%= :send_password.l %></button><span> | <%= link_to :cancel.l, login_path %></span></div>
+<% end %>

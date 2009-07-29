@@ -9,7 +9,7 @@
 <%= :notifier_new_account_access.l %>
 
 <% if @password.nil? %>
-<%= "#{AppConfig.site_url}/access/reset_password/#{@user.id}?confirm=#{@user.password_reset_key}&initial=1" %>
+<%= edit_user_password_url(@user, :confirm => @user.password_reset_key, :initial => 1) %>
 
 <%= :notifier_new_account_access_login.l_with_args(:login => @user.username) %>
 <% else %>

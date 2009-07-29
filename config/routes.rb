@@ -22,10 +22,14 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'feed/:user/:token/:action.:project.:format', :controller => 'feed'
   
   # The rest of the simple controllers
-  %w[dashboard access administration config].each do |controller|
+  %w[dashboard administration config].each do |controller|
   	map.connect "#{controller}/:action/:id",        :controller => controller
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
+
+  map.resource :session, :only => [:new, :create, :destroy]
+  map.login 'login', :controller => 'sessions', :action => 'new'
+  map.logout 'logout', :controller => 'sessions', :action => 'destroy', :method => :delete
 
   # BaseCamp API
   map.connect 'project/list',                                       :controller => 'basecamp', :action => 'projects_list'
@@ -124,11 +128,14 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :times, :path_prefix => 'project/:active_project',
                         :collection => {:by_task => :get}
-  
+ 
+  map.resource :password, :only => [:new, :create]
   map.resources :users, :member => {:avatar => [:get, :put, :delete],
                                     :permissions => [:get, :put]},
-                        :collection => {:current => :get}
-  
+                        :collection => {:current => :get} do |users|
+    users.resource :password, :only => [:edit, :update]
+  end
+
   map.resources :companies, :member => {:logo => [:get, :put, :delete],
                                        :permissions => [:get, :put]}
   

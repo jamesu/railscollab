@@ -17,6 +17,7 @@
 #++
 
 class Notifier < ActionMailer::Base
+  default_url_options[:host] = AppConfig.site_url
 
   def message(user, msg, sent_at = Time.now)
     @subject    = "#{AppConfig.site_name} - New message #{msg.title}"

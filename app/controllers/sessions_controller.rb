@@ -17,46 +17,51 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class AccessController < ApplicationController
+class SessionsController < ApplicationController
 
   layout 'dialog'
-
+  before_filter :use_openid, :only => [:new, :create]
   filter_parameter_logging :password
 
-  def index
-    if @logged_user.nil?
-      redirect_to :action => 'login'
+  def new
+    redirect_to :controller => 'dashboard' unless @logged_user.nil?
+  end
+
+  def create
+    remember = params['remember']
+    if params[:openid_url]
+      openid_login
     else
-      redirect_to :controller => 'dashboard'
+      username_login
     end
   end
 
-  def login
-    @use_openid = (AppConfig.allow_openid and params['use_openid'].to_i == 1)
+  def destroy
+    session['user_id'] = nil
+    redirect_to login_path
+  end
 
-    case request.method
-    when :post
-      login_params = params[:login]
-      remember = login_params['remember']
+  protected
 
-      # Normal boring username + password
-      @logged_user = User.authenticate(login_params['user'], login_params['password'])
+  def username_login
+    # Normal boring username + password
+    @logged_user = User.authenticate(params['user'], params['password'])
 
-      if @logged_user.nil?
-        error_status(true, :login_failure)
-      else
-        error_status(false, :login_success)
-        redirect_back_or_default :controller => 'dashboard'
+    if @logged_user.nil?
+      error_status(true, :login_failure)
+      render :action => 'new'
+    else
+      error_status(false, :login_success)
+      redirect_back_or_default :controller => 'dashboard'
 
-        session['user_id'] = @logged_user.id
-      end
+      session['user_id'] = @logged_user.id
     end
   end
 
   def openid_login
     unless AppConfig.allow_openid
       error_status(true, :invalid_request)
-      redirect_to :action => 'login'
+      redirect_to :action => 'new'
       return
     end
 
@@ -72,9 +77,6 @@ class AccessController < ApplicationController
           session['user_id'] = log_user.id
           return
         end
-
-        redirect_to :action => 'login'
-
       elsif result.unsuccessful?
         if result == :canceled
           error_status(true, :verification_cancelled)
@@ -83,84 +85,16 @@ class AccessController < ApplicationController
         else
           error_status(true, :verification_failed)
         end
-
-        redirect_to :action => 'login'
-
       else
         error_status(true, :unknown_response_status, {:status => result.message})
-        redirect_to :action => 'login'
       end
+      redirect_to :action => 'new'
     end
   end
 
-  def logout
-    session['user_id'] = nil
-    redirect_to :controller => 'access', :action => 'login'
+  def use_openid
+    @use_openid = (AppConfig.allow_openid and params['use_openid'].to_i == 1)
   end
-
-  def forgot_password
-    case request.method
-    when :post
-      @your_email = params[:your_email]
-
-      unless @your_email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-        error_status(false, :invalid_email)
-        return
-      end
-
-      user = User.first(:conditions => ['email = ?', @your_email])
-      if user.nil?
-        error_status(false, :invalid_email_not_in_use)
-        return
-      end
-
-      # Send the reset!
-      user.send_password_reset()
-      error_status(false, :forgot_password_sent_email)
-      redirect_to :action => 'login'
-    end
-  end
-
-  def reset_password
-    begin
-      @user = User.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(false, :invalid_request)
-      redirect_to :action => 'login'
-      return
-    end
-
-    unless @user.password_reset_key == params[:confirm]
-      error_status(false, :invalid_request)
-      redirect_to :action => 'login'
-    end
-
-    @initial_signup = params.has_key? :initial
-
-    case request.method
-    when :post
-      @password_data = params[:user]
-
-      unless @password_data[:password]
-        @user.errors.add(:password, :new_password_required.l)
-        return
-      end
-
-      unless @password_data[:password] == @password_data[:password_confirmation]
-        @user.errors.add(:password_confirmation, :does_not_match.l)
-        return
-      end
-
-      @user.password = @password_data[:password]
-      @user.save
-
-      error_status(false, :password_changed)
-      redirect_to :action => 'login'
-      return
-    end
-  end
-
-  protected
 
   def protect?(action)
     false
