@@ -486,15 +486,6 @@ es:
   project: Proyecto
   page: Página
   
-  # Calendar
-  wday_1: Lunes
-  wday_2: Martes
-  wday_3: Miércoles
-  wday_4: Jueves
-  wday_5: Viernes
-  wday_6: Sábado
-  wday_7: Domingo
-  
   # Admin
   project_confirm_delete: "¿Estás seguro de que quieres borrar éste proyecto?"
   no_projects_owned_by_company: "Tu compañía no tiene proyectos"
