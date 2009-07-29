@@ -208,54 +208,49 @@ module ApplicationHelper
     "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>"
   end
   
-  def calendar_wdays
-    [:wday_7.l, :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l]
+  def calendar_wdays(offset = 0)
+    start_week = Date.today.beginning_of_week + offset.days
+    (start_week...start_week+7.days).collect { |day| I18n.l(day, :format => '%A') }
   end
   
+  # offset: -1 to start the week in sunday
   def months_calendar(start_date, end_date, tableclass, offset=0, merge_month=false)
     # Day header
-    days = calendar_wdays
-    header = ['', *days].map { |content| [:th, content]}
+    header = ['', *calendar_wdays(offset)].map { |content| [:th, content]}
 
     end_date = end_date.end_of_month
     months = []
     until start_date > end_date
-      months << (start_date.beginning_of_month..start_date.end_of_month) 
+      months << (start_date.beginning_of_month..start_date.end_of_month)
       start_date += 1.month
     end
-    
+
     # Iterate until final month
     rows = months.inject([header]) do |all_rows, month_dates|
-      cur_month = month_dates.first.month
-      month_cell = [:thm, I18n.l(month_dates.first, :format => '%B'), 0]
-      start_of_month = (month_dates.first.cwday + offset) % 7
+      first_day = month_dates.first
+      start_of_month = (first_day - (first_day.beginning_of_week + offset.days)) % 7
       month_dates = month_dates.to_a
 
-
-      # Add the days of the previous month
       if merge_month
+        # Add the days of the previous and next months
         month_dates.unshift *(month_dates.first-start_of_month.days...month_dates.first).to_a
+        missing = 7 - month_dates.size % 7
+        month_dates.concat((month_dates.last+1.day..month_dates.last+missing.days).to_a) unless missing == 7
       else
         month_dates.unshift *[nil] * start_of_month
       end
 
-      # Add the days of the next month
-      if merge_month
-        missing = 7 - month_dates.size % 7
-        month_dates.concat((month_dates.last+1.day..month_dates.last+missing.days).to_a) unless missing == 7
-      end
-      
       week_rows = month_dates.in_groups_of(7).collect do |week|
         week.collect do |cur_date|
-          if cur_date.nil? || cur_date.month != cur_month
+          if cur_date.nil? || cur_date.month != first_day.month
             [:bday, cur_date.try(:day)]
           else
             [:mday, yield(cur_date)]
           end
         end
       end
-      
-      month_cell[2] = week_rows.size + 1
+
+      month_cell = [:thm, I18n.l(first_day, :format => '%B'), week_rows.size + 1]
       all_rows.concat [[month_cell], *week_rows]
     end
     

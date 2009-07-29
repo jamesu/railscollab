@@ -462,15 +462,6 @@
   project: Project
   page: Page
   
-  # Calendar
-  wday_1: Monday
-  wday_2: Tuesday
-  wday_3: Wednesday
-  wday_4: Thursday
-  wday_5: Friday
-  wday_6: Saturday
-  wday_7: Sunday
-  
   # Admin
   project_confirm_delete: "Are you sure you want to delete this project?"
   no_projects_owned_by_company: "There are no projects owned by this company"
