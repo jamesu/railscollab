@@ -45,7 +45,8 @@ class SessionsController < ApplicationController
 
   def username_login
     # Normal boring username + password
-    @logged_user = User.authenticate(params['user'], params['password'])
+    debugger
+    @logged_user = User.authenticate(params['login']['user'], params['login']['password'])
 
     if @logged_user.nil?
       error_status(true, :login_failure)
