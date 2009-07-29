@@ -485,19 +485,6 @@ en:
   wday_6: Saturday
   wday_7: Sunday
   
-  month_1: January
-  month_2: February
-  month_3: March
-  month_4: April
-  month_5: May
-  month_6: June
-  month_7: July
-  month_8: August
-  month_9: September
-  month_10: October
-  month_11: November
-  month_12: December
-  
   # Admin
   project_confirm_delete: "Are you sure you want to delete this project?"
   no_projects_owned_by_company: "There are no projects owned by this company"

@@ -196,7 +196,7 @@ module ApplicationHelper
           when :mday
             "<td>#{column[1]}</td>"
           when :bday
-            "<td class=\"blank\"></td>"
+            "<td class=\"blank\">#{column[1]}</td>"
           when :th
             "<th>#{column[1]}</th>"
           when :thm
@@ -209,59 +209,54 @@ module ApplicationHelper
   end
   
   def calendar_wdays
-    ['', :wday_7.l, :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l]
+    [:wday_7.l, :wday_1.l, :wday_2.l, :wday_3.l, :wday_4.l, :wday_5.l, :wday_6.l]
   end
   
   def months_calendar(start_date, end_date, tableclass, offset=0, merge_month=false)
-    days = calendar_wdays
     # Day header
-    rows = [days.map { |content| [:th, content]}]
+    days = calendar_wdays
+    header = ['', *days].map { |content| [:th, content]}
+
+    end_date = end_date.end_of_month
+    months = []
+    until start_date > end_date
+      months << (start_date.beginning_of_month..start_date.end_of_month) 
+      start_date += 1.month
+    end
     
     # Iterate until final month
-    cur_date = start_date
-    final_date = Date.civil(end_date.year, end_date.month, 1)
-    while cur_date < final_date
-      days_in_month = Date.civil(cur_date.year, cur_date.month, -1).day
-      start_of_month = (Date.civil(cur_date.year, cur_date.month, 1).cwday + offset) % 8
+    rows = months.inject([header]) do |all_rows, month_dates|
+      cur_month = month_dates.first.month
+      month_cell = [:thm, I18n.l(month_dates.first, :format => '%B'), 0]
+      start_of_month = (month_dates.first.cwday + offset) % 7
+      month_dates = month_dates.to_a
+
+
+      # Add the days of the previous month
+      if merge_month
+        month_dates.unshift *(month_dates.first-start_of_month.days...month_dates.first).to_a
+      else
+        month_dates.unshift *[nil] * start_of_month
+      end
+
+      # Add the days of the next month
+      if merge_month
+        missing = 7 - month_dates.size % 7
+        month_dates.concat((month_dates.last+1.day..month_dates.last+missing.days).to_a) unless missing == 7
+      end
       
-      # Month row
-      month_row = [:thm, "month_#{cur_date.month}".to_sym.l, 0]
-      day_rows = 1
-      rows << [month_row]
-      
-      # Blank days
-      cur_row = (1...start_of_month).map { |d| [:bday] }
-      
-      # Month days
-      wday_count = start_of_month
-      (1..days_in_month).each do |d|
-        cur_row << [:mday, yield(Date.civil(cur_date.year, cur_date.month, d))]
-        
-        wday_count += 1
-        if wday_count % 8 == 0
-          rows << cur_row
-          day_rows += 1
-          wday_count = 1
-          cur_row = []
+      week_rows = month_dates.in_groups_of(7).collect do |week|
+        week.collect do |cur_date|
+          if cur_date.nil? || cur_date.month != cur_month
+            [:bday, cur_date.try(:day)]
+          else
+            [:mday, yield(cur_date)]
+          end
         end
       end
       
-      # Remaining blank days
-      unless wday_count == 1
-        if merge_month
-          # Add the days of the next month
-          (8-wday_count).times { cur_row << [:bday, yield(Date.civil(cur_date.year, cur_date.month, d))] }
-        else
-          # Just bank out the rest
-          (8-wday_count).times { cur_row << [:bday] }
-        end
-        rows << cur_row
-        day_rows += 1
-      end
-      
-      month_row[2] = day_rows
-      
-      cur_date += 1.month
+      month_cell[2] = week_rows.size + 1
+      all_rows.concat [[month_cell], *week_rows]
     end
     
     cal_table(rows, tableclass)
@@ -269,7 +264,6 @@ module ApplicationHelper
 
   def days_calendar(start_date, end_date, tableclass)
     # Day header
-    start_day = start_date.cwday
     header = (Date.today..Date.today+6.days).map { |date| [:th, I18n.l(date, :format => '%A')] }
     
     # Iterate until final day
