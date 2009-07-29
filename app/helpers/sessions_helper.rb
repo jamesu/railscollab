@@ -1,7 +1,7 @@
-module AccessHelper
+module SessionsHelper
   def page_title
     case action_name
-      when 'reset_password' then @initial_signup ? :set_password.l : :reset_password.l
+      when 'new', 'create' then :login.l
       else super
     end
   end

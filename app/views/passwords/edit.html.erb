@@ -1,4 +1,4 @@
-<%= form_tag :controller => 'access', :action => 'reset_password' %>
+<% form_tag user_password_path(@user), :method => :put do %>
 <%= error_messages_for :user %>
   <input type="hidden" name="confirm" value="<%= h params[:confirm] %>"/>
   <div>
@@ -12,6 +12,6 @@
   </div>
   
   <div id="buttonSubmit">
-  <button class="submit" type="submit" accesskey="s"><%= @initial_signup ? :set_password.l : :change_password.l %></button>
+  <button class="submit" type="submit" accesskey="s"><%= @initial_signup ? :set_password.l : :reset_password.l %></button>
   </div>
-</form>
+<% end %>

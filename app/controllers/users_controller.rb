@@ -94,9 +94,9 @@ class UsersController < ApplicationController
     new_account_password = nil
 
     if user_attribs.has_key?(:generate_password)
-      @user.password = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
+      @user.password = @user.password_confirmation = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
     else
-      if user_attribs.has_key? :password and !user_attribs[:password].empty?
+      unless user_attribs[:password].blank?
         @user.password = user_attribs[:password]
         @user.password_confirmation = user_attribs[:password_confirmation]
       end
@@ -127,7 +127,7 @@ class UsersController < ApplicationController
       # Time to update permissions
       update_project_permissions(@user, params[:user_project], params[:project_permission])
       # ... and send details!
-      @user.send_new_account_info(new_account_password) if @send_email
+      Notifier.deliver_account_new_info(@user, new_account_password) if @send_email
     end
     
     respond_to do |format|
@@ -192,7 +192,7 @@ class UsersController < ApplicationController
       end
     end
 
-    if user_params.has_key? :password and !user_params[:password].empty?
+    unless user_params[:password].blank?
       @user.password = user_params[:password]
       @user.password_confirmation = user_params[:password_confirmation]
     end

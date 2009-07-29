@@ -47,12 +47,6 @@ class User < ActiveRecord::Base
   
   has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
 
-  before_validation_on_create :process_create
-
-  def process_create
-    @cached_password ||= ''
-  end
-
   def twister_array=(value)
     self.twister = value.join()
   end
@@ -91,6 +85,7 @@ class User < ActiveRecord::Base
       self.token = nil
       return
     end
+    @password = value
 
     # Calculate a unique token with salt
     loop do
@@ -118,26 +113,16 @@ class User < ActiveRecord::Base
       break if (calc_twister[0] != '0')
     end
     
-    @cached_password = value.clone
     self.twister_array = calc_twister
   end
   
-  def password
-    @cached_password
-  end
-  
-  def password_changed?
-    #puts "CHANGED == #{@cached_password.class} (#{!@cached_password.nil?})"
-    !@cached_password.nil?
-  end
-
   def password_reset_key
     Digest::SHA1.hexdigest(self.salt + self.twisted_token + (self.last_login.nil? ? '' : self.last_login.strftime('%Y-%m-%d %H:%M:%S')))
   end
 
-  def twisted_token()
+  def twisted_token
     value = self.token
-    return value unless value.valid_hash?
+    return value if value.valid_hash?
 
     twist_array = self.twister_array
     result = ''
@@ -194,14 +179,6 @@ class User < ActiveRecord::Base
 
   def valid_password(pass)
     self.token == Digest::SHA1.hexdigest(self.salt + pass)
-  end
-
-  def send_password_reset()
-    Notifier.deliver_password_reset(self)
-  end
-
-  def send_new_account_info(password=nil)
-    Notifier.deliver_account_new_info(self, password)
   end
 
   # Core permissions
@@ -375,19 +352,25 @@ class User < ActiveRecord::Base
   def process_update_params
   end
 
+  def password_required?
+    token.blank? || !@password.blank?
+  end
+
   # Accesibility
 
   attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
+
+  attr_accessor :password_confirmation
+  attr_reader :password
 
   # Validation
   
   validates_presence_of :username, :on => :create
   validates_length_of :username, :within => 3..40
 
-  validates_presence_of :password, :if => :password_changed?
-  validates_length_of :password, :minimum => 4, :if => :password_changed?
-
-  validates_confirmation_of :password, :if => :password_changed?
+  validates_presence_of :password, :if => :password_required?
+  validates_length_of :password, :minimum => 4, :if => :password_required?
+  validates_confirmation_of :password, :if => :password_required?
   
   validates_uniqueness_of :username
   validates_uniqueness_of :email

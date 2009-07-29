@@ -1,8 +1,8 @@
 <div id="userbox">
   <% if user.is_anonymous? %>
-  <%= :welcome_anonymous.l %> (<%= link_to(:login.l, {:controller => 'access', :action => 'logout'}) %>),
+  <%= :welcome_anonymous.l %> (<%= link_to(:login.l, logout_path) %>),
   <% else %>
-  <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, {:controller => 'access', :action => 'logout'}, :confirm => :are_you_sure_logout.l %>),
+  <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>),
   <% end %>
   <ul>
     <% unless user.is_anonymous? %>
