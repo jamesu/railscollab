@@ -101,11 +101,9 @@ class DashboardController < ApplicationController
     @active_projects = @logged_user.active_projects
         
     @time_now = Time.zone.now
-    tstart = @time_now.utc
-    tend = tstart + 3.months
     
-    @date_start = Date.civil(tstart.year, tstart.month, 1)
-    @date_end = Date.civil(tend.year, tend.month, -1)
+    @date_start = @time_now.utc.to_date.beginning_of_month
+    @date_end = @date_start + 3.months - 1.day
     
     assignee = unless params[:assigned_to].nil? or params[:assigned_to].empty?
       if params[:assigned_to][0] == 99 # c
