@@ -694,6 +694,8 @@ en:
   notifier_donotreply: "DO NOT REPLY TO THIS MESSAGE"
   notifier_greeting: "Hi {{user}}"
   notifier_new_message: "A new message entitled '{{title}}' has been posted in the project {{project}}. To view this message, visit the following URL:"
+  notifier_new_task: "A new task has been posted in the project {{project}}. To view this task, visit the following URL:"
+  notifier_new_milestone: "A new milestone named '{{name}}' has been posted in the project {{project}}. To view this milestone, visit the following URL:"
   notifier_new_comment: "A new comment has been posted to the message {{title}}. To view this comment, visit the following URL:"
   notifier_reset_password: "A request to reset the password for your account has been made at {{site}}. Provided you wish to continue with this request, please visit the following url:"
   notifier_new_account: "{{user}} has created new account for you at {{site}}."

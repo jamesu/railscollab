@@ -34,6 +34,36 @@ class Notifier < ActionMailer::Base
 	}
   end
 
+  def task(user, task, sent_at = Time.now)
+    @subject    = "#{AppConfig.site_name} - New task"
+    @recipients = user.email
+    @from       = AppConfig.notification_email_address
+    @sent_on    = sent_at
+    @headers    = {}
+	
+	@body       = {
+		:site_name => AppConfig.site_name,
+		:task => task,
+		:user => user,
+		:sent_on => sent_at
+	}
+  end
+
+  def milestone(user, milestone, sent_at = Time.now)
+    @subject    = "#{AppConfig.site_name} - New message #{milestone.name}"
+    @recipients = user.email
+    @from       = AppConfig.notification_email_address
+    @sent_on    = sent_at
+    @headers    = {}
+	
+	@body       = {
+		:site_name => AppConfig.site_name,
+		:milestone => milestone,
+		:user => user,
+		:sent_on => sent_at
+	}
+  end
+
   def message_comment(user, comment, msg, sent_at = Time.now)
     @subject    = "#{AppConfig.site_name} - New comment for #{msg.title}"
     @recipients = user.email
