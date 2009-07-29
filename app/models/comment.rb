@@ -107,9 +107,9 @@ class Comment < ActiveRecord::Base
 		self.text.excerpt(50)
 	end
 	
-	def object_url
+	def object_url(host = nil)
 		if self.rel_object
-			self.rel_object.object_url + "#objectComments"
+			self.rel_object.object_url(host) + "#objectComments"
 		else
 			""
 		end

@@ -152,6 +152,7 @@ class MessagesController < ApplicationController
       unless params[:notify_user].nil?
         valid_users = params[:notify_user].collect do |user_id|
           real_id = user_id.to_i
+          next if real_id == @logged_user.id # will be subscribed below
 
           number_of_users = ProjectUser.count(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id])
           next if number_of_users == 0
@@ -159,7 +160,10 @@ class MessagesController < ApplicationController
           real_id
         end.compact
         
-        User.all(:conditions => { :id => valid_users }).each { |user| @message.send_notification(user) }
+        User.find(valid_users).each do |user|
+          @message.ensure_subscribed(user)
+          @message.send_notification(user)
+        end
       end
 
       # Subscribe
