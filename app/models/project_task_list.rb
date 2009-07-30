@@ -64,9 +64,8 @@ class ProjectTaskList < ActiveRecord::Base
     ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
   end
 
-  def ensure_completed(task_completed, completed_by)
-    # If the task isn't complete, and we don't think we are
-    # complete either, exit (vice versa)
+  def ensure_completed(completed_by)
+    # If we don't think we are complete either, exit (vice versa)
     @ensured_complete = true
     self.project_tasks(true)
     

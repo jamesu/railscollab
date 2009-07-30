@@ -45,6 +45,7 @@ class ProjectTask < ActiveRecord::Base
   before_update  :process_update_params
   after_update   :update_task_list
   before_destroy :process_destroy
+  after_destroy  :update_task_list
 
   def process_params
     write_attribute('completed_on', nil)
@@ -52,7 +53,7 @@ class ProjectTask < ActiveRecord::Base
   end
 
   def process_create
-    self.task_list.ensure_completed(!self.completed_on.nil?, self.created_by)
+    self.task_list.ensure_completed(self.created_by)
     self.task_list.save!
     ApplicationLog.new_log(self, self.created_by, :add, self.task_list.is_private, self.task_list.project)
   end
@@ -75,13 +76,15 @@ class ProjectTask < ActiveRecord::Base
 
   def process_destroy
     ApplicationLog.new_log(self, self.updated_by, :delete, true, self.task_list.project)
+    @update_completed = true
+    @update_completed_user = self.updated_by
   end
 
   def update_task_list
     return if @update_completed.nil?
 
     task_list = self.task_list
-    task_list.ensure_completed(@update_completed, self.completed_by)
+    task_list.ensure_completed(@update_completed_user)
     task_list.save!
     
     # If opened, we log after the task list
