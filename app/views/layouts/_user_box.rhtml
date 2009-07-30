@@ -20,7 +20,7 @@
   <div class="PopupMenuWidgetDiv" id="account_more_menu" style="display:none">
     <p><%= :account.l %>:</p>
     <ul>
-      <li><%= link_to :update_profile.l, edit_user_path(:id => user.id) %></li>
+      <li><%= link_to :edit_profile.l, edit_user_path(:id => user.id) %></li>
       <li><%= link_to :update_avatar.l, avatar_user_path(:id => user.id) %></li>
     </ul>
     <p><%= :userbox_more.l %></p>

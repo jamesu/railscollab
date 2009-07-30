@@ -113,6 +113,11 @@ function bindStatic() {
       });
       
       $('.loginOpenID').click(login_toggle_openid);
+      
+      $('.PopupMenuWidgetAttachTo').click(function(evt) {
+        $(this).title = '';
+        $('#'+this.id+'_menu').toggle();
+      });
 }
 
 function bindDynamic() {
