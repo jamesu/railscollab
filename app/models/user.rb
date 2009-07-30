@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
 
   has_many :project_users,     :dependent => :delete_all
   has_many :projects,          :through => :project_users
-  has_many :active_projects,   :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC'
+  has_many :active_projects,   :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC, projects.name ASC'
   has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
   has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
