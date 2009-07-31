@@ -223,7 +223,7 @@ class ProjectTask < ActiveRecord::Base
 
   # Accesibility
 
-  attr_accessible :text, :assigned_to_id, :task_list_id
+  attr_accessible :text, :assigned_to_id, :task_list_id, :estimated_hours
 
   # Validation
 

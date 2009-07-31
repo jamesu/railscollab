@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090727115904) do
+ActiveRecord::Schema.define(:version => 20090731074550) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20090727115904) do
     t.integer  "updated_by_id"
     t.integer  "order",                               :default => 0, :null => false
     t.integer  "comments_count",                      :default => 0
+    t.float    "estimated_hours"
   end
 
   add_index "project_tasks", ["completed_on"], :name => "index_project_tasks_on_completed_on"

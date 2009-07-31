@@ -17,3 +17,7 @@
     <%= assign_project_select 'task', 'assigned_to_id', @active_project, :id => "taskAssignedTo#{task.id}" %>
   </div>
   <div><%= check_box_tag 'send_notification', '1', params[:send_notification], :id => "taskSendNotification#{task.id}", :class => 'checkbox'  %> <label for="taskSendNotification<%= task.id %>" class="checkbox"><%= :send_email_notification_to_user.l %></label></div>
+  <div>
+    <label for="addTaskHours"><%= :estimated_hours.l %>:</label>
+    <%= text_field 'task', 'estimated_hours', :id => 'addTaskHours', :class => 'short' %>
+  </div>
