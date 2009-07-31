@@ -351,6 +351,8 @@ en-US:
   assign_to: Assign to
   priority: Priority
   description: Description
+  estimated_hours: Estimated hours
+  task_estimated_hours: "[{{hours}} estimated hours]"
   is_private_list: Is private
   is_private_list_info: "(Private task lists are visible only to owner company members. Members of client companies will not be able to see them)"
   task_list: Task list

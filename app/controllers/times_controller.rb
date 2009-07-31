@@ -65,14 +65,8 @@ class TimesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @project = @active_project
-        @tasks = ProjectTime.find_by_task_list({:order => "#{@active_project.connection.quote_column_name 'order'} DESC"}, @time_conditions, "#{@sort_type} #{@sort_order}")
+        @tasks = ProjectTime.find_by_task_lists(@active_project.project_task_lists, @time_conditions)
         @content_for_sidebar = 'index_sidebar'
-    
-        @times = @project.project_times.find(:all, 
-                                             :conditions => @time_conditions, 
-                                             :page => {:size => AppConfig.times_per_page, :current => @current_page}, 
-                                             :order => "#{@sort_type} #{@sort_order}")
       }
     end
   end

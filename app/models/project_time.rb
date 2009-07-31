@@ -184,25 +184,28 @@ class ProjectTime < ActiveRecord::Base
 	  end
 	end
 	
-	def self.find_by_task_list(params, time_conds, time_order=nil)
-	   lists = []
-	   
-	   ProjectTaskList.find(:all, :params).each do |list|
-	       tasks = []
-	       list.project_tasks.each do |task|
-	         total = ProjectTime.sum(:hours, :conditions => ['task_list_id = ? AND task_id = ?', list.id, task.id])
-	         if (!total.nil? and total > 0)
-	           total_billable = ProjectTime.sum(:hours, :conditions => ['task_list_id = ? AND task_id = ? AND is_billable = ?', list.id, task.id, true])
-	           extra_conditions = time_conds.clone.merge({'task_list_id' => list.id, 'task_id' => task.id})
-	           tasks << {:task => task, :hours => total, :billable_hours => total_billable || 0, :list => ProjectTime.find(:all, :conditions => extra_conditions, :order => time_order)}
-	         end
-	       end
-	       
-	       lists << {:list => list, :tasks => tasks}
-	   end
-	   
-	   return lists
-	end
+  def self.find_by_task_lists(task_lists, time_conds)
+    lists = []
+
+    task_lists.all(:include => {:project_tasks => :project_times}).each do |list|
+      tasks = []
+      list.project_tasks.each do |task|
+        times = task.project_times.select do |time|
+          time_conds.all? {|attr, value| time.send(attr) == value}
+        end
+        total = times.inject(0) {|sum, time| sum + time.hours}
+        if (total > 0)
+          total_billable = times.select(&:is_billable).inject(0) {|sum, time| sum + time.hours}
+          extra_conditions = time_conds.clone.merge({'task_list_id' => list.id, 'task_id' => task.id})
+          tasks << {:task => task, :hours => total, :billable_hours => total_billable || 0, :times => times}
+        end
+      end
+
+      lists << {:list => list, :tasks => tasks}
+    end
+
+    return lists
+  end
 	
 	def self.find_grouped(group_field, params)
 		grouped_fields = {}

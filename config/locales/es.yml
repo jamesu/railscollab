@@ -358,6 +358,8 @@ es:
   assign_to: Asignar a
   priority: Prioridad
   description: Descripción
+  estimated_hours: Horas estimadas
+  task_estimated_hours: "[{{hours}} horas estimadas]"
   is_private_list: Es privada
   is_private_list_info: "(Las listas de tareas privadas sólo pueden verlas los miembros de la compañía propietaria. Los miembros de otras compañías no podrán verlas.)"
   task_list: Lista de tareas
