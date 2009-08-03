@@ -153,13 +153,13 @@ function bindDynamic() {
         return false;
       });
       
-      $('.taskItem form').submit(function(evt) {
+      $('.taskItem form.editTaskItem').submit(function(evt) {
         $(this).request(JustRebind, 'script');
         
         return false;
       });
     
-      $('.taskItem form .cancel').click(function(evt) {
+      $('.taskItem form.editTaskItem .cancel').click(function(evt) {
         $.get(this.href, null, JustRebind, 'script');
         
         return false;

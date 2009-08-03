@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090731074550) do
+ActiveRecord::Schema.define(:version => 20090731120012) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(:version => 20090731074550) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
+    t.datetime "start_date"
   end
 
   add_index "project_times", ["created_on"], :name => "index_project_times_on_created_on"

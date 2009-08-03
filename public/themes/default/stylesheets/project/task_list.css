@@ -36,6 +36,12 @@ div.taskList li.taskItem div.taskActions {
 div.taskList li.taskItem:hover div.taskActions {
 	display: inline;
 }
+div.taskList li.taskItem div.taskActions form {
+  display: inline;
+}
+div.taskList li.taskItem div.taskActions form div {
+  display: inline;
+}
 
 div.taskList span.taskCheckbox {
   padding-top: 4px;

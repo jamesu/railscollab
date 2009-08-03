@@ -60,6 +60,12 @@ input.short { width: 50px; }
 input.medium { width: 150px; }
 input.long { width: 400px; }
 input.title { width: 530px; }
+input.image {
+  width: auto;
+  border: none;
+  background: none;
+  vertical-align: text-bottom;
+}
 
 input.checkbox, input.yes_no {
   border: 0;

@@ -41,4 +41,8 @@ module TimesHelper
   def additional_stylesheets
     ['project/time']
   end
+
+  def seconds_to_time(seconds)
+    Time.at(seconds).utc.strftime('%R')
+  end
 end

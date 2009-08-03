@@ -16,12 +16,19 @@
       <a href="<%= view_time.object_url %>"><%= h view_time.name %></a>
     </div>
     <div class="content">
-<% if view_time.done_date.year == Time.now.year %>
-      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "%A, %d %B") %></div>
-<% else %>
-      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "%b %d. %Y") %></div>
-<% end %>
-      <div class="hours"><span><%= "Hours" %>:</span> <%= view_time.hours %></div>
+<% if view_time.done_date.nil? -%>
+      <div><%= :time_running.l %></div>
+<% else -%>
+      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, view_time.done_date.year == Time.now.year ? "%A, %d %B" : "%A, %d %B %Y") %>
+<% end -%>
+      <div class="hours">
+        <span><%= "Hours" %>:</span>
+<% if view_time.done_date.nil? -%>
+        <%= seconds_to_time Time.now - view_time.start_date %>
+<% else -%>
+        <%= view_time.hours %>
+<% end -%>
+      </div>
       
       <div class="description"><% if !view_time.open_task.nil? %><p><%= link_to (view_time.open_task.text, view_time.open_task.object_url) %></p><% end %><%= textilize view_time.description %></div>
 

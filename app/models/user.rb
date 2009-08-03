@@ -46,6 +46,8 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
   
   has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
+  
+  has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'
 
   def twister_array=(value)
     self.twister = value.join()
