@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'feed/:user/:token/:action.:project.:format', :controller => 'feed'
   
   # The rest of the simple controllers
-  %w[dashboard administration config].each do |controller|
+  %w[dashboard].each do |controller|
   	map.connect "#{controller}/:action/:id",        :controller => controller
   	map.connect "#{controller}/:action/:id.format", :controller => controller
   end
@@ -82,7 +82,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects/:active_project/feed/recent_items_rss', :controller => 'basecamp', :action => 'recent_project_items_rss'
     
   # project & project object url's
-  map.resources :projects, :as => 'project',
+  map.resources :projects,
                           :member => { :people => :get,
                                        :search => [:get, :post],
                                        :users => [:delete],
@@ -138,8 +138,13 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :companies, :member => {:logo => [:get, :put, :delete],
-                                       :permissions => [:get, :put]}
-  
+                                        :hide_welcome_info => :put,
+                                        :permissions => [:get, :put]}
+  map.resources :configurations, :only => [:index, :edit, :update]
+  map.resources :tools, :only => [:index]
+
+  map.administration 'administration', :controller => 'administration', :action => 'index'
+
   # Install the default route as the lowest priority.
   #map.connect ':controller/:action/:id.:format'
   #map.connect ':controller/:action/:id'

@@ -39,14 +39,14 @@ class CompaniesController < ApplicationController
   end
 
   def index
+    company = Company.owner
+  	clients = Company.owner.clients(true)
+  	@companies = [company] + clients
     respond_to do |format|
-      format.html {
-        redirect_to :controller => 'administration', :action => 'people'
-      }
+      format.html
       format.xml  {
         if @logged_user.is_admin
-          @companies = Company.find(:all)
-          render :xml => @users.to_xml(:root => 'user')
+          render :xml => @companies.to_xml(:root => 'companies')
         else
           return error_status(true, :insufficient_permissions)
         end
@@ -109,6 +109,15 @@ class CompaniesController < ApplicationController
         format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
       end
     end
+  end
+  
+  def hide_welcome_info
+    error_status(true, :invalid_company) unless @company.is_owner?
+    error_status(true, :insufficient_permissions) unless @company.can_be_edited_by(@logged_user)
+
+    @company.hide_welcome_info = true
+    error_status(false, :welcome_info_hidden) if @company.save
+    redirect_back_or_default :controller => 'dashboard'
   end
 
   def destroy

@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html {
-        redirect_to :controller => 'administration', :action => 'people'
+        redirect_to companies_path
       }
       format.xml  {
         if @logged_user.is_admin

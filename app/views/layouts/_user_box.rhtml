@@ -49,12 +49,11 @@
   <div class="PopupMenuWidgetDiv" id="administration_more_menu"  style="display:none">
     <p><%= :administration.l %>:</p>
     <ul>
-      <li><%= link_to :company.l, :controller => 'administration', :action => 'company' %></li>
-      <li><%= link_to :members.l, :controller => 'administration', :action => 'members' %></li>
-      <li><%= link_to :clients.l, :controller => 'administration', :action => 'clients' %></li>
-      <li><%= link_to :projects.l, :controller => 'administration', :action => 'projects' %></li>
-      <li><%= link_to :configuration.l, :controller => 'administration', :action => 'configuration' %></li>
-      <li><%= link_to :tools.l, :controller => 'administration', :action => 'tools' %></li>
+      <li><%= link_to :company.l, Company.owner %></li>
+      <li><%= link_to :members.l, companies_path %></li>
+      <li><%= link_to :projects.l, projects_path %></li>
+      <li><%= link_to :configuration.l, configurations_path %></li>
+      <li><%= link_to :tools.l, tools_path %></li>
     </ul>
   </div>
 <% end %>

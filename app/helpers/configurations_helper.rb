@@ -16,17 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-module ConfigHelper
+module ConfigurationsHelper
   def current_tab
     :configuration
   end
 
   def current_crumb
-    @category.display_name
+    case action_name
+      when 'index' then :configuration.l
+      else @category.display_name
+    end
   end
 
   def extra_crumbs
-    [{:title => :configuration, :url => "/administration/configuration"}]
+    crumbs = []
+    crumbs << {:title => :configuration, :url => configurations_path} unless action_name == 'index'
+    crumbs
   end
 
   def additional_stylesheets

@@ -27,8 +27,4 @@ module AdministrationHelper
   def current_tab
     action_name.to_sym
   end
-
-  def additional_stylesheets
-    ['project/people'] if action_name == 'people'
-  end
 end

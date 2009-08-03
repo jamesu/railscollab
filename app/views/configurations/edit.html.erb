@@ -4,7 +4,7 @@
 
 <% else %>
 
-<%= form_tag :controller => 'config', :action => 'update_category', :id => @category.id %>
+<% form_tag configuration_path(@category), :method => :put do %>
   <div id="configCategoryOptions">
 <% @options.each do |option| -%>
     <div class="configCategoryOption <%= cycle('odd', 'even') %>" id="configCategoryOption_<%= option.name %>">
@@ -22,6 +22,6 @@
   </div>
 
     <button class="submit" type="submit"><%= :save.l %></button>&nbsp;<button type="reset"><%= :reset.l %></button>
-</form>
+<% end %>
 
 <% end %>
