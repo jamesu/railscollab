@@ -17,46 +17,56 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ConfigController < ApplicationController
+class ConfigurationsController < ApplicationController
   layout 'administration'
 
   before_filter :process_session
+  before_filter :find_categories
+  before_filter :find_category, :only => [:edit, :update]
 
-  def update_category
+  def index 
+  end
+
+  def edit
+    @content_for_sidebar = 'edit_sidebar'
+  end
+
+  def update
+    option_values = params[:options]
+
+    @options.each do |option|
+      next unless option_values.has_key? option.name
+
+      option.value = option_values[option.name]
+      option.save
+    end
+
+    # Force reload of configuration
+    ConfigOption.reload_all
+
+    error_status(false, :success_updated_config_category)
+    redirect_to configurations_path
+  end
+
+  protected
+  def find_categories
+    sys_conds = params[:system] ? [] : ['is_system = ?', false]
+    @categories = ConfigCategory.all(:conditions => sys_conds, :order => 'category_order DESC')
+  end
+
+  def find_category
     begin
       @category = ConfigCategory.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_category)
-      redirect_to :controller => 'administration', :action => 'configuration'
+      redirect_to configurations_path
       return false
     end
 
-    if @category.options.empty?
-      error_status(true, :config_category_empty)
-      redirect_to :controller => 'administration', :action => 'configuration'
-    end
-
-    @content_for_sidebar = 'update_category_sidebar'
     @options = @category.options
-    sys_conds = (params[:system].to_i == 1) ? [] : ['is_system = ?', false]
-    @categories = ConfigCategory.all(:conditions => sys_conds, :order => 'category_order DESC')
-
-    case request.method
-    when :post
-      option_values = params[:options]
-
-      @options.each do |option|
-        next unless option_values.has_key? option.name
-
-        option.value = option_values[option.name]
-        option.save
-      end
-
-      # Force reload of configuration
-      ConfigOption.reload_all
-
-      error_status(false, :success_updated_config_category)
-      redirect_to :controller => 'administration', :action => 'configuration'
+    if @options.empty?
+      error_status(true, :config_category_empty)
+      redirect_to configurations_path
     end
   end
 

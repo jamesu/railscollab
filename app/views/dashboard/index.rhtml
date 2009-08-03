@@ -14,7 +14,7 @@
     <div class='content'><%= step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
    <% end %>
   <% if @logged_user.is_admin %>
-  <p><%= link_to :hide_welcome_info.l, {:controller => 'administration', :action => 'hide_welcome_info'}, :method => :post %></p>
+  <p><%= link_to :hide_welcome_info.l, hide_welcome_info_company_path(Company.owner), :method => :put %></p>
   <% end %>
 </div>
 <% end %>

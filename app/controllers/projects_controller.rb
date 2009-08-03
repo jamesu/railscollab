@@ -27,12 +27,10 @@ class ProjectsController < ApplicationController
   after_filter  :user_track, :only => [:index, :search, :people]
 
   def index
+    @projects = @logged_user.is_admin ? Project.find(:all) : @logged_user.projects
     respond_to do |format|
-      format.html {
-        redirect_to(:controller => 'dashboard', :action => 'index')
-      }
+      format.html { render :layout => 'administration' }
       format.xml  { 
-        @projects = @logged_user.is_admin ? Project.find(:all) : @logged_user.projects
         render :xml => @projects.to_xml(:root => 'projects')
       }
     end

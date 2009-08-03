@@ -32,7 +32,7 @@ class TimesController < ApplicationController
       
     unless @logged_user.has_permission(@active_project, :can_manage_time)
       error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'project'
+      redirect_back_or_default @active_project
     end
     
     respond_to do |format|

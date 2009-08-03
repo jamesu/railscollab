@@ -41,10 +41,10 @@ module NavigationHelper
   def administration_tabbed_navigation
     items = [
       {:id => :index,         :url => '/administration/index'},
-      {:id => :people,       :url => '/administration/people'},
-      {:id => :projects,      :url => '/administration/projects'},
-      {:id => :configuration, :url => '/administration/configuration'},
-      {:id => :tools,         :url => '/administration/tools'},
+      {:id => :people,       :url => companies_path},
+      {:id => :projects,      :url => projects_path},
+      {:id => :configuration, :url => configurations_path},
+      {:id => :tools,         :url => tools_path},
       #{:id => :upgrade,       :url => '/administration/upgrade'}
     ]
   end

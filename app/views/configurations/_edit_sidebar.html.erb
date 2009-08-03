@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @categories.each do |category| -%>
-      <li><%= link_to h(category.display_name), :controller => 'config', :action => 'update_category', :id => category.id %></li>
+      <li><%= link_to h(category.display_name), edit_configuration_path(category) %></li>
 <% end %>
     </ul>
   </div>

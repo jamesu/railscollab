@@ -42,4 +42,8 @@ module CompaniesHelper
     crumbs << {:title => @company.name, :url => company_path(:id => @company.id)} if action_name == 'permissions'
     crumbs
   end
+
+  def additional_stylesheets
+    ['project/people'] if action_name == 'index'
+  end
 end

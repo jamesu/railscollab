@@ -41,7 +41,7 @@ class Tag < ActiveRecord::Base
   end
 
   def object_url
-    url_for :only_path => true, :controller => 'project', :action => 'tags', :id => self.tag, :active_project => self.project_id
+    url_for :only_path => true, :controller => 'projects', :action => 'tags', :id => self.tag, :active_project => self.project_id
   end
 
   def self.priv_scope(include_private)
