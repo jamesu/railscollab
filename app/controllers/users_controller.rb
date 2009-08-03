@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   filter_parameter_logging :password
   
   before_filter :process_session
-  before_filter :obtain_user, :except => [:index, :create, :new, :current]
+  before_filter :obtain_user, :except => [:index, :create, :new]
   after_filter :user_track, :only => [:index, :show]
 
   def index
@@ -148,9 +148,6 @@ class UsersController < ApplicationController
 
   def edit
     return error_status(true, :insufficient_permissions) unless @user.profile_can_be_updated_by(@logged_user)
-  	
-    @projects = @active_projects
-    @permissions = ProjectUser.permission_names()
   end
   
   def update
@@ -227,14 +224,6 @@ class UsersController < ApplicationController
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
-  end
-
-  def current
-    @user = @logged_user
-    @projects = @active_projects
-    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
-
-    render :action => 'edit'
   end
 
   def destroy
