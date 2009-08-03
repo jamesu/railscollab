@@ -572,6 +572,10 @@ es:
   time_confirm_delete: "¿Estás seguro de que quieres borrar éste registro de tiempo?"
   start_time: "Iniciar registro de tiempo"
   stop_time: "Parar registro de tiempo"
+  done_date_format: "%e %b"
+  done_date_format_with_year: "%e %b %y"
+  done_date_long_format: "%A, %e de %B"
+  done_date_long_format_with_year: "%A, %e de %B de %Y"
   
   csv_export: "Exportación a CSV"
   csv: CSV

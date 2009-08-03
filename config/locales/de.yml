@@ -546,6 +546,10 @@
   time_confirm_delete: "Are you sure you want to delete this time record?"
   start_time: "Start time"
   stop_time: "Stop time"
+  done_date_format: "%b %d"
+  done_date_format_with_year: "%b %d %y"
+  done_date_long_format: "%A, %d %B"
+  done_date_long_format_with_year: "%A, %d %B %Y"
   
   csv_export: "CSV Export"
   csv: CSV
