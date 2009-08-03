@@ -89,6 +89,7 @@ class TimesController < ApplicationController
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
     
     @time.attributes = params[:time]
+    @time.start_date = Time.current unless @time.done_date
     @time.created_by = @logged_user
     
     respond_to do |format|
@@ -135,6 +136,25 @@ class TimesController < ApplicationController
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
       end
     end
+  end
+
+  def stop
+    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
+    
+    @time.done_date = Time.current
+    @time.hours = ((@time.done_date - @time.start_date) / 3600.0).round(2)
+    @time.updated_by = @logged_user
+    @time.save
+    
+    respond_to do |format|
+      format.html {
+        error_status(false, :success_stopped_time)
+        redirect_back_or_default(@time)
+      }
+      format.js {}
+      format.xml  { head :ok }
+    end
+    
   end
 
   def destroy

@@ -120,6 +120,7 @@
   welcome_back: "Willkommen zurück <strong>{{user}}</strong>"
   logout: Abmelden
   are_you_sure_logout: Sind sie sicher, daß Sie sich ausloggen wollen?
+  running_times: "you have {{count}} running times"
   
   # Permission names
   can_manage_messages: Manage messages
@@ -227,6 +228,7 @@
   success_added_time: Successfully added time record
   success_edited_time: Successfully updated time record
   success_deleted_time: Successfully deleted time record
+  success_stopped_time: Successfully stopped time record
   success_added_user: Successfully added user
   success_deleted_user: "Successfully deleted user {{name}}"
   unimplemented: Unimplemented
@@ -529,6 +531,7 @@
   person: Person
   hours: Hours
   details: Details
+  time_running: Running
   open_tasks: Open tasks
   done_date: Done date
   private_time: Private time
@@ -541,6 +544,8 @@
   billable_hours: "[{{hours}} billable hours]"
   no_times_in_project: "This project has no time records"
   time_confirm_delete: "Are you sure you want to delete this time record?"
+  start_time: "Start time"
+  stop_time: "Stop time"
   
   csv_export: "CSV Export"
   csv: CSV

@@ -125,6 +125,9 @@ es:
   welcome_back: "Bienvenido de nuevo <strong>{{user}}</strong>"
   logout: Cerrar sesión
   are_you_sure_logout: ¿Estás seguro de que quieres cerrar sesión?
+  running_times:
+    one: "tienes {{count}} tiempo en progreso"
+    other: "tienes {{count}} tiempos en progreso"
   
   # Permission names
   can_manage_messages: Gestionar mensajes
@@ -234,6 +237,7 @@ es:
   success_added_time: Registro de tiempo añadido con éxito
   success_edited_time: Actualización de registro de tiempo con éxito
   success_deleted_time: Registro de tiempo borrado con éxito
+  success_stopped_time: Registro de tiempo parado con éxito
   success_added_user: Usuario añadido con éxito
   success_deleted_user: "Usuario {{name}} borrado con éxito"
   unimplemented: No implementado
@@ -553,6 +557,7 @@ es:
   person: Persona
   hours: Horas
   details: Detalles
+  time_running: En progreso
   open_tasks: Tareas abiertas
   done_date: Fecha de realización
   private_time: Tiempo privado
@@ -565,6 +570,8 @@ es:
   billable_hours: "[{{hours}} horas facturables]"
   no_times_in_project: "Éste proyecto no tiene registros de tiempo"
   time_confirm_delete: "¿Estás seguro de que quieres borrar éste registro de tiempo?"
+  start_time: "Iniciar registro de tiempo"
+  stop_time: "Parar registro de tiempo"
   
   csv_export: "Exportación a CSV"
   csv: CSV

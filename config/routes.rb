@@ -127,6 +127,7 @@ ActionController::Routing::Routes.draw do |map|
                                          :complete => :put}
   
   map.resources :times, :path_prefix => 'project/:active_project',
+                        :member => {:stop => :put},
                         :collection => {:by_task => :get}
  
   map.resource :password, :only => [:new, :create]

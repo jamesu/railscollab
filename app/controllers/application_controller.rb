@@ -56,7 +56,8 @@ protected
       return false unless verify_project
     end
 
-    @active_projects = @logged_user.active_projects
+    @active_projects = @logged_user.active_projects.all
+    @running_times = @logged_user.assigned_times.running.all
     true
   end
 

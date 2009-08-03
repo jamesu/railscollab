@@ -109,6 +109,10 @@ body {
   list-style: square;
 }
 
+#userbox #running_times_menu form, #userbox #running_times_menu form div {
+  display: inline;
+}
+
 /** Tabs **/
 
 #tabsWrapper {

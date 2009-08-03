@@ -10,6 +10,10 @@ table.timeLogs th {
   border-bottom: 1px solid #333;
 }
 
+table.timeLogs tr.timeRunning {
+  background: #C8FFCC;
+}
+
 table.timeLogs tr.timeToday {
   background: #FFFFCC;
 }

@@ -1,14 +1,17 @@
 <div id="userbox">
-  <% if user.is_anonymous? %>
+<% if user.is_anonymous? -%>
   <%= :welcome_anonymous.l %> (<%= link_to(:login.l, logout_path) %>),
-  <% else %>
+<% else -%>
   <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>),
-  <% end %>
+<% end -%>
+<% unless running_times.blank? -%>
+  <%= :running_times.l_with_args(:count => running_times.size) %> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>
+<% end -%>
   <ul>
     <% unless user.is_anonymous? %>
     <li><%= link_to :account.l, current_users_path %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
     <% end %>
-<% if not projects.nil? and projects.length > 0 %>
+<% unless projects.blank? %>
     <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% end %>
 <% if user.is_admin %>
@@ -31,7 +34,7 @@
   </div>
   <% end %>
   
-<% if not projects.nil? and projects.length > 0 %>
+<% unless projects.blank? %>
   <div class="PopupMenuWidgetDiv" id="projects_more_menu"  style="display:none">
     <p><%= :projects.l %>:</p>
     <ul>
@@ -52,6 +55,21 @@
       <li><%= link_to :projects.l, :controller => 'administration', :action => 'projects' %></li>
       <li><%= link_to :configuration.l, :controller => 'administration', :action => 'configuration' %></li>
       <li><%= link_to :tools.l, :controller => 'administration', :action => 'tools' %></li>
+    </ul>
+  </div>
+<% end %>
+
+<% unless running_times.blank? %>
+  <div class="PopupMenuWidgetDiv" id="running_times_menu"  style="display:none">
+    <ul>
+<% running_times.each do |time| -%>
+      <li>
+        <%= h(time.name) %>
+        <% form_tag stop_time_path(:id => time.id), :method => :put do %>
+          <div><%= image_submit_tag 'icons/stop.gif', :alt => :stop_time.l, :class => 'image' %></div>
+        <% end %>
+      </li>
+<% end %>
     </ul>
   </div>
 <% end %>

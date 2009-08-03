@@ -11,20 +11,24 @@
 <% end %>
   </div>
 
+<% if @time.start_date.nil? -%>
   <div>
     <label for="timeFormHours"><%= :hours.l %>: <span class="label_required">*</span></label>
     <%= text_field 'time', 'hours', :id => 'timeFormHours', :class => 'short' %>
   </div>
+<% end -%>
   
   <div>
     <label for="timeFormDesc"><%= :description.l %>: </label>
     <%= text_area 'time', 'description', :id => 'timeFormDesc', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
+<% if @time.start_date.nil? -%>
   <div>
     <label for="timeDoneDate"><%= :done_date.l %>:</label>
     <%= date_select 'time', 'done_date', :id => 'timeDoneDate', :class => 'short' %>
   </div>
+<% end -%>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
