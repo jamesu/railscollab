@@ -1,6 +1,6 @@
 <% task_list = show %>
 
-<div class="taskList" id="list_<%= task_list.id %>" url="<%= task_list.object_url %>">
+<div class="taskList" id="list_<%= task_list.id %>">
 <div class="block">
 <% if task_list.is_private? %>
     <div class="private" title="<%= :private_task_list.l %>"><span><%= :private_task_list.l %></span></div>
@@ -24,7 +24,7 @@
     <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
       <% form_tag tasks_path(:task_list_id => task_list.id) do %>
         <%= render :partial => 'tasks/form', :object => task_list.project_tasks.build %>
-        <button class="submit" type="submit"><%= :add_task.l %></button> <%= :or.l %> <a class="cancel" href="#"><%= :cancel.l %></a>
+        <div><button class="submit" type="submit"><%= :add_task.l %></button> <%= :or.l %> <a class="cancel" href="#"><%= :cancel.l %></a></div>
       <% end %>
     </div>
   </div>

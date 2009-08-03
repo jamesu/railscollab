@@ -36,7 +36,10 @@
       <table class="blank">
 <% project[:tasks].each do |task| -%>
         <tr>
-          <td class="taskCheckbox"><input class="checkbox completion" type="checkbox" url="<%= status_task_path(:task_list_id => task.task_list_id, :id => task.id, :active_project => project[:id]) %>" <% if task.is_completed? %>checked="true"<% end %>/></td>
+          <td class="taskCheckbox">
+            <input class="checkbox completion" type="checkbox" <% if task.is_completed? %>checked="true"<% end %>/>
+            <%= link_to '', status_task_path(:task_list_id => task.task_list_id, :id => task.id, :active_project => project[:id]) %>
+          </td>
           <td class="taskText">
 <% if not task.assigned_to.nil? %>
             <span class="assignedTo"><%= h task.assigned_to.object_name  %>:</span>
