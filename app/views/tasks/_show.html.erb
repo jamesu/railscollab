@@ -1,34 +1,36 @@
 <% task_item = show %>
 
-<li class="taskItem" id="task_item_<%= task_item.id %>" task_id="<%= task_item.id %>">
+<li class="taskItem" id="task_item_<%= task_item.id %>">
 <% if task_item.can_be_changed_by(@logged_user) && !task_item.is_completed? %>
 <div class="taskItemHandle" style="display:none">
   <div class="inner">[+]</div>
 </div>
 <% end %>
 <div class="taskItemContent">
-	<% if task_item.can_be_changed_by(@logged_user) %>
-	<div class="taskControls">
-			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm_l => :task_delete_confirm.l, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
-			</div>
-			<% end %>
 <% if task_item.can_be_changed_by(@logged_user) %>
-        <input class="checkbox completion" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
-<% else %>
-        <span class="taskCheckbox"><%= render_icon( (task_item.completed_on.nil? ? 'not-checked' : 'checked'), :task_open.l) %></span>
+	<div class="taskControls">
+			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => :task_delete_confirm.l, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
+	</div>
 <% end %>
-        <span class="taskText">
-					<% if not task_item.assigned_to.nil? %>
-          <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
-					<% end %>
-          <%= h task_item.text %>
+<% if task_item.can_be_changed_by(@logged_user) %>
+  <input class="checkbox completion" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
+  <%= link_to '', status_task_path(:id => task_item, :task_list_id => task_item.task_list_id) %>
+<% else %>
+  <span class="taskCheckbox"><%= render_icon( (task_item.completed_on.nil? ? 'not-checked' : 'checked'), :task_open.l) %></span>
+<% end %>
+  <span class="taskText">
+		<% if not task_item.assigned_to.nil? %>
+    <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
+		<% end %>
+    <%= h task_item.text %>
 <% if task_item.is_completed? -%>
-          <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
-                              :time => format_usertime(task_item.completed_on, :task_list_completed_time_format.l),
-                              :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))) %>)</span>
+    <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
+                            :time => format_usertime(task_item.completed_on, :task_list_completed_time_format.l),
+                            :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))) %>)</span>
 <% end -%>
-					<% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
-	<br />
   </span>
+  <div class="taskActions">
+    <% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
+  </div>
 </div>
 </li>

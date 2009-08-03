@@ -105,7 +105,7 @@ function bindStatic() {
       
       $('.taskCheckbox .completion').click(function(evt) {
         var el = $(evt.target);
-        var url = el.attr('url');
+        var url = el.next('a').attr('href');
         
         $.put(url, {'task[completed]': evt.target.checked}, JustReload, 'script');
         
@@ -160,42 +160,33 @@ function bindDynamic() {
       });
     
       $('.taskItem form .cancel').click(function(evt) {
-        var el = $(evt.target);
-        var list_url = el.parents('.taskList:first').attr('url');
-        var task_id = el.parents('.taskItem:first').attr('task_id');
-        
-        $.get(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
+        $.get(this.href, null, JustRebind, 'script');
         
         return false;
       });
       
       $('.taskList .completion').click(function(evt) {
         var el = $(evt.target);
-        var list_url = el.parents('.taskList:first').attr('url');
-        var task_id = el.parents('.taskItem:first').attr('task_id');
+        var url = el.next('a').attr('href');
         
-        $.put(list_url + '/tasks/' + task_id + '/status', {'task[completed]': evt.target.checked}, JustRebind, 'script');
+        $.put(url, {'task[completed]': evt.target.checked}, JustRebind, 'script');
         
         return false;
       });
       
       $('.taskList .taskEdit').click(function(evt) {
-        var el = $(this);
-        var list_url = el.parents('.taskList:first').attr('url');
-        var task_id = el.parents('.taskItem:first').attr('task_id');
-        
-        $.get(list_url + '/tasks/' + task_id + '/edit', null, JustRebind, 'script');
+        $.get(this.href, null, JustRebind, 'script');
         
         return false;
       });
       
+      $('.taskList .taskDelete').each(function() {
+        this.onclick_fn = this.onclick;
+        this.onclick = null;
+      });
       $('.taskList .taskDelete').click(function(evt) {
-        var el = $(this);
-        var list_url = el.parents('.taskList:first').attr('url');
-        var task_id = el.parents('.taskItem:first').attr('task_id');
-        
-        if (confirm(el.attr('confirm_l')))
-          $.del(list_url + '/tasks/' + task_id, null, JustRebind, 'script');
+        if (this.onclick_fn())
+          $.del(this.href, null, JustRebind, 'script');
         
         return false;
       });
@@ -203,7 +194,6 @@ function bindDynamic() {
       $('.doEditTaskList').click(function(evt) {
         var el = $(this);
         var list = el.parents('.taskList:first');
-        var list_url = list.attr('url');
         list.removeClass('reorder');
         
         list.find('.openTasks:first ul').sortable('destroy');
@@ -217,8 +207,8 @@ function bindDynamic() {
       
       $('.doSortTaskList').click(function(evt) {
         var el = $(this);
+        var url = el.attr('href');
         var list = el.parents('.taskList:first');
-        var list_url = list.attr('url');
         list.addClass('reorder');
         
         list.find('.openTasks:first ul').sortable({
@@ -226,7 +216,7 @@ function bindDynamic() {
           handle: '.taskItemHandle .inner',
           opacity: 0.75,
           update: function(e, ui) {
-            $.post(list_url + '/reorder', list.find('.openTasks:first ul').sortable('serialize', {key: 'tasks'}));
+            $.post(url, list.find('.openTasks:first ul').sortable('serialize', {key: 'tasks'}));
           }
         });
         

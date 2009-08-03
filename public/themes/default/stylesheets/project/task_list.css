@@ -30,10 +30,10 @@ div.taskList li.taskItem div.taskControls img {
 	margin-bottom: -4px;
 }
 
-div.taskList li.taskItem img.comment {
+div.taskList li.taskItem div.taskActions {
 	display: none;
 }
-div.taskList li.taskItem:hover img.comment {
+div.taskList li.taskItem:hover div.taskActions {
 	display: inline;
 }
 
