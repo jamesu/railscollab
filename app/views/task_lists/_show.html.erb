@@ -37,7 +37,7 @@
 <%= :recent_completed_tasks.l %>:
 <% end %>
     <ul class="taskItems">
-    <%= render :partial => 'tasks/show', :collection => (!on_list_page ? task_list.completed_tasks[-5..-1].try(:reverse) : task_list.completed_tasks), :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
+    <%= render :partial => 'tasks/show', :collection => (!on_list_page ? task_list.completed_tasks.last(5).reverse : task_list.completed_tasks), :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% if !on_list_page and task_list.completed_tasks.length > 5 %>
       <li>
         <%= link_to :view_all_completed_tasks.l, :controller => 'task_lists', :action => 'show', :id => task_list.id %>
