@@ -63,8 +63,8 @@
     <ul>
 <% running_times.each do |time| -%>
       <li>
-        <%= h(time.name) %>
-        <% form_tag stop_time_path(:id => time.id), :method => :put do %>
+        <%= link_to h(time.name), time.object_url %>
+        <% form_tag stop_time_path(:active_project => time.project_id, :id => time.id), :method => :put do %>
           <div><%= image_submit_tag 'icons/stop.gif', :alt => :stop_time.l, :class => 'image' %></div>
         <% end %>
       </li>

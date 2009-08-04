@@ -22,8 +22,6 @@ class DashboardController < ApplicationController
   after_filter  :user_track
 
   def index
-    @active_projects = @logged_user.active_projects
-
     when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
       if @active_projects.length > 0
         include_private = @logged_user.member_of_owner?
@@ -65,8 +63,6 @@ class DashboardController < ApplicationController
   end
 
   def my_projects
-    @active_projects = @logged_user.active_projects
-
     # Create the sorted projects list
     sort_type = params[:orderBy]
     sort_type = 'priority' unless ['name'].include?(params[:orderBy])
@@ -79,7 +75,6 @@ class DashboardController < ApplicationController
   end
 
   def my_tasks
-    @active_projects = @logged_user.active_projects
     @has_assigned_tasks = nil
     @projects_milestonestasks = @active_projects.collect do |project|
     @has_assigned_tasks ||= true unless (project.milestones_by_user(@logged_user).empty? and 
@@ -98,8 +93,6 @@ class DashboardController < ApplicationController
   end
 
   def milestones
-    @active_projects = @logged_user.active_projects
-        
     @time_now = Time.zone.now
     
     @date_start = @time_now.utc.to_date.beginning_of_month
