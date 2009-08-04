@@ -31,6 +31,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :reload_owner
   before_filter :login_required
+  before_filter :logged_user_info
   before_filter :set_time_zone
 
 protected
@@ -55,10 +56,13 @@ protected
       @active_project = Project.find(params[:active_project]) rescue ActiveRecord::RecordNotFound
       return false unless verify_project
     end
+  end
 
-    @active_projects = @logged_user.active_projects.all
-    @running_times = @logged_user.assigned_times.running.all
-    true
+  def logged_user_info
+    unless @logged_user.nil?
+      @active_projects = @logged_user.active_projects.all
+      @running_times = @logged_user.assigned_times.running.all
+    end
   end
 
   def verify_project
