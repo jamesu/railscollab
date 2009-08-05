@@ -189,12 +189,12 @@ class FeedController < ApplicationController
         return
       end
 
-      @times = @logged_user.member_of_owner? ? @project.project_times : @project.project_times.open
-  	else
-      @times = ProjectTime.all_by_user(@logged_user)
-  	end
+      @times = @logged_user.member_of_owner? ? @project.project_times : @project.project_times.public
+    else
+      @times = ProjectTime.all_by_user(@logged_user, :conditions => 'done_date IS NOT NULL')
+    end
 
-  	respond_to do |format|
+    respond_to do |format|
       format.html do
         render :text => '404 Not found', :status => 404
       end
@@ -211,7 +211,7 @@ class FeedController < ApplicationController
         build_str = ''
         CSV.generate_row(['Project', 'Date (UTC)', 'Attributed to', 'Hours', 'Name', 'Description', 'Task list', 'Task'], 8, build_str)
         @times.each { |time| CSV.generate_row([time.project.name,
-              time.done_date.strftime('%m/%d/%Y'),
+              time.running? ? '' : time.done_date.strftime('%m/%d/%Y'),
               time.assigned_to.nil? ? 'Anyone' : time.assigned_to.display_name,
               time.hours,
               time.name,
@@ -222,7 +222,7 @@ class FeedController < ApplicationController
 
         render :text => build_str, :content_type => 'application/vnd.ms-excel'
       end
-  	end
+    end
   end
 
   protected

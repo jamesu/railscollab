@@ -16,14 +16,14 @@
       <a href="<%= view_time.object_url %>"><%= h view_time.name %></a>
     </div>
     <div class="content">
-<% if view_time.done_date.nil? -%>
+<% if view_time.running? -%>
       <div><%= :time_running.l %></div>
 <% else -%>
       <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, :"done_date_long_format#{'_with_year' if view_time.done_date.year != Time.now.year}".l) %>
 <% end -%>
       <div class="hours">
         <span><%= "Hours" %>:</span>
-<% if view_time.done_date.nil? -%>
+<% if view_time.running? -%>
         <%= seconds_to_time Time.now - view_time.start_date %>
 <% else -%>
         <%= view_time.hours %>

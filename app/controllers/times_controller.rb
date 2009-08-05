@@ -142,7 +142,7 @@ class TimesController < ApplicationController
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
     
     @time.done_date = Time.current
-    @time.hours = ((@time.done_date - @time.start_date) / 3600.0).round(2)
+    @time.hours_will_change!
     @time.updated_by = @logged_user
     @time.save
     
