@@ -28,7 +28,7 @@
 <% @times.each do |time| -%>
 
 <%
-  class_name = if time.done_date.nil?
+  class_name = if time.running?
     'timeRunning'
   elsif time.is_today?
     'timeToday'
@@ -40,7 +40,7 @@
 -%>
   <tr class="<%= class_name %>">
     <td class="timeDate">
-<% if time.done_date.nil? -%>
+<% if time.running? -%>
       <%= :time_running.l %>
 <% else -%>
       <%= format_usertime(time.done_date, :"done_date_format#{'_with_year' if time.done_date.year != Time.now.year}".l) %>
@@ -55,7 +55,7 @@
 		</td>
     <td class="timeHours">
       <%= '*' if time.is_billable %>
-<% if time.done_date.nil? -%>
+<% if time.running? -%>
       <%= seconds_to_time Time.now - time.start_date %>
 <% else -%>
       <%= time.hours %>

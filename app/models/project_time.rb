@@ -41,6 +41,18 @@ class ProjectTime < ActiveRecord::Base
 	after_create   :process_create
 	before_update  :process_update_params
 	before_destroy :process_destroy
+
+        def running?
+          self.done_date.nil? && !self.start_date.nil?
+        end
+
+        def hours
+          if self.running?
+            ((Time.now - self.start_date) / 3600.0).round(2)
+          else
+            self[:hours]
+          end
+        end
 	 
 	def process_params
 	  if self.assigned_to_user_id.nil?
