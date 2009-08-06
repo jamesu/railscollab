@@ -186,7 +186,7 @@ class ProjectMessage < ActiveRecord::Base
   end
 
   validates_each :project_message_category do |record, attr, value|
-    record.errors.add(attr, :not_part_of_project.l) if value.project_id != record.project_id
+    record.errors.add(attr, :not_part_of_project.l) if value && value.project_id != record.project_id
   end
 
   validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|

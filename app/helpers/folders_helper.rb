@@ -41,7 +41,7 @@ module FoldersHelper
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => "/project/#{@active_project.id}/files"}
+    crumbs << {:title => :files, :url => files_path(@active_project.id)}
     crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil? or @folder.new_record?
     crumbs
   end
@@ -50,7 +50,7 @@ module FoldersHelper
     @page_actions = []
   
     if ProjectFile.can_be_created_by(@logged_user, @active_project)
-      @page_actions << {:title => :add_file, :url => "/project/#{@active_project.id}/files/add_file"}
+      @page_actions << {:title => :add_file, :url => new_file_path(:folder_id => @folder.id)}
     end
 
     if ProjectFolder.can_be_created_by(@logged_user, @active_project)

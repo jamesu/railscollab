@@ -68,8 +68,7 @@ module ApplicationHelper
     return '--' if tags.empty?
 
     tags.collect do |tag|
-      tag_name = (h tag)
-      "<a href=\"/project/#{object.project_id}/tags/#{tag_name}\">#{tag_name}</a>"
+      link_to h(tag), project_tag_path(object.project_id, tag)
     end.join(', ')
   end
 
