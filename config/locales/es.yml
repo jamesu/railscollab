@@ -255,7 +255,6 @@ es:
   finished_projects: Proyectos finalizados
   archived_projects_list_info: "Lista de proyectos finalizados (archivados). Todas las acciones para el proyecto están bloqueados pero puedes navegar por ellos."
   project_completed_time_with_user: "{{time}} | {{user}}"
-  project_completed_time_format: "%e de %b de %Y"
   calendar_feeds: iCalendar
   ical: iCalendar
   calendar_feed_milestone_info: Usa éste enlace para llevar los hitos a tu aplicación de calendario favorita.
@@ -294,7 +293,6 @@ es:
   upcoming: Próximos
   milestones_summary: "Hitos {{adjetives}}"
   milestone_completed_time_with_user: "{{time}} | {{user}}"
-  milestone_completed_time_format: "%e de %b de %Y %H:%M"
   project_status_header: "Estado del proyecto: {{status}}"
   active: Activo
   completed: Completado
@@ -308,7 +306,6 @@ es:
   num_tasks_open_in_task_list: "{{num}} tareas abiertas de {{total}} en la lista"
   completed_task_lists: Lista de tareas completa
   task_list_completed_time_with_user: "{{time}} | {{user}}"
-  task_list_completed_time_format: "%e de %b de %Y"
   tags_used_in_project:  Etiquetas usadas en el proyecto
   no_tags_used_in_project: No se han usado etiquetas en el proyecto
   objects_tagged_with:
@@ -346,7 +343,6 @@ es:
   # Message view
   from: De
   message_created_with_user: "{{time}} | {{user}}"
-  message_created_format: "%e de %b de %Y %H:%M"
   comments: Comentarios
   no_messages_in_project: No hay mensajes en éste proyecto
   no_messages_in_category: No hay mensajes en ésta categoría
@@ -403,18 +399,14 @@ es:
     one: "&raquo; Mostrar el próximo {{count}} hito"
     other: "&raquo; Mostrar los próximos {{count}} hitos"
   today: Hoy
-  milestone_due_date_extended_format: "%A, %e de %B de %Y"
-  milestone_due_date_format: "%A, %e de %B"
   milestone_empty_info: "Éste hito está vacio. Puedes añadir un {{message}} o una {{task_list}} cuando quieras"
   task_lists: Listas de tareas
   message: Mensaje
   milestone_messages_created_with_user: "{{time}} | {{user}}"
-  milestone_messages_created_format: "%e de %b %Y %H:%M"
   milestone_confirm_delete: "¿Estás seguro de que quieres borrar éste hito?"
   
   # Wiki page view
   wiki_page_confirm_delete: "¿Estás seguro de que quieres borrar ésta página?"
-  wiki_page_updated_format: "%e de %B de %Y %H:%M"
   
   # Activity
   action_add: Añadido
@@ -426,8 +418,6 @@ es:
   action_close: Cerrado
   action_upload: Subido
   action_today_with_time: "Hoy {{time}}"
-  action_today_fomat: "%H:%M"
-  action_past_format: "%e de %B de %Y"
   action_yesterday: Ayer
   action_by: 'por {{user}}'
   
@@ -484,7 +474,6 @@ es:
   # Dashboard
   started_on: Iniciado a las
   no_active_projects: No hay proyectos activos
-  project_created_format: "%e de %b de %Y"
   companies_involved_in: "Compañías involucradas en el proyecto"
   tasks_in_list: "En {{list}}"
   anyone: Cualquiera
@@ -512,7 +501,6 @@ es:
   no_comments_for_object: No se han publicado comentarios en éste objeto
   comment_posted_with_user: "Publicado en {{time}} por {{user}}"
   comment_posted: "Publicado en {{time}} por <strong>{{name}}</strong>"
-  comment_posted_format: "%e de %b de %Y %H:%M"
   
   # User
   generate_password: Generar contraseña
@@ -572,10 +560,6 @@ es:
   time_confirm_delete: "¿Estás seguro de que quieres borrar éste registro de tiempo?"
   start_time: "Iniciar registro de tiempo"
   stop_time: "Parar registro de tiempo"
-  done_date_format: "%e %b"
-  done_date_format_with_year: "%e %b %y"
-  done_date_long_format: "%A, %e de %B"
-  done_date_long_format_with_year: "%A, %e de %B de %Y"
   
   csv_export: "Exportación a CSV"
   csv: CSV
@@ -597,10 +581,6 @@ es:
   important_file_info: "Los archivos importantes se listan en la barra lateral \"Archivos importantes\" de la página del proyecto"
   revision_created_by: "Revisión #{{number}} <span>(por {{user}} el {{date}})</span>"
   revision_created_on: "Revisión #{{number}} <span>(creada el {{date}})</span>"
-  revision_date_format: "%e de %b de %Y %H:%M"
-  revision_date_format_short: "%A, %e de %B"
-  grouped_files_date_format: "%A, %e de %B"
-  grouped_files_date_format_with_year: "%A, %e de %B de %Y"
   download_size: "Descargar ({{size}})"
   details_size: "Detalles ({{size}})"
   revisions: Revisiones
@@ -811,6 +791,26 @@ es:
       default: "%a, %d %b %Y %H:%M:%S %z"
       short: "%d de %b %H:%M"
       long: "%d de %B de %Y %H:%M"
+      project_created_format: "%e de %b de %Y"
+      project_completed_time_format: "%e de %b de %Y"
+      task_list_completed_time_format: "%e de %b de %Y"
+      message_created_format: "%e de %b de %Y %H:%M"
+      milestone_completed_time_format: "%e de %b de %Y %H:%M"
+      milestone_due_date_extended_format: "%A, %e de %B de %Y"
+      milestone_due_date_format: "%A, %e de %B"
+      milestone_messages_created_format: "%e de %b %Y %H:%M"
+      wiki_page_updated_format: "%e de %B de %Y %H:%M"
+      action_today_fomat: "%H:%M"
+      action_past_format: "%e de %B de %Y"
+      comment_posted_format: "%e de %b de %Y %H:%M"
+      done_date_format: "%e %b"
+      done_date_format_with_year: "%e %b %y"
+      done_date_long_format: "%A, %e de %B"
+      done_date_long_format_with_year: "%A, %e de %B de %Y"
+      revision_date_format_short: "%A, %e de %B"
+      revision_date_format: "%e de %b de %Y %H:%M"
+      grouped_files_date_format: "%A, %e de %B"
+      grouped_files_date_format_with_year: "%A, %e de %B de %Y"
     am: "am"
     pm: "pm"
 

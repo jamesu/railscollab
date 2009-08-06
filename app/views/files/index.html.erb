@@ -24,7 +24,7 @@
 <%= render :partial => 'files/order_and_pagination', :locals => {:order => @order, :page => @page, :pagination => @pagination} %>
 
 <% @files.each do |group_by, grouped_files| -%>
-<h2><%= Time === group_by ? format_usertime(group_by, "grouped_files_date_format#{'_with_year' unless group_by.year == Date.today.year}".to_sym.l) : group_by.upcase %></h2>
+<h2><%= Time === group_by ? format_usertime(group_by, "grouped_files_date_format#{'_with_year' unless group_by.year == Date.today.year}") : group_by.upcase %></h2>
 <div class="filesList">
 <% grouped_files.each do |file| -%>
   <div class="listedFile <%= cycle('odd', 'even') %>">
@@ -41,10 +41,10 @@
 <% if !last_revision.created_by.nil? %>
 		<%= :revision_created_by.l_with_args(:number => last_revision.revision_number,
 		                                     :user => "<a href=\"#{last_revision.created_by.object_url}\">#{h last_revision.created_by.display_name}</a>",
-		                                     :date => format_usertime(last_revision.created_on, :revision_date_format_short.l)) %>
+		                                     :date => format_usertime(last_revision.created_on, :revision_date_format_short)) %>
 <% else %>
 		<%= :revision_created_by.l_with_args(:number => last_revision.revision_number,
-		                                     :date => format_usertime(last_revision.created_on, :revision_date_format_short.l)) %>
+		                                     :date => format_usertime(last_revision.created_on, :revision_date_format_short)) %>
 <% end %>
       </div>
 <% end %>

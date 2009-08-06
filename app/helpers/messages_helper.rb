@@ -41,7 +41,7 @@ module MessagesHelper
   def extra_crumbs
     crumbs = []
     crumbs << {:title => :messages, :url => messages_path} unless action_name == 'index'
-    crumbs << {:title => @message.project_message_category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show'
+    crumbs << {:title => @message.project_message_category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show' && @message.project_message_category
     crumbs
   end
 

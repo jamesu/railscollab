@@ -20,13 +20,13 @@
         <% if comment.is_anonymous? %>
           <%= :comment_posted.l_with_args(
                   :name => comment.author_name,
-                  :time => format_usertime(comment.created_on, :comment_posted_format.l)) %>
+                  :time => format_usertime(comment.created_on, :comment_posted_format)) %>
                   <% if @logged_user.is_admin %>
                     (<span class="commentAddress"><%= h(comment.author_homepage) %></span>)
                   <% end %>
         <% else %>
           <%= :comment_posted_with_user.l_with_args(
-                  :time => format_usertime(comment.created_on, :comment_posted_format.l),
+                  :time => format_usertime(comment.created_on, :comment_posted_format),
                   :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>") %>
         <% end %>
         :</div>

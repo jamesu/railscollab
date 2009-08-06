@@ -12,7 +12,7 @@
 <% @tagged_objects[:messages].each do |message| -%>
   <li><a href="<%= message.object_url %>"><%= h message.object_name %></a>
 <% if !message.created_by.nil? %>
-  <span class="desc">- <%= format_usertime(message.created_on, :message_created_format.l) %> | <%= link_to (h message.created_by.display_name), user_path(:id => message.created_by.id) %></span>
+  <span class="desc">- <%= format_usertime(message.created_on, :message_created_format) %> | <%= link_to (h message.created_by.display_name), user_path(:id => message.created_by.id) %></span>
 <% end %>
   </li>
 <% end %>

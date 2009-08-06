@@ -5,7 +5,7 @@
           <td class="projectName">
             <%= check_box_tag "user_project[]", "#{permissions.id}", user.member_of(permissions), {:id => "projectPermissions#{permissions.id}", :class => 'checkbox normal', :onclick => "permissions_form_project_select(#{permissions.id})"} %>
 <% if !permissions.is_active? %>
-            <label for="projectPermissions<%= permissions.id %>" class="checkbox"><del class="help" title="<%= "Completed on #{format_usertime(permissions.completed_on, '%b %d, %Y')} by #{permissions.completed_by.display_name}" %>"><%= h permissions.name %></del></label>
+            <label for="projectPermissions<%= permissions.id %>" class="checkbox"><del class="help" title="<%= "Completed on #{format_usertime(permissions.completed_on, :project_completed_time_format)} by #{permissions.completed_by.display_name}" %>"><%= h permissions.name %></del></label>
 <% else %>
             <label for="projectPermissions<%= permissions.id %>>" class="checkbox"><%= h permissions.name %></label>
 <% end %>
