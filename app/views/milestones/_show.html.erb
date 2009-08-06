@@ -37,9 +37,9 @@
     
     <div class="content">
 <% if milestone.due_date.year > Date.today.year %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_extended_format.l) %></div>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_extended_format) %></div>
 <% else %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_format.l) %></div>
+      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_format) %></div>
 <% end %>
       
 <% if not milestone.description.nil? %>
@@ -59,7 +59,7 @@
         <li><%= link_to (h message.title), message_path(:id => message.id) %>
 <% if not message.created_by.nil? %>
       <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
-             :time => format_usertime(message.created_on, :milestone_messages_created_format.l),
+             :time => format_usertime(message.created_on, :milestone_messages_created_format),
              :user => link_to(h(message.created_by.display_name), user_path(:id => message.created_by.id) )) %>)</span>
 <% end %>
 <% end %>

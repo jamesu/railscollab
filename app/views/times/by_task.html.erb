@@ -35,7 +35,7 @@
 <% if time.running? -%>
       <%= :time_running.l %>
 <% else -%>
-      <%= format_usertime(time.done_date, :"done_date_format#{'_with_year' if time.done_date.year != Time.now.year}".l) %>
+      <%= format_usertime(time.done_date, "done_date_format#{'_with_year' if time.done_date.year != Time.now.year}") %>
 <% end -%>
     </td>
     <td class="timeUser">

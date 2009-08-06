@@ -25,7 +25,7 @@
     <%= h task_item.text %>
 <% if task_item.is_completed? -%>
     <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
-                            :time => format_usertime(task_item.completed_on, :task_list_completed_time_format.l),
+                            :time => format_usertime(task_item.completed_on, :task_list_completed_time_format),
                             :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))) %>)</span>
 <% end -%>
   </span>

@@ -13,7 +13,7 @@
         <td>
           <label for="<%= "projectPermissionsCheckbox#{project.id}" %>" class="checkbox normal">
 <% if !project.is_active? %>
-          <del><span title="<%= :project_completed_on.l_with_args(:date => format_usertime(project.completed_on, :project_created_format.l), :user => h(project.completed_by.display_name)) %>"><%= h project.name %></span></del>
+          <del><span title="<%= :project_completed_on.l_with_args(:date => format_usertime(project.completed_on, :project_created_format), :user => h(project.completed_by.display_name)) %>"><%= h project.name %></span></del>
 <% else %>
           <%= h project.name %>
 <% end %>

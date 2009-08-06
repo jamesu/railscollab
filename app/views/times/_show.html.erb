@@ -19,7 +19,7 @@
 <% if view_time.running? -%>
       <div><%= :time_running.l %></div>
 <% else -%>
-      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, :"done_date_long_format#{'_with_year' if view_time.done_date.year != Time.now.year}".l) %>
+      <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "done_date_long_format#{'_with_year' if view_time.done_date.year != Time.now.year}") %>
 <% end -%>
       <div class="hours">
         <span><%= "Hours" %>:</span>
