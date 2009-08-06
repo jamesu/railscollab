@@ -126,7 +126,8 @@ ActionController::Routing::Routes.draw do |map|
  
   map.resource :password, :only => [:new, :create]
   map.resources :users, :member => {:avatar => [:get, :put, :delete],
-                                    :permissions => [:get, :put]} do |users|
+                                    :permissions => [:get, :put]},
+                        :collection => {:current => :get} do |users|
     users.resource :password, :only => [:edit, :update]
   end
 

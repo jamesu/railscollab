@@ -226,6 +226,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def current
+    @user = @logged_user
+    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
+
+    render :action => 'edit'
+  end
+
   def destroy
     return error_status(true, :insufficient_permissions) unless (@user.can_be_deleted_by(@logged_user))
     
