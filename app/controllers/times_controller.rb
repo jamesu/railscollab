@@ -141,8 +141,8 @@ class TimesController < ApplicationController
   def stop
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
     
+    @time.hours = @time.hours # Save calculated hours before setting done_date
     @time.done_date = Time.current
-    @time.hours_will_change!
     @time.updated_by = @logged_user
     @time.save
     
