@@ -41,7 +41,7 @@ module NavigationHelper
   def administration_tabbed_navigation
     items = [
       {:id => :index,         :url => administration_path},
-      {:id => :people,       :url => companies_path},
+      {:id => :people,        :url => companies_path},
       {:id => :projects,      :url => projects_path},
       {:id => :configuration, :url => configurations_path},
       {:id => :tools,         :url => tools_path},
@@ -69,14 +69,14 @@ module NavigationHelper
 
   def project_tabbed_navigation
     project_id = @active_project.id
-    items = [{:id => :overview,   :url => "/project/#{project_id}"}]
-    items << {:id => :messages,   :url => "/project/#{project_id}/messages"}
-    items << {:id => :tasks,      :url => "/project/#{project_id}/task_lists"}
-    items << {:id => :milestones, :url => "/project/#{project_id}/milestones"}
-    items << {:id => :ptime,      :url => "/project/#{project_id}/times"} if @logged_user.has_permission(@active_project, :can_manage_time)
-    items << {:id => :files,      :url => "/project/#{project_id}/files"}
-    items << {:id => :wiki,       :url => "/project/#{project_id}/wiki_pages"}
-    items << {:id => :people,     :url => "/project/#{project_id}/people"}
+    items = [{:id => :overview,   :url => project_path(@active_project)}]
+    items << {:id => :messages,   :url => messages_path(@active_project)}
+    items << {:id => :tasks,      :url => task_lists_path(@active_project)}
+    items << {:id => :milestones, :url => milestones_path(@active_project)}
+    items << {:id => :ptime,      :url => times_path(@active_project)} if @logged_user.has_permission(@active_project, :can_manage_time)
+    items << {:id => :files,      :url => files_path(@active_project)}
+    items << {:id => :wiki,       :url => wiki_pages_path(@active_project)}
+    items << {:id => :people,     :url => people_project_path(@active_project)}
 
     items
   end

@@ -146,6 +146,6 @@ class DashboardController < ApplicationController
       @tag_names = []
     end
 
-    @content_for_sidebar = 'project/search_sidebar'
+    @content_for_sidebar = 'projects/search_sidebar'
   end
 end

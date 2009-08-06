@@ -93,42 +93,36 @@ ActionController::Routing::Routes.draw do |map|
                           :has_many => [:tags]
   
   # Nested routes don't seem to work with path_prefix...
-  map.resources :task_lists, :path_prefix => 'project/:active_project',
-                             :member => {:reorder => :any}
-  map.resources :tasks, :path_prefix => 'project/:active_project/task_lists/:task_list_id',
-                        :member => {:status => :put},
-                        :has_many => [:comments]
-  map.with_options :path_prefix => 'project/:active_project' do |project|
+  map.with_options :path_prefix => 'projects/:active_project' do |project|
+    project.resources :task_lists,
+                               :member => {:reorder => :any}
+    project.resources :tasks, :path_prefix => 'projects/:active_project/task_lists/:task_list_id',
+                          :member => {:status => :put},
+                          :has_many => [:comments]
+    
     WikiEngine.draw_for project
-  end
-  
-  map.resources :comments, :path_prefix => 'project/:active_project'
-  
-  # Note: filter by category is done via "posts" on the category controller
-  map.resources :messages, :path_prefix => 'project/:active_project',
-                           :member => {:unsubscribe => :put,
-                                       :subscribe => :put},
+
+    project.resources :comments
+    # Note: filter by category is done via "posts" on the category controller
+    project.resources :messages,
+                           :member => {:unsubscribe => :put, :subscribe => :put},
                            :has_many => [:comments]
   
-  map.resources :categories, :path_prefix => 'project/:active_project',
-                             :member => {:posts => :get}
+    project.resources :categories, :member => {:posts => :get}
   
-  map.resources :folders, :path_prefix => 'project/:active_project',
-                          :member => {:files => :get}
+    project.resources :folders, :member => {:files => :get}
   
-  map.resources :files, :path_prefix => 'project/:active_project',
-                        :member => {:download => :get,
-                                    :attach => [:get, :put],
-                                    :detatch => :put},
+    project.resources :files,
+                        :member => {:download => :get, :attach => [:get, :put], :detatch => :put},
                         :has_many => [:comments]
   
-  map.resources :milestones, :path_prefix => 'project/:active_project',
-                             :member => {:open => :put,
-                                         :complete => :put}
+    project.resources :milestones, :member => {:open => :put, :complete => :put}
   
-  map.resources :times, :path_prefix => 'project/:active_project',
+    project.resources :times,
                         :member => {:stop => :put},
                         :collection => {:by_task => :get}
+  end
+  
  
   map.resource :password, :only => [:new, :create]
   map.resources :users, :member => {:avatar => [:get, :put, :delete],

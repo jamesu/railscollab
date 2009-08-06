@@ -6,7 +6,7 @@
     <ul class="listWithDetails">
 <% is_public = @logged_user.member_of_owner? %>
     <% @tag_names.each do |tag| -%>
-      <li><a href="<%= "/project/#{@active_project.id}/tags/#{tag.tag}" %>"><%= h tag.tag %></a> <span class="desc"> - <%= :tag_object_count.l_with_args(:count => Tag.count_by(tag.tag, @active_project, !@logged_user.member_of_owner?)) %></span></li>
+      <li><%= link_to h(tag.tag), project_tag_path(@active_project, tag.tag) %> <span class="desc"> - <%= :tag_object_count.l_with_args(:count => Tag.count_by(tag.tag, @active_project, !@logged_user.member_of_owner?)) %></span></li>
     <% end %>
     </ul>
   </div>

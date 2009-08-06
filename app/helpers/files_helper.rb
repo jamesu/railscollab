@@ -43,7 +43,7 @@ module FilesHelper
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => "/project/#{@active_project.id}/files"} unless action_name == 'index'
+    crumbs << {:title => :files, :url => files_path(@active_project.id)} unless action_name == 'index'
     crumbs << {:title => @folder.name, :url => @folder.object_url} if !@folder.nil? and action_name == 'show'
     crumbs
   end

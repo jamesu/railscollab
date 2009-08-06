@@ -40,7 +40,7 @@ module CategoriesHelper
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => "/project/#{@active_project.id}/messages"}
+    crumbs << {:title => :messages, :url => messages_path(@active_project.id)}
     crumbs
   end
 
