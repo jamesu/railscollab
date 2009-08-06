@@ -31,7 +31,7 @@
   </span>
   <div class="taskActions">
     <% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
-<% if ProjectTime.can_be_created_by(@logged_user, task_item.project) %>
+<% if !task_item.is_completed? && ProjectTime.can_be_created_by(@logged_user, task_item.project) %>
     <% form_tag times_path, :method => :post do %>
       <div>
         <%= hidden_field_tag 'time[name]', task_item.text[0, ProjectTime.columns_hash['name'].limit], :id => nil %>
