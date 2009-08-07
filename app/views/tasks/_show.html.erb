@@ -23,6 +23,8 @@
     <span class="assignedTo"><%= task_item.assigned_to.object_name %>:</span> 
 		<% end %>
     <%= h task_item.text %>
+    <span class="desc">(<%= :task_created_by.l_with_args(
+                            :user => link_to(h(task_item.created_by.display_name), user_path(:id => task_item.created_by_id))) %>)</span>
 <% if task_item.is_completed? -%>
     <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
                             :time => format_usertime(task_item.completed_on, :task_list_completed_time_format),
