@@ -118,7 +118,7 @@ class TimesController < ApplicationController
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
-    @open_task_lists << @time.project_task_list unless @open_task_lists.include? @time.project_task_list
+    @open_task_lists << @time.project_task_list unless @time.project_task_list.nil? || @open_task_lists.include?(@time.project_task_list)
     @open_task_lists.each do |task_list|
       task_list.project_tasks.reject! {|task| task.is_completed? && task != @time.project_task }
     end
@@ -140,7 +140,7 @@ class TimesController < ApplicationController
         format.xml  { head :ok }
       else
         @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
-        @open_task_lists << @time.project_task_list unless @open_task_lists.include? @time.project_task_list
+        @open_task_lists << @time.project_task_list unless @time.project_task_list.nil? || @open_task_lists.include?(@time.project_task_list)
         @open_task_lists.each do |task_list|
           task_list.project_tasks.reject! {|task| task.is_completed? && task != @time.project_task }
         end
