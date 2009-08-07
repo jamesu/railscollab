@@ -80,13 +80,15 @@ class TimesController < ApplicationController
 
     @time = @active_project.project_times.build
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+    @open_task_lists.each do |task_list|
+      task_list.project_tasks.reject! {|task| task.is_completed?}
+    end
   end
   
   def create
     return error_status(true, :insufficient_permissions) unless (ProjectTime.can_be_created_by(@logged_user, @active_project))
 
     @time = @active_project.project_times.build
-    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
     
     @time.attributes = params[:time]
     @time.start_date = Time.current unless @time.done_date
@@ -101,6 +103,10 @@ class TimesController < ApplicationController
         format.js {}
         format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
       else
+        @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists.each do |task_list|
+          task_list.project_tasks.reject! {|task| task.is_completed?}
+        end
         format.html { render :action => "new" }
         format.js {}
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
@@ -112,13 +118,15 @@ class TimesController < ApplicationController
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+    @open_task_lists << @time.project_task_list unless @open_task_lists.include? @time.project_task_list
+    @open_task_lists.each do |task_list|
+      task_list.project_tasks.reject! {|task| task.is_completed? && task != @time.project_task }
+    end
   end
 
   def update
     return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
 
-    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
-    
     @time.attributes = params[:time]
     @time.updated_by = @logged_user
     
@@ -131,6 +139,11 @@ class TimesController < ApplicationController
         format.js {}
         format.xml  { head :ok }
       else
+        @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists << @time.project_task_list unless @open_task_lists.include? @time.project_task_list
+        @open_task_lists.each do |task_list|
+          task_list.project_tasks.reject! {|task| task.is_completed? && task != @time.project_task }
+        end
         format.html { render :action => "edit" }
         format.js {}
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
