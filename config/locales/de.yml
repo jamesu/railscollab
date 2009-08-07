@@ -362,6 +362,7 @@
   no_tasks_assigned_to_you: There are no tasks assigned to you
   edit_tasks: Edit tasks
   task: Task
+  task_created_by: "Created by {{user}}"
   
   # Milestone form
   private_milestone: Private milestone

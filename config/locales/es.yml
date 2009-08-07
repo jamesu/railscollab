@@ -380,6 +380,7 @@ es:
   no_tasks_assigned_to_you: No tienes tareas asignadas
   edit_tasks: Editar tareas
   task: Tarea
+  task_created_by: "Creado por {{user}}"
   
   # Milestone form
   private_milestone: Hitos privados
