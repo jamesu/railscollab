@@ -37,6 +37,9 @@ en:
   sort_by_finished_date: Sort by finished date
   sort_by_hours: Sort by hours
   report_by_task: Report by task
+
+  as_list: View List
+  as_summary: View Summary
   
   # Page titles & actions
   add_project: Add project

@@ -1,0 +1,39 @@
+<% message = show_list %>
+<div class="message">
+  <div class="list">
+    <div class="meta">
+      <div class="messageCommentCount">
+<% if not message.comments.empty? %>
+        <span><%= :comments.l %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
+<% else %>
+        <span><%= :comments.l %>:</span> <%= message.comments.length %>
+<% end %>
+      </div>
+      <div class="messageTags">
+        <span><%= :tags.l %>:</span> <%= tag_list message %>
+      </div>
+
+      <% fc = message.attached_files(@logged_user.member_of_owner?).length %>
+      <% if fc > 0 %>
+      <div class="objectFilesTitle">
+        <span><%= :attached_files.l %>:</span> <%= fc %>
+      </div>
+      <% end %>
+      
+      <div class="messageOptions"><%= action_list actions_for_message(message) %></div>
+    </div>
+    <div class="desc">
+    <div class="title"><%= link_to (h message.title), message_path(:id => message.id) %>
+<% if message.is_private? %>
+    <div class="private" title="<%= :private_message.l %>"><span><%= :private_message.l %></span></div>
+<% end %>
+    </div>
+<% if not message.created_by.nil? %>
+      <div class="messageAuthor"><%= :message_created_with_user.l_with_args(
+            :time => format_usertime(message.created_on, :message_created_format),
+            :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))) %></div>
+<% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>

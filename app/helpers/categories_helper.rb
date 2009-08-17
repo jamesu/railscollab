@@ -54,7 +54,17 @@ module CategoriesHelper
     if ProjectMessage.can_be_created_by(@logged_user, @active_project)
       @page_actions << {:title => :add_message, :url => new_message_path(:category_id => @category.id)} if action_name == 'posts'
     end
+
+    if @display_list
+      @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+    else
+      @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+    end
     
     @page_actions
+  end
+
+  def additional_stylesheets
+    ['project/messages']
   end
 end
