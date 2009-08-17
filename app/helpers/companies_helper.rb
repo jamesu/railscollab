@@ -38,7 +38,7 @@ module CompaniesHelper
   end
 
   def extra_crumbs
-    crumbs = [{:title => :people, :url => '/administration/people'}]
+    crumbs = [{:title => :people, :url => companies_path}]
     crumbs << {:title => @company.name, :url => company_path(:id => @company.id)} if action_name == 'permissions'
     crumbs
   end
