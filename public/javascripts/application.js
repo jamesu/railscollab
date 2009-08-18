@@ -15,11 +15,17 @@ jQuery.fn.extend({
 	   success: callback,
 	   dataType: type
 	 });
-	},
+  },
 	
-	autofocus: function() {
-	  this.find('.autofocus:first').focus();
-	}
+  autofocus: function() {
+    this.find('.autofocus:first').focus();
+  },
+
+  fancyRemove: function() {
+    this.slideUp(300, function(evt) {
+        $(this).remove();
+    });
+  }
 });
 
 // jQuery object extensions
@@ -251,6 +257,33 @@ function bindDynamic() {
 
         return false;
       });
+
+      $('a.action').click(function(evt) {
+        var el = $(this);
+        var on_page = $('#milestones .milestone').length > 1 ? 1 : 0; // TODO: more generic!
+
+        alert(on_page);
+
+        if (!confirm(el.attr('aconfirm')))
+            return false;
+
+        switch(el.attr('amethod')) {
+          case 'delete':
+            $.del(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'post':
+            $.post(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'put':
+            $.put(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'get':
+            $.get(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+        };
+
+        return false;
+      });
 }
 
 function JustReload(data) {
@@ -281,6 +314,8 @@ function rebindDynamic() {
 
   $('#action_dialog form').unbind();
   $('#action_dialog a.cancel').unbind();
+
+  $('a.action').unbind();
   
   bindDynamic();
 }

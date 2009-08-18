@@ -50,8 +50,11 @@ module ApplicationHelper
     actions.collect do |action|
       if action[:cond]
         extras = {}
+
         extras[:confirm] = action[:confirm] if action.has_key? :confirm
         extras[:method]  = action[:method]  if action.has_key? :method
+        extras[:aconfirm] = action[:aconfirm] if action.has_key? :aconfirm
+        extras[:amethod]  = action[:amethod]  if action.has_key? :amethod
         extras[:onclick] = action[:onclick] if action.has_key? :onclick
         extras[:id]      = action[:id]      if action.has_key? :id
         extras[:class] = action[:class] if action.has_key? :class
@@ -123,7 +126,7 @@ module ApplicationHelper
 
   def actions_for_milestone(milestone)
     [{:name => :edit.l,   :url => edit_milestone_path(:id => milestone.id), :cond => milestone.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :milestone_confirm_delete.l}]
+     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :class => 'action', :amethod => :delete, :aconfirm => :milestone_confirm_delete.l}]
   end
 
   def actions_for_task_list(task_list)

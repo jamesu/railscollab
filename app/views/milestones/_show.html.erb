@@ -1,12 +1,12 @@
 <% milestone = show %>
 <% if milestone.is_completed? %>
-<div class="milestone success">
+<div class="milestone success" id="milestone_<%= milestone.id %>">
 <% elsif milestone.is_today? %>
-<div class="milestone important">
+<div class="milestone important" id="milestone_<%= milestone.id %>">
 <% elsif milestone.is_late? %>
-<div class="milestone important">
+<div class="milestone important" id="milestone_<%= milestone.id %>">
 <% else %>
-<div class="milestone hint">
+<div class="milestone hint" id="milestone_<%= milestone.id %>">
 <% end %>
 
 <% if milestone.is_private %>

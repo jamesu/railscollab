@@ -12,20 +12,9 @@
     <h2><%= :upcoming_milestones.l %></h2>
 <% unless @calendar_milestones.empty? %>
     <h3><%= :due_in_next_n_days.l_with_args(:num => 14) %></h3>
-  <%= now = @time_now.to_date
-      prev_month = now.month
-      days_calendar now, now + 13.days, 'dayCal' do |date|
-        unless date == now
-          if date.month != prev_month
-            prev_month = date.month
-            calendar_block(I18n.l(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
-          else
-            calendar_block(date.day, @calendar_milestones["#{date.month}-#{date.day}"], 'day')
-          end
-        else
-          calendar_block(:today.l, @calendar_milestones["#{date.month}-#{date.day}"], 'today', true)
-        end
-  end %>
+    <div id="milestoneCalendar">
+      <%= render :partial => 'calendar' %>
+    </div>
 <% end -%>
   <h3><%= :all_upcoming_milestones.l %></h3>
 <%= render :partial => 'show', :collection => @upcoming_milestones %>
