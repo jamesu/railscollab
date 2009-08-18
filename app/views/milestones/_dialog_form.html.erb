@@ -1,0 +1,21 @@
+<%= form_tag milestones_path :method => :post %>
+<%= error_messages_for :milestone %>
+  <div>
+    <label for="milestoneFormName"><%= :name.l %>: <span class="label_required">*</span></label>
+    <%= text_field 'milestone', 'name', :id => 'milestoneFormName', :class => 'long autofocus' %>
+  </div>
+
+  <div>
+    <label for="milestoneDueDate"><%= :due_date.l %>:</label>
+    <%= date_select 'milestone', 'due_date', :id => 'milestoneDueDate', :class => 'short' %>
+  </div>
+  
+<% if @logged_user.member_of_owner? %>
+  <div class="formBlock">
+    <label for="milestoneIsPrivate"><%= :private_milestone.l %>: <span class="desc"><%= :milestones_private_info.l %></span></label>
+    <%= yesno_toggle 'milestone', 'is_private', :id => 'milestoneIsPrivate', :class => 'checkbox'  %>
+  </div>
+<% end %>
+
+    <button class="submit" type="submit"><%= :add_milestone.l %></button> <a href="#" class="cancel"><%= :cancel.l %> </a>
+</form>

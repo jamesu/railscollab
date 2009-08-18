@@ -94,13 +94,19 @@ function bindStatic() {
         
         return false;
       });
+
+      $('.ajax_action').click(function(evt) {
+        $.get($(this).attr('href'), {}, JustRebind, 'script');
+
+        return false;
+      });
       
-	    $('a#messageFormAdditionalTextToggle').click(function(evt) {
-	      $('#messageFormAdditionalText').toggle();
-	      $('#messageFormAdditionalTextExpand').toggle();
-	      $('#messageFormAdditionalTextCollapse').toggle();
-	      
-	      return false;
+      $('a#messageFormAdditionalTextToggle').click(function(evt) {
+        $('#messageFormAdditionalText').toggle();
+        $('#messageFormAdditionalTextExpand').toggle();
+        $('#messageFormAdditionalTextCollapse').toggle();
+        
+        return false;
       });
       
       $('.taskCheckbox .completion').click(function(evt) {
@@ -225,6 +231,14 @@ function bindDynamic() {
         $(this).hide();
         $('.doEditTaskList').show();
         
+        return false;
+      });
+
+
+
+      $('#action_dialog a.cancel').click(function(evt) {
+        $('#action_dialog').hide();
+
         return false;
       });
 }

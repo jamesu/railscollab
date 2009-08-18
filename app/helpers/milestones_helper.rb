@@ -37,6 +37,27 @@ module MilestonesHelper
     crumbs
   end
 
+  def page_actions
+    @page_actions = []
+
+    if action_name == 'index'
+      if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
+        @page_actions << {:title => :add_milestone, :url => new_milestone_path, :ajax => true}
+      end
+    elsif action_name == 'show'
+      if not @milestone.is_completed?
+        if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+          @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
+        end
+        if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+          @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
+        end
+      end
+    end
+
+    @page_actions
+  end
+
   def additional_stylesheets
     ['project/milestones']
   end

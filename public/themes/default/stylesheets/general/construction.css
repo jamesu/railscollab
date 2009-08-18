@@ -342,6 +342,17 @@ body {
   color: black;
 }
 
+#page_actions .dialog {
+  margin: 0px;
+
+  background-color:#F8F8F8;
+  border-color:#CCCCCC;
+
+  border:2px solid #CCCCCC;
+
+  padding:5px 10px;
+}
+
 /** Footer **/
 
 #footer {

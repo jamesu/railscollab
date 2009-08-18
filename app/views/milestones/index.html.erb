@@ -1,11 +1,3 @@
-<%
-  @page_actions = []
-  
-  if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_milestone, :url => new_milestone_path}
-  end
-%>
-
 <% unless @late_milestones.empty? and @calendar_milestones.empty? and @upcoming_milestones.empty? %>
 <div id="milestones">
 <% unless @late_milestones.empty? %>

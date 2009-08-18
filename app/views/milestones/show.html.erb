@@ -1,15 +1,3 @@
-<%
-  @page_actions = []
-  
-  if not @milestone.is_completed?
-      if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-        @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
-      end
-      if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-        @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
-      end
-  end
-%>
 <div id="milestones">
 <%= render :partial => 'show', :collection => [@milestone] %>
 </div>
