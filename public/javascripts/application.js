@@ -258,7 +258,7 @@ function bindDynamic() {
         return false;
       });
 
-      $('a.action').click(function(evt) {
+      $('a.oaction').click(function(evt) {
         var el = $(this);
         var on_page = $('#milestones .milestone').length > 1 ? 1 : 0; // TODO: more generic!
 
@@ -313,7 +313,7 @@ function rebindDynamic() {
   $('#action_dialog form').unbind();
   $('#action_dialog a.cancel').unbind();
 
-  $('a.action').unbind();
+  $('a.oaction').unbind();
   
   bindDynamic();
 }

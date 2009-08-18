@@ -126,7 +126,7 @@ module ApplicationHelper
 
   def actions_for_milestone(milestone)
     [{:name => :edit.l,   :url => edit_milestone_path(:id => milestone.id), :cond => milestone.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :class => 'action', :amethod => :delete, :aconfirm => :milestone_confirm_delete.l}]
+     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :class => 'oaction', :amethod => :delete, :aconfirm => :milestone_confirm_delete.l}]
   end
 
   def actions_for_task_list(task_list)
