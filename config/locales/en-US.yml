@@ -39,6 +39,9 @@ en-US:
   sort_by_hours: Sort by hours
   report_by_task: Report by task
   
+  as_list: View List
+  as_summary: View Summary
+  
   # Page titles & actions
   add_project: Add project
   add_user: Add user

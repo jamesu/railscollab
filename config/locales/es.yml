@@ -38,6 +38,9 @@ es:
   sort_by_hours: Ordenar por horas
   report_by_task: Informe por tarea
   
+  as_list: Ver lista
+  as_summary: Ver resumen
+  
   # Page titles & actions
   add_project: Añadir proyecto
   add_user: Añadir usuario
