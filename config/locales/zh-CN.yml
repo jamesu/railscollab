@@ -37,6 +37,9 @@ zh-CN:
   sort_by_hours: 按工时排序
   report_by_task: 任务报告
   
+  as_list: View List
+  as_summary: View Summary
+  
   # Page titles & actions
   add_project: 创建项目
   add_user: 添加用户

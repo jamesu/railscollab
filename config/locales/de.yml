@@ -37,6 +37,9 @@
   sort_by_hours: Sortieren nach Stunden
   report_by_task: Aufschlüsseln nach Aufgaben
   
+  as_list: View List
+  as_summary: View Summary
+  
   # Page titles & actions
   add_project: Projekt hinzufügen
   add_user: Mitarbeiter hinzufügen
