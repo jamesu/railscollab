@@ -47,12 +47,21 @@ module MessagesHelper
 
   def page_actions
     @page_actions = []
-    
-    if ProjectMessage.can_be_created_by(@logged_user, @active_project)
-      @page_actions << {:title => :add_message, :url => (@category.nil? ? 
-    	  								  new_message_path : new_message_path(:category_id => @category.id))} if action_name == 'index'
+
+    if action_name == 'index'
+
+      if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+        @page_actions << {:title => :add_message, :url => (@category.nil? ?
+    	  								  new_message_path : new_message_path(:category_id => @category.id))}
+      end
+
+      if @display_list
+        @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+      else
+        @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+      end
     end
-    
+
     @page_actions
   end
 

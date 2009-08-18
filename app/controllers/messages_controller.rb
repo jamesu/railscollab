@@ -44,7 +44,15 @@ class MessagesController < ApplicationController
     msg_conditions = {}
     msg_conditions['category_id'] = @category.id unless @category.nil?
     msg_conditions['is_private'] = false unless @logged_user.member_of_owner?
-    
+
+    # probably should make this more generic...
+    if params[:display] == 'list'
+      session[:msglist] = true
+    elsif params[:display] == 'summary'
+      session[:msglist] = false
+    end
+    @display_list = session[:msglist] || false
+
     respond_to do |format|
       format.html {
         @content_for_sidebar = 'index_sidebar'

@@ -15,6 +15,35 @@
   border-bottom: 1px solid #ccc;
 }
 
+.message .list {
+  padding-left: 5px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+  width: 530px;
+
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.message .list .meta {
+  float:right;
+  width: 130px;
+}
+
+.desc .title {
+    font-size: 150%;
+    font-style: normal;
+}
+
+.message .list .desc {
+  width: 400px;
+  float:left;
+}
+
+.message .list .private {
+  display:inline-block;
+  float:none;
+}
+
 .message h1 {
   font-size: 2em;
 }

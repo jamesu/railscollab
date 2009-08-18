@@ -3,7 +3,8 @@
   <div id="messagesPaginationTop">
   <%= pagination_links "#{messages_path(@active_project)}?", @pagination unless @pagination.length <= 1 %>
   </div>
-<%= render :partial => 'messages/show', :collection => @messages, :locals => {:on_message_page => false} %>
+<%= render :partial => (@display_list ? 'messages/show_list' : 'messages/show'),
+           :collection => @messages, :locals => {:on_message_page => false} %>
   <div id="messagesPaginationBottom">
   <%= pagination_links "#{messages_path(@active_project)}?", @pagination unless @pagination.length <= 1 %></div>
 </div>

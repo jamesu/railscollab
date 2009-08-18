@@ -21,7 +21,7 @@ module ProjectsHelper
   def current_tab
     case action_name
       when 'people', 'permissions' then :people
-      when 'new', 'create', 'edit', 'update' then :projects
+      when 'new', 'create', 'edit', 'update', 'index' then :projects
       else :overview
     end
   end
@@ -46,6 +46,7 @@ module ProjectsHelper
   def page_title
     case action_name
       when 'show' then :overview.l
+      when 'index' then :projects.l
       else super
     end
   end
