@@ -131,7 +131,7 @@ function bindDynamic() {
       // Popup form for Add Item
       $('.addTask form').submit(function(evt) {
         var form = $(this);
-        form.request(JustRebind, 'script')
+        form.request(JustRebind, 'script');
         form.reset();
         return false;
       });
@@ -235,6 +235,16 @@ function bindDynamic() {
       });
 
 
+      // Generic action form
+
+      $('#action_dialog form').submit(function(evt) {
+        var form = $(this);
+        form.request(RebindAction, 'script');
+
+        form.find('.submit:first').attr('disabled', true);
+        //form.reset();
+        return false;
+      });
 
       $('#action_dialog a.cancel').click(function(evt) {
         $('#action_dialog').hide();
@@ -251,6 +261,11 @@ function JustRebind(data) {
   rebindDynamic();
 }
 
+function RebindAction(data) {
+  rebindDynamic();
+  $('#action_dialog').hide();
+}
+
 function rebindDynamic() {
   
   $('.addTask form').unbind();
@@ -263,6 +278,9 @@ function rebindDynamic() {
   
   $('.doSortTaskList').unbind();
   $('.doEditTaskList').unbind();
+
+  $('#action_dialog form').unbind();
+  $('#action_dialog a.cancel').unbind();
   
   bindDynamic();
 }
