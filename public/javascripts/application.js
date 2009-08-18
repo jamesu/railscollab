@@ -262,8 +262,6 @@ function bindDynamic() {
         var el = $(this);
         var on_page = $('#milestones .milestone').length > 1 ? 1 : 0; // TODO: more generic!
 
-        alert(on_page);
-
         if (!confirm(el.attr('aconfirm')))
             return false;
 
