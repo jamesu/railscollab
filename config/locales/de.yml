@@ -433,9 +433,9 @@
   phone_numbers: Phone numbers
   office: Office
   fax: Fax
+  fax_number: Fax number
   mobile: Mobile
   home: Home
-  fax_number: Fax number
   homepage: Homepage
   address: Address
   address_2: Address 2
