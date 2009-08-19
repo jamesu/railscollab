@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090731120012) do
+ActiveRecord::Schema.define(:version => 20090819113247) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(:version => 20090731120012) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
-    t.integer  "category_id",                :limit => 8,                      :null => false
+    t.integer  "category_id",                :limit => 8
     t.integer  "comments_count",                            :default => 0
     t.integer  "attached_files_count",                      :default => 0
   end
