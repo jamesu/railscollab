@@ -8,6 +8,9 @@
     <label for="loginPassword"><%= :password.l %></label>
     <%= password_field "login", "password", :size => 30, :id => 'loginPassword', :class => 'medium' %>
   </div>
+  
+  <%= check_box_tag :remember %>
+  <label for="remember"><%= :remember_me.l %></label>
   <div class="clean"></div>
   
   <span><%= link_to :forgot_password_q.l , new_password_path %>
