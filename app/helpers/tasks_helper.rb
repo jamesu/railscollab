@@ -42,6 +42,6 @@ module TasksHelper
   end
 
   def additional_stylesheets
-    ['project/task_list', 'project/task'] if action_name == 'show'
+    ['project/task_list', 'project/task', 'project/comments'] if action_name == 'show'
   end
 end
