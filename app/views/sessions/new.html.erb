@@ -10,7 +10,7 @@
   </div>
   
   <%= check_box_tag :remember, '1', false, :class => 'checkbox' %>
-  <label for="remember"><%= :remember_me.l %></label>
+  <label class="checkbox" for="remember"><%= :remember_me.l %></label>
   <div class="clean"></div>
   
   <span><%= link_to :forgot_password_q.l , new_password_path %>
