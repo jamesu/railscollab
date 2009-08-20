@@ -211,8 +211,8 @@ function bindDynamic() {
         list.find('.openTasks:first ul').sortable('destroy');
         list.find('.taskItemHandle').hide();
          
-        $(this).hide();
-        $('.doSortTaskList').show();
+        el.hide();
+        el.parent().children('.doSortTaskList').show();
         
         return false;
       });
@@ -234,8 +234,8 @@ function bindDynamic() {
         
         list.find('.taskItemHandle').show();
          
-        $(this).hide();
-        $('.doEditTaskList').show();
+        el.hide();
+        el.parent().children('.doEditTaskList').show();
         
         return false;
       });
