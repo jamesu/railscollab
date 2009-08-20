@@ -40,4 +40,16 @@ module TaskListsHelper
   def additional_stylesheets
     ['project/task_list']
   end
+
+  def page_actions
+    @page_actions = []
+
+    if action_name == 'index'
+      if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+        @page_actions << {:title => :add_task_list, :url=> new_task_list_path, :ajax => true}
+      end
+    end
+
+    @page_actions
+  end
 end

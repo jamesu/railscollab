@@ -131,7 +131,7 @@ module ApplicationHelper
 
   def actions_for_task_list(task_list)
     [{:name => :edit.l,          :url => edit_task_list_path(:id => task_list.id), :cond => task_list.can_be_changed_by(@logged_user)},
-     {:name => :delete.l,        :url => task_list_path(:id => task_list.id), :cond => task_list.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :task_list_confirm_delete.l},
+     {:name => :delete.l,        :url => task_list_path(:id => task_list.id), :cond => task_list.can_be_deleted_by(@logged_user), :class => 'oaction', :amethod => :delete, :aconfirm => :task_list_confirm_delete.l},
      {:name => :reorder_tasks.l, :url => reorder_task_list_path(:id => task_list.id), :class => 'doSortTaskList', :cond => task_list.can_be_changed_by(@logged_user)}]
   end
 

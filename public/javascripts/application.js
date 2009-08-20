@@ -260,7 +260,7 @@ function bindDynamic() {
 
       $('a.oaction').click(function(evt) {
         var el = $(this);
-        var on_page = $('#milestones .milestone').length > 1 ? 1 : 0; // TODO: more generic!
+        var on_page = $('#content .pageList:first').length == 1 ? 1 : 0;
 
         if (!confirm(el.attr('aconfirm')))
             return false;
