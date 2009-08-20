@@ -114,6 +114,11 @@ function bindStatic() {
         
         return false;
       });
+
+      $('#new_account_info a.cancel').click(function(evt) {
+        $.put($(this).attr('href'), {}, JustRebind, 'script');
+        return false;
+      });
       
       $('.taskCheckbox .completion').click(function(evt) {
         var el = $(evt.target);
