@@ -24,20 +24,20 @@ class SessionsController < ApplicationController
   filter_parameter_logging :password
 
   def new
-    redirect_to :controller => 'dashboard' unless @logged_user.nil?
+    redirect_to :controller => 'dashboard' unless logged_user.nil?
   end
 
   def create
-    remember = params['remember']
     if params[:openid_url]
       openid_login
     else
       username_login
     end
+    remember(logged_user) if params['remember']
   end
 
   def destroy
-    session['user_id'] = nil
+    forget(logged_user)
     redirect_to login_path
   end
 

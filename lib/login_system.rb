@@ -65,6 +65,10 @@ module LoginSystem
     false
   end
 
+  def logged_user
+    @logged_user ||= user_from_session || user_from_cookie
+  end
+
   # login_required filter. add
   #
   #   before_filter :login_required
@@ -81,25 +85,21 @@ module LoginSystem
       return true if token_login_accepted
     end
 
-	do_action = false
+    do_action = false
 
-	if request.accepts.first == Mime::XML
+    if request.accepts.first == Mime::XML
       # HTTP basic authentication for XML / YAML requests
       @logged_user = nil
 
       authenticate_or_request_with_http_basic do |user_name, password|
         @logged_user = User.authenticate(user_name, password)
       end
-	else
-      # Session authentication
-      if session['user_id'].nil?
-        @logged_user = nil
-      else
-        @logged_user = User.first(:conditions => ['id = ?', session['user_id']])
-      end
+    else
+      # Session or cookie authentication
+      session['user_id'] = logged_user.id unless logged_user.nil?
 
       do_action = true
-	end
+    end
 
     # Don't exist? what a pity!
     if @logged_user.nil?
@@ -142,6 +142,28 @@ module LoginSystem
     end
 
     true
+  end
+
+  def user_from_cookie
+    if token = cookies[:remember_token]
+      return nil unless user = User.find_by_remember(token)
+      return user if user.remember?
+    end
+  end
+
+  def user_from_session
+    User.first(:conditions => ['id = ?', session['user_id']]) if session['user_id']
+  end
+
+  def remember(user)
+    user.remember_me!
+    cookies[:remember_token] = { :value => user.remember, :expires => user.remember_expires_at }
+  end
+
+  def forget(user)
+    user.forget_me! if user
+    cookies.delete(:remember_token)
+    session['user_id'] = nil
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized

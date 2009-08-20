@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090819113247) do
+ActiveRecord::Schema.define(:version => 20090820151620) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(:version => 20090819113247) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
-    t.string   "time_zone",                                           :null => false
+    t.string   "time_zone",                        :default => "",    :null => false
     t.string   "logo_file_name"
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
@@ -143,9 +143,9 @@ ActiveRecord::Schema.define(:version => 20090819113247) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",  :null => false
+    t.integer "timestamp",                  :null => false
     t.string  "server_url"
-    t.string  "salt",       :null => false
+    t.string  "salt",       :default => "", :null => false
   end
 
   create_table "project_companies", :id => false, :force => true do |t|
@@ -410,11 +410,13 @@ ActiveRecord::Schema.define(:version => 20090819113247) do
     t.boolean  "auto_assign",                        :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext",   :limit => 5
-    t.string   "time_zone",                                             :null => false
+    t.string   "time_zone",                          :default => "",    :null => false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
+    t.string   "remember"
+    t.datetime "remember_expires_at"
   end
 
   add_index "users", ["company_id"], :name => "index_users_on_company_id"

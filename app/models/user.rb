@@ -153,6 +153,22 @@ class User < ActiveRecord::Base
     result == self.token
   end
 
+  def remember?
+    remember_expires_at && Time.now.utc < remember_expires_at
+  end
+
+  def remember_me!
+    self.remember_expires_at = 2.weeks.from_now.utc
+    self.remember = Digest::SHA1.hexdigest(salt + remember_expires_at.to_s + token)
+    save(false)
+  end
+
+  def forget_me!
+    self.remember = nil
+    self.remember_expires_at = nil
+    save(false)
+  end
+
   def self.openid_login(identity_url)
     user = first(:conditions => ['identity_url = ?', identity_url])
     return nil if user.nil?
