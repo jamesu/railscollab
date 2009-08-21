@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090820151620) do
+ActiveRecord::Schema.define(:version => 20090820215404) do
 
   create_table "administration_tools", :force => true do |t|
     t.string  "name",       :limit => 50, :default => "", :null => false
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
   end
 
   create_table "project_messages", :force => true do |t|
-    t.integer  "milestone_id",                              :default => 0,     :null => false
+    t.integer  "milestone_id"
     t.integer  "project_id"
     t.string   "title",                      :limit => 100
     t.text     "text"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
 
   create_table "project_task_lists", :force => true do |t|
     t.integer  "priority"
-    t.integer  "milestone_id",                   :default => 0,     :null => false
+    t.integer  "milestone_id"
     t.integer  "project_id"
     t.string   "name",            :limit => 100
     t.text     "description"

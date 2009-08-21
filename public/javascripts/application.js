@@ -15,11 +15,17 @@ jQuery.fn.extend({
 	   success: callback,
 	   dataType: type
 	 });
-	},
+  },
 	
-	autofocus: function() {
-	  this.find('.autofocus:first').focus();
-	}
+  autofocus: function() {
+    this.find('.autofocus:first').focus();
+  },
+
+  fancyRemove: function() {
+    this.slideUp(300, function(evt) {
+        $(this).remove();
+    });
+  }
 });
 
 // jQuery object extensions
@@ -94,13 +100,24 @@ function bindStatic() {
         
         return false;
       });
+
+      $('.ajax_action').click(function(evt) {
+        $.get($(this).attr('href'), {}, JustRebind, 'script');
+
+        return false;
+      });
       
-	    $('a#messageFormAdditionalTextToggle').click(function(evt) {
-	      $('#messageFormAdditionalText').toggle();
-	      $('#messageFormAdditionalTextExpand').toggle();
-	      $('#messageFormAdditionalTextCollapse').toggle();
-	      
-	      return false;
+      $('a#messageFormAdditionalTextToggle').click(function(evt) {
+        $('#messageFormAdditionalText').toggle();
+        $('#messageFormAdditionalTextExpand').toggle();
+        $('#messageFormAdditionalTextCollapse').toggle();
+        
+        return false;
+      });
+
+      $('#new_account_info a.cancel').click(function(evt) {
+        $.put($(this).attr('href'), {}, JustRebind, 'script');
+        return false;
       });
       
       $('.taskCheckbox .completion').click(function(evt) {
@@ -125,7 +142,7 @@ function bindDynamic() {
       // Popup form for Add Item
       $('.addTask form').submit(function(evt) {
         var form = $(this);
-        form.request(JustRebind, 'script')
+        form.request(JustRebind, 'script');
         form.reset();
         return false;
       });
@@ -199,8 +216,8 @@ function bindDynamic() {
         list.find('.openTasks:first ul').sortable('destroy');
         list.find('.taskItemHandle').hide();
          
-        $(this).hide();
-        $('.doSortTaskList').show();
+        el.hide();
+        el.parent().children('.doSortTaskList').show();
         
         return false;
       });
@@ -222,9 +239,52 @@ function bindDynamic() {
         
         list.find('.taskItemHandle').show();
          
-        $(this).hide();
-        $('.doEditTaskList').show();
+        el.hide();
+        el.parent().children('.doEditTaskList').show();
         
+        return false;
+      });
+
+
+      // Generic action form
+
+      $('#action_dialog form').submit(function(evt) {
+        var form = $(this);
+        form.request(RebindAction, 'script');
+
+        form.find('.submit:first').attr('disabled', true);
+        //form.reset();
+        return false;
+      });
+
+      $('#action_dialog a.cancel').click(function(evt) {
+        $('#action_dialog').hide();
+
+        return false;
+      });
+
+      $('a.oaction').click(function(evt) {
+        var el = $(this);
+        var on_page = $('#content .pageList:first').length == 1 ? 1 : 0;
+
+        if (!confirm(el.attr('aconfirm')))
+            return false;
+
+        switch(el.attr('amethod')) {
+          case 'delete':
+            $.del(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'post':
+            $.post(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'put':
+            $.put(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+          case 'get':
+            $.get(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
+            break;
+        };
+
         return false;
       });
 }
@@ -235,6 +295,11 @@ function JustReload(data) {
 
 function JustRebind(data) {
   rebindDynamic();
+}
+
+function RebindAction(data) {
+  rebindDynamic();
+  $('#action_dialog').hide();
 }
 
 function rebindDynamic() {
@@ -249,6 +314,11 @@ function rebindDynamic() {
   
   $('.doSortTaskList').unbind();
   $('.doEditTaskList').unbind();
+
+  $('#action_dialog form').unbind();
+  $('#action_dialog a.cancel').unbind();
+
+  $('a.oaction').unbind();
   
   bindDynamic();
 }

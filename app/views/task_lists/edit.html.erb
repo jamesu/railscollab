@@ -1,10 +1,3 @@
-<%
-  @page_actions = []
-  
-  if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_task_list, :url=> new_task_list_path}
-  end
-%>
 <%= form_tag task_list_path(:id => @task_list.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= :edit_task_list.l %></button>

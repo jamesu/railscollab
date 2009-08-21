@@ -52,6 +52,6 @@ module FilesHelper
     case action_name
       when 'attach' then ['project/attach_files']
       else ['project/files']
-    end
+    end + ['project/comments']
   end
 end

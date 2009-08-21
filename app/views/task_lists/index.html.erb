@@ -1,14 +1,7 @@
-<%
-  @page_actions = []
-  
-  if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
-    @page_actions << {:title => :add_task_list, :url=> new_task_list_path}
-  end
-%>
+<div id="openTaskLists" class="pageList">
 <% if @open_task_lists.length > 0 %>
-<div id="openTaskLists">
 <%= render :partial => 'show', :collection => @open_task_lists, :locals => {:on_list_page => false} %>
-</div>
 <% else %>
 <p><%= :no_open_task_lists_for_project.l %></p>
 <% end %>
+</div>

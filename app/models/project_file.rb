@@ -86,8 +86,8 @@ class ProjectFile < ActiveRecord::Base
     self.filename
   end
 
-  def object_url
-    url_for hash_for_file_path(:only_path => true, :id => self.id, :active_project => self.project_id)
+  def object_url(host = nil)
+    url_for hash_for_file_path(:only_path => true, :host => host, :id => self.id, :active_project => self.project_id)
   end
 
   def download_url

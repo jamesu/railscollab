@@ -31,9 +31,11 @@ class TaskListsController < ApplicationController
     
     respond_to do |format|
       format.html {
-        @open_task_lists = @active_project.project_task_lists.open(include_private)
-        @completed_task_lists = @active_project.project_task_lists.completed(include_private)
-        @content_for_sidebar = 'index_sidebar'
+        index_lists(include_private)
+      }
+      format.js {
+        index_lists(include_private)
+        render :template => 'task_lists/index'
       }
       format.xml  {
         conds = include_private ? {} : {'is_private', false}
@@ -83,6 +85,7 @@ class TaskListsController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
+      format.js {}
       format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
     end
   end
@@ -113,7 +116,7 @@ class TaskListsController < ApplicationController
           error_status(false, :success_added_task_list)
           redirect_back_or_default(@task_list)
         }
-        format.js {}
+        format.js { return index }
         format.xml  { render :xml => @task_list.to_xml(:root => 'task-list'), :status => :created, :location => @task_list }
       else
         format.html { render :action => "new" }
@@ -163,7 +166,9 @@ class TaskListsController < ApplicationController
     end
     
     return error_status(true, :insufficient_permissions) unless (@task_list.can_be_deleted_by(@logged_user))
-    
+
+    @on_page = (params[:on_page] || '').to_i == 1
+    @removed_id = @task_list.id
     @task_list.updated_by = @logged_user
     @task_list.destroy
 
@@ -172,7 +177,7 @@ class TaskListsController < ApplicationController
         error_status(false, :success_deleted_task_list)
         redirect_to(task_lists_url)
       }
-      format.js {}
+      format.js { index_lists(@logged_user.member_of_owner?) }
       format.xml  { head :ok }
     end
   end
@@ -201,5 +206,13 @@ class TaskListsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
+protected
+
+  def index_lists(include_private)
+    @open_task_lists = @active_project.project_task_lists.open(include_private)
+    @completed_task_lists = @active_project.project_task_lists.completed(include_private)
+    @content_for_sidebar = 'index_sidebar'
+  end
+
 end

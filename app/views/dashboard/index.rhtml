@@ -4,7 +4,7 @@
   end
 %>
 <% if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info %>
-<div class="hint">
+<div class="hint" id="new_account_info">
 
   <div class="header"><%= :welcome_to_new_account.l %></div>
   <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name), :url => "<a href=\"#{AppConfig.site_url}\">#{AppConfig.site_url}</a>") %></div>
@@ -14,7 +14,7 @@
     <div class='content'><%= step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
    <% end %>
   <% if @logged_user.is_admin %>
-  <p><%= link_to :hide_welcome_info.l, hide_welcome_info_company_path(Company.owner), :method => :put %></p>
+  <p><%= link_to :hide_welcome_info.l, hide_welcome_info_company_path(Company.owner), :class => 'cancel' %></p>
   <% end %>
 </div>
 <% end %>

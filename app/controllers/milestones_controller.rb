@@ -32,18 +32,12 @@ class MilestonesController < ApplicationController
     @content_for_sidebar = 'index_sidebar'
     
     respond_to do |format|
-      format.html {  
-        @time_now = Time.zone.now
-  	
-        @late_milestones = @active_project.project_milestones.late(include_private)
-        @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
-        @completed_milestones = @active_project.project_milestones.completed(include_private)
-
-        end_date = (@time_now + 14.days).to_date
-        @calendar_milestones = @upcoming_milestones.select{|m| m.due_date < end_date}.group_by do |obj| 
-          date = obj.due_date.to_date
-          "#{date.month}-#{date.day}"
-        end
+      format.html {
+        index_lists(include_private, false)
+      }
+      format.js { 
+        index_lists(include_private, false)
+        render :template => 'milestones/index'
       }
       format.xml  {
         @milestones = include_private ? @active_project.project_milestones : @active_project.project_milestones.public
@@ -81,7 +75,7 @@ class MilestonesController < ApplicationController
           error_status(false, :success_added_milestone)
           redirect_back_or_default(@milestone)
         }
-        format.js {}
+        format.js { return index }
         format.xml  { render :xml => @milestone.to_xml(:root => 'milestone'), :status => :created, :location => @milestone }
       else
         format.html { render :action => "new" }
@@ -126,6 +120,8 @@ class MilestonesController < ApplicationController
   def destroy
     return error_status(true, :insufficient_permissions) unless (@milestone.can_be_deleted_by(@logged_user))
 
+    @on_page = (params[:on_page] || '').to_i == 1
+    @removed_id = @milestone.id
     @milestone.updated_by = @logged_user
     @milestone.destroy
 
@@ -134,7 +130,7 @@ class MilestonesController < ApplicationController
         error_status(false, :success_deleted_milestone)
         redirect_back_or_default(milestones_url)
       }
-      format.js {}
+      format.js { index_lists(@logged_user.member_of_owner?, true) }
       format.xml  { head :ok }
     end
   end
@@ -171,5 +167,19 @@ class MilestonesController < ApplicationController
     end
 
     true
+  end
+
+  def index_lists(include_private, calendar_only)
+    @time_now = Time.zone.now
+
+    @late_milestones = @active_project.project_milestones.late(include_private) unless calendar_only
+    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
+    @completed_milestones = @active_project.project_milestones.completed(include_private) unless calendar_only
+
+    end_date = (@time_now + 14.days).to_date
+    @calendar_milestones = @upcoming_milestones.select{|m| m.due_date < end_date}.group_by do |obj|
+      date = obj.due_date.to_date
+      "#{date.month}-#{date.day}"
+    end
   end
 end

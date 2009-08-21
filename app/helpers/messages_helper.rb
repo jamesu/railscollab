@@ -66,6 +66,6 @@ module MessagesHelper
   end
 
   def additional_stylesheets
-    ['project/messages']
+    ['project/messages', 'project/comments']
   end
 end

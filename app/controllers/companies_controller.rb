@@ -116,8 +116,20 @@ class CompaniesController < ApplicationController
     error_status(true, :insufficient_permissions) unless @company.can_be_edited_by(@logged_user)
 
     @company.hide_welcome_info = true
-    error_status(false, :welcome_info_hidden) if @company.save
-    redirect_back_or_default :controller => 'dashboard'
+    saved = @company.save
+    
+    respond_to do |format|
+      format.html {
+        error_status(false, :welcome_info_hidden) if saved
+        redirect_back_or_default :controller => 'dashboard'
+      }
+      format.js {
+        # Quick update here, no need for a whole .rjs!
+        render :update do |pg|
+          pg.select('#new_account_info').fancyRemove
+        end
+      }
+    end
   end
 
   def destroy
