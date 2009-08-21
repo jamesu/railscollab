@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+
+def randomize_secret
+  (1..40).map { |x| (65 + rand(26)).chr }.join
+end
+
+session_store_file = <<-SESSION_STORE
+session: _railscollab_session
+secret: #{randomize_secret}
+
+SESSION_STORE
+
+# write session store
+if !File.exists? 'config/app_keys.yml'
+  puts 'Generating session keys'
+  File.open('config/app_keys.yml', 'w') { |f| f.write(session_store_file) }
+end
+
+# Copy over example files!
+Dir["config/example/*"].each do |file|
+  name = "config/#{File.basename(file)}"
+  unless File.exists? name
+    FileUtils.cp(file, name)
+    puts "Copied #{name}"
+  end
+end
+
+# Copy over database
+db_name = "db/schema.rb"
+unless File.exists? db_name
+  puts "Copying default schema"
+  FileUtils.cp("db/schema.example.rb", db_name)
+end
+
+# Run normal install scripts
+system "rake gems:install"
+system "rake db:railscollab:install --trace"
