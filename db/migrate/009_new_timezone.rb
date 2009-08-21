@@ -1,7 +1,7 @@
 class NewTimezone < ActiveRecord::Migration
   def self.up
-    add_column :users, :time_zone, :string, :null => false
-    add_column :companies, :time_zone, :string, :null => false
+    add_column :users, :time_zone, :string, :null => false, :default => ''
+    add_column :companies, :time_zone, :string, :null => false, :default => ''
     
     User.find(:all).each do |user|
         user.time_zone = TimeZone[user.timezone].name
