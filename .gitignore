@@ -15,3 +15,4 @@ tmp/restart.txt
 tmp/**/*
 public/themes/*
 *.sqlite3
+db/schema.rb
