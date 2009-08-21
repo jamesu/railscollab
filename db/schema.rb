@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
-    t.string   "time_zone",                        :default => "",    :null => false
+    t.string   "time_zone",                                           :null => false
     t.string   "logo_file_name"
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
@@ -143,9 +143,9 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
   end
 
   create_table "open_id_authentication_nonces", :force => true do |t|
-    t.integer "timestamp",                  :null => false
+    t.integer "timestamp",  :null => false
     t.string  "server_url"
-    t.string  "salt",       :default => "", :null => false
+    t.string  "salt",       :null => false
   end
 
   create_table "project_companies", :id => false, :force => true do |t|
@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
     t.integer  "created_by_id"
     t.datetime "updated_on"
     t.integer  "updated_by_id"
-    t.integer  "category_id",                :limit => 8
+    t.integer  "category_id",                :limit => 8,                      :null => false
     t.integer  "comments_count",                            :default => 0
     t.integer  "attached_files_count",                      :default => 0
   end
@@ -410,7 +410,7 @@ ActiveRecord::Schema.define(:version => 20090820151620) do
     t.boolean  "auto_assign",                        :default => false, :null => false
     t.string   "identity_url"
     t.string   "office_number_ext",   :limit => 5
-    t.string   "time_zone",                          :default => "",    :null => false
+    t.string   "time_zone",                                             :null => false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
