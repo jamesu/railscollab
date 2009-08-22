@@ -356,8 +356,6 @@ class User < ActiveRecord::Base
     self.ar_to_xml(options.merge(default_options), &block)
   end
 
-  protected
-
   before_create :process_params
   before_update :process_update_params
 
