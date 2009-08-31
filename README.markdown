@@ -22,7 +22,13 @@ whose access can be restricted to certain elements of the project.
 
 ## How can i install / upgrade?
 
-Refer to the [INSTALL.markdown] [3] and [UPGRADE.markdown] [4] files
+Simply run the following:
+
+    script/setup
+
+And login using the username `admin`, with the password `password`.
+
+For more advanced setup options, refer to the [INSTALL.markdown] [3] and [UPGRADE.markdown] [4] files
 
 ## I do i do [x]?
 
