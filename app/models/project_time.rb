@@ -87,8 +87,8 @@ class ProjectTime < ActiveRecord::Base
 		self.name
 	end
 	
-	def object_url
-		url_for hash_for_time_path(:only_path => true, :id => self.id, :active_project => self.project_id)
+	def object_url(host = nil)
+		url_for hash_for_time_path(:only_path => host.nil?, :host => host, :id => self.id, :active_project => self.project_id)
 	end
 	
 	# Responsible party assignment

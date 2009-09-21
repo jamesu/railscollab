@@ -325,8 +325,8 @@ class User < ActiveRecord::Base
     self.display_name
   end
 
-  def object_url
-    url_for hash_for_user_path(:only_path => true, :id => self.id)
+  def object_url(host = nil)
+    url_for hash_for_user_path(:only_path => host.nil?, :host => host, :id => self.id)
   end
 
   def self.get_online(active_in=15)

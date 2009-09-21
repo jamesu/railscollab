@@ -40,8 +40,8 @@ class Tag < ActiveRecord::Base
     self.tag
   end
 
-  def object_url
-    url_for :only_path => true, :controller => 'projects', :action => 'tags', :id => self.tag, :active_project => self.project_id
+  def object_url(host = nil)
+    url_for :only_path => host.nil?, :host => host, :controller => 'projects', :action => 'tags', :id => self.tag, :active_project => self.project_id
   end
 
   def self.priv_scope(include_private)

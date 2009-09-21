@@ -26,8 +26,8 @@ class WikiPage < ActiveRecord::Base
     self.title
   end
 
-  def object_url
-    url_for :only_path => true, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => self.project_id
+  def object_url(host = nil)
+    url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => self.project_id
   end
 
   # Core permissions

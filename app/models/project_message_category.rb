@@ -52,8 +52,8 @@ class ProjectMessageCategory < ActiveRecord::Base
     self.name
   end
 
-  def object_url
-    url_for :only_path => true, :controller => 'message', :action => 'category', :id => self.id, :active_project => self.project_id
+  def object_url(host = nil)
+    url_for :only_path => host.nil?, :host => host, :controller => 'message', :action => 'category', :id => self.id, :active_project => self.project_id
   end
 
   # Core Permissions

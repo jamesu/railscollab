@@ -90,8 +90,8 @@ class ProjectFileRevision < ActiveRecord::Base
     self.project_file.filename
   end
 
-  def object_url
-    (url_for hash_for_download_file_path(:only_path => true, :id => self.id, :active_project => self.project_id)) + "\#revision#{self.id}"
+  def object_url(host = nil)
+    (url_for hash_for_download_file_path(:only_path => host.nil?, :host => host, :id => self.id, :active_project => self.project_id)) + "\#revision#{self.id}"
   end
 
   def icon_url

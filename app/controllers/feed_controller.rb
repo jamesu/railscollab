@@ -26,7 +26,7 @@ class FeedController < ApplicationController
 
   def recent_activities
   	@activity_log = ApplicationLog.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
-  	@activity_url = AppConfig.site_url + @logged_user.recent_activity_feed_url(nil)
+  	@activity_url = root_url
 
   	respond_to do |format|
       format.html do
@@ -71,7 +71,7 @@ class FeedController < ApplicationController
   	end
 
   	@activity_log = ApplicationLog.logs_for(@project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
-  	@activity_url = AppConfig.site_url + @logged_user.recent_activity_feed_url(@project)
+  	@activity_url = project_url(@project)
 
   	respond_to do |format|
       format.html do
@@ -104,7 +104,7 @@ class FeedController < ApplicationController
 
   def recent_milestones
   	@milestones = ProjectMilestone.all_by_user(@logged_user)
-  	@milestones_url = AppConfig.site_url + @logged_user.milestone_feed_url(nil)
+  	@milestones_url = url_for(:controller => 'dashboard', :action => 'milestones')
 
   	respond_to do |format|
       format.html do
@@ -149,7 +149,7 @@ class FeedController < ApplicationController
   	end
 
   	@milestones = @project.project_milestones.open(@logged_user.member_of_owner?)
-  	@milestones_url = AppConfig.site_url + @logged_user.milestone_feed_url(@project)
+  	@milestones_url = milestones_url(@project)
 
   	respond_to do |format|
       format.html do

@@ -33,7 +33,7 @@ class AdministrationTool < ActiveRecord::Base
     "administration_tool_#{self.name}_description".to_sym.l
   end
 
-  def object_url
-    url_for :only_path => true, :controller => self.controller, :action => self.action
+  def object_url(host = nil)
+    url_for :only_path => host.nil?, :host => host, :controller => self.controller, :action => self.action
   end
 end

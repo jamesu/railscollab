@@ -88,8 +88,8 @@ class ProjectTaskList < ActiveRecord::Base
     self.name
   end
 
-  def object_url
-    url_for :only_path => true, :controller => 'task_lists', :action => 'show', :id => self.id, :active_project => self.project_id
+  def object_url(host = nil)
+    url_for :only_path => host.nil?, :host => host, :controller => 'task_lists', :action => 'show', :id => self.id, :active_project => self.project_id
   end
 
   def tags

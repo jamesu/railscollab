@@ -117,8 +117,8 @@ class Company < ActiveRecord::Base
     self.name
   end
 
-  def object_url
-    url_for hash_for_company_path(:only_path => true, :id => self.id)
+  def object_url(host = nil)
+    url_for hash_for_company_path(:only_path => host.nil?, :host => host, :id => self.id)
   end
 
   def self.select_list
