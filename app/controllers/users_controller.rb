@@ -237,7 +237,7 @@ class UsersController < ApplicationController
     return error_status(true, :insufficient_permissions) unless (@user.can_be_deleted_by(@logged_user))
     
     old_name = @user.display_name
-    @user.updated_by = @logged_user
+    #@user.updated_by = @logged_user
     @user.destroy
     
     respond_to do |format|
