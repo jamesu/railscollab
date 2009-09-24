@@ -20,7 +20,7 @@ class Notifier < ActionMailer::Base
   default_url_options[:host] = AppConfig.site_url
 
   def message(user, msg, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - New message #{msg.title}"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_message.l_with_args :title => msg.title}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at
@@ -35,7 +35,7 @@ class Notifier < ActionMailer::Base
   end
 
   def task(user, task, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - New task"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_task.l}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at
@@ -50,7 +50,7 @@ class Notifier < ActionMailer::Base
   end
 
   def milestone(user, milestone, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - New message #{milestone.name}"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_milestone.l_with_args :name => milestone.name}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at
@@ -65,7 +65,7 @@ class Notifier < ActionMailer::Base
   end
 
   def message_comment(user, comment, msg, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - New comment for #{msg.title}"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_comment.l_with_args :title => msg.title}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at
@@ -81,7 +81,7 @@ class Notifier < ActionMailer::Base
   end
   
   def password_reset(user, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - Reset password request"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_reset_password_request.l}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at
@@ -95,7 +95,7 @@ class Notifier < ActionMailer::Base
   end
   
   def account_new_info(user, password, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - Your account has been created"
+    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_account.l}"
     @recipients = user.email
     @from       = AppConfig.notification_email_address
     @sent_on    = sent_at

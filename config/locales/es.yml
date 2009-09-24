@@ -700,6 +700,12 @@ es:
   
   
   # Mailing views
+  notifier_subject_new_task: "Nueva tarea"
+  notifier_subject_new_message: "Nuevo mensaje {{title}}"
+  notifier_subject_new_milestone: "Nuevo hito {{name}}"
+  notifier_subject_new_comment: "Nuevo comentario en {{title}}"
+  notifier_subject_reset_password_request: "Petición de cambio de contraseña"
+  notifier_subject_new_account: "Tu cuenta se ha creado"
   notifier_donotreply: "NO CONTESTE A ÉSTE MENSAJE"
   notifier_greeting: "Hola {{user}}"
   notifier_new_message: "Un nuevo mensaje con el título '{{title}}' se ha publicado en el proyecto {{project}}. Para verlo visite la siguiente dirección URL:"

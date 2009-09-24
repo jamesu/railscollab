@@ -688,6 +688,12 @@ en:
   
   
   # Mailing views
+  notifier_subject_new_task: "New task"
+  notifier_subject_new_message: "New message {{title}}"
+  notifier_subject_new_milestone: "New milestone {{name}}"
+  notifier_subject_new_comment: "New comment for {{title}}"
+  notifier_subject_reset_password_request: "Reset password request"
+  notifier_subject_new_account: "Your account has been created"
   notifier_donotreply: "DO NOT REPLY TO THIS MESSAGE"
   notifier_greeting: "Hi {{user}}"
   notifier_new_message: "A new message entitled '{{title}}' has been posted in the project {{project}}. To view this message, visit the following URL:"
