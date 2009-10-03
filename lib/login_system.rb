@@ -156,6 +156,7 @@ module LoginSystem
   end
 
   def remember(user)
+    return if user.nil?
     user.remember_me!
     cookies[:remember_token] = { :value => user.remember, :expires => user.remember_expires_at }
   end
