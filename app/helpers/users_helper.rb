@@ -47,7 +47,7 @@ module UsersHelper
 
   def extra_crumbs
     crumbs = [
-      {:title => :people, :url => '/administration/people'},
+      {:title => :people, :url => '/companies'},
       {:title => @user.company.name, :url => company_path(:id => @user.company.id)}
     ]
     crumbs << {:title => @user.display_name, :url => user_path(:id => @user.id)} if action_name == 'permissions'
