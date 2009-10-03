@@ -249,10 +249,10 @@ private
 
   def find_comment_object
     rmap = comment_route_map
-    rmap.keys.each do |key|
-      value = params[key]
+    rmap.keys.each do |rtc|
+      value = params[rtc[0]]
       if !value.nil?
-        return Kernel.const_get(rmap[key]) || nil, params[key].to_i
+        return Kernel.const_get(rtc[1]) || nil, value.to_i
       end
     end
     
@@ -274,13 +274,11 @@ private
   end
   
   def comment_route_map
-    ohash = ActiveSupport::OrderedHash.new
-    ohash[:message_id] = :ProjectMessage
-    ohash[:milestone_id] = :ProjectMilestone
-    ohash[:file_id] = :ProjectFile
-    ohash[:task_id] = :ProjectTask
-    ohash[:task_list_id] = :ProjectTaskList
-    ohash
+    [[:message_id, :ProjectMessage],
+     [:milestone_id, :ProjectMilestone],
+     [:file_id, :ProjectFile],
+     [:task_id, :ProjectTask],
+     [:task_list_id, :ProjectTaskList]]
   end
 
 end
