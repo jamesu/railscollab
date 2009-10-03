@@ -47,6 +47,7 @@
     </div>
     <div class="cardBlock">
     <% user_card.im_values.each do |im_value| -%>
+    <% next if im_value.value.blank? %>
     <div class="cardIM">
         <img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %>" /><span> <%= h im_value.value %></span>
     </div>
