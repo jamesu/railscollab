@@ -249,7 +249,7 @@ private
 
   def find_comment_object
     rmap = comment_route_map
-    rmap.keys.each do |rtc|
+    rmap.each do |rtc|
       value = params[rtc[0]]
       if !value.nil?
         return Kernel.const_get(rtc[1]) || nil, value.to_i
