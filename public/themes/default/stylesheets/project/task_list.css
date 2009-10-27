@@ -87,6 +87,7 @@ div.taskList .taskListTags span {
 
 div.taskList ul.taskItems {
   padding-left: 0px;
+  line-height: 160%;
 }
 
 div.taskList ul.taskItems li {
