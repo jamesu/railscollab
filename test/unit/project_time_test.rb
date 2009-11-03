@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectTimeTest < ActiveSupport::TestCase
-  fixtures :project_times
+  #fixtures :project_times
 
   # Replace this with your real tests.
   def test_truth

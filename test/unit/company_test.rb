@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class CompanyTest < ActiveSupport::TestCase
-  fixtures :companies
+  #fixtures :companies
 
   # Replace this with your real tests.
   def test_truth

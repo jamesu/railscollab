@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class AdministrationToolTest < ActiveSupport::TestCase
-  fixtures :administration_tools
+  #fixtures :administration_tools
 
   # Replace this with your real tests.
   def test_truth

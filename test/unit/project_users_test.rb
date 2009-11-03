@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectUsersTest < ActiveSupport::TestCase
-  fixtures :project_users
+  #fixtures :project_users
 
   # Replace this with your real tests.
   def test_truth

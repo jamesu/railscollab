@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ConfigOptionTest < ActiveSupport::TestCase
-  fixtures :config_options
+  #fixtures :config_options
 
   # Replace this with your real tests.
   def test_truth

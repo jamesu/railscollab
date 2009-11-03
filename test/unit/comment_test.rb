@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class CommentTest < ActiveSupport::TestCase
-  fixtures :comments
+  #fixtures :comments
 
   # Replace this with your real tests.
   def test_truth

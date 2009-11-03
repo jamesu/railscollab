@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class IMTypeTest < ActiveSupport::TestCase
-  fixtures :im_types
+  #fixtures :im_types
 
   # Replace this with your real tests.
   def test_truth
