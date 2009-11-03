@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MilestoneControllerTest < ActionController::TestCase
+class MilestonesControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   def test_truth
     assert true

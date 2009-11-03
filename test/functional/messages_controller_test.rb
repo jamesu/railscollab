@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MessageControllerTest < ActionController::TestCase
+class MessagesControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   def test_truth
     assert true
