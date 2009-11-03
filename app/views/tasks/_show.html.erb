@@ -34,6 +34,14 @@
   <div class="taskActions">
     <% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
 <% if !task_item.is_completed? && ProjectTime.can_be_created_by(@logged_user, task_item.project) %>
+<% running_time = running_time_for_task(task_item) 
+unless running_time.nil? %>
+
+<% form_tag stop_time_path(:active_project => running_time.project_id, :id => running_time.id), :method => :put do %>
+  <div><%= image_submit_tag 'icons/stop.gif', :alt => :stop_time.l, :class => 'image' %></div>
+<% end %>
+
+<% else %>
     <% form_tag times_path, :method => :post do %>
       <div>
         <%= hidden_field_tag 'time[name]', task_item.text[0, ProjectTime.columns_hash['name'].limit], :id => nil %>
@@ -42,6 +50,7 @@
         <%= image_submit_tag 'icons/start.gif', :alt => :start_time.l, :class => 'image' %>
       </div>
     <% end %>
+<% end %>
 <% end %>
   </div>
 </div>

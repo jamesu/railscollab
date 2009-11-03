@@ -191,6 +191,16 @@ module ApplicationHelper
      {:name => :delete.l,  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page}, :cond => page.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :wiki_page_confirm_delete.l}]
   end
   
+  def running_time_for_task(task)
+    @running_times.each do |time|
+      if time.task_id == task.id
+        return time
+      end
+    end
+    
+    nil
+  end
+  
   def cal_table(in_rows, tableclass)
     rows = in_rows.map do |row|
       columns = row.map do |column|
