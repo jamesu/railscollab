@@ -144,6 +144,13 @@ function bindDynamic() {
         var form = $(this);
         form.request(JustRebind, 'script');
         form.reset();
+
+        //set task list back to edit mode when new task is added (otherwise new item will be in edit mode, and rest will be in reorder mode)
+        var list = form.parents('.taskList:first');
+        if(list.hasClass('reorder')) {
+          list.find('.doEditTaskList').click();
+        }
+
         return false;
       });
       
