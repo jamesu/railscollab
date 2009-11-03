@@ -1,0 +1,16 @@
+--- 
+config_category_1: 
+  name: mailing
+  id: "1"
+  category_order: "0"
+  is_system: f
+config_category_2: 
+  name: general
+  id: "2"
+  category_order: "1"
+  is_system: f
+config_category_3: 
+  name: system
+  id: "3"
+  category_order: "2"
+  is_system: t

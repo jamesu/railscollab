@@ -1,0 +1,271 @@
+--- 
+config_option_18: 
+  name: site_theme
+  category_name: general
+  id: "18"
+  value: default
+  config_handler_class: ThemeConfigHandler
+  option_order: "9"
+  is_system: f
+  dev_comment: ""
+config_option_6: 
+  name: asset_hosts_url
+  category_name: general
+  id: "6"
+  value: example.com
+  config_handler_class: StringConfigHandler
+  option_order: "3"
+  is_system: f
+  dev_comment: "'example.com' will enable assets[0-3].example.com as asset hosts."
+config_option_19: 
+  name: max_attachments
+  category_name: system
+  id: "19"
+  value: "5"
+  config_handler_class: IntegerConfigHandler
+  option_order: "9"
+  is_system: t
+  dev_comment: ""
+config_option_7: 
+  name: site_url
+  category_name: general
+  id: "7"
+  value: http://localhost:3000
+  config_handler_class: StringConfigHandler
+  option_order: "1"
+  is_system: f
+  dev_comment: ""
+config_option_20: 
+  name: messages_per_page
+  category_name: system
+  id: "20"
+  value: "10"
+  config_handler_class: IntegerConfigHandler
+  option_order: "2"
+  is_system: t
+  dev_comment: ""
+config_option_8: 
+  name: default_project_message_categories
+  category_name: general
+  id: "8"
+  value: |-
+    General
+    Projects
+    Problems
+  config_handler_class: TextListConfigHandler
+  option_order: "5"
+  is_system: f
+  dev_comment: ""
+config_option_21: 
+  name: files_per_page
+  category_name: system
+  id: "21"
+  value: "10"
+  config_handler_class: IntegerConfigHandler
+  option_order: "4"
+  is_system: t
+  dev_comment: ""
+config_option_10: 
+  name: log_really_silent
+  category_name: general
+  id: "10"
+  value: "0"
+  config_handler_class: BoolConfigHandler
+  option_order: "12"
+  is_system: f
+  dev_comment: ""
+config_option_9: 
+  name: first_day_of_week
+  category_name: general
+  id: "9"
+  value: "7"
+  config_handler_class: DayConfigHandler
+  option_order: "13"
+  is_system: f
+  dev_comment: ""
+config_option_22: 
+  name: logs_per_project
+  category_name: system
+  id: "22"
+  value: "5"
+  config_handler_class: IntegerConfigHandler
+  option_order: "1"
+  is_system: t
+  dev_comment: ""
+config_option_11: 
+  name: default_language
+  category_name: general
+  id: "11"
+  value: en
+  config_handler_class: StringConfigHandler
+  option_order: "10"
+  is_system: f
+  dev_comment: ""
+config_option_23: 
+  name: max_upload_size
+  category_name: system
+  id: "23"
+  value: "10485760"
+  config_handler_class: IntegerConfigHandler
+  option_order: "8"
+  is_system: t
+  dev_comment: ""
+config_option_12: 
+  name: allow_anonymous
+  category_name: general
+  id: "12"
+  value: "0"
+  config_handler_class: BoolConfigHandler
+  option_order: "8"
+  is_system: f
+  dev_comment: ""
+config_option_24: 
+  name: minutes_to_comment_edit_expire
+  category_name: system
+  id: "24"
+  value: "3"
+  config_handler_class: IntegerConfigHandler
+  option_order: "6"
+  is_system: t
+  dev_comment: ""
+config_option_13: 
+  name: site_name
+  category_name: general
+  id: "13"
+  value: RailsCollab
+  config_handler_class: StringConfigHandler
+  option_order: "0"
+  is_system: f
+  dev_comment: ""
+config_option_1: 
+  name: notification_email_method
+  category_name: mailing
+  id: "1"
+  value: test
+  config_handler_class: NotificationMethodConfigHandler
+  option_order: "1"
+  is_system: f
+  dev_comment: ""
+config_option_25: 
+  name: project_logs_per_page
+  category_name: system
+  id: "25"
+  value: "10"
+  config_handler_class: IntegerConfigHandler
+  option_order: "0"
+  is_system: t
+  dev_comment: ""
+config_option_14: 
+  name: default_project_message_category
+  category_name: general
+  id: "14"
+  value: General
+  config_handler_class: StringConfigHandler
+  option_order: "6"
+  is_system: f
+  dev_comment: ""
+config_option_2: 
+  name: notification_email_sendmail
+  category_name: mailing
+  id: "2"
+  value: |
+    --- 
+    arguments: -i -t -O DeliveryMode='b'
+    location: /usr/bin/sendmail
+
+  config_handler_class: NotificationSendmailConfigHandler
+  option_order: "3"
+  is_system: f
+  dev_comment: ""
+config_option_26: 
+  name: minutes_to_activity_log_expire
+  category_name: system
+  id: "26"
+  value: "5"
+  config_handler_class: IntegerConfigHandler
+  option_order: "7"
+  is_system: t
+  dev_comment: ""
+config_option_15: 
+  name: use_asset_hosts
+  category_name: general
+  id: "15"
+  value: "0"
+  config_handler_class: BoolConfigHandler
+  option_order: "2"
+  is_system: f
+  dev_comment: Enable usage of asset hosts. Also see assets_host_url
+config_option_3: 
+  name: notification_email_smtp
+  category_name: mailing
+  id: "3"
+  value: |
+    --- 
+    authentication: login
+    domain: domain.com
+    port: 123
+    password: password
+    user_name: user
+    address: localhost
+
+  config_handler_class: NotificationSMTPConfigHandler
+  option_order: "2"
+  is_system: f
+  dev_comment: ""
+config_option_27: 
+  name: search_results_per_page
+  category_name: system
+  id: "27"
+  value: "20"
+  config_handler_class: IntegerConfigHandler
+  option_order: "5"
+  is_system: t
+  dev_comment: ""
+config_option_16: 
+  name: allow_openid
+  category_name: general
+  id: "16"
+  value: "0"
+  config_handler_class: BoolConfigHandler
+  option_order: "7"
+  is_system: f
+  dev_comment: ""
+config_option_4: 
+  name: notification_email_address
+  category_name: mailing
+  id: "4"
+  value: RailsCollab Notification <fill.this.in@localhost>
+  config_handler_class: StringConfigHandler
+  option_order: "0"
+  is_system: f
+  dev_comment: ""
+config_option_28: 
+  name: times_per_page
+  category_name: system
+  id: "28"
+  value: "10"
+  config_handler_class: IntegerConfigHandler
+  option_order: "3"
+  is_system: t
+  dev_comment: ""
+config_option_17: 
+  name: search_enabled
+  category_name: general
+  id: "17"
+  value: "1"
+  config_handler_class: BoolConfigHandler
+  option_order: "11"
+  is_system: f
+  dev_comment: ""
+config_option_5: 
+  name: default_project_folders
+  category_name: general
+  id: "5"
+  value: |-
+    images
+    documents
+    other
+  config_handler_class: TextListConfigHandler
+  option_order: "4"
+  is_system: f
+  dev_comment: ""

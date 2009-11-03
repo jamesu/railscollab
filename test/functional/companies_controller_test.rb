@@ -1,9 +1,8 @@
 require 'test_helper'
 
 class CompaniesControllerTest < ActionController::TestCase
-
-  test "Owner should exist" do
-    assert !Company.owner.nil?
-  end
-  
+# Replace this with your real tests.
+def test_truth
+  assert true
 end
+
