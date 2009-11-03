@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ImValueTest < ActiveSupport::TestCase
-  #fixtures :im_values
+  fixtures :all
 
   # Replace this with your real tests.
   def test_truth

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectFileTest < ActiveSupport::TestCase
-  #fixtures :project_files
+  fixtures :all
 
   # Replace this with your real tests.
   def test_truth

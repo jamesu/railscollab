@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectFolderTest < ActiveSupport::TestCase
-  #fixtures :project_folders
+  fixtures :all
 
   # Replace this with your real tests.
   def test_truth

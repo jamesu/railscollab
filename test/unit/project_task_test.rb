@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectTaskTest < ActiveSupport::TestCase
-  #fixtures :project_tasks
+  fixtures :all
 
   # Replace this with your real tests.
   def test_truth

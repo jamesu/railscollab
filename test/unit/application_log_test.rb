@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ApplicationLogTest < ActiveSupport::TestCase
-  #fixtures :application_logs
+  fixtures :all
 
   # Replace this with your real tests.
   def test_truth
