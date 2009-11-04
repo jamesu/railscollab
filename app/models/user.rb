@@ -211,7 +211,7 @@ class User < ActiveRecord::Base
   end
 
   def can_be_viewed_by(user)
-    user.member_of_owner? or user.company_id == self.id or self.member_of_owner?
+    user.member_of_owner? or user.company_id == self.company_id or self.member_of_owner?
   end
 
   # Specific permissions

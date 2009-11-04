@@ -7,7 +7,7 @@ require "faker"
 
 Factory.define :company do |u|
   u.sequence(:client_of) {|n| Company.owner}
-  u.sequence(:name) {|n| Faker::Name.name }
+  u.sequence(:name) {|n| Faker::Company.name }
   u.sequence(:email) {|n| Faker::Internet.email }
   
   u.sequence(:created_by) {|n| Company.owner.created_by}
@@ -39,5 +39,9 @@ end
 Factory.define :owner_user, :parent => :user do |u|
   u.sequence(:company) {|n| Company.owner}
   u.is_admin false
+end
+
+Factory.define :im_type do |u|
+  u.sequence(:name) {|n| Faker::Company.name }
 end
 
