@@ -17,6 +17,7 @@
 <% if !card.im_values.empty? %>
       <table class="imAddresses">
 <% card.im_values.each do |im_value| -%>
+<% next if im_value.value.blank? %>
         <tr>
           <td><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %>" /></td>
           <td><%= h im_value.value %> <% if im_value.is_default %><span class="desc">(<%= :primary_im.l %>)</span><% end %></td>
