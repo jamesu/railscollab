@@ -21,6 +21,7 @@ class WikiPagesController < ApplicationController
 
   before_filter :process_session
   before_filter :set_created_by, :only => [:create, :update]
+  before_filter :find_sidebar_page, :only => [:index, :show]
   after_filter  :user_track, :only => [:index, :show]
 
   include WikiEngine::Controller
@@ -64,5 +65,10 @@ class WikiPagesController < ApplicationController
 
   def find_wiki_page
     @wiki_page = wiki_pages.find(params[:id], :scope => @active_project)
+  end
+  
+  def find_sidebar_page
+    @wiki_sidebar = wiki_pages.find("sidebar", :scope => @active_project) rescue nil
+    @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
   end
 end
