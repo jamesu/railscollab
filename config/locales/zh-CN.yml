@@ -124,7 +124,7 @@ zh-CN:
   welcome_back: "欢迎你回来  <strong>{{user}}</strong>"
   logout: 退出
   are_you_sure_logout: 你确定要退出?
-  running_times: "you have {{count}} running times"
+  running_times: "You have {{count}} running times"
   
   # Permission names
   can_manage_messages: 管理消息

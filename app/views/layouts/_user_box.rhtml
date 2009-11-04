@@ -1,12 +1,12 @@
 <div id="userbox">
-<% if user.is_anonymous? -%>
+<% if user.is_anonymous? %>
   <%= :welcome_anonymous.l %> (<%= link_to(:login.l, logout_path) %>),
-<% else -%>
-  <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>),
-<% end -%>
-<% unless running_times.blank? -%>
-  <%= :running_times.l_with_args(:count => running_times.size) %> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>
-<% end -%>
+<% else %>
+  <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>)
+<% end %>
+  <div id="running_times_count" style="display:<%= @running_times.empty? ? 'none' : 'block' %>;">
+  <span><%= :running_times.l_with_args(:count => @running_times.size) %></span> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>
+  </div>
   <ul>
     <% unless user.is_anonymous? %>
     <li><%= link_to :account.l, @logged_user %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
@@ -58,18 +58,9 @@
   </div>
 <% end %>
 
-<% unless running_times.blank? %>
-  <div class="PopupMenuWidgetDiv" id="running_times_menu"  style="display:none">
+  <div class="PopupMenuWidgetDiv" id="running_times_menu" style="display:none">
     <ul>
-<% running_times.each do |time| -%>
-      <li>
-        <%= link_to h(time.name), time.object_url %>
-        <% form_tag stop_time_path(:active_project => time.project_id, :id => time.id), :method => :put do %>
-          <div><%= image_submit_tag 'icons/stop.gif', :alt => :stop_time.l, :class => 'image' %></div>
-        <% end %>
-      </li>
-<% end %>
+	  <%= render :partial => 'times/listed', :collection => @running_times %>
     </ul>
   </div>
-<% end %>
 </div>

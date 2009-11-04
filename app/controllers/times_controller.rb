@@ -96,6 +96,8 @@ class TimesController < ApplicationController
     
     respond_to do |format|
       if @time.save
+        add_running_time(@time)
+        
         format.html {
           error_status(false, :success_added_time)
           redirect_back_or_default(@time)
@@ -159,6 +161,8 @@ class TimesController < ApplicationController
     @time.updated_by = @logged_user
     @time.save
     
+    remove_running_time(@time)
+    
     respond_to do |format|
       format.html {
         error_status(false, :success_stopped_time)
@@ -172,7 +176,9 @@ class TimesController < ApplicationController
 
   def destroy
     return error_status(true, :insufficient_permissions) unless (@time.can_be_deleted_by(@logged_user))
-
+    
+    remove_running_time(@time)
+    
     @time.updated_by = @logged_user
     @time.destroy
 
@@ -208,5 +214,14 @@ private
     @sort_type = params[:orderBy]
     @sort_type = 'created_on' unless ['done_date', 'hours'].include?(params[:orderBy])
     @sort_order = 'DESC'
+  end
+  
+  def add_running_time(time)
+    @running_times.each { |chk| return if chk.id == time.id }
+    @running_times << time
+  end
+  
+  def remove_running_time(time)
+    @running_times.reject! { |chk| chk.id == time.id ? true : false }
   end
 end

@@ -1,0 +1,4 @@
+<li id="listed_time_<%= listed.id %>">
+  <%= link_to h(listed.name), listed.object_url %>
+  <%= link_to render_icon('stop', :stop_time.l), stop_time_path(:id => listed.id), :class => 'blank stopTime' %>
+</li>

@@ -1,0 +1,5 @@
+page.remove "listed_time_#{@time.id}"
+page.call "Project.updateRunningTimes", @running_times.size, :running_times.l_with_args(:count => @running_times.size)
+unless @time.project_task.nil?
+  page.replace("task_item_#{@time.project_task.id}", :partial => 'tasks/show', :collection => [@time.project_task] )
+end

@@ -124,7 +124,7 @@
   welcome_back: "Willkommen zurück <strong>{{user}}</strong>"
   logout: Abmelden
   are_you_sure_logout: Sind sie sicher, daß Sie sich ausloggen wollen?
-  running_times: "you have {{count}} running times"
+  running_times: "You have {{count}} running times"
   
   # Permission names
   can_manage_messages: Manage messages

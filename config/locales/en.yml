@@ -129,7 +129,7 @@ en:
   welcome_back: "Welcome back <strong>{{user}}</strong>"
   logout: Logout
   are_you_sure_logout: Are you sure you want to log out?
-  running_times: "you have {{count}} running times"
+  running_times: "You have {{count}} running times"
   
   # Permission names
   can_manage_messages: Manage messages

@@ -294,6 +294,28 @@ function bindDynamic() {
 
         return false;
       });
+
+      // Start & stop time
+
+      $('.startTime').click(function(evt) {
+        var el = $(this);
+        $.post(Project.buildUrl('/times'), {
+            'time[open_task_id]': el.attr('task_id'),
+            'time[assigned_to_id]': LOGGED_USER_ID,
+        }, JustRebind, 'script');
+        
+        return false;
+      });
+
+      $('.stopTime').click(function(evt) {
+        var el = $(this);
+        $.put(el.attr('href'), {
+            'time[open_task_id]': el.attr('task_id'),
+            'time[assigned_to_id]': LOGGED_USER_ID,
+        }, JustRebind, 'script');
+
+        return false;
+      });
 }
 
 function JustReload(data) {
@@ -326,13 +348,27 @@ function rebindDynamic() {
   $('#action_dialog a.cancel').unbind();
 
   $('a.oaction').unbind();
+
+  $('.startTime').unbind();
+  $('.stopTime').unbind();
   
   bindDynamic();
 }
 
 var Project = {
   buildUrl: function(resource) {
-    return ('/project' + PROJECT_ID + resource);
+    return ('/projects/' + PROJECT_ID + resource);
+  },
+
+  updateRunningTimes: function(size, locale) {
+    $('#running_times_count span').html(locale);
+    
+    if (size > 0)
+      $('#running_times_count').show();
+    else {
+      $('#running_times_count').hide();
+      $('#running_times_menu').hide();
+    }
   }
 };
 

@@ -63,8 +63,8 @@ class ProjectTime < ActiveRecord::Base
     end
     
     # set name to task name
-    if self.name.empty? and !self.project_task.nil?
-      self.name = self.project_task.text
+    if (self.name.nil? or self.name.blank?) and !self.project_task.nil?
+      self.name = self.project_task.text[0, ProjectTime.columns_hash['name'].limit]
     end
   end
   
@@ -108,7 +108,7 @@ class ProjectTime < ActiveRecord::Base
   end
   
   def open_task_id=(val)
-        # Set open_task accordingly
+    # Set open_task accordingly
     if (val.nil? || val == '0')
       self.open_task = nil
       return

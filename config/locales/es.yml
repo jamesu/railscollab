@@ -130,8 +130,8 @@ es:
   logout: Cerrar sesión
   are_you_sure_logout: ¿Estás seguro de que quieres cerrar sesión?
   running_times:
-    one: "tienes {{count}} tiempo en progreso"
-    other: "tienes {{count}} tiempos en progreso"
+    one: "Tienes {{count}} tiempo en progreso"
+    other: "Tienes {{count}} tiempos en progreso"
   
   # Permission names
   can_manage_messages: Gestionar mensajes
