@@ -60,9 +60,7 @@ class TaskListsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @open_task_lists = @active_project.project_task_lists.open(include_private)
-        @completed_task_lists = @active_project.project_task_lists.completed(include_private)
-        @content_for_sidebar = 'index_sidebar'
+        index_lists(include_private)
       }
       format.js {}
       format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
@@ -213,6 +211,8 @@ protected
     @open_task_lists = @active_project.project_task_lists.open(include_private)
     @completed_task_lists = @active_project.project_task_lists.completed(include_private)
     @content_for_sidebar = 'index_sidebar'
+    
+    puts "!!!\nSZ0=#{@open_task_lists[0].name}-#{@open_task_lists[0].project_tasks.length}\n!!!"
   end
 
 end
