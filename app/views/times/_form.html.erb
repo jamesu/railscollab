@@ -7,7 +7,7 @@
   <div id="openTaskLists">
 <% if @open_task_lists.length > 0 %>
     <label for="timeOpenTasks"><%= :open_tasks.l %>:</label>
-    <%= task_collection_select 'time', 'open_task_id', @open_task_lists, :id => 'timeOpenTasks' %>
+    <%= task_collection_select 'time', 'open_task_id', @open_task_lists, @task_filter, :id => 'timeOpenTasks' %>
 <% end %>
   </div>
 

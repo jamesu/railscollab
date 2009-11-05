@@ -22,8 +22,8 @@ module ProjectItemsHelper
     select_tag "#{object}[#{method}]", assign_select_grouped_options(project, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
   end
 
-  def task_collection_select(object, method, collection, options = {})
-    select_tag "#{object}[#{method}]", task_select_grouped_options(collection, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
+  def task_collection_select(object, method, collection, filter=nil, options = {})
+    select_tag "#{object}[#{method}]", task_select_grouped_options(collection, filter, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
   end
 
   def select_file_options(project, current_object=nil)
@@ -78,10 +78,11 @@ module ProjectItemsHelper
     default_option + grouped_options_for_select(items, options)
   end
 
-  def task_select_grouped_options(task_lists, options = {})
+  def task_select_grouped_options(task_lists, filter=nil, options = {})
     items = {}
     task_lists.each do |task_list|
-      items[task_list.name] = task_list.project_tasks.collect {|task| [truncate(task.text, 50), task.id.to_s]}
+      list = filter.nil? ? task_list.project_tasks : task_list.project_tasks.reject(&filter)
+      items[task_list.name] = list.collect {|task| [truncate(task.text, 50), task.id.to_s]}
     end
 
     content_tag(:option, :none.l, :value => 0) + grouped_options_for_select(items, options)
