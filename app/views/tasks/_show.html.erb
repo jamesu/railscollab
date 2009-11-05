@@ -9,7 +9,7 @@
 <div class="taskItemContent">
 <% if task_item.can_be_changed_by(@logged_user) %>
 	<div class="taskControls">
-			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => :task_delete_confirm.l, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
+			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:aconfirm => :task_delete_confirm.l, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
 	</div>
 <% end %>
 <% if task_item.can_be_changed_by(@logged_user) %>

@@ -204,13 +204,10 @@ function bindDynamic() {
         return false;
       });
       
-      $('.taskList .taskDelete').each(function() {
-        this.onclick_fn = this.onclick;
-        this.onclick = null;
-      });
       $('.taskList .taskDelete').click(function(evt) {
-        if (this.onclick_fn())
-          $.del(this.href, null, JustRebind, 'script');
+        var el = $(this);
+        if (confirm(el.attr('aconfirm')))
+           $.del(this.href, null, JustRebind, 'script');
         
         return false;
       });
@@ -339,7 +336,8 @@ function rebindDynamic() {
   $('.taskItem form').unbind();
   $('.taskItem form .cancel').unbind();
   $('.taskList .completion').unbind();
-  $('.taskList .itemDelete').unbind();
+  $('.taskList .taskEdit').unbind();
+  $('.taskList .taskDelete').unbind();
   
   $('.doSortTaskList').unbind();
   $('.doEditTaskList').unbind();
