@@ -211,8 +211,6 @@ protected
     @open_task_lists = @active_project.project_task_lists.open(include_private)
     @completed_task_lists = @active_project.project_task_lists.completed(include_private)
     @content_for_sidebar = 'index_sidebar'
-    
-    puts "!!!\nSZ0=#{@open_task_lists[0].name}-#{@open_task_lists[0].project_tasks.length}\n!!!"
   end
 
 end
