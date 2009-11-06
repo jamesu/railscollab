@@ -296,7 +296,7 @@ function bindDynamic() {
 
       $('.startTime').click(function(evt) {
         var el = $(this);
-        $.post(Project.buildUrl('/times'), {
+        $.post(el.attr('href'), {
             'time[open_task_id]': el.attr('task_id'),
             'time[assigned_to_id]': LOGGED_USER_ID,
         }, JustRebind, 'script');
