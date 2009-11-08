@@ -71,7 +71,7 @@ module ApplicationHelper
     return '--' if tags.empty?
 
     tags.collect do |tag|
-      link_to h(tag), project_tag_path(object.project_id, tag)
+      link_to h(tag), project_tag_path(object.project_id, CGI.escape(tag))
     end.join(', ')
   end
 

@@ -36,7 +36,7 @@ class TagsController < ApplicationController
 private
 
   def tags_in_project
-  	@tag_name = params[:id]
+  	@tag_name = CGI.unescape(params[:id])
   	@active_project = Project.find(params[:project_id]) rescue nil
     return if !verify_project
   	
