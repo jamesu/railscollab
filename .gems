@@ -1,0 +1,2 @@
+icalendar --version '>= 1.0.2'
+acts_as_ferret  --version '>= 0.4.4'
