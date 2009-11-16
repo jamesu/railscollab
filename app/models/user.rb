@@ -44,9 +44,24 @@ class User < ActiveRecord::Base
   has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
   has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
-  
-  has_attached_file :avatar, :styles => { :thumb => "50x50" }, :default_url => ''
-  
+
+	AVATAR_OPTIONS_BASIC = {
+		:styles => { :thumb => "50x50" },
+		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
+		:default_url => ''
+	}
+	
+	AVATAR_OPTIONS_S3 = {
+		:s3_credentials => {
+			:access_key_id => AppConfig.s3_access_key,
+			:secret_access_key => AppConfig.s3_secret_key
+		},
+		:path => ":attachment/:id/:style.:extension",
+		:bucket => 'htc_user_avatar'
+	}
+	
+	has_attached_file :avatar, AVATAR_OPTIONS_BASIC.merge(AppConfig.attach_to_s3 ? AVATAR_OPTIONS_S3 : {})
+
   has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'
 
   def twister_array=(value)

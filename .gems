@@ -2,3 +2,4 @@ icalendar --version '>= 1.0.2'
 acts_as_ferret --version '>= 0.4.4'
 ruby-openid --version '>=2.1.2'
 RedCloth --version '>= 4.0.0'
+aws-s3

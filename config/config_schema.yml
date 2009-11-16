@@ -52,12 +52,30 @@ system:
     default: 5
     comment: ""
     order: 9
-  
+    
+  attach_to_s3:
+    handler: BoolConfigHandler
+    default: false
+    comment: "Enable attachment to Amazon S3"
+    order: 10
+
+  s3_access_key:
+    handler: StringConfigHandler
+    default: ''
+    comment: "Amazon S3 Access Key"
+    order: 11
+
+  s3_secret_key:
+    handler: StringConfigHandler
+    default: ''
+    comment: "Amazon S3 Secret Key"
+    order: 12
+
   ferret_index_path:
     handler: StringConfigHandler
     default: "/tmp/index"
     comment: "Relative path to RAILS_ROOT for ferret's index folder."
-    order: 10
+    order: 13
 
 general:
   site_name:   
