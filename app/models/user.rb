@@ -199,7 +199,7 @@ class User < ActiveRecord::Base
 	end
 
   def self.openid_login(identity_url)
-    user = first(:conditions => ['identity_url = ?', identity_url])
+    user = first(:conditions => ['identity_url = ?', OpenIdAuthentication.normalize_url(identity_url)])
     return nil if user.nil?
 
     now = Time.now.utc
