@@ -6,8 +6,8 @@ def randomize_secret
 end
 
 session_store_file = <<-SESSION_STORE
-session: _railscollab_session
-secret: #{randomize_secret}
+session_key: _railscollab_session
+session_secret: #{randomize_secret}
 
 SESSION_STORE
 

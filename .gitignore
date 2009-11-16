@@ -1,4 +1,5 @@
 .DS_Store
+config/app_keys.yml
 config/config.yml
 config/database.yml
 config/deploy.rb
