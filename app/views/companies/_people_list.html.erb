@@ -35,12 +35,12 @@
 
 <% num_users = 1 %>
 <% users = @active_project.nil? ? company.users : company.users_on_project(@active_project)  %>
-<% users.each do |user|
+<% (users.sort{ |x,y| x.display_name <=> y.display_name }).each do |user|
    user_card = user %>
 <div class="card">
   <div class="cardIcon"><img src="<%= user_card.avatar_url %>" alt="<%= h user_card.display_name %> avatar" /></div>
   <div class="cardData">
-    <h3><%= h user_card.display_name %></h3>
+    <h3><%= link_to (h user_card.display_name), user %></h3>
       <% if user_card.title? %><div class="detailsTitle"> <%= h user_card.title %></div><% end %>
     <div class="cardBlock">
       <a href="mailto:<%= h user_card.email %>"><%= h user_card.email %></a>
