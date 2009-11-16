@@ -5,7 +5,7 @@
 <div class="card">
   <div class="cardIcon"><img src="<%= company_card.logo_url %>" alt="<%= h company_card.name %> logo" /></div>
   <div class="cardData">
-    <h3><%= h company_card.name %></h3>
+    <h3><%= link_to (h company_card.name), company %></h3>
     <% if company_card.email? %>
     <div class="cardBlock">
       <a href="mailto:<%= h company_card.email %>"><%= h company_card.email %></a>
