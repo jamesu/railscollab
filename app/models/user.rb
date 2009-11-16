@@ -169,6 +169,35 @@ class User < ActiveRecord::Base
     save(false)
   end
 
+	def identity_url
+		begin
+			return OpenIdAuthentication.normalize_url(read_attribute('identity_url'))
+		rescue
+			return nil
+		end
+	end
+	
+	def identity_url=(value)
+		begin
+			write_attribute('identity_url', OpenIdAuthentication.normalize_url(value))
+		rescue
+			write_attribute('identity_url', nil)
+		end
+	end
+	
+	def validate
+	    if self.identity_url != nil && self.identity_url.length > 0
+			if (self.identity_url.include?("@") || self.identity_url.include?(" "))
+				errors.add(:identity_url, "contains invalid characters")
+			end
+			begin
+				OpenIdAuthentication.normalize_url(self.identity_url)
+			rescue
+				errors.add(:identity_url, "is not a valid OpenID URL")
+			end
+		end
+	end
+
   def self.openid_login(identity_url)
     user = first(:conditions => ['identity_url = ?', identity_url])
     return nil if user.nil?
