@@ -47,11 +47,17 @@ system:
     default: 10485760
     comment: ""
     order: 8
-  max_attachments:   
+  max_attachments:
     handler: IntegerConfigHandler
     default: 5
     comment: ""
     order: 9
+  
+  ferret_index_path:
+    handler: StringConfigHandler
+    default: "/tmp/index"
+    comment: "Relative path to RAILS_ROOT for ferret's index folder."
+    order: 10
 
 general:
   site_name:   
