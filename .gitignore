@@ -1,11 +1,9 @@
 .DS_Store
-config/app_keys.yml
 config/config.yml
 config/database.yml
 config/deploy.rb
 coverage
 db/schema.rb
-index/**
 log/*.log
 log/ferret_server.*
 nbproject
