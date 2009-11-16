@@ -5,7 +5,7 @@
   end
   
   if @user.permissions_can_be_updated_by(@logged_user)
-  	@page_actions << {:title => :update_permissions, :url => permissions_user(:id => @user.id)}
+  	@page_actions << {:title => :update_permissions, :url => permissions_user_path(:id => @user.id)}
   end
 %>
 <%=
