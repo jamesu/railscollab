@@ -30,6 +30,11 @@ module ConfigSystem
     
     # Determine what we are running under
     AppConfig.server = self.detect_server
+
+	# Load from config.yml if it's present
+	(YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}).merge(ENV).each do |key, value|
+		AppConfig.send("#{key}=", value)
+	end
   end
   
   def self.detect_server

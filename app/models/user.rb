@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
   has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
-
+	
 	has_attached_file :avatar, {
 		:styles => { :thumb => "50x50" },
 		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 		:path => ":attachment/:id/:style.:extension",
 		:bucket => 'htc_user_avatar'
 	} : {})
-
+	
   has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'
 
   def twister_array=(value)

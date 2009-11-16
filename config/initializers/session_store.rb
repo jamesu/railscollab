@@ -5,11 +5,10 @@
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
 
-# Note: make sure you have keys in config/app_keys.yml
-temp_key_yaml = YAML.load_file("#{RAILS_ROOT}/config/app_keys.yml")
+# Note: make sure you have keys in config/config.yml
 ActionController::Base.session = {
-  :key => temp_key_yaml['session'],
-  :secret      => temp_key_yaml['secret']
+  :key => AppConfig.session_key,
+  :secret      => AppConfig.session_secret
 }
 
 # Use the database for sessions instead of the cookie-based default,

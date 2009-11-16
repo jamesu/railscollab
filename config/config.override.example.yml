@@ -6,8 +6,7 @@ common:
 # Environment specific configuration
 
 production:
-  
+
 development:
-  
+
 testing:
-  
