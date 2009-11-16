@@ -57,6 +57,9 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
 end
 
+require 'acts_as_ferret'
+ActsAsFerret.index_dir = "#{RAILS_ROOT}/tmp/index"
+
 ConfigSystem.post_init
 
 # Include your application configuration below
