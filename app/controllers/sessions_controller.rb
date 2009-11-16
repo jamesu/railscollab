@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if params[:openid_url]
+	if using_open_id?
       openid_login
     else
       username_login
