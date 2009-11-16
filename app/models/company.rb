@@ -31,22 +31,18 @@ class Company < ActiveRecord::Base
 
   has_and_belongs_to_many :projects,  :join_table => :project_companies
 
-	LOGO_OPTIONS_BASIC = {
+	has_attached_file :logo, {
 		:styles => { :thumb => "50x50" },
 		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
 		:default_url => ''
-	}
-	
-	LOGO_OPTIONS_S3 = {
+	}.merge(AppConfig.attach_to_s3 ? {
 		:s3_credentials => {
 			:access_key_id => AppConfig.s3_access_key,
 			:secret_access_key => AppConfig.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
 		:bucket => 'htc_company_logo'
-	}
-	
-	has_attached_file :logo, LOGO_OPTIONS_BASIC.merge(AppConfig.attach_to_s3 ? LOGO_OPTIONS_S3 : {})
+	} : {})
 
   before_create :process_params
   before_update :process_update_params
