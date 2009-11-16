@@ -1,0 +1,17 @@
+development:
+  attach_to_s3: false
+  s3_access_key: ''
+  s3_secret_key: ''
+  s3_bucket_prefix: ''
+
+testing:
+  attach_to_s3: false
+  s3_access_key: ''
+  s3_secret_key: ''
+  s3_bucket_prefix: ''
+
+production:
+  attach_to_s3: false
+  s3_access_key: ''
+  s3_secret_key: ''
+  s3_bucket_prefix: ''
