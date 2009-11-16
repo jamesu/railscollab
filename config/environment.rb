@@ -63,10 +63,10 @@ end
 require 'smtp_tls'
 ActionMailer::Base.smtp_settings = {
   :address  => "smtp.gmail.com",
-  :port  => '587',
-  :authentication  => :plain,
+  :port  => 587,
   :user_name  => "htc@railcs.com",
-  :password  => "q1w2e3"
+  :password  => "q1w2e3xxx",
+  :authentication  => :login
 }
 
 require 'acts_as_ferret'
