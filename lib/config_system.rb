@@ -36,7 +36,7 @@ module ConfigSystem
 	# Load from config.yml if it's present
 	config_yml_settings = YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}
 	
-	session_key_settings..merge(config_yml_settings).merge(ENV).each do |key, value|
+	session_key_settings.merge(config_yml_settings).merge(ENV).each do |key, value|
 		AppConfig.send("#{key}=", value)
 	end
   end
