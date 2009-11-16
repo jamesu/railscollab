@@ -134,7 +134,7 @@ class UsersController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_added_user)
-          redirect_to @user
+          redirect_back_or_default :controller => 'administration', :action => 'people'
         }
         format.js {}
         format.xml  { render :xml => @user.to_xml(:root => 'user'), :status => :created, :location => @user }
@@ -214,7 +214,7 @@ class UsersController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_updated_profile)
-		  redirect_to @user
+          redirect_back_or_default :controller => 'administration', :action => 'people'
         }
         format.js {}
         format.xml  { head :ok }
@@ -243,7 +243,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_user, {:name => old_name})
-		redirect_to users_path
+        redirect_back_or_default :controller => 'administration', :action => 'people'
       }
       format.js {}
       format.xml  { head :ok }
