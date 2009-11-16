@@ -1,14 +1,4 @@
-require 'test/unit'
-
-require 'rubygems'
-gem 'mocha'
-require 'mocha'
-
-gem 'ruby-openid'
-require 'openid'
-
-RAILS_ROOT = File.dirname(__FILE__) unless defined? RAILS_ROOT
-require File.dirname(__FILE__) + "/../lib/open_id_authentication"
+require File.dirname(__FILE__) + '/test_helper'
 
 class OpenIdAuthenticationTest < Test::Unit::TestCase
   def setup
@@ -21,7 +11,8 @@ class OpenIdAuthenticationTest < Test::Unit::TestCase
   def test_authentication_should_fail_when_the_identity_server_is_missing
     open_id_consumer = mock()
     open_id_consumer.expects(:begin).raises(OpenID::OpenIDError)
-    @controller.stubs(:open_id_consumer).returns(open_id_consumer)
+    @controller.expects(:open_id_consumer).returns(open_id_consumer)
+    @controller.expects(:logger).returns(mock(:error => true))
 
     @controller.send(:authenticate_with_open_id, "http://someone.example.com") do |result, identity_url|
       assert result.missing?
@@ -29,10 +20,18 @@ class OpenIdAuthenticationTest < Test::Unit::TestCase
     end
   end
 
+  def test_authentication_should_be_invalid_when_the_identity_url_is_invalid
+    @controller.send(:authenticate_with_open_id, "!") do |result, identity_url|
+      assert result.invalid?, "Result expected to be invalid but was not"
+      assert_equal "Sorry, but this does not appear to be a valid OpenID", result.message
+    end
+  end
+
   def test_authentication_should_fail_when_the_identity_server_times_out
     open_id_consumer = mock()
     open_id_consumer.expects(:begin).raises(Timeout::Error, "Identity Server took too long.")
-    @controller.stubs(:open_id_consumer).returns(open_id_consumer)
+    @controller.expects(:open_id_consumer).returns(open_id_consumer)
+    @controller.expects(:logger).returns(mock(:error => true))
 
     @controller.send(:authenticate_with_open_id, "http://someone.example.com") do |result, identity_url|
       assert result.missing?
@@ -41,7 +40,6 @@ class OpenIdAuthenticationTest < Test::Unit::TestCase
   end
 
   def test_authentication_should_begin_when_the_identity_server_is_present
-    @controller.stubs(:open_id_consumer).returns(stub(:begin => true))
     @controller.expects(:begin_open_id_authentication)
     @controller.send(:authenticate_with_open_id, "http://someone.example.com")
   end
