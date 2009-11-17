@@ -2,6 +2,10 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
+  create_table "legacy_table", :force => true do |t|
+    t.column "name", :string
+  end
+
   create_table "books", :force => true do |t|
     t.column "title", "string"
     t.column "type", "text"
@@ -38,6 +42,17 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "events", :force => true do |t|
     t.column "name", "string"
     t.column "event_date", "datetime"
+  end
+
+  create_table "cities", :force => true do |t|
+    t.column "name", "string"
+    t.column "population", "integer"
+    t.column "my_slug", "string"
+  end
+
+  create_table "districts", :force => true do |t|
+    t.column "name", "string"
+    t.column "cached_slug", "string"
   end
 
   create_table "slugs", :force => true do |t|

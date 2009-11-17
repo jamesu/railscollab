@@ -143,6 +143,57 @@ As of FriendlyId version 2.0.2, "new" and "index" are reseved by default. When
 you attempt to store a reserved value, FriendlyId raises a
 FriendlyId::SlugGenerationError.
 
+=== Cached slugs
+
+Checking the slugs table all the time has an impact on performance, so as of
+2.3.0, FriendlyId offers slug caching.
+
+This feature can improve the performance of some views by about 25%, and reduce
+memory consumption by about 40% as compared to the same view without cached
+slugs. The biggest improvement will be for "index" type views with many links
+that depend on slugs to generate the URL.
+
+==== Automagic setup:
+
+To enable slug caching, simply add a column named "cached_slug" to your model.
+FriendlyId will automagically use this column if it detects it:
+
+  class AddCachedSlugToUsers < ActiveRecord::Migration
+    def self.up
+      add_column :users, :cached_slug, :string
+    end
+
+    def self.down
+      remove_column :users, :cached_slug
+    end
+  end
+
+Then, redo the slugs:
+
+  rake friendly_id:redo_slugs MODEL=User
+
+This feature exists largely to improve the performance of URL
+generation, the part of Rails where FriendlyId has the biggest
+performance impact. FriendlyId never queries against this column, so
+it's not necessary to add an index on it unless your application does.
+
+Two warnings when using this feature:
+
+*DO NOT* forget to redo the slugs, or else this feature will not work!
+
+Also, this feature uses +attr_protected+ to protect the cached_slug
+column, unless you have already invoked +attr_accessible+. So if you
+wish to use +attr_accessible+, you must invoke it BEFORE you invoke
++has_friendly_id+ in your class.
+
+==== Using a custom column name:
+
+You can also use a different name for the column if you choose, via the
+:cache_column config option:
+
+  class User < ActiveRecord::Base
+    has_friendly_id :name, :use_slug => true, :cache_column => 'my_cached_slug'
+  end
 
 === Scoped Slugs
 
@@ -212,7 +263,7 @@ that uses a non-Roman writing system, your feedback would be most welcome.
   @post.friendly_id # "友好编号在中国"
   @post2 = Post.create(:title => "友好编号在中国")
   @post2.friendly_id # "友好编号在中国--2"
-  
+
 === Custom Slug Generation
 
 While FriendlyId's slug generation options work for most people, you may need
@@ -224,7 +275,7 @@ generation block:
       MySlugGeneratorClass::my_slug_method(text)
     end
   end
-  
+
 FriendlyId will still respect your settings for max length and reserved words,
 but will use your block rather than the baked-in methods to normalize the
 friendly_id text.
@@ -253,13 +304,9 @@ an older version of FriendlyId. Here's how to set it up.
   script/generate friendly_id
   rake db:migrate
 
-2) Load FriendlyId in your app:
+2) Add the gem to config/environment.rb:
 
-  # Rails 2.1 and higher; add this to the gem section of environment.rb:
   config.gem "friendly_id"
-
-  # Rails 2.0; this goes at the bottom of environment.rb
-  require 'friendly_id'
 
 3) Add some code to your models:
 
@@ -283,46 +330,8 @@ rake friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
 == Installing an older version
 
-If you are still on Rails 2.1 or lower, please install version 2.0.4:
-
-gem install friendly_id --version 2.0.4
-
-Note that this version depends on the Unicode gem, which doesn't compile on
-Windows and is incompatible with Ruby 1.9. It also can't be installed on
-Heroku. If these are problems, you'll need to update your application to Rails
-2.2 or higher and use the current release of FriendlyId.
-
-== Upgrading from an older version
-
-If you installed an older version of FriendlyId and want to upgrade to 2.0.x,
-follow these steps:
-
-==== Install the friendly_id Gem:
-
-  sudo gem install friendly_id
-
-==== Add FriendlyId to environment.rb:
-
-===== For Rails 2.1 and higher:
-
-  config.gem "friendly_id"
-
-===== For Rails 2.0:
-
-Add this to the bottom of environment.rb:
-
-  require 'friendly_id'
-
-==== Remove the older version of FriendlyId:
-
-  git rm -rf vendor/plugins/friendly_id
-  svn delete vendor/plugins/friendly_id
-  # or whatever
-
-====  Generate the upgrade migration and run it
-
-  ./script/generate friendly_id_20_upgrade
-  rake db:migrate
+You can download older versions of FriendlyId from Github that work with Rails <
+2.2. These versions are, however, no longer maintained or supported.
 
 == Hacking FriendlyId:
 
@@ -331,13 +340,45 @@ we love pull requests. :-)
 
 == Bugs:
 
-Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/14675-friendly_id].
+Please report them on the {Github issue tracker}[http://github.com/norman/friendly_id/issues]
+for this project.
 
+If you have a bug to report, please include the following information:
+
+* Stack trace and error message.
+* Version information for FriendlyId, Rails and Ruby.
+* Any snippets of relevant model, view or controller code that shows how your are using FriendlyId.
+
+If you are able to, it helps even more if you can fork FriendlyId on Github, and
+add a test that reproduces the error you are experiencing.
 
 == Credits:
 
-FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org],
-{Adrian Mugnolo}[mailto:adrian@randomba.org], and {Emilio Tagua}[mailto:miloops@gmail.com].
+FriendlyId was created by {Norman Clarke}[mailto:norman@njclarke.com],
+{Adrian Mugnolo}[mailto:adrian@mugnolo.com], and {Emilio Tagua}[mailto:miloops@gmail.com].
+
+We are grateful for many contributions from the Ruby and Rails community, in
+particular from the following people:
+
+* Adam Cigánek
+* Alistair Holt
+* Andrew Loe III
+* Bence Nagy
+* Bruno Michel
+* Chris Nolan
+* David Ramalho
+* Diego Carrion
+* Florian Aßmann
+* Harry Love
+* Jesse Crouch
+* Joe Van Dyk
+* Josh Nichols
+* Mikhail Shirkov
+* Nathan Phelps
+* Rob Ingram
+* Sean Abrahams
+* Steve Luscher
+* Tim Kadom
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
 under the MIT license.

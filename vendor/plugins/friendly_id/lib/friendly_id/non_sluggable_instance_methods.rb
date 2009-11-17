@@ -1,6 +1,8 @@
-# encoding: utf-8
-
 module FriendlyId::NonSluggableInstanceMethods
+
+  def self.included(base)
+    base.validate :validate_friendly_id
+  end
 
   attr :found_using_friendly_id
 
@@ -17,7 +19,7 @@ module FriendlyId::NonSluggableInstanceMethods
 
   # Returns the friendly_id.
   def friendly_id
-    send friendly_id_options[:column]
+    send friendly_id_options[:method]
   end
   alias best_id friendly_id
 
@@ -27,10 +29,10 @@ module FriendlyId::NonSluggableInstanceMethods
   end
 
   private
-  
+
   def validate_friendly_id
     if self.class.friendly_id_options[:reserved].include? friendly_id
-      self.errors.add(self.class.friendly_id_options[:column],
+      self.errors.add(self.class.friendly_id_options[:method],
         self.class.friendly_id_options[:reserved_message] % friendly_id)
       return false
     end

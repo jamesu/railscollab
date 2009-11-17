@@ -1,24 +1,15 @@
-# encoding: utf-8
-
 module FriendlyId::SluggableClassMethods
 
   include FriendlyId::Helpers
-  
-  def self.extended(base) #:nodoc:#
-
-    class << base
-      alias_method_chain :find_one, :friendly
-      alias_method_chain :find_some, :friendly
-      alias_method_chain :validate_find_options, :friendly
-    end
-
-  end
 
   # Finds a single record using the friendly id, or the record's id.
-  def find_one_with_friendly(id_or_name, options) #:nodoc:#
+  def find_one(id_or_name, options) #:nodoc:#
 
     scope = options.delete(:scope)
-    return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
+
+    if id_or_name.is_a?(Integer) || id_or_name.kind_of?(ActiveRecord::Base)
+      return super(id_or_name, options)
+    end
 
     find_options = {:select => "#{self.table_name}.*"}
     find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
@@ -35,18 +26,21 @@ module FriendlyId::SluggableClassMethods
 
     if result
       result.finder_slug_name = id_or_name
+    elsif id_or_name.to_i.to_s != id_or_name
+      raise ActiveRecord::RecordNotFound
     else
-      result = find_one_without_friendly id_or_name, options
+      result = super id_or_name, options
     end
 
     result
+
   rescue ActiveRecord::RecordNotFound => e
 
     if friendly_id_options[:scope]
       if !scope
-        e.message << "; expected scope but got none"
+        raise ActiveRecord::RecordNotFound.new("%s; expected scope but got none" % e.message)
       else
-        e.message << " and scope=#{scope}"
+        raise ActiveRecord::RecordNotFound.new("%s and scope=#{scope}" % e.message)
       end
     end
 
@@ -55,7 +49,7 @@ module FriendlyId::SluggableClassMethods
   end
 
   # Finds multiple records using the friendly ids, or the records' ids.
-  def find_some_with_friendly(ids_and_names, options) #:nodoc:#
+  def find_some(ids_and_names, options) #:nodoc:#
 
     slugs, ids = get_slugs_and_ids(ids_and_names, options)
     results = []
@@ -77,7 +71,7 @@ module FriendlyId::SluggableClassMethods
     results
   end
 
-  def validate_find_options_with_friendly(options) #:nodoc:#
+  def validate_find_options(options) #:nodoc:#
     options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
       :order, :select, :readonly, :group, :from, :lock, :having, :scope])
   end

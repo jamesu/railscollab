@@ -2,16 +2,19 @@
 
 require File.dirname(__FILE__) + '/test_helper'
 
-class SluggedModelTest < Test::Unit::TestCase
+class STIModelTest < Test::Unit::TestCase
 
   context "A slugged model using single table inheritance" do
 
     setup do
-      Novel.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :title, :use_slug => true)
-      Novel.delete_all
-      Slug.delete_all
+      Novel.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :title, :use_slug => true)
       @novel = Novel.new :title => "Test novel"
       @novel.save!
+    end
+
+    teardown do
+      Novel.delete_all
+      Slug.delete_all
     end
 
     should "have a slug" do

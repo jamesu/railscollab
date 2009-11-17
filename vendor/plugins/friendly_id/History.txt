@@ -1,3 +1,42 @@
+== 2.2.3 2009-11-12
+* 1 minor fix
+  * Fixed typo in post-install message.
+
+== 2.2.3 2009-11-12
+
+* 4 minor enhancements:
+  * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
+  * Made sure friendly_id generator makes a lib/tasks directory (Josh Nichols)
+  * Finders now accept instances of ActiveRecord::Base, matching AR's behavior (Josh Nichols)
+  * SlugGenerationError now raise when a blank value is passed to strip_diacritics
+
+== 2.2.2 2009-10-26
+
+* 1 minor enhancement:
+  * Fixed Rake tasks creating duplicate slugs and not properly clearing cached slugs (closes GH issues #14 and #15)
+
+== 2.2.1 2009-10-23
+
+* 2 minor enhancements:
+  * slug cache now properly caches the slug sequence (closes GH issue #10)
+  * attr_protected is now only invoked on the cached_slug column if attr_accessible has not already been invoked. (closes GH issue #11)
+
+== 2.2.0 2009-10-19
+
+* 1 major enhancement:
+  *  Added slug caching, offers huge performance boost (Bruno Michel)
+
+* 2 minor enhancements:
+  * Handle Unicode string length correctly (Mikhail Shirkov)
+  * Remove alias_method_chain in favor of super (Diego Carrion)
+
+== 2.1.4 2009-09-01
+
+* 3 minor enhancements:
+  * Fixed upgrade generator not installing rake tasks (Harry Love)
+  * Fixed handling of very large id's (Nathan Phelps)
+  * Fixed long index name on migration (Rob Ingram)
+
 == 2.1.3 2009-06-03
 
 * 1 minor enhancement:
@@ -12,9 +51,9 @@
 == 2.1.1 2009-03-25
 
 * 2 minor enhancements:
-  * Fixed bug with find_some; if a record has old slugs, find_some will no longer return 
+  * Fixed bug with find_some; if a record has old slugs, find_some will no longer return
 multiple copies of that record when finding by numerical ID. (Steve Luscher)
-  * Fixed bug with find_some: you can now find_some with an array of numerical IDs without 
+  * Fixed bug with find_some: you can now find_some with an array of numerical IDs without
 an error being thrown. (Steve Luscher)
 
 == 2.1.0 2009-03-25
@@ -97,7 +136,7 @@ an error being thrown. (Steve Luscher)
 
 == 2008-07-14
 
-* Improved slug generation for friendly id's with apostrophes. (alistairholt)
+* Improved slug generation for friendly id's with apostrophes. (Alistair Holt)
 * Added support for namespaced models in Rakefile. (David Ramalho)
 
 == 2008-06-23

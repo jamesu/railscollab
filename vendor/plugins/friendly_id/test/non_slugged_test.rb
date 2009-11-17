@@ -7,8 +7,11 @@ class NonSluggedTest < Test::Unit::TestCase
   context "A non-slugged model with default FriendlyId options" do
 
     setup do
-      User.delete_all
       @user = User.create!(:login => "joe", :email => "joe@example.org")
+    end
+
+    teardown do
+      User.delete_all
     end
 
     should "have friendly_id options" do
@@ -34,23 +37,23 @@ class NonSluggedTest < Test::Unit::TestCase
     end
 
     should "indicate if it was found by its friendly id" do
-      @user = User.find(@user.friendly_id)
-      assert @user.found_using_friendly_id?
+      user = User.find(@user.friendly_id)
+      assert user.found_using_friendly_id?
     end
 
     should "indicate if it was found by its numeric id" do
-      @user = User.find(@user.id)
-      assert @user.found_using_numeric_id?
+      user = User.find(@user.id)
+      assert user.found_using_numeric_id?
     end
 
     should "indicate if it has a better id" do
-      @user = User.find(@user.id)
-      assert @user.has_better_id?
+      user = User.find(@user.id)
+      assert user.has_better_id?
     end
 
     should "not validate if the friendly_id text is reserved" do
-      @user = User.new(:login => "new", :email => "test@example.org")
-      assert !@user.valid?
+      user = User.new(:login => "new", :email => "test@example.org")
+      assert !user.valid?
     end
 
     should "have always string for a friendly_id" do
@@ -86,9 +89,9 @@ class NonSluggedTest < Test::Unit::TestCase
       end
 
       should "indicate if the results were found using a friendly_id" do
-        @users = User.find([@user.id, @user2.friendly_id], :order => "login ASC")
-        assert @users[0].found_using_friendly_id?
-        assert @users[1].found_using_numeric_id?
+        users = User.find([@user.id, @user2.friendly_id], :order => "login ASC")
+        assert users[0].found_using_friendly_id?
+        assert users[1].found_using_numeric_id?
       end
 
     end

@@ -1,12 +1,10 @@
-#encoding: utf-8
-
 # A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
   before_save :check_for_blank_name, :set_sequence
-  
-  
+
+
   ASCII_APPROXIMATIONS = {
     198 => "AE",
     208 => "D",
@@ -28,10 +26,7 @@ class Slug < ActiveRecord::Base
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     #
     # Note that the Unicode handling in ActiveSupport may fail to process some
-    # characters from Polish, Icelandic and other languages. If your
-    # application uses these languages, check {out this
-    # article}[http://link-coming-soon.com] for information on how to get
-    # better urls in your application.
+    # characters from Polish, Icelandic and other languages.
     def normalize(slug_text)
       return "" if slug_text.nil? || slug_text == ""
       ActiveSupport::Multibyte.proxy_class.new(slug_text.to_s).normalize(:kc).
@@ -42,7 +37,7 @@ class Slug < ActiveRecord::Base
         downcase.
         to_s
     end
-    
+
     def parse(friendly_id)
       name, sequence = friendly_id.split('--')
       sequence ||= "1"
@@ -52,7 +47,8 @@ class Slug < ActiveRecord::Base
     # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
     # from "The Ruby Way."
     def strip_diacritics(string)
-      ActiveSupport::Multibyte.proxy_class.new(string).normalize(:kd).unpack('U*').inject([]) { |a, u| 
+      a = ActiveSupport::Multibyte.proxy_class.new(string || "").normalize(:kd)
+      a.unpack('U*').inject([]) { |a, u|
         if ASCII_APPROXIMATIONS[u]
           a += ASCII_APPROXIMATIONS[u].unpack('U*')
         elsif (u < 0x300 || u > 0x036F)
@@ -63,7 +59,7 @@ class Slug < ActiveRecord::Base
     end
 
 
-    
+
     # Remove non-ascii characters from the string.
     def strip_non_ascii(string)
       strip_diacritics(string).gsub(/[^a-z0-9]+/i, ' ')

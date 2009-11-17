@@ -1,6 +1,19 @@
-# encoding: utf-8
-
 module FriendlyId::SluggableInstanceMethods
+
+  def self.included(base)
+    base.has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+    base.before_save :set_slug
+    base.after_save :set_slug_cache
+    unless base.friendly_id_options[:cache_column]
+      if base.columns.any? { |c| c.name == 'cached_slug' }
+        base.friendly_id_options[:cache_column] = :cached_slug
+      end
+    end
+    # only protect the column if the class is not already using attributes_accessible
+    if base.friendly_id_options[:cache_column] && !base.accessible_attributes
+      base.attr_protected base.friendly_id_options[:cache_column].to_sym
+    end
+  end
 
   NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
 
@@ -13,7 +26,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using one of its friendly ids?
   def found_using_friendly_id?
-    finder_slug
+    !!@finder_slug_name
   end
 
   # Was the record found using its numeric id?
@@ -23,12 +36,20 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using an old friendly id?
   def found_using_outdated_friendly_id?
+    if cache = friendly_id_options[:cache_column]
+      return false if send(cache) == @finder_slug_name
+    end
     finder_slug.id != slug.id
   end
 
   # Was the record found using an old friendly id, or its numeric id?
   def has_better_id?
-    slug and found_using_numeric_id? || found_using_outdated_friendly_id?
+    has_a_slug? and found_using_numeric_id? || found_using_outdated_friendly_id?
+  end
+
+  # Does the record have (at least) one slug?
+  def has_a_slug?
+    @finder_slug_name || slug
   end
 
   # Returns the friendly id.
@@ -47,17 +68,20 @@ module FriendlyId::SluggableInstanceMethods
   # id.
   def slug(reload = false)
     @most_recent_slug = nil if reload
-    @most_recent_slug ||= slugs.first
+    @most_recent_slug ||= slugs.first(:order => "id DESC")
   end
 
   # Returns the friendly id, or if none is available, the numeric id.
   def to_param
+    if cache = friendly_id_options[:cache_column]
+      return read_attribute(cache) || id.to_s
+    end
     slug ? slug.to_friendly_id : id.to_s
   end
 
   # Get the processed string used as the basis of the friendly id.
   def slug_text
-    base = send friendly_id_options[:column]
+    base = send friendly_id_options[:method]
     if self.slug_normalizer_block
       base = self.slug_normalizer_block.call(base)
     else
@@ -69,9 +93,9 @@ module FriendlyId::SluggableInstanceMethods
       end
       base = Slug::normalize(base)
     end
-    
-    if base.length > friendly_id_options[:max_length]
-      base = base[0...friendly_id_options[:max_length]]
+
+    if base.mb_chars.length > friendly_id_options[:max_length]
+      base = base.mb_chars[0...friendly_id_options[:max_length]]
     end
     if friendly_id_options[:reserved].include?(base)
       raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
@@ -79,7 +103,7 @@ module FriendlyId::SluggableInstanceMethods
     return base
   end
 
-  private
+private
 
   def finder_slug=(finder_slug)
     @finder_slug_name = finder_slug.name
@@ -107,8 +131,14 @@ module FriendlyId::SluggableInstanceMethods
       # If we're renaming back to a previously used friendly_id, delete the
       # slug so that we can recycle the name without having to use a sequence.
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
-      slug = slugs.build slug_attributes
-      slug
+      slugs.build slug_attributes
+    end
+  end
+
+  def set_slug_cache
+    if friendly_id_options[:cache_column] && send(friendly_id_options[:cache_column]) != slug.to_friendly_id
+      send "#{friendly_id_options[:cache_column]}=", slug.to_friendly_id
+      send :update_without_callbacks
     end
   end
 
