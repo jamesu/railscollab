@@ -64,11 +64,11 @@ class WikiPagesController < ApplicationController
   end
 
   def find_wiki_page
-    @wiki_page = wiki_pages.find(params[:id], :scope => @active_project)
+    @wiki_page = wiki_pages.find(params[:id], :scope => @active_project.id.to_s)
   end
   
   def find_sidebar_page
-    @wiki_sidebar = wiki_pages.find("sidebar", :scope => @active_project) rescue nil
+    @wiki_sidebar = wiki_pages.find("sidebar", :scope => @active_project.id.to_s) rescue nil
     @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
   end
 end
