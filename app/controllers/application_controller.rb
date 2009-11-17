@@ -24,6 +24,7 @@ require_dependency 'login_system'
 require_dependency 'config/aaf'
 
 class ApplicationController < ActionController::Base
+  include SslRequirement
   include LoginSystem
 
   protect_from_forgery
@@ -35,6 +36,10 @@ class ApplicationController < ActionController::Base
   before_filter :set_time_zone
 
 protected
+
+  def ssl_required?
+	AppConfig.using_ssl
+  end
 
   def error_status(error, message, args={})
   	flash[:error] = error
