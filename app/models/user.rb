@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
 			:secret_access_key => AppConfig.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => 'htc_user_avatar'
+		:bucket => "#{AppConfig.s3_bucket_prefix}user_avatar"
 	} : {})
 	
   has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'

@@ -36,7 +36,7 @@ class ProjectFileRevision < ActiveRecord::Base
 			:secret_access_key => AppConfig.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => 'htc_project_file_revision_data'
+		:bucket => "#{AppConfig.s3_bucket_prefix}project_file_revision_data"
 	} : {})
 
   before_create :process_params

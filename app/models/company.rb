@@ -41,7 +41,7 @@ class Company < ActiveRecord::Base
 			:secret_access_key => AppConfig.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => 'htc_company_logo'
+		:bucket => "#{AppConfig.s3_bucket_prefix}company_logo"
 	} : {})
 
   before_create :process_params
