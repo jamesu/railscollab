@@ -2,13 +2,18 @@ class WikiPage < ActiveRecord::Base
   include ActionController::UrlWriter
   include WikiEngine::Model
   belongs_to :project
-  self.friendly_id_options[:scope] = :project
+  # self.friendly_id_options[:scope] = :project
+  self.friendly_id_options[:scope] = :scope_value
   self.non_versioned_columns << :project_id
   named_scope :main, lambda{ |project| {:conditions => {:main => true, :project_id => project.id}} }
 
   after_create  :process_create
   before_update :process_update_params
   before_destroy :process_destroy
+
+  def scope_value
+	self.project.id.to_s
+  end
 
   def process_create
     ApplicationLog.new_log(self, self.created_by, :add)
