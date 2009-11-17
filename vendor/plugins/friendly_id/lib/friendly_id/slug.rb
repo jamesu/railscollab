@@ -89,7 +89,7 @@ class Slug < ActiveRecord::Base
 
   def set_sequence
     return unless new_record?
-    last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
+    last = Slug.find(:first, :conditions => { :name => name, :scope => "#{scope}",
       :sluggable_type => sluggable_type}, :order => "sequence DESC",
       :select => 'sequence')
     self.sequence = last.sequence + 1 if last
