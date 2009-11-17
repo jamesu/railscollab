@@ -18,7 +18,7 @@ module FriendlyId::SluggableClassMethods
 
     find_options[:conditions] = {
       "#{Slug.table_name}.name"     => name,
-      "#{Slug.table_name}.scope"    => scope,
+      "#{Slug.table_name}.scopes"    => scope,
       "#{Slug.table_name}.sequence" => sequence
     }
 
