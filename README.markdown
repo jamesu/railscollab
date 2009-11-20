@@ -40,7 +40,7 @@ Please refer to the project entry on [OpenSourceRails] [5] for any screenshots o
 
 ## Can I run RailsCollab on Heroku?
 
-Yes you can! Adn this is how:
+Yes you can! And this is how:
 
 1. Run setup script
 
@@ -58,7 +58,7 @@ Yes you can! Adn this is how:
 
     rake heroku:config --app [heroku app name]
 
-5. Lunch in browser
+5. Launch in browser
 
     heroku open
 
