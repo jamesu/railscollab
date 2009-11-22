@@ -63,12 +63,12 @@ pl:
   update_people: Uaktualnij ludzi
   edit_client: Edytuj klienta
   new_logo: Nowe logo
-  update_logo: Zmień logo
+  update_logo: Aktualizuj logo
   forms: Formularze
   add_form: Dodaj formularz
   edit_form: Edytuj formularz
-  add_time: Dodaj termin
-  edit_time: Edytuj termin
+  add_time: Dodaj czas
+  edit_time: Edytuj czas
   edit_user: Edytuj użytkownika
   add_message: Dodaj wiadomość
   edit_message: Edytuj wiadomość
@@ -76,16 +76,16 @@ pl:
   add_category: Dodaj kategorię
   edit_message_category: Edytuj kategorię wiadomości
   edit_category: Edytuj kategorię
-  view_message: Zobacz wiadomość
-  category_messages: "Wiadomości z kategorii {{category}}"
+  view_message: Pokaż wiadomość
+  category_messages: "Wiadomość z kategorii {{category}}"
   add_milestone: Dodaj punkt przełomowy
   edit_milestone: Edytuj punkt przełomowy
   add_task_list: Dodaj listę zadań
   add_task: Dodaj zadanie
   edit_task_list: Edytuj listę zadań
   edit_task: Edytuj zadanie
-  reorder_tasks: Zmień kolejność zadań
-  search_results: Wyniki wyszukiwania
+  reorder_tasks: Przeorganizuj zadania
+  search_results: Wyszukaj w rezutatach
   add_project: Dodaj projekt
   edit_project: Edytuj projekt
   user_card: Wizytówka użytkownika {{user}}
@@ -96,156 +96,156 @@ pl:
   company_card: "Wizytówka firmy {{company}}"
   reset_password: Resetuj hasło
   set_password: Ustaw hasło
-  save_changes: Zapisz zmiany
+  save_changes: Zachowaj hasło
   
   # Feeds
-  recent_milestones_feed: Recent milestones feed
-  recent_milestones_feed_info: Recent milestones for all projects
-  recent_activities_feed: Recent activities feed
-  recent_activities_feed_info: Recent activities for all projects
-  recent_project_milestones_feed: "{{project}} Recent milestones feed"
-  recent_project_milestones_feed_info: "Recent milestones for the {{project}} project"
-  recent_project_activities_feed: "{{project}} Recent activities feed"
-  recent_project_activities_feed_info: "Recent activities for the {{project}} project"
+  recent_milestones_feed: Ostatnio wprowadzone punkty przełomowe
+  recent_milestones_feed_info: Ostatnie punkty przełomowe dla wszystkich projektów
+  recent_activities_feed: Ostatnio wprowadzone czynności
+  recent_activities_feed_info: Ostatnie czynności dla wszystkich projektów
+  recent_project_milestones_feed: "{{project}} Ostatnio wprowadzone punkty przełomowe"
+  recent_project_milestones_feed_info: "Ostatnie punkty przełomowe dla projektu {{project}}"
+  recent_project_activities_feed: "{{project}} Ostatnio wprowadzone czynności"
+  recent_project_activities_feed_info: "Ostatnie czynności dla projektu {{project}}"
   
   # New account steps
-  welcome_to_new_account: Welcome to your newly created account
-  welcome_to_new_account_info: "{{user}}, welcome to your new account. From now on it will always be available on {{url}} (you can bookmark this link). You can get started in a minute following these easy steps:"
-  new_account_step1: "Step 1: Update your company info"
-  new_account_step1_info: "<a href='{{url}}'>Set your company details</a> such as phone and fax number, address, email, homepage etc"
-  new_account_step2: "Step 2: Add team members"
-  new_account_step2_info: "You can <a href='{{url}}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system"
-  new_account_step3: "Step 3: Add client companies and their members"
-  new_account_step3_info: "Now it's time to <a href='{{url}}'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)"
-  new_account_step4: "Step 4: Start a project"
-  new_account_step4_info: "Defining a <a href='{{url}}'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients."
+  welcome_to_new_account: Witamy na Twoim nowo utworzonym koncie
+  welcome_to_new_account_info: "{{user}}, witaj na Swoim nowym koncie. Od tej pory będzie dla ciebie zawsze dostępne pod adresem {{url}} (możesz dodać ten link do zakładek). Możesz zacząć za minutkę po przejściu następujących prostych kroków:"
+  new_account_step1: "Krok 1: Zaktualizuj informacje o Twojej firmie"
+  new_account_step1_info: "<a href='{{url}}'>Tu wstaw informacje firmowe</a> takie jak numer faxu, adres, email, strona firmowa, itp."
+  new_account_step2: "Krok 2: Dodaj członków zespołu"
+  new_account_step2_info: "Możesz <a href='{{url}}'>stworzyć konta użytkowników</a> dla wszystkich członków zespołu (ilość nieograniczona). Każdy z nich otrzyma nazwę użytkownika i hasło dzięki którym będą mogli skorzystać z systemu"
+  new_account_step3: "Krok 3: Dodaj firmy klientów i ich członków"
+  new_account_step3_info: "Nadszedł czas by <a href='{{url}}'>określić firmy klientów</a> (nieograniczona ilość). Następnie możesz dodać do nich członków lub zostawić to szefom ich zespołów. Klienci są podobni do członków Twojej firmy, mają jednakże ograniczony dostęp do zawartości i funkcji (możesz ustawić możliwości dla każdego członka i projektu)"
+  new_account_step4: "Krok 4: Rozpocznij Projekt"
+  new_account_step4_info: "Określenie <a href='{{url}}'>nowego projektu</a> jest proste: wprowadź nazwę i opis (opcjonalnie) i kliknij Wyślij. Możesz następnie określić uprawnienia członków Twojego zespołu i klientów."
   
-  hide_welcome_info: "&raquo; Hide this info permanently"
+  hide_welcome_info: "&raquo; Nigdy więcej nie pokazuj powitania"
   
-  welcome_to_administration: Welcome to the administration panel. Using this tool you can manage your company data, members, clients and projects you are involved in.
+  welcome_to_administration: Witaj w panelu administracyjnym. Za pomocą tego narzędzia możesz zarządzać danymi firmy, członkami, klientami i projektami w których uczestniczą.
   
   # User box
-  welcome_anonymous: "Welcome <strong>Anonymous</strong>"
-  welcome_back: "Welcome back <strong>{{user}}</strong>"
-  logout: Logout
-  are_you_sure_logout: Are you sure you want to log out?
-  running_times: "you have {{count}} running times"
+  welcome_anonymous: "Witaj <strong>Nieznajomy</strong>"
+  welcome_back: "Witaj ponownie <strong>{{user}}</strong>"
+  logout: Wyloguj
+  are_you_sure_logout: Czy aby na pewno chcesz wyjść?
+  running_times: "masz na koncie {{count}} uruchomień"
   
   # Permission names
-  can_manage_messages: Manage messages
-  can_manage_tasks: Manage tasks
-  can_manage_milestones: Manage milestones
-  can_manage_time: Manage times
-  can_upload_files: Upload files
-  can_manage_files: Manage files
-  can_assign_to_owners: Assign tasks to members of owner company
-  can_assign_to_other: Assign tasks to members of other clients
-  can_manage_wiki_pages: Manage wiki pages
+  can_manage_messages: Zarządzaj wiadomościami
+  can_manage_tasks: Zarządzaj zadaniami
+  can_manage_milestones: Zarządzaj punktami przełomowymi
+  can_manage_time: Zarządzaj terminami
+  can_upload_files: Wgraj pliki
+  can_manage_files: Zarządzaj plikami
+  can_assign_to_owners: Przydziel zadania członkom firmy właściciela
+  can_assign_to_other: Przydziel zadania czlonkom innych klientów
+  can_manage_wiki_pages: Zarządzaj stronami wiki
   
   # Status messages
-  login_success: Login successful
-  login_failure: Invalid login
-  invalid_openid_server: "Unable to find openid server for <q>{{openid_url}}</q>"
-  failed_verification_openid_url: "Verification of {{openid_url}} failed"
-  failed_login_openid_url: "Failed login with identity {{openid_url}}"
-  success_login_openid_url: "You have successfully logged in with {{openid_url}} as your identity"
-  verification_failed: Verification failed
-  verification_cancelled: Verification cancelled
-  unknown_response_status: "Unknown response status: {{status}}"
-  invalid_email: Invalid email address
-  invalid_email_not_in_use: Invalid email address
-  password_changed: Password changed
-  insufficient_permissions: Insufficient permissions
-  success_updated_profile: Successfully updated profile
-  success_updated_permissions: Successfully updated permissions
-  success_updated_avatar: Successfully updated avatar
-  error_updating_avatar: Error uploading avatar
-  success_deleted_avatar: Successfully deleted avatar
-  invalid_user: Invalid user
-  invalid_object: Invalid object
-  invalid_comment: Invalid comment
-  success_added_comment_error_files: Successfully added comment, some attachments failed validation
-  success_added_comment: Successfully added comment
-  success_edited_comment_error_files: Successfully updated comment, some attachments failed validation
-  success_edited_comment: Successfully updated comment
-  success_deleted_comment: Successfully deleted comment
-  invalid_company: Invalid company
-  success_added_company: Successfully added company
-  success_added_client: Successfully added client
-  success_edited_client: Successfully updated client
-  success_deleted_client: Successfully deleted client
-  error_deleting_client: Error deleting client
-  no_projects: No projects
-  success_updated_logo: Successfully updated logo
-  error_uploading_logo: Error uploading logo
-  success_deleted_logo: Successfully deleted logo
-  welcome_info_hidden: Welcome info hidden
-  invalid_folder: Invalid folder
-  success_added_folder: Successfully added folder
-  success_edited_folder: Successfully updated folder
-  success_deleted_folder: Successfully deleted folder
-  invalid_file: Invalid file
-  invalid_file_revision: Invalid file revision
-  no_file_revisions: No file revisions
-  success_added_file: Successfully added file
-  success_edited_file: Successfully updated file
-  success_deleted_file: Successfully deleted file
-  success_added_new_file_to_object: Successfully attached new file to object
-  error_adding_file_to_object: Error attaching new file to object
-  success_added_file_to_object: Successfully attached file to object
-  error_adding_file_to_object: Error attaching file to object
-  success_removed_file_from_object: Successfully removed file from object
-  invalid_form: Invalid form
-  error_submitting_form: Error submitting form
-  success_added_form: Successfully added form
-  success_edited_form: Successfully updated form
-  success_deleted_form: Successfully deleted form
-  invalid_message_category: Invalid message category
-  success_added_message_category: Successfully added message category
-  success_edited_message_category: Successfully updated message category
-  success_deleted_message_category: Successfully deleted message category
-  invalid_message: Invalid message
-  success_added_message_failed_attachments: Successfully added message, some attachments failed validation
-  success_added_message: Successfully added message
-  success_edited_message: Successfully updated message
-  success_edited_message_failed_attachments: Successfully updated message, some attachments failed validation
-  success_deleted_message: Successfully deleted message
-  success_subscribed_to_message: Subscribed to message
-  success_unsubscribed_from_message: Unsubscribed from message
-  invalid_milestone: Invalid milestone
-  success_added_milestone: Successfully added milestone
-  success_edited_milestone: Successfully updated milestone
-  success_deleted_milestone: Successfully deleted milestone
-  milestone_already_completed: Milestone already completed
-  milestone_already_open: Milestone already open
-  error_saving: Error saving
-  invalid_project: Invalid project
-  success_added_project: Successfully added project
-  success_edited_project: Successfully updated project
-  success_deleted_project: Successfully deleted project
-  project_already_completed: Project already completed
-  project_already_open: Project already open
-  invalid_task_list: Invalid task list
-  success_added_task_list: Successfully added task list
-  success_edited_task_list: Successfully updated task list
-  success_deleted_task_list: Successfully deleted task list
-  invalid_task: Invalid task
-  success_added_task: Successfully added task
-  success_edited_task: Successfully updated task
-  success_deleted_task: Successfully deleted task
-  task_already_completed: Task already completed
-  task_already_open: Task already open
+  login_success: Logowanie zakończone sukcesem
+  login_failure: Nieprawidłowy login
+  invalid_openid_server: "Nie można znaleźć serwera openid dla <q>{{openid_url}}</q>"
+  failed_verification_openid_url: "Potwierdzanie {{openid_url}} zakończone niepowodzeniem"
+  failed_login_openid_url: "Nieudane logowanie do tożsamości {{openid_url}}"
+  success_login_openid_url: "Pomyślne logowanie do tożsamości {{openid_url}}"
+  verification_failed: Potwierdzanie zakończone niepowodzeniem
+  verification_cancelled: Potwierdzanie przerwane
+  unknown_response_status: "Nieznany status odpowiedzi: {{status}}"
+  invalid_email: Nieprawidłowy adres email
+  invalid_email_not_in_use: Nieprawidłowy adres email
+  password_changed: Hasło zostało zmienione
+  insufficient_permissions: Niewystarczające uprawnienia
+  success_updated_profile: Pomyślna aktualizacja profilu
+  success_updated_permissions: Pomyślna aktualizacja uprawnień
+  success_updated_avatar: Pomyślna aktualizacja awatara
+  error_updating_avatar: Błąd aktualizacji awatara
+  success_deleted_avatar: Awatar pomyślnie usunięty
+  invalid_user: Nieprawidłowy użytkownik
+  invalid_object: Nieprawidłowy obiekt
+  invalid_comment: Nieprawidłowy komentaż
+  success_added_comment_error_files: Komentarz dodany pomyślnie, niektóre załączniki nie spełniają wymagań
+  success_added_comment: Komentaż dodany pomyślnie
+  success_edited_comment_error_files: Komentarz zaktualizowany pomyślnie, niektóre załączniki nie spełniają wymagań
+  success_edited_comment: Komentarz zaktualizowany pomyślnie
+  success_deleted_comment: Komentarz usunięty pomyślnie
+  invalid_company: Nieprawidłowa firma
+  success_added_company: Firma dodana pomyślnie
+  success_added_client: Klient dodany pomyślnie
+  success_edited_client: Klient zaktualizowany pomyślnie
+  success_deleted_client: Klient usunięty pomyślnie
+  error_deleting_client: Błąd usuwania klienta
+  no_projects: Brak projektów
+  success_updated_logo: Logo zaktualizowane pomyślnie
+  error_uploading_logo: Błąd wgrywania loga
+  success_deleted_logo: Logo usunięte pomyślnie
+  welcome_info_hidden: Powitanie ukryte
+  invalid_folder: Nieprawidłowy folder
+  success_added_folder: Folder dodany pomyślnie
+  success_edited_folder: Folder zaktualizowany pomyślnie
+  success_deleted_folder: Folder usunięty pomyślnie
+  invalid_file: Nieprawidłowy plik
+  invalid_file_revision: Nieprawidłowa wersja pliku
+  no_file_revisions: Brak wersji pliku
+  success_added_file: Plik dodany pomyślnie
+  success_edited_file: Plik zaktualizowany pomyślnie
+  success_deleted_file: Plik usunięty pomyślnie
+  success_added_new_file_to_object: Nowy plik dołączony do obiektu pomyślnie
+  error_adding_file_to_object: Błąd dołącznia pliku do obiektu
+  success_added_file_to_object: Plik dołączony do obiektu pomyślnie
+  error_adding_file_to_object: Błąd dołącznia pliku do obiektu
+  success_removed_file_from_object: Plik pomyślnie usunięty z obiektu
+  invalid_form: Nieprawidłowy formularz
+  error_submitting_form: Błąd wysyłania formularza
+  success_added_form: Formularz dodany pomyślnie
+  success_edited_form: Formularz zaktualizowany pomyślnie
+  success_deleted_form: Formularz usunięty pomyślnie
+  invalid_message_category: Nieprawidłowa kategoria wiadomości
+  success_added_message_category: Kategoria wiadomości dodana pomyślnie
+  success_edited_message_category: Kategoria wiadomości zaktualizowana pomyślnie
+  success_deleted_message_category: Kategoria wiadomości usunięta pomyślnie
+  invalid_message: Nieprawidłowa wiadomość
+  success_added_message_failed_attachments: Wiadomość dodana pomyślnie, niektóre załączniki nie spełniają wymagań
+  success_added_message: Wiadomość dodana pomyślnie
+  success_edited_message: Wiadomość zaktualizowana pomyślnie
+  success_edited_message_failed_attachments: Wiadomość zaktualizowana pomyślnie, niektóre załączniki nie spełniają wymagań
+  success_deleted_message: Wiadomość usunięta pomyślnie
+  success_subscribed_to_message: Dopisano do wiadomości
+  success_unsubscribed_from_message: Wypisano z wiadomości
+  invalid_milestone: Nieprawidłowy punkt przełomowy
+  success_added_milestone: Punkt przełomowy dodany pomyślnie
+  success_edited_milestone: Punkt przełomowy zaktualizowany pomyślnie
+  success_deleted_milestone: Punkt przełomowy usunięty pomyślnie
+  milestone_already_completed: Punkt przełomowy został już osiągnięty
+  milestone_already_open: Punkt przełomowy jest już otwarty
+  error_saving: Błąd zapisu
+  invalid_project: Nieprawidłowy projekt
+  success_added_project: Projekt dodany pomyślnie
+  success_edited_project: Projekt zaktualizowany pomyślnie
+  success_deleted_project: Projekt usunięty pomyślnie
+  project_already_completed: Projekt został już zakończony
+  project_already_open: Projekt jest już otwarty
+  invalid_task_list: Nieprawidłowa lista zadań
+  success_added_task_list: Lista zadań dodana pomyślnie
+  success_edited_task_list: Lista zadań zaktualizowana pomyślnie
+  success_deleted_task_list: Lista zadań usunięta pomyślnie
+  invalid_task: Nieprawidłowe zadanie
+  success_added_task: Zadnie dodane pomyślnie
+  success_edited_task: Zadnie zaktualizowane pomyślnie
+  success_deleted_task: Zadnie usunięte pomyślnie
+  task_already_completed: Zadanie zostało już wykonane
+  task_already_open: Zadanie jest już otwarte
   invalid_time: Invalid time record
-  success_added_time: Successfully added time record
-  success_edited_time: Successfully updated time record
-  success_deleted_time: Successfully deleted time record
-  success_stopped_time: Successfully stopped time record
-  success_added_user: Successfully added user
-  success_deleted_user: "Successfully deleted user {{name}}"
-  unimplemented: Unimplemented
-  invalid_request: Invalid request
+  success_added_time: Znacznik czasu dodany pomyślnie
+  success_edited_time: Znacznik czasu zaktualizowany pomyślnie
+  success_deleted_time: Znacznik czasu usunięty pomyślnie
+  success_stopped_time: Znacznik czasu zatrzymany pomyślnie
+  success_added_user: Użytkownik dodany pomyślnie
+  success_deleted_user: "Usunięcie użytkownika {{name}} zakończyło się sukcesem"
+  unimplemented: Niezaimplementowano
+  invalid_request: Nieprawidłowe żądanie
   
-    # Stuff which appears in the sidebar
+  # Stuff which appears in the sidebar
   online_users: Użytkownicy online
   users_active_in_last_n_minutes: "Użytkownicy obecni w ciągu ostatnich {{number}} minut:"
   my_projects_sidebar_link: "&raquo; Moje projekty"
@@ -335,46 +335,46 @@ pl:
   milestone_in: "{{milestone}} w {{project}}"
   
   # Message view
-  from: From
+  from: Od
   message_created_with_user: "{{time}} | {{user}}"
-  comments: Comments
-  no_messages_in_project: There are no messages in this project
-  no_messages_in_category: There are no messages in this category
-  edit: Edit
-  delete: Delete
-  remove: Remove
-  read_more: "Read more..."
+  comments: Komentarze
+  no_messages_in_project: Nie ma wiadomości dotyczących tego projektu
+  no_messages_in_category: Brak wiadomości w tej kategorii
+  edit: Edytuj
+  delete: Skasuj
+  remove: Usuń
+  read_more: "Czytaj więcej..."
   message_seperator: "****"
-  message_confirm_delete: "Are you sure you want to delete this message?"
+  message_confirm_delete: "Na pewno chcesz usunąć tę wiadomość?"
   
   # Task form
-  private_task_list: Private task list
-  assign_to: Assign to
-  priority: Priority
-  description: Description
-  estimated_hours: Estimated hours
-  task_estimated_hours: "[{{hours}} estimated hours]"
-  is_private_list: Is private
-  is_private_list_info: "(Private task lists are visible only to owner company members. Members of client companies will not be able to see them)"
-  task_list: Task list
-  or: or
-  cancel: Cancel
+  private_task_list: Prywatna lista zadań
+  assign_to: Przydzielony do
+  priority: Ważność
+  description: Opis
+  estimated_hours: przybliżony czas w godzinach
+  task_estimated_hours: "[{{godziny}} przybliżone godziny]"
+  is_private_list: Prywatne
+  is_private_list_info: "(Prywatne listy zadań są widoczne dla firmy posiadającej. Pracownicy firmy klienckiej nie będą uprawnieni do ich oglądania.)"
+  task_list: Lista zadań
+  or: lub
+  cancel: Skasuj
   
   
   # Task view
-  no_open_task_lists_for_project: There are no open task lists for this project
-  order: Order
-  task_list_confirm_delete: "Are you sure you want to delete this task list?"
-  task_delete_confirm: "Are you sure you want to delete this task?"
-  view_all_completed_tasks: View all completed tasks
-  recent_completed_tasks: Recently completed tasks
-  completed_tasks: Completed tasks
-  task_mark_open: Mark task as open
-  mark_task_completed: Mark task as completed
-  no_tasks_assigned_to_you: There are no tasks assigned to you
-  edit_tasks: Edit tasks
-  task: Task
-  task_created_by: "Created by {{user}}"
+  no_open_task_lists_for_project: Nie ma otwartych list zadań dla tego projektu
+  order: Zamów
+  task_list_confirm_delete: "Jesteś pewien, że chcesz skasować tę listę zadań?"
+  task_delete_confirm: "Jesteś pewien, że chcesz skasować to zadanie?"
+  view_all_completed_tasks: Pokaż wszystkie ukończone zadania
+  recent_completed_tasks: Ostatnio ukończone zadania
+  completed_tasks: Ukończone zadania
+  task_mark_open: Zaznacz zadanie jako otwarte
+  mark_task_completed: Zaznacz zadanie jako zakończone
+  no_tasks_assigned_to_you: Nie ma żadnych przypisanych Tobie zadań
+  edit_tasks: Edytuj zadania
+  task: Zadania
+  task_created_by: "Stworzone przez {{user}}"
   
   # Milestone form
   private_milestone: Private milestone
@@ -501,41 +501,41 @@ pl:
   contact_info: Informacje nt. kontaktu
   
   # Dashboard
-  started_on: Started on
-  no_active_projects: There are no active projects
-  companies_involved_in: "Companies involved in project"
-  tasks_in_list: "In {{list}}"
-  anyone: Anyone
-  none: None
-  project: Project
-  page: Page
+  started_on: Rozpoczęte
+  no_active_projects: Nie ma aktywnych projektów
+  companies_involved_in: "Firmy zaangażowane w projekt"
+  tasks_in_list: "W {{list}}"
+  anyone: Ktokolwiek
+  none: Nikt
+  project: Projekt
+  page: Strona
   
   # Admin
-  project_confirm_delete: "Are you sure you want to delete this project?"
-  no_projects_owned_by_company: "There are no projects owned by this company"
-  active_project: Active project
-  finished_project: Finished project
-  delete_client_confirm: "Are you sure you want to delete this client?"
-  no_clients_in_company: "No clients are present for this company"
-  users: Users
+  project_confirm_delete: "Jesteś pewien, że chcesz skasować ten projekt?"
+  no_projects_owned_by_company: "Nie ma żadnych projektów, których firma byłaby właścicielem"
+  active_project: Aktywne projekty
+  finished_project: Projekty zakończone
+  delete_client_confirm: "Jesteś pewien, że chcesz skasować tego klienta?"
+  no_clients_in_company: "Nie ma żadnych klientów dla tej firmy"
+  users: Użytkownicy
   
   # Comments
-  comment: Comment
-  add_comment: Add comment
-  edit_comment: Edit comment
-  post_comment: Post comment
-  private_comment: Private comment
-  private_comment_info: "Private comments are visible only to owner company members. Members of client companies will not be able to see them"
-  comment_delete_confirm: "Are you sure you want to delete this comment?"
-  no_comments_for_object: No comments are posted for this object
-  comment_posted_with_user: "Posted on {{time}} by {{user}}"
-  comment_posted: "Posted on {{time}} by <strong>{{name}}</strong>"
+  comment: Komentarz
+  add_comment: Dodaj komentarz
+  edit_comment: Edytuj komentarz
+  post_comment: Zamieść komentarz
+  private_comment: Prywatny komentarz
+  private_comment_info: "Prywatne komentarze są widoczne tylko dla członków firmy właścicielskiej. Członkowie firmy-klienta nie będą uprawnieni do ich oglądania."
+  comment_delete_confirm: "Jesteś pewien, że chcesz skasować ten komentarz?"
+  no_comments_for_object: Brak komentarzy dla tego obiektu.
+  comment_posted_with_user: "Zamieszczone o {{time}} przez {{user}}"
+  comment_posted: "Zamieszczone o {{time}} przez <strong>{{name}}</strong>"
   
   # User
-  generate_password: Generate password
-  send_account_email_notification: "Send email notification?"
-  send_account_email_notication_info:  "If you select \"Yes\" the user will receive an email with a welcome message and login parameters"
-  owner: Owner
+  generate_password: Wygeneruj hasło
+  send_account_email_notification: "Wysłać powiadomienie e-mailem?"
+  send_account_email_notication_info:  "Jeśli wybierzesz \"Yes\" użytkownik otrzyma e=mail z wiadomością powitalną i parametrami logowania"
+  owner: Właściciel
   
   # Project
   project_show_description_in_overview: Pokaż opis na stronie podglądowej projektu
@@ -628,36 +628,36 @@ pl:
   upload_attach_to_message: Załaduj nowy plik i załącz go do wiadomości
   select_file: Wybierz plik
   
-  yesno_yes: "Yes"
-  yesno_no: "No"
-  new_password_required: New password requires
-  does_not_match: Does not match
-  has_insufficient_permissions: Has insufficient permissions
-  required: Required
-  is_incorrect: Is incorrect
-  not_allowed: Not allowed
-  not_part_of_project: Not part of project
-  search: Search
-  search_box_default: "Search..."
-  search_displaying_results_for: "Displaying {{start}}...{{finish}} out of {{total}} results for {{search}}."
-  search_no_matching_objects: "There are no objects which match '<strong>{{search}}</strong>'"
+  yesno_yes: "Tak"
+  yesno_no: "Nie"
+  new_password_required: Wymagane nowe hasło
+  does_not_match: Nie pasuje
+  has_insufficient_permissions: Brak odpowiednich uprawnień
+  required: Wymagane
+  is_incorrect: Nieprawidłowe
+  not_allowed: Brak zezwolenia
+  not_part_of_project: Nie jest częścią projektu
+  search: Wyszukaj
+  search_box_default: "Wyszukaj..."
+  search_displaying_results_for: "Wyświetlanie {{start}}...{{finish}} z {{total}} rezultatów dla {{search}}."
+  search_no_matching_objects: "Nie ma obiektów pasujących do '<strong>{{search}}</strong>'"
   
   
   # Configuration messages
-  invalid_category: Invalid category
-  config_category_empty: Category empty
-  success_updated_config_category: "Successfully updated configuration"
+  invalid_category: Nieprawidłowa kategoria
+  config_category_empty: Pusta kategoria
+  success_updated_config_category: "Udana konfiguracja uaktualnienia"
   
   # Configuration categories
   # category_<name>_name
   # category_<name>_description
   category_system_name: System
   category_system_description: "System variables. Defaults should suffice"
-  category_general_name: General
+  category_general_name: Ogólny
   category_general_description: "General RailsCollab Settings"
   category_mailing_name: Mailing
   category_mailing_description: "Options for handling email sending"
-  category_services_name: Services
+  category_services_name: Usługi
   category_services_description: "Options for handling third party services"
   
   # Configuration options
