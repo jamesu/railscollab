@@ -8,7 +8,7 @@
 # Note: make sure you have keys in config/config.yml
 ActionController::Base.session = {
   :key => AppConfig.session_key,
-  :secret      => AppConfig.session_secret
+  :secret => AppConfig.session_secret
 }
 
 # Use the database for sessions instead of the cookie-based default,

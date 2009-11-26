@@ -31,14 +31,14 @@ module ConfigSystem
     # Determine what we are running under
     AppConfig.server = self.detect_server
 
-	# Load from app_keys.yml for session keys
-	session_key_settings = YAML.load_file("config/app_keys.yml") rescue {}
-	# Load from config.yml if it's present
-	config_yml_settings = YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}
+	  # Load from app_keys.yml for session keys
+	  session_key_settings = YAML.load_file("config/app_keys.yml") rescue {}
+	  # Load from config.yml if it's present
+	  config_yml_settings = YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}
 	
-	session_key_settings.merge(config_yml_settings).merge(ENV).each do |key, value|
-		AppConfig.send("#{key}=", value)
-	end
+	  session_key_settings.merge(config_yml_settings).merge(ENV).each do |key, value|
+		  AppConfig.send("#{key}=", value)
+	  end
   end
   
   def self.detect_server
