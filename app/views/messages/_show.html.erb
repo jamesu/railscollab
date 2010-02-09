@@ -10,6 +10,8 @@
       <div class="messageAuthor"><%= :message_created_with_user.l_with_args(
             :time => format_usertime(message.created_on, :message_created_format),
             :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))) %></div>
+<% else %>
+      <div class="messageAuthor"><%= format_usertime(message.created_on, :message_created_format) %></div>
 <% end %>
       <div class="messageText">
         <%= textilize message.text %>
