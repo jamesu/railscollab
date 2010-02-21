@@ -32,6 +32,10 @@ module ApplicationHelper
 
     "<div class=\"advancedPagination\"><span>#{:page.l}: </span><span>(#{values})</span></div>"
   end
+  
+  def icon_url(filename)
+    "/themes/#{AppConfig.site_theme}/images/icons/#{filename}.gif"
+  end
 
   def checkbox_link(link, checked=false, hint=nil, attrs={})
     icon_url = checked ? "/themes/#{AppConfig.site_theme}/images/icons/checked.gif" : "/themes/#{AppConfig.site_theme}/images/icons/not-checked.gif"
