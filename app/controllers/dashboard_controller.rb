@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
   after_filter  :user_track
 
   def index
-    when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
+    when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
       if @active_projects.length > 0
         include_private = @logged_user.member_of_owner?
 
@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
           { :project_id => project_ids } :
           { :project_id => project_ids, :is_private => false }
 
-        @activity_log = ApplicationLog.all(:conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => AppConfig.project_logs_per_page)
+        @activity_log = ApplicationLog.all(:conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => Rails.configuration.project_logs_per_page)
       else
         @activity_log = []
       end
@@ -133,12 +133,12 @@ class DashboardController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => AppConfig.search_results_per_page})
+      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => Rails.configuration.search_results_per_page})
 
       @tag_names = []
       @pagination = []
-      @start_search_results = AppConfig.search_results_per_page * (current_page-1)
-      (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
+      @start_search_results = Rails.configuration.search_results_per_page * (current_page-1)
+      (@total_search_results.to_f / Rails.configuration.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
       @last_search = :search_box_default.l
       @search_results = []

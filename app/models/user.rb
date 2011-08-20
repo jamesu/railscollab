@@ -47,15 +47,15 @@ class User < ActiveRecord::Base
 	
 	has_attached_file :avatar, {
 		:styles => { :thumb => "50x50" },
-		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
+		:storage => Rails.configuration.attach_to_s3 ? :s3 : :filesystem,
 		:default_url => ''
-	}.merge(AppConfig.attach_to_s3 ? {
+	}.merge(Rails.configuration.attach_to_s3 ? {
 		:s3_credentials => {
-			:access_key_id => AppConfig.s3_access_key,
-			:secret_access_key => AppConfig.s3_secret_key
+			:access_key_id => Rails.configuration.s3_access_key,
+			:secret_access_key => Rails.configuration.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => "#{AppConfig.s3_bucket_prefix}user_avatar"
+		:bucket => "#{Rails.configuration.s3_bucket_prefix}user_avatar"
 	} : {})
 	
   has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'
@@ -288,7 +288,7 @@ class User < ActiveRecord::Base
   end
 
   def is_anonymous?
-    AppConfig.allow_anonymous and self.username == 'Anonymous'
+    Rails.configuration.allow_anonymous and self.username == 'Anonymous'
   end
 
   def is_part_of(project)
@@ -351,7 +351,7 @@ class User < ActiveRecord::Base
 
   def avatar_url
     if !avatar?
-      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{AppConfig.site_url}/themes/#{AppConfig.site_theme}/images/avatar.gif")
+      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.site_url}/themes/#{Rails.configuration.site_theme}/images/avatar.gif")
     else
       avatar.url(:thumb)
     end

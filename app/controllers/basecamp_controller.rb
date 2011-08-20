@@ -1021,7 +1021,7 @@ class BasecampController < ApplicationController
   # /feed/recent_items_rss
   def recent_items_rss
   	@activity_log = ApplicationLog.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
- 	@activity_url = AppConfig.site_url + '/feed/recent_items_rss'
+ 	@activity_url = Rails.configuration.site_url + '/feed/recent_items_rss'
 
   	render :text => '404 Not found', :status => 404 unless @activity_log.length > 0
   	render :template => 'feed/recent_activities'
@@ -1030,7 +1030,7 @@ class BasecampController < ApplicationController
   # /projects/#{id}/feed/recent_items_rss
   def recent_project_items_rss
   	@activity_log = ApplicationLog.logs_for(@active_project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
- 	@activity_url = AppConfig.site_url + "/projects/#{@active_project.id}/feed/recent_items_rss"
+ 	@activity_url = Rails.configuration.site_url + "/projects/#{@active_project.id}/feed/recent_items_rss"
 
   	render :text => '404 Not found', :status => 404 unless @activity_log.length > 0
   	render :template => 'feed/recent_activities'

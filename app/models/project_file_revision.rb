@@ -28,15 +28,15 @@ class ProjectFileRevision < ActiveRecord::Base
 	
 	has_attached_file :data, {
 		:styles => { :thumb => "50x50" },
-		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
+		:storage => Rails.configuration.attach_to_s3 ? :s3 : :filesystem,
 		:default_url => ''
-	}.merge(AppConfig.attach_to_s3 ? {
+	}.merge(Rails.configuration.attach_to_s3 ? {
 		:s3_credentials => {
-			:access_key_id => AppConfig.s3_access_key,
-			:secret_access_key => AppConfig.s3_secret_key
+			:access_key_id => Rails.configuration.s3_access_key,
+			:secret_access_key => Rails.configuration.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => "#{AppConfig.s3_bucket_prefix}project_file_revision_data"
+		:bucket => "#{Rails.configuration.s3_bucket_prefix}project_file_revision_data"
 	} : {})
 
   before_create :process_params
@@ -87,7 +87,7 @@ class ProjectFileRevision < ActiveRecord::Base
   def filetype_icon_url
     if !has_thumbnail
       ext = self.file_type ? self.file_type.icon : "unknown.png"
-      return "/themes/#{AppConfig.site_theme}/images/filetypes/#{ext}"
+      return "/themes/#{Rails.configuration.site_theme}/images/filetypes/#{ext}"
     else
       data.url(:thumb)
     end

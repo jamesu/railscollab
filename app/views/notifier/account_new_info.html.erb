@@ -4,7 +4,7 @@
 
 <%= :notifier_greeting.l_with_args(:user => @user.display_name) %>
 
-<%= :notifier_new_account.l_with_args(:user => @user.created_by.display_name, :site => AppConfig.site_name) %>
+<%= :notifier_new_account.l_with_args(:user => @user.created_by.display_name, :site => Rails.configuration.site_name) %>
 
 <%= :notifier_new_account_access.l %>
 
@@ -13,7 +13,7 @@
 
 <%= :notifier_new_account_access_login.l_with_args(:login => @user.username) %>
 <% else %>
-<%= AppConfig.site_url %>
+<%= Rails.configuration.site_url %>
 
 <%= :notifier_new_account_credentials.l %>
 
@@ -21,4 +21,4 @@
 <%= :password.l %>: <%= @password %>
 <% end %>
 --
-<%= AppConfig.site_url %>
+<%= Rails.configuration.site_url %>

@@ -159,7 +159,7 @@ class FoldersController < ApplicationController
         @page = params[:page].to_i
         @page = 0 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => AppConfig.files_per_page, :current => @page}, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => Rails.configuration.files_per_page, :current => @page}, :order => "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.page_count.times {|page| @pagination << page+1}
         
@@ -173,7 +173,7 @@ class FoldersController < ApplicationController
         @files = ProjectFile.find(:all,
                                   :conditions => file_conditions,
                                   :offset => params[:offset],
-                                  :limit => params[:limit] || AppConfig.files_per_page)
+                                  :limit => params[:limit] || Rails.configuration.files_per_page)
         
         render :xml => @files.to_xml(:only => [:id,
                                                :filename,

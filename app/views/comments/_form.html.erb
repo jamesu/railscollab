@@ -32,6 +32,6 @@
 <% if ProjectFile.can_be_created_by(@logged_user, @active_project) %>
   <%= render :partial => 'files/attach_file' %>
   <script type="text/javascript">
-    file_form_attach_init(<%= AppConfig.max_attachments %>);
+    file_form_attach_init(<%= Rails.configuration.max_attachments %>);
   </script>
 <% end %>

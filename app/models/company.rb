@@ -33,15 +33,15 @@ class Company < ActiveRecord::Base
 
 	has_attached_file :logo, {
 		:styles => { :thumb => "50x50" },
-		:storage => AppConfig.attach_to_s3 ? :s3 : :filesystem,
+		:storage => Rails.configuration.attach_to_s3 ? :s3 : :filesystem,
 		:default_url => ''
-	}.merge(AppConfig.attach_to_s3 ? {
+	}.merge(Rails.configuration.attach_to_s3 ? {
 		:s3_credentials => {
-			:access_key_id => AppConfig.s3_access_key,
-			:secret_access_key => AppConfig.s3_secret_key
+			:access_key_id => Rails.configuration.s3_access_key,
+			:secret_access_key => Rails.configuration.s3_secret_key
 		},
 		:path => ":attachment/:id/:style.:extension",
-		:bucket => "#{AppConfig.s3_bucket_prefix}company_logo"
+		:bucket => "#{Rails.configuration.s3_bucket_prefix}company_logo"
 	} : {})
 
   before_create :process_params
@@ -112,7 +112,7 @@ class Company < ActiveRecord::Base
 
   def logo_url
     if !logo?
-      "/themes/#{AppConfig.site_theme}/images/logo.gif"
+      "/themes/#{Rails.configuration.site_theme}/images/logo.gif"
     else
       logo.url(:thumb)
     end

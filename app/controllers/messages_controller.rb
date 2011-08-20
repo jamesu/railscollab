@@ -62,7 +62,7 @@ class MessagesController < ApplicationController
         
         @messages = @active_project.project_messages.find(:all, 
                                                           :conditions => msg_conditions, 
-                                                          :page => {:size => AppConfig.messages_per_page, :current => @page})
+                                                          :page => {:size => Rails.configuration.messages_per_page, :current => @page})
         
         @pagination = []
         @messages.page_count.times {|page| @pagination << page+1}
@@ -79,7 +79,7 @@ class MessagesController < ApplicationController
         @messages = @active_project.project_messages.find(:all, 
                                                           :conditions => msg_conditions, 
                                                           :offset => params[:offset],
-                                                          :limit => params[:limit] || AppConfig.messages_per_page)
+                                                          :limit => params[:limit] || Rails.configuration.messages_per_page)
         render :xml => @messages.to_xml(:root => 'messages')
       }
     end
@@ -123,7 +123,7 @@ class MessagesController < ApplicationController
     if @category
       @message.category_id = @category.id
     else
-      @category = @active_project.project_message_categories.find(:first, :conditions => ['name = ?', AppConfig.default_project_message_category])
+      @category = @active_project.project_message_categories.find(:first, :conditions => ['name = ?', Rails.configuration.default_project_message_category])
     end
 
     @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))

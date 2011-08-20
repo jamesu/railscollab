@@ -34,7 +34,7 @@
         <div id="crumbsBlock">
           <%= render :partial => 'layouts/crumbs', :object => dashboard_crumbs %>
           
-          <% if AppConfig.search_enabled %>
+          <% if Rails.configuration.search_enabled %>
           <div id="searchBox">
             <%= form_tag :controller => 'dashboard', :action => 'search' %>
               <div>

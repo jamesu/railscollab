@@ -21,7 +21,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 require_dependency 'login_system'
-require_dependency 'config/aaf'
 
 class ApplicationController < ActionController::Base
   include SslRequirement
@@ -38,7 +37,7 @@ class ApplicationController < ActionController::Base
 protected
 
   def ssl_required?
-	AppConfig.using_ssl
+	Rails.configuration.using_ssl
   end
 
   def error_status(error, message, args={})

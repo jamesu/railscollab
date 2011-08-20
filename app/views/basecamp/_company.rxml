@@ -17,6 +17,6 @@ xml.company do
 	xml.tag!('can-see-private', company.is_owner?, :type => 'boolean')
 	
 	if company.is_owner?
-		xml.tag!('url-name', AppConfig.site_url)
+		xml.tag!('url-name', Rails.configuration.site_url)
 	end
 end

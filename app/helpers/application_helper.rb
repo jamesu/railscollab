@@ -20,7 +20,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def site_name
-    html_escape AppConfig.site_name
+    html_escape Rails.configuration.site_name
   end
 
   def product_signature
@@ -34,11 +34,11 @@ module ApplicationHelper
   end
   
   def icon_url(filename)
-    "/themes/#{AppConfig.site_theme}/images/icons/#{filename}.gif"
+    "/themes/#{Rails.configuration.site_theme}/images/icons/#{filename}.gif"
   end
 
   def checkbox_link(link, checked=false, hint=nil, attrs={})
-    icon_url = checked ? "/themes/#{AppConfig.site_theme}/images/icons/checked.gif" : "/themes/#{AppConfig.site_theme}/images/icons/not-checked.gif"
+    icon_url = checked ? "/themes/#{Rails.configuration.site_theme}/images/icons/checked.gif" : "/themes/#{Rails.configuration.site_theme}/images/icons/not-checked.gif"
     
     method = attrs[:method] || :post
     link_to "<img src='#{icon_url}' alt='' />", link, attrs.merge({:method => method, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
@@ -47,7 +47,7 @@ module ApplicationHelper
   def render_icon(filename, alt, attrs={})
     attr_values = attrs.keys.collect{ |a| "#{a}='#{attrs[a]}'" }.join(' ')
 
-    "<img src='/themes/#{AppConfig.site_theme}/images/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>"
+    "<img src='/themes/#{Rails.configuration.site_theme}/images/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>"
   end
 
   def action_list(actions)

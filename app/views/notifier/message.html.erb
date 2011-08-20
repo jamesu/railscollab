@@ -4,10 +4,10 @@
 
 <%= :notifier_new_message.l_with_args(:title => @message.title, :project => @message.project.name) %>
 
-- <%= @message.object_url(AppConfig.site_url) %>
+- <%= @message.object_url(Rails.configuration.site_url) %>
 
 <%= :company.l %>: <%= Company.owner.name %>
 <%= :project.l %>: <%= @message.project.name %>
 
 --
-<%= AppConfig.site_url %>
+<%= Rails.configuration.site_url %>

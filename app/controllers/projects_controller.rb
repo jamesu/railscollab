@@ -41,8 +41,8 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * AppConfig.minutes_to_activity_log_expire) do
-          @project_log_entries = (@logged_user.member_of_owner? ? @project.application_logs : @project.application_logs.public)[0..(AppConfig.project_logs_per_page-1)]
+        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.application_logs : @project.application_logs.public)[0..(Rails.configuration.project_logs_per_page-1)]
         end
 
         @time_now = Time.zone.now
@@ -75,12 +75,12 @@ class ProjectsController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => AppConfig.search_results_per_page})
+      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.search_results_per_page})
 
       @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
       @pagination = []
-      @start_search_results = AppConfig.search_results_per_page * (current_page-1)
-      (@total_search_results.to_f / AppConfig.search_results_per_page).ceil.times {|page| @pagination << page+1}
+      @start_search_results = Rails.configuration.search_results_per_page * (current_page-1)
+      (@total_search_results.to_f / Rails.configuration.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
       @last_search = :search_box_default.l
       @search_results = []
@@ -258,14 +258,14 @@ class ProjectsController < ApplicationController
       @project.users << @logged_user
 
       # Add default folders
-      AppConfig.default_project_folders.each do |folder_name|
+      Rails.configuration.default_project_folders.each do |folder_name|
         folder = ProjectFolder.new(:name => folder_name)
         folder.project = @project
         folder.save
       end
 
       # Add default message categories
-      AppConfig.default_project_message_categories.each do |category_name|
+      Rails.configuration.default_project_message_categories.each do |category_name|
         category = ProjectMessageCategory.new(:name => category_name)
         category.project = @project
         category.save

@@ -11,7 +11,7 @@
         <label for="fileFormFolder"><%= :folder.l %>: <span class="label_required">*</span></label>
         <%= select 'file', 'folder_id', ProjectFolder.select_list(@active_project), {}, {:id => 'fileFormFolder'} %>
       </div>
-      <p><%= :file_upload_info.l_with_args(:max => format_size(AppConfig.max_upload_size)) %></p>
+      <p><%= :file_upload_info.l_with_args(:max => format_size(Rails.configuration.max_upload_size)) %></p>
     </div>
   </div>
 <% else %>
@@ -75,7 +75,7 @@
     <div class="optionControl"><%= yesno_toggle 'file', 'comments_enabled', :class => 'yes_no', :id => 'fileFormEnableComments' %></div>
     <div class="optionDesc"><%= :enable_comments_info.l %></div>
   </div>
-<% if AppConfig.allow_anonymous %>  
+<% if Rails.configuration.allow_anonymous %>  
   <div class="objectOption">
     <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'file', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'fileFormEnableAnonymousComments' %></div>

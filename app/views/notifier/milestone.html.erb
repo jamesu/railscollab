@@ -4,10 +4,10 @@
 
 <%= :notifier_new_milestone.l_with_args(:name => @milestone.name, :project => @milestone.project.name) %>
 
-- <%= @milestone.object_url(AppConfig.site_url) %>
+- <%= @milestone.object_url(Rails.configuration.site_url) %>
 
 <%= :company.l %>: <%= Company.owner.name %>
 <%= :project.l %>: <%= @milestone.project.name %>
 
 --
-<%= AppConfig.site_url %>
+<%= Rails.configuration.site_url %>

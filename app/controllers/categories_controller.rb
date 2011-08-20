@@ -193,7 +193,7 @@ class CategoriesController < ApplicationController
         
         @messages = @category.project_messages.find(:all, 
                                                     :conditions => msg_conditions, 
-                                                    :page => {:size => AppConfig.messages_per_page, :current => @page})
+                                                    :page => {:size => Rails.configuration.messages_per_page, :current => @page})
         
         @pagination = []
         @messages.page_count.times {|page| @pagination << page+1}
@@ -209,7 +209,7 @@ class CategoriesController < ApplicationController
         @messages = @category.project_messages.find(:all, 
                                                     :conditions => msg_conditions, 
                                                     :offset => params[:offset],
-                                                    :limit => params[:limit] || AppConfig.messages_per_page)
+                                                    :limit => params[:limit] || Rails.configuration.messages_per_page)
         
         render :xml => @messages.to_xml(:only => [:id,
                                                   :title,

@@ -29,7 +29,7 @@ module ConfigSystem
     try_libs
     
     # Determine what we are running under
-    AppConfig.server = self.detect_server
+    Rails.configuration.server = self.detect_server
 
 	  # Load from app_keys.yml for session keys
 	  session_key_settings = YAML.load_file("config/app_keys.yml") rescue {}
@@ -37,7 +37,7 @@ module ConfigSystem
 	  config_yml_settings = YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}
 	
 	  session_key_settings.merge(config_yml_settings).merge(ENV).each do |key, value|
-		  AppConfig.send("#{key}=", value)
+		  Rails.configuration.send("#{key}=", value)
 	  end
   end
   
@@ -82,13 +82,13 @@ module ConfigSystem
     ActionView::Helpers::AssetTagHelper.module_eval do
        alias_method :av_image_path, :image_path
        def image_path(source)
-         av_image_path("/themes/#{AppConfig.site_theme}/images/#{source}")
+         av_image_path("/themes/#{Rails.configuration.site_theme}/images/#{source}")
        end
        alias_method :path_to_image, :image_path
        
        alias_method :av_stylesheet_path, :stylesheet_path
        def stylesheet_path(source)
-         av_stylesheet_path("/themes/#{AppConfig.site_theme}/stylesheets/#{source}")
+         av_stylesheet_path("/themes/#{Rails.configuration.site_theme}/stylesheets/#{source}")
        end
        alias_method :path_to_stylesheet, :stylesheet_path
     end    
@@ -110,10 +110,10 @@ module ConfigSystem
     overrides = load_overrides
     
     begin
-      ConfigOption.dump_config(AppConfig)
+      ConfigOption.dump_config(Rails.configuration)
       unless overrides.common.nil?
         overrides.common.keys.each do |key|
-          AppConfig.send("#{overrides.common[key]}=", overrides.common[key])
+          Rails.configuration.send("#{overrides.common[key]}=", overrides.common[key])
         end
       end
       
@@ -126,20 +126,20 @@ module ConfigSystem
     
     # ActionMailer stuff
     begin
-      ActionMailer::Base.delivery_method                 = AppConfig.notification_email_method.to_sym
-      ActionMailer::Base.smtp_settings                   = AppConfig.notification_email_smtp.symbolize_keys.delete_if{ |key, value| value.nil? or value.empty? }
+      ActionMailer::Base.delivery_method                 = Rails.configuration.notification_email_method.to_sym
+      ActionMailer::Base.smtp_settings                   = Rails.configuration.notification_email_smtp.symbolize_keys.delete_if{ |key, value| value.nil? or value.empty? }
       ActionMailer::Base.smtp_settings[:authentication] = ActionMailer::Base.smtp_settings[:authentication].to_sym
-      ActionMailer::Base.sendmail_settings               = AppConfig.notification_email_sendmail
+      ActionMailer::Base.sendmail_settings               = Rails.configuration.notification_email_sendmail
     rescue Exception
     end
     
     # Theming
-    ActionController::Base.asset_host = AppConfig.use_asset_hosts ? Proc.new { |source|
-        "assets#{rand(3)}.#{AppConfig.asset_hosts_url}"
+    ActionController::Base.asset_host = Rails.configuration.use_asset_hosts ? Proc.new { |source|
+        "assets#{rand(3)}.#{Rails.configuration.asset_hosts_url}"
     } : nil
     
     # Globalite
-    I18n.locale = I18n.default_locale= AppConfig.default_language.nil? ? 'en-US' : AppConfig.default_language
+    I18n.locale = I18n.default_locale= Rails.configuration.default_language.nil? ? 'en-US' : Rails.configuration.default_language
   end
   
   def self.try_libs

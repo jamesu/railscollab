@@ -22,7 +22,7 @@
   
   <script type="text/javascript">
     file_form_attach_update_action();
-    file_form_attach_init(<%= AppConfig.max_attachments %>);
+    file_form_attach_init(<%= Rails.configuration.max_attachments %>);
   </script>
   
   <button class="submit" type="submit"><%= :attach_files.l %></button>

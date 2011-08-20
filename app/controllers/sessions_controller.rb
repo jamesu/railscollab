@@ -60,7 +60,7 @@ class SessionsController < ApplicationController
   end
 
   def openid_login
-    unless AppConfig.allow_openid
+    unless Rails.configuration.allow_openid
       error_status(true, :invalid_request)
       redirect_to :action => 'new'
       return
@@ -94,7 +94,7 @@ class SessionsController < ApplicationController
   end
 
   def use_openid
-    @use_openid = (AppConfig.allow_openid and params['use_openid'].to_i == 1)
+    @use_openid = (Rails.configuration.allow_openid and params['use_openid'].to_i == 1)
   end
 
   def protect?(action)

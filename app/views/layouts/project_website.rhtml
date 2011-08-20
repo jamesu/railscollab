@@ -49,7 +49,7 @@
         <div id="crumbsBlock">
           <%= render :partial => 'layouts/crumbs', :object => project_crumbs %>
           
-          <% if AppConfig.search_enabled %>
+          <% if Rails.configuration.search_enabled %>
           <div id="searchBox">
             <%= form_tag search_project_path(:id => @active_project.id) %>
               <div>

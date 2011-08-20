@@ -17,17 +17,17 @@
 #++
 
 class Notifier < ActionMailer::Base
-  default_url_options[:host] = AppConfig.site_url
+  default_url_options[:host] = Rails.configuration.site_url
 
   def message(user, msg, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_message.l_with_args :title => msg.title}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_message.l_with_args :title => msg.title}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:message => msg,
 		:user => user,
 		:sent_on => sent_at
@@ -35,14 +35,14 @@ class Notifier < ActionMailer::Base
   end
 
   def task(user, task, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_task.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_task.l}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:task => task,
 		:user => user,
 		:sent_on => sent_at
@@ -50,14 +50,14 @@ class Notifier < ActionMailer::Base
   end
 
   def milestone(user, milestone, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_milestone.l_with_args :name => milestone.name}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_milestone.l_with_args :name => milestone.name}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:milestone => milestone,
 		:user => user,
 		:sent_on => sent_at
@@ -65,14 +65,14 @@ class Notifier < ActionMailer::Base
   end
 
   def message_comment(user, comment, msg, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_comment.l_with_args :title => msg.title}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_comment.l_with_args :title => msg.title}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:message => msg,
 		:comment => comment,
 		:user => user,
@@ -81,28 +81,28 @@ class Notifier < ActionMailer::Base
   end
   
   def password_reset(user, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_reset_password_request.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_reset_password_request.l}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:user => user,
 		:sent_on => sent_at
 	}
   end
   
   def account_new_info(user, password, sent_at = Time.now)
-    @subject    = "#{AppConfig.site_name} - #{:notifier_subject_new_account.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_account.l}"
     @recipients = user.email
-    @from       = AppConfig.notification_email_address
+    @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => AppConfig.site_name,
+		:site_name => Rails.configuration.site_name,
 		:user => user,
 		:password => password,
 		:sent_on => sent_at

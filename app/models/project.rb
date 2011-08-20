@@ -200,7 +200,7 @@ class Project < ActiveRecord::Base
 
   def self.search(query, is_private, projects, options={}, tag_search=false)
     results = []
-    return results, 0 unless AppConfig.search_enabled
+    return results, 0 unless Rails.configuration.search_enabled
 
     project_ids = projects.collect { |project| project.id }.join('|')
     real_query = if is_private

@@ -78,7 +78,7 @@ class Comment < ActiveRecord::Base
 	  	
 	  	if self.created_by == user and !user.is_anonymous?
 	  		now = Time.now.utc
-		    return (now <= (self.created_on + (60 * AppConfig.minutes_to_comment_edit_expire)))
+		    return (now <= (self.created_on + (60 * Rails.configuration.minutes_to_comment_edit_expire)))
 	    end
 	  end
 	  

@@ -104,7 +104,7 @@ module LoginSystem
     # Don't exist? what a pity!
     if @logged_user.nil?
       # Check to see if we accept anonymous logins...
-      if AppConfig.allow_anonymous
+      if Rails.configuration.allow_anonymous
         @logged_user = User.first(:conditions => ['username = ?', 'Anonymous'])
         if @logged_user.nil?
           session['user_id'] = nil

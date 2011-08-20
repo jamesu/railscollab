@@ -42,7 +42,7 @@ class TimesController < ApplicationController
     
         @times = @project.project_times.find(:all, 
                                              :conditions => @time_conditions, 
-                                             :page => {:size => AppConfig.times_per_page, :current => @current_page}, 
+                                             :page => {:size => Rails.configuration.times_per_page, :current => @current_page}, 
                                              :order => "#{@sort_type} #{@sort_order}")
         
         @pagination = []
@@ -52,7 +52,7 @@ class TimesController < ApplicationController
       format.xml  {
         @times = @project.project_times.find(:all, :conditions => @time_conditions,
                                                    :offset => params[:offset],
-                                                   :limit => params[:limit] || AppConfig.times_per_page, 
+                                                   :limit => params[:limit] || Rails.configuration.times_per_page, 
                                                    :order => "#{@sort_type} #{@sort_order}")
         
         render :xml => @times.to_xml(:root => 'times')
