@@ -1,77 +1,139 @@
-ActionController::Routing::Routes.draw do |map|
+Railscollab::Application.routes.draw do
   root :to => 'dashboard#index'
 
   # feed url's
-  match 'feed/:user/:token/:action.:format',          :controller => 'feed'
-  match 'feed/:user/:token/:action.:project.:format', :controller => 'feed'
+  match 'feed/:user/:token/:action.:format',  :controller => 'feed'
+  match 'feed/:user/:token/:action.::format', :controller => 'feed'
   
   # The rest of the simple controllers
   %w[dashboard].each do |controller|
-  	map.connect "#{controller}/:action/:id",        :controller => controller
-  	map.connect "#{controller}/:action/:id.format", :controller => controller
+    match "#{controller}/:action/:id",        :controller => controller
+    match "#{controller}/:action/:id.format", :controller => controller
   end
 
-  map.resource :session, :only => [:new, :create, :destroy]
-  map.login 'login', :controller => 'sessions', :action => 'new'
-  map.logout 'logout', :controller => 'sessions', :action => 'destroy', :method => :delete
+  resource :session, :only => [:new, :create, :destroy]
+  match 'login', :controller => 'sessions', :action => 'new'
+  match 'logout', :controller => 'sessions', :action => 'destroy', :method => :delete
     
   # project & project object url's
-  map.resources :projects,
-                          :member => { :people => :get,
-                                       :search => [:get, :post],
-                                       :users => [:delete],
-                                       :companies => [:delete],
-                                       :complete => :put,
-                                       :open => :put,
-                                       :permissions => [:get, :put]},
-                          :has_many => [:tags]
+  resources :projects do
+    member do
+      get :people
+      get :search
+      post :search
+      delete :users
+      delete :companies
+      put :complete
+      put :open
+      get :permissions
+      put :permissions
+    end
+    
+    resources :tags
+  end
   
   # Nested routes don't seem to work with path_prefix...
-  map.with_options :path_prefix => 'projects/:active_project' do |project|
-    project.resources :task_lists,
-                               :member => {:reorder => :any}
-    project.resources :tasks, :path_prefix => 'projects/:active_project/task_lists/:task_list_id',
-                          :member => {:status => :put},
-                          :has_many => [:comments]
+  scope 'projects/:active_project' do
+    resources :task_lists do
+      member do
+        get :reorder
+        post :reorder
+        put :reorder
+        delete :reorder
+      end
+    end
     
-    WikiEngine.draw_for project
+    resources :tasks, :path_prefix => 'projects/:active_project/task_lists/:task_list_id' do
+      member do
+        put :status
+      end
+      
+      resources :comments
+    end
+    
+    #WikiEngine.draw_for project
 
-    project.resources :comments
+    resources :comments
     # Note: filter by category is done via "posts" on the category controller
-    project.resources :messages,
-                           :member => {:unsubscribe => :put, :subscribe => :put},
-                           :has_many => [:comments]
+    resources :messages do
+      member do
+        put :unsubscribe
+        put :subscribe
+      end
+      
+      resources :comments
+    end
   
-    project.resources :categories, :member => {:posts => :get}
+    resources :categories do
+      get :posts
+    end
+    
+    resources :folders do
+      member do
+        get :files
+      end
+    end
+    
+    resources :files do
+      member do 
+        get :download
+        get :attach
+        put :attach
+        put :detatch
+      end
+      resources :comments
+    end
   
-    project.resources :folders, :member => {:files => :get}
-  
-    project.resources :files,
-                        :member => {:download => :get, :attach => [:get, :put], :detatch => :put},
-                        :has_many => [:comments]
-  
-    project.resources :milestones, :member => {:open => :put, :complete => :put}
-  
-    project.resources :times,
-                        :member => {:stop => :put},
-                        :collection => {:by_task => :get}
+    resources :milestones do
+      member do 
+        put :open
+        put :complete
+      end
+    end
+    
+    resources :times do
+      member do
+        put :stop
+      end
+      collection do
+        put :by_task
+      end
+    end
   end
   
  
-  map.resource :password, :only => [:new, :create]
-  map.resources :users, :member => {:avatar => [:get, :put, :delete],
-                                    :permissions => [:get, :put]},
-                        :collection => {:current => :get} do |users|
-    users.resource :password, :only => [:edit, :update]
+  resource :password, :only => [:new, :create]
+  resources :users do
+    member do
+      get :avatar
+      put :avatar
+      delete :avatar
+      get :permissions
+      put :permissions
+    end
+    
+    collection do
+      get :current
+    end
+    
+    resource :password, :only => [:edit, :update]
   end
 
-  map.resources :companies, :member => {:logo => [:get, :put, :delete],
-                                        :hide_welcome_info => :put,
-                                        :permissions => [:get, :put]}
-  map.resources :configurations, :only => [:index, :edit, :update]
-  map.resources :tools, :only => [:index]
+  resources :companies do
+    member do 
+      get :logo
+      put :logo
+      delete :logo
+      put :hide_welcome_info
+      get :permissions
+      put :permissions
+    end
+  end
+  
+  resources :configurations, :only => [:index, :edit, :update]
+  resources :tools, :only => [:index]
 
-  map.administration 'administration', :controller => 'administration', :action => 'index'
+  match 'administration', :controller => 'administration', :action => 'index', :as => :administration
 
   # Install the default route as the lowest priority.
   #map.connect ':controller/:action/:id.:format'
