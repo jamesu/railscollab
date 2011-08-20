@@ -6,6 +6,7 @@ gem 'cancan'
 gem 'sass-rails', "~> 3.1.0.rc"
 gem 'haml'
 gem 'uglifier'
+gem 'paperclip'
 
 #group :test, :development do
 #  gem 'rspec-rails', '~> 2.3.1'
