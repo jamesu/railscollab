@@ -18,7 +18,7 @@
 #++
 
 class Company < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   belongs_to :client_of, :class_name => 'Company', :foreign_key => 'client_of_id'
 

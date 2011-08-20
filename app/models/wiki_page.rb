@@ -1,5 +1,5 @@
 class WikiPage < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
   include WikiEngine::Model
   belongs_to :project
   # self.friendly_id_options[:scope] = :project

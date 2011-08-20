@@ -18,7 +18,7 @@
 #++
 
 class ProjectTaskList < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   belongs_to :project_milestone, :foreign_key => 'milestone_id'
   belongs_to :project

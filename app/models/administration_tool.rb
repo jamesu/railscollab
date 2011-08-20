@@ -18,7 +18,7 @@
 #++
 
 class AdministrationTool < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
   validates_uniqueness_of :name
 
   def self.admin_list

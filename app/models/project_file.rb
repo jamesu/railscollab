@@ -18,7 +18,7 @@
 #++
 
 class ProjectFile < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   belongs_to :project
   belongs_to :project_folder, :foreign_key => 'folder_id', :counter_cache => true

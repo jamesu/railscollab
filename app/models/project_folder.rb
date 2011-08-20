@@ -18,7 +18,7 @@
 #++
 
 class ProjectFolder < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   belongs_to :project
 

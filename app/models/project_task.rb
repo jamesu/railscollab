@@ -18,7 +18,7 @@
 #++
 
 class ProjectTask < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   def project; self.task_list.project; end
   belongs_to :task_list, :class_name => 'ProjectTaskList', :foreign_key => 'task_list_id'

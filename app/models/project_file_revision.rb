@@ -18,7 +18,7 @@
 #++
 
 class ProjectFileRevision < ActiveRecord::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
 
   belongs_to :project_file, :foreign_key => 'file_id'
   belongs_to :file_type,    :foreign_key => 'file_type_id'
