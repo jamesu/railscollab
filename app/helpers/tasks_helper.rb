@@ -25,7 +25,7 @@ module TasksHelper
     case action_name
       when 'new', 'create' then :add_task
       when 'edit', 'update' then :edit_task
-      when 'show' then truncate(@task.text, 25)
+      when 'show' then truncate(@task.text, :length => 25)
       else super
     end
   end

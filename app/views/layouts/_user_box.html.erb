@@ -2,7 +2,7 @@
 <% if user.is_anonymous? %>
   <%= :welcome_anonymous.l %> (<%= link_to(:login.l, logout_path) %>),
 <% else %>
-  <%= :welcome_back.l_with_args(:user => h(user.display_name)) %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>)
+  <%= :welcome_back.l_with_args(:user => h(user.display_name)).html_safe %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>)
 <% end %>
   <div id="running_times_count" style="display:<%= @running_times.empty? ? 'none' : 'block' %>;">
   <span><%= :running_times.l_with_args(:count => @running_times.size) %></span> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>

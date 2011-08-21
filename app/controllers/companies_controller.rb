@@ -162,7 +162,7 @@ class CompaniesController < ApplicationController
       return
   	end
 
-    case request.method
+    case request.method_symbol
     when :put
       project_list = params[:project]
       project_list ||= []
@@ -188,7 +188,7 @@ class CompaniesController < ApplicationController
   def logo
     return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
     
-    case request.method
+    case request.method_symbol
     when :put
       company_attribs = params[:company]
 

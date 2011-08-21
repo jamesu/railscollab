@@ -12,7 +12,7 @@
       <% if not ['Comment', 'ProjectMessage'].include?(application_logs.rel_object_type) %>
       <b><%= application_logs.friendly_action %>:</b>
       <% end %>
-      <%= application_logs.rel_object.nil? ? h(truncate(application_logs.object_name, 50)) : link_to(h(truncate(application_logs.object_name, 50)), application_logs.rel_object.object_url) %>
+      <%= application_logs.rel_object.nil? ? h(truncate(application_logs.object_name, :length => 50)) : link_to(h(truncate(application_logs.object_name, :length => 50)), application_logs.rel_object.object_url) %>
       </span>
 
 <% if show_project_column %>
@@ -39,14 +39,14 @@
 <% else %>
     <td class="logTakenOnBy">
     <% if application_logs.is_today? %>
-        <%= :action_today_with_time.l_with_args(:time => format_usertime(application_logs.created_on, :action_today_fomat)) %>
+        <%= :action_today_with_time.l_with_args(:time => format_usertime(application_logs.created_on, :action_today_fomat)).html_safe %>
     <% elsif application_logs.is_yesterday? %>
         <%= :action_yesterday.l %>
     <% else %>
         <%= format_usertime(application_logs.created_on, :action_past_format) %>
     <% end %>
     <% if not application_logs.taken_by.nil? %>
-    <%= :action_by.l_with_args :user => link_to(h(application_logs.taken_by.display_name), user_path(:id => application_logs.taken_by.id)) %>
+    <%= :action_by.l_with_args(:user => link_to(h(application_logs.taken_by.display_name), user_path(:id => application_logs.taken_by.id))) .html_safe %>
     <% end %>
     </td>
 <% end %>

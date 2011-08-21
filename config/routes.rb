@@ -1,16 +1,12 @@
 Railscollab::Application.routes.draw do
-  root :to => 'dashboard#index'
-
   # feed url's
   match 'feed/:user/:token/:action.:format',  :controller => 'feed'
   match 'feed/:user/:token/:action.::format', :controller => 'feed'
   
   # The rest of the simple controllers
-  %w[dashboard].each do |controller|
-    match "#{controller}/:action/:id",        :controller => controller
-    match "#{controller}/:action/:id.format", :controller => controller
-  end
-
+  match "dashboard/:action(/:id)",        :controller => 'dashboard'
+  match "dashboard/:action/:id.format", :controller => 'dashboard'
+  
   resource :session, :only => [:new, :create, :destroy]
   match 'login', :controller => 'sessions', :action => 'new'
   match 'logout', :controller => 'sessions', :action => 'destroy', :method => :delete
@@ -141,7 +137,5 @@ Railscollab::Application.routes.draw do
 
   match 'administration', :controller => 'administration', :action => 'index', :as => :administration
 
-  # Install the default route as the lowest priority.
-  #map.connect ':controller/:action/:id.:format'
-  #map.connect ':controller/:action/:id'
+  root :to => 'dashboard#index'
 end

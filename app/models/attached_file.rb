@@ -17,11 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'composite_primary_keys'
-
 class AttachedFile < ActiveRecord::Base
-  set_primary_keys :rel_object_type, :rel_object_id, :file_id
-
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	
 	belongs_to :project_file, :foreign_key => 'file_id'

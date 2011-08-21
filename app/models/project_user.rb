@@ -17,11 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'composite_primary_keys'
-
 class ProjectUser < ActiveRecord::Base
-  set_primary_keys :project_id, :user_id
-
   belongs_to :user
   belongs_to :project
 

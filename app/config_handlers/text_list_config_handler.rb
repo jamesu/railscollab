@@ -25,12 +25,12 @@ class TextListConfigHandler < ConfigHandler
 	end
 	
 	def value=(val)
-		if val.class == Array:
+		if val.class == Array
 			@rawValue = val.join("\r\n")
 		else
 			# Clean input
-		    res = []
-		    val.to_s.each_line { |l| res << l.strip }
+			res = []
+			val.to_s.each_line { |l| res << l.strip }
 			@rawValue = res.uniq.reject{ |el| !el.empty? }.join("\r\n")
 		end
 	end

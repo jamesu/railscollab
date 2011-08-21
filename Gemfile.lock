@@ -44,6 +44,7 @@ GEM
     builder (3.0.0)
     cancan (1.6.5)
     cocaine (0.2.0)
+    dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (1.2.0)
       multi_json (~> 1.0)
@@ -118,6 +119,7 @@ PLATFORMS
 DEPENDENCIES
   cancan
   choices!
+  dynamic_form
   haml
   paperclip
   pg

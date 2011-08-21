@@ -302,7 +302,7 @@ class FilesController < ApplicationController
       return
     end
 
-    case request.method
+    case request.method_symbol
     when :put
       attach_attribs = params[:attach]
 

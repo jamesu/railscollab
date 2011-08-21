@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   include LoginSystem
 
   protect_from_forgery
+  clear_helpers
   helper :navigation
 
   before_filter :reload_owner
@@ -81,7 +82,7 @@ protected
 
   def user_track
     unless @logged_user.nil?
-      store_location if request.method == :get and request.format == :html
+      store_location if request.method_symbol == :get and request.format == :html
       @logged_user.update_attribute('last_visit', Time.now.utc)
     end
 

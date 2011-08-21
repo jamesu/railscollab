@@ -35,9 +35,9 @@ class ProjectTime < ActiveRecord::Base
   
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   
-  named_scope :running, :conditions => 'start_date IS NOT NULL AND done_date IS NULL'
+  scope :running, :conditions => 'start_date IS NOT NULL AND done_date IS NULL'
 
-  before_validation_on_create  :process_params
+  before_validation :process_params, :on => :create
   after_create   :process_create
   before_update  :process_update_params
   before_destroy :process_destroy

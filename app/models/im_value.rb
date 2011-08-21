@@ -16,11 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'composite_primary_keys'
-
 class ImValue < ActiveRecord::Base
 	set_table_name 'user_im_values'
-  set_primary_keys :user_id, :im_type_id
 	
 	belongs_to :user
 	belongs_to :im_type

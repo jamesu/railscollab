@@ -82,7 +82,7 @@ module ProjectItemsHelper
     items = {}
     task_lists.each do |task_list|
       list = filter.nil? ? task_list.project_tasks : task_list.project_tasks.reject(&filter)
-      items[task_list.name] = list.collect {|task| [truncate(task.text, 50), task.id.to_s]}
+      items[task_list.name] = list.collect {|task| [truncate(task.text, :length => 50), task.id.to_s]}
     end
 
     content_tag(:option, :none.l, :value => 0) + grouped_options_for_select(items, options)

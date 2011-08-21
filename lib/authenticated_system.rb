@@ -64,7 +64,7 @@ module AuthenticatedSystem
     def access_denied
       respond_to do |format|
         format.html do
-          store_location if request.method == :get
+          store_location if request.method_symbol == :get
           if @token_login.nil?
             redirect_to '/login'
           else

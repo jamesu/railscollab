@@ -251,7 +251,7 @@ class UsersController < ApplicationController
   def avatar
     return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
 
-    case request.method
+    case request.method_symbol
     when :put
       user_attribs = params[:user]
 
@@ -311,7 +311,7 @@ class UsersController < ApplicationController
     @projects = @user.company.projects
     @permissions = ProjectUser.permission_names()
 
-    case request.method
+    case request.method_symbol
     when :put
       update_project_permissions(@user, params[:user_project], params[:project_permission], @projects)
       #ApplicationLog.new_log(@project, @logged_user, :edit, true)

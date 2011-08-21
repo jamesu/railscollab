@@ -18,8 +18,8 @@
 #++
 
 class DashboardController < ApplicationController
-
   after_filter  :user_track
+  helper :dashboard
 
   def index
     when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do

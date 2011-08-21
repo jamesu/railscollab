@@ -30,7 +30,7 @@ class ProjectTaskList < ActiveRecord::Base
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
 
-  before_validation_on_create  :process_params
+  before_validation :process_params, :on => :create
   after_create   :process_create
   before_update  :process_update_params
   after_update   :update_tags

@@ -30,24 +30,24 @@ module ApplicationHelper
   def pagination_links(url, ids)
     values = ids.collect{ |id| "<a href=\"#{url}page=#{id}\">#{id}</a>" }.join(' | ')
 
-    "<div class=\"advancedPagination\"><span>#{:page.l}: </span><span>(#{values})</span></div>"
+    "<div class=\"advancedPagination\"><span>#{:page.l}: </span><span>(#{values})</span></div>".html_safe
   end
   
   def icon_url(filename)
-    "/themes/#{Rails.configuration.site_theme}/images/icons/#{filename}.gif"
+    "/images/icons/#{filename}.gif"
   end
 
   def checkbox_link(link, checked=false, hint=nil, attrs={})
-    icon_url = checked ? "/themes/#{Rails.configuration.site_theme}/images/icons/checked.gif" : "/themes/#{Rails.configuration.site_theme}/images/icons/not-checked.gif"
+    icon_url = checked ? "/images/icons/checked.gif" : "/images/icons/not-checked.gif"
     
     method = attrs[:method] || :post
-    link_to "<img src='#{icon_url}' alt='' />", link, attrs.merge({:method => method, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
+    link_to "<img src='#{icon_url}' alt='' />".html_safe, link, attrs.merge({:method => method, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
   end
 
   def render_icon(filename, alt, attrs={})
     attr_values = attrs.keys.collect{ |a| "#{a}='#{attrs[a]}'" }.join(' ')
 
-    "<img src='/themes/#{Rails.configuration.site_theme}/images/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>"
+    "<img src='/images/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>".html_safe
   end
 
   def action_list(actions)
@@ -76,7 +76,7 @@ module ApplicationHelper
 
     tags.collect do |tag|
       link_to h(tag), project_tag_path(object.project_id, CGI.escape(tag))
-    end.join(', ')
+    end.join(', ').html_safe
   end
 
   def format_size(value)
@@ -95,16 +95,16 @@ module ApplicationHelper
 
   def yesno_toggle(object_name, method, options = {})
     radio_button(object_name, method, "true", options.merge({:id => "#{options[:id]}Yes"}))    +
-    " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> " +
+    " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> ".html_safe +
     radio_button(object_name, method, "false", options.merge({:id => "#{options[:id]}No"}))    +
-    " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>"
+    " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>".html_safe
   end
 
   def yesno_toggle_tag(name, is_yes, options = {})
     radio_button_tag(name, "1", is_yes, options.merge({:id => "#{options[:id]}Yes"})) +
-      " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> " +
+      " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{:yesno_yes.l}</label> ".html_safe +
       radio_button_tag(name, "0", !is_yes, options.merge({:id => "#{options[:id]}No"})) +
-      " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>"
+      " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{:yesno_no.l}</label>".html_safe
   end
 	
 	def actions_for_user(user)
@@ -221,7 +221,7 @@ module ApplicationHelper
       end
       "<tr>#{columns}</tr>"
     end
-    "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>"
+    "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>".html_safe
   end
   
   # offset: Use date.wday, so use 0 to start the week in sunday
@@ -298,7 +298,7 @@ module ApplicationHelper
       ''
     end
     
-    "<div class=\"#{classname}\">#{content} #{list}</div>"
+    "<div class=\"#{classname}\">#{content} #{list}</div>".html_safe
   end
 
   def textilize(text)

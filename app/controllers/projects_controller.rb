@@ -115,7 +115,7 @@ class ProjectsController < ApplicationController
   def permissions
     return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
-    case request.method
+    case request.method_symbol
     when :get
       @project_users = @project.users
       @user_projects = @logged_user.projects
@@ -191,7 +191,7 @@ class ProjectsController < ApplicationController
   def users
     return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
-    case request.method
+    case request.method_symbol
     when :delete
       user = User.find(params[:user_id])
       unless user.owner_of_owner?
@@ -208,7 +208,7 @@ class ProjectsController < ApplicationController
   def companies
     return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
 
-    case request.method
+    case request.method_symbol
     when :delete
       company = Company.find(params[:company_id])
       unless company.is_owner?

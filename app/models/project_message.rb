@@ -41,7 +41,7 @@ class ProjectMessage < ActiveRecord::Base
 
   has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
 
-  before_validation_on_create :process_params
+  before_validation :process_params, :on => :create
   after_create  :process_create
   before_update :process_update_params
   before_destroy :process_destroy
