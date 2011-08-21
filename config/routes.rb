@@ -51,7 +51,13 @@ Railscollab::Application.routes.draw do
       resources :comments
     end
     
-    #WikiEngine.draw_for project
+    resources :wiki_pages do
+      collection do
+        put :preview
+        get :list
+      end
+    end
+    match 'wiki_pages/:id/:version', :controller => 'wiki_pages', :action => 'show', :conditions => {:method => :get}, :as => :version_wiki_page
 
     resources :comments
     # Note: filter by category is done via "posts" on the category controller
