@@ -67,7 +67,7 @@ module ApplicationHelper
       else
         nil
       end
-    end.compact.join(' | ')
+    end.compact.join(' | ').html_safe
   end
 
   def tag_list(object)
@@ -219,9 +219,9 @@ module ApplicationHelper
             "<th class=\"month\" rowspan=\"#{column[2]}\">#{column[1]}</th>"
         end
       end
-      "<tr>#{columns}</tr>"
+      "<tr>#{columns.join}</tr>"
     end
-    "<table class=\"#{tableclass}\"><tbody>#{rows}</tbody></table>".html_safe
+    "<table class=\"#{tableclass}\"><tbody>#{rows.join}</tbody></table>".html_safe
   end
   
   # offset: Use date.wday, so use 0 to start the week in sunday
@@ -306,6 +306,6 @@ module ApplicationHelper
 
     textilized = RedCloth.new(text, [ :hard_breaks, :filter_html ])
     textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
-    textilized.to_html
+    textilized.to_html.html_safe
   end
 end

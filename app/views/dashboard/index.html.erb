@@ -7,11 +7,11 @@
 <div class="hint" id="new_account_info">
 
   <div class="header"><%= :welcome_to_new_account.l %></div>
-  <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name), :url => "<a href=\"#{Rails.configuration.site_url}\">#{Rails.configuration.site_url}</a>") %></div>
+  <div class="content"><%= :welcome_to_new_account_info.l_with_args(:user => h(@logged_user.display_name), :url => "<a href=\"#{Rails.configuration.site_url}\">#{Rails.configuration.site_url}</a>").html_safe %></div>
   
    <% new_account_steps(@logged_user).each do |step| %>
-    <div class='header'><%= step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>
-    <div class='content'><%= step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
+    <div class='header'><%= raw step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>
+    <div class='content'><%= raw step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}" %></div>
    <% end %>
   <% if @logged_user.is_admin %>
   <p><%= link_to :hide_welcome_info.l, hide_welcome_info_company_path(Company.owner), :class => 'cancel' %></p>
@@ -27,7 +27,7 @@
   <h2><%= :late_milestones.l %></h2>
   <ul>
 <% @late_milestones.each do |milestone| %>
-    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))) %> (<span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>)</li>
+    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))).html_safe %> (<span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>)</li>
 <% end %>
   </ul>
 <% end %>

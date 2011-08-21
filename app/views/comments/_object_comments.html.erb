@@ -27,7 +27,7 @@
         <% elsif not comment.created_by.nil? %>
           <%= :comment_posted_with_user.l_with_args(
                   :time => format_usertime(comment.created_on, :comment_posted_format),
-                  :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>") %>
+                  :user => "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>").html_safe %>
         <% else %>
           <%= format_usertime(comment.created_on, :comment_posted_format) %>
         <% end %>

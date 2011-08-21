@@ -26,7 +26,7 @@ class Comment < ActiveRecord::Base
 	has_many :attached_file, :as => 'rel_object'
 	has_many :project_file, :through => :attached_file
 
-	before_validation :on => :create,  :process_params
+	before_validation :process_params, :on => :create
 	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy

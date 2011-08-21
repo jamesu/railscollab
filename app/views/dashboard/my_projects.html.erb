@@ -22,7 +22,7 @@
     <%=
     project.companies.collect do |company|
     link_to( (h company.name), company_path(:id => company.id) )
-    end.join(', ') 
+    end.join(', ').html_safe
     %>
     </div>
 <% end %>

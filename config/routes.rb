@@ -4,7 +4,7 @@ Railscollab::Application.routes.draw do
   match 'feed/:user/:token/:action.::format', :controller => 'feed'
   
   # The rest of the simple controllers
-  match "dashboard/:action(/:id)",        :controller => 'dashboard'
+  match "dashboard/(/:action(/:id))",        :controller => 'dashboard'
   match "dashboard/:action/:id.format", :controller => 'dashboard'
   
   resource :session, :only => [:new, :create, :destroy]

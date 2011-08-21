@@ -25,8 +25,6 @@ class Tag < ActiveRecord::Base
 
   belongs_to :rel_object, :polymorphic => true
 
-  acts_as_ferret :fields => [:tag, :project_id, :is_private], :store_class_name => true
-
   before_create :process_params
 
   def process_params

@@ -50,7 +50,7 @@
 <% if not (milestone.project_messages.length > 0 or milestone.project_task_lists.length > 0) %>
       <p><%= :milestone_empty_info.l_with_args(
                :message => link_to(:message.l, new_message_path(:milestone_id => milestone.id)),
-               :task_list => link_to(:task_list.l, new_task_list_path(:milestone_id => milestone.id))) %></p>
+               :task_list => link_to(:task_list.l, new_task_list_path(:milestone_id => milestone.id))).html_safe %></p>
 <% else %>
 <% if milestone.project_messages.length > 0 %>
       <p><%= :messages.l %>:</p>
@@ -60,7 +60,7 @@
 <% if not message.created_by.nil? %>
       <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
              :time => format_usertime(message.created_on, :milestone_messages_created_format),
-             :user => link_to(h(message.created_by.display_name), user_path(:id => message.created_by.id) )) %>)</span>
+             :user => link_to(h(message.created_by.display_name), user_path(:id => message.created_by.id) )).html_safe %>)</span>
 <% end %>
 <% end %>
       </ul>

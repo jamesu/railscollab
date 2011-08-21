@@ -121,7 +121,7 @@ class MessagesController < ApplicationController
     if @category
       @message.category_id = @category.id
     else
-      @category = @active_project.project_message_categories.where(:conditions => ['name = ?', Rails.configuration.default_project_message_category]).first
+      @category = @active_project.project_message_categories.where(['name = ?', Rails.configuration.default_project_message_category]).first
     end
 
     @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))
