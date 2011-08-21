@@ -77,7 +77,7 @@ en:
   edit_message_category: Edit message category
   edit_category: Edit category
   view_message: View message
-  category_messages: "Messages of category {{category}}"
+  category_messages: "Messages of category %{category}"
   add_milestone: Add milestone
   edit_milestone: Edit milestone
   add_task_list: Add task list
@@ -88,12 +88,12 @@ en:
   search_results: Search results
   add_project: Add project
   edit_project: Edit project
-  user_card: User card of {{user}}
-  folder_name: "Folder : {{folder}}"
+  user_card: User card of %{user}
+  folder_name: "Folder : %{folder}"
   add_page: Add page
   edit_page: Edit page
   all_pages: All pages
-  company_card: "Company card of {{company}}"
+  company_card: "Company card of %{company}"
   reset_password: Reset password
   set_password: Set password
   save_changes: Save changes
@@ -103,22 +103,22 @@ en:
   recent_milestones_feed_info: Recent milestones for all projects
   recent_activities_feed: Recent activities feed
   recent_activities_feed_info: Recent activities for all projects
-  recent_project_milestones_feed: "{{project}} Recent milestones feed"
-  recent_project_milestones_feed_info: "Recent milestones for the {{project}} project"
-  recent_project_activities_feed: "{{project}} Recent activities feed"
-  recent_project_activities_feed_info: "Recent activities for the {{project}} project"
+  recent_project_milestones_feed: "%{project} Recent milestones feed"
+  recent_project_milestones_feed_info: "Recent milestones for the %{project} project"
+  recent_project_activities_feed: "%{project} Recent activities feed"
+  recent_project_activities_feed_info: "Recent activities for the %{project} project"
   
   # New account steps
   welcome_to_new_account: Welcome to your newly created account
-  welcome_to_new_account_info: "{{user}}, welcome to your new account. From now on it will always be available on {{url}} (you can bookmark this link). You can get started in a minute following these easy steps:"
+  welcome_to_new_account_info: "%{user}, welcome to your new account. From now on it will always be available on %{url} (you can bookmark this link). You can get started in a minute following these easy steps:"
   new_account_step1: "Step 1: Update your company info"
-  new_account_step1_info: "<a href='{{url}}'>Set your company details</a> such as phone and fax number, address, email, homepage etc"
+  new_account_step1_info: "<a href='%{url}'>Set your company details</a> such as phone and fax number, address, email, homepage etc"
   new_account_step2: "Step 2: Add team members"
-  new_account_step2_info: "You can <a href='{{url}}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system"
+  new_account_step2_info: "You can <a href='%{url}'>create user accounts</a> for all members of your team (unlimited number). Every member will get their username and password which they can use to access the system"
   new_account_step3: "Step 3: Add client companies and their members"
-  new_account_step3_info: "Now it's time to <a href='{{url}}'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)"
+  new_account_step3_info: "Now it's time to <a href='%{url}'>define client companies</a> (unlimited). When you're done you can add their members or leave that for their team leaders. Client members are similar to your company members except that they have limited access to content and functions (you can set what they can do per project and per member)"
   new_account_step4: "Step 4: Start a project"
-  new_account_step4_info: "Defining a <a href='{{url}}'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients."
+  new_account_step4_info: "Defining a <a href='%{url}'>new project</a> is really easy: set a name and decription (optional) and click submit. After that you can set permissions for your team members and clients."
   
   hide_welcome_info: "&raquo; Hide this info permanently"
   
@@ -126,10 +126,10 @@ en:
   
   # User box
   welcome_anonymous: "Welcome <strong>Anonymous</strong>"
-  welcome_back: "Welcome back <strong>{{user}}</strong>"
+  welcome_back: "Welcome back <strong>%{user}</strong>"
   logout: Logout
   are_you_sure_logout: Are you sure you want to log out?
-  running_times: "You have {{count}} running times"
+  running_times: "You have %{count} running times"
   
   # Permission names
   can_manage_messages: Manage messages
@@ -145,13 +145,13 @@ en:
   # Status messages
   login_success: Login successful
   login_failure: Invalid login
-  invalid_openid_server: "Unable to find openid server for <q>{{openid_url}}</q>"
-  failed_verification_openid_url: "Verification of {{openid_url}} failed"
-  failed_login_openid_url: "Failed login with identity {{openid_url}}"
-  success_login_openid_url: "You have successfully logged in with {{openid_url}} as your identity"
+  invalid_openid_server: "Unable to find openid server for <q>%{openid_url}</q>"
+  failed_verification_openid_url: "Verification of %{openid_url} failed"
+  failed_login_openid_url: "Failed login with identity %{openid_url}"
+  success_login_openid_url: "You have successfully logged in with %{openid_url} as your identity"
   verification_failed: Verification failed
   verification_cancelled: Verification cancelled
-  unknown_response_status: "Unknown response status: {{status}}"
+  unknown_response_status: "Unknown response status: %{status}"
   invalid_email: Invalid email address
   invalid_email_not_in_use: Invalid email address
   password_changed: Password changed
@@ -241,13 +241,13 @@ en:
   success_deleted_time: Successfully deleted time record
   success_stopped_time: Successfully stopped time record
   success_added_user: Successfully added user
-  success_deleted_user: "Successfully deleted user {{name}}"
+  success_deleted_user: "Successfully deleted user %{name}"
   unimplemented: Unimplemented
   invalid_request: Invalid request
   
   # Stuff which appears in the sidebar
   online_users: Online users
-  users_active_in_last_n_minutes: "Users who were active in last {{number}} minutes:"
+  users_active_in_last_n_minutes: "Users who were active in last %{number} minutes:"
   my_projects_sidebar_link: "&raquo; My projects"
   update_feeds: RSS feeds
   recent_activities: Recent activities
@@ -256,7 +256,7 @@ en:
   active_projects: Active projects
   finished_projects: Finished projects
   archived_projects_list_info: "List of finished (archived) projects. All actions for these projects are locked, but you can still browse them."
-  project_completed_time_with_user: "{{time}} | {{user}}"
+  project_completed_time_with_user: "%{time} | %{user}"
   calendar_feeds: iCalendar
   ical: iCalendar
   calendar_feed_milestone_info: Use this link to bring milestone data to your favorite calendar application.
@@ -265,9 +265,9 @@ en:
   folder_delete_confirmation: "Are you sure you want to delete this folder?"
   all_files: All files
   important_files: Important files
-  important_file_revisions_count: "{{count}} revision(s)"
+  important_file_revisions_count: "%{count} revision(s)"
   important_messages: Important messages
-  important_messages_comments_count: "{{count}} comment(s)"
+  important_messages_comments_count: "%{count} comment(s)"
   categories: Categories
   all_categories: All categories
   configuration_categories: Configuration categories
@@ -289,9 +289,9 @@ en:
   completed_milestones: Completed milestones
   late: Late
   upcoming: Upcoming
-  milestones_summary: "{{adjetives}} milestones"
-  milestone_completed_time_with_user: "{{time}} | {{user}}"
-  project_status_header: "Project status: {{status}}"
+  milestones_summary: "%{adjetives} milestones"
+  milestone_completed_time_with_user: "%{time} | %{user}"
+  project_status_header: "Project status: %{status}"
   active: Active
   completed: Completed
   edit_project_details: Edit project details
@@ -301,15 +301,15 @@ en:
   mark_project_as_active_confirmation: "Are you sure you want to mark this project as open? This will unlock all project actions"
   involved_companies: Involved companies
   open_task_lists: Open task lists
-  num_tasks_open_in_task_list: "{{num}} open of {{total}} tasks in list"
+  num_tasks_open_in_task_list: "%{num} open of %{total} tasks in list"
   completed_task_lists: Completed task lists
-  task_list_completed_time_with_user: "{{time}} | {{user}}"
+  task_list_completed_time_with_user: "%{time} | %{user}"
   tags_used_in_project: Tags used in this project
   no_tags_used_in_project: There are no tags used in this project
-  objects_tagged_with: "{{count}} objects are tagged with <strong>{{tag}}</strong>"
-  no_objects_tagged_with: "There are no objects are tagged with <strong>{{tag}}</strong>"
-  milestone_assigned_to: "Assigned to {{name}}"
-  tag_object_count: "{{count}} objects."
+  objects_tagged_with: "%{count} objects are tagged with <strong>%{tag}</strong>"
+  no_objects_tagged_with: "There are no objects are tagged with <strong>%{tag}</strong>"
+  milestone_assigned_to: "Assigned to %{name}"
+  tag_object_count: "%{count} objects."
   # Message form
   title: Title
   text: Text
@@ -332,11 +332,11 @@ en:
   current_logo_confirm_delete: "Are you sure you want to delete this logo?"
   logo_not_uploaded: Logo is not uploaded
   logo_replace_info: "Note that the current logo will be deleted and replaced with new one!"
-  milestone_in: "{{milestone}} in {{project}}"
+  milestone_in: "%{milestone} in %{project}"
   
   # Message view
   from: From
-  message_created_with_user: "{{time}} | {{user}}"
+  message_created_with_user: "%{time} | %{user}"
   comments: Comments
   no_messages_in_project: There are no messages in this project
   no_messages_in_category: There are no messages in this category
@@ -353,7 +353,7 @@ en:
   priority: Priority
   description: Description
   estimated_hours: Estimated hours
-  task_estimated_hours: "[{{hours}} estimated hours]"
+  task_estimated_hours: "[%{hours} estimated hours]"
   is_private_list: Is private
   is_private_list_info: "(Private task lists are visible only to owner company members. Members of client companies will not be able to see them)"
   task_list: Task list
@@ -374,7 +374,7 @@ en:
   no_tasks_assigned_to_you: There are no tasks assigned to you
   edit_tasks: Edit tasks
   task: Task
-  task_created_by: "Created by {{user}}"
+  task_created_by: "Created by %{user}"
   
   # Milestone form
   private_milestone: Private milestone
@@ -388,14 +388,14 @@ en:
   todays_milestones: Todays milestones
   upcoming_milestones: Upcoming milestones
   all_upcoming_milestones: All upcoming milestones
-  milestone_days_left: "{{days}} days left"
-  milestone_days_late: "{{days}} days late"
-  milestone_show_all_upcoming: "&raquo; Show all {{count}} upcoming milestones"
+  milestone_days_left: "%{days} days left"
+  milestone_days_late: "%{days} days late"
+  milestone_show_all_upcoming: "&raquo; Show all %{count} upcoming milestones"
   today: Today
-  milestone_empty_info: "This milestone is empty. You can add a {{message}} or a {{task_list}} to it at any time"
+  milestone_empty_info: "This milestone is empty. You can add a %{message} or a %{task_list} to it at any time"
   task_lists: Task lists
   message: Message
-  milestone_messages_created_with_user: "{{time}} | {{user}}"
+  milestone_messages_created_with_user: "%{time} | %{user}"
   milestone_confirm_delete: "Are you sure you want to delete this milestone?"
   
   # Wiki page view
@@ -410,9 +410,9 @@ en:
   action_edit: Modified
   action_close: Closed
   action_upload: Uploaded
-  action_today_with_time: "Today {{time}}"
+  action_today_with_time: "Today %{time}"
   action_yesterday: Yesterday
-  action_by: 'by {{user}}'
+  action_by: 'by %{user}'
   
   # Access
   forgot_password_sent_email: Further instructions have been sent to your e-mail address
@@ -469,7 +469,7 @@ en:
   started_on: Started on
   no_active_projects: There are no active projects
   companies_involved_in: "Companies involved in project"
-  tasks_in_list: "In {{list}}"
+  tasks_in_list: "In %{list}"
   anyone: Anyone
   none: None
   project: Project
@@ -493,8 +493,8 @@ en:
   private_comment_info: "Private comments are visible only to owner company members. Members of client companies will not be able to see them"
   comment_delete_confirm: "Are you sure you want to delete this comment?"
   no_comments_for_object: No comments are posted for this object
-  comment_posted_with_user: "Posted on {{time}} by {{user}}"
-  comment_posted: "Posted on {{time}} by <strong>{{name}}</strong>"
+  comment_posted_with_user: "Posted on %{time} by %{user}"
+  comment_posted: "Posted on %{time} by <strong>%{name}</strong>"
   
   # User
   generate_password: Generate password
@@ -506,17 +506,17 @@ en:
   project_show_description_in_overview: Show description on project overview page
   company_no_users: There are no users in this company
   permissions_form: Permissions form
-  permissions_info: "Using the {{link}} you can easily add or remove companies and users and control their access permissions."
-  clients_involved_in: "{{company}} users involved in {{project}}"
+  permissions_info: "Using the %{link} you can easily add or remove companies and users and control their access permissions."
+  clients_involved_in: "%{company} users involved in %{project}"
   confirm_client_remove: "Are you sure you want to remove this company?"
   confirm_user_remove: "Are you sure you want to remove this user?"
   confirm_user_delete: "Are you sure you want to delete this user?"
   hint: Hint
   hint_permissions_info: "Check project to give access permissions for this company. Note that you'll also need to specify access permissions for company members that you want to be able to access and manage selected projects (you can do that through the projects people page or user profiles)."
-  project_completed_on: "Completed on {{date}} by {{user}}"
+  project_completed_on: "Completed on %{date} by %{user}"
   all: All
   go: Go
-  due_in_next_n_days: "Due in the next {{num}} days"
+  due_in_next_n_days: "Due in the next %{num} days"
   project_locked_header: "This project has been marked as completed, and is locked."
   
   # Forms
@@ -528,7 +528,7 @@ en:
   save: Save
   reset: Reset
   submit: Submit
-  form_action_add_to: "Add {{object}} to {{link}}"
+  form_action_add_to: "Add %{object} to %{link}"
   form_related_object_notfound: "Related object does not exist!"
   form_confirm_delete: "Are you sure you want to delete this form?"
   no_forms_in_project: There are no forms in this project
@@ -546,10 +546,10 @@ en:
   private_time_info: "Private times are visible only to owner company members. Members of client companies will not be able to see them."
   billable_time: Billable time
   billable_time_info: "Billable times are those for which you expect payment from the client(s)."
-  task_list_hours: "{{name}} [{{hours}} hours]"
+  task_list_hours: "%{name} [%{hours} hours]"
   task_list_hours_info: "Tasks which have been logged with time"
-  task_list_task_hours: "{{name}} [{{hours}} hours]"
-  billable_hours: "[{{hours}} billable hours]"
+  task_list_task_hours: "%{name} [%{hours} hours]"
+  billable_hours: "[%{hours} billable hours]"
   no_times_in_project: "This project has no time records"
   time_confirm_delete: "Are you sure you want to delete this time record?"
   start_time: "Start time"
@@ -566,17 +566,17 @@ en:
   new_file: New file
   new_revision: New revision
   existing_file: Existing file
-  file_upload_info: "You can upload files of any type. Maximum filesize is {{max}}"
+  file_upload_info: "You can upload files of any type. Maximum filesize is %{max}"
   file_update_info: "You can replace an existing file by specifying a new one. If you don't want to replace it simply leave this field blank."
   revision_comment: Revision comment
   private_file: Private file
   private_file_info: "Private files are visible only to owner company members. Members of client companies will not be able to see them."
   important_file: Important file
   important_file_info: "Important files are listed in the \"Important files\" sidebar on the project files page"
-  revision_created_by: "Revision #{{number}} <span>(by {{user}} on {{date}})</span>"
-  revision_created_on: "Revision #{{number}} <span>(created on {{date}})</span>"
-  download_size: "Download ({{size}})"
-  details_size: "Details ({{size}})"
+  revision_created_by: "Revision #%{number} <span>(by %{user} on %{date})</span>"
+  revision_created_on: "Revision #%{number} <span>(created on %{date})</span>"
+  download_size: "Download (%{size})"
+  details_size: "Details (%{size})"
   revisions: Revisions
   last_revision: Last revision
   file_delete_confirmation: "Are you sure you want to delete this file?"
@@ -589,7 +589,7 @@ en:
   attach_existing_file: "Attach existing file (from Files section)"
   file_view_details: View file details
   no_files_in_location: There are no files in this location.
-  hint_attach_files: "Use this form to attach files to <strong>{{link}}</strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>."
+  hint_attach_files: "Use this form to attach files to <strong>%{link}</strong>. You can attach one or many files. You can select any existing file from files section or upload new ones. <strong>New files will also be available through files section when you upload them</strong>."
   upload_attach_to_message: Upload new file and attach it to message
   select_file: Select file
   
@@ -604,8 +604,8 @@ en:
   not_part_of_project: Not part of project
   search: Search
   search_box_default: "Search..."
-  search_displaying_results_for: "Displaying {{start}}...{{finish}} out of {{total}} results for {{search}}."
-  search_no_matching_objects: "There are no objects which match '<strong>{{search}}</strong>'"
+  search_displaying_results_for: "Displaying %{start}...%{finish} out of %{total} results for %{search}."
+  search_no_matching_objects: "There are no objects which match '<strong>%{search}</strong>'"
   
   
   # Configuration messages
@@ -689,21 +689,21 @@ en:
   
   # Mailing views
   notifier_subject_new_task: "New task"
-  notifier_subject_new_message: "New message {{title}}"
-  notifier_subject_new_milestone: "New milestone {{name}}"
-  notifier_subject_new_comment: "New comment for {{title}}"
+  notifier_subject_new_message: "New message %{title}"
+  notifier_subject_new_milestone: "New milestone %{name}"
+  notifier_subject_new_comment: "New comment for %{title}"
   notifier_subject_reset_password_request: "Reset password request"
   notifier_subject_new_account: "Your account has been created"
   notifier_donotreply: "DO NOT REPLY TO THIS MESSAGE"
-  notifier_greeting: "Hi {{user}}"
-  notifier_new_message: "A new message entitled '{{title}}' has been posted in the project {{project}}. To view this message, visit the following URL:"
-  notifier_new_task: "A new task has been posted in the project {{project}}. To view this task, visit the following URL:"
-  notifier_new_milestone: "A new milestone named '{{name}}' has been posted in the project {{project}}. To view this milestone, visit the following URL:"
-  notifier_new_comment: "A new comment has been posted to the message {{title}}. To view this comment, visit the following URL:"
-  notifier_reset_password: "A request to reset the password for your account has been made at {{site}}. Provided you wish to continue with this request, please visit the following url:"
-  notifier_new_account: "{{user}} has created new account for you at {{site}}."
+  notifier_greeting: "Hi %{user}"
+  notifier_new_message: "A new message entitled '%{title}' has been posted in the project %{project}. To view this message, visit the following URL:"
+  notifier_new_task: "A new task has been posted in the project %{project}. To view this task, visit the following URL:"
+  notifier_new_milestone: "A new milestone named '%{name}' has been posted in the project %{project}. To view this milestone, visit the following URL:"
+  notifier_new_comment: "A new comment has been posted to the message %{title}. To view this comment, visit the following URL:"
+  notifier_reset_password: "A request to reset the password for your account has been made at %{site}. Provided you wish to continue with this request, please visit the following url:"
+  notifier_new_account: "%{user} has created new account for you at %{site}."
   notifier_new_account_access: "To access this account, simply visit the following URL:"
-  notifier_new_account_access_login: "Then login using the username '{{login}}'."
+  notifier_new_account_access_login: "Then login using the username '%{login}'."
   notifier_new_account_credentials: "Then login using the following credentials:"
   author: Author
   
@@ -720,8 +720,8 @@ en:
   ProjectFileRevision: File revision
   WikiPage: Wiki page
   
-  search_dashboard: "{{type}}: {{name}} in {{project}}"
-  search_project: "{{type}}: {{name}}"
+  search_dashboard: "%{type}: %{name} in %{project}"
+  search_project: "%{type}: %{name}"
   
   # system
   
