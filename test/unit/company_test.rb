@@ -10,7 +10,7 @@ class CompanyTest < ActiveSupport::TestCase
   test "Default logo" do
     assert !Company.owner.has_logo?
     
-    assert_equal Company.owner.logo_url, "/themes/#{Rails.configuration.site_theme}/images/logo.gif"
+    assert_equal Company.owner.logo_url, "/assets/logo.gif"
   end
   
   test "Permissions" do

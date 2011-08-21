@@ -62,7 +62,7 @@
 <% end -%>
     </td>
     <td class="timeDetails">
-			<% if !time.open_task.nil? %><span><img src="/themes/<%= Rails.configuration.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= link_to(time.name, time.open_task.object_url, :class => 'assignedTo') %><% else %><%= h time.name %><% end %>
+			<% if !time.open_task.nil? %><span><img src="/assets/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= link_to(time.name, time.open_task.object_url, :class => 'assignedTo') %><% else %><%= h time.name %><% end %>
     </td>
 		<td class="timeEdit">
 <%= action_list actions_for_time(time) %>

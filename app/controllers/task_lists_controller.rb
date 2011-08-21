@@ -38,8 +38,8 @@ class TaskListsController < ApplicationController
         render :template => 'task_lists/index'
       }
       format.xml  {
-        conds = include_private ? {} : {'is_private', false}
-        @task_lists = @active_project.project_task_lists.find(:all, :conditions => conds)
+        conds = include_private ? {} : {'is_private' => false}
+        @task_lists = @active_project.project_task_lists.where(conds)
         render :xml => @task_lists.to_xml(:root => 'task-lists')
       }
     end

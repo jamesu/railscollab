@@ -95,7 +95,7 @@ class ProjectFile < ActiveRecord::Base
   end
 
   def filetype_icon_url
-    project_file_revisions.empty? ? "/themes/#{Rails.configuration.site_theme}/images/filetypes/unknown.png" : project_file_revisions[0].filetype_icon_url
+    project_file_revisions.empty? ? "/assets/filetypes/unknown.png" : project_file_revisions[0].filetype_icon_url
   end
 
   def file_size
@@ -183,7 +183,11 @@ class ProjectFile < ActiveRecord::Base
 
   def self.find_grouped(group_field, params)
     grouped_fields = {}
-    found_files = ProjectFile.all(params)
+    found_files = ProjectFile.where(params[:conditions])
+    found_files = found_files.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:page].nil?
+    found_files = found_files.order(params[:order]) unless params[:order].nil?
+    
+    @pagination = []
 
     group_type = DateTime if ['created_on', 'updated_on'].include?(group_field)
     group_type ||= String

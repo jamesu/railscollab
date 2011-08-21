@@ -130,14 +130,14 @@ body {
 #tabs ul li {
   margin: 0 1px;
   float: left;
-  background: url('../../images/layout/tab_right.gif') no-repeat top right;
+  background: url('../../assets/layout/tab_right.gif') no-repeat top right;
 }
 
 #tabs ul li a {
   border: 0;
   display: block;
   padding: 2px 12px;
-  background: url('../../images/layout/tab_left.gif') no-repeat top left;
+  background: url('../../assets/layout/tab_left.gif') no-repeat top left;
   text-align: center;
   color: #333;
   font-size: 10px;
@@ -153,11 +153,11 @@ body {
 }
 
 #tabs ul li.active {
-  background: url('../../images/layout/tab_active_right.gif') no-repeat top right;
+  background: url('../../assets/layout/tab_active_right.gif') no-repeat top right;
 }
 
 #tabs ul li.active a {
-  background: url('../../images/layout/tab_active_left.gif') no-repeat top left;
+  background: url('../../assets/layout/tab_active_left.gif') no-repeat top left;
   color: white;
 }
 
@@ -250,7 +250,7 @@ body {
 
 #outerContentWrapper {
   clear: both;
-  background: url('../../images/layout/content-back.gif') repeat-x;
+  background: url('../../assets/layout/content-back.gif') repeat-x;
 }
 
 #innerContentWrapper {
@@ -331,7 +331,7 @@ body {
   padding: 0 15px 0 0;
   color: #444;
   text-decoration: underline;
-  background: url('../../images/icons/more_down.gif') no-repeat right bottom;
+  background: url('../../assets/icons/more_down.gif') no-repeat right bottom;
 }
 
 #page_actions ul li a:hover {
@@ -377,7 +377,7 @@ body {
 
 #listOfRssFeeds li {
   padding-left: 16px;
-  background: url('../../images/icons/feed.gif') no-repeat;
+  background: url('../../assets/icons/feed.gif') no-repeat;
   line-height: 12px;
   margin: 2px 0;
 }
@@ -483,11 +483,11 @@ div.private {
   width: 37px;
   overflow: hidden;
   margin-left: 2px;
-  background: url('../../images/icons/private.gif') no-repeat;
+  background: url('../../assets/icons/private.gif') no-repeat;
 }
 
 #pageTitle.private {
-  background: url('../../images/icons/private.gif') no-repeat;
+  background: url('../../assets/icons/private.gif') no-repeat;
 }
 
 div.private span {
@@ -502,7 +502,7 @@ div.billable {
   width: 37px;
   overflow: hidden;
   margin-left: 2px;
-  background: url('../../images/icons/billable.gif') no-repeat;
+  background: url('../../assets/icons/billable.gif') no-repeat;
 }
 
 div.billable span {

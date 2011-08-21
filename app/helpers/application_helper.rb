@@ -34,11 +34,11 @@ module ApplicationHelper
   end
   
   def icon_url(filename)
-    "/images/icons/#{filename}.gif"
+    "/assets/icons/#{filename}.gif"
   end
 
   def checkbox_link(link, checked=false, hint=nil, attrs={})
-    icon_url = checked ? "/images/icons/checked.gif" : "/images/icons/not-checked.gif"
+    icon_url = checked ? "/assets/icons/checked.gif" : "/assets/icons/not-checked.gif"
     
     method = attrs[:method] || :post
     link_to "<img src='#{icon_url}' alt='' />".html_safe, link, attrs.merge({:method => method, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
@@ -47,7 +47,7 @@ module ApplicationHelper
   def render_icon(filename, alt, attrs={})
     attr_values = attrs.keys.collect{ |a| "#{a}='#{attrs[a]}'" }.join(' ')
 
-    "<img src='/images/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>".html_safe
+    "<img src='/assets/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>".html_safe
   end
 
   def action_list(actions)

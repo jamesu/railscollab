@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
   after_filter  :user_track, :only => [:index, :search, :people]
 
   def index
-    @projects = @logged_user.is_admin ? Project.find(:all) : @logged_user.projects
+    @projects = @logged_user.is_admin ? Project.all : @logged_user.projects
     respond_to do |format|
       format.html { render :layout => 'administration' }
       format.xml  { 

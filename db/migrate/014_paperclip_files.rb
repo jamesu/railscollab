@@ -7,8 +7,8 @@ class PaperclipFiles < ActiveRecord::Migration
     add_column :project_file_revisions, 'has_thumbnail',     :boolean, :default => false
     
     # Migrate the data to the new system
-    ProjectFileRevision.find(:all).each do |file|
-      repo = TempRepo.find(:first, :conditions => {'id' => file.repository_id})
+    ProjectFileRevision.all.each do |file|
+      repo = TempRepo.where({'id' => file.repository_id}).first
       unless repo.nil?
         puts "Migrating file #{file.project_file.filename} (revision #{file.id})"
         if repo.storage != :database
@@ -46,7 +46,7 @@ class PaperclipFiles < ActiveRecord::Migration
     end
     
     # Ok, time to migrate data back to old system
-    ProjectFileRevision.find(:all).each do |file|
+    ProjectFileRevision.all.each do |file|
       puts "Migrating file #{file.project_file.filename} (revision #{file.id})"
       
       repo = TempRepo.new

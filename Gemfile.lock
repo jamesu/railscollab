@@ -111,6 +111,7 @@ GEM
     uglifier (0.5.4)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
+    will_paginate (3.0.0)
 
 PLATFORMS
   java
@@ -128,3 +129,4 @@ DEPENDENCIES
   sqlite3
   therubyracer-heroku (= 0.8.1.pre3)
   uglifier
+  will_paginate (~> 3.0)

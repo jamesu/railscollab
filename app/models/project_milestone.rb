@@ -238,7 +238,7 @@ class ProjectMilestone < ActiveRecord::Base
       { :completed_on => nil, :project_id => project_ids } :
       { :completed_on => nil, :project_id => project_ids, :is_private => false }
 
-    self.all(:conditions => msg_conditions)
+    self.where(msg_conditions)
   end
 	
   def self.all_assigned_to(user, assignee, start_time=nil, end_time=nil, real_projects=nil, exclude_inactive=false)
@@ -279,9 +279,7 @@ class ProjectMilestone < ActiveRecord::Base
       msg_conditions['assigned_to_company_id'] = assignee.id
     end
 
-    with_scope(:find => {:conditions => time_conditions}) do
-      self.find(:all, :conditions => msg_conditions, :order => 'due_date ASC', :joins => msg_joins)
-    end
+    where(time_conditions).where(msg_conditions).order('due_date ASC').joins(msg_joins)
   end
 
   def self.todays_by_user(user)
@@ -296,7 +294,7 @@ class ProjectMilestone < ActiveRecord::Base
       ["completed_on IS NULL AND (due_date >= '#{from_date}' AND due_date < '#{to_date}') AND project_id IN (#{project_ids})"] :
       ["completed_on IS NULL AND (due_date >= '#{from_date}' AND due_date < '#{to_date}') AND project_id IN (#{project_ids}) AND is_private = ?", false]
 
-    self.all(:conditions => msg_conditions)
+    self.where(msg_conditions)
   end
 
   def self.late_by_user(user)
@@ -312,7 +310,7 @@ class ProjectMilestone < ActiveRecord::Base
       ["due_date < '#{due_date}' AND completed_on IS NULL AND project_id IN (#{project_ids})"] :
       ["due_date < '#{due_date}' AND completed_on IS NULL AND project_id IN (#{project_ids}) AND is_private = ?", false]
 
-    self.all(:conditions => msg_conditions)
+    self.where(msg_conditions)
   end
 
   # Accesibility

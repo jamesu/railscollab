@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
 
   def avatar_url
     if !avatar?
-      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.site_url}/themes/#{Rails.configuration.site_theme}/images/avatar.gif")
+      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.site_url}/assets/avatar.gif")
     else
       avatar.url(:thumb)
     end

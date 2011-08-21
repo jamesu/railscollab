@@ -26,7 +26,7 @@
 
 <% list[:tasks].each do |task_info| -%>
 <% task = task_info[:task] %>
-<h4><span><img src="/themes/<%= Rails.configuration.site_theme %>/images/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => task_info[:hours]) %> <%= :billable_hours.l_with_args(:hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= :task_estimated_hours.l_with_args(:hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
+<h4><span><img src="/assets/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => task_info[:hours]) %> <%= :billable_hours.l_with_args(:hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= :task_estimated_hours.l_with_args(:hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
 
 <table class="timeLogs blank"><tr><th><%= :log_date.l %></th><th><%= :name.l %></th><th><%= :details.l %></th><th><%= :hours.l %></th></tr>
 <% task_info[:times].each do |time| -%>

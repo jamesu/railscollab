@@ -189,27 +189,25 @@ class CategoriesController < ApplicationController
         @content_for_sidebar = 'messages/index_sidebar'
     
         @page = params[:page].to_i
-        @page = 0 unless @page > 0
+        @page = 1 unless @page > 0
         
-        @messages = @category.project_messages.find(:all, 
-                                                    :conditions => msg_conditions, 
-                                                    :page => {:size => Rails.configuration.messages_per_page, :current => @page})
+        @messages = @category.project_messages.where(msg_conditions)
+                                              .paginate(:page => @page, :per_page => Rails.configuration.messages_per_page)
         
         @pagination = []
-        @messages.page_count.times {|page| @pagination << page+1}
+        @messages.total_pages.times {|page| @pagination << page+1}
         
         # Important messages (html only)
         important_conditions = {'is_important' => true}
         important_conditions['is_private'] = false unless @logged_user.member_of_owner?
-        @important_messages = @active_project.project_messages.find(:all, :conditions => important_conditions)
+        @important_messages = @active_project.project_messages.where(important_conditions)
 
         render :template => 'messages/index'
       }
       format.xml  { 
-        @messages = @category.project_messages.find(:all, 
-                                                    :conditions => msg_conditions, 
-                                                    :offset => params[:offset],
-                                                    :limit => params[:limit] || Rails.configuration.messages_per_page)
+        @messages = @category.project_messages.where(msg_conditions)
+                                              .offset(params[:offset])
+                                              .limit(params[:limit] || Rails.configuration.messages_per_page)
         
         render :xml => @messages.to_xml(:only => [:id,
                                                   :title,

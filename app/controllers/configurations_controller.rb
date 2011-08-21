@@ -51,7 +51,7 @@ class ConfigurationsController < ApplicationController
   protected
   def find_categories
     sys_conds = params[:system] ? [] : ['is_system = ?', false]
-    @categories = ConfigCategory.all(:conditions => sys_conds, :order => 'category_order DESC')
+    @categories = ConfigCategory.where(sys_conds).order('category_order DESC')
   end
 
   def find_category

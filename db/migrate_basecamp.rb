@@ -135,7 +135,7 @@ puts "Inserted owner..."
 xml.elements.each('account/clients/client')  { |client| import_company(client.elements, Company.owner) }
 
 # Fix owners of all companies
-Company.find(:all).each do |company|
+Company.all.each do |company|
 	if company.created_by.nil?
 		company.created_by = MAP_IDS[:owner]
 		company.updated_by = MAP_IDS[:owner]

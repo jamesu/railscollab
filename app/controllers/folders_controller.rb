@@ -157,11 +157,11 @@ class FoldersController < ApplicationController
         @content_for_sidebar = 'files/index_sidebar'
         
         @page = params[:page].to_i
-        @page = 0 unless @page > 0
+        @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => {:size => Rails.configuration.files_per_page, :current => @page}, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.files_per_page, :order => "#{sort_type} #{sort_order}")
         @pagination = []
-        result_set.page_count.times {|page| @pagination << page+1}
+        result_set.total_pages.times {|page| @pagination << page+1}
         
         # Important files and folders (html only)
         @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
@@ -170,10 +170,9 @@ class FoldersController < ApplicationController
         render :template => 'files/index'
       }
       format.xml  { 
-        @files = ProjectFile.find(:all,
-                                  :conditions => file_conditions,
-                                  :offset => params[:offset],
-                                  :limit => params[:limit] || Rails.configuration.files_per_page)
+        @files = ProjectFile.where(file_conditions)
+                            .offset(params[:offset])
+                            .limit(params[:limit] || Rails.configuration.files_per_page)
         
         render :xml => @files.to_xml(:only => [:id,
                                                :filename,

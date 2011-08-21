@@ -18,6 +18,6 @@
 
 class ImType < ActiveRecord::Base
 	def icon_url
-	 return "/themes/#{Rails.configuration.site_theme}/images/im/#{self.icon}"
+	 return "/assets/im/#{self.icon}"
 	end
 end

@@ -112,7 +112,7 @@ class Company < ActiveRecord::Base
 
   def logo_url
     if !logo?
-      "/themes/#{Rails.configuration.site_theme}/images/logo.gif"
+      "/assets/logo.gif"
     else
       logo.url(:thumb)
     end

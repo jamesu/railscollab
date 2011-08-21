@@ -32,7 +32,7 @@ class UsersController < ApplicationController
       }
       format.xml  {
         if @logged_user.is_admin
-          @users = User.find(:all)
+          @users = User.all
           render :xml => @users.to_xml(:root => 'user')
         else
           return error_status(true, :insufficient_permissions)

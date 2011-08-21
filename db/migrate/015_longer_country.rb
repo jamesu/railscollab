@@ -5,7 +5,7 @@ class LongerCountry < ActiveRecord::Migration
     change_column :companies, 'country', :string, :limit => 100
     
     # Convert to full name
-    Company.find(:all).each do |company|
+    Company.all.each do |company|
         company.update_attribute 'country', TZInfo::Country.get(company.country).name rescue nil
     end
   end
@@ -15,7 +15,7 @@ class LongerCountry < ActiveRecord::Migration
     TZInfo::Country.all.each{ |x| codes[x.name] = x.code }
     
     # Convert back to code
-    Company.find(:all).each do |company|
+    Company.all.each do |company|
       company.update_attribute 'country', (codes[company.country] || '')
     end
   end

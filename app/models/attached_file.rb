@@ -29,7 +29,7 @@ class AttachedFile < ActiveRecord::Base
              object.id, 
              attach_id]
 	                                          
-	  AttachedFile.find(:all, :conditions => conds).each do |attach|
+	  AttachedFile.where(conds).each do |attach|
 	    if !attach.project_file.nil? and !attach.project_file.is_visible and attach.project_file.attached_files.length <= 1
 	      attach.project_file.destroy
 	    end
@@ -43,7 +43,7 @@ class AttachedFile < ActiveRecord::Base
              object.class.to_s, 
              object.id]
 	                                 
-	  AttachedFile.find(:all, :conditions => conds).each do |attach|
+	  AttachedFile.where(conds).each do |attach|
 	    if !attach.project_file.nil? and !attach.project_file.is_visible and attach.project_file.attached_files.length <= 1
 	      AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
                object.class.to_s, 

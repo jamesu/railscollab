@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
           { :project_id => project_ids } :
           { :project_id => project_ids, :is_private => false }
 
-        @activity_log = ApplicationLog.all(:conditions => activity_conditions, :order => 'created_on DESC, id DESC', :limit => Rails.configuration.project_logs_per_page)
+        @activity_log = ApplicationLog.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.project_logs_per_page)
       else
         @activity_log = []
       end

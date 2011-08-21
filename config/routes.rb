@@ -67,7 +67,9 @@ Railscollab::Application.routes.draw do
     end
   
     resources :categories do
-      get :posts
+      member do
+        get :posts
+      end
     end
     
     resources :folders do

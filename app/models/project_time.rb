@@ -228,7 +228,9 @@ class ProjectTime < ActiveRecord::Base
   
   def self.find_grouped(group_field, params)
     grouped_fields = {}
-    found_times = ProjectTime.find(:all, params)
+    found_times = ProjectTime.where(params[:conditions])
+    found_times = found_times.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:page].nil?
+    found_times = found_times.order(params[:order]) unless params[:order].nil?
     
     group_type = ProjectTime if ['assigned_to','project','project_task','project_task_list'].include?(group_field)
     group_type ||= String
@@ -264,7 +266,7 @@ class ProjectTime < ActiveRecord::Base
                      ["project_id IN (#{project_ids})"] :
                      ["project_id IN (#{project_ids}) AND is_private = ?", false]
     
-    return self.find(:all, :conditions => time_conditions)
+    return where(:conditions => time_conditions)
   end
   
   # Core Permissions

@@ -40,20 +40,19 @@ class TimesController < ApplicationController
         @project = @active_project
         @content_for_sidebar = 'index_sidebar'
     
-        @times = @project.project_times.find(:all, 
-                                             :conditions => @time_conditions, 
-                                             :page => {:size => Rails.configuration.times_per_page, :current => @current_page}, 
-                                             :order => "#{@sort_type} #{@sort_order}")
+        @times = @project.project_times.where(@time_conditions) 
+                                       .paginate(:page => @current_page, :per_page => Rails.configuration.times_per_page)
+                                       .order("#{@sort_type} #{@sort_order}")
         
         @pagination = []
-        @times.page_count.times {|page| @pagination << page+1}
+        @times.total_pages.times {|page| @pagination << page+1}
     
       }
       format.xml  {
-        @times = @project.project_times.find(:all, :conditions => @time_conditions,
-                                                   :offset => params[:offset],
-                                                   :limit => params[:limit] || Rails.configuration.times_per_page, 
-                                                   :order => "#{@sort_type} #{@sort_order}")
+        @times = @project.project_times.where(@time_conditions)
+                                       .offset(params[:offset])
+                                       .limit(params[:limit] || Rails.configuration.times_per_page) 
+                                       .order("#{@sort_type} #{@sort_order}")
         
         render :xml => @times.to_xml(:root => 'times')
       }
@@ -200,7 +199,7 @@ private
 
   def prepare_times
     @current_page = params[:page].to_i
-    @current_page = 0 unless @current_page > 0
+    @current_page = 1 unless @current_page > 0
     
     @time_conditions = @logged_user.member_of_owner? ? {} : {'is_private' => false}
     @sort_type = params[:orderBy]

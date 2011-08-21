@@ -8,6 +8,7 @@ gem 'haml'
 gem 'uglifier'
 gem 'paperclip'
 gem 'dynamic_form'
+gem 'will_paginate', '~> 3.0'
 
 #group :test, :development do
 #  gem 'rspec-rails', '~> 2.3.1'

@@ -37,7 +37,7 @@ class TasksController < ApplicationController
         @content_for_sidebar = 'task_lists/index_sidebar'
       }
       format.xml  {
-        @tasks = @task_list.project_tasks.find(:all)
+        @tasks = @task_list.project_tasks
         render :xml => @tasks.to_xml(:root => 'tasks')
       }
     end
