@@ -146,10 +146,6 @@ en-US:
   # Status messages
   login_success: Login successful
   login_failure: Invalid login
-  invalid_openid_server: "Unable to find openid server for <q>{{openid_url}}</q>"
-  failed_verification_openid_url: "Verification of {{openid_url}} failed"
-  failed_login_openid_url: "Failed login with identity {{openid_url}}"
-  success_login_openid_url: "You have successfully logged in with {{openid_url}} as your identity"
   verification_failed: Verification failed
   verification_cancelled: Verification cancelled
   unknown_response_status: "Unknown response status: {{status}}"
@@ -423,8 +419,6 @@ en-US:
   repeat_password: Repeat password
   username: Username
   password: Password
-  openid: OpenID
-  use_openid: Use OpenID
   forgot_password_q: "Forgot password?"
   
   # Account
@@ -438,7 +432,6 @@ en-US:
   administrator: Administrator
   auto_assign: Auto assign
   auto_assign_to_new_projects: "Auto assign to new projects?"
-  openid_info: "For more information about OpenID, please visit <a href=\"http://openid.net/\">OpenID</a>."
   display_name: Display name
   timezone: Timezone
   instant_messengers: Instant Messengers
@@ -643,8 +636,6 @@ en-US:
   option_default_project_message_categories_description: "Message categories that will be created when project is created. Every category name should be in a new line. Duplicate or empty lines will be ignored"
   option_default_project_message_category_name: "Default message category"
   option_default_project_message_category_description: "Message category that will be selected by default"
-  option_allow_openid_name: "Allow OpenID logins"
-  option_allow_openid_description: "Allow logging in via OpenID"
   option_allow_anonymous_name: "Allow anonymous login"
   option_allow_anonymous_description: "You will need to make a user of the owner company called 'Anonymous' for this to work"
   option_default_language_name: "Default language"

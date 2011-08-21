@@ -1,4 +1,4 @@
-<div id="normal_login" <% if @use_openid %>style="display: none;" <% end %>>
+<div id="normal_login">
 <% form_tag session_path, :method => :post do %>
   <div id="loginUsernameDiv">
     <label for="loginUsername"><%= :username.l %></label>
@@ -13,25 +13,9 @@
   <label class="checkbox" for="remember"><%= :remember_me.l %></label>
   <div class="clean"></div>
   
-  <span><%= link_to :forgot_password_q.l , new_password_path %>
-  <% if Rails.configuration.allow_openid %>| <a class="loginOpenID" href="#"><%= :use_openid.l %></a><% end %></span>
+  <span><%= link_to :forgot_password_q.l , new_password_path %></span>
   <div id="buttonSubmit">
   <button class="submit" type="submit" accesskey="s"><%= :login.l %></button>
   </div>
 <% end %>
 </div>
-    
-<% if Rails.configuration.allow_openid %>
-<div id="openid_login" <% unless @use_openid %>style="display: none;"<% end %>>
-<% form_tag session_path, :method => :post do %>
-  <div id="loginUsernameDiv">
-    <label for="loginOpenIDIdentity"><%= :openid.l %></label>
-    <%= text_field_tag "openid_url", "", :size => 30, :id => 'loginOpenIDIdentity', :class => 'openid_login' %>
-  </div>
-  <% if Rails.configuration.allow_openid %><a class="loginOpenID" href="#"><%= :login.l %></a><% end %></span>
-  <div id="buttonSubmit">
-  <button class="submit" type="submit" accesskey="s"><%= :login.l %></button>
-  </div>
-<% end %>
-</div>
-<% end %>

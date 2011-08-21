@@ -53,14 +53,6 @@
     <%= time_zone_select 'user', 'time_zone', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
   </div>
 
-<% if Rails.configuration.allow_openid %>
-  <div>
-    <label for="userFormOpenID"><%= :openid.l %></label>
-    <%= text_field 'user', 'identity_url', :id => 'userFormOpenID', :class => 'openid_login' %>
-    <p class="desc"><%= :openid_info.l %></p>
-  </div>
-<% end %>
-
 <div class="formBlock">  
   <fieldset>
     <legend><%= :password.l %></legend>

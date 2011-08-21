@@ -209,19 +209,6 @@ class User < ActiveRecord::Base
 		end
 	end
 
-  def self.openid_login(identity_url)
-    user = first(:conditions => ['identity_url = ?', OpenIdAuthentication.normalize_url(identity_url)])
-    return nil if user.nil?
-
-    now = Time.now.utc
-    user.last_login = now
-    user.last_activity = now
-    user.last_visit = now
-    user.save!
-
-    user
-  end
-
   def self.authenticate(login, pass)
     user = first(:conditions => ['username = ?', login])
     return nil if user.nil? or not user.valid_password(pass)

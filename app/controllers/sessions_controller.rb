@@ -20,18 +20,13 @@
 class SessionsController < ApplicationController
 
   layout 'dialog'
-  before_filter :use_openid, :only => [:new, :create]
 
   def new
     redirect_to :controller => 'dashboard' unless @logged_user.nil?
   end
 
   def create
-	if using_open_id?
-      openid_login
-    else
-      username_login
-    end
+    username_login
     remember(@logged_user) if params['remember']
   end
 
@@ -56,44 +51,6 @@ class SessionsController < ApplicationController
 
       session['user_id'] = @logged_user.id
     end
-  end
-
-  def openid_login
-    unless Rails.configuration.allow_openid
-      error_status(true, :invalid_request)
-      redirect_to :action => 'new'
-      return
-    end
-
-    authenticate_with_open_id(params[:openid_url]) do |result, identity_url, registration|
-      if result.successful?
-        log_user = User.openid_login(identity_url)
-
-        if log_user.nil?
-          error_status(true, :failed_login_openid_url, {:openid_url => identity_url})
-        else
-          error_status(false, :success_login_openid_url, {:openid_url => identity_url})
-          redirect_back_or_default :controller => 'dashboard'
-          session['user_id'] = log_user.id
-          return
-        end
-      elsif result.unsuccessful?
-        if result == :canceled
-          error_status(true, :verification_cancelled)
-        elsif !identity_url.nil?
-          error_status(true, :failed_verification_openid_url, {:openid_url => identity_url})
-        else
-          error_status(true, :verification_failed)
-        end
-      else
-        error_status(true, :unknown_response_status, {:status => result.message})
-      end
-      redirect_to :action => 'new'
-    end
-  end
-
-  def use_openid
-    @use_openid = (Rails.configuration.allow_openid and params['use_openid'].to_i == 1)
   end
 
   def protect?(action)

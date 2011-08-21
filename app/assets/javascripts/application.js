@@ -129,8 +129,6 @@ function bindStatic() {
         return false;
       });
       
-      $('.loginOpenID').click(login_toggle_openid);
-      
       $('.PopupMenuWidgetAttachTo').click(function(evt) {
         $(this).title = '';
         $('#'+this.id+'_menu').toggle();
@@ -371,22 +369,6 @@ var Project = {
 };
 
 // Login form stuff
-
-function login_toggle_openid()
-{
-	if ($('#openid_login').css('display') == 'none')
-	{
-		$('#openid_login').show();
-		$('#normal_login').hide();
-		$('#loginOpenIDIdentity').focus();
-	}
-	else
-	{
-		$('#openid_login').hide();
-		$('#normal_login').show();
-		$('#loginUsername').focus();
-	}
-}
 
 // Permissions form stuff
 var permissions_form_items = [];

@@ -102,12 +102,6 @@ general:
     comment: ""
     order: 6
 
-  allow_openid:
-    handler: BoolConfigHandler
-    default: false
-    comment: ""
-    order: 7
-
   allow_anonymous:
     handler: BoolConfigHandler
     default: false
