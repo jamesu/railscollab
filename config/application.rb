@@ -19,3 +19,4 @@ end
 require 'authenticated_system'
 require 'authentication'
 require 'authentication/by_cookie_token'
+require 'railscollab_extras'

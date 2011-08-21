@@ -33,10 +33,8 @@ module ConfigSystem
 
 	  # Load from app_keys.yml for session keys
 	  session_key_settings = YAML.load_file("config/app_keys.yml") rescue {}
-	  # Load from config.yml if it's present
-	  config_yml_settings = YAML.load_file('config/config.yml')[RAILS_ENV] rescue {}
-	
-	  session_key_settings.merge(config_yml_settings).merge(ENV).each do |key, value|
+	  
+	  session_key_settings.each do |key, value|
 		  Rails.configuration.send("#{key}=", value)
 	  end
   end
@@ -77,46 +75,9 @@ module ConfigSystem
     end
   end
   
-  def self.post_init  
-    # Following for themeable assets
-    ActionView::Helpers::AssetTagHelper.module_eval do
-       alias_method :av_image_path, :image_path
-       def image_path(source)
-         av_image_path("/themes/#{Rails.configuration.site_theme}/images/#{source}")
-       end
-       alias_method :path_to_image, :image_path
-       
-       alias_method :av_stylesheet_path, :stylesheet_path
-       def stylesheet_path(source)
-         av_stylesheet_path("/themes/#{Rails.configuration.site_theme}/stylesheets/#{source}")
-       end
-       alias_method :path_to_stylesheet, :stylesheet_path
-    end    
-  end
-  
-  def self.load_overrides
-    begin
-      override = OpenStruct.new(YAML.load_file("#{::Rails.root}/config/config.override.yml"))
-      env_config = override.send(RAILS_ENV)
-      override.common.update(env_config) unless env_config.nil?
-      
-      override
-    rescue Exception
-      OpenStruct.new()
-    end
-  end
-  
   def self.load_config
-    overrides = load_overrides
-    
     begin
       ConfigOption.dump_config(Rails.configuration)
-      unless overrides.common.nil?
-        overrides.common.keys.each do |key|
-          Rails.configuration.send("#{overrides.common[key]}=", overrides.common[key])
-        end
-      end
-      
       load_sys
     rescue Exception
     end
