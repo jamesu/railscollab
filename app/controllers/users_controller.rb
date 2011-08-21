@@ -20,8 +20,6 @@
 class UsersController < ApplicationController
 
   layout 'administration'
-
-  filter_parameter_logging :password
   
   before_filter :process_session
   before_filter :obtain_user, :except => [:index, :create, :new]

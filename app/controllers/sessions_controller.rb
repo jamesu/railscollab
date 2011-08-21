@@ -21,7 +21,6 @@ class SessionsController < ApplicationController
 
   layout 'dialog'
   before_filter :use_openid, :only => [:new, :create]
-  filter_parameter_logging :password
 
   def new
     redirect_to :controller => 'dashboard' unless @logged_user.nil?

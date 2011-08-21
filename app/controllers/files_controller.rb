@@ -24,8 +24,6 @@ class FilesController < ApplicationController
   before_filter :process_session
   before_filter  :obtain_file, :except => [:index, :new, :create]
   after_filter  :user_track, :only => [:index, :show]
-
-  filter_parameter_logging :file_data
   
   # GET /files
   # GET /files.xml
