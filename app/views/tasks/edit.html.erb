@@ -5,7 +5,7 @@
     @page_actions << {:title => :add_task_list, :url=> new_task_list_path}
   end
 %>
-<% form_tag task_path(:task_list_id => @task.task_list_id, :id => @task.id), :method => :put do %>
+<%= form_tag task_path(:task_list_id => @task.task_list_id, :id => @task.id), :method => :put do %>
   <%= render :partial => 'form', :object => @task %>
   <div><button class="submit" type="submit"><%=:edit_task.l %></button></div>
 <% end %>

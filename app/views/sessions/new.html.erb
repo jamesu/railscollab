@@ -1,5 +1,5 @@
 <div id="normal_login">
-<% form_tag session_path, :method => :post do %>
+<%= form_tag session_path, :method => :post do %>
   <div id="loginUsernameDiv">
     <label for="loginUsername"><%= :username.l %></label>
     <%= text_field "login", "user", :size => 30, :id => 'loginUsername', :class => 'medium' %>

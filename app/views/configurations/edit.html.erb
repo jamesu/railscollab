@@ -4,7 +4,7 @@
 
 <% else %>
 
-<% form_tag configuration_path(@category), :method => :put do %>
+<%= form_tag configuration_path(@category), :method => :put do %>
   <div id="configCategoryOptions">
 <% @options.each do |option| -%>
     <div class="configCategoryOption <%= cycle('odd', 'even') %>" id="configCategoryOption_<%= option.name %>">
