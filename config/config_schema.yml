@@ -56,7 +56,7 @@ system:
   ferret_index_path:
     handler: StringConfigHandler
     default: "/tmp/index"
-    comment: "Relative path to RAILS_ROOT for ferret's index folder."
+    comment: "Relative path to ::Rails.root for ferret's index folder."
     order: 13
 
 general:

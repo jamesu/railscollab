@@ -96,7 +96,7 @@ module ConfigSystem
   
   def self.load_overrides
     begin
-      override = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.override.yml"))
+      override = OpenStruct.new(YAML.load_file("#{::Rails.root}/config/config.override.yml"))
       env_config = override.send(RAILS_ENV)
       override.common.update(env_config) unless env_config.nil?
       

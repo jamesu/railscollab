@@ -33,14 +33,14 @@ namespace :db do
 			puts "Dumping configuration to config/config.yml"
 			config = OpenStruct.new()
 			ConfigOption.dump_config(config)
-			File.open("#{RAILS_ROOT}/config/config.yml", 'w') do |file|
+			File.open("#{::Rails.root}/config/config.yml", 'w') do |file|
 				file.puts YAML::dump(config.marshal_dump)
 			end
 		end
 		
 		task :load_config => :environment do
 			puts "Loading configuration from config/config.yml"
-			config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/config.yml"))
+			config = OpenStruct.new(YAML.load_file("#{::Rails.root}/config/config.yml"))
 			ConfigOption.load_config(config)
 		end
 		
@@ -127,7 +127,7 @@ namespace :db do
         out = {}
         rows.each_with_index { |mi, i| out["#{table.singularize}_#{i + 1}"] = mi }
       
-        model_file = RAILS_ROOT + "/test/fixtures/#{table}.yml"
+        model_file = ::Rails.root + "/test/fixtures/#{table}.yml"
         
         File.exists?(model_file) ? File.delete(model_file) : nil
         File.open(model_file, 'w') {|f| f << YAML.dump(out).gsub("<%", "<%%") }
