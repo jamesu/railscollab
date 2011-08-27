@@ -135,7 +135,6 @@ Railscollab::Application.routes.draw do
   end
   
   resources :configurations, :only => [:index, :edit, :update]
-  resources :tools, :only => [:index]
 
   match 'administration', :controller => 'administration', :action => 'index', :as => :administration
 

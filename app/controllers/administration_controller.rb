@@ -25,10 +25,6 @@ class AdministrationController < ApplicationController
   def index
   end
 
-  def upgrade
-  	@versions = []
-  end
-
   protected
   def authorize?(user)
   	user.is_admin

@@ -10,8 +10,6 @@ en:
   clients: Clients
   projects: Projects
   configuration: Configuration
-  tools: Tools
-  upgrade: Upgrade
   messages: Messages
   tasks: Tasks
   milestones: Milestones
@@ -679,12 +677,6 @@ en:
   option_notification_email_smtp_description: "Settings used for the SMTP mail transport"
   option_notification_email_sendmail_name: "Sendmail transport settings"
   option_notification_email_sendmail_description: "Settings used for the Sendmail mail transport"
-  
-  # Administration tools
-  # administration_tool_<name>
-  # administration_tool_<name>_description
-  
-  no_administration_tools: "No administration tools"
   
   
   # Mailing views
