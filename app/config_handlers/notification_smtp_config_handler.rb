@@ -29,7 +29,7 @@ class NotificationSMTPConfigHandler < ConfigHandler
 	end
 	
 	def value=(val)
-		if val.class == String:
+		if val.class == String
 		  @rawValue = val
 		else
 		  @rawValue = YAML.dump(val).to_s
