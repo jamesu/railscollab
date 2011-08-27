@@ -30,8 +30,8 @@
 <% selected_class = {} %>
 <% end %>
       <li><%= link_to (h category.name), posts_category_path(:id => category.id), selected_class %> 
-      <% if category.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), edit_category_path(:id => category.id) %><% end %>
-      <% if category.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => :category_delete_confirmation.l %><% end %>
+      <% if can?(:edit,category) %><%= link_to render_icon('edit',''), edit_category_path(:id => category.id) %><% end %>
+      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => :category_delete_confirmation.l %><% end %>
       </li>
 <% end %>
     </ul>

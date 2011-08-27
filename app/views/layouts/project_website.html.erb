@@ -26,7 +26,7 @@
 		<div class="important center">
 			<h5>
 			  <%= :project_locked_header.l %>
-			  <% if @active_project.status_can_be_changed_by(@logged_user) %>
+			  <% if can?(:change_status, @active_project) %>
 			      <%= link_to :mark_project_as_active.l, open_project_path(:id => @active_project.id), :method => :put, :confirm => :mark_project_as_active_confirmation.l %>
 			<% end %>
 			</h5>

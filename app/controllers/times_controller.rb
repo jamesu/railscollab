@@ -28,12 +28,7 @@ class TimesController < ApplicationController
   after_filter  :user_track,      :only   => [:index, :by_task, :view]
 
   def index
-    return error_status(true, :insufficient_permissions) unless @logged_user.has_permission(@active_project, :can_manage_time)
-      
-    unless @logged_user.has_permission(@active_project, :can_manage_time)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default @active_project
-    end
+    authorize! :manage_time, @active_project
     
     respond_to do |format|
       format.html {
@@ -60,7 +55,7 @@ class TimesController < ApplicationController
   end
 
   def by_task
-    return error_status(true, :insufficient_permissions) unless @logged_user.has_permission(@active_project, :can_manage_time)
+    authorize! :manage_time, @active_project
 
     respond_to do |format|
       format.html {
@@ -71,11 +66,11 @@ class TimesController < ApplicationController
   end
 
   def show
-    return error_status(true, :insufficient_permissions) unless @time.can_be_seen_by(@logged_user)
+    authorize! :show, @time
   end
 
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectTime.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_time, @active_project
 
     @time = @active_project.project_times.build
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
@@ -83,7 +78,7 @@ class TimesController < ApplicationController
   end
   
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectTime.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_time, @active_project
 
     @time = @active_project.project_times.build
     
@@ -112,7 +107,7 @@ class TimesController < ApplicationController
   end
 
   def edit
-    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
+    authorize! :edit, @time
 
     @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
     @open_task_lists << @time.project_task_list unless @time.project_task_list.nil? || @open_task_lists.include?(@time.project_task_list)
@@ -120,7 +115,7 @@ class TimesController < ApplicationController
   end
 
   def update
-    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
+    authorize! :edit, @time
 
     @time.attributes = params[:time]
     @time.updated_by = @logged_user
@@ -145,7 +140,7 @@ class TimesController < ApplicationController
   end
 
   def stop
-    return error_status(true, :insufficient_permissions) unless @time.can_be_edited_by(@logged_user)
+    authorize! :edit, @time
     
     @time.hours = @time.hours # Save calculated hours before setting done_date
     @time.done_date = Time.current
@@ -166,7 +161,7 @@ class TimesController < ApplicationController
   end
 
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@time.can_be_deleted_by(@logged_user))
+    authorize! :delete, @time
     
     remove_running_time(@time)
     

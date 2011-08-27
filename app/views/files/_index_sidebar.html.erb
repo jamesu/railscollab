@@ -16,8 +16,8 @@
 <% selected_class = {} %>
 <% end %>
       <li><%= link_to (h folder.name), files_folder_path(:id => folder.id), selected_class %> 
-      <% if folder.can_be_edited_by(@logged_user) %><%= link_to render_icon('edit',''), edit_folder_path(:id => folder.id) %><% end %>
-      <% if folder.can_be_deleted_by(@logged_user) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => :folder_delete_confirmation.l %><% end %>
+      <% if can?(:edit,folder) %><%= link_to render_icon('edit',''), edit_folder_path(:id => folder.id) %><% end %>
+      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => :folder_delete_confirmation.l %><% end %>
       </li>
 <% end %>
     </ul>

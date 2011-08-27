@@ -35,7 +35,7 @@ class MessagesController < ApplicationController
     end
     
     unless @category.nil?
-      return error_status(true, :insufficient_permissions) unless @category.can_be_seen_by(@logged_user)
+      authorize! :show, @category
     end
     
     include_private = @logged_user.member_of_owner?
@@ -86,7 +86,7 @@ class MessagesController < ApplicationController
   # GET /messages/1
   # GET /messages/1.xml
   def show
-    return error_status(true, :insufficient_permissions) unless @message.can_be_seen_by(@logged_user)
+    authorize! :show, @message
     
     @private_object = @message.is_private
 
@@ -104,7 +104,7 @@ class MessagesController < ApplicationController
   # GET /messages/new
   # GET /messages/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectMessage.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_message, @active_project
     
     @message = @active_project.project_messages.build()
     
@@ -134,13 +134,13 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
-    return error_status(true, :insufficient_permissions) unless @message.can_be_edited_by(@logged_user)
+    authorize! :edit, @message
   end
 
   # POST /messages
   # POST /messages.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectMessage.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_message, @active_project
     
     @message = @active_project.project_messages.build(params[:message])
     
@@ -201,7 +201,7 @@ class MessagesController < ApplicationController
   # PUT /messages/1
   # PUT /messages/1.xml
   def update
-    return error_status(true, :insufficient_permissions) unless (@message.can_be_edited_by(@logged_user))
+    authorize! :edit, @message
     
     message_attribs = params[:message]
     @message.attributes = message_attribs
@@ -238,7 +238,7 @@ class MessagesController < ApplicationController
   # DELETE /messages/1
   # DELETE /messages/1.xml
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@message.can_be_deleted_by(@logged_user))
+    authorize! :delete, @message
     
     @message.updated_by = @logged_user
     @message.destroy
@@ -255,11 +255,7 @@ class MessagesController < ApplicationController
 
   # PUT /messages/1/subscribe
   def subscribe
-    unless @message.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default messages_path
-      return
-    end
+    authorize! :show, @message
 
     @message.ensure_subscribed(@logged_user) if @message.class == ProjectMessage
 
@@ -275,11 +271,7 @@ class MessagesController < ApplicationController
 
   # PUT /messages/1/unsubscribe
   def unsubscribe
-    unless @message.can_be_seen_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default messages_path
-      return
-    end
+    authorize! :show, @message
 
   	@message.subscribers.delete(@logged_user)
 

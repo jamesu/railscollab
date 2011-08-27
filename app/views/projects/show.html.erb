@@ -1,19 +1,19 @@
 <%
   @page_actions = []
   
-  if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+  if can? :create_message, @active_project
     @page_actions << {:title => :add_message, :url=> new_message_path(:active_project => @active_project.id)}
   end
 
-  if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+  if can? :create_task_list, @active_project
     @page_actions << {:title => :add_task_list, :url=> new_task_list_path(:active_project => @active_project.id)}
   end
   
-  if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
+  if can? :create_milestone, @active_project
     @page_actions << {:title => :add_milestone, :url=> new_milestone_path(:active_project => @active_project.id)}
   end
 
-  if ProjectFile.can_be_created_by(@logged_user, @active_project)
+  if can? :create_file, @active_project
     @page_actions << {:title => :add_file, :url=> new_file_path(:active_project => @active_project.id)}
   end
 %>

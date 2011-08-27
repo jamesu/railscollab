@@ -17,7 +17,7 @@
     </ul>
   </div>
 
-<% if task_list.can_be_changed_by(@logged_user) %>
+<% if can?(:edit,task_list) %>
 <%  show_form = @new_list.nil? ? false : true %>
   <div class="addTask">
     <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to :add_task.l, new_task_path(:task_list_id => task_list.id) %></div>

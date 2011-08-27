@@ -40,7 +40,7 @@ class CommentsController < ApplicationController
     return error_status(true, :invalid_object) if @commented_object.nil?
     
     # Check permissions
-    return error_status(true, :insufficient_permissions) unless (@commented_object.can_be_seen_by(@logged_user))
+    authorize! :show, @commented_object
     
     @comments = @logged_user.member_of_owner? ? @commented_object.comments : @commented_object.comments.public
     
@@ -61,7 +61,7 @@ class CommentsController < ApplicationController
   # GET /comments/1
   # GET /comments/1.xml
   def show
-    return error_status(true, :insufficient_permissions) unless (@comment.comment_can_be_seen_by(@logged_user))
+    authorize! :show, @comment
     
     respond_to do |format|
       format.html {}
@@ -88,13 +88,7 @@ class CommentsController < ApplicationController
     return error_status(true, :invalid_object) if @commented_object.nil?
     
     # Check permissions
-    return error_status(true, :insufficient_permissions) unless (@commented_object.comment_can_be_added_by(@logged_user))
-
-    unless @commented_object.comment_can_be_added_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default @commented_object.object_url
-      return
-    end
+    authorize! :comment, @commented_object
 
     @comment = Comment.new()
     @comment.rel_object = @commented_object
@@ -110,7 +104,7 @@ class CommentsController < ApplicationController
 
   # GET /comments/1/edit
   def edit
-    return error_status(true, :insufficient_permissions) unless @comment.can_be_edited_by(@logged_user)
+    authorize! :edit, @comment
     
     @commented_object = @comment.rel_object
 	  @active_project = @commented_object.project
@@ -132,13 +126,7 @@ class CommentsController < ApplicationController
     return error_status(true, :invalid_object) if @commented_object.nil?
     
     # Check permissions
-    return error_status(true, :insufficient_permissions) unless (@commented_object.comment_can_be_added_by(@logged_user))
-
-    unless @commented_object.comment_can_be_added_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default @commented_object.object_url
-      return
-    end
+    authorize! :comment, @commented_object
 
     @comment = Comment.new()
     @comment.rel_object = @commented_object
@@ -188,7 +176,7 @@ class CommentsController < ApplicationController
   # PUT /comments/1
   # PUT /comments/1.xml
   def update
-    return error_status(true, :insufficient_permissions) unless (@comment.can_be_edited_by(@logged_user))
+    authorize! :edit, @comment
 
     @commented_object = @comment.rel_object
   	@active_project = @commented_object.project
@@ -230,7 +218,7 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.xml
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@comment.can_be_deleted_by(@logged_user))
+    authorize! :delete, @comment
     
     @comment.updated_by = @logged_user
     @comment.destroy

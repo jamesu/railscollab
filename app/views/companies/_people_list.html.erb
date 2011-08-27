@@ -29,7 +29,7 @@
 				<% end %>
 			</div>
 
-			<% if company_card.can_be_edited_by(@logged_user) %>
+			<% if can? :edit, company_card %>
 				<div class="cardBlock">
 					<%= action_list actions_for_company(company) %>
 				</div>
@@ -69,7 +69,7 @@
 				<div class="cardBlock">
 					<% if user_card.owner_of_owner? %><div class="cardOwner"><%= :owner.l %></div><% end %>
 				</div>
-				<% if user_card.profile_can_be_updated_by(@logged_user) %>
+				<% if can?(:update_profile, user_card) %>
 					<div class="cardBlock">
 						<%= action_list actions_for_user(user_card) %>
 					</div>

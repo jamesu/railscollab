@@ -269,43 +269,6 @@ class ProjectTime < ActiveRecord::Base
     return where(:conditions => time_conditions)
   end
   
-  # Core Permissions
-  
-  def self.can_be_created_by(user, project)
-    project.is_active? and user.has_permission(project, :can_manage_time)
-  end
-  
-  def can_be_edited_by(user)
-   return false if (!user.member_of(project))
-   return ((user.is_admin or created_by.id == user.id) and project.is_active?)
-  end
-  
-  def can_be_deleted_by(user)
-   project.is_active? and user.member_of(project) and user.is_admin
-  end
-  
-  def can_be_seen_by(user)
-   if !project.has_member(user)
-     return false
-   end
-   
-   if user.has_permission(project, :can_manage_time)
-     return true
-   end
-   
-   if self.is_private and !user.member_of_owner?
-     return false
-   end
-   
-   return true
-  end
-  
-  # Specific Permissions
-
-  def can_be_managed_by(user)
-    project.is_active? and user.has_permission(project, :can_manage_time)
-  end
-  
   # Accesibility
   
   attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable

@@ -1,11 +1,11 @@
 <%
   @page_actions = []
   
-  if ProjectFile.can_be_created_by(@logged_user, @active_project)
+  if can? :create_file, @active_project
 	@page_actions << {:title => :add_file, :url => new_file_path}
   end
 
-  if ProjectFolder.can_be_created_by(@logged_user, @active_project)
+  if can? :create_folder, @active_project
     @page_actions << {:title => :add_folder, :url => new_folder_path}
   end
 %>
@@ -72,7 +72,7 @@
 <div id="fileComments">
 <%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @file.comments : @file.comments.public} %>
 
-<% if @file.comment_can_be_added_by(@logged_user) %>
+<% if can? :comment, @file %>
 <%= render :partial => 'comments/add_form', :locals => {:commented_object => @file} %>
 <% end %>
 </div>

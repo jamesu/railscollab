@@ -2,7 +2,7 @@
 	@additional_stylesheets ||= []
 	@additional_stylesheets << 'project/attach_files'
 %>
-<% if !attached_files.empty? or (!dont_add and attached_files_object.file_can_be_added_by(@logged_user)) %>
+<% if !attached_files.empty? or (!dont_add and can?(:add_file, attached_files_object)) %>
 <div class="objectFiles">
   <ul>
 <% attached_files.each do |attached_file| -%>
@@ -11,7 +11,7 @@
     </li>
 <% end %>
   </ul>
-<% if !dont_add and attached_files_object.file_can_be_added_by(@logged_user) %>
+<% if !dont_add and can?(:add_file, attached_files_object) %>
   <p>&raquo; <%= link_to :attach_files.l, attach_file_path(:object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id) %></p>
 <% end %>
 </div>

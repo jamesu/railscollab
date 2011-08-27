@@ -11,7 +11,7 @@
     <p><%= :users_active_in_last_n_minutes.l_with_args(:number => 15) %></p>
     <ul>
 <% @online_users.each do |user| -%>
-<% if user.can_be_viewed_by(@logged_user) %>
+<% if can? :show, user %>
       <li><%= link_to (h user.display_name), user_path(:id => user.id) %> <span class="desc">(<%= h user.company.name %>)</span></li>
 <% end %>
 <% end %>

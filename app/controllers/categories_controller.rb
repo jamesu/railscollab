@@ -46,7 +46,7 @@ class CategoriesController < ApplicationController
       return error_status(true, :invalid_message_category)
     end
     
-    return error_status(true, :insufficient_permissions) unless @category.can_be_seen_by(@logged_user)
+    authorize! :show, @category
     
     respond_to do |format|
       format.html {
@@ -61,7 +61,7 @@ class CategoriesController < ApplicationController
   # GET /categories/new
   # GET /categories/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectMessageCategory.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_message_category, @active_project
     
     @category = @active_project.project_message_categories.build()
     
@@ -79,13 +79,13 @@ class CategoriesController < ApplicationController
       return error_status(true, :invalid_message_category)
     end
     
-    return error_status(true, :insufficient_permissions) unless @category.can_be_edited_by(@logged_user)
+    authorize! :edit, @category
   end
 
   # POST /categories
   # POST /categories.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectMessageCategory.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_message_category, @active_project
     
     @category = @active_project.project_message_categories.build(params[:category])
     @category.created_by = @logged_user
@@ -115,7 +115,7 @@ class CategoriesController < ApplicationController
       return error_status(true, :invalid_message_category)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@category.can_be_edited_by(@logged_user))
+    authorize! :edit, @category
     
     @category.updated_by = @logged_user
     
@@ -144,7 +144,7 @@ class CategoriesController < ApplicationController
       return error_status(true, :invalid_message_category)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@category.can_be_deleted_by(@logged_user))
+    authorize! :delete, @category
     
     @category.updated_by = @logged_user
     @category.destroy
@@ -168,7 +168,7 @@ class CategoriesController < ApplicationController
       return error_status(true, :invalid_message_category)
     end
     
-    return error_status(true, :insufficient_permissions) unless @category.can_be_seen_by(@logged_user)
+    authorize! :show, @category
     
     include_private = @logged_user.member_of_owner?
     

@@ -21,6 +21,8 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  include Authentication
+  include Authentication::ByCookieToken
 
   belongs_to :company
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
@@ -164,92 +166,22 @@ class User < ActiveRecord::Base
     result == self.token
   end
 
-  def remember?
-    remember_expires_at && Time.now.utc < remember_expires_at
-  end
-
-  def remember_me!
-    self.remember_expires_at = 2.weeks.from_now.utc
-    self.remember = Digest::SHA1.hexdigest(salt + remember_expires_at.to_s + token)
-    save(false)
-  end
-
-  def forget_me!
-    self.remember = nil
-    self.remember_expires_at = nil
-    save(false)
-  end
-
-	def identity_url
-		begin
-			return OpenIdAuthentication.normalize_url(read_attribute('identity_url'))
-		rescue
-			return nil
-		end
-	end
-	
-	def identity_url=(value)
-		begin
-			write_attribute('identity_url', OpenIdAuthentication.normalize_url(value))
-		rescue
-			write_attribute('identity_url', nil)
-		end
-	end
-	
-	def validate
-	    if self.identity_url != nil && self.identity_url.length > 0
-			if (self.identity_url.include?("@") || self.identity_url.include?(" "))
-				errors.add(:identity_url, "contains invalid characters")
-			end
-			begin
-				OpenIdAuthentication.normalize_url(self.identity_url)
-			rescue
-				errors.add(:identity_url, "is not a valid OpenID URL")
-			end
-		end
-	end
-
   def self.authenticate(login, pass)
-    user = first(:conditions => ['username = ?', login])
-    return nil if user.nil? or not user.valid_password(pass)
-
-    now = Time.now.utc
-    user.last_login = now
-    user.last_activity = now
-    user.last_visit = now
-    user.save!
-
-    user
+    user = User.where(:username => login).first
+    if (!user.nil?) and (user.valid_password(pass))
+      now = Time.now.utc
+      user.last_login = now
+      user.last_activity = now
+      user.last_visit = now
+      user.save!
+      return user
+    else
+      return nil
+    end
   end
 
   def valid_password(pass)
     self.token == Digest::SHA1.hexdigest(self.salt + pass)
-  end
-
-  # Core permissions
-
-  def self.can_be_created_by(user)
-    user.member_of_owner? and user.is_admin
-  end
-
-  def can_be_deleted_by(user)
-    return false if self.owner_of_owner? or user.id == self.id
-    user.is_admin
-  end
-
-  def can_be_viewed_by(user)
-    user.member_of_owner? or user.company_id == self.company_id or self.member_of_owner?
-  end
-
-  # Specific permissions
-
-  def profile_can_be_updated_by(user)
-    (self.id == user.id and !user.is_anonymous?) or (user.member_of_owner? and user.is_admin)
-  end
-
-  def permissions_can_be_updated_by(user)
-    return false if self.owner_of_owner?
-    user.member_of_owner? and user.is_admin
   end
 
   # Helpers
@@ -417,5 +349,4 @@ class User < ActiveRecord::Base
   
   validates_uniqueness_of :username
   validates_uniqueness_of :email
-  validates_uniqueness_of :identity_url, :if => Proc.new { |user| !(user.identity_url.nil? or user.identity_url.empty? ) }
 end

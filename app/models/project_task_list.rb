@@ -119,36 +119,6 @@ class ProjectTaskList < ActiveRecord::Base
   def send_comment_notifications(comment)
   end
 
-  def self.can_be_created_by(user, project)
-    project.is_active? and user.has_permission(project, :can_manage_tasks)
-  end
-
-  def can_be_managed_by(user)
-    project.is_active? and user.has_permission(project, :can_manage_tasks)
-  end
-
-  def can_be_edited_by(user)
-    return false if !project.is_active? or !user.member_of(project) or user.is_anonymous?
-
-    return true if user.is_admin
-
-    !(self.is_private and !user.member_of_owner?) and user.id == created_by_id
-  end
-  
-  alias :can_be_changed_by :can_be_edited_by
-
-  def can_be_deleted_by(user)
-    project.is_active? and user.member_of(project) and user.is_admin
-  end
-
-  def can_be_seen_by(user)
-    user.member_of(self.project) and !(self.is_private and !user.member_of_owner?)
-  end
-
-  def comment_can_be_added_by(user)
-    project.is_active? and project.has_member(user) and !user.is_anonymous?
-  end
-
   def open_tasks
     self.project_tasks.select{ |task| task.completed_on.nil? }
   end

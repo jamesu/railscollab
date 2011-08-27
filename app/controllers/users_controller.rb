@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    return error_status(true, :insufficient_permissions) unless (User.can_be_created_by(@logged_user))
+    authorize! :create_user, current_user
 
     @user = User.new
     @company = @logged_user.company
@@ -74,7 +74,7 @@ class UsersController < ApplicationController
   end
   
   def create
-    return error_status(true, :insufficient_permissions) unless (User.can_be_created_by(@logged_user))
+    authorize! :create_user, current_user
 
     @user = User.new
     @company = @logged_user.company
@@ -145,11 +145,11 @@ class UsersController < ApplicationController
   end
 
   def edit
-    return error_status(true, :insufficient_permissions) unless @user.profile_can_be_updated_by(@logged_user)
+    authorize! :update_profile, @user
   end
   
   def update
-    return error_status(true, :insufficient_permissions) unless @user.profile_can_be_updated_by(@logged_user)
+    authorize! :update_profile, @user
   	
     @projects = @active_projects
     @permissions = ProjectUser.permission_names()
@@ -226,13 +226,13 @@ class UsersController < ApplicationController
 
   def current
     @user = @logged_user
-    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
+    authorize! :update_profile, @user
 
     render :action => 'edit'
   end
 
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@user.can_be_deleted_by(@logged_user))
+    authorize! :delete, @user
     
     old_name = @user.display_name
     #@user.updated_by = @logged_user
@@ -249,7 +249,7 @@ class UsersController < ApplicationController
   end
 
   def avatar
-    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
+    authorize! :update_profile, @user
 
     case request.method_symbol
     when :put
@@ -278,7 +278,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    return error_status(true, :insufficient_permissions) unless (@user.can_be_viewed_by(@logged_user))
+    authorize! :show, @user
     
     respond_to do |format|
       format.html { }
@@ -306,7 +306,7 @@ class UsersController < ApplicationController
   end
 
   def permissions
-    return error_status(true, :insufficient_permissions) unless (@user.profile_can_be_updated_by(@logged_user))
+    authorize! :update_profile, @user
 
     @projects = @user.company.projects
     @permissions = ProjectUser.permission_names()
@@ -325,15 +325,7 @@ class UsersController < ApplicationController
     project_ids ||= []
 
     # Grab the list of project id's specified
-    project_list = project_ids.collect do |project_id|
-      begin
-        project = Project.find(project_id)
-        project.can_be_managed_by(@logged_user)
-        project
-      rescue ActiveRecord::RecordNotFound
-        nil
-      end
-    end.compact
+    project_list = Project.where(:id => project_ids & User.project_ids)
 
     # Associate project permissions with user
     project_list.each do |project|

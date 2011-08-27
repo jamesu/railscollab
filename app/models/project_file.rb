@@ -208,52 +208,6 @@ class ProjectFile < ActiveRecord::Base
     return found_files, grouped_fields
   end
 
-  # Core permissions
-
-  def self.can_be_created_by(user, project)
-    project.is_active? and user.has_permission(project, :can_upload_files)
-  end
-
-  def can_be_edited_by(user)
-    return false if (!project.is_active? or !(user.member_of(project) and user.has_permission(project, :can_manage_files)))
-
-    return true if user.is_admin
-
-    !(self.is_private and !user.member_of_owner?) and user.id == self.created_by.id
-  end
-
-  def can_be_deleted_by(user)
-    user.is_admin and project.is_active? and user.member_of(project)
-  end
-
-  def can_be_seen_by(user)
-    return false if !user.member_of(self.project)
-
-    !(self.is_private and !user.member_of_owner?)
-  end
-
-  # Specific Permissions
-
-  def can_be_managed_by(user)
-    project.is_active? and user.has_permission(project, :can_manage_files)
-  end
-
-  def can_be_downloaded_by(user)
-    can_be_seen_by(user)
-  end
-
-  def options_can_be_changed_by(user)
-    user.member_of_owner? and can_be_edited_by(user)
-  end
-
-  def comment_can_be_added_by(user)
-    if user.is_anonymous?
-      return (self.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !self.is_private)
-    else
-      return (self.comments_enabled and project.is_active? and user.member_of(project) and !(self.is_private and !user.member_of_owner?))
-    end
-  end
-
   # Accesibility
 
   attr_accessible :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled

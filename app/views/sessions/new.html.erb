@@ -2,14 +2,14 @@
 <%= form_tag session_path, :method => :post do %>
   <div id="loginUsernameDiv">
     <label for="loginUsername"><%= :username.l %></label>
-    <%= text_field "login", "user", :size => 30, :id => 'loginUsername', :class => 'medium' %>
+    <%= text_field_tag 'login', @login, :size => 30, :id => 'loginUsername', :class => 'medium' %>
   </div>
   <div id="loginPasswordDiv">
     <label for="loginPassword"><%= :password.l %></label>
-    <%= password_field "login", "password", :size => 30, :id => 'loginPassword', :class => 'medium' %>
+    <%= password_field_tag 'password', nil, :size => 30, :id => 'loginPassword', :class => 'medium' %>
   </div>
   
-  <%= check_box_tag :remember, '1', false, :class => 'checkbox' %>
+  <%= check_box_tag 'remember_me', '1', @remember_me, :class => 'checkbox' %>
   <label class="checkbox" for="remember"><%= :remember_me.l %></label>
   <div class="clean"></div>
   

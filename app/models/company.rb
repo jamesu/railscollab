@@ -78,34 +78,6 @@ class Company < ActiveRecord::Base
     false
   end
 
-  def self.can_be_created_by(user)
-    user.is_admin and user.member_of_owner?
-  end
-
-  def can_be_edited_by(user)
-    user.is_admin and (user.company == self or user.member_of_owner?)
-  end
-
-  def can_be_deleted_by(user)
-    user.is_admin and user.member_of_owner?
-  end
-
-  def can_be_seen_by(user)
-    true
-  end
-
-  def client_can_be_added_by(user)
-    user.is_admin and user.member_of_owner?
-  end
-
-  def can_be_removed_by(user)
-    !self.is_owner? and user.is_admin and user.member_of_owner?
-  end
-
-  def can_be_managed_by(user)
-    user.is_admin? and !self.is_owner?
-  end
-
   def has_logo?
     self.logo?
   end

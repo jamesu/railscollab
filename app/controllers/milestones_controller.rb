@@ -47,16 +47,16 @@ class MilestonesController < ApplicationController
   end
 
   def show
-    return error_status(true, :insufficient_permissions) unless @milestone.can_be_seen_by(@logged_user)
+    authorize! :show, @milestone
   end
 
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectMilestone.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_milestone, @active_project
     @milestone = @active_project.project_milestones.build
   end
   
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectMilestone.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_milestone, @active_project
     @milestone = @active_project.project_milestones.build
     
     milestone_attribs = params[:milestone]
@@ -86,11 +86,11 @@ class MilestonesController < ApplicationController
   end
 
   def edit
-    return error_status(true, :insufficient_permissions) unless @milestone.can_be_edited_by(@logged_user)
+    authorize! :edit, @milestone
   end
   
   def update
-    return error_status(true, :insufficient_permissions) unless @milestone.can_be_edited_by(@logged_user)
+    authorize! :edit, @milestone
  
     milestone_attribs = params[:milestone]
     @milestone.attributes = milestone_attribs
@@ -118,7 +118,7 @@ class MilestonesController < ApplicationController
   end
 
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@milestone.can_be_deleted_by(@logged_user))
+    authorize! :delete, @milestone
 
     @on_page = (params[:on_page] || '').to_i == 1
     @removed_id = @milestone.id
@@ -136,7 +136,7 @@ class MilestonesController < ApplicationController
   end
 
   def complete
-    return error_status(true, :insufficient_permissions) unless (@milestone.status_can_be_changed_by(@logged_user))
+    authorize! :change_status, @milestone
     return error_status(true, :milestone_already_completed) if (@milestone.is_completed?)
 
     @milestone.set_completed(true, @logged_user)
@@ -146,7 +146,7 @@ class MilestonesController < ApplicationController
   end
 
   def open
-    return error_status(true, :insufficient_permissions) unless (@milestone.status_can_be_changed_by(@logged_user))
+    authorize! :change_status, @milestone
     return error_status(true, :milestone_already_open) unless (@milestone.is_completed?)
 
     @milestone.set_completed(false)

@@ -108,91 +108,91 @@ module ApplicationHelper
   end
 	
 	def actions_for_user(user)
-	   profile_updateable = user.profile_can_be_updated_by(@logged_user)
+	   profile_updateable = can?(:update_profile, user)
 	   
 	   actions = [{:name => :edit.l, :url => edit_user_path(:id => user.id), :cond => profile_updateable}]
 	   
 	   if @active_project.nil?
 	     actions += [
-	       {:name => :delete.l, :url => user_path(:id => user.id), :cond => user.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :confirm_user_delete.l},
-	       {:name => :permissions.l, :url => permissions_user_path(:id => user.id), :cond => user.permissions_can_be_updated_by(@logged_user)}]
+	       {:name => :delete.l, :url => user_path(:id => user.id), :cond => can?(:delete,user), :method => :delete, :confirm => :confirm_user_delete.l},
+	       {:name => :permissions.l, :url => permissions_user_path(:id => user.id), :cond => can?(:update_permissions, user)}]
 	   else
-	     actions << {:name => :remove.l, :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => user.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :confirm_user_remove.l}
+	     actions << {:name => :remove.l, :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => can?(:delete,user), :method => :delete, :confirm => :confirm_user_remove.l}
 	   end
 	   
 	   actions
 	end
 
   def actions_for_project(project)
-    [{:name => :edit.l,   :url => edit_project_path(:id => project.id), :cond => project.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => project_path(:id => project.id), :cond => project.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :project_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_project_path(:id => project.id), :cond => can?(:edit,project)},
+     {:name => :delete.l, :url => project_path(:id => project.id), :cond => can?(:delete,project), :method => :delete, :confirm => :project_confirm_delete.l}]
   end
 
   def actions_for_milestone(milestone)
-    [{:name => :edit.l,   :url => edit_milestone_path(:id => milestone.id), :cond => milestone.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => milestone.can_be_deleted_by(@logged_user), :class => 'oaction', :amethod => :delete, :aconfirm => :milestone_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_milestone_path(:id => milestone.id), :cond => can?(:edit,milestone)},
+     {:name => :delete.l, :url => milestone_path(:id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :amethod => :delete, :aconfirm => :milestone_confirm_delete.l}]
   end
 
   def actions_for_task_list(task_list)
-    [{:name => :edit.l,          :url => edit_task_list_path(:id => task_list.id), :cond => task_list.can_be_changed_by(@logged_user)},
-     {:name => :delete.l,        :url => task_list_path(:id => task_list.id), :cond => task_list.can_be_deleted_by(@logged_user), :class => 'oaction', :amethod => :delete, :aconfirm => :task_list_confirm_delete.l},
-     {:name => :reorder_tasks.l, :url => reorder_task_list_path(:id => task_list.id), :class => 'doSortTaskList', :cond => task_list.can_be_changed_by(@logged_user)}]
+    [{:name => :edit.l,          :url => edit_task_list_path(:id => task_list.id), :cond => can?(:edit,task_list)},
+     {:name => :delete.l,        :url => task_list_path(:id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :amethod => :delete, :aconfirm => :task_list_confirm_delete.l},
+     {:name => :reorder_tasks.l, :url => reorder_task_list_path(:id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
   end
 
   def actions_for_message(message)
-    [{:name => :edit.l,   :url => edit_message_path(:id => message.id), :cond => message.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => message_path(:id => message.id), :cond => message.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :message_confirm_delete.l}]
+    [{:name => :edit.l,   :url => edit_message_path(:id => message.id), :cond => can?(:edit,message)},
+     {:name => :delete.l, :url => message_path(:id => message.id), :cond => can?(:delete,message), :method => :delete, :confirm => :message_confirm_delete.l}]
   end
 
   def actions_for_company(company)
     actions = [
-      {:name => :add_user.l, :url => "/users/new?company_id=#{company.id}", :cond => (@active_project.nil? and User.can_be_created_by(@logged_user))}, 
-      {:name => :edit.l,   :url => edit_company_path(:id => company.id), :cond => company.can_be_edited_by(@logged_user)}]
+      {:name => :add_user.l, :url => "/users/new?company_id=#{company.id}", :cond => (@active_project.nil? and can?(:create_user, current_user))}, 
+      {:name => :edit.l,   :url => edit_company_path(:id => company.id), :cond => can?(:edit,company)}]
     
     unless @active_project.nil?
-      actions << {:name => :remove.l, :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => company.can_be_removed_by(@logged_user), :method => :delete, :confirm => :confirm_client_remove.l}
+      actions << {:name => :remove.l, :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => can?(:remove, company), :method => :delete, :confirm => :confirm_client_remove.l}
     else
-      actions << {:name => :permissions.l, :url => permissions_company_path(:id => company.id), :cond => company.can_be_managed_by(@logged_user)}
+      actions << {:name => :permissions.l, :url => permissions_company_path(:id => company.id), :cond => can?(:manage, company)}
     end
     
     actions
   end
 
   def actions_for_comment(comment)
-    [{:name => :edit.l,   :url => edit_comment_path(:id => comment.id),   :cond => comment.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => comment_path(:id => comment.id), :cond => comment.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :comment_delete_confirm.l}]
+    [{:name => :edit.l,   :url => edit_comment_path(:id => comment.id),   :cond => can?(:edit,comment)},
+     {:name => :delete.l, :url => comment_path(:id => comment.id), :cond => can?(:delete,comment), :method => :delete, :confirm => :comment_delete_confirm.l}]
   end
 
   def actions_for_file(file, last_revision)
-    [{:name => :details_size.l_with_args(:size => format_size(last_revision.filesize)), :url => file_path(:id => file.id), :cond => file.can_be_downloaded_by(@logged_user)},
-     {:name => :edit.l,   :url => edit_file_path(:id => file.id), :cond => file.can_be_edited_by(@logged_user)},
-     {:name => :delete.l, :url => file_path(:id => file.id), :cond => file.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :file_delete_confirmation.l}]
+    [{:name => :details_size.l_with_args(:size => format_size(last_revision.filesize)), :url => file_path(:id => file.id), :cond => can?(:download, file)},
+     {:name => :edit.l,   :url => edit_file_path(:id => file.id), :cond => can?(:edit,file)},
+     {:name => :delete.l, :url => file_path(:id => file.id), :cond => can?(:delete,file), :method => :delete, :confirm => :file_delete_confirmation.l}]
   end
 
   def actions_for_file_revision(file, revision)
-    [{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => download_file_path(:id => file.id, :revision => revision.revision_number), :cond => file.can_be_downloaded_by(@logged_user)},
-     {:name => :edit.l,                                                             :url => edit_file_path(:id => file.id, :revision => revision.revision_number), :cond => file.can_be_edited_by(@logged_user)}]
+    [{:name => :download_size.l_with_args(:size => format_size(revision.filesize)), :url => download_file_path(:id => file.id, :revision => revision.revision_number), :cond => can?(:download, file)},
+     {:name => :edit.l,                                                             :url => edit_file_path(:id => file.id, :revision => revision.revision_number), :cond => can?(:edit,file)}]
   end
 
   def actions_for_attached_files(attached_file, object)
     [{:name => :details.l, :url => file_path(:id => attached_file.id), :cond => true},
-     {:name => :detatch.l, :url => detatch_file_path(:id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => object.file_can_be_added_by(@logged_user), :method => :put, :confirm => :detatch_file_confirm.l}]
+     {:name => :detatch.l, :url => detatch_file_path(:id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :method => :put, :confirm => :detatch_file_confirm.l}]
   end
 
   def actions_for_time(time)
     [{:name => :details.l, :url => time_path(:id => time.id), :cond => true},
-     {:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => time.can_be_edited_by(@logged_user)},
-     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => time.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :time_confirm_delete.l}]
+     {:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => can?(:edit,time)},
+     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => :time_confirm_delete.l}]
   end
 
   def actions_for_time_short(time)
-    [{:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => time.can_be_edited_by(@logged_user)},
-     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => time.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :time_confirm_delete.l}]
+    [{:name => :edit.l,    :url => edit_time_path(:id => time.id), :cond => can?(:edit,time)},
+     {:name => :delete.l,  :url => time_path(:id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => :time_confirm_delete.l}]
   end
 
   def actions_for_wiki_page(page)
-    [{:name => :edit.l,    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page}, :cond => page.can_be_edited_by(@logged_user)},
-     {:name => :delete.l,  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page}, :cond => page.can_be_deleted_by(@logged_user), :method => :delete, :confirm => :wiki_page_confirm_delete.l}]
+    [{:name => :edit.l,    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page}, :cond => can?(:edit,page)},
+     {:name => :delete.l,  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page}, :cond => can?(:delete,page), :method => :delete, :confirm => :wiki_page_confirm_delete.l}]
   end
   
   def running_time_for_task(task)

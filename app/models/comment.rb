@@ -63,43 +63,6 @@ class Comment < ActiveRecord::Base
 	    end
 	  end
 	end
-		
-	# Core Permissions
-	
-	def self.can_be_created_by(user, project)
-	 false
-	end
-	
-	def can_be_edited_by(user)
-	  comment_project = self.rel_object.project
-	  
-	  if comment_project.is_active? and comment_project.has_member(user)
-	    return true if (user.member_of_owner? and user.is_admin)
-	  	
-	  	if self.created_by == user and !user.is_anonymous?
-	  		now = Time.now.utc
-		    return (now <= (self.created_on + (60 * Rails.configuration.minutes_to_comment_edit_expire)))
-	    end
-	  end
-	  
-	  return false
-	end
-	
-	def can_be_deleted_by(user)
-	 return self.rel_object.can_be_deleted_by(user)
-	end
-	
-	def can_be_seen_by(user)
-	 return false if (self.is_private and !user.member_of_owner?)
-	 
-	 self.rel_object.can_be_seen_by(user)
-	end
-	
-	# Specific permissions
-    
-    def file_can_be_added_by(user)
-      return (self.can_be_edited_by(user) and (self.new_record? and user.has_permission(self.rel_object.project, :can_upload_files)))
-    end
     
     # Helpers
 

@@ -219,44 +219,6 @@ class Project < ActiveRecord::Base
     return results, results.total_hits
   end
 	
-	# Core Permissions
-	
-	def self.can_be_created_by(user)
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def can_be_edited_by(user)
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def can_be_deleted_by(user)
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def can_be_seen_by(user)
-	 return (self.has_member(user) or (user.member_of_owner? and user.is_admin))
-	end
-	
-	# Specific Permissions
-	
-	def can_be_managed_by(user)
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def company_can_be_removed_by(company, user)
-	 return false if company.is_owner?
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def user_can_be_removed_by(user_remove, user)
-	 return false if user_remove.owner_of_owner?
-	 return (user.member_of_owner? and user.is_admin)
-	end
-	
-	def status_can_be_changed_by(user)
-	 return self.can_be_edited_by(user)
-	end
-	
 	# Helpers
 	
 	def self.select_list

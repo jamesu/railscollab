@@ -11,7 +11,7 @@
 <% end %>
           </td>
           <td class="permissionsList">
-          <% if user.permissions_can_be_updated_by(@logged_user) %>
+          <% if can? :update_permissions, user %>
             <div id="projectPermissionsBlock<%= permissions.id %>" <% unless user.member_of(permissions) %>style="display: none"<% end %>>
               <div class="projectPermission">
                 <%= check_box_tag "project_#{permissions.id}_all", "1", user.has_all_permissions(permissions), {:id => "projectPermissions#{permissions.id}All", :class => 'checkbox', :onclick => "permissions_form_project_select_all(#{permissions.id})"} %> <label for="<%= "projectPermissions#{permissions.id}All" %>" class="checkbox" style="font-weight: bolder"><%= :all.l %></label>

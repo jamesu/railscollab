@@ -26,7 +26,7 @@
 <div id="messageComments">
 <%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @message.comments : @message.comments.public} %>
 
-<% if @message.comment_can_be_added_by(@logged_user) %>
+<% if can? :comment, @message %>
 <%= render :partial => 'comments/add_form', :locals => {:commented_object => @message} %>
 <% end %>
 </div>

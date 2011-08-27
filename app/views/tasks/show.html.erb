@@ -31,7 +31,7 @@
 <div id="taskComments">
 <%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @task.comments : @task.comments.public} %>
 
-<% if @task.comment_can_be_added_by(@logged_user) %>
+<% if can? :comment, @task %>
 <%= render :partial => 'comments/add_form', :locals => {:commented_object => @task} %>
 <% end %>
 </div>

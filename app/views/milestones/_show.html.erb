@@ -14,7 +14,7 @@
 <% end %>
 
     <div class="header">
-<% if milestone.status_can_be_changed_by(@logged_user) %>
+<% if can?(:change_status, milestone) %>
 <% if milestone.is_completed? %>
 <%= checkbox_link open_milestone_path(:id => milestone.id), true, nil, {:method => :put} %>
 <% else %>

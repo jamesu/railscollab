@@ -20,11 +20,9 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
-require_dependency 'login_system'
-
 class ApplicationController < ActionController::Base
   include SslRequirement
-  include LoginSystem
+  include AuthenticatedSystem
 
   protect_from_forgery
   clear_helpers
@@ -36,6 +34,10 @@ class ApplicationController < ActionController::Base
   before_filter :set_time_zone
 
 protected
+
+  rescue_from CanCan::AccessDenied do |exception|
+    return error_status(true, :insufficient_permissions)
+  end
 
   def ssl_required?
 	Rails.configuration.using_ssl
@@ -71,7 +73,7 @@ protected
   end
 
   def verify_project
-    if @active_project.nil? or not (@active_project.can_be_seen_by(@logged_user))
+    if @active_project.nil? or not (can?(:show, @active_project))
       error_status(false, :insufficient_permissions)
       redirect_to :controller => 'dashboard'
       return false

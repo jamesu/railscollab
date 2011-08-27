@@ -99,7 +99,7 @@ class ProjectsController < ApplicationController
   end
 
   def people
-    return error_status(true, :insufficient_permissions) unless @project.can_be_seen_by(@logged_user)
+    authorize! :show, @project
 
     @project_companies = @project.companies
 
@@ -113,7 +113,7 @@ class ProjectsController < ApplicationController
   end
 
   def permissions
-    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
+    authorize! :manage, @project
 
     case request.method_symbol
     when :get
@@ -189,7 +189,7 @@ class ProjectsController < ApplicationController
   end
 
   def users
-    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
+    authorize! :manage, @project
 
     case request.method_symbol
     when :delete
@@ -206,7 +206,7 @@ class ProjectsController < ApplicationController
   end
 
   def companies
-    return error_status(true, :insufficient_permissions) unless @project.can_be_managed_by(@logged_user)
+    authorize! :manage, @project
 
     case request.method_symbol
     when :delete
@@ -225,7 +225,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    return error_status(true, :insufficient_permissions) unless Project.can_be_created_by(@logged_user)
+    authorize! :create_project, current_user
 
     @project = Project.new
     
@@ -236,7 +236,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    return error_status(true, :insufficient_permissions) unless Project.can_be_created_by(@logged_user)
+    authorize! :create_project, current_user
 
     @project = Project.new
     
@@ -289,11 +289,11 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    return error_status(true, :insufficient_permissions) unless @project.can_be_edited_by(@logged_user)
+    authorize! :edit, @project
   end
 
   def update
-    return error_status(true, :insufficient_permissions) unless @project.can_be_edited_by(@logged_user)
+    authorize! :edit, @project
 
     @project.attributes = params[:project]
     @project.updated_by = @logged_user
@@ -315,7 +315,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    return error_status(true, :insufficient_permissions) unless @project.can_be_deleted_by(@logged_user)
+    authorize! :delete, @project
 
     @project.updated_by = @logged_user
     @project.destroy
@@ -331,7 +331,7 @@ class ProjectsController < ApplicationController
   end
 
   def complete
-    return error_status(true, :insufficient_permissions) unless @project.status_can_be_changed_by(@logged_user)
+    authorize! :change_status, @project
     return error_status(true, :project_already_completed) unless @project.is_active?
 
     @project.set_completed(true, @logged_user)
@@ -348,7 +348,7 @@ class ProjectsController < ApplicationController
   end
 
   def open
-    return error_status(true, :insufficient_permissions) unless @project.status_can_be_changed_by(@logged_user)
+    authorize! :change_status, @project
     return error_status(true, :project_already_open) if @project.is_active?
 
     @project.set_completed(false, @logged_user)

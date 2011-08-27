@@ -1,7 +1,7 @@
 <%
   @page_actions = []
   
-  if ProjectTime.can_be_created_by(@logged_user, @active_project)
+  if can? :create_time, @active_project
     @page_actions << {:title => :add_time, :url => new_time_path}
   end
   

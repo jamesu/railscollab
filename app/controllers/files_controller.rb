@@ -80,7 +80,7 @@ class FilesController < ApplicationController
   # GET /files/1
   # GET /files/1.xml
   def show
-    return error_status(true, :insufficient_permissions) unless @file.can_be_seen_by(@logged_user)
+    authorize! :show, @file
     
     respond_to do |format|
       format.html {
@@ -114,7 +114,7 @@ class FilesController < ApplicationController
   # GET /files/new
   # GET /files/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectFile.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_file, @active_project
     
     @file = @active_project.project_files.build()
     
@@ -126,13 +126,13 @@ class FilesController < ApplicationController
 
   # GET /files/1/edit
   def edit
-    return error_status(true, :insufficient_permissions) unless @file.can_be_edited_by(@logged_user)
+    authorize! :edit, @file
   end
 
   # POST /files
   # POST /files.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectFile.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_file, @active_project
 
     file_attribs = params[:file]
     @file = @active_project.project_files.build(file_attribs)
@@ -179,7 +179,7 @@ class FilesController < ApplicationController
   # PUT /files/1
   # PUT /files/1.xml
   def update
-    return error_status(true, :insufficient_permissions) unless (@file.can_be_edited_by(@logged_user))
+    authorize! :edit, @file
 
     file_data = params[:file_data]
     unless file_data.nil?
@@ -232,7 +232,7 @@ class FilesController < ApplicationController
   # DELETE /files/1
   # DELETE /files/1.xml
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@file.can_be_deleted_by(@logged_user))
+    authorize! :delete, @file
     
     @file.updated_by = @logged_user
     @file.destroy
@@ -295,11 +295,7 @@ class FilesController < ApplicationController
       return
     end
 
-    unless @attach_object.file_can_be_added_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default @attach_object.object_url
-      return
-    end
+    authorize! :add_file, @attach_object
 
     case request.method_symbol
     when :put
@@ -366,11 +362,7 @@ class FilesController < ApplicationController
       return
     end
 
-    unless @attach_object.file_can_be_added_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default @attach_object.object_url
-      return
-    end
+    authorize! :add_file, @attach_object
 
     begin
       existing_file = @active_project.project_files.find(params[:id])

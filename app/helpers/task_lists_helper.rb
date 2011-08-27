@@ -45,7 +45,7 @@ module TaskListsHelper
     @page_actions = []
 
     if action_name == 'index'
-      if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+      if can?(:create_task_list, @active_project)
         @page_actions << {:title => :add_task_list, :url=> new_task_list_path, :ajax => true}
       end
     end

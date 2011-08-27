@@ -41,15 +41,15 @@ module MilestonesHelper
     @page_actions = []
 
     if action_name == 'index'
-      if ProjectMilestone.can_be_created_by(@logged_user, @active_project)
+      if can? :create_milestone, @active_project
         @page_actions << {:title => :add_milestone, :url => new_milestone_path, :ajax => true}
       end
     elsif action_name == 'show'
       if not @milestone.is_completed?
-        if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+        if can? :create_message, @active_project
           @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
         end
-        if ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+        if can? :create_task_list, @active_project
           @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
         end
       end

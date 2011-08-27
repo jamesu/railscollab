@@ -28,7 +28,7 @@
 </div>
 <% end %>
 
-<% if @active_project.can_be_edited_by(@logged_user) or @active_project.status_can_be_changed_by(@logged_user) %>
+<% if can?(:edit,@active_project) or can?(:change_status, @active_project) %>
 <div class="sidebarBlock">
 <% if @active_project.is_active? %>
   <h2><%= :project_status_header.l_with_args(:status => :active.l) %></h2>
@@ -37,11 +37,11 @@
 <% end %>
   <div class="blockContent">
     <ul>
-<% if @active_project.can_be_edited_by(@logged_user) %>
+<% if can? :edit, @active_project %>
       <li><%= link_to :edit_project_details.l, edit_project_path(:id => @active_project.id) %></li>
 <% end %>
 
-<% if @active_project.status_can_be_changed_by(@logged_user) %>
+<% if can?(:change_status, @active_project) %>
 <% if @active_project.is_active? %>
       <li><%= link_to :mark_project_as_finished.l, complete_project_path(:id => @active_project.id), :method => :put, :confirm => :mark_project_as_finished_confirmation.l %></li>
 <% else %>

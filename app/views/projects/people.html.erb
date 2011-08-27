@@ -1,7 +1,7 @@
 <%
   @page_actions = []
   
-  if @project.can_be_managed_by(@logged_user)
+  if can? :manage, @project
     @page_actions << {:title => :permissions, :url=> permissions_project_path(:id => @active_project.id)}
   end
 %>
@@ -9,6 +9,6 @@
 <%= render :partial => 'companies/people_list', :collection => @project_companies %>
 </div>
 
-<% if @project.can_be_managed_by(@logged_user) %>
+<% if can? :manage, @project %>
 <div class="hint"><%= :permissions_info.l_with_args(:link => link_to(:permissions_form.l, permissions_project_path(:id => @active_project.id))) %></div>
 <% end %>

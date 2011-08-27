@@ -15,13 +15,13 @@
 <% else %>
     <p><%= :no_subscribers.l %></p>
 <% end %>
-<% if @message.can_subscribe(@logged_user) and !@subscribers.include?(@logged_user) %>
+<% if can?(:subscribe, @message) and !@subscribers.include?(@logged_user) %>
     <p><%= link_to :message_subscribe.l, subscribe_message_path(:id => @message.id), {:method => :put, :confirm => :message_subscription_confirmation.l} %></p>
 <% end %>
   </div>
 </div>
 
-<% if @message.options_can_be_changed_by(@logged_user) %>
+<% if can? :change_options, @message %>
 <div class="sidebarBlock">
   <h2><%= :options.l %></h2>
   <div class="blockContent">

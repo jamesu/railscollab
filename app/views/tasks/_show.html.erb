@@ -1,18 +1,18 @@
 <% task_item = show %>
 
 <li class="taskItem" id="task_item_<%= task_item.id %>">
-<% if task_item.can_be_changed_by(@logged_user) && !task_item.is_completed? %>
+<% if can?(:edit,task_item) && !task_item.is_completed? %>
 <div class="taskItemHandle" style="display:none">
   <div class="inner">[+]</div>
 </div>
 <% end %>
 <div class="taskItemContent">
-<% if task_item.can_be_changed_by(@logged_user) %>
+<% if can?(:edit,task_item) %>
 	<div class="taskControls">
 			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:aconfirm => :task_delete_confirm.l, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
 	</div>
 <% end %>
-<% if task_item.can_be_changed_by(@logged_user) %>
+<% if can?(:edit,task_item) %>
   <input class="checkbox completion" type="checkbox" <% if task_item.is_completed? %>checked="true"<% end %>/>
   <%= link_to '', status_task_path(:id => task_item, :task_list_id => task_item.task_list_id) %>
 <% else %>
@@ -24,16 +24,16 @@
 		<% end %>
     <%= h task_item.text %>
     <span class="desc">(<%= :task_created_by.l_with_args(
-                            :user => link_to(h(task_item.created_by.display_name), user_path(:id => task_item.created_by_id))) %>)</span>
+                            :user => link_to(h(task_item.created_by.display_name), user_path(:id => task_item.created_by_id))).html_safe %>)</span>
 <% if task_item.is_completed? -%>
     <span class="desc">(<%= :task_list_completed_time_with_user.l_with_args(
                             :time => format_usertime(task_item.completed_on, :task_list_completed_time_format),
-                            :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))) %>)</span>
+                            :user => link_to_unless(task_item.completed_by.nil?, h(task_item.completed_by.try(:display_name)), user_path(:id => task_item.completed_by_id))).html_safe %>)</span>
 <% end -%>
   </span>
   <div class="taskActions">
-    <% if task_item.comment_can_be_added_by(@logged_user) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
-<% if !task_item.is_completed? && ProjectTime.can_be_created_by(@logged_user, task_item.project) %>
+    <% if can?(:comment, task_item) %><%= link_to render_icon('comment','', { :class => "comment" }), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank'} %><% end %>
+<% if !task_item.is_completed? && can?(:create_time, task_item.project) %>
 <% running_time = running_time_for_task(task_item) 
 unless running_time.nil? %>
 <%= link_to render_icon('stop', :stop_time.l), stop_time_path(:active_project => running_time.project_id, :id => running_time.id), :class => 'blank stopTime' %>

@@ -27,7 +27,7 @@ class CompaniesController < ApplicationController
   after_filter  :reload_owner
 
   def show
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_seen_by(@logged_user))
+    authorize! :show, @company
     
     respond_to do |format|
       format.html { }
@@ -55,13 +55,13 @@ class CompaniesController < ApplicationController
   end
 
   def new
-    return error_status(true, :insufficient_permissions) unless (Company.can_be_created_by(@logged_user))
+    authorize! :create_company, current_user
     
     @company = Company.new
   end
 
   def create
-    return error_status(true, :insufficient_permissions) unless (Company.can_be_created_by(@logged_user))
+    authorize! :create_company, current_user
 
     @company = Company.new
 
@@ -86,11 +86,11 @@ class CompaniesController < ApplicationController
   end
 
   def edit
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
+    authorize! :edit, @company
   end
   
   def update
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
+    authorize! :edit, @company
 
     @company.attributes = params[:company]
     @company.updated_by = @logged_user
@@ -113,7 +113,7 @@ class CompaniesController < ApplicationController
   
   def hide_welcome_info
     error_status(true, :invalid_company) unless @company.is_owner?
-    error_status(true, :insufficient_permissions) unless @company.can_be_edited_by(@logged_user)
+    authorize! :edit, @company
 
     @company.hide_welcome_info = true
     saved = @company.save
@@ -133,7 +133,7 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_deleted_by(@logged_user))
+    authorize! :delete, @company
 
     estatus = :success_deleted_client
   	begin
@@ -153,7 +153,7 @@ class CompaniesController < ApplicationController
   end
 
   def permissions
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_managed_by(@logged_user))
+    authorize! :manage, @company
 
   	@projects = Project.all(:order => 'name')
   	if @projects.empty?
@@ -186,7 +186,7 @@ class CompaniesController < ApplicationController
   end
 
   def logo
-    return error_status(true, :insufficient_permissions) unless (@company.can_be_edited_by(@logged_user))
+    authorize! :edit, @company
     
     case request.method_symbol
     when :put

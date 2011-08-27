@@ -1,7 +1,7 @@
 <%
   @page_actions = []
   
-  if Project.can_be_created_by(@logged_user)
+  if can? :create_project, current_user
   	@page_actions << {:title => :add_project, :url => new_project_path}
   end
 %>
@@ -16,7 +16,7 @@
 <% @projects.each do |project| -%>
   <tr>
     <td class="middle">
-<% if project.status_can_be_changed_by(@logged_user) %>
+<% if can?(:change_status, project) %>
 <%= project.is_active? ? checkbox_link(complete_project_path(:id => project.id), false, nil, {:method => :put}) : checkbox_link(open_project_path(:id => project.id), true, nil, {:method => :put}) %>
 <% else %>
 <% if project.is_active? %>

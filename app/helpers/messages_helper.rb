@@ -50,7 +50,7 @@ module MessagesHelper
 
     if action_name == 'index'
 
-      if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+      if can? :create_message, @active_project
         @page_actions << {:title => :add_message, :url => (@category.nil? ?
     	  								  new_message_path : new_message_path(:category_id => @category.id))}
       end

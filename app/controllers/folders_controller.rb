@@ -41,7 +41,7 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.xml
   def show
-    return error_status(true, :insufficient_permissions) unless @folder.can_be_seen_by(@logged_user)
+    authorize! :show, @folder
     
     respond_to do |format|
       format.html {
@@ -56,7 +56,7 @@ class FoldersController < ApplicationController
   # GET /folders/new
   # GET /folders/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectFolder.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_folder, @active_project
     
     @folder = @active_project.project_folders.build()
     
@@ -68,13 +68,13 @@ class FoldersController < ApplicationController
 
   # GET /folders/1/edit
   def edit
-    return error_status(true, :insufficient_permissions) unless @folder.can_be_edited_by(@logged_user)
+    authorize! :edit, @folder
   end
 
   # POST /folders
   # POST /folders.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectFolder.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_folder, @active_project
     
     @folder = @active_project.project_folders.build(params[:folder])
     @folder.created_by = @logged_user
@@ -98,7 +98,7 @@ class FoldersController < ApplicationController
   # PUT /folders/1
   # PUT /folders/1.xml
   def update
-    return error_status(true, :insufficient_permissions) unless (@folder.can_be_edited_by(@logged_user))
+    authorize! :edit, @folder
     
     @folder.updated_by = @logged_user
     
@@ -121,7 +121,7 @@ class FoldersController < ApplicationController
   # DELETE /folders/1
   # DELETE /folders/1.xml
   def destroy
-    return error_status(true, :insufficient_permissions) unless (@folder.can_be_deleted_by(@logged_user))
+    authorize! :delete, @folder
     
     @folder.updated_by = @logged_user
     @folder.destroy
@@ -139,7 +139,7 @@ class FoldersController < ApplicationController
   # /folders/1/files
   # /folders/1/files.xml
   def files
-    return error_status(true, :insufficient_permissions) unless @folder.can_be_seen_by(@logged_user)
+    authorize! :show, @folder
     
     # conditions
     file_conditions = {'folder_id' => @folder.id, 'project_id' => @active_project.id, 'is_visible' => true}

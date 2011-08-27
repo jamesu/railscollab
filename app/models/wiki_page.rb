@@ -45,21 +45,8 @@ class WikiPage < ActiveRecord::Base
     url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => self.project_id
   end
 
-  # Core permissions
-
-  def self.can_be_created_by(user, project)
-    project.is_active? and user.member_of(project) and user.has_permission(project, :can_manage_wiki_pages)
-  end
-
-  def can_be_edited_by(user)
-    project.is_active? and user.member_of(project) and user.has_permission(project, :can_manage_wiki_pages)
-  end
-
-  def can_be_deleted_by(user)
-    user.is_admin and project.is_active? and user.member_of(project)
-  end
-
   protected
+  
   def main_page
     @main_page ||= self.class.main(project).first
   end

@@ -54,7 +54,7 @@ class TaskListsController < ApplicationController
       return error_status(true, :invalid_task_list)
     end
     
-    return error_status(true, :insufficient_permissions) unless @task_list.can_be_seen_by(@logged_user)
+    authorize! :show, @task_list
     
     include_private = @logged_user.member_of_owner?
 
@@ -70,7 +70,7 @@ class TaskListsController < ApplicationController
   # GET /task_lists/new
   # GET /task_lists/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectTaskList.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_task_list, @active_project
     
     @task_list = @active_project.project_task_lists.build()
     
@@ -96,13 +96,13 @@ class TaskListsController < ApplicationController
       return error_status(true, :invalid_task_list)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task_list.can_be_edited_by(@logged_user))
+    authorize! :edit, @task_list
   end
 
   # POST /task_lists
   # POST /task_lists.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectTaskList.can_be_created_by(@logged_user, @active_project))
+    authorize! :create_task_list, @active_project
     
     @task_list = @active_project.project_task_lists.build(params[:task_list])
     @task_list.created_by = @logged_user
@@ -133,7 +133,7 @@ class TaskListsController < ApplicationController
       return error_status(true, :invalid_task_list)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task_list.can_be_edited_by(@logged_user))
+    authorize! :edit, @task_list
     
     @task_list.updated_by = @logged_user
 
@@ -163,7 +163,7 @@ class TaskListsController < ApplicationController
       return error_status(true, :invalid_task_list)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task_list.can_be_deleted_by(@logged_user))
+    authorize! :delete, @task_list
 
     @on_page = (params[:on_page] || '').to_i == 1
     @removed_id = @task_list.id
@@ -188,7 +188,7 @@ class TaskListsController < ApplicationController
       return error_status(true, :invalid_task_list)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task_list.can_be_edited_by(@logged_user))
+    authorize! :edit, @task_list
     
     order = params[:tasks].collect { |id| id.to_i }
     

@@ -47,11 +47,11 @@ module CategoriesHelper
   def page_actions
     @page_actions = []
     
-    if ProjectMessageCategory.can_be_created_by(@logged_user, @active_project)
+    if can? :create_message_category, @active_project
       @page_actions << {:title => :add_category, :url => new_category_path } if action_name == 'index'
     end
     
-    if ProjectMessage.can_be_created_by(@logged_user, @active_project)
+    if can? :create_message, @active_project
       @page_actions << {:title => :add_message, :url => new_message_path(:category_id => @category.id)} if action_name == 'posts'
     end
 

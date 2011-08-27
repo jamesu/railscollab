@@ -163,44 +163,6 @@ class ProjectTask < ActiveRecord::Base
     self.order = value
     self.updated_by = user unless user.nil?
   end
-
-  def self.can_be_created_by(user, task_list)
-    task_list.project.is_active? and user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and task_list.can_be_managed_by(user))
-  end
-
-  def can_be_edited_by(user)
-    project = task_list.project
-
-    return false if !user.member_of(project) or !project.is_active? or user.is_anonymous?
-    return true if user.is_admin
-
-    task_assigned_to = assigned_to
-    return true if (task_assigned_to == user) or (task_assigned_to == user.company) or task_assigned_to.nil?
-
-    # Owner editable for 3 mins
-    return true if self.created_by_id == user.id and (self.created_on + 3.minutes) < Time.now.utc
-
-    return task_list.can_be_changed_by(user)
-  end
-  
-  alias :can_be_changed_by :can_be_edited_by
-
-  def can_be_deleted_by(user)
-    task_list.can_be_deleted_by(user)
-  end
-
-  def can_be_seen_by(user)
-    can_be_changed_by(user) or task_list.can_be_seen_by(user)
-  end
-  
-  
-  def can_be_completed_by(user)
-    self.can_be_edited_by(user)
-  end
-
-  def comment_can_be_added_by(user)
-    task_list.comment_can_be_added_by(user)
-  end
   
   # Serialization
   alias_method :ar_to_xml, :to_xml
@@ -230,7 +192,7 @@ class ProjectTask < ActiveRecord::Base
   validates_presence_of :text
 
   validates_each :task_list, :allow_nil => false do |record, attr, value|
-    record.errors.add(attr, :not_part_of_project.l) if (value.project_id != record.project_id) or !(value.can_be_changed_by(record.last_editor))
+    record.errors.add(attr, :not_part_of_project.l) if (value.project_id != record.project_id)
   end
 
   validates_each :assigned_to, :allow_nil => true do |record, attr, value|

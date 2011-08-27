@@ -1,6 +1,6 @@
 <%
   @page_actions = []
-  if WikiPage.can_be_created_by(@logged_user, @active_project)
+  if can? :create_wiki_page, @active_project
     @page_actions << {:title => :add_page, :url => new_wiki_page_path}
   end
   @page_actions << {:title => :all_pages, :url => list_wiki_pages_path}

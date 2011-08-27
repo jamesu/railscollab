@@ -62,7 +62,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   # GET /tasks/new.xml
   def new
-    return error_status(true, :insufficient_permissions) unless (ProjectTask.can_be_created_by(@logged_user, @task_list))
+    authorize! :create_task, @task_list
     
     @task = @task_list.project_tasks.build
 
@@ -80,13 +80,13 @@ class TasksController < ApplicationController
       return error_status(true, :invalid_task)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task.can_be_edited_by(@logged_user))
+    authorize! :edit, @task
   end
 
   # POST /tasks
   # POST /tasks.xml
   def create
-    return error_status(true, :insufficient_permissions) unless (ProjectTask.can_be_created_by(@logged_user, @task_list))
+    authorize! :create_task, @task_list
     
     @task = @task_list.project_tasks.build(params[:task])
     @task.created_by = @logged_user
@@ -115,7 +115,7 @@ class TasksController < ApplicationController
       return error_status(true, :invalid_task)
     end
     
-    return error_status(true, :cannot_edit_listitem) unless (@task.can_be_edited_by(@logged_user))
+    authorize! :edit, @task
     
     @task.updated_by = @logged_user
 
@@ -143,7 +143,7 @@ class TasksController < ApplicationController
       return error_status(true, :invalid_task)
     end
     
-    return error_status(true, :insufficient_permissions) unless (@task.can_be_deleted_by(@logged_user))
+    authorize! :delete, @task
     
     @task.updated_by = @logged_user
     @task.destroy
@@ -163,8 +163,8 @@ class TasksController < ApplicationController
     rescue
       return error_status(true, :invalid_task)
     end
-  
-    return error_status(true, :insufficient_permissions) unless (@task.can_be_completed_by(@logged_user))
+    
+    authorize! :complete, @task
     
     @task.set_completed(params[:task][:completed] == 'true', @logged_user)
     @task.order = @task_list.project_tasks.length
@@ -183,10 +183,7 @@ protected
   def grab_list
     begin
       @task_list = @active_project.project_task_lists.find(params[:task_list_id])
-      unless @task_list.can_be_seen_by(@logged_user)
-        error_status(true, :insufficient_permissions)
-        return false
-      end
+      authorize! :show, @task_list
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task)
       return false

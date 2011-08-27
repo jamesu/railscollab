@@ -56,30 +56,6 @@ class ProjectMessageCategory < ActiveRecord::Base
     url_for :only_path => host.nil?, :host => host, :controller => 'message', :action => 'category', :id => self.id, :active_project => self.project_id
   end
 
-  # Core Permissions
-
-  def self.can_be_created_by(user, project)
-    project.is_active? and user.has_permission(project, :can_manage_messages)
-  end
-
-  def can_be_edited_by(user)
-    self.project.is_active? and user.has_permission(project, :can_manage_messages)
-  end
-
-  def can_be_deleted_by(user)
-    self.project.is_active? and user.has_permission(project, :can_manage_messages)
-  end
-
-  def can_be_seen_by(user)
-    self.project.has_member(user)
-  end
-
-  # Specific Permissions
-
-  def can_be_managed_by(user)
-    project.is_active? and user.has_permission(project, :can_manage_messages)
-  end
-
   # Helpers
 
   def self.select_list(project)

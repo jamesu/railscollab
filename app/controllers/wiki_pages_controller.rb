@@ -31,24 +31,15 @@ class WikiPagesController < ApplicationController
 
   protected
   def check_create_permissions
-    unless WikiPage.can_be_created_by(@logged_user, @active_project)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'wiki_pages'
-    end
+    authorize! :create_wiki_page, @active_project
   end
 
   def check_update_permissions
-    unless @wiki_page.can_be_edited_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'wiki_pages'
-    end
+    authorize! :edit, @wiki_page
   end
 
   def check_delete_permissions
-    unless @wiki_page.can_be_deleted_by(@logged_user)
-      error_status(true, :insufficient_permissions)
-      redirect_back_or_default :controller => 'wiki_pages'
-    end
+    authorize! :delete, @wiki_page
   end
 
   def set_created_by
