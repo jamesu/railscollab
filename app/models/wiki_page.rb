@@ -1,11 +1,11 @@
 class WikiPage < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  include WikiPageUser
   
   before_save :set_main_page
+  acts_as_versioned :extend => WikiPageUser
   has_friendly_id :title, :use_slug => true, :strip_diacritics => true
-  acts_as_versioned
   validates_presence_of :title
-  scope :main, :conditions => {:main => true}
 
   def title_from_id=(id)
     self.title = id.to_s.underscore.humanize if id

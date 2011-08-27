@@ -1,0 +1,18 @@
+  <table class="data wiki_pages">
+    <thead>
+      <tr>
+        <th><%= t 'wiki_engine.title' %></th>
+        <th><%= t 'wiki_engine.last_modified' %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% list.each do |wiki_page| %>
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td><%= link_to h(wiki_page.title), wiki_page_path(:id => wiki_page) %></td>
+          <td><%= wiki_page.updated_at.to_s(:long) %></td>
+          <td class="operations"><%= render :partial => 'operations', :locals => {:wiki_page => wiki_page} %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>

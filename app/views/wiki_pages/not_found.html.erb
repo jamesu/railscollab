@@ -1,0 +1,5 @@
+<h2><%= t 'wiki_engine.not_found' %></h2>
+
+<p><%= t 'wiki_engine.non_existing_page' %>
+<%= link_to t('wiki_engine.create_it'), new_wiki_page_path(:id => params[:id]) %>.
+</p>
