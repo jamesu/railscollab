@@ -4,7 +4,7 @@
   <ul>
 <% current_tab = self.current_tab %>
 <% tabs.each do |item| -%>
-    <li id="<%= "item_#{item[:id]}" %>" <%= 'class="active"' if item[:id] == current_tab %>>
+    <li id="<%= "item_#{item[:id]}" %>" <%= 'class="active"'.html_safe if item[:id] == current_tab %>>
     <a href="<%= item[:url] %>"><%= item[:id].l %></a>
     </li>
 <% end %>
