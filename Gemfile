@@ -10,6 +10,7 @@ gem 'paperclip'
 gem 'dynamic_form'
 gem 'will_paginate', '~> 3.0'
 gem 'RedCloth'
+gem 'icalendar'
 
 #group :test, :development do
 #  gem 'rspec-rails', '~> 2.3.1'

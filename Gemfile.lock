@@ -53,6 +53,7 @@ GEM
     hashie (1.0.0)
     hike (1.1.0)
     i18n (0.6.0)
+    icalendar (1.1.6)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -124,6 +125,7 @@ DEPENDENCIES
   choices!
   dynamic_form
   haml
+  icalendar
   paperclip
   pg
   rails (= 3.1.0rc4)
