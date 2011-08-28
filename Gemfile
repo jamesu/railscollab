@@ -11,6 +11,7 @@ gem 'dynamic_form'
 gem 'will_paginate', '~> 3.0'
 gem 'RedCloth'
 gem 'icalendar'
+gem 'factory_girl'
 
 #group :test, :development do
 #  gem 'rspec-rails', '~> 2.3.1'
