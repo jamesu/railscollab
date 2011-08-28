@@ -192,10 +192,10 @@ class ProjectTask < ActiveRecord::Base
   validates_presence_of :text
 
   validates_each :task_list, :allow_nil => false do |record, attr, value|
-    record.errors.add(attr, :not_part_of_project.l) if (value.project_id != record.project_id)
+    record.errors.add(attr, I18n.t('not_part_of_project')) if (value.project_id != record.project_id)
   end
 
   validates_each :assigned_to, :allow_nil => true do |record, attr, value|
-    record.errors.add(attr, :not_part_of_project.l) if !value.nil? and !value.is_part_of(record.task_list.project)
+    record.errors.add(attr, I18n.t('not_part_of_project')) if !value.nil? and !value.is_part_of(record.task_list.project)
   end
 end

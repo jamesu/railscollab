@@ -10,7 +10,7 @@
 <%= render :partial => 'projects/permissions', :locals => {:user => @user}, :collection => @projects %>
       </table>
     </div>
-    <button class="submit" type="submit"><%= :update_permissions.l %></button>
+    <button class="submit" type="submit"><%= t('update_permissions') %></button>
   </form>
 </div>
 <% end %>

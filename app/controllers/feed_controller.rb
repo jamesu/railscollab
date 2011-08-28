@@ -39,7 +39,7 @@ class FeedController < ApplicationController
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = :recent_activities.l
+        ical.properties['X-WR-CALNAME'] = I18n.t('recent_activities')
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
@@ -84,7 +84,7 @@ class FeedController < ApplicationController
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = :recent_activities.l
+        ical.properties['X-WR-CALNAME'] = I18n.t('recent_activities')
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
@@ -117,7 +117,7 @@ class FeedController < ApplicationController
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = :recent_milestones.l
+        ical.properties['X-WR-CALNAME'] = I18n.t('recent_milestones')
         # TODO: timezone
 
         @milestones.each do |milestone|
@@ -162,7 +162,7 @@ class FeedController < ApplicationController
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = "#{@project.name} #{:milestones.l}"
+        ical.properties['X-WR-CALNAME'] = "#{@project.name} #{I18n.t('milestones')}"
         # TODO: timezone
 
         @milestones.each do |milestone|

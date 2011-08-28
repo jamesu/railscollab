@@ -16,8 +16,8 @@
 			<% end %>
 			<div class="cardBlock">
 				<% if company_card.homepage? %><div><%= link_to h(company_card.homepage), company_card.homepage %></div><% end %>
-				<% if company_card.fax_number? %><div><span><%= :fax.l %>:</span><%= h(company_card.fax_number) %></div><% end %>
-				<% if company_card.phone_number? %><div><span><%= :home.l %>:</span><%= h(company_card.phone_number) %></div><% end %>
+				<% if company_card.fax_number? %><div><span><%= t('fax') %>:</span><%= h(company_card.fax_number) %></div><% end %>
+				<% if company_card.phone_number? %><div><span><%= t('home') %>:</span><%= h(company_card.phone_number) %></div><% end %>
 			</div>
 			<div class="cardBlock">
 				<% if company_card.address? %><%= h company_card.address %><% end %>
@@ -61,13 +61,13 @@
 					<% end %>
 				</div>
 				<div class="cardBlock">
-					<% if user_card.office_number? %><div class="cardOffice"><span><%= :office.l %>:</span><%= h(user_card.office_number) %></div><% end %>
-					<% if user_card.fax_number? %><div class="cardFax"><span><%= :fax.l %>:</span><%= h(user_card.fax_number) %></div><% end %>
-					<% if user_card.mobile_number? %><div class="cardMobile"><span><%= :mobile.l %>:</span><%= h(user_card.mobile_number) %></div><% end %>
-					<% if user_card.home_number? %><div class="cardHome"><span><%= :home.l %>:</span><%= h(user_card.home_number) %></div><% end %>
+					<% if user_card.office_number? %><div class="cardOffice"><span><%= t('office') %>:</span><%= h(user_card.office_number) %></div><% end %>
+					<% if user_card.fax_number? %><div class="cardFax"><span><%= t('fax') %>:</span><%= h(user_card.fax_number) %></div><% end %>
+					<% if user_card.mobile_number? %><div class="cardMobile"><span><%= t('mobile') %>:</span><%= h(user_card.mobile_number) %></div><% end %>
+					<% if user_card.home_number? %><div class="cardHome"><span><%= t('home') %>:</span><%= h(user_card.home_number) %></div><% end %>
 				</div>
 				<div class="cardBlock">
-					<% if user_card.owner_of_owner? %><div class="cardOwner"><%= :owner.l %></div><% end %>
+					<% if user_card.owner_of_owner? %><div class="cardOwner"><%= t('owner') %></div><% end %>
 				</div>
 				<% if can?(:update_profile, user_card) %>
 					<div class="cardBlock">

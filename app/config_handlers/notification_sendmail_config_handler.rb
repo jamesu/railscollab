@@ -34,7 +34,7 @@ class NotificationSendmailConfigHandler < ConfigHandler
 	
 	def render(name, options)
 	    values = self.value
-		"<label for=\"#{name}[location]\">#{:notification_sendmail_location.l}</label>" + text_field_tag("#{name}[location]", values[:location], options.merge(:class => 'middle') )+
-		"<label for=\"#{name}[arguments]\">#{:notification_sendmail_arguments.l}</label>" + text_field_tag("#{name}[arguments]", values[:arguments], options.merge(:class => 'middle'))
+		"<label for=\"#{name}[location]\">#{I18n.t('notification_sendmail_location')}</label>" + text_field_tag("#{name}[location]", values[:location], options.merge(:class => 'middle') )+
+		"<label for=\"#{name}[arguments]\">#{I18n.t('notification_sendmail_arguments')}</label>" + text_field_tag("#{name}[arguments]", values[:arguments], options.merge(:class => 'middle'))
 	end
 end

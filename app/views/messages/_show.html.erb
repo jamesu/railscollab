@@ -2,12 +2,12 @@
 <div class="message">
   <div class="block">
 <% if message.is_private? %>
-    <div class="private" title="<%= :private_message.l %>"><span><%= :private_message.l %></span></div>
+    <div class="private" title="<%= t('private_message') %>"><span><%= t('private_message') %></span></div>
 <% end %>
     <div class="header"><%= link_to (h message.title), message_path(:id => message.id) %></div>
     <div class="content">
 <% if not message.created_by.nil? %>
-      <div class="messageAuthor"><%= :message_created_with_user.l_with_args(
+      <div class="messageAuthor"><%= t('message_created_with_user', 
             :time => format_usertime(message.created_on, :message_created_format),
             :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))).html_safe %></div>
 <% else %>
@@ -16,20 +16,20 @@
       <div class="messageText">
         <%= textilize message.text %>
         <% if not message.additional_text.nil? %>
-        <p><%= link_to :read_more.l, message_path(:id => message.id) %></p>
+        <p><%= link_to t('read_more'), message_path(:id => message.id) %></p>
         <% end %>
       </div>
     
 <%= render :partial => 'files/list_attached_files', :locals => {:dont_add => @message.nil?, :attached_files => message.attached_files(@logged_user.member_of_owner?), :attached_files_object => message} %>
       <div class="messageCommentCount">
 <% if not message.comments.empty? %>
-        <span><%= :comments.l %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
+        <span><%= t('comments') %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
 <% else %>
-        <span><%= :comments.l %>:</span> <%= message.comments.length %>
+        <span><%= t('comments') %>:</span> <%= message.comments.length %>
 <% end %>
       </div>
       <div class="messageTags">
-        <span><%= :tags.l %>:</span> <%= tag_list message %>
+        <span><%= t('tags') %>:</span> <%= tag_list message %>
       </div>
       <div class="messageOptions"><%= action_list actions_for_message(message) %></div>
     </div>

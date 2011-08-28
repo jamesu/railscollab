@@ -2,16 +2,16 @@
 <%= error_messages_for :user %>
   <input type="hidden" name="confirm" value="<%= h params[:confirm] %>"/>
   <div>
-    <label for="passwordFormNewPassword"><%= :password.l %> <span class="label_required">*</span></label>
+    <label for="passwordFormNewPassword"><%= t('password') %> <span class="label_required">*</span></label>
     <input type="password" id="passwordFormNewPassword" name="user[password]" />
   </div>
   
   <div>
-    <label for="passwordFormNewPasswordAgain"><%= :repeat_password.l %> <span class="label_required">*</span></label>
+    <label for="passwordFormNewPasswordAgain"><%= t('repeat_password') %> <span class="label_required">*</span></label>
     <input type="password" id="passwordFormNewPasswordAgain" name="user[password_confirmation]" />
   </div>
   
   <div id="buttonSubmit">
-  <button class="submit" type="submit" accesskey="s"><%= @initial_signup ? :set_password.l : :reset_password.l %></button>
+  <button class="submit" type="submit" accesskey="s"><%= @initial_signup ? t('set_password') : t('reset_password') %></button>
   </div>
 <% end %>

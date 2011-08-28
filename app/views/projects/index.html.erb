@@ -9,8 +9,8 @@
 <table id="projects">
   <tr>
     <th></th>
-    <th><%= :name.l %></th>
-    <th><%= :options.l %></th>
+    <th><%= t('name') %></th>
+    <th><%= t('options') %></th>
   </tr>
 
 <% @projects.each do |project| -%>
@@ -20,9 +20,9 @@
 <%= project.is_active? ? checkbox_link(complete_project_path(:id => project.id), false, nil, {:method => :put}) : checkbox_link(open_project_path(:id => project.id), true, nil, {:method => :put}) %>
 <% else %>
 <% if project.is_active? %>
-<img src="<%= icon_url('not-checked') %>" alt="" title="<%= :active_project.l %>" />
+<img src="<%= icon_url('not-checked') %>" alt="" title="<%= t('active_project') %>" />
 <% else %>
-<img src="<%= icon_url('checked') %>" alt="" title="<%= :finished_project.l %>" />
+<img src="<%= icon_url('checked') %>" alt="" title="<%= t('finished_project') %>" />
 <% end %>
 <% end %>
     </td>
@@ -32,5 +32,5 @@
 <% end %>
 </table>
 <% else %>
-<%= :no_projects_owned_by_company.l %>
+<%= t('no_projects_owned_by_company') %>
 <% end %>

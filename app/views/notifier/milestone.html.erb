@@ -1,13 +1,13 @@
 ------------------------------------------------------------
- <%= :notifier_donotreply.l %>
+ <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= :notifier_new_milestone.l_with_args(:name => @milestone.name, :project => @milestone.project.name) %>
+<%= t('notifier_new_milestone', :name => @milestone.name, :project => @milestone.project.name) %>
 
 - <%= @milestone.object_url(Rails.configuration.site_url) %>
 
-<%= :company.l %>: <%= Company.owner.name %>
-<%= :project.l %>: <%= @milestone.project.name %>
+<%= t('company') %>: <%= Company.owner.name %>
+<%= t('project') %>: <%= @milestone.project.name %>
 
 --
 <%= Rails.configuration.site_url %>

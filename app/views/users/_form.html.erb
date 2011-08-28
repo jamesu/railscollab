@@ -2,29 +2,29 @@
 
 <% if @logged_user.is_admin %>
   <div class="hint">
-    <div class="header"><%= :administration_options_info.l %></div>
+    <div class="header"><%= t('administration_options_info') %></div>
     <div class="content">
       <div>
-        <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
+        <label for="userFormUsername"><%= t('username') %>: <span class="label_required">*</span></label>
         <%= text_field 'user', 'username', :id => 'userFormUsername' %>
       </div>
       
 <% if @logged_user.member_of_owner? %>
       <div>
-        <label for="userFormCompany"><%= :company.l %>: <span class="label_required">*</span></label>
+        <label for="userFormCompany"><%= t('company') %>: <span class="label_required">*</span></label>
         <%= select 'user', 'company_id', Company.select_list, {}, {:id => 'userFormCompany'} %>
       </div>
       
       <fieldset>
-        <legend><%= :options.l %></legend>
+        <legend><%= t('options') %></legend>
         
         <div>
-          <label for="userFormIsAdmin"><%= :administrator.l %>: <span class="label_required">*</span></label>
+          <label for="userFormIsAdmin"><%= t('administrator') %>: <span class="label_required">*</span></label>
           <%= yesno_toggle 'user', 'is_admin', :id => 'userFormIsAdmin', :class => 'checkbox'  %>
         </div>
     
         <div>
-          <label for="userFormAutoAssign"><%= :auto_assign_to_new_projects.l %>: <span class="label_required">*</span></label>
+          <label for="userFormAutoAssign"><%= t('auto_assign_to_new_projects') %>: <span class="label_required">*</span></label>
           <%= yesno_toggle 'user', 'auto_assign', :id => 'userFormAutoAssign', :class => 'checkbox'  %>
         </div>
       </fieldset>
@@ -33,43 +33,43 @@
   </div>
 <% else %>
   <div>
-    <label for="userFormUsername"><%= :username.l %>: <span class="label_required">*</span></label>
+    <label for="userFormUsername"><%= t('username') %>: <span class="label_required">*</span></label>
     <%= @user.username %>
   </div>
 <% end %>
 
   <div>
-    <label for="userFormDisplayName"><%= :display_name.l %></label>
+    <label for="userFormDisplayName"><%= t('display_name') %></label>
     <%= text_field 'user', 'display_name', :id => 'userFormDisplayName', :class => 'medium' %>
   </div>
   
   <div>
-    <label for="profileFormEmail"><%= :email_address.l %> <span class="label_required">*</span></label>
+    <label for="profileFormEmail"><%= t('email_address') %> <span class="label_required">*</span></label>
     <%= text_field 'user', 'email', :id => 'profileFormEmail', :class => 'long' %>
   </div>
   
   <div>
-    <label for="profileFormTimezone"><%= :timezone.l %> <span class="label_required">*</span></label>
+    <label for="profileFormTimezone"><%= t('timezone') %> <span class="label_required">*</span></label>
     <%= time_zone_select 'user', 'time_zone', nil, {}, {:id => 'profileFormTimezone', :class => 'long'} %>
   </div>
 
 <div class="formBlock">  
   <fieldset>
-    <legend><%= :password.l %></legend>
+    <legend><%= t('password') %></legend>
     <% if @user.new_record? %>
     <div>
-        <label for="userFormGeneratePassword"><%= :generate_password.l %></label>
+        <label for="userFormGeneratePassword"><%= t('generate_password') %></label>
         <input type="checkbox" checked="true" name="user[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="user_form_update_passwordgen()"/>      
     </div>
     <% end %>
     <div id="userFormPasswordInputs">
       <div>
-        <label for="userFormPassword"><%= :password.l %> <span class="label_required">*</span></label>
+        <label for="userFormPassword"><%= t('password') %> <span class="label_required">*</span></label>
         <input type="password" id="userFormPassword" name="user[password]" />
       </div>
 
       <div>
-        <label for="userFormPasswordA"><%= :repeat_password.l %> <span class="label_required">*</span></label>
+        <label for="userFormPasswordA"><%= t('repeat_password') %> <span class="label_required">*</span></label>
         <input type="password" id="userFormPasswordA" name="user[password_confirmation]" />
       </div>
     </div>
@@ -81,41 +81,41 @@
 
 <% if @user.new_record? %>
 <div class="formBlock"> 
-  <label><%= :send_account_email_notification.l %> <span class="label_required">*</span></label>
-  <%= yesno_toggle_tag 'new_account_notification', !!@send_email, :id => 'userFormEmailNotificationYes', :class => 'checkbox' %><br /><span class="desc"><%= :send_account_email_notication_info.l %></span>
+  <label><%= t('send_account_email_notification') %> <span class="label_required">*</span></label>
+  <%= yesno_toggle_tag 'new_account_notification', !!@send_email, :id => 'userFormEmailNotificationYes', :class => 'checkbox' %><br /><span class="desc"><%= t('send_account_email_notication_info') %></span>
 </div>
 <% else %>
 <div class="formBlock">
   <fieldset>
-    <legend><%= :contact_info.l %></legend>
+    <legend><%= t('contact_info') %></legend>
   
     <div>
-      <label for="userFormTitle"><%= :title.l %></label>
+      <label for="userFormTitle"><%= t('title') %></label>
       <%= text_field 'user', 'title', :id => 'userFormTitle' %>
     </div>
       
     <div>
-      <label for="userFormOfficeNumber"><%= :office.l %></label>
+      <label for="userFormOfficeNumber"><%= t('office') %></label>
       <%= text_field 'user', 'office_number', :id => 'userFormOfficeNumber' %>
     </div>
     
     <div>
-      <label for="userFormOfficeNumberExt"><%= :office.l %></label>
+      <label for="userFormOfficeNumberExt"><%= t('office') %></label>
       <%= text_field 'user', 'office_number_ext', :id => 'userFormOfficeNumberExt' %>
     </div>
     
     <div>
-      <label for="userFormFaxNumber"><%= :fax.l %></label>
+      <label for="userFormFaxNumber"><%= t('fax') %></label>
       <%= text_field 'user', 'fax_number', :id => 'userFormFaxNumber' %>
     </div>
     
     <div>
-      <label for="userFormMobileNumber"><%= :mobile.l %></label>
+      <label for="userFormMobileNumber"><%= t('mobile') %></label>
       <%= text_field 'user', 'mobile_number', :id => 'userFormMobileNumber' %>
     </div>
     
     <div>
-      <label for="userFormHomeNumber"><%= :home.l %></label>
+      <label for="userFormHomeNumber"><%= t('home') %></label>
       <%= text_field 'user', 'home_number', :id => 'userFormHomeNumber' %>
     </div>
     
@@ -123,12 +123,12 @@
 <% all_im_values = @user.im_info %>
 <% if all_im_values.length > 0 %>
   <fieldset>
-    <legend><%= :instant_messengers.l %></legend>
+    <legend><%= t('instant_messengers') %></legend>
     <table class="blank">
       <tr>
-        <th colspan="2"><%= :service.l %></th>
-        <th><%= :value.l %></th>
-        <th><%= :primary_im.l %></th>
+        <th colspan="2"><%= t('service') %></th>
+        <th><%= t('value') %></th>
+        <th><%= t('primary_im') %></th>
       </tr>
 <% @count = 0 %>
 <% all_im_values.each do |im_value| -%>
@@ -141,7 +141,7 @@
 <% @count += 1 %>
 <% end %>
     </table>
-    <p class="desc"><%= :instant_messengers_info.l %></p>
+    <p class="desc"><%= t('instant_messengers_info') %></p>
   </fieldset>
 <% end %>
 </div>
@@ -154,7 +154,7 @@
 </script>
 
 <fieldset>
-  <legend><%= :permissions.l %></legend>
+  <legend><%= t('permissions') %></legend>
   <div id="userPermissions">
     <div id="userProjects">
       <table class="blank">

@@ -39,11 +39,11 @@ class NotificationSMTPConfigHandler < ConfigHandler
 	def render(name, options)
 		values = self.value
 		      
-		"<label for=\"#{name}[address]\">#{:notification_smtp_address.l}</label>" + text_field_tag("#{name}[address]", values[:address], options.merge(:class => 'middle') ) +
-		"<label for=\"#{name}[port]\">#{:notification_smtp_port.l}</label>" + text_field_tag("#{name}[port]", values[:port], options.merge(:class => 'middle')) +
-		"<label for=\"#{name}[domain]\">#{:notification_smtp_domain.l}</label>" + text_field_tag("#{name}[domain]", values[:domain], options.merge(:class => 'middle')) +
-		"<label for=\"#{name}[user_name]\">#{:notification_smtp_username.l}</label>" + text_field_tag("#{name}[user_name]", values[:user_name], options.merge(:class => 'middle')) +
-		"<label for=\"#{name}[password]\">#{:notification_smtp_password.l}</label>" + text_field_tag("#{name}[password]", values[:password], options.merge(:class => 'middle')) +
-		"<label for=\"#{name}[authentication]\">#{:notification_smtp_authentication.l}</label>" + text_field_tag("#{name}[authentication]", values[:authentication], options.merge(:class => 'middle'))
+		"<label for=\"#{name}[address]\">#{I18n.t('notification_smtp_address')}</label>" + text_field_tag("#{name}[address]", values[:address], options.merge(:class => 'middle') ) +
+		"<label for=\"#{name}[port]\">#{I18n.t('notification_smtp_port')}</label>" + text_field_tag("#{name}[port]", values[:port], options.merge(:class => 'middle')) +
+		"<label for=\"#{name}[domain]\">#{I18n.t('notification_smtp_domain')}</label>" + text_field_tag("#{name}[domain]", values[:domain], options.merge(:class => 'middle')) +
+		"<label for=\"#{name}[user_name]\">#{I18n.t('notification_smtp_username')}</label>" + text_field_tag("#{name}[user_name]", values[:user_name], options.merge(:class => 'middle')) +
+		"<label for=\"#{name}[password]\">#{I18n.t('notification_smtp_password')}</label>" + text_field_tag("#{name}[password]", values[:password], options.merge(:class => 'middle')) +
+		"<label for=\"#{name}[authentication]\">#{I18n.t('notification_smtp_authentication')}</label>" + text_field_tag("#{name}[authentication]", values[:authentication], options.merge(:class => 'middle'))
 	end
 end

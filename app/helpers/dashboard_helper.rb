@@ -41,20 +41,20 @@ module DashboardHelper
   end
 
   def new_account_steps(user)
-    [{:title   => :new_account_step1.l,
-	  :content => :new_account_step1_info.l_with_args(:url => edit_company_path(:id => Company.owner.id)),
+    [{:title   => I18n.t('new_account_step1'),
+	  :content => I18n.t('new_account_step1_info', :url => edit_company_path(:id => Company.owner.id)),
 	  :del     => Company.owner.updated?},
 
-      {:title   => :new_account_step2.l,
-	   :content => :new_account_step2_info.l_with_args(:url => "/users/new?company_id=#{user.company.id}"),
+      {:title   => I18n.t('new_account_step2'),
+	   :content => I18n.t('new_account_step2_info', :url => "/users/new?company_id=#{user.company.id}"),
 	   :del     => (Company.owner.users.length > 1)},
 
-      {:title   => :new_account_step3.l,
-	   :content => :new_account_step3_info.l_with_args(:url => new_company_path),
+      {:title   => I18n.t('new_account_step3'),
+	   :content => I18n.t('new_account_step3_info', :url => new_company_path),
 	   :del     => (Company.owner.clients.length > 0)},
 
-      {:title   => :new_account_step4.l,
-	   :content => :new_account_step4_info.l_with_args(:url => new_project_path),
+      {:title   => I18n.t('new_account_step4'),
+	   :content => I18n.t('new_account_step4_info', :url => new_project_path),
 	   :del     => (Company.owner.projects.length > 0)}]
   end
 end

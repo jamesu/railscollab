@@ -1,13 +1,13 @@
 ------------------------------------------------------------
- <%= :notifier_donotreply.l %>
+ <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= :notifier_new_message.l_with_args(:title => @message.title, :project => @message.project.name) %>
+<%= t('notifier_new_message', :title => @message.title, :project => @message.project.name) %>
 
 - <%= @message.object_url(Rails.configuration.site_url) %>
 
-<%= :company.l %>: <%= Company.owner.name %>
-<%= :project.l %>: <%= @message.project.name %>
+<%= t('company') %>: <%= Company.owner.name %>
+<%= t('project') %>: <%= @message.project.name %>
 
 --
 <%= Rails.configuration.site_url %>

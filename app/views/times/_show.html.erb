@@ -2,11 +2,11 @@
 <div class="time block">
 
 <% if view_time.is_private %>
-    <div class="private" title="<%= :private_time.l %>"><span><%= :private_time.l %></span></div>
+    <div class="private" title="<%= t('private_time') %>"><span><%= t('private_time') %></span></div>
 <% end %>
 
 <% if view_time.is_billable %>
-    <div class="billable" title="<%= :billable_time.l %>"><span><%= :billable_time.l %></span></div>
+    <div class="billable" title="<%= t('billable_time') %>"><span><%= t('billable_time') %></span></div>
 <% end %>
 
     <div class="header">
@@ -17,7 +17,7 @@
     </div>
     <div class="content">
 <% if view_time.running? -%>
-      <div><%= :time_running.l %></div>
+      <div><%= t('time_running') %></div>
 <% else -%>
       <div class="doneDate"><span><%= "Done date" %>:</span> <%= format_usertime(view_time.done_date, "done_date_long_format#{'_with_year' if view_time.done_date.year != Time.now.year}") %></div>
 <% end -%>

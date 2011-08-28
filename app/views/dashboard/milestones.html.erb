@@ -1,10 +1,10 @@
 <% if @late_milestones.length > 0 %>
 <div id="lateMilestones" class="important">
-  <div class="header"><%= :late_milestones.l %></div>
+  <div class="header"><%= t('late_milestones') %></div>
 <% if @late_milestones.length > 0 %>
   <ul>
 <% @late_milestones.each do |milestone| %>
-    <li><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>: <%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))) %> <% unless milestone.assigned_to.nil? %>(<%= h milestone.assigned_to.object_name %>)<% end %></li>
+    <li><%= t('milestone_days_late', :days => milestone.days_late) %>: <%= t('milestone_in', :milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))) %> <% unless milestone.assigned_to.nil? %>(<%= h milestone.assigned_to.object_name %>)<% end %></li>
 <% end %>
   </ul>
 <% end %>
@@ -17,7 +17,7 @@ months_calendar @date_start, @date_end, 'monthsCal', Rails.configuration.first_d
   unless date == now
     calendar_block(date.day, @milestones["#{date.month}-#{date.day}"], 'day')  
   else
-    calendar_block(:today.l, @milestones["#{date.month}-#{date.day}"], 'today', true)
+    calendar_block(t('today'), @milestones["#{date.month}-#{date.day}"], 'today', true)
   end
 end %>
 </div>

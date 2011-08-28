@@ -6,9 +6,9 @@
 
 <% unless @online_users.empty? %>
 <div class="sidebarBlock">
-  <h2><%= :online_users.l %></h2>
+  <h2><%= t('online_users') %></h2>
   <div class="blockContent">
-    <p><%= :users_active_in_last_n_minutes.l_with_args(:number => 15) %></p>
+    <p><%= t('users_active_in_last_n_minutes', :number => 15) %></p>
     <ul>
 <% @online_users.each do |user| -%>
 <% if can? :show, user %>
@@ -22,23 +22,23 @@
 
 <% unless @my_projects.empty? %>
 <div class="sidebarBlock">
-  <h2><%= :my_projects.l %></h2>
+  <h2><%= t('my_projects') %></h2>
   <div class="blockContent">
     <ul>
 <% @my_projects.each do |project| -%>
       <li><%= link_to h(project.name), project_path(:id => project.id) %></li>
 <% end %>
     </ul>
-    <p><%= link_to :my_projects_sidebar_link.l, :controller => 'dashboard', :action => 'my_projects' %></p>
+    <p><%= link_to t('my_projects_sidebar_link'), :controller => 'dashboard', :action => 'my_projects' %></p>
   </div>
 </div>
 <% end %>
 
 <div class="sidebarBlock">
-  <h2><%= :update_feeds.l %></h2>
+  <h2><%= t('update_feeds') %></h2>
   <div class="blockContent">
     <ul id="listOfRssFeeds">
-      <li><a href="<%= @logged_user.recent_activity_feed_url(nil, 'rss') %>"><%= :recent_activities.l %></a></li>
+      <li><a href="<%= @logged_user.recent_activity_feed_url(nil, 'rss') %>"><%= t('recent_activities') %></a></li>
     </ul>
   </div>
 </div>

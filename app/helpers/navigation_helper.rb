@@ -19,7 +19,7 @@
 module NavigationHelper
   def page_title
     title = current_crumb
-    title = title.l if title.is_a? Symbol
+    title = I18n.t(title) if title.is_a? Symbol
     title
   end
 

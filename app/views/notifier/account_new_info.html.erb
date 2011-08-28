@@ -1,24 +1,24 @@
 ------------------------------------------------------------
- <%= :notifier_donotreply.l %>
+ <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= :notifier_greeting.l_with_args(:user => @user.display_name) %>
+<%= t('notifier_greeting', :user => @user.display_name) %>
 
-<%= :notifier_new_account.l_with_args(:user => @user.created_by.display_name, :site => Rails.configuration.site_name) %>
+<%= t('notifier_new_account', :user => @user.created_by.display_name, :site => Rails.configuration.site_name) %>
 
-<%= :notifier_new_account_access.l %>
+<%= t('notifier_new_account_access') %>
 
 <% if @password.nil? %>
 <%= edit_user_password_url(@user, :confirm => @user.password_reset_key, :initial => 1) %>
 
-<%= :notifier_new_account_access_login.l_with_args(:login => @user.username) %>
+<%= t('notifier_new_account_access_login', :login => @user.username) %>
 <% else %>
 <%= Rails.configuration.site_url %>
 
-<%= :notifier_new_account_credentials.l %>
+<%= t('notifier_new_account_credentials') %>
 
-<%= :username.l %>: <%= @user.username %>
-<%= :password.l %>: <%= @password %>
+<%= t('username') %>: <%= @user.username %>
+<%= t('password') %>: <%= @password %>
 <% end %>
 --
 <%= Rails.configuration.site_url %>

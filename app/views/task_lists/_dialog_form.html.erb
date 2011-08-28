@@ -2,27 +2,27 @@
 <%= error_messages_for :task_list %>
 
   <div>
-    <label for="taskListFormName"><%= :name.l %>: <span class="label_required">*</span></label>
+    <label for="taskListFormName"><%= t('name') %>: <span class="label_required">*</span></label>
     <%= text_field 'task_list', 'name', :id => 'taskListFormName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="taskListFormDescription"><%= :description.l %>: </label>
+    <label for="taskListFormDescription"><%= t('description') %>: </label>
     <%= text_area 'task_list', 'description', :id => 'taskListFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div class="formBlock">
-    <label for="taskListFormMilestone"><%= :milestone.l %>: </label>
+    <label for="taskListFormMilestone"><%= t('milestone') %>: </label>
     <%= select 'task_list', 'milestone_id', select_milestone_options(@active_project), {}, {:class => 'select_milestone', :id => 'taskListFormMilestone'} %>
   </div>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
-    <label for="taskListFormIsPrivate"><%= :is_private_list.l %>: <span class="desc"><%= :is_private_list_info.l %></span></label>
+    <label for="taskListFormIsPrivate"><%= t('is_private_list') %>: <span class="desc"><%= t('is_private_list_info') %></span></label>
     <%= yesno_toggle 'task_list', 'is_private', :id => 'taskListFormIsPrivate', :class => 'yes_no'  %>
   </div>
 <% end %>
 
-  <button class="submit" type="submit"><%= :add_task_list.l %></button> <a href="#" class="cancel"><%= :cancel.l %> </a>
+  <button class="submit" type="submit"><%= t('add_task_list') %></button> <a href="#" class="cancel"><%= t('cancel') %> </a>
 
 </form>

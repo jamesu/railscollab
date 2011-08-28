@@ -26,28 +26,28 @@
 
 <% if @late_milestones.length > 0 or !@calendar_milestones.empty? %>
 <div id="lateOrTodayMilestones" class="block">
-  <div class="header"><%= :milestones_summary.l_with_args :adjetives => [!@late_milestones.empty? ? :late.l : nil,
-                           !@calendar_milestones.empty? ? :upcoming.l : nil].compact.to_sentence %></div>
+  <div class="header"><%= t('milestones_summary', :adjetives => [!@late_milestones.empty? ? t('late') : nil,
+                           !@calendar_milestones.empty? ? t('upcoming') : nil].compact.to_sentence) %></div>
 <% if @late_milestones.length > 0 %>
-  <h2><%= :late_milestones.l %></h2>
+  <h2><%= t('late_milestones') %></h2>
   <ul>
 <% @late_milestones.each do |milestone| %>
-    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= :milestone_in.l_with_args(:milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))) %> (<span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>)</li>
+    <li><% unless milestone.assigned_to.nil? %><%= h milestone.assigned_to.object_name %>: <% end %><%= t('milestone_in', :milestone => link_to(h(milestone.name), milestone_path(:id => milestone.id, :active_project => milestone.project)), :project => link_to(h(milestone.project.name), project_path(:id => milestone.project.id))) %> (<span class="error"><%= t('milestone_days_late', :days => milestone.days_late) %></span>)</li>
 <% end %>
   </ul>
 <% end %>
 
 <% unless @calendar_milestones.empty? %>
-<h2><%= :due_in_next_n_days.l_with_args(:num => 14) %></h2>
+<h2><%= t('due_in_next_n_days', :num => 14) %></h2>
   <%= now = @time_now.to_date
       prev_month = now.month
       days_calendar now, now + 13.days, 'dayCal' do |date|
         if date == now
-          calendar_block(:today.l, @calendar_milestones["#{date.month}-#{date.day}"], 'today', true) 
+          calendar_block(t('today'), @calendar_milestones["#{date.month}-#{date.day}"], 'today', true) 
         else
           if date.month != prev_month 
             prev_month = date.month
-            calendar_block(I18n.l(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
+            calendar_block(l(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
           else
             calendar_block(date.day, @calendar_milestones["#{date.month}-#{date.day}"], 'day') 
           end
@@ -58,18 +58,18 @@
 </div>
 <% end %>
 
-<h2><%= :recent_activities.l %></h2>
+<h2><%= t('recent_activities') %></h2>
 <% cache "user#{@logged_user.id}_#{@active_project.id}_dblog" do %>
 <% if @project_log_entries.length > 0 %>
 <table class="applicationLogs blank">
   <tr>
     <th></th>
-    <th><%= :details.l %></th>
-    <th class="right"><%= :log_date.l %></th>
+    <th><%= t('details') %></th>
+    <th class="right"><%= t('log_date') %></th>
   </tr>
 	<%= render :partial => 'layouts/application_logs', :collection => @project_log_entries, :locals => {:show_project_column => false} %>
 </table>
 <% else %>
-<%= :no_recent_activities.l %>
+<%= t('no_recent_activities') %>
 <% end %>
 <% end %>

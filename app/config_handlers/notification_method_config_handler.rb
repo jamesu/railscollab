@@ -27,9 +27,9 @@ class NotificationMethodConfigHandler < ConfigHandler
 	end
 	
 	def render(name, options)
-		opts = options_for_select({:notification_method_test.l => 'test', 
-		                           :notification_method_smtp.l => 'smtp',
-		                           :notification_method_sendmail.l => 'sendmail'}, self.value)
+		opts = options_for_select({I18n.t('notification_method_test') => 'test', 
+		                           I18n.t('notification_method_smtp') => 'smtp',
+		                           I18n.t('notification_method_sendmail') => 'sendmail'}, self.value)
 		select_tag name, opts, options
 	end
 end

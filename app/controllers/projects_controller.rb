@@ -82,7 +82,7 @@ class ProjectsController < ApplicationController
       @start_search_results = Rails.configuration.search_results_per_page * (current_page-1)
       (@total_search_results.to_f / Rails.configuration.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
-      @last_search = :search_box_default.l
+      @last_search = I18n.t('search_box_default')
       @search_results = []
 
       @tag_names = Tag.list_by_project(@project, !@logged_user.member_of_owner?, false)

@@ -4,11 +4,11 @@
       unless date == now
         if date.month != prev_month
           prev_month = date.month
-          calendar_block(I18n.l(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
+          calendar_block(t(date, :format => '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')
         else
           calendar_block(date.day, @calendar_milestones["#{date.month}-#{date.day}"], 'day')
         end
       else
-        calendar_block(:today.l, @calendar_milestones["#{date.month}-#{date.day}"], 'today', true)
+        calendar_block(t('today'), @calendar_milestones["#{date.month}-#{date.day}"], 'today', true)
       end
     end %>

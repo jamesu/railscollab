@@ -32,7 +32,7 @@ class ApplicationLog < ActiveRecord::Base
   end
 
   def friendly_action
-    "action_#{self.action}".to_sym.l
+    I18n.t "action_#{self.action}"
   end
 
   def action

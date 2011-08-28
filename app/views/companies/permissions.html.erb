@@ -1,8 +1,8 @@
 <% if @projects.length > 0 %>
 <div id="companyPermissions">
   <div class="hint">
-    <div class="header"><%= :hint.l %></div>
-    <div class="content"><%= :hint_permissions_info.l %></div>
+    <div class="header"><%= t('hint') %></div>
+    <div class="content"><%= t('hint_permissions_info') %></div>
   </div>
   <%= form_tag permissions_company_path(:id => @company.id), :method => :put %>
     <table class="blank">
@@ -13,7 +13,7 @@
         <td>
           <label for="<%= "projectPermissionsCheckbox#{project.id}" %>" class="checkbox normal">
 <% if !project.is_active? %>
-          <del><span title="<%= :project_completed_on.l_with_args(:date => format_usertime(project.completed_on, :project_created_format), :user => h(project.completed_by.display_name)) %>"><%= h project.name %></span></del>
+          <del><span title="<%= t('project_completed_on', :date => format_usertime(project.completed_on, :project_created_format), :user => h(project.completed_by.display_name)) %>"><%= h project.name %></span></del>
 <% else %>
           <%= h project.name %>
 <% end %>
@@ -23,7 +23,7 @@
 <% end %>
     </table>
     
-    <button class="submit" type="submit"><%= :update_permissions.l %></button>
+    <button class="submit" type="submit"><%= t('update_permissions') %></button>
   </form>
 </div>
 <% end %>

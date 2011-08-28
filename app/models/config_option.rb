@@ -25,11 +25,11 @@ class ConfigOption < ActiveRecord::Base
   end
 
   def display_name
-    "option_#{self.name}_name".to_sym.l
+    I18n.t "option_#{self.name}_name"
   end
 
   def display_description
-    "option_#{self.name}_description".to_sym.l
+    I18n.t "option_#{self.name}_description"
   end
 
   def handler

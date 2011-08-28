@@ -19,9 +19,9 @@
 module FilesHelper
   def page_title
     case action_name
-      when 'index' then @current_folder.nil? ? :files.l : :folder_name.l_with_args(:folder => @current_folder.name)
-      when 'new', 'create' then :add_file.l
-      when 'edit', 'update' then :edit_file.l
+      when 'index' then @current_folder.nil? ? I18n.t('files') : I18n.t('folder_name', :folder => @current_folder.name)
+      when 'new', 'create' then I18n.t('add_file')
+      when 'edit', 'update' then I18n.t('edit_file')
       else super
     end
   end

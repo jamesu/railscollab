@@ -3,9 +3,9 @@
             <ul>
 <% crumbs.each do |crumb| -%>
 <% if crumb[:url] %>
-              <li>&raquo; <a href="<%= crumb[:url] %>"><%= crumb[:title].is_a?(Symbol) ? crumb[:title].l : h(crumb[:title]) %></a></li>
+              <li>&raquo; <a href="<%= crumb[:url] %>"><%= crumb[:title].is_a?(Symbol) ? t(crumb[:title]) : h(crumb[:title]) %></a></li>
 <% else %>
-              <li>&raquo; <span><%= crumb[:title].is_a?(Symbol) ? crumb[:title].l : h(crumb[:title]) %></span></li>
+              <li>&raquo; <span><%= crumb[:title].is_a?(Symbol) ? t(crumb[:title]) : h(crumb[:title]) %></span></li>
 <% end %>
 <% end %>
             </ul>

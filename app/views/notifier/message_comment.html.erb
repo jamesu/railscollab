@@ -1,14 +1,14 @@
 ------------------------------------------------------------
- <%= :notifier_donotreply.l %>
+ <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= :notifier_new_comment.l_with_args(:title => @message.title) %>
+<%= t('notifier_new_comment', :title => @message.title) %>
 
 - <%= @comment.object_url(Rails.configuration.site_url) %>
 
-<%= :company.l %>: <%= Company.owner.name %>
-<%= :project.l %>: <%= @message.project.name %>
-<%= :author.l %>: <%= @comment.created_by.display_name %>
+<%= t('company') %>: <%= Company.owner.name %>
+<%= t('project') %>: <%= @message.project.name %>
+<%= t('author') %>: <%= @comment.created_by.display_name %>
 
 --
 <%= Rails.configuration.site_url %>

@@ -39,14 +39,14 @@
             <%= form_tag :controller => 'dashboard', :action => 'search' %>
               <div>
 <%
-  @search_field_default_value = :search_box_default.l
+  @search_field_default_value = t('search_box_default')
   @last_search ||= @search_field_default_value
   @search_field_attrs = {
     :onfocus => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''",
     :onblur => "if (event.target.value == '#{@search_field_default_value}') event.target.value=''"
   }
 %>
-                <%= text_field_tag 'search_id', (h @last_search), @search_field_attrs %><button type="submit"><%= :go.l %></button>
+                <%= text_field_tag 'search_id', (h @last_search), @search_field_attrs %><button type="submit"><%= t('go') %></button>
               </div>
             </form>
           </div>

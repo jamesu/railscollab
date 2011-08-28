@@ -21,19 +21,19 @@
 
 <% if total_time > 0 %>
 <div class="timeTaskList">
-<h2><%= :task_list_hours.l_with_args(:name => h(list[:list].object_name), :hours => total_time) %> <%= :billable_hours.l_with_args(:hours => total_time) if total_billable_time > 0 %> <%= :task_estimated_hours.l_with_args(:hours => total_estimated_time) if total_estimated_time > 0 %></h2>
-<h4><%= :task_list_hours_info.l %></h4>
+<h2><%= t('task_list_hours', :name => h(list[:list].object_name), :hours => total_time) %> <%= t('billable_hours', :hours => total_time) if total_billable_time > 0 %> <%= t('task_estimated_hours', :hours => total_estimated_time) if total_estimated_time > 0 %></h2>
+<h4><%= t('task_list_hours_info') %></h4>
 
 <% list[:tasks].each do |task_info| -%>
 <% task = task_info[:task] %>
-<h4><span><img src="/assets/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= :task_list_task_hours.l_with_args(:name => h(task.object_name), :hours => task_info[:hours]) %> <%= :billable_hours.l_with_args(:hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= :task_estimated_hours.l_with_args(:hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
+<h4><span><img src="/assets/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= t('task_list_task_hours', :name => h(task.object_name), :hours => task_info[:hours]) %> <%= t('billable_hours', :hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= t('task_estimated_hours', :hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
 
-<table class="timeLogs blank"><tr><th><%= :log_date.l %></th><th><%= :name.l %></th><th><%= :details.l %></th><th><%= :hours.l %></th></tr>
+<table class="timeLogs blank"><tr><th><%= t('log_date') %></th><th><%= t('name') %></th><th><%= t('details') %></th><th><%= t('hours') %></th></tr>
 <% task_info[:times].each do |time| -%>
   <tr>
     <td class="timeDate">
 <% if time.running? -%>
-      <%= :time_running.l %>
+      <%= t('time_running') %>
 <% else -%>
       <%= format_usertime(time.done_date, "done_date_format#{'_with_year' if time.done_date.year != Time.now.year}") %>
 <% end -%>
@@ -68,5 +68,5 @@
 <% end %>
 </div>
 <% else %>
-<p><%= :no_times_in_project.l %></p>
+<p><%= t('no_times_in_project') %></p>
 <% end %>

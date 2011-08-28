@@ -1,20 +1,20 @@
 <%= error_messages_for :project %>
   <div>
-    <label for="projectFormName"><%= :name.l %>: <span class="label_required">*</span></label>
+    <label for="projectFormName"><%= t('name') %>: <span class="label_required">*</span></label>
     <%= text_field 'project', 'name', :id => 'projectFormName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="projectPriority"><%= :priority.l %>: <span class="label_required">*</span></label>
+    <label for="projectPriority"><%= t('priority') %>: <span class="label_required">*</span></label>
     <%= text_field 'project', 'priority', :id => 'projectPriority', :class => 'long' %>
   </div>
   
   <div>
-    <label for="projectFormDescription"><%= :description.l %>:</label>
+    <label for="projectFormDescription"><%= t('description') %>:</label>
     <%= text_area 'project', 'description', :id => 'projectFormDescription', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
   <div>
-    <label><%= :project_show_description_in_overview.l %>: </label>
+    <label><%= t('project_show_description_in_overview') %>: </label>
     <%= yesno_toggle 'project', 'show_description_in_overview', :id => 'projectFormShowDescription', :class => 'yes_no'  %>
   </div>

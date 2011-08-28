@@ -21,7 +21,7 @@
       <!-- header -->
       <div id="headerWrapper">
         <div id="header">
-          <h1><%= link_to :administration.l, :controller => 'administration' %></h1>
+          <h1><%= link_to t('administration'), :controller => 'administration' %></h1>
           <div id="userboxWrapper"><%= render :partial => 'layouts/user_box', :locals => {:user => @logged_user, :projects => @active_projects, :running_times => @running_times} %></div>
         </div>
       </div>

@@ -23,7 +23,7 @@ module ConfigurationsHelper
 
   def current_crumb
     case action_name
-      when 'index' then :configuration.l
+      when 'index' then I18n.t('configuration')
       else @category.display_name
     end
   end

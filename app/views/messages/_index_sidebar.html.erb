@@ -1,11 +1,11 @@
 <% if !@important_messages.empty? %>
 <div class="sidebarBlock">
-  <h2><%= :important_messages.l %></h2>
+  <h2><%= t('important_messages') %></h2>
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @important_messages.each do |important_message| -%>
       <li><a href="<%= important_message.object_url %>"><%= h important_message.title %></a><br />
-      <span class="desc"><%= :important_messages_comments_count.l_with_args(:count => important_message.comments.length) %></span></li>
+      <span class="desc"><%= t('important_messages_comments_count', :count => important_message.comments.length) %></span></li>
 <% end %>
     </ul>
   </div>
@@ -14,13 +14,13 @@
 
 <% if !@active_project.project_message_categories.empty? %>
 <div class="sidebarBlock">
-  <h2><%= :categories.l %></h2>
+  <h2><%= t('categories') %></h2>
   <div class="blockContent" id="sidebarMessageCategoryList">
     <ul>
 <% if !@category.nil? %>
-      <li><%= link_to :all_categories.l, messages_path %></li>
+      <li><%= link_to t('all_categories'), messages_path %></li>
 <% else %>
-      <li><%= link_to :all_categories.l, messages_path, :class => 'selected' %></li>
+      <li><%= link_to t('all_categories'), messages_path, :class => 'selected' %></li>
 <% end %>
     
 <% @active_project.project_message_categories.each do |category| -%>
@@ -31,12 +31,12 @@
 <% end %>
       <li><%= link_to (h category.name), posts_category_path(:id => category.id), selected_class %> 
       <% if can?(:edit,category) %><%= link_to render_icon('edit',''), edit_category_path(:id => category.id) %><% end %>
-      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => :category_delete_confirmation.l %><% end %>
+      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => t('category_delete_confirmation') %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= new_category_path %>"><%= :add_category.l %></a></p>
+    <p><a href="<%= new_category_path %>"><%= t('add_category') %></a></p>
 	<% end %>
   </div>
 </div>

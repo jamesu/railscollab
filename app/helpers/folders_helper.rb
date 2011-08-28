@@ -19,9 +19,9 @@
 module FoldersHelper
   def page_title
     case action_name
-      when 'files' then :folder_name.l_with_args(:folder => @current_folder.name)
-      when 'new', 'create' then :add_folder.l
-      when 'edit', 'update' then :edit_folder.l
+      when 'files' then I18n.t('folder_name', :folder => @current_folder.name)
+      when 'new', 'create' then I18n.t('add_folder')
+      when 'edit', 'update' then I18n.t('edit_folder')
       else super
     end
   end

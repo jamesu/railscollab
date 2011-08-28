@@ -1,8 +1,8 @@
 <div class="sidebarBlock">
-  <h2><%= :calendar_feeds.l %></h2>
+  <h2><%= t('calendar_feeds') %></h2>
   <div class="blockContent">
-    <a href="<%= @logged_user.milestone_feed_url(nil, 'ics') %>" class="iCalSubscribe"><%= :ical.l %></a>
-    <p><%= :calendar_feed_milestone_info.l %></p>
-    <p><%= :calendar_feeds_password_warning.l %></p>
+    <a href="<%= @logged_user.milestone_feed_url(nil, 'ics') %>" class="iCalSubscribe"><%= t('ical') %></a>
+    <p><%= t('calendar_feed_milestone_info') %></p>
+    <p><%= t('calendar_feeds_password_warning') %></p>
   </div>
 </div>

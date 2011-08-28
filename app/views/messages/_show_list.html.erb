@@ -4,19 +4,19 @@
     <div class="meta">
       <div class="messageCommentCount">
 <% if not message.comments.empty? %>
-        <span><%= :comments.l %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
+        <span><%= t('comments') %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
 <% else %>
-        <span><%= :comments.l %>:</span> <%= message.comments.length %>
+        <span><%= t('comments') %>:</span> <%= message.comments.length %>
 <% end %>
       </div>
       <div class="messageTags">
-        <span><%= :tags.l %>:</span> <%= tag_list message %>
+        <span><%= t('tags') %>:</span> <%= tag_list message %>
       </div>
 
       <% fc = message.attached_files(@logged_user.member_of_owner?).length %>
       <% if fc > 0 %>
       <div class="objectFilesTitle">
-        <span><%= :attached_files.l %>:</span> <%= fc %>
+        <span><%= t('attached_files') %>:</span> <%= fc %>
       </div>
       <% end %>
       
@@ -25,11 +25,11 @@
     <div class="desc">
     <div class="title"><%= link_to (h message.title), message_path(:id => message.id) %>
 <% if message.is_private? %>
-    <div class="private" title="<%= :private_message.l %>"><span><%= :private_message.l %></span></div>
+    <div class="private" title="<%= t('private_message') %>"><span><%= t('private_message') %></span></div>
 <% end %>
     </div>
 <% if not message.created_by.nil? %>
-      <div class="messageAuthor"><%= :message_created_with_user.l_with_args(
+      <div class="messageAuthor"><%= t('message_created_with_user', 
             :time => format_usertime(message.created_on, :message_created_format),
             :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))) %></div>
 <% else %>

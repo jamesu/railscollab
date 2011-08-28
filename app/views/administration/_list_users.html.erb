@@ -1,6 +1,6 @@
 <% if users.empty? %>
 
-<p><%= :company_no_users.l %></p>
+<p><%= t('company_no_users') %></p>
 
 <% else %>
 
@@ -11,8 +11,8 @@
     <div class="userDetails">
       <div class="userName"><a href="<%= "/users/#{listed_user.id}" %>"><%= listed_user.display_name %></a></div>
 <% if company.is_owner? %>
-      <div class="userIsAdmin"><span><%= :administrator.l %>:</span> <%= listed_user.is_admin ? :yesno_yes.l : :yesno_no.l %></div>
-      <div class="userAutoAssign"><span><%= :auto_assign.l %>:</span> <%= listed_user.auto_assign ? :yesno_yes.l : :yesno_no.l %></div>
+      <div class="userIsAdmin"><span><%= t('administrator') %>:</span> <%= listed_user.is_admin ? t('yesno_yes') : t('yesno_no') %></div>
+      <div class="userAutoAssign"><span><%= t('auto_assign') %>:</span> <%= listed_user.auto_assign ? t('yesno_yes') : t('yesno_no') %></div>
 <% end %>
       <div class="userOptions"><%= action_list actions_for_user(listed_user) %>
       </div>

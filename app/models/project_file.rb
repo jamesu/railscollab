@@ -216,14 +216,14 @@ class ProjectFile < ActiveRecord::Base
 
   validates_presence_of :filename
   validates_each :project_folder, :allow_nil => true do |record, attr, value|
-    record.errors.add(attr, :not_part_of_project.l) if value.project_id != record.project_id
+    record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 
   validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-    record.errors.add(attr, :not_allowed.l) if value == true
+    record.errors.add(attr, I18n.t('not_allowed')) if value == true
   end
 
   validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-    record.errors.add(attr, :not_allowed.l) if value == false
+    record.errors.add(attr, I18n.t('not_allowed')) if value == false
   end
 end

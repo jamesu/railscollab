@@ -19,7 +19,7 @@
 module UsersHelper
   def page_title
     case action_name
-      when 'show' then :user_card.l_with_args(:user => @user.display_name)
+      when 'show' then I18n.t('user_card', :user => @user.display_name)
       else super
     end
   end

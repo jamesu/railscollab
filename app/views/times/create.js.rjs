@@ -1,6 +1,6 @@
 if @time.done_date.nil?
   # Add to running time list
-  page.call "Project.updateRunningTimes", @running_times.size, :running_times.l_with_args(:count => @running_times.size)
+  page.call "Project.updateRunningTimes", @running_times.size, t('running_times', :count => @running_times.size)
   page.select('#running_times_menu ul').append(render({:partial => 'listed', :collection => [@time]}))
   
   # Update task list item

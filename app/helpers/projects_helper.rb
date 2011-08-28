@@ -45,8 +45,8 @@ module ProjectsHelper
 
   def page_title
     case action_name
-      when 'show' then :overview.l
-      when 'index' then :projects.l
+      when 'show' then I18n.t('overview')
+      when 'index' then I18n.t('projects')
       else super
     end
   end

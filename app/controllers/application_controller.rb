@@ -45,7 +45,7 @@ protected
 
   def error_status(error, message, args={})
   	flash[:error] = error
-  	flash[:message] = message.l_with_args(args)
+  	flash[:message] = I18n.t(message, args)
   end
 
   def set_time_zone

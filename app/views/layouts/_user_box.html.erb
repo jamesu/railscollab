@@ -1,42 +1,42 @@
 <div id="userbox">
 <% if user.is_anonymous? %>
-  <%= :welcome_anonymous.l %> (<%= link_to(:login.l, logout_path) %>),
+  <%= t('welcome_anonymous') %> (<%= link_to(t('login'), logout_path) %>),
 <% else %>
-  <%= :welcome_back.l_with_args(:user => h(user.display_name)).html_safe %> (<%= link_to :logout.l, logout_path, :confirm => :are_you_sure_logout.l %>)
+  <%= t('welcome_back', :user => h(user.display_name)).html_safe %> (<%= link_to t('logout'), logout_path, :confirm => t('are_you_sure_logout') %>)
 <% end %>
   <div id="running_times_count" style="display:<%= @running_times.empty? ? 'none' : 'block' %>;">
-  <span><%= :running_times.l_with_args(:count => @running_times.size) %></span> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>
+  <span><%= t('running_times', :count => @running_times.size) %></span> <%= render_icon 'bullet_drop_down', '', :id => 'running_times', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %>
   </div>
   <ul>
     <% unless user.is_anonymous? %>
-    <li><%= link_to :account.l, @logged_user %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to t('account'), @logged_user %> <%= render_icon 'bullet_drop_down', '', :id => 'account_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
     <% end %>
 <% unless projects.blank? %>
-    <li><%= link_to :projects.l, :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to t('projects'), :controller => 'dashboard', :action => 'my_projects' %> <%= render_icon 'bullet_drop_down', '', :id => 'projects_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% end %>
 <% if user.is_admin %>
-    <li><%= link_to :administration.l, :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
+    <li><%= link_to t('administration'), :controller => 'administration' %> <%= render_icon 'bullet_drop_down', '', :id => 'administration_more', :class => 'PopupMenuWidgetAttachTo', :title => 'Enable javascript' %></li>
 <% end %>
   </ul>
 
   <% unless user.is_anonymous? %>  
   <div class="PopupMenuWidgetDiv" id="account_more_menu" style="display:none">
-    <p><%= :account.l %>:</p>
+    <p><%= t('account') %>:</p>
     <ul>
-      <li><%= link_to :edit_profile.l, edit_user_path(:id => user.id) %></li>
-      <li><%= link_to :update_avatar.l, avatar_user_path(:id => user.id) %></li>
+      <li><%= link_to t('edit_profile'), edit_user_path(:id => user.id) %></li>
+      <li><%= link_to t('update_avatar'), avatar_user_path(:id => user.id) %></li>
     </ul>
-    <p><%= :userbox_more.l %></p>
+    <p><%= t('userbox_more') %></p>
     <ul>
-      <li><%= link_to :my_projects.l, :controller => 'dashboard', :action => 'my_projects' %></li>
-      <li><%= link_to :my_tasks.l, :controller => 'dashboard', :action => 'my_tasks' %></li>
+      <li><%= link_to t('my_projects'), :controller => 'dashboard', :action => 'my_projects' %></li>
+      <li><%= link_to t('my_tasks'), :controller => 'dashboard', :action => 'my_tasks' %></li>
     </ul>
   </div>
   <% end %>
   
 <% unless projects.blank? %>
   <div class="PopupMenuWidgetDiv" id="projects_more_menu"  style="display:none">
-    <p><%= :projects.l %>:</p>
+    <p><%= t('projects') %>:</p>
     <ul>
 <% projects.each do |project| -%>
       <li><%= link_to h(project.name), project_path(:id => project.id) %></li>
@@ -47,12 +47,12 @@
   
 <% if user.is_admin %>
   <div class="PopupMenuWidgetDiv" id="administration_more_menu"  style="display:none">
-    <p><%= :administration.l %>:</p>
+    <p><%= t('administration') %>:</p>
     <ul>
-      <li><%= link_to :company.l, Company.owner %></li>
-      <li><%= link_to :members.l, companies_path %></li>
-      <li><%= link_to :projects.l, projects_path %></li>
-      <li><%= link_to :configuration.l, configurations_path %></li>
+      <li><%= link_to t('company'), Company.owner %></li>
+      <li><%= link_to t('members'), companies_path %></li>
+      <li><%= link_to t('projects'), projects_path %></li>
+      <li><%= link_to t('configuration'), configurations_path %></li>
     </ul>
   </div>
 <% end %>

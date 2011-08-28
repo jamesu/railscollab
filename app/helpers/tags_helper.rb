@@ -22,7 +22,7 @@ module TagsHelper
   end
   
   def page_title
-    :tags.l
+    I18n.t('tags')
   end
 
   def current_crumb

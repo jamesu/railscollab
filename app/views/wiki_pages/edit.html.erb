@@ -1,7 +1,7 @@
 <%= form_for(@wiki_page, :url => wiki_page_path(:id => @wiki_page)) do |form| %>
   <%= render :partial => form %>
   <div class="buttons">
-    <button class="submit" type="submit"><%= :edit_page.l %></button>
+    <button class="submit" type="submit"><%= t('edit_page') %></button>
     <%= preview_button %>
   </div>
 <% end %>

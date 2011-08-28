@@ -18,7 +18,7 @@
     <div class="description"><%= textilize project.description %></div>
 <% end %>
 <% if project.companies.length > 0 %>
-    <div class="involvedCompanies"><em><%= :companies_involved_in.l %>:</em> 
+    <div class="involvedCompanies"><em><%= t('companies_involved_in') %>:</em> 
     <%=
     project.companies.collect do |company|
     link_to( (h company.name), company_path(:id => company.id) )
@@ -27,15 +27,15 @@
     </div>
 <% end %>
 <% if not project.created_by.nil? %>
-    <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= "#{format_usertime(project.created_on, :project_created_format)} | " %>
+    <div class="startedOnBy"><em><%= t('started_on') %>:</em> <%= "#{format_usertime(project.created_on, :project_created_format)} | " %>
     <%= link_to (h project.created_by.display_name), user_path(:id => project.created_by.id) %>
     </div>
 <% else %>
-    <div class="startedOnBy"><em><%= :started_on.l %>:</em> <%= format_usertime(project.created_on, :project_created_format)  %></div>
+    <div class="startedOnBy"><em><%= t('started_on') %>:</em> <%= format_usertime(project.created_on, :project_created_format)  %></div>
 <% end %>
   </div>
 </div>
 <% end %>
 <% else %>
-<p><%= :no_active_projects.l %></p>
+<p><%= t('no_active_projects') %></p>
 <% end %>

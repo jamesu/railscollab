@@ -1,4 +1,4 @@
 <%= form_tag( messages_path, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => true} %>
-    <button class="submit" type="submit"><%= :add_message.l %></button>
+    <button class="submit" type="submit"><%= t('add_message') %></button>
 </form>

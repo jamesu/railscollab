@@ -2,29 +2,29 @@
 
 <% if @logged_user.is_anonymous? %>
   <div>
-    <label for="commentFormName"><%= :name.l %>: <span class="label_required">*</span></label>
+    <label for="commentFormName"><%= t('name') %>: <span class="label_required">*</span></label>
     <%= text_field 'comment', 'author_name', :id => 'commentFormName', :class => 'long' %>
   </div>
   
   <div>
-    <label for="commentFormEmail"><%= :email_address.l %>: <span class="label_required">*</span></label>
+    <label for="commentFormEmail"><%= t('email_address') %>: <span class="label_required">*</span></label>
     <%= text_field 'comment', 'author_email', :id => 'commentFormEmail', :class => 'long' %>
   </div>
 <% end %>
   
   <div class="formAddCommentText">
-    <label for="addCommentText"><%= :text.l %>: <span class="label_required">*</span></label>
+    <label for="addCommentText"><%= t('text') %>: <span class="label_required">*</span></label>
     <%= text_area 'comment', 'text', :id => 'addCommentText', :class => 'comment' %>
   </div>
     
 <% if @logged_user.member_of_owner? %>
   <fieldset>
-    <legend><%= :options.l %></legend>
+    <legend><%= t('options') %></legend>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= :private_comment.l %>:</label></div>
+      <div class="optionLabel"><label><%= t('private_comment') %>:</label></div>
       <div class="optionControl"><%= yesno_toggle 'comment', 'is_private', :class => 'yes_no', :id => 'commentFormIsPrivate' %></div>
-      <div class="optionDesc"><%= :private_comment_info.l %></div>
+      <div class="optionDesc"><%= t('private_comment_info') %></div>
     </div>
   </fieldset>
 <% end %>

@@ -1,12 +1,12 @@
 <% if @folders.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= :folders.l %></h2>
+  <h2><%= t('folders') %></h2>
   <div class="blockContent" id="sidebarFolderList">
     <ul>
 <% if !@folder.nil? %>
-      <li><%= link_to :all_files.l, files_path %></li>
+      <li><%= link_to t('all_files'), files_path %></li>
 <% else %>
-      <li><%= link_to :all_files.l, files_path, :class => 'selected' %></li>
+      <li><%= link_to t('all_files'), files_path, :class => 'selected' %></li>
 <% end %>
     
 <% @folders.each do |folder| -%>
@@ -17,12 +17,12 @@
 <% end %>
       <li><%= link_to (h folder.name), files_folder_path(:id => folder.id), selected_class %> 
       <% if can?(:edit,folder) %><%= link_to render_icon('edit',''), edit_folder_path(:id => folder.id) %><% end %>
-      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => :folder_delete_confirmation.l %><% end %>
+      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => t('folder_delete_confirmation') %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= new_folder_path %>"><%= :add_folder.l %></a></p>
+    <p><a href="<%= new_folder_path %>"><%= t('add_folder') %></a></p>
 	<% end %>
   </div>
 </div>
@@ -30,13 +30,13 @@
 
 <% if @important_files.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= :important_files.l %></h2>
+  <h2><%= t('important_files') %></h2>
   <div class="blockContent">
     <ul>
 <% @important_files.each do |important_file| -%>
       <li>
         <a href="<%= important_file.object_url %>"><%= important_file.filename %></a><br />
-        <span class="desc"><%= :important_file_revisions_count.l_with_args(:count => important_file.project_file_revisions.length) %></span>
+        <span class="desc"><%= t('important_file_revisions_count', :count => important_file.project_file_revisions.length) %></span>
       </li>
 <% end %>
     </ul>

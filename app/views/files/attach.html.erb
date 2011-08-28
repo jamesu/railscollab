@@ -1,19 +1,19 @@
 <%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :method => :put, :multipart => true) %>
 
-  <div class="hint"><%= :hint_attach_files.l_with_args(:link => "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name)}</a>") %></div>
+  <div class="hint"><%= t('hint_attach_files', :link => "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name)}</a>") %></div>
   <div>
-  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormExistingFile" class="checkbox"><%= :attach_existing_file.l %></label>
+  	<%= radio_button_tag 'attach[what]', 'existing_file', true, {:id => 'attachFormExistingFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormExistingFile" class="checkbox"><%= t('attach_existing_file') %></label>
   </div>
   
   <div id="attachFormExistingFileControls">
     <fieldset>
-      <legend><%= :select_file.l %></legend>
+      <legend><%= t('select_file') %></legend>
       <%= select_tag 'attach[file_id]', options_for_select(select_file_options(@active_project, @attach_object)), {:id => 'attachFormSelectFile', :style => 'width: 300px'} %>
     </fieldset>
   </div>
   
   <div>
-  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormNewFile" class="checkbox"><%= :upload_attach_to_message.l %></label>
+  	<%= radio_button_tag 'attach[what]', 'new_file', true, {:id => 'attachFormNewFile', :class => 'checkbox', :onclick => 'file_form_attach_update_action()'} %> <label for="attachFormNewFile" class="checkbox"><%= t('upload_attach_to_message') %></label>
   </div>
   
   <div id="attachFormNewFileControls">
@@ -25,6 +25,6 @@
     file_form_attach_init(<%= Rails.configuration.max_attachments %>);
   </script>
   
-  <button class="submit" type="submit"><%= :attach_files.l %></button>
+  <button class="submit" type="submit"><%= t('attach_files') %></button>
   
 </form>

@@ -189,7 +189,7 @@ class BasecampController < ApplicationController
 
   # /projects/#{project_id}/msg/create
   def projects_msg_create
-    unless ProjectMessage.can_be_created_by(@logged_user, @active_project)
+    unless can? :create_message, @active_project
       render :text => 'Error', :status => 403
       return
     end
@@ -246,7 +246,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @comment.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@comment)
       render :text => 'Error', :status => 403
       return
     end
@@ -266,7 +266,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @message.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@message)
       render :text => 'Error', :status => 403
       return
     end
@@ -324,7 +324,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @comment.can_be_edited_by(@logged_user)
+    unless can?(:edit,@comment)
       render :text => 'Error', :status => 403
       return
     end
@@ -351,7 +351,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @message.can_be_edited_by(@logged_user)
+    unless can?(:edit,@message)
       render :text => 'Error', :status => 403
       return
     end
@@ -392,7 +392,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @task.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task)
       render :text => 'Error', :status => 403
       return
     end
@@ -444,7 +444,7 @@ class BasecampController < ApplicationController
 
   # /projects/#{project_id}/todos/create_list
   def projects_todos_create_list
-    unless ProjectTaskList.can_be_created_by(@logged_user, @active_project)
+    unless can? :create_task_list, @active_project
       render :text => 'Error', :status => 403
       return
     end
@@ -478,7 +478,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @task.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@task)
       render :text => 'Error', :status => 403
       return
     end
@@ -498,7 +498,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @task_list.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@task_list)
       render :text => 'Error', :status => 403
       return
     end
@@ -555,7 +555,7 @@ class BasecampController < ApplicationController
 
     @task_list = @task.project_task_list
 
-    unless @task_list.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task_list)
       render :text => 'Error', :status => 403
       return
     end
@@ -589,7 +589,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @task_list.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task_list)
       render :text => 'Error', :status => 403
       return
     end
@@ -613,7 +613,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @task.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task)
       render :text => 'Error', :status => 403
       return
     end
@@ -640,7 +640,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @task.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task)
       render :text => 'Error', :status => 403
       return
     end
@@ -668,7 +668,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @task_list.can_be_changed_by(@logged_user)
+    unless can?(:edit,@task_list)
       render :text => 'Error', :status => 403
       return
     end
@@ -702,7 +702,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @milestone.status_can_be_changed_by(@logged_user)
+    unless can?(:change_status, @milestone)
       render :text => 'Error', :status => 403
       return
     end
@@ -722,7 +722,7 @@ class BasecampController < ApplicationController
 
   # /projects/#{project_id}/milestones/create
   def projects_milestones_create
-    unless ProjectMilestone.can_be_created_by(@logged_user, @active_project)
+    unless can? :create_milestone, @active_project
       render :text => 'Error', :status => 403
       return
     end
@@ -756,7 +756,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @milestone.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@milestone)
       render :text => 'Error', :status => 403
       return
     end
@@ -801,7 +801,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @milestone.status_can_be_changed_by(@logged_user)
+    unless can?(:change_status, @milestone)
       render :text => 'Error', :status => 403
       return
     end
@@ -828,7 +828,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @milestone.can_be_edited_by(@logged_user)
+    unless can?(:edit,@milestone)
       render :text => 'Error', :status => 403
       return
     end
@@ -891,7 +891,7 @@ class BasecampController < ApplicationController
       return
     end
 
-	unless @time.can_be_deleted_by(@logged_user)
+	unless can?(:delete,@time)
       render :text => 'Error', :status => 403
       return
     end
@@ -989,7 +989,7 @@ class BasecampController < ApplicationController
       return
     end
 
-    unless @time.can_be_edited_by(@logged_user)
+    unless can?(:edit,@time)
       render :text => 'Error', :status => 403
       return
     end

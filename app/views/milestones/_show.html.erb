@@ -10,7 +10,7 @@
 <% end %>
 
 <% if milestone.is_private %>
-    <div class="private" title="<%= :private_milestone.l %>"><span><%= :private_milestone.l %></span></div>
+    <div class="private" title="<%= t('private_milestone') %>"><span><%= t('private_milestone') %></span></div>
 <% end %>
 
     <div class="header">
@@ -27,19 +27,19 @@
 <% end %>
       <%= link_to (h milestone.name), milestone_path(:id => milestone.id) %>
 <% if milestone.is_upcoming? %>
- (<%= :milestone_days_left.l_with_args(:days => milestone.days_left) %>)
+ (<%= t('milestone_days_left', :days => milestone.days_left) %>)
 <% elsif milestone.is_late? %>
- (<%= :milestone_days_late.l_with_args(:days => milestone.days_late) %>)
+ (<%= t('milestone_days_late', :days => milestone.days_late) %>)
 <% elsif milestone.is_today? %>
- (<%= :today.l %>)
+ (<%= t('today') %>)
 <% end %>
     </div>
     
     <div class="content">
 <% if milestone.due_date.year > Date.today.year %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_extended_format) %></div>
+      <div class="dueDate"><span><%= t('due_date') %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_extended_format) %></div>
 <% else %>
-      <div class="dueDate"><span><%= :due_date.l %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_format) %></div>
+      <div class="dueDate"><span><%= t('due_date') %>:</span> <%= format_usertime(milestone.due_date, :milestone_due_date_format) %></div>
 <% end %>
       
 <% if not milestone.description.nil? %>
@@ -48,17 +48,17 @@
 
 <!-- Milestones -->
 <% if not (milestone.project_messages.length > 0 or milestone.project_task_lists.length > 0) %>
-      <p><%= :milestone_empty_info.l_with_args(
-               :message => link_to(:message.l, new_message_path(:milestone_id => milestone.id)),
-               :task_list => link_to(:task_list.l, new_task_list_path(:milestone_id => milestone.id))).html_safe %></p>
+      <p><%= t('milestone_empty_info', 
+               :message => link_to(t('message'), new_message_path(:milestone_id => milestone.id)),
+               :task_list => link_to(t('task_list'), new_task_list_path(:milestone_id => milestone.id))).html_safe %></p>
 <% else %>
 <% if milestone.project_messages.length > 0 %>
-      <p><%= :messages.l %>:</p>
+      <p><%= t('messages') %>:</p>
       <ul>
 <% (@logged_user.member_of_owner? ? milestone.project_messages : milestone.project_messages.public).each do |message| -%>
         <li><%= link_to (h message.title), message_path(:id => message.id) %>
 <% if not message.created_by.nil? %>
-      <span class="desc">(<%= :milestone_messages_created_with_user.l_with_args(
+      <span class="desc">(<%= t('milestone_messages_created_with_user', 
              :time => format_usertime(message.created_on, :milestone_messages_created_format),
              :user => link_to(h(message.created_by.display_name), user_path(:id => message.created_by.id) )).html_safe %>)</span>
 <% end %>
@@ -68,7 +68,7 @@
 
 <!-- Task lists -->
 <% if milestone.project_task_lists.length > 0 %>
-      <p><%= :task_lists.l %>:</p>
+      <p><%= t('task_lists') %>:</p>
       <ul>
 <% (@logged_user.member_of_owner? ? milestone.project_task_lists : milestone.project_task_lists.public).each do |task_list| -%>
 <% if task_list.is_completed? %>
@@ -82,7 +82,7 @@
 
 <% end %>
 
-  <p><span><%= :tags.l %>:</span> <%= tag_list milestone %></p>
+  <p><span><%= t('tags') %>:</span> <%= tag_list milestone %></p>
 
 <div class="milestoneOptions">
 <%= action_list actions_for_milestone(milestone) %>

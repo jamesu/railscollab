@@ -19,7 +19,7 @@
 module CompaniesHelper
   def page_title
     case action_name
-      when 'show' then :company_card.l_with_args(:company => @company.name)
+      when 'show' then I18n.t('company_card', :company => @company.name)
       else super
     end
   end

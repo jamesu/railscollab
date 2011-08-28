@@ -19,7 +19,7 @@
 module MessagesHelper
   def page_title
     case action_name
-      when 'category' then :category_messages.l_with_args(:category => @category.name)
+      when 'category' then I18n.t('category_messages', :category => @category.name)
       else super
     end
   end

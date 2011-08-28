@@ -1,7 +1,7 @@
             <div id="page_actions">
               <ul>
 <% page_actions.each do |action| -%>
-                <li><a href="<%= action[:url] %>" <%= action[:ajax] ? 'class="ajax_action"' : 'class="action"' %> id="action_<%= action[:title] %>"><%= action[:title].l %></a></li>
+                <li><a href="<%= action[:url] %>" <%= action[:ajax] ? 'class="ajax_action"' : 'class="action"' %> id="action_<%= action[:title] %>"><%= t(action[:title]) %></a></li>
 <% end %>
               </ul>
 

@@ -1,4 +1,4 @@
 <%= form_tag( comment_path(:id => @comment.id), :method => :put, :multipart => true ) %>
 <%= render :partial => 'form' %>
-    <button class="submit" type="submit"><%= :edit_comment.l %></button>
+    <button class="submit" type="submit"><%= t('edit_comment') %></button>
 </form>

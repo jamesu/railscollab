@@ -1,4 +1,4 @@
 <%= form_tag task_path(:task_list_id => @task.task_list_id, :id => @task.id), :method => :put, :class => 'editTaskItem' %>
   <%= render :partial => 'form', :object => @task %>
-  <div><button class="submit" type="submit"><%=:edit_task.l %></button> <%= :or.l %> <%= link_to :cancel.l, task_path(:task_list_id => @task.task_list_id, :id => @task.id), :class => 'cancel' %></div>
+  <div><button class="submit" type="submit"><%=t('edit_task') %></button> <%= t('or') %> <%= link_to t('cancel'), task_path(:task_list_id => @task.task_list_id, :id => @task.id), :class => 'cancel' %></div>
 </form>

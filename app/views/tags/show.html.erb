@@ -1,13 +1,13 @@
 <%
-  @page_title = :tags.l
+  @page_title = t('tags')
   @bread_crumbs = project_crumbs(@tag_name, [{:title => :search, :url => search_project_path(:id => @active_project.id)}])
 %>
 
 <% if @tagged_objects_count > 0 %>
-<p><%= :objects_tagged_with.l_with_args({:count => @tagged_objects_count, :tag => h(@tag_name)}) %>:</p>
+<p><%= t('objects_tagged_with', {:count => @tagged_objects_count, :tag => h(@tag_name)}) %>:</p>
 
 <% if not @tagged_objects[:messages].empty? %>
-<h2><%= :messages.l %></h2>
+<h2><%= t('messages') %></h2>
 <ul>
 <% @tagged_objects[:messages].each do |message| -%>
   <li><a href="<%= message.object_url %>"><%= h message.object_name %></a>
@@ -20,13 +20,13 @@
 <% end %>
 
 <% if not @tagged_objects[:milestones].empty? %>
-<h2><%= :milestones.l %></h2>
+<h2><%= t('milestones') %></h2>
 <ul>
 <% @tagged_objects[:milestones].each do |milestone| -%>
   <li>
     <a href="<%= milestone.object_url %>"><%= h milestone.object_name %></a>
 <% if !milestone.assigned_to.nil? %>
-    <span class="desc">- <%= :milestone_assigned_to.l_with_args({:name => h(milestone.assigned_to.object_name)}) %></span>
+    <span class="desc">- <%= t('milestone_assigned_to', {:name => h(milestone.assigned_to.object_name)}) %></span>
 <% end %>
 <% if milestone.is_completed? %>
     <%= render_icon 'ok', "Completed milestone" %>
@@ -37,7 +37,7 @@
 <% end %>
 
 <% if not @tagged_objects[:task_lists].empty? %>
-<h2><%= :task_lists.l %></h2>
+<h2><%= t('task_lists') %></h2>
 <ul>
 <% @tagged_objects[:task_lists].each do |task_list| -%>
   <li>
@@ -51,7 +51,7 @@
 <% end %>
 
 <% if not @tagged_objects[:files].empty? %>
-<h2><%= :files.l %></h2>
+<h2><%= t('files') %></h2>
 <ul>
 <% @tagged_objects[:files].each do |file| -%>
   <li><a href="<%= file.object_url%>"><%= h file.filename %></a> <span class="desc">(<%= format_size file.file_size %>)</span></li>
@@ -60,5 +60,5 @@
 <% end %>
 
 <% else %>
-<p><%= :no_objects_tagged_with.l_with_args({:tag => h(@tag_name)}) %></p>
+<p><%= t('no_objects_tagged_with', {:tag => h(@tag_name)}) %></p>
 <% end %>

@@ -64,13 +64,13 @@ module ProjectItemsHelper
     permissions = @logged_user.permissions_for(project)
     return [] if permissions.nil? or !(permissions.can_assign_to_owners or permissions.can_assign_to_other)
 
-    default_option = permissions.can_assign_to_other ? content_tag(:option, :anyone.l, :value => 0) : ''
+    default_option = permissions.can_assign_to_other ? content_tag(:option, I18n.t('anyone'), :value => 0) : ''
     items = {}
     project.companies.each do |company|
       next if company.is_owner? and !permissions.can_assign_to_owners
       next if !company.is_owner? and !permissions.can_assign_to_other
 
-      items[company.name] = [[:anyone.l, "c#{company.id}"], *company.users.collect do |user|
+      items[company.name] = [[I18n.t('anyone'), "c#{company.id}"], *company.users.collect do |user|
         [user.username, user.id.to_s] if user.member_of(project)
       end.compact]
     end
@@ -85,7 +85,7 @@ module ProjectItemsHelper
       items[task_list.name] = list.collect {|task| [truncate(task.text, :length => 50), task.id.to_s]}
     end
 
-    content_tag(:option, :none.l, :value => 0) + grouped_options_for_select(items, options)
+    content_tag(:option, I18n.t('none'), :value => 0) + grouped_options_for_select(items, options)
   end
   
   def object_comments_url(object)

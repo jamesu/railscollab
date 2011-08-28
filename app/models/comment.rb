@@ -101,6 +101,6 @@ class Comment < ActiveRecord::Base
 	
 	validates_presence_of :text
 	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-		record.errors.add attr, :not_allowed.l if value == true
+		record.errors.add attr, I18n.t('not_allowed') if value == true
 	end
 end

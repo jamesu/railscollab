@@ -17,10 +17,10 @@
 
 <table class="timeLogs blank">
   <tr>
-    <th><%= :log_date.l %></th>
-    <th><%= :person.l %></th>
-    <th><%= :hours.l %></th>
-    <th><%= :summary.l %></th>
+    <th><%= t('log_date') %></th>
+    <th><%= t('person') %></th>
+    <th><%= t('hours') %></th>
+    <th><%= t('summary') %></th>
 	<th></th>
   </tr>
 
@@ -41,7 +41,7 @@
   <tr class="<%= class_name %>">
     <td class="timeDate">
 <% if time.running? -%>
-      <%= :time_running.l %>
+      <%= t('time_running') %>
 <% else -%>
       <%= format_usertime(time.done_date, "done_date_format#{'_with_year' if time.done_date.year != Time.now.year}") %>
 <% end -%>
@@ -74,5 +74,5 @@
 
 </div>
 <% else %>
-<p><%= :no_times_in_project.l %></p>
+<p><%= t('no_times_in_project') %></p>
 <% end %>

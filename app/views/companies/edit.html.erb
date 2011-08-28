@@ -1,26 +1,26 @@
 <%= form_tag company_path(:id => @company.id), :method => :put %>
 <%= render :partial => 'form' %>
-    <button class="submit" type="submit"><%= :edit_company.l %></button>
+    <button class="submit" type="submit"><%= t('edit_company') %></button>
 </form>
 
 <%= form_tag(logo_company_path(:id => @company.id), :method => :put, :multipart => true) %>
   <fieldset>
-    <legend><%= :current_logo.l %></legend>
+    <legend><%= t('current_logo') %></legend>
 <% if @company.has_logo? %>
     <img src="<%= @company.logo_url %>" alt="<%= h @company.name %> logo" />
-    <p><%= link_to :delete_current_logo.l, logo_company_path(:id => @company.id), {:onclick => :current_logo_confirm_delete.l, :method => :delete} %></p>
+    <p><%= link_to t('delete_current_logo'), logo_company_path(:id => @company.id), {:onclick => t('current_logo_confirm_delete'), :method => :delete} %></p>
 <% else %>
-    <%= :logo_not_uploaded.l %>
+    <%= t('logo_not_uploaded') %>
 <% end %>
   </fieldset>
   
   <div>
-    <label for="logoFormLogo"><%= :new_logo.l %>: <span class="label_required">*</span></label>
+    <label for="logoFormLogo"><%= t('new_logo') %>: <span class="label_required">*</span></label>
     <div id="logoFormLogo"><input type="file" name="company[logo]" /></div>
 <% if @company.has_logo? %>
-    <p class="desc"><%= :logo_replace_info.l %></p>
+    <p class="desc"><%= t('logo_replace_info') %></p>
 <% end %>
   </div>
   
-    <button class="submit" type="submit"><%= :update_logo.l %></button>
+    <button class="submit" type="submit"><%= t('update_logo') %></button>
 </form>

@@ -141,7 +141,7 @@ class FilesController < ApplicationController
     # verify file data
     file_data = params[:file_data]
     if file_data.nil? or file_data[:file].nil?
-      @file.errors.add(:file, :required.l)
+      @file.errors.add(:file, I18n.t('required'))
     end
     
     # sort out other attributes
@@ -184,7 +184,7 @@ class FilesController < ApplicationController
     file_data = params[:file_data]
     unless file_data.nil?
       if file_data[:updated_file] and !file_data[:file]
-        @file.errors.add(:file, :required.l)
+        @file.errors.add(:file, I18n.t('required'))
       end
     end
 

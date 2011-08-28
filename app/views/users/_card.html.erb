@@ -5,14 +5,14 @@
     <h2><%= h card.display_name %></h2>
     
     <div class="cardBlock">
-      <div><span><%= :title.l %>:</span> <%= card.title ? (h card.title) : :not_applicable.l %></div>
-      <div><span><%= :company.l %>:</span> <%= link_to card.company.name, company_path(:id => card.company.id) %></div>
+      <div><span><%= t('title') %>:</span> <%= card.title ? (h card.title) : t('not_applicable') %></div>
+      <div><span><%= t('company') %>:</span> <%= link_to card.company.name, company_path(:id => card.company.id) %></div>
     </div>
     
-    <h2><%= :contact_online.l %></h2>
+    <h2><%= t('contact_online') %></h2>
     
     <div class="cardBlock">
-      <div><span><%= :email_address.l %>:</span> <a href="mailto:<%= h card.email %>"><%= h card.email %></a></div>
+      <div><span><%= t('email_address') %>:</span> <a href="mailto:<%= h card.email %>"><%= h card.email %></a></div>
       
 <% if !card.im_values.empty? %>
       <table class="imAddresses">
@@ -20,7 +20,7 @@
 <% next if im_value.value.blank? %>
         <tr>
           <td><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %>" /></td>
-          <td><%= h im_value.value %> <% if im_value.is_default %><span class="desc">(<%= :primary_im.l %>)</span><% end %></td>
+          <td><%= h im_value.value %> <% if im_value.is_default %><span class="desc">(<%= t('primary_im') %>)</span><% end %></td>
         </tr>
 <% end %>
       </table>
@@ -29,13 +29,13 @@
     </div>
     
     <% if !card.office_number.nil? or !card.fax_number.nil? or !card.mobile_number.nil? or !card.home_number.nil? %>
-    <h2><%= :contact_offline.l %></h2>
+    <h2><%= t('contact_offline') %></h2>
     
     <div class="cardBlock">
-      <% if !card.office_number.nil? and !card.office_number.empty? %><div><span><%= :office.l %>:</span><%= h(card.office_number) %></div><% end %>
-      <% if !card.fax_number.nil? and !card.fax_number.empty? %><div><span><%= :fax.l %>:</span><%= h(card.fax_number) %></div><% end %>
-      <% if !card.mobile_number.nil? and !card.mobile_number.empty? %><div><span><%= :mobile.l %>:</span><%= h(card.mobile_number) %></div><% end %>
-      <% if !card.home_number.nil? and !card.home_number.empty? %><div><span><%= :home.l %>:</span><%= h(card.home_number) %></div><% end %>
+      <% if !card.office_number.nil? and !card.office_number.empty? %><div><span><%= t('office') %>:</span><%= h(card.office_number) %></div><% end %>
+      <% if !card.fax_number.nil? and !card.fax_number.empty? %><div><span><%= t('fax') %>:</span><%= h(card.fax_number) %></div><% end %>
+      <% if !card.mobile_number.nil? and !card.mobile_number.empty? %><div><span><%= t('mobile') %>:</span><%= h(card.mobile_number) %></div><% end %>
+      <% if !card.home_number.nil? and !card.home_number.empty? %><div><span><%= t('home') %>:</span><%= h(card.home_number) %></div><% end %>
     </div>
     <% end %>
   

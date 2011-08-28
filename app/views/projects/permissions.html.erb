@@ -20,7 +20,7 @@
         <%= render :partial => 'projects/permissions_users', :locals => {:project => @active_project, :company => company}, :collection => company.users %>
 <% else %>
         <tr>
-          <td colspan="2"><%= :company_no_users.l %></td>
+          <td colspan="2"><%= t('company_no_users') %></td>
         </tr>
 <% end %>
          </table>
@@ -31,7 +31,7 @@
 <% end %>
 <% end %>
 
-<button class="submit" type="submit"><%= :update_people.l %></button>
+<button class="submit" type="submit"><%= t('update_people') %></button>
 </div>
 </form>
 <% end %>

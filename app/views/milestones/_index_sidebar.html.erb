@@ -1,22 +1,22 @@
 <div class="sidebarBlock">
-  <h2><%= :calendar_feeds.l %></h2>
+  <h2><%= t('calendar_feeds') %></h2>
   <div class="blockContent">
-    <a href="<%= @logged_user.milestone_feed_url(@active_project, 'ics') %>" class="iCalSubscribe"><%= :ical.l %></a>
-    <p><%= :calendar_feed_milestone_info.l.html_safe %></p>
-    <p><%= :calendar_feeds_password_warning.l.html_safe %></p>
+    <a href="<%= @logged_user.milestone_feed_url(@active_project, 'ics') %>" class="iCalSubscribe"><%= t('ical') %></a>
+    <p><%= t('calendar_feed_milestone_info').html_safe %></p>
+    <p><%= t('calendar_feeds_password_warning').html_safe %></p>
   </div>
 </div>
 
 <% if @completed_milestones.length > 0 %>
 <div class="sidebarBlock">
-  <h2><%= :completed_milestones.l %></h2>
+  <h2><%= t('completed_milestones') %></h2>
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @completed_milestones.each do |milestone| -%>
       <li><%= link_to (h milestone.name), milestone_path(:id => milestone.id) %>
 <% if not milestone.completed_by.nil? %>
         <br /><span class="desc"><%= 
-          :milestone_completed_time_with_user.l_with_args(
+          t('milestone_completed_time_with_user', 
                :time => format_usertime(milestone.completed_on, :milestone_completed_time_format),
                :user => (link_to milestone.completed_by.display_name, user_path(:id => milestone.completed_by.id))).html_safe %></span>
 <% end %>

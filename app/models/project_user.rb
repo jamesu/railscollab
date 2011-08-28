@@ -61,7 +61,7 @@ class ProjectUser < ActiveRecord::Base
 
   def self.permission_names()
     vals = {}
-    @@permission_fields.each{ |field| vals[field] = field.l }
+    @@permission_fields.each{ |field| vals[field] = I18n.t(field) }
     vals
   end
 

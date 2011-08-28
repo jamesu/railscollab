@@ -10,5 +10,5 @@
 </div>
 
 <% if can? :manage, @project %>
-<div class="hint"><%= :permissions_info.l_with_args(:link => link_to(:permissions_form.l, permissions_project_path(:id => @active_project.id))) %></div>
+<div class="hint"><%= t('permissions_info', :link => link_to(t('permissions_form'), permissions_project_path(:id => @active_project.id))) %></div>
 <% end %>

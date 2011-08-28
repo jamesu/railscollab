@@ -20,7 +20,7 @@ class Notifier < ActionMailer::Base
   default_url_options[:host] = Rails.configuration.site_url
 
   def message(user, msg, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_message.l_with_args :title => msg.title}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_message', :title => msg.title)}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
@@ -35,7 +35,7 @@ class Notifier < ActionMailer::Base
   end
 
   def task(user, task, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_task.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_task')}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
@@ -50,7 +50,7 @@ class Notifier < ActionMailer::Base
   end
 
   def milestone(user, milestone, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_milestone.l_with_args :name => milestone.name}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_milestone', :name => milestone.name)}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
@@ -65,7 +65,7 @@ class Notifier < ActionMailer::Base
   end
 
   def message_comment(user, comment, msg, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_comment.l_with_args :title => msg.title}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_comment', :title => msg.title)}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
@@ -81,7 +81,7 @@ class Notifier < ActionMailer::Base
   end
   
   def password_reset(user, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_reset_password_request.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_reset_password_request')}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at
@@ -95,7 +95,7 @@ class Notifier < ActionMailer::Base
   end
   
   def account_new_info(user, password, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{:notifier_subject_new_account.l}"
+    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_account')}"
     @recipients = user.email
     @from       = Rails.configuration.notification_email_address
     @sent_on    = sent_at

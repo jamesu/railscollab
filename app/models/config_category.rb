@@ -21,11 +21,11 @@ class ConfigCategory < ActiveRecord::Base
   #has_many :config_options
 
   def display_name
-    "category_#{self.name}_name".to_sym.l
+    I18n.t "category_#{self.name}_name"
   end
 
   def display_description
-    "category_#{self.name}_description".to_sym.l
+    I18n.t "category_#{self.name}_description"
   end
 
   def options

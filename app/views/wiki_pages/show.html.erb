@@ -10,5 +10,5 @@
 <div class="options">
   <%= action_list actions_for_wiki_page(@wiki_page) %>
   <%= select_tag :versions, options_for_versions_select(@versions), :onchange => 'document.location.href = this.value;' %>
-  <%= :'wiki_engine.last_modified_with_time'.l_with_args(:time => format_usertime(@version.created_at, :wiki_page_updated_format)) %>
+  <%= I18n.t('wiki_engine.last_modified_with_time', :time => format_usertime(@version.created_at, :wiki_page_updated_format)) %>
 </div>

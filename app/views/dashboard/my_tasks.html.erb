@@ -6,7 +6,7 @@
     <div class="header"><h2><%= link_to (h project[:name]), project_path(:id => project[:id]) %></h2></div>
     <div class="content">
 <% if project[:milestones].length > 0 %>
-      <p><%= link_to :milestones.l, milestones_path(:active_project => project[:id]) %>:</p>
+      <p><%= link_to t('milestones'), milestones_path(:active_project => project[:id]) %>:</p>
       <table class="blank">
 <% project[:milestones].each do |milestone| -%>
         <tr>
@@ -15,15 +15,15 @@
 <% if not milestone.assigned_to.nil? %>
             <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span> 
 <% else %>
-            <span class="assignedTo"><%= :anyone.l %>:</span> 
+            <span class="assignedTo"><%= t('anyone') %>:</span> 
 <% end %>
             <%= link_to (h milestone.name), milestone_path(:id => milestone.id, :active_project => project[:id]) %> - 
 <% if milestone.is_upcoming? %>
-            <span><%= :milestone_days_left.l_with_args(:days => milestone.days_left) %></span>
+            <span><%= t('milestone_days_left', :days => milestone.days_left) %></span>
 <% elsif milestone.is_late? %>
-            <span class="error"><%= :milestone_days_late.l_with_args(:days => milestone.days_late) %></span>
+            <span class="error"><%= t('milestone_days_late', :days => milestone.days_late) %></span>
 <% elsif milestone.is_today? %>
-            <span><%= :today.l %></span>
+            <span><%= t('today') %></span>
 <% end %>
           </td>
         </tr>
@@ -32,7 +32,7 @@
 <% end %>
 
 <% if project[:tasks].length > 0 %>
-      <p><%= link_to :tasks.l, task_lists_path(:active_project => project[:id]) %>:</p>
+      <p><%= link_to t('tasks'), task_lists_path(:active_project => project[:id]) %>:</p>
       <table class="blank">
 <% project[:tasks].each do |task| -%>
         <tr>
@@ -44,11 +44,11 @@
 <% if not task.assigned_to.nil? %>
             <span class="assignedTo"><%= h task.assigned_to.object_name  %>:</span>
 <% else %>
-            <span class="assignedTo"><%= :anyone.l %>:</span>
+            <span class="assignedTo"><%= t('anyone') %>:</span>
 <% end %>
             <%= h task.text %> 
 <% if not task.task_list.nil? %>
-            (<%= :tasks_in_list.l_with_args(:list => link_to(h(task.task_list.name), task_list_path(:id => task.task_list_id, :active_project => project[:id]))) %>)
+            (<%= t('tasks_in_list', :list => link_to(h(task.task_list.name), task_list_path(:id => task.task_list_id, :active_project => project[:id]))) %>)
 <% end %>
           </td>
         </tr>
@@ -62,9 +62,9 @@
 <% end %>
 </div>
 <% else %>
-<p><%= :no_active_projects.l %></p>
+<p><%= t('no_active_projects') %></p>
 <% end  %>
 
 <% if not @has_assigned_tasks %>
-<p><%= :no_tasks_assigned_to_you.l %></p>
+<p><%= t('no_tasks_assigned_to_you') %></p>
 <% end %>

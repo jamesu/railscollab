@@ -1,12 +1,12 @@
 <%= error_messages_for :message %>
 
  <div>
-    <label for="messageFormTitle"><%= :title.l %>: <span class="label_required">*</span></label>
+    <label for="messageFormTitle"><%= t('title') %>: <span class="label_required">*</span></label>
     <%= text_field 'message', 'title', :id => 'messageFormTitle', :class => 'title' %>
   </div>
   
   <div>
-    <label for="messageFormText"><%= :text.l %>: <span class="label_required">*</span></label>
+    <label for="messageFormText"><%= t('text') %>: <span class="label_required">*</span></label>
     <%= text_area 'message', 'text', :id => 'messageFormText', :class => 'editor' %>
   </div>
   
@@ -24,60 +24,60 @@
         expand_sstyle = 'display:inline'
       end
     %>
-    <label for="messageFormAdditionalText"><%= :additional_text.l %> (<a href="#" id="messageFormAdditionalTextToggle"><span id="messageFormAdditionalTextExpand" style="<%= expand_sstyle %>"><%= :expand.l %></span><span id="messageFormAdditionalTextCollapse" style="<%= compact_sstyle %>"><%= :collapse.l %></span></a>):<span class="desc"> - <%= :additional_text_info.l %></span></label>
+    <label for="messageFormAdditionalText"><%= t('additional_text') %> (<a href="#" id="messageFormAdditionalTextToggle"><span id="messageFormAdditionalTextExpand" style="<%= expand_sstyle %>"><%= t('expand') %></span><span id="messageFormAdditionalTextCollapse" style="<%= compact_sstyle %>"><%= t('collapse') %></span></a>):<span class="desc"> - <%= t('additional_text_info') %></span></label>
     <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText', :class => 'editor', :style => compact_style %>
   </div>
   
   <fieldset>
-    <legend><%= :milestone.l %></legend>
+    <legend><%= t('milestone') %></legend>
     <%= select 'message', 'milestone_id', select_milestone_options(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
   </fieldset>
 
   <fieldset>
-    <legend><%= :category.l %></legend>
+    <legend><%= t('category') %></legend>
     <%= select 'message', 'category_id', ProjectMessageCategory.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormCategory'} %>
   </fieldset>
     
 <% if @logged_user.member_of_owner? %>
   <fieldset>
-    <legend><%= :options.l %></legend>
+    <legend><%= t('options') %></legend>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= :private_message.l %>:</label></div>
+      <div class="optionLabel"><label><%= t('private_message') %>:</label></div>
       <div class="optionControl"><%= yesno_toggle 'message', 'is_private', :class => 'yes_no', :id => 'messageFormIsPrivate' %></div>
-      <div class="optionDesc"><%= :private_message_info.l %></div>
+      <div class="optionDesc"><%= t('private_message_info') %></div>
     </div>
     
     <div class="objectOption">
-      <div class="optionLabel"><label><%= :important_message.l %>:</label></div>
+      <div class="optionLabel"><label><%= t('important_message') %>:</label></div>
       <div class="optionControl"><%= yesno_toggle 'message', 'is_important', :class => 'yes_no', :id => 'messageFormIsImportant' %></div>
-      <div class="optionDesc"><%= :important_message_info.l %></div>
+      <div class="optionDesc"><%= t('important_message_info') %></div>
     </div>
     
     <div class="objectOption">
-    <div class="optionLabel"><label><%= :enable_comments.l %>:</label></div>
+    <div class="optionLabel"><label><%= t('enable_comments') %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'message', 'comments_enabled', :class => 'yes_no', :id => 'messageFormEnableComments' %></div>
-    <div class="optionDesc"><%= :enable_comments_info.l %></div>
+    <div class="optionDesc"><%= t('enable_comments_info') %></div>
   </div>
 
 <% if Rails.configuration.allow_anonymous %>    
   <div class="objectOption">
-    <div class="optionLabel"><label><%= :enable_anonymous_comments.l %>:</label></div>
+    <div class="optionLabel"><label><%= t('enable_anonymous_comments') %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'message', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'messageFormEnableAnonymousComments' %></div>
-    <div class="optionDesc"><%= :enable_anonymous_comments_info.l %></div>
+    <div class="optionDesc"><%= t('enable_anonymous_comments_info') %></div>
   </div>
 <% end %>
   </fieldset>
 <% end %>
   
   <fieldset>
-    <legend><%= :tags.l %></legend>
-    <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %><br /><span class="desc"><%=:tags_info.l %></span>
+    <legend><%= t('tags') %></legend>
+    <%= text_field 'message', 'tags', :id => 'messageFormTags', :class => 'long' %><br /><span class="desc"><%=t('tags_info') %></span>
   </fieldset>
 <% if @message.new_record? %>
   <fieldset id="emailNotification">
-    <legend><%= :email_notification.l %></legend>
-    <p><%= :email_notification_info.l %></p>
+    <legend><%= t('email_notification') %></legend>
+    <p><%= t('email_notification_info') %></p>
 <% @active_project.companies.each do |company| -%>
     <script type="text/javascript">
       notify_form_companies.company_<%= company.id %> = {

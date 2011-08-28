@@ -1,49 +1,49 @@
 <%= error_messages_for :time %>
   <div>
-    <label for="timeFormName"><%= :summary.l %>: <span class="label_required">*</span></label>
+    <label for="timeFormName"><%= t('summary') %>: <span class="label_required">*</span></label>
     <%= text_field 'time', 'name', :id => 'timeFormName', :class => 'long' %>
   </div>
 
   <div id="openTaskLists">
 <% if @open_task_lists.length > 0 %>
-    <label for="timeOpenTasks"><%= :open_tasks.l %>:</label>
+    <label for="timeOpenTasks"><%= t('open_tasks') %>:</label>
     <%= task_collection_select 'time', 'open_task_id', @open_task_lists, @task_filter, :id => 'timeOpenTasks' %>
 <% end %>
   </div>
 
 <% if @time.start_date.nil? -%>
   <div>
-    <label for="timeFormHours"><%= :hours.l %>: <span class="label_required">*</span></label>
+    <label for="timeFormHours"><%= t('hours') %>: <span class="label_required">*</span></label>
     <%= text_field 'time', 'hours', :id => 'timeFormHours', :class => 'short' %>
   </div>
 <% end -%>
   
   <div>
-    <label for="timeFormDesc"><%= :description.l %>: </label>
+    <label for="timeFormDesc"><%= t('description') %>: </label>
     <%= text_area 'time', 'description', :id => 'timeFormDesc', :class => 'short', :rows => 10, :cols => 40 %>
   </div>
   
 <% if @time.start_date.nil? -%>
   <div>
-    <label for="timeDoneDate"><%= :done_date.l %>:</label>
+    <label for="timeDoneDate"><%= t('done_date') %>:</label>
     <%= date_select 'time', 'done_date', :id => 'timeDoneDate', :class => 'short' %>
   </div>
 <% end -%>
   
 <% if @logged_user.member_of_owner? %>
   <div class="formBlock">
-    <label for="timeFormIsPrivate"><%= :private_time.l %>: <span class="desc">(<%= :private_time_info.l %>)</span></label>
+    <label for="timeFormIsPrivate"><%= t('private_time') %>: <span class="desc">(<%= t('private_time_info') %>)</span></label>
     <%= yesno_toggle 'time', 'is_private', :id => 'timeFormIsPrivate', :class => 'checkbox'  %>
   </div>
   <div class="formBlock">
-    <label for="timeFormIsBillable"><%= :billable_time.l %>: <span class="desc">(<%= :billable_time_info.l %>)</span></label>
+    <label for="timeFormIsBillable"><%= t('billable_time') %>: <span class="desc">(<%= t('billable_time_info') %>)</span></label>
     <%= yesno_toggle 'time', 'is_billable', :id => 'timeFormIsBillable', :class => 'checkbox'  %>
   </div>
 <% end %>
   
   <div class="formBlock">
     <div>
-      <label for="timeFormAssignedTo"><%= :assign_to.l %>:</label>
+      <label for="timeFormAssignedTo"><%= t('assign_to') %>:</label>
       <%= assign_project_select 'time', 'assigned_to_id', @active_project, :id => 'timeFormAssignedTo' %>
     </div>
   </div>
