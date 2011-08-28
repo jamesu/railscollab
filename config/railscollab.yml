@@ -1,20 +1,14 @@
+defaults: &defaults
+  attach_to_s3: false
+  s3_access_key: ''
+  s3_secret_key: ''
+  s3_bucket_prefix: ''
+  using_ssl: false
+  site_url: 'http://localhost'
+
 development:
-  attach_to_s3: false
-  s3_access_key: ''
-  s3_secret_key: ''
-  s3_bucket_prefix: ''
-  using_ssl: false
-
-testing:
-  attach_to_s3: false
-  s3_access_key: ''
-  s3_secret_key: ''
-  s3_bucket_prefix: ''
-  using_ssl: false
-
+  <<: *defaults
+test:
+  <<: *defaults
 production:
-  attach_to_s3: false
-  s3_access_key: ''
-  s3_secret_key: ''
-  s3_bucket_prefix: ''
-  using_ssl: false
+  <<: *defaults

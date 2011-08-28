@@ -15,10 +15,10 @@ admin_user:
   office_number: ""
   created_by_id: 
   username: admin
-  remember: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
+  remember_token: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
   id: "1"
   updated_on: 2009-11-03 16:59:14
-  remember_expires_at: 2009-10-17 08:24:49
+  remember_token_expires_at: 2009-10-17 08:24:49
   mobile_number: ""
   last_visit: 2009-11-03 16:59:14
   is_admin: t
@@ -27,6 +27,5 @@ admin_user:
   office_number_ext: ""
   display_name: Administrator
   time_zone: UTC
-  identity_url: 
   avatar_updated_at: 
   email: better.set.this@localhost
