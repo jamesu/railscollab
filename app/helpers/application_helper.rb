@@ -90,7 +90,7 @@ module ApplicationHelper
 
   def format_usertime(time, format, user=@logged_user)
     return '' if time.nil?
-    I18n.l(time, :format => format)
+    I18n.l(time, :format => format.to_sym)
   end
 
   def yesno_toggle(object_name, method, options = {})
