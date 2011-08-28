@@ -21,7 +21,7 @@ class ProjectFile < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :project_folder, :foreign_key => 'folder_id', :counter_cache => true
+  belongs_to :folder, :counter_cache => true
 
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
@@ -47,17 +47,17 @@ class ProjectFile < ActiveRecord::Base
   end
 
   def process_create
-    ApplicationLog::new_log(self, self.created_by, :add)
+    Activity::new_log(self, self.created_by, :add)
   end
 
   def process_update_params
-    ApplicationLog::new_log(self, self.updated_by, :edit)
+    Activity::new_log(self, self.updated_by, :edit)
   end
 
   def process_destroy
     AttachedFile.clear_files(self.id)
     Tag.clear_by_object(self)
-    ApplicationLog::new_log(self, self.updated_by, :delete)
+    Activity::new_log(self, self.updated_by, :delete)
   end
 
   def tags
@@ -131,7 +131,7 @@ class ProjectFile < ActiveRecord::Base
     file_revision.comment = comment
     file_revision.save!
     
-    ApplicationLog::new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
+    Activity::new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
   end
 
   def update_revision(file, old_revision, user, comment)
@@ -215,7 +215,7 @@ class ProjectFile < ActiveRecord::Base
   # Validation
 
   validates_presence_of :filename
-  validates_each :project_folder, :allow_nil => true do |record, attr, value|
+  validates_each :folder, :allow_nil => true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 

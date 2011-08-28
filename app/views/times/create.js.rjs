@@ -4,7 +4,7 @@ if @time.done_date.nil?
   page.select('#running_times_menu ul').append(render({:partial => 'listed', :collection => [@time]}))
   
   # Update task list item
-  unless @time.project_task.nil?
-    page.replace("task_item_#{@time.project_task.id}", :partial => 'tasks/show', :collection => [@time.project_task] )
+  unless @time.task.nil?
+    page.replace("task_item_#{@time.task.id}", :partial => 'tasks/show', :collection => [@time.task] )
   end
 end

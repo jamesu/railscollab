@@ -1,5 +1,5 @@
 <% 
-  user_permission = ProjectUser.where({'project_id' => permissions.id, 'user_id' => user.id})
+  user_permission = Person.where({'project_id' => permissions.id, 'user_id' => user.id})
 %>
         <tr>
           <td class="projectName">

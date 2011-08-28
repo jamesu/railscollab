@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectTimeTest < ActiveSupport::TestCase
+class PersonTest < ActiveSupport::TestCase
   fixtures :all
 
   # Replace this with your real tests.

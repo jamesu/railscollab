@@ -148,8 +148,8 @@ class CommentsController < ApplicationController
         # Notify everyone
         @commented_object.send_comment_notifications(@comment)
 
-        # Subscribe if ProjectMessage
-        @commented_object.ensure_subscribed(@logged_user) if @commented_object.class == ProjectMessage
+        # Subscribe if Message
+        @commented_object.ensure_subscribed(@logged_user) if @commented_object.class == Message
 
         if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @comment, @logged_user, @comment.is_private) != params[:uploaded_files].length)
           estatus = :success_added_comment_error_files
@@ -262,11 +262,11 @@ private
   end
   
   def comment_route_map
-    [[:message_id, :ProjectMessage],
-     [:milestone_id, :ProjectMilestone],
+    [[:message_id, :Message],
+     [:milestone_id, :Milestone],
      [:file_id, :ProjectFile],
-     [:task_id, :ProjectTask],
-     [:task_list_id, :ProjectTaskList]]
+     [:task_id, :Task],
+     [:task_list_id, :TaskList]]
   end
 
 end

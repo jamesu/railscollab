@@ -3,13 +3,13 @@ class Ability
 
   def initialize(user)
 
-    # ProjectTask
+    # Task
 
-    can :create_task, ProjectTaskList do |task_list|
+    can :create_task, TaskList do |task_list|
       task_list.project.is_active? and user.member_of(task_list.project) and (!(task_list.is_private and !user.member_of_owner?) and can?(:manage, task_list))
     end
 
-    can :edit, ProjectTask do |task|
+    can :edit, Task do |task|
       task_list = task.task_list
       project = task_list.project
       
@@ -26,33 +26,33 @@ class Ability
       end
     end
 
-    can :delete, ProjectTask do |task|
+    can :delete, Task do |task|
       can? :delete, task.task_list
     end
 
-    can :show, ProjectTask do |task|
+    can :show, Task do |task|
       can?(:show, task.task_list) or can?(:edit, task)
     end
 
-    can :complete, ProjectTask do |task|
+    can :complete, Task do |task|
       can? :edit, task
     end
 
-    can :comment, ProjectTask do |task|
+    can :comment, Task do |task|
       can? :comment, task.task_list
     end
 
-    # ProjectTaskList
+    # TaskList
 
     can :create_task_list, Project do |project|
       project.is_active? and user.has_permission(project, :can_manage_tasks)
     end
 
-    can :manage, ProjectTaskList do |task_list|
+    can :manage, TaskList do |task_list|
       task_list.project.is_active? and user.has_permission(task_list.project, :can_manage_tasks)
     end
 
-    can :edit, ProjectTaskList do |task_list|
+    can :edit, TaskList do |task_list|
       if !task_list.project.is_active? or !user.member_of(task_list.project) or user.is_anonymous?
         false
       elsif user.is_admin
@@ -62,25 +62,25 @@ class Ability
       end
     end
 
-    can :delete, ProjectTaskList do |task_list|
+    can :delete, TaskList do |task_list|
       task_list.project.is_active? and user.member_of(task_list.project) and user.is_admin
     end
 
-    can :show, ProjectTaskList do |task_list|
+    can :show, TaskList do |task_list|
       user.member_of(task_list.project) and !(task_list.is_private and !user.member_of_owner?)
     end
 
-    can :comment, ProjectTaskList do |task_list|
+    can :comment, TaskList do |task_list|
       task_list.project.is_active? and task_list.project.has_member(user) and !user.is_anonymous?
     end
 
-    # ProjectTime
+    # TimeRecord
 
-    can :create_time, ProjectTime do |project|
+    can :create_time, TimeRecord do |project|
       project.is_active? and user.has_permission(project, :can_manage_time)
     end
 
-    can :edit, ProjectTime do |project_time|
+    can :edit, TimeRecord do |project_time|
       if (!user.member_of(project_time.project))
         false
       else
@@ -88,11 +88,11 @@ class Ability
       end
     end
 
-    can :delete, ProjectTime do |project_time|
+    can :delete, TimeRecord do |project_time|
       project_time.project.is_active? and user.member_of(project_time.project) and user.is_admin
     end
 
-    can :show, ProjectTime do |project_time|
+    can :show, TimeRecord do |project_time|
       if !project_time.project.has_member(user)
         false
       elsif user.has_permission(project_time.project, :can_manage_time)
@@ -108,17 +108,17 @@ class Ability
       project.is_active? and user.has_permission(project, :can_manage_time)
     end
 
-    can :manage, ProjectTime do |project_time|
+    can :manage, TimeRecord do |project_time|
       project_time.project.is_active? and user.has_permission(project_time.project, :can_manage_time)
     end
 
-    # ProjectMilestone
+    # Milestone
 
     can :create_milestone, Project do |project|
       project.is_active? and user.has_permission(project, :can_manage_milestones)
     end
 
-    can :edit, ProjectMilestone do |milestone|
+    can :edit, Milestone do |milestone|
       if (!milestone.project.is_active? or !user.member_of(milestone.project))
         false
       else
@@ -126,19 +126,19 @@ class Ability
       end
     end
 
-    can :delete, ProjectMilestone do |milestone|
+    can :delete, Milestone do |milestone|
       milestone.project.is_active? and user.member_of(milestone.project) and user.is_admin
     end
 
-    can :show, ProjectMilestone do |milestone|
+    can :show, Milestone do |milestone|
       user.member_of(milestone.project) and !(milestone.is_private and !user.member_of_owner?)
     end
 
-    can :manage, ProjectMilestone do |milestone|
+    can :manage, Milestone do |milestone|
       milestone.project.is_active? and user.has_permission(milestone.project, :can_manage_milestones)
     end
     
-    can :change_status, ProjectMilestone do |milestone|
+    can :change_status, Milestone do |milestone|
       if can?(:edit, milestone)
         true
       else
@@ -147,39 +147,39 @@ class Ability
       end
     end
     
-    can :comment, ProjectMilestone do |milestone|
+    can :comment, Milestone do |milestone|
       milestone.project.is_active? and milestone.project.has_member(user) and !user.is_anonymous?
     end
 
-    # ProjectMessageCategory
+    # Category
 
     can :create_message_category, Project do |project|
       project.is_active? and user.has_permission(project, :can_manage_messages)
     end
 
-    can :edit, ProjectMessageCategory do |category|
+    can :edit, Category do |category|
       category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
     end
 
-    can :delete, ProjectMessageCategory do |category|
+    can :delete, Category do |category|
       category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
     end
 
-    can :show, ProjectMessageCategory do |category|
+    can :show, Category do |category|
       category.project.has_member(user)
     end
 
-    can :manage, ProjectMessageCategory do |category|
+    can :manage, Category do |category|
       category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
     end
 
-    # ProjectMessage
+    # Message
 
     can :create_message, Project do |project|
       project.is_active? and user.has_permission(project, :can_manage_messages)
     end
 
-    can :edit, ProjectMessage do |message|
+    can :edit, Message do |message|
       if !message.project.is_active? or !user.member_of(message.project)
         false
       elsif user.is_admin
@@ -189,11 +189,11 @@ class Ability
       end
     end
 
-    can :delete, ProjectMessage do |message|
+    can :delete, Message do |message|
       user.is_admin and message.project.is_active? and user.member_of(message.project)
     end
 
-    can :show, ProjectMessage do |message|
+    can :show, Message do |message|
       if !user.member_of(message.project)
         false
       else
@@ -201,23 +201,23 @@ class Ability
       end
     end
     
-    can :subscribe, ProjectMessage do |message|
+    can :subscribe, Message do |message|
       message.comments_enabled and message.project.is_active? and user.member_of(message.project) and !(message.is_private and !user.member_of_owner?)
     end
 
-    can :manage, ProjectMessage do |message|
+    can :manage, Message do |message|
       message.project.is_active? and user.has_permission(message.project, :can_manage_messages)
     end
 
-    can :add_file, ProjectMessage do |message|
+    can :add_file, Message do |message|
       can?(:edit, message) and user.has_permission(message.project, :can_upload_files)
     end
     
-    can :change_options, ProjectMessage do |message|
+    can :change_options, Message do |message|
       user.member_of_owner? and can?(:edit, message)
     end
     
-    can :comment, ProjectMessage do |message|
+    can :comment, Message do |message|
       project = message.project
       if user.is_anonymous?
         message.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !message.is_private
@@ -226,25 +226,25 @@ class Ability
       end
     end
 
-    # ProjectFolder
+    # Folder
 
     can :create_folder, Project do |project|
       folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
     end
 
-    can :edit, ProjectFolder do |folder|
+    can :edit, Folder do |folder|
       folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
     end
 
-    can :delete, ProjectFolder do |folder|
+    can :delete, Folder do |folder|
       folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
     end
 
-    can :show, ProjectFolder do |folder|
+    can :show, Folder do |folder|
       folder.project.has_member(user)
     end
 
-    can :manage, ProjectFolder do |folder|
+    can :manage, Folder do |folder|
       folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
     end
 

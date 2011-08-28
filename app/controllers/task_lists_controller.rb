@@ -39,7 +39,7 @@ class TaskListsController < ApplicationController
       }
       format.xml  {
         conds = include_private ? {} : {'is_private' => false}
-        @task_lists = @active_project.project_task_lists.where(conds)
+        @task_lists = @active_project.task_lists.where(conds)
         render :xml => @task_lists.to_xml(:root => 'task-lists')
       }
     end
@@ -49,7 +49,7 @@ class TaskListsController < ApplicationController
   # GET /task_lists/1.xml
   def show
     begin
-      @task_list = @active_project.project_task_lists.find(params[:id])
+      @task_list = @active_project.task_lists.find(params[:id])
     rescue
       return error_status(true, :invalid_task_list)
     end
@@ -72,10 +72,10 @@ class TaskListsController < ApplicationController
   def new
     authorize! :create_task_list, @active_project
     
-    @task_list = @active_project.project_task_lists.build()
+    @task_list = @active_project.task_lists.build()
     
     begin
-      @task_list.project_milestone = @active_project.project_milestones.find(params[:milestone_id])
+      @task_list.project_milestone = @active_project.milestones.find(params[:milestone_id])
       @task_list.is_private = @task_list.project_milestone.is_private
     rescue ActiveRecord::RecordNotFound
       @task_list.milestone_id = 0
@@ -91,7 +91,7 @@ class TaskListsController < ApplicationController
   # GET /task_lists/1/edit
   def edit
     begin
-      @task_list = @active_project.project_task_lists.find(params[:id])
+      @task_list = @active_project.task_lists.find(params[:id])
     rescue
       return error_status(true, :invalid_task_list)
     end
@@ -104,7 +104,7 @@ class TaskListsController < ApplicationController
   def create
     authorize! :create_task_list, @active_project
     
-    @task_list = @active_project.project_task_lists.build(params[:task_list])
+    @task_list = @active_project.task_lists.build(params[:task_list])
     @task_list.created_by = @logged_user
 
     respond_to do |format|
@@ -128,7 +128,7 @@ class TaskListsController < ApplicationController
   # PUT /task_lists/1.xml
   def update
     begin
-      @task_list = @active_project.project_task_lists.find(params[:id])
+      @task_list = @active_project.task_lists.find(params[:id])
     rescue
       return error_status(true, :invalid_task_list)
     end
@@ -158,7 +158,7 @@ class TaskListsController < ApplicationController
   # DELETE /task_lists/1.xml
   def destroy
     begin
-      @task_list = @active_project.project_task_lists.find(params[:id])
+      @task_list = @active_project.task_lists.find(params[:id])
     rescue
       return error_status(true, :invalid_task_list)
     end
@@ -183,7 +183,7 @@ class TaskListsController < ApplicationController
   # POST /task_lists/1/reorder
   def reorder
     begin
-      @task_list = @active_project.project_task_lists.find(params[:id])
+      @task_list = @active_project.task_lists.find(params[:id])
     rescue
       return error_status(true, :invalid_task_list)
     end
@@ -192,9 +192,9 @@ class TaskListsController < ApplicationController
     
     order = params[:tasks].collect { |id| id.to_i }
     
-    @task_list.project_tasks.each do |item|
+    @task_list.tasks.each do |item|
         idx = order.index(item.id)
-        item.order = idx || @task_list.project_tasks.length
+        item.order = idx || @task_list.tasks.length
         item.save!
     end
     
@@ -208,8 +208,8 @@ class TaskListsController < ApplicationController
 protected
 
   def index_lists(include_private)
-    @open_task_lists = @active_project.project_task_lists.open(include_private)
-    @completed_task_lists = @active_project.project_task_lists.completed(include_private)
+    @open_task_lists = @active_project.task_lists.open(include_private)
+    @completed_task_lists = @active_project.task_lists.completed(include_private)
     @content_for_sidebar = 'index_sidebar'
   end
 

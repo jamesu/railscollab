@@ -32,12 +32,12 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @open_task_lists = @active_project.project_task_lists.open(include_private)
-        @completed_task_lists = @active_project.project_task_lists.completed(include_private)
+        @open_task_lists = @active_project.task_lists.open(include_private)
+        @completed_task_lists = @active_project.task_lists.completed(include_private)
         @content_for_sidebar = 'task_lists/index_sidebar'
       }
       format.xml  {
-        @tasks = @task_list.project_tasks
+        @tasks = @task_list.tasks
         render :xml => @tasks.to_xml(:root => 'tasks')
       }
     end
@@ -47,7 +47,7 @@ class TasksController < ApplicationController
   # GET /tasks/1.xml
   def show
     begin
-      @task = @task_list.project_tasks.find(params[:id])
+      @task = @task_list.tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
@@ -64,7 +64,7 @@ class TasksController < ApplicationController
   def new
     authorize! :create_task, @task_list
     
-    @task = @task_list.project_tasks.build
+    @task = @task_list.tasks.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -75,7 +75,7 @@ class TasksController < ApplicationController
   # GET /tasks/1/edit
   def edit
     begin
-      @task = @task_list.project_tasks.find(params[:id])
+      @task = @task_list.tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
@@ -88,7 +88,7 @@ class TasksController < ApplicationController
   def create
     authorize! :create_task, @task_list
     
-    @task = @task_list.project_tasks.build(params[:task])
+    @task = @task_list.tasks.build(params[:task])
     @task.created_by = @logged_user
 
     respond_to do |format|
@@ -110,7 +110,7 @@ class TasksController < ApplicationController
   # PUT /tasks/1.xml
   def update
     begin
-      @task = @task_list.project_tasks.find(params[:id])
+      @task = @task_list.tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
@@ -138,7 +138,7 @@ class TasksController < ApplicationController
   # DELETE /tasks/1.xml
   def destroy
     begin
-      @task = @task_list.project_tasks.find(params[:id])
+      @task = @task_list.tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
@@ -159,7 +159,7 @@ class TasksController < ApplicationController
   # PUT /tasks/1/status.xml
   def status
     begin
-      @task = @task_list.project_tasks.find(params[:id])
+      @task = @task_list.tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
@@ -167,7 +167,7 @@ class TasksController < ApplicationController
     authorize! :complete, @task
     
     @task.set_completed(params[:task][:completed] == 'true', @logged_user)
-    @task.order = @task_list.project_tasks.length
+    @task.order = @task_list.tasks.length
     @task.save
 
     respond_to do |format|
@@ -182,7 +182,7 @@ protected
 
   def grab_list
     begin
-      @task_list = @active_project.project_task_lists.find(params[:task_list_id])
+      @task_list = @active_project.task_lists.find(params[:task_list_id])
       authorize! :show, @task_list
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_task)

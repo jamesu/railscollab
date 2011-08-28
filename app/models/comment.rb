@@ -38,16 +38,16 @@ class Comment < ActiveRecord::Base
 	end
 	
 	def process_create
-	  ApplicationLog.new_log(self, self.created_by, :add, self.is_private, self.rel_object.project)
+	  Activity.new_log(self, self.created_by, :add, self.is_private, self.rel_object.project)
 	end
 	
 	def process_update_params
-	  ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private, self.rel_object.project)
+	  Activity.new_log(self, self.updated_by, :edit, self.is_private, self.rel_object.project)
 	end
 	
 	def process_destroy
 	  AttachedFile.clear_attachments(self)
-	  ApplicationLog.new_log(self, self.updated_by, :delete, true,  self.rel_object.project)
+	  Activity.new_log(self, self.updated_by, :delete, true,  self.rel_object.project)
 	end
 	
 	def last_edited_by_owner?

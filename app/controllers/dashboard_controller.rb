@@ -32,20 +32,20 @@ class DashboardController < ApplicationController
           { :project_id => project_ids } :
           { :project_id => project_ids, :is_private => false }
 
-        @activity_log = ApplicationLog.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.project_logs_per_page)
+        @activity_log = Activity.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.project_logs_per_page)
       else
         @activity_log = []
       end
     end
 
     @time_now = Time.zone.now
-    @late_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+    @late_milestones = Milestone.all_assigned_to(@logged_user,
                                                         nil,
                                                         nil,
                                                         (@time_now - 1.day).utc.to_date,
                                                         nil,
                                                         true)
-    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+    @upcoming_milestones = Milestone.all_assigned_to(@logged_user,
                                                             nil,
                                                             @time_now.utc.to_date,
                                                             (@time_now.utc + 14.days).to_date,
@@ -108,14 +108,14 @@ class DashboardController < ApplicationController
       nil
     end
     
-    @late_milestones = ProjectMilestone.all_assigned_to(@logged_user,
+    @late_milestones = Milestone.all_assigned_to(@logged_user,
                                                         assignee,
                                                         nil,
                                                         @date_start-1,
                                                         nil,
                                                         true)
 
-    @milestones = ProjectMilestone.all_assigned_to(@logged_user, 
+    @milestones = Milestone.all_assigned_to(@logged_user, 
                                                    assignee,
                                                    @date_start, 
                                                    @date_end, nil, true).group_by do |obj| 

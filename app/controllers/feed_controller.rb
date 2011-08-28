@@ -25,7 +25,7 @@ class FeedController < ApplicationController
   after_filter :user_track
 
   def recent_activities
-  	@activity_log = ApplicationLog.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+  	@activity_log = Activity.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
   	@activity_url = root_url
 
   	respond_to do |format|
@@ -70,7 +70,7 @@ class FeedController < ApplicationController
       return
   	end
 
-  	@activity_log = ApplicationLog.logs_for(@project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+  	@activity_log = Activity.logs_for(@project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
   	@activity_url = project_url(@project)
 
   	respond_to do |format|
@@ -103,7 +103,7 @@ class FeedController < ApplicationController
   end
 
   def recent_milestones
-  	@milestones = ProjectMilestone.all_by_user(@logged_user)
+  	@milestones = Milestone.all_by_user(@logged_user)
   	@milestones_url = url_for(:controller => 'dashboard', :action => 'milestones')
 
   	respond_to do |format|
@@ -148,7 +148,7 @@ class FeedController < ApplicationController
       return
   	end
 
-  	@milestones = @project.project_milestones.open(@logged_user.member_of_owner?)
+  	@milestones = @project.milestones.open(@logged_user.member_of_owner?)
   	@milestones_url = milestones_url(@project)
 
   	respond_to do |format|
@@ -189,9 +189,9 @@ class FeedController < ApplicationController
         return
       end
 
-      @times = @logged_user.member_of_owner? ? @project.project_times : @project.project_times.public
+      @times = @logged_user.member_of_owner? ? @project.time_records : @project.time_records.public
     else
-      @times = ProjectTime.all_by_user(@logged_user, :conditions => 'done_date IS NOT NULL')
+      @times = TimeRecord.all_by_user(@logged_user, :conditions => 'done_date IS NOT NULL')
     end
 
     respond_to do |format|
@@ -216,8 +216,8 @@ class FeedController < ApplicationController
               time.hours,
               time.name,
               time.description,
-              time.project_task_list.nil? ? '' : time.project_task_list.object_name,
-              time.project_task.nil? ? '' : time.project_task.object_name,
+              time.task_list.nil? ? '' : time.task_list.object_name,
+              time.task.nil? ? '' : time.task.object_name,
             ], 8, build_str) }
 
         render :text => build_str, :content_type => 'application/vnd.ms-excel'

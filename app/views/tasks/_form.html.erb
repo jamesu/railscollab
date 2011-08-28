@@ -4,7 +4,7 @@
 <% if not task.new_record? and @no_show_list.nil? %>
   <div>
     <label for="addTaskTaskList<%= task.id %>"><%= t('task_list') %>: <span class="label_required">*</span></label>
-    <%= select 'task', 'task_list_id', ProjectTaskList.select_list(@active_project), {}, :id => "addTaskTaskList#{task.id}" %>
+    <%= select 'task', 'task_list_id', TaskList.select_list(@active_project), {}, :id => "addTaskTaskList#{task.id}" %>
   </div>
 <% end %>
 

@@ -28,24 +28,24 @@ class User < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 
   has_many :im_values, :order => 'im_type_id DESC', :dependent => :delete_all
-  has_many :application_logs, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :activities, :foreign_key => 'created_by_id', :dependent => :destroy
 
-  has_many :project_milestones, :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_tasks,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_task_lists, :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_times,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_file_revisions,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :milestones, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :tasks,      :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :task_lists, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :time_records,           :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :project_file_revisions, :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :project_files,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_messages,   :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :messages,           :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :comments,           :foreign_key => 'created_by_id', :dependent => :destroy
   has_many :tags,               :foreign_key => 'created_by_id', :dependent => :destroy
 
-  has_many :project_users,     :dependent => :delete_all
-  has_many :projects,          :through => :project_users
-  has_many :active_projects,   :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC, projects.name ASC'
-  has_many :finished_projects, :through => :project_users, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
+  has_many :people,            :dependent => :delete_all
+  has_many :projects,          :through => :people
+  has_many :active_projects,   :through => :people, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC, projects.name ASC'
+  has_many :finished_projects, :through => :people, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
-  has_and_belongs_to_many :subscriptions, :class_name => 'ProjectMessage', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
+  has_and_belongs_to_many :subscriptions, :class_name => 'Message', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
 	
 	has_attached_file :avatar, {
 		:styles => { :thumb => "50x50" },
@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
 		:bucket => "#{Rails.configuration.s3_bucket_prefix}user_avatar"
 	} : {})
 	
-  has_many :assigned_times, :class_name => 'ProjectTime', :foreign_key => 'assigned_to_user_id'
+  has_many :assigned_times, :class_name => 'TimeRecord', :foreign_key => 'assigned_to_user_id'
 
   def twister_array=(value)
     self.twister = value.join()
@@ -187,15 +187,15 @@ class User < ActiveRecord::Base
   # Helpers
 
   def all_milestones
-    ProjectMilestone.all_by_user(self)
+    Milestone.all_by_user(self)
   end
 
   def todays_milestones
-    ProjectMilestone.todays_by_user(self)
+    Milestone.todays_by_user(self)
   end
 
   def late_milestones
-    ProjectMilestone.late_by_user(self)
+    Milestone.late_by_user(self)
   end
 
   def member_of_owner?
@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
   end
 
   def member_of(project)
-    return ProjectUser.all(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]).length > 0
+    return Person.all(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]).length > 0
   end
 
   def has_all_permissions(project, reload=false)
@@ -235,7 +235,7 @@ class User < ActiveRecord::Base
   def permissions_for(project, reload=false)
     @@cached_permissions ||= {}
     @@cached_permissions[project] = nil if reload
-    @@cached_permissions[project] = (ProjectUser.first(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]) || false)
+    @@cached_permissions[project] = (Person.first(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]) || false)
     
     @@cached_permissions[project].class == FalseClass ? nil : @@cached_permissions[project]
   end
@@ -256,7 +256,7 @@ class User < ActiveRecord::Base
     if project.nil?
       return (url_for :only_path => true, :controller => 'feed', :action => 'recent_milestones',  :user => self.id, :format => format, :token => self.twisted_token())
     else
-      return (url_for :only_path => true, :controller => 'feed', :action => 'project_milestones', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
+      return (url_for :only_path => true, :controller => 'feed', :action => 'milestones', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
     end
   end
 

@@ -23,7 +23,7 @@
     <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to t('add_task'), new_task_path(:task_list_id => task_list.id) %></div>
     <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
       <%= form_tag tasks_path(:task_list_id => task_list.id) do %>
-        <%= render :partial => 'tasks/form', :object => ProjectTask.new(:task_list => task_list) %>
+        <%= render :partial => 'tasks/form', :object => Task.new(:task_list => task_list) %>
         <div><button class="submit" type="submit"><%= t('add_task') %></button> <%= t('or') %> <a class="cancel" href="#"><%= t('cancel') %></a></div>
       <% end %>
     </div>

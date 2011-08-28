@@ -167,31 +167,31 @@ xml.elements.each('account/projects/project') do |bproject|
 	
 	# Attachment categories...
 	bproject.elements.each('attachment-categories/attachment-category') do |attach_category|
-		folder = ProjectFolder.new(:name => attach_category.elements['name'].text)
+		folder = Folder.new(:name => attach_category.elements['name'].text)
 		folder.project = project
 		
 		puts "  Adding folder '#{folder.name}'"
 		folder.save!
 		MAP_IDS[:folders][attach_category.elements['id'].text.to_i] = folder.id
-		ApplicationLog::new_log(folder, MAP_IDS[:owner], :add)
+		Activity::new_log(folder, MAP_IDS[:owner], :add)
 	end
 	
 	# Message categories...
 	bproject.elements.each('post-categories/post-category') do |post_category|
-		category = ProjectMessageCategory.new(:name => post_category.elements['name'].text)
+		category = Category.new(:name => post_category.elements['name'].text)
 		category.project = project
 		
 		puts "  Adding category '#{category.name}'"
 		category.save!
 		MAP_IDS[:categories][post_category.elements['id'].text.to_i] = category.id
-		ApplicationLog::new_log(category, MAP_IDS[:owner], :add)
+		Activity::new_log(category, MAP_IDS[:owner], :add)
 	end
 	
 	# Milestones...
 	bproject.elements.each('milestones/milestone') do |bmilestone|
 		milestone_attribs = bmilestone.elements
 		
-		milestone = ProjectMilestone.new(
+		milestone = Milestone.new(
 			:name => milestone_attribs['title'].text,
 			:description => 'Imported from BaseCamp',
 			:due_date => Date.parse(milestone_attribs['deadline'].text),
@@ -219,7 +219,7 @@ xml.elements.each('account/projects/project') do |bproject|
 	bproject.elements.each('todo-lists/todo-list') do |todo_list|
 		todo_list_attribs = todo_list.elements
 		
-		task_list = ProjectTaskList.new(
+		task_list = TaskList.new(
 			:name => todo_list_attribs['name'].text,
 			:description => 'Imported from BaseCamp',
 			:priority => todo_list_attribs['position'].text,
@@ -239,7 +239,7 @@ xml.elements.each('account/projects/project') do |bproject|
 		todo_list.elements.each('todo-items/todo-item') do |todo_item|
 			todo_item_attribs = todo_item.elements
 			
-			task = ProjectTask.new(
+			task = Task.new(
 				:text => todo_item_attribs['content'].text,
 				:assigned_to_id => todo_item_attribs['responsible-party-type'].nil? ? '0' :
 				                  (todo_item_attribs['responsible-party-type'].text == 'Person' ? 
@@ -279,7 +279,7 @@ xml.elements.each('account/projects/project') do |bproject|
 	bproject.elements.each('time-entries/time-entry') do |btime|
 		time_attribs = btime.elements
 		
-		time = ProjectTime.new(
+		time = TimeRecord.new(
 			:name => time_attribs['description'].text,
 			:description => 'Imported from BaseCamp',
 			:done_date => time_attribs['date'],
@@ -300,10 +300,9 @@ xml.elements.each('account/projects/project') do |bproject|
 	bproject.elements.each('posts/post') do |post|
 		post_attribs = post.elements
 		
-		message = ProjectMessage.new(
+		message = Message.new(
 			:title => post_attribs['title'].text,
-			:text => post_attribs['body'].text,
-			:additional_text => post_attribs['extended-body'].text,
+			:text => post_attribs['body'].text + "\n" + post_attribs['extended-body'].text,
 			:milestone_id => MAP_IDS[:milestones][post_attribs['milestone-id'].text.to_i],
 			:category_id => MAP_IDS[:categories][post_attribs['category-id'].text.to_i],
 			:is_private => (!post_attribs['private'].nil? ? (post_attribs['private'].text == 'true') : false),

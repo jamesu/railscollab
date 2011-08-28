@@ -45,7 +45,7 @@ module ProjectItemsHelper
     conds = {'project_id' => project.id}
     conds['is_private'] = false unless @logged_user.member_of_owner?
     
-    [['-- None --', 0]] + ProjectMilestone.all(:conditions => conds).collect do |milestone|
+    [['-- None --', 0]] + Milestone.all(:conditions => conds).collect do |milestone|
       [milestone.name, milestone.id]
     end
   end
@@ -54,7 +54,7 @@ module ProjectItemsHelper
     conds = {'project_id' => project.id}
     conds['is_private'] = false unless @logged_user.member_of_owner?
     
-    ProjectMessage.all(:conditions => conds, :select => 'id, title').collect do |message|
+    Message.all(:conditions => conds, :select => 'id, title').collect do |message|
       [message.title, message.id]
     end
   end
@@ -81,7 +81,7 @@ module ProjectItemsHelper
   def task_select_grouped_options(task_lists, filter=nil, options = {})
     items = {}
     task_lists.each do |task_list|
-      list = filter.nil? ? task_list.project_tasks : task_list.project_tasks.reject(&filter)
+      list = filter.nil? ? task_list.tasks : task_list.tasks.reject(&filter)
       items[task_list.name] = list.collect {|task| [truncate(task.text, :length => 50), task.id.to_s]}
     end
 

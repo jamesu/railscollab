@@ -17,10 +17,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ApplicationLog < ActiveRecord::Base
+class Activity < ActiveRecord::Base
   belongs_to :project
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :taken_by,   :class_name => 'User', :foreign_key => 'taken_by_id'
   belongs_to :rel_object, :polymorphic => true
 
   before_create :process_params
@@ -55,7 +54,7 @@ class ApplicationLog < ActiveRecord::Base
     really_silent = Rails.configuration.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
-      @log = ApplicationLog.new()
+      @log = Activity.new()
 
       @log.action = action
       if action == :delete
@@ -86,13 +85,12 @@ class ApplicationLog < ActiveRecord::Base
         user.last_activity = Time.now.utc
         user.save
       end
-      @log.taken_by = user
       @log.is_private = private
       @log.save
     else
       # Destroy all occurrences of this object from the log
       # (assuming no audit trail is required here)
-      ApplicationLog.destroy_all({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id})
+      Activity.destroy_all({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id})
     end
   end
 
@@ -111,6 +109,6 @@ class ApplicationLog < ActiveRecord::Base
   	private_conditions += 'AND is_private = 0' unless include_private
   	private_conditions += 'AND is_silent = 0'  unless include_silent
 
-  	ApplicationLog.all(:conditions => "#{conditions} #{private_conditions}", :order => 'created_on DESC', :limit => limit)
+  	Activity.all(:conditions => "#{conditions} #{private_conditions}", :order => 'created_on DESC', :limit => limit)
   end
 end

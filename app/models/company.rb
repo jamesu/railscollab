@@ -91,7 +91,7 @@ class Company < ActiveRecord::Base
   end
 
   def users_on_project(project)
-    proj_users = ProjectUser.all(:conditions => ['project_id = ?', project.id], :select => 'user_id')
+    proj_users = Person.all(:conditions => ['project_id = ?', project.id], :select => 'user_id')
     query_users = proj_users.collect{ |user| user.user_id }
     User.all(:conditions => { :id => query_users, :company_id => self.id })
   end

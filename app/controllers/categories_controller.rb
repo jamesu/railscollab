@@ -27,7 +27,7 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.xml
   def index
-    @categories = @active_project.project_message_categories
+    @categories = @active_project.categories
     
     respond_to do |format|
       format.html {}
@@ -41,7 +41,7 @@ class CategoriesController < ApplicationController
   # GET /categories/1.xml
   def show
     begin
-      @category = @active_project.project_message_categories.find(params[:id])
+      @category = @active_project.categories.find(params[:id])
     rescue
       return error_status(true, :invalid_message_category)
     end
@@ -63,7 +63,7 @@ class CategoriesController < ApplicationController
   def new
     authorize! :create_message_category, @active_project
     
-    @category = @active_project.project_message_categories.build()
+    @category = @active_project.categories.build()
     
     respond_to do |format|
       format.html # new.html.erb
@@ -74,7 +74,7 @@ class CategoriesController < ApplicationController
   # GET /categories/1/edit
   def edit
     begin
-      @category = @active_project.project_message_categories.find(params[:id])
+      @category = @active_project.categories.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       return error_status(true, :invalid_message_category)
     end
@@ -87,7 +87,7 @@ class CategoriesController < ApplicationController
   def create
     authorize! :create_message_category, @active_project
     
-    @category = @active_project.project_message_categories.build(params[:category])
+    @category = @active_project.categories.build(params[:category])
     @category.created_by = @logged_user
     
     respond_to do |format|
@@ -110,7 +110,7 @@ class CategoriesController < ApplicationController
   # PUT /categories/1.xml
   def update
     begin
-      @category = @active_project.project_message_categories.find(params[:id])
+      @category = @active_project.categories.find(params[:id])
     rescue
       return error_status(true, :invalid_message_category)
     end
@@ -139,7 +139,7 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1.xml
   def destroy
     begin
-      @category = @active_project.project_message_categories.find(params[:id])
+      @category = @active_project.categories.find(params[:id])
     rescue
       return error_status(true, :invalid_message_category)
     end
@@ -163,7 +163,7 @@ class CategoriesController < ApplicationController
   # /categories/1/posts.xml
   def posts
     begin
-      @category = @active_project.project_message_categories.find(params[:id])
+      @category = @active_project.categories.find(params[:id])
     rescue
       return error_status(true, :invalid_message_category)
     end
@@ -191,7 +191,7 @@ class CategoriesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        @messages = @category.project_messages.where(msg_conditions)
+        @messages = @category.messages.where(msg_conditions)
                                               .paginate(:page => @page, :per_page => Rails.configuration.messages_per_page)
         
         @pagination = []
@@ -200,12 +200,12 @@ class CategoriesController < ApplicationController
         # Important messages (html only)
         important_conditions = {'is_important' => true}
         important_conditions['is_private'] = false unless @logged_user.member_of_owner?
-        @important_messages = @active_project.project_messages.where(important_conditions)
+        @important_messages = @active_project.messages.where(important_conditions)
 
         render :template => 'messages/index'
       }
       format.xml  { 
-        @messages = @category.project_messages.where(msg_conditions)
+        @messages = @category.messages.where(msg_conditions)
                                               .offset(params[:offset])
                                               .limit(params[:limit] || Rails.configuration.messages_per_page)
         

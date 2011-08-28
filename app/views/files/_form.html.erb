@@ -9,7 +9,7 @@
       </div>
       <div id="selectFolderControl">
         <label for="fileFormFolder"><%= t('folder') %>: <span class="label_required">*</span></label>
-        <%= select 'file', 'folder_id', ProjectFolder.select_list(@active_project), {}, {:id => 'fileFormFolder'} %>
+        <%= select 'file', 'folder_id', Folder.select_list(@active_project), {}, {:id => 'fileFormFolder'} %>
       </div>
       <p><%= t('file_upload_info', :max => format_size(Rails.configuration.max_upload_size)) %></p>
     </div>

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ApplicationLogTest < ActiveSupport::TestCase
+class TimeRecordTest < ActiveSupport::TestCase
   fixtures :all
 
   # Replace this with your real tests.

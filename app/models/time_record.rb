@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectTime < ActiveRecord::Base
+class TimeRecord < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   
   belongs_to :project
@@ -25,13 +25,13 @@ class ProjectTime < ActiveRecord::Base
   belongs_to :company, :foreign_key => 'assigned_to_company_id'
   belongs_to :user, :foreign_key => 'assigned_to_user_id'
   
-  belongs_to :project_task_list, :foreign_key => 'task_list_id'
-  belongs_to :project_task, :foreign_key => 'task_id'
+  belongs_to :task_list
+  belongs_to :task
   
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
   
-  has_many :project_messages, :foreign_key => 'milestone_id'
+  has_many :messages
   
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   
@@ -63,13 +63,13 @@ class ProjectTime < ActiveRecord::Base
     end
     
     # set name to task name
-    if (self.name.nil? or self.name.blank?) and !self.project_task.nil?
-      self.name = self.project_task.text[0, ProjectTime.columns_hash['name'].limit]
+    if (self.name.nil? or self.name.blank?) and !self.task.nil?
+      self.name = self.task.text[0, TimeRecord.columns_hash['name'].limit]
     end
   end
   
   def process_create
-    ApplicationLog::new_log(self, self.created_by, :add, self.is_private)
+    Activity::new_log(self, self.created_by, :add, self.is_private)
   end
   
   def process_update_params
@@ -80,12 +80,12 @@ class ProjectTime < ActiveRecord::Base
       write_attribute("assigned_to_company_id", 0)
     end
     
-    ApplicationLog::new_log(self, self.updated_by, :edit, self.is_private)
+    Activity::new_log(self, self.updated_by, :edit, self.is_private)
   end
   
   def process_destroy
     Tag.clear_by_object(self)
-    ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
+    Activity.new_log(self, self.updated_by, :delete, self.is_private)
   end
   
   def object_name
@@ -99,12 +99,12 @@ class ProjectTime < ActiveRecord::Base
   # Responsible party assignment
   
   def open_task=(obj)
-    self.project_task_list = obj.try(:task_list)
-    self.project_task = obj
+    self.task_list = obj.try(:task_list)
+    self.task = obj
   end
   
   def open_task
-    self.project_task
+    self.task
   end
   
   def open_task_id=(val)
@@ -114,12 +114,12 @@ class ProjectTime < ActiveRecord::Base
       return
     end
     
-    self.open_task = ProjectTask.find(val)
+    self.open_task = Task.find(val)
   end
   
   def open_task_id
-    if !self.project_task.nil?
-      self.project_task.id.to_s
+    if !self.task.nil?
+      self.task.id.to_s
     else
       "0"
     end
@@ -206,10 +206,10 @@ class ProjectTime < ActiveRecord::Base
   def self.find_by_task_lists(task_lists, time_conds)
     lists = []
 
-    task_lists.all(:include => {:project_tasks => :project_times}).each do |list|
+    task_lists.all(:include => {:tasks => :time_records}).each do |list|
       tasks = []
-      list.project_tasks.each do |task|
-        times = task.project_times.select do |time|
+      list.tasks.each do |task|
+        times = task.time_records.select do |time|
           time_conds.all? {|attr, value| time.send(attr) == value}
         end
         total = times.inject(0) {|sum, time| sum + time.hours}
@@ -228,17 +228,17 @@ class ProjectTime < ActiveRecord::Base
   
   def self.find_grouped(group_field, params)
     grouped_fields = {}
-    found_times = ProjectTime.where(params[:conditions])
+    found_times = TimeRecord.where(params[:conditions])
     found_times = found_times.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:page].nil?
     found_times = found_times.order(params[:order]) unless params[:order].nil?
     
-    group_type = ProjectTime if ['assigned_to','project','project_task','project_task_list'].include?(group_field)
+    group_type = TimeRecord if ['assigned_to','project','project_task','project_task_list'].include?(group_field)
     group_type ||= String
     
     found_times.each do |time|
       dest_str = nil
       
-      if group_type == ProjectTime
+      if group_type == TimeRecord
         dest_str = time[group_field].object_name
       else
         dest_str = time[group_field].to_s[0..0]

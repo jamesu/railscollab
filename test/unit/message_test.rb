@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectFolderTest < ActiveSupport::TestCase
+class MessageTest < ActiveSupport::TestCase
   fixtures :all
 
   # Replace this with your real tests.

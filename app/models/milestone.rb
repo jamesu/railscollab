@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectMilestone < ActiveRecord::Base
+class Milestone < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   belongs_to :project
@@ -31,7 +31,7 @@ class ProjectMilestone < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :project_task_lists, :foreign_key => 'milestone_id', :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify do
+  has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify do
     def public(reload=false)
       # Grab public comments only
       @public_task_lists = nil if reload
@@ -39,7 +39,7 @@ class ProjectMilestone < ActiveRecord::Base
     end
   end
 
-  has_many :project_messages, :foreign_key => 'milestone_id', :dependent => :nullify do
+  has_many :messages, :dependent => :nullify do
     def public(reload=false)
       # Grab public comments only
       @public_messages = nil if reload
@@ -66,7 +66,7 @@ class ProjectMilestone < ActiveRecord::Base
   end
 
   def process_create
-    ApplicationLog::new_log(self, self.created_by, :add, self.is_private)
+    Activity::new_log(self, self.created_by, :add, self.is_private)
   end
 
   def process_update_params
@@ -78,17 +78,17 @@ class ProjectMilestone < ActiveRecord::Base
     end
 
     if @update_completed.nil?
-      ApplicationLog::new_log(self, self.updated_by, :edit, self.is_private)
+      Activity::new_log(self, self.updated_by, :edit, self.is_private)
     else
       write_attribute('completed_on', @update_completed ? Time.now.utc : nil)
       self.completed_by = @update_completed_user
-      ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
+      Activity::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
     end
   end
 
   def process_destroy
     Tag.clear_by_object(self)
-    ApplicationLog::new_log(self, self.updated_by, :delete, self.is_private)
+    Activity::new_log(self, self.updated_by, :delete, self.is_private)
   end
 
   def object_name
@@ -210,7 +210,7 @@ class ProjectMilestone < ActiveRecord::Base
     return [] if project_ids.empty?
 
     # Milestone not completed, visible, and part of project(s)?
-    msg_conditions = {'project_milestones.completed_on' => nil, 'project_id' => project_ids}
+    msg_conditions = {'milestones.completed_on' => nil, 'project_id' => project_ids}
     msg_conditions['is_private'] = false unless user.member_of_owner?
 
     # Exclude inactive projects?

@@ -311,8 +311,6 @@ en:
   # Message form
   title: Title
   text: Text
-  additional_text: Additional text
-  additional_text_info: Additional message text is visible only on comments page
   collapse: Collapse
   expand: Expand
   milestone: Milestone
@@ -703,11 +701,11 @@ en:
   # Search models
   Tag: Tag
   Comment: Comment
-  ProjectMessage: Message
-  ProjectTime: Time 
-  ProjectTask: Task
-  ProjectTaskList: Task list
-  ProjectMilestone: Milestone
+  Message: Message
+  TimeRecord: Time 
+  Task: Task
+  TaskList: Task list
+  Milestone: Milestone
   ProjectFile: File
   ProjectFileRevision: File revision
   WikiPage: Wiki page

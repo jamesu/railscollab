@@ -12,7 +12,7 @@
 </div>
 <% end %>
 
-<% if !@active_project.project_message_categories.empty? %>
+<% if !@active_project.categories.empty? %>
 <div class="sidebarBlock">
   <h2><%= t('categories') %></h2>
   <div class="blockContent" id="sidebarMessageCategoryList">
@@ -23,7 +23,7 @@
       <li><%= link_to t('all_categories'), messages_path, :class => 'selected' %></li>
 <% end %>
     
-<% @active_project.project_message_categories.each do |category| -%>
+<% @active_project.categories.each do |category| -%>
 <% if !@category.nil? and @category.id == category.id %>
 <% selected_class = {:class => 'selected'} %>
 <% else %>

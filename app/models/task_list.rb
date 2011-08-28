@@ -17,16 +17,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectTaskList < ActiveRecord::Base
+class TaskList < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  belongs_to :project_milestone, :foreign_key => 'milestone_id'
+  belongs_to :milestone
   belongs_to :project
   belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
   belongs_to :created_by,   :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by,   :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :project_tasks, :foreign_key => 'task_list_id', :order => "#{self.connection.quote_column_name 'order'} ASC", :dependent => :destroy
+  has_many :tasks, :order => "#{self.connection.quote_column_name 'order'} ASC", :dependent => :destroy
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
 
@@ -67,7 +67,7 @@ class ProjectTaskList < ActiveRecord::Base
   def ensure_completed(completed_by)
     # If we don't think we are complete either, exit (vice versa)
     @ensured_complete = true
-    self.project_tasks(true)
+    self.tasks(true)
     
     # Ok now lets check if we are *really* complete
     if self.finished_all_tasks?
@@ -120,21 +120,21 @@ class ProjectTaskList < ActiveRecord::Base
   end
 
   def open_tasks
-    self.project_tasks.select{ |task| task.completed_on.nil? }
+    self.tasks.select{ |task| task.completed_on.nil? }
   end
 
   def completed_tasks
-    self.project_tasks.reject{ |task| task.completed_on.nil? }
+    self.tasks.reject{ |task| task.completed_on.nil? }
   end
 
   def finished_all_tasks?
     completed_count = 0
 
-    self.project_tasks.each do |task|
+    self.tasks.each do |task|
       completed_count += 1 unless task.completed_on.nil?
     end
 
-    completed_count > 0 and completed_count == self.project_tasks.length
+    completed_count > 0 and completed_count == self.tasks.length
   end
 
   def self.priv_scope(include_private)
@@ -148,7 +148,7 @@ class ProjectTaskList < ActiveRecord::Base
   end
 
   def self.select_list(project)
-    ProjectTaskList.all(:conditions => ['project_id = ?', project.id], :select => 'id, name').collect do |tasklist|
+    TaskList.all(:conditions => ['project_id = ?', project.id], :select => 'id, name').collect do |tasklist|
       [tasklist.name, tasklist.id]
     end
   end

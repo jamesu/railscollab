@@ -12,10 +12,6 @@
   </div>
   <div class="messageText">
     <%= textilize @message.text %>
-<% if !@message.additional_text.nil? and @message.additional_text? %>
-    <div class="messageSeparator"><%= t('message_seperator') %></div>
-    <%= textilize @message.additional_text %>
-<% end%>
   </div>
 
 <%= render :partial => 'files/list_attached_files', :locals => {:dont_add => true, :attached_files => @message.attached_files(@logged_user.member_of_owner?), :attached_files_object => @message} %>

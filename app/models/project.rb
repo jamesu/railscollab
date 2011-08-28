@@ -25,10 +25,10 @@ class Project < ActiveRecord::Base
 	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
 	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 	
-	has_many :project_users
-	has_many :users, :through=> :project_users
+	has_many :people
+	has_many :users, :through => :people
 	
-	has_many :project_times, :dependent => :destroy do
+	has_many :time_records, :dependent => :destroy do
 		def public(reload=false)
 			# Grab public logs only
 			@public_project_times = nil if reload
@@ -37,7 +37,7 @@ class Project < ActiveRecord::Base
   end
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
 	
-	has_many :project_milestones, :dependent => :destroy do
+	has_many :milestones, :dependent => :destroy do
 		def public(reload=false)
 			# Grab public logs only
 			@public_project_milestones = nil if reload
@@ -46,37 +46,37 @@ class Project < ActiveRecord::Base
 	
 		def open(include_private=true, reload=false)
 			# Grab open milestones only
-			ProjectMilestone.priv_scope(include_private) do
-			  where('project_milestones.completed_on IS NULL', :order => 'project_milestones.due_date ASC')
+			Milestone.priv_scope(include_private) do
+			  where('milestones.completed_on IS NULL', :order => 'milestones.due_date ASC')
 			end
 		end
 		
 		def late(include_private=true, reload=false)
-			ProjectMilestone.priv_scope(include_private) do
+			Milestone.priv_scope(include_private) do
 			  where(['due_date < ? AND completed_on IS NULL', Date.today])
 			end
 		end
 		
 		def todays(include_private=true, reload=false)
-			ProjectMilestone.priv_scope(include_private) do
+			Milestone.priv_scope(include_private) do
 			  where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1])
 			end
 		end
 		
 		def upcoming(include_private=true, reload=false)
-			ProjectMilestone.priv_scope(include_private) do
+			Milestone.priv_scope(include_private) do
 			  where(['completed_on IS NULL AND due_date >= ?', Date.today+1])
 			end
 		end
 		
 		def completed(include_private=true, reload=false)
-			ProjectMilestone.priv_scope(include_private) do 
+			Milestone.priv_scope(include_private) do 
 			  where('completed_on IS NOT NULL')
 			end
 		end
 	end
 	
-	has_many :project_task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
+	has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
 		def public(reload=false)
 			# Grab public logs only
 			@public_project_task_lists = nil if reload
@@ -84,23 +84,23 @@ class Project < ActiveRecord::Base
 		end
 		
 		def open(include_private = true, reload=false)
-			ProjectTaskList.priv_scope(include_private) do
+			TaskList.priv_scope(include_private) do
 			  # Grab open task lists only
-			  where('project_task_lists.completed_on IS NULL')
+			  where('task_lists.completed_on IS NULL')
 			end
 		end
 		
 		def completed(include_private = true, reload=false)
-			ProjectTaskList.priv_scope(include_private) do
+			TaskList.priv_scope(include_private) do
 			  # Grab completed task lists only
-			  where('project_task_lists.completed_on IS NOT NULL')
+			  where('task_lists.completed_on IS NOT NULL')
 			end
 		end
 	end
 	
-	has_many :project_tasks, :through => :project_task_lists
+	has_many :tasks, :through => :project_task_lists
 	
-	has_many :project_folders, :dependent => :destroy
+	has_many :folders, :dependent => :destroy
 	has_many :project_files, :dependent => :destroy do
 		def important(include_private = true, reload=false)
 			ProjectFile.priv_scope(include_private) do
@@ -108,9 +108,9 @@ class Project < ActiveRecord::Base
 			end
 		end
 	end
-  has_many :project_messages, :order => 'created_on DESC', :dependent => :destroy do
+  has_many :messages, :order => 'created_on DESC', :dependent => :destroy do
     def important(include_private = true, reload=false)
-      ProjectMessage.priv_scope(include_private) do
+      Message.priv_scope(include_private) do
         where(['is_important = ?', true])
       end
     end
@@ -120,9 +120,9 @@ class Project < ActiveRecord::Base
       @public_project_messages ||= where(['is_private = ?', false])
     end
   end
-	has_many :project_message_categories, :dependent => :destroy
+	has_many :categories, :dependent => :destroy
 	
-	has_many :application_logs, :order => 'created_on DESC, id DESC', :dependent => :destroy do
+	has_many :activities, :order => 'created_on DESC, id DESC', :dependent => :destroy do
 		def public(reload=false)
 			# Grab public logs only
 			@public_application_logs = nil if reload
@@ -144,22 +144,22 @@ class Project < ActiveRecord::Base
 	end
 	
 	def process_create
-	  ApplicationLog.new_log(self, self.created_by, :add, true)
+	  Activity.new_log(self, self.created_by, :add, true)
 	end
 	
 	def process_update_params
 	  if @update_completed.nil?
-		ApplicationLog::new_log(self, self.updated_by, :edit, true)
+		Activity::new_log(self, self.updated_by, :edit, true)
 	  else
 		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
 		self.completed_by = @update_completed_user
-		ApplicationLog::new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
+		Activity::new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
 	  end
 	end
 	
 	def process_destroy
-	  ActiveRecord::Base.connection.execute("DELETE FROM project_users WHERE project_id = #{self.id}")
-	  ApplicationLog.new_log(self, self.updated_by, :delete, true)
+	  people.destroy_all
+	  Activity.new_log(self, self.updated_by, :delete, true)
 	end
 	
 	def object_name
@@ -171,7 +171,7 @@ class Project < ActiveRecord::Base
 	end
 	
 	def tasks_by_user(user, completed=false)
-		self.project_tasks.where(["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND project_tasks.completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
+		self.tasks.where(["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND project_tasks.completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
 	end
 	
 	def is_active?
@@ -179,11 +179,11 @@ class Project < ActiveRecord::Base
 	end
 	
   def milestones_by_user(user, completed=false)
-    ProjectMilestone.where(["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
+    Milestone.where(["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
   end
 
   def has_member(user)
-    return ProjectUser.where("project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
+    return Person.where("project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
   end
 
   def set_completed(value, user=nil)

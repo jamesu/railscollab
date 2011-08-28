@@ -56,7 +56,7 @@ class FilesController < ApplicationController
         
         # Important files and folders (html only)
         @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
-        @folders = @active_project.project_folders
+        @folders = @active_project.folders
       }
       format.xml  {
         @files = ProjectFile.where(file_conditions)
@@ -100,7 +100,7 @@ class FilesController < ApplicationController
         @current_folder = @file.project_folder
         @order = nil
         @page = nil
-        @folders = @active_project.project_folders
+        @folders = @active_project.folders
         
         # Important files (html only)
         @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
@@ -280,7 +280,7 @@ class FilesController < ApplicationController
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
 
-    if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'ProjectMessage'].include?(rel_object_type))
+    if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'Message'].include?(rel_object_type))
       error_status(true, :invalid_request)
       redirect_back_or_default :controller => 'files'
       return
@@ -347,7 +347,7 @@ class FilesController < ApplicationController
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
 
-    if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'ProjectMessage'].include?(rel_object_type))
+    if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'Message'].include?(rel_object_type))
       error_status(true, :invalid_request)
       redirect_back_or_default files_path
       return

@@ -26,15 +26,15 @@ class WikiPage < ActiveRecord::Base
   end
 
   def process_create
-    ApplicationLog.new_log(self, self.created_by, :add)
+    Activity.new_log(self, self.created_by, :add)
   end
 
   def process_update_params
-    ApplicationLog.new_log(self, self.created_by, :edit)
+    Activity.new_log(self, self.created_by, :edit)
   end
 
   def process_destroy
-    ApplicationLog.new_log(self, self.created_by, :delete)
+    Activity.new_log(self, self.created_by, :delete)
   end
 
   def object_name

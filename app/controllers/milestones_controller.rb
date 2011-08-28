@@ -40,7 +40,7 @@ class MilestonesController < ApplicationController
         render :template => 'milestones/index'
       }
       format.xml  {
-        @milestones = include_private ? @active_project.project_milestones : @active_project.project_milestones.public
+        @milestones = include_private ? @active_project.milestones : @active_project.milestones.public
         render :xml => @milestones.to_xml(:root => 'milestones')
       }
     end
@@ -52,12 +52,12 @@ class MilestonesController < ApplicationController
 
   def new
     authorize! :create_milestone, @active_project
-    @milestone = @active_project.project_milestones.build
+    @milestone = @active_project.milestones.build
   end
   
   def create
     authorize! :create_milestone, @active_project
-    @milestone = @active_project.project_milestones.build
+    @milestone = @active_project.milestones.build
     
     milestone_attribs = params[:milestone]
     @milestone.attributes = milestone_attribs
@@ -159,7 +159,7 @@ class MilestonesController < ApplicationController
 
   def obtain_milestone
     begin
-      @milestone = @active_project.project_milestones.find(params[:id])
+      @milestone = @active_project.milestones.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_milestone)
       redirect_back_or_default milestones_path
@@ -172,9 +172,9 @@ class MilestonesController < ApplicationController
   def index_lists(include_private, calendar_only)
     @time_now = Time.zone.now
 
-    @late_milestones = @active_project.project_milestones.late(include_private) unless calendar_only
-    @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
-    @completed_milestones = @active_project.project_milestones.completed(include_private) unless calendar_only
+    @late_milestones = @active_project.milestones.late(include_private) unless calendar_only
+    @upcoming_milestones = Milestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
+    @completed_milestones = @active_project.milestones.completed(include_private) unless calendar_only
 
     end_date = (@time_now + 14.days).to_date
     @calendar_milestones = @upcoming_milestones.select{|m| m.due_date < end_date}.group_by do |obj|

@@ -10,5 +10,5 @@
 </div>
 
 <% if can? :manage, @project %>
-<div class="hint"><%= t('permissions_info', :link => link_to(t('permissions_form'), permissions_project_path(:id => @active_project.id))) %></div>
+<div class="hint"><%= t('permissions_info', :link => link_to(t('permissions_form'), permissions_project_path(:id => @active_project.id))).html_safe %></div>
 <% end %>

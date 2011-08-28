@@ -17,11 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectMessage < ActiveRecord::Base
+class Message < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  belongs_to :project_milestone,        :foreign_key => 'milestone_id'
-  belongs_to :project_message_category, :foreign_key => 'category_id', :counter_cache => true
+  belongs_to :milestone
+  belongs_to :category,         :counter_cache => true
   belongs_to :project
 
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
@@ -51,17 +51,17 @@ class ProjectMessage < ActiveRecord::Base
   end
 
   def process_create
-    ApplicationLog.new_log(self, self.created_by, :add, self.is_private)
+    Activity.new_log(self, self.created_by, :add, self.is_private)
   end
 
   def process_update_params
-    ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private)
+    Activity.new_log(self, self.updated_by, :edit, self.is_private)
   end
 
   def process_destroy
     Tag.clear_by_object(self)
     AttachedFile.clear_attachments(self)
-    ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
+    Activity.new_log(self, self.updated_by, :delete, self.is_private)
   end
 
   def tags
@@ -126,17 +126,17 @@ class ProjectMessage < ActiveRecord::Base
 
   # Accesibility
 
-  attr_accessible :title, :text, :additional_text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
+  attr_accessible :title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 
   # Validation
 
   validates_presence_of :title
   validates_presence_of :text
-  validates_each :project_milestone, :allow_nil => true do |record, attr, value|
+  validates_each :milestone, :allow_nil => true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 
-  validates_each :project_message_category do |record, attr, value|
+  validates_each :category do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value && value.project_id != record.project_id
   end
 

@@ -26,7 +26,7 @@
 
 <% list[:tasks].each do |task_info| -%>
 <% task = task_info[:task] %>
-<h4><span><img src="/assets/logtypes/projecttasks.gif" alt="projectask" title="projectask" /> </span><%= t('task_list_task_hours', :name => h(task.object_name), :hours => task_info[:hours]) %> <%= t('billable_hours', :hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= t('task_estimated_hours', :hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
+<h4><span><img src="/assets/logtypes/tasks.gif" alt="task" title="task" /> </span><%= t('task_list_task_hours', :name => h(task.object_name), :hours => task_info[:hours]) %> <%= t('billable_hours', :hours => task_info[:billable_hours]) if task_info[:billable_hours] > 0 %> <%= t('task_estimated_hours', :hours => task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0 %></h4>
 
 <table class="timeLogs blank"><tr><th><%= t('log_date') %></th><th><%= t('name') %></th><th><%= t('details') %></th><th><%= t('hours') %></th></tr>
 <% task_info[:times].each do |time| -%>

@@ -42,12 +42,12 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html {
         when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
-          @project_log_entries = (@logged_user.member_of_owner? ? @project.application_logs : @project.application_logs.public)[0..(Rails.configuration.project_logs_per_page-1)]
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.public)[0..(Rails.configuration.project_logs_per_page-1)]
         end
 
         @time_now = Time.zone.now
-        @late_milestones = @project.project_milestones.late(include_private)
-        @upcoming_milestones = ProjectMilestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@project])
+        @late_milestones = @project.milestones.late(include_private)
+        @upcoming_milestones = Milestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@project])
 
         @calendar_milestones = @upcoming_milestones.group_by do |obj| 
           date = obj.due_date.to_date
@@ -55,7 +55,7 @@ class ProjectsController < ApplicationController
         end
 
         @project_companies = @project.companies(include_private)
-        @important_messages = @project.project_messages.important(include_private)
+        @important_messages = @project.messages.important(include_private)
         @important_files = @project.project_files.important(include_private)
 
         @content_for_sidebar = 'overview_sidebar'
@@ -117,18 +117,17 @@ class ProjectsController < ApplicationController
 
     case request.method_symbol
     when :get
-      @project_users = @project.users
+      @people = @project.users
       @user_projects = @logged_user.projects
 
       @companies = [Company.owner]
-      @permissions = ProjectUser.permission_names()
+      @permissions = Person.permission_names()
       clients = Company.owner.clients
       if clients.length > 0
         @companies += clients
       end
-    when :put
+    when :post, :put
       # Sort out changes to the company set
-
       @project.companies.clear
       @project.companies << Company.owner
       if params[:project_company]
@@ -136,14 +135,14 @@ class ProjectsController < ApplicationController
         valid_companies.each{ |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
       end
 
-      valid_user_ids = params[:project_user] || []
+      valid_user_ids = params[:people] || []
 
       # Grab the old user set
-      project_users = @project.project_users.all :include => {:user => :company}
+      people = @project.people.all :include => {:user => :company}
 
-      # Destroy the ProjectUser entry for each non-active user
-      project_users.each do |project_user|
-        user = project_user.user
+      # Destroy the Person entry for each non-active user
+      people.each do |person|
+        user = person.user
         next if user.owner_of_owner?
 
         # Have a look to see if it is on our list
@@ -152,14 +151,14 @@ class ProjectsController < ApplicationController
         has_valid_company = valid_companies.include? user.company
 
         if has_valid_user and has_valid_company
-          permissions = params[:project_user_permissions] ? params[:project_user_permissions][user.id.to_s] : nil
-          project_user.reset_permissions
-          project_user.update_str permissions unless permissions.nil?
-          project_user.ensure_permissions if project_user.user.member_of_owner?
-          project_user.save
+          permissions = params[:people_permissions] ? params[:people_permissions][user.id.to_s] : nil
+          person.reset_permissions
+          person.update_str permissions unless permissions.nil?
+          person.ensure_permissions if person.user.member_of_owner?
+          person.save
         else
           # Exterminate! (maybe better if this was a single query?)
-          project_user.destroy
+          person.destroy
         end
         valid_user_ids.delete user.id.to_s if has_valid_user
 
@@ -167,17 +166,17 @@ class ProjectsController < ApplicationController
         #
       end
 
-      # Create new ProjectUser entries for new users
+      # Create new Person entries for new users
 
       users = User.all :conditions => {:id => valid_user_ids}, :include => :company
       users.each do |user|
         next unless valid_companies.include? user.company
-        project_user = @project.project_users.create :user => user
-        permissions = params[:project_user_permissions] ? params[:project_user_permissions][id] : nil
-        project_user.reset_permissions
-        project_user.update_str permissions unless permissions.nil?
-        project_user.ensure_permissions if project_user.user.member_of_owner?
-        project_user.save
+        person = @project.people.create(:user => user)
+        permissions = params[:people_permissions] ? params[:people_permissions][id] : nil
+        person.reset_permissions
+        person.update_str permissions unless permissions.nil?
+        person.ensure_permissions if person.user.member_of_owner?
+        person.save
       end
 
       # Now we can do the log keeping!
@@ -195,7 +194,7 @@ class ProjectsController < ApplicationController
     when :delete
       user = User.find(params[:user_id])
       unless user.owner_of_owner?
-        ProjectUser.delete_all(['user_id = ? AND project_id = ?', params[:user], @project.id])
+        Person.delete_all(['user_id = ? AND project_id = ?', params[:user], @project.id])
       end
     end
 
@@ -213,7 +212,7 @@ class ProjectsController < ApplicationController
       company = Company.find(params[:company_id])
       unless company.is_owner?
         company_user_ids = company.users.collect{ |user| user.id }
-        ProjectUser.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
+        Person.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
         @project.companies.delete(company)
       end
     end
@@ -259,14 +258,14 @@ class ProjectsController < ApplicationController
 
       # Add default folders
       Rails.configuration.default_project_folders.each do |folder_name|
-        folder = ProjectFolder.new(:name => folder_name)
+        folder = Folder.new(:name => folder_name)
         folder.project = @project
         folder.save
       end
 
       # Add default message categories
       Rails.configuration.default_project_message_categories.each do |category_name|
-        category = ProjectMessageCategory.new(:name => category_name)
+        category = Category.new(:name => category_name)
         category.project = @project
         category.save
       end

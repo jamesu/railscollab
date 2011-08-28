@@ -29,7 +29,7 @@ class MessagesController < ApplicationController
   # GET /messages.xml
   def index
     begin
-      @category = @active_project.project_message_categories.find(params[:category_id])
+      @category = @active_project.categories.find(params[:category_id])
     rescue
       @category = nil
     end
@@ -59,9 +59,8 @@ class MessagesController < ApplicationController
     
         @page = params[:page].to_i
         @page = 1 unless @page > 0
-        
-        @messages = @active_project.project_messages.where(msg_conditions)
-                                                    .paginate(:page => @page+1, :per_page => Rails.configuration.messages_per_page)
+        @messages = @active_project.messages.where(msg_conditions)
+                                                    .paginate(:page => @page, :per_page => Rails.configuration.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -70,12 +69,12 @@ class MessagesController < ApplicationController
         important_conditions = {'is_important' => true}
         important_conditions['category_id'] = @category.id unless @category.nil?
         important_conditions['is_private'] = false unless @logged_user.member_of_owner?
-        @important_messages = @active_project.project_messages.where(important_conditions)
+        @important_messages = @active_project.messages.where(important_conditions)
 
         render :template => 'messages/index'
       }
       format.xml  { 
-        @messages = @active_project.project_messages.where(msg_conditions)
+        @messages = @active_project.messages.where(msg_conditions)
                                                     .offset(params[:offset])
                                                     .limit(params[:limit] || Rails.configuration.messages_per_page)
         render :xml => @messages.to_xml(:root => 'messages')
@@ -106,14 +105,14 @@ class MessagesController < ApplicationController
   def new
     authorize! :create_message, @active_project
     
-    @message = @active_project.project_messages.build()
+    @message = @active_project.messages.build()
     
     # Set milestone
     @message.milestone_id = @milestone.id if @milestone
     
     # Grab default category
     begin
-      @category = @active_project.project_message_categories.find(params[:category_id])
+      @category = @active_project.categories.find(params[:category_id])
     rescue ActiveRecord::RecordNotFound
       @category = nil
     end
@@ -121,7 +120,7 @@ class MessagesController < ApplicationController
     if @category
       @message.category_id = @category.id
     else
-      @category = @active_project.project_message_categories.where(['name = ?', Rails.configuration.default_project_message_category]).first
+      @category = @active_project.categories.where(['name = ?', Rails.configuration.default_project_message_category]).first
     end
 
     @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))
@@ -142,7 +141,7 @@ class MessagesController < ApplicationController
   def create
     authorize! :create_message, @active_project
     
-    @message = @active_project.project_messages.build(params[:message])
+    @message = @active_project.messages.build(params[:message])
     
     message_attribs = params[:message]
     @message.attributes = message_attribs
@@ -160,7 +159,7 @@ class MessagesController < ApplicationController
           real_id = user_id.to_i
           next if real_id == @logged_user.id # will be subscribed below
 
-          number_of_users = ProjectUser.count(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id])
+          number_of_users = Person.count(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id])
           next if number_of_users == 0
 
           real_id
@@ -173,7 +172,7 @@ class MessagesController < ApplicationController
       end
 
       # Subscribe
-      @message.ensure_subscribed(@logged_user) if @message.class == ProjectMessage
+      @message.ensure_subscribed(@logged_user) if @message.class == Message
       
       # Handle uploaded files
       if (!params[:uploaded_files].nil? and ProjectFile.handle_files(params[:uploaded_files], @message, @logged_user, @message.is_private) != params[:uploaded_files].length)
@@ -257,7 +256,7 @@ class MessagesController < ApplicationController
   def subscribe
     authorize! :show, @message
 
-    @message.ensure_subscribed(@logged_user) if @message.class == ProjectMessage
+    @message.ensure_subscribed(@logged_user) if @message.class == Message
 
     respond_to do |format|
       format.html {
@@ -289,7 +288,7 @@ private
 
    def obtain_message
      begin
-        @message = @active_project.project_messages.find(params[:id])
+        @message = @active_project.messages.find(params[:id])
      rescue ActiveRecord::RecordNotFound
        error_status(true, :invalid_message)
        redirect_back_or_default messages_path

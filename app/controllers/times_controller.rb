@@ -35,7 +35,7 @@ class TimesController < ApplicationController
         @project = @active_project
         @content_for_sidebar = 'index_sidebar'
     
-        @times = @project.project_times.where(@time_conditions) 
+        @times = @project.time_records.where(@time_conditions)
                                        .paginate(:page => @current_page, :per_page => Rails.configuration.times_per_page)
                                        .order("#{@sort_type} #{@sort_order}")
         
@@ -44,7 +44,7 @@ class TimesController < ApplicationController
     
       }
       format.xml  {
-        @times = @project.project_times.where(@time_conditions)
+        @times = @project.time_records.where(@time_conditions)
                                        .offset(params[:offset])
                                        .limit(params[:limit] || Rails.configuration.times_per_page) 
                                        .order("#{@sort_type} #{@sort_order}")
@@ -59,7 +59,7 @@ class TimesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @tasks = ProjectTime.find_by_task_lists(@active_project.project_task_lists, @time_conditions)
+        @tasks = TimeRecord.find_by_task_lists(@active_project.task_lists, @time_conditions)
         @content_for_sidebar = 'index_sidebar'
       }
     end
@@ -72,15 +72,15 @@ class TimesController < ApplicationController
   def new
     authorize! :create_time, @active_project
 
-    @time = @active_project.project_times.build
-    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+    @time = @active_project.time_records.build
+    @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
     @task_filter = Proc.new {|task| task.is_completed? }
   end
   
   def create
     authorize! :create_time, @active_project
 
-    @time = @active_project.project_times.build
+    @time = @active_project.time_records.build
     
     @time.attributes = params[:time]
     @time.start_date = Time.current unless @time.done_date
@@ -97,7 +97,7 @@ class TimesController < ApplicationController
         format.js {}
         format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
       else
-        @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
         @task_filter = Proc.new {|task| task.is_completed? }
         format.html { render :action => "new" }
         format.js {}
@@ -109,9 +109,9 @@ class TimesController < ApplicationController
   def edit
     authorize! :edit, @time
 
-    @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
-    @open_task_lists << @time.project_task_list unless @time.project_task_list.nil? || @open_task_lists.include?(@time.project_task_list)
-    @task_filter = Proc.new {|task| task.is_completed? && task != @time.project_task}
+    @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+    @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
+    @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
   end
 
   def update
@@ -129,9 +129,9 @@ class TimesController < ApplicationController
         format.js {}
         format.xml  { head :ok }
       else
-        @open_task_lists = @active_project.project_task_lists.open(@logged_user.member_of_owner?)
-        @open_task_lists << @time.project_task_list unless @time.project_task_list.nil? || @open_task_lists.include?(@time.project_task_list)
-        @task_filter = Proc.new {|task| task.is_completed? && task != @time.project_task}
+        @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
+        @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
         format.html { render :action => "edit" }
         format.js {}
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
@@ -182,7 +182,7 @@ private
 
   def obtain_time
     begin
-      @time = @active_project.project_times.find(params[:id])
+      @time = @active_project.time_records.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_time)
       redirect_back_or_default times_path

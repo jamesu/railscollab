@@ -17,27 +17,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectMessageCategory < ActiveRecord::Base
+class Category < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   belongs_to :project
 
-  has_many :project_messages, :foreign_key => 'category_id'
+  has_many :messages
 
   after_create  :process_create
   before_update :process_update_params
   before_destroy :process_destroy
 
   def process_create
-    ApplicationLog.new_log(self, @created_by, :add, false) unless @created_by.nil?
+    Activity.new_log(self, @created_by, :add, false) unless @created_by.nil?
   end
 
   def process_update_params
-    ApplicationLog.new_log(self, @updated_by, :edit, false) unless @updated_by.nil?
+    Activity.new_log(self, @updated_by, :edit, false) unless @updated_by.nil?
   end
 
   def process_destroy
-    ApplicationLog.new_log(self, @updated_by, :delete, false) unless @updated_by.nil?
+    Activity.new_log(self, @updated_by, :delete, false) unless @updated_by.nil?
   end
   
   def created_by=(user)
@@ -59,7 +59,7 @@ class ProjectMessageCategory < ActiveRecord::Base
   # Helpers
 
   def self.select_list(project)
-    categories = ProjectMessageCategory.all(:conditions => ['project_id = ?', project.id], :select => 'id, name')
+    categories = Category.all(:conditions => ['project_id = ?', project.id], :select => 'id, name')
     categories.collect{ |category| [category.name, category.id] }
   end
 

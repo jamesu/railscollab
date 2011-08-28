@@ -10,24 +10,6 @@
     <%= text_area 'message', 'text', :id => 'messageFormText', :class => 'editor' %>
   </div>
   
-  <div>
-    <% 
-      if @message.additional_text?
-        expand_style = 'display:none;'
-        expand_sstyle = expand_style
-        compact_style = 'display:block;'
-        compact_sstyle = 'display:inline'
-      else
-        compact_style = 'display:none;'
-        compact_sstyle = compact_style
-        expand_style = 'display:block;'
-        expand_sstyle = 'display:inline'
-      end
-    %>
-    <label for="messageFormAdditionalText"><%= t('additional_text') %> (<a href="#" id="messageFormAdditionalTextToggle"><span id="messageFormAdditionalTextExpand" style="<%= expand_sstyle %>"><%= t('expand') %></span><span id="messageFormAdditionalTextCollapse" style="<%= compact_sstyle %>"><%= t('collapse') %></span></a>):<span class="desc"> - <%= t('additional_text_info') %></span></label>
-    <%= text_area 'message', 'additional_text', :id => 'messageFormAdditionalText', :class => 'editor', :style => compact_style %>
-  </div>
-  
   <fieldset>
     <legend><%= t('milestone') %></legend>
     <%= select 'message', 'milestone_id', select_milestone_options(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormMilestone'} %>
@@ -35,7 +17,7 @@
 
   <fieldset>
     <legend><%= t('category') %></legend>
-    <%= select 'message', 'category_id', ProjectMessageCategory.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormCategory'} %>
+    <%= select 'message', 'category_id', Category.select_list(@active_project), {}, {:class => 'select_milestone', :id => 'messageFormCategory'} %>
   </fieldset>
     
 <% if @logged_user.member_of_owner? %>

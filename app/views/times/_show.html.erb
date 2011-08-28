@@ -30,7 +30,7 @@
 <% end -%>
       </div>
       
-      <div class="description"><% if !view_time.open_task.nil? %><p><%= link_to (view_time.open_task.text, view_time.open_task.object_url) %></p><% end %><%= textilize view_time.description %></div>
+      <div class="description"><% if !view_time.open_task.nil? %><p><%= link_to(view_time.open_task.text, view_time.open_task.object_url) %></p><% end %><%= textilize view_time.description %></div>
 
       <div class="timeOptions"><%= action_list actions_for_time_short(view_time) %></div>
     </div>

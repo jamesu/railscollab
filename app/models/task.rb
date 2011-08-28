@@ -17,11 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectTask < ActiveRecord::Base
+class Task < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   def project; self.task_list.project; end
-  belongs_to :task_list, :class_name => 'ProjectTaskList', :foreign_key => 'task_list_id'
+  belongs_to :task_list
 
   belongs_to :company, :foreign_key => 'assigned_to_company_id'
   belongs_to :user,    :foreign_key => 'assigned_to_user_id'
@@ -38,7 +38,7 @@ class ProjectTask < ActiveRecord::Base
     end
   end
 
-  has_many :project_times, :foreign_key => 'task_id', :dependent => :nullify
+  has_many :time_records, :dependent => :nullify
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -49,7 +49,7 @@ class ProjectTask < ActiveRecord::Base
 
   def process_params
     write_attribute('completed_on', nil)
-    write_attribute('order', self.task_list.project_tasks.length)
+    write_attribute('order', self.task_list.tasks.length)
   end
 
   def process_create

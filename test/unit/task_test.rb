@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectUsersTest < ActiveSupport::TestCase
+class TaskTest < ActiveSupport::TestCase
   fixtures :all
 
   # Replace this with your real tests.

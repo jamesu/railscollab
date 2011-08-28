@@ -46,10 +46,10 @@ class UsersController < ApplicationController
 
     @user = User.new
     @company = @logged_user.company
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
 
     @send_email = params[:new_account_notification] == 'false' ? false : true
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
     @projects = @active_projects
     
     begin
@@ -78,10 +78,10 @@ class UsersController < ApplicationController
 
     @user = User.new
     @company = @logged_user.company
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
 
     @send_email = params[:new_account_notification] == 'false' ? false : true
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
     @projects = @active_projects
     
     user_attribs = params[:user]
@@ -152,7 +152,7 @@ class UsersController < ApplicationController
     authorize! :update_profile, @user
   	
     @projects = @active_projects
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
     
     user_params = params[:user]
 
@@ -309,12 +309,12 @@ class UsersController < ApplicationController
     authorize! :update_profile, @user
 
     @projects = @user.company.projects
-    @permissions = ProjectUser.permission_names()
+    @permissions = Person.permission_names()
 
     case request.method_symbol
     when :put
       update_project_permissions(@user, params[:user_project], params[:project_permission], @projects)
-      #ApplicationLog.new_log(@project, @logged_user, :edit, true)
+      #Activity.new_log(@project, @logged_user, :edit, true)
       error_status(false, :success_updated_permissions)
     end
   end
@@ -325,19 +325,19 @@ class UsersController < ApplicationController
     project_ids ||= []
 
     # Grab the list of project id's specified
-    project_list = Project.where(:id => project_ids & User.project_ids)
+    project_list = Project.where(:id => project_ids & user.project_ids)
 
     # Associate project permissions with user
     project_list.each do |project|
       permission_list = project_permission.nil? ? nil : project_permission[project.id.to_s]
 
       # Find permission list
-      project_user = project.project_users.find_or_create_by_user_id user.id
+      person = project.people.find_or_create_by_user_id user.id
 
       # Reset and update permissions
-      project_user.reset_permissions
-      project_user.update_str permission_list unless permission_list.nil?
-      project_user.save
+      person.reset_permissions
+      person.update_str permission_list unless permission_list.nil?
+      person.save
     end
 
     unless old_projects.nil?
@@ -347,7 +347,7 @@ class UsersController < ApplicationController
       end.compact
 
       unless delete_list.empty?
-        ProjectUser.delete_all(:user_id => user.id, :project_id => delete_list)
+        Person.delete_all(:user_id => user.id, :project_id => delete_list)
       end
     end
   end

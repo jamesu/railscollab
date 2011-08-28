@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectUser < ActiveRecord::Base
+class Person < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
 
@@ -66,6 +66,6 @@ class ProjectUser < ActiveRecord::Base
   end
 
   def self.check_permission(user, project, permission)
-    return ProjectUser.first(:conditions => ['project_id = ? AND user_id = ? AND ? = 1', project.id, user.id, permission], :select => [:user_id, :username])
+    return Person.first(:conditions => ['project_id = ? AND user_id = ? AND ? = 1', project.id, user.id, permission], :select => [:user_id, :username])
   end
 end

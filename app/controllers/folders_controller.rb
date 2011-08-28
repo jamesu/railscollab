@@ -28,7 +28,7 @@ class FoldersController < ApplicationController
   # GET /folders
   # GET /folders.xml
   def index
-    @folders = @active_project.project_folders
+    @folders = @active_project.folders
     
     respond_to do |format|
       format.html { redirect_to(files_path) }
@@ -58,7 +58,7 @@ class FoldersController < ApplicationController
   def new
     authorize! :create_folder, @active_project
     
-    @folder = @active_project.project_folders.build()
+    @folder = @active_project.folders.build()
     
     respond_to do |format|
       format.html # new.html.erb
@@ -76,7 +76,7 @@ class FoldersController < ApplicationController
   def create
     authorize! :create_folder, @active_project
     
-    @folder = @active_project.project_folders.build(params[:folder])
+    @folder = @active_project.folders.build(params[:folder])
     @folder.created_by = @logged_user
     
     respond_to do |format|
@@ -165,7 +165,7 @@ class FoldersController < ApplicationController
         
         # Important files and folders (html only)
         @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
-        @folders = @active_project.project_folders
+        @folders = @active_project.folders
         
         render :template => 'files/index'
       }
@@ -193,7 +193,7 @@ private
   def obtain_folder
     if params[:folder_name]
       begin
-        @folder = @active_project.project_folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
+        @folder = @active_project.folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
         redirect_back_or_default files_path
@@ -201,7 +201,7 @@ private
       end
     elsif params[:id]
       begin
-        @folder = @active_project.project_folders.find(params[:id])
+        @folder = @active_project.folders.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
         redirect_back_or_default files_path
