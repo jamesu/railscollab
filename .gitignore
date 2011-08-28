@@ -4,7 +4,6 @@ config/config.yml
 config/database.yml
 config/deploy.rb
 coverage
-db/schema.rb
 log/*.log
 log/ferret_server.*
 nbproject

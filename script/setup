@@ -26,13 +26,6 @@ Dir["config/example/*"].each do |file|
   end
 end
 
-# Copy over database
-db_name = "db/schema.rb"
-unless File.exists? db_name
-  puts "Copying default schema"
-  FileUtils.cp("db/schema.example.rb", db_name)
-end
-
 # Run normal install scripts
-system "rake gems:install"
+system "bundle install"
 system "rake db:railscollab:install --trace"
