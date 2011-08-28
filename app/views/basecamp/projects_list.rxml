@@ -1,3 +1,0 @@
-xml.projects do
-  render :partial => 'basecamp/project', :collection => @active_projects, :locals => {:xml_instance => xml}
-end

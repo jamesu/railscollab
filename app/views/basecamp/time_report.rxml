@@ -1,3 +1,0 @@
-xml.tag!('time-entries') do
-	render :partial => 'basecamp/time_entry', :collection => @times, :locals => {:xml_instance => xml}
-end

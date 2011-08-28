@@ -1,3 +1,0 @@
-xml.companies do
-  render :partial => 'basecamp/company', :collection => @companies, :locals => {:xml_instance => xml}
-end

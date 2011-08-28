@@ -1,3 +1,0 @@
-xml.tag!('post-categories') do
-  render :partial => 'basecamp/post_category', :collection => @categories, :locals => {:xml_instance => xml}
-end

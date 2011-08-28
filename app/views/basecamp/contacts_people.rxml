@@ -1,3 +1,0 @@
-xml.people do
-  render :partial => 'basecamp/person', :collection => @people, :locals => {:xml_instance => xml}
-end

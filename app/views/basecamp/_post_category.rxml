@@ -1,8 +1,0 @@
-xml = xml_instance
-
-xml.tag!('post-category') do
-	xml.id post_category.id, :type => 'integer'
-	xml.name (h post_category.name)
-	xml.tag!('project-id', post_category.project_id, :type => 'integer')
-	xml.tag!('elements-count', post_category.project_messages.length, :type => 'integer')
-end

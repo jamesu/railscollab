@@ -1,1 +1,0 @@
-render :partial => 'basecamp/todo_item', :collection => [@task], :locals => {:xml_instance => xml}

@@ -1,3 +1,0 @@
-xml.posts do
-	render :partial => 'basecamp/post', :collection => @messages, :locals => {:xml_instance => xml, :is_abbreviated => true}
-end

@@ -1,1 +1,0 @@
-render :partial => 'basecamp/comment', :collection => [@comment], :locals => {:xml_instance => xml}

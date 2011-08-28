@@ -1,1 +1,0 @@
-render :partial => 'basecamp/time_entry', :collection => [@time], :locals => {:xml_instance => xml}
