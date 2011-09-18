@@ -37,12 +37,12 @@ class Milestone < ActiveRecord::Base
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
 
-  scope :public, where(:is_private => false)
-  scope :open, lambda { |include_private| Milestone.priv_scope(include_private) { where('milestones.completed_on IS NULL', :order => 'milestones.due_date ASC') } }
-  scope :late, lambda { |include_private| Milestone.priv_scope(include_private) { where(['due_date < ? AND completed_on IS NULL', Date.today]) } }
-  scope :todays, lambda { |include_private| Milestone.priv_scope(include_private) { where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1]) } }
-  scope :upcoming, lambda { |include_private| Milestone.priv_scope(include_private) { where(['completed_on IS NULL AND due_date >= ?', Date.today+1]) } }
-  scope :completed, lambda { |include_private| Milestone.priv_scope(include_private) { where('completed_on IS NOT NULL') } }
+  scope :is_public, where(:is_private => false)
+  scope :is_open, where('milestones.completed_on IS NULL').order('milestones.due_date ASC')
+  scope :late, where(['due_date < ? AND completed_on IS NULL', Date.today])
+  scope :todays, where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1])
+  scope :upcoming, where(['completed_on IS NULL AND due_date >= ?', Date.today+1])
+  scope :completed, where('completed_on IS NOT NULL')
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -61,7 +61,7 @@ class Milestone < ActiveRecord::Base
   end
 
   def process_create
-    Activity::new_log(self, self.created_by, :add, self.is_private)
+    Activity.new_log(self, self.created_by, :add, self.is_private)
   end
 
   def process_update_params
@@ -73,17 +73,17 @@ class Milestone < ActiveRecord::Base
     end
 
     if @update_completed.nil?
-      Activity::new_log(self, self.updated_by, :edit, self.is_private)
+      Activity.new_log(self, self.updated_by, :edit, self.is_private)
     else
       write_attribute('completed_on', @update_completed ? Time.now.utc : nil)
       self.completed_by = @update_completed_user
-      Activity::new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
+      Activity.new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
     end
   end
 
   def process_destroy
     Tag.clear_by_object(self)
-    Activity::new_log(self, self.updated_by, :delete, self.is_private)
+    Activity.new_log(self, self.updated_by, :delete, self.is_private)
   end
 
   def object_name
@@ -174,16 +174,6 @@ class Milestone < ActiveRecord::Base
   def set_completed(value, user=nil)
     @update_completed = value
     @update_completed_user = user
-  end
-
-  def self.priv_scope(include_private)
-    if include_private
-      yield
-    else
-      with_scope :find => { :conditions =>  ['is_private = ?', false] } do
-        yield
-      end
-    end
   end
 
   # Helpers

@@ -54,11 +54,11 @@ class ProjectFileRevision < ActiveRecord::Base
   end
 
   def process_update_params
-    Activity::new_log(self, self.updated_by, :edit, self.project_file.is_private, self.project_file.project)
+    Activity.new_log(self, self.updated_by, :edit, self.project_file.is_private, self.project_file.project)
   end
 
   def process_destroy
-    Activity::new_log(self, self.updated_by, :delete, self.project_file.is_private, self.project_file.project)
+    Activity.new_log(self, self.updated_by, :delete, self.project_file.is_private, self.project_file.project)
   end
 
   def project_id

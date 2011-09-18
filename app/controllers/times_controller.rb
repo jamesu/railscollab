@@ -73,7 +73,8 @@ class TimesController < ApplicationController
     authorize! :create_time, @active_project
 
     @time = @active_project.time_records.build
-    @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+    @open_task_lists = @active_project.task_lists.is_open
+    @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
     @task_filter = Proc.new {|task| task.is_completed? }
   end
   
@@ -97,7 +98,8 @@ class TimesController < ApplicationController
         
         format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
       else
-        @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists = @active_project.task_lists.is_open
+        @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @task_filter = Proc.new {|task| task.is_completed? }
         format.html { render :action => "new" }
         
@@ -109,7 +111,8 @@ class TimesController < ApplicationController
   def edit
     authorize! :edit, @time
 
-    @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+    @open_task_lists = @active_project.task_lists.is_open
+    @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
     @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
     @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
   end
@@ -129,7 +132,8 @@ class TimesController < ApplicationController
         
         format.xml  { head :ok }
       else
-        @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
+        @open_task_lists = @active_project.task_lists.is_open
+        @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
         @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
         format.html { render :action => "edit" }

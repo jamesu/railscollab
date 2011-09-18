@@ -22,7 +22,7 @@ class Activity < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :rel_object, :polymorphic => true
 
-  scope :public, where(:is_private => false)
+  scope :is_public, where(:is_private => false)
 
   before_create :process_params
 

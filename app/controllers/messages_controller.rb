@@ -38,8 +38,6 @@ class MessagesController < ApplicationController
       authorize! :show, @category
     end
     
-    include_private = @logged_user.member_of_owner?
-    
     # conditions
     msg_conditions = {}
     msg_conditions['category_id'] = @category.id unless @category.nil?

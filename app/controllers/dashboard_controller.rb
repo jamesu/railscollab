@@ -24,11 +24,9 @@ class DashboardController < ApplicationController
   def index
     when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
       if @active_projects.length > 0
-        include_private = @logged_user.member_of_owner?
-
         project_ids = @active_projects.collect{ |project| project.id }
 
-        activity_conditions = include_private ?
+        activity_conditions = @logged_user.member_of_owner? ?
           { :project_id => project_ids } :
           { :project_id => project_ids, :is_private => false }
 

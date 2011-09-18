@@ -63,11 +63,11 @@ class Project < ActiveRecord::Base
 	
 	def process_update_params
 	  if @update_completed.nil?
-		Activity::new_log(self, self.updated_by, :edit, true)
+		Activity.new_log(self, self.updated_by, :edit, true)
 	  else
 		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
 		self.completed_by = @update_completed_user
-		Activity::new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
+		Activity.new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
 	  end
 	end
 	

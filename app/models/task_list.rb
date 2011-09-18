@@ -30,9 +30,9 @@ class TaskList < ActiveRecord::Base
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
 
-  scope :public, where(:is_private => false)
-  scope :open, lambda { |include_private| TaskList.priv_scope(include_private) { where('task_lists.completed_on IS NULL') } }
-  scope :completed, lambda { |include_private| TaskList.priv_scope(include_private) { where('task_lists.completed_on IS NOT NULL') } }
+  scope :is_public, where(:is_private => false)
+  scope :is_open, where('task_lists.completed_on IS NULL')
+  scope :completed, where('task_lists.completed_on IS NOT NULL')
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -53,19 +53,19 @@ class TaskList < ActiveRecord::Base
   end
 
   def process_create
-    ApplicationLog.new_log(self, self.created_by, :add, self.is_private)
+    Activity.new_log(self, self.created_by, :add, self.is_private)
     update_tags
   end
 
   def process_update_params
     return unless @ensured_complete.nil?
 
-    ApplicationLog.new_log(self, self.updated_by, :edit, self.is_private)
+    Activity.new_log(self, self.updated_by, :edit, self.is_private)
   end
 
   def process_destroy
     Tag.clear_by_object(self)
-    ApplicationLog.new_log(self, self.updated_by, :delete, self.is_private)
+    Activity.new_log(self, self.updated_by, :delete, self.is_private)
   end
 
   def ensure_completed(completed_by)
@@ -78,12 +78,12 @@ class TaskList < ActiveRecord::Base
       if self.completed_on.nil?
         write_attribute('completed_on', Time.now.utc)
         self.completed_by = completed_by
-        ApplicationLog::new_log(self, completed_by, :close, self.is_private)
+        Activity.new_log(self, completed_by, :close, self.is_private)
       end
     else
       unless self.completed_on.nil?
         write_attribute('completed_on', nil)
-        ApplicationLog::new_log(self, completed_by, :open, self.is_private)
+        Activity.new_log(self, completed_by, :open, self.is_private)
       end
     end
   end
@@ -141,16 +141,6 @@ class TaskList < ActiveRecord::Base
     completed_count > 0 and completed_count == self.tasks.length
   end
 
-  def self.priv_scope(include_private)
-    if include_private
-      yield
-    else
-      with_scope :find => { :conditions =>  ['is_private = ?', false] } do
-        yield
-      end
-    end
-  end
-
   def self.select_list(project)
     TaskList.where(:project_id => project.id).select('id, name').collect do |tasklist|
       [tasklist.name, tasklist.id]
@@ -181,7 +171,7 @@ class TaskList < ActiveRecord::Base
   # Validation
 
   validates_presence_of :name
-  validates_each :project_milestone, :allow_nil => true do |record, attr, value|
+  validates_each :milestone, :allow_nil => true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 

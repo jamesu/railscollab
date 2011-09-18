@@ -35,9 +35,9 @@ class Message < ActiveRecord::Base
 
   has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
 
-  scope :public, where(:is_private => false)
+  scope :is_public, where(:is_private => false)
   
-  scope :important, lambda { |include_private| Message.priv_scope(include_private) { where(:is_important => true) } }
+  scope :important, where(:is_important => true)
 
   before_validation :process_params, :on => :create
   after_create  :process_create
@@ -110,16 +110,6 @@ class Message < ActiveRecord::Base
 
   def send_notification(user)
     Notifier.deliver_message(user, self)
-  end
-
-  def self.priv_scope(include_private)
-    if include_private
-      yield
-    else
-      with_scope :find => { :conditions =>  ['is_private = ?', false] } do
-        yield
-      end
-    end
   end
 
   # Accesibility

@@ -37,16 +37,15 @@ class ProjectsController < ApplicationController
   end
   
   def show
-    include_private = @logged_user.member_of_owner?
-
     respond_to do |format|
       format.html {
         when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
-          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.public)[0..(Rails.configuration.project_logs_per_page-1)]
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.is_public)[0..(Rails.configuration.project_logs_per_page-1)]
         end
 
         @time_now = Time.zone.now
-        @late_milestones = @project.milestones.late(include_private)
+        @late_milestones = @project.milestones.late
+        @late_milstones = @late_milestones.is_public unless @logged_user.member_of_owner?
         @upcoming_milestones = Milestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, (@time_now.utc + 14.days).to_date, [@project])
 
         @calendar_milestones = @upcoming_milestones.group_by do |obj| 
@@ -54,9 +53,11 @@ class ProjectsController < ApplicationController
           "#{date.month}-#{date.day}"
         end
 
-        @project_companies = @project.companies(include_private)
-        @important_messages = @project.messages.important(include_private)
-        @important_files = @project.project_files.important(include_private)
+        @project_companies = @project.companies
+        @important_messages = @project.messages.important
+        @important_messages = @important_messages.is_public unless @logged_user.member_of_owner?
+        @important_files = @project.project_files.important
+        @important_files = @important_files.is_public unless @logged_user.member_of_owner?
 
         @content_for_sidebar = 'overview_sidebar'
       }

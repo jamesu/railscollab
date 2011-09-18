@@ -31,7 +31,7 @@ class ProjectFile < ActiveRecord::Base
   has_many :comments, :as => 'rel_object', :dependent => :destroy
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   
-  scope :important, lambda { |include_private| ProjectFile.priv_scope(include_private) { where(:is_important => true) } }
+  scope :important, where(:is_important => true)
 
   before_validation :process_params, :on => :create
   after_create  :process_create
@@ -43,17 +43,17 @@ class ProjectFile < ActiveRecord::Base
   end
 
   def process_create
-    Activity::new_log(self, self.created_by, :add)
+    Activity.new_log(self, self.created_by, :add)
   end
 
   def process_update_params
-    Activity::new_log(self, self.updated_by, :edit)
+    Activity.new_log(self, self.updated_by, :edit)
   end
 
   def process_destroy
     AttachedFile.clear_files(self.id)
     Tag.clear_by_object(self)
-    Activity::new_log(self, self.updated_by, :delete)
+    Activity.new_log(self, self.updated_by, :delete)
   end
 
   def tags
@@ -109,16 +109,6 @@ class ProjectFile < ActiveRecord::Base
   def send_comment_notifications(comment)
   end
 
-  def self.priv_scope(include_private)
-    if include_private
-      yield
-    else
-      with_scope :find => { :conditions =>  ['is_private = ?', false] } do
-        yield
-      end
-    end
-  end
-
   def add_revision(file, new_revision, user, comment)
     file_revision = ProjectFileRevision.new(:revision_number => new_revision)
     file_revision.project_file = self
@@ -127,7 +117,7 @@ class ProjectFile < ActiveRecord::Base
     file_revision.comment = comment
     file_revision.save!
     
-    Activity::new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
+    Activity.new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
   end
 
   def update_revision(file, old_revision, user, comment)

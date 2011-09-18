@@ -55,7 +55,8 @@ class FilesController < ApplicationController
         result_set.total_pages.times {|page| @pagination << page+1}
         
         # Important files and folders (html only)
-        @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
+        @important_files = @active_project.project_files.important
+        @important_files = @important_files.is_public unless @logged_user.member_of_owner?
         @folders = @active_project.folders
       }
       format.xml  {
@@ -103,7 +104,8 @@ class FilesController < ApplicationController
         @folders = @active_project.folders
         
         # Important files (html only)
-        @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
+        @important_files = @active_project.project_files.important
+        @important_files = @important_files.is_public unless @logged_user.member_of_owner?
       }
       format.xml  { 
         render :xml => @file.to_xml(:include => [:project_file_revisions])

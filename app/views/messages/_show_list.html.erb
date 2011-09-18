@@ -13,7 +13,9 @@
         <span><%= t('tags') %>:</span> <%= tag_list message %>
       </div>
 
-      <% fc = message.attached_files(@logged_user.member_of_owner?).length %>
+      <% fc = message.attached_files
+         fc = fc.is_public unless @logged_user.member_of_owner?
+         fc = fc.length %>
       <% if fc > 0 %>
       <div class="objectFilesTitle">
         <span><%= t('attached_files') %>:</span> <%= fc %>

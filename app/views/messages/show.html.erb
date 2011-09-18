@@ -5,8 +5,8 @@
     <div class="messageAuthor"><span><%= t('from') %>:</span> <%= link_to( h(@message.created_by.display_name), user_path(:id => @message.created_by.id)) %></div>
 <% end %>
     <div class="messageDate"><span><%= t('log_date') %>:</span> <%= format_usertime(@message.created_on, :message_created_format) %></div>
-<% unless @message.project_milestone.nil? %>    
-    <div class="messageMilestone"><span><%= t('milestone') %>:</span> <%= link_to h(@message.project_milestone.object_name), @message.project_milestone.object_url %></div>
+<% unless @message.milestone.nil? %>
+    <div class="messageMilestone"><span><%= t('milestone') %>:</span> <%= link_to h(@message.milestone.object_name), @message.milestone.object_url %></div>
 <% end %>
     <div class="messageTags"><span><%= t('tags') %>:</span> <%= @message.tags %></div>
   </div>
@@ -20,7 +20,7 @@
 
 <!-- Comments -->
 <div id="messageComments">
-<%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @message.comments : @message.comments.public} %>
+<%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @message.comments : @message.comments.is_public} %>
 
 <% if can? :comment, @message %>
 <%= render :partial => 'comments/add_form', :locals => {:commented_object => @message} %>

@@ -148,8 +148,9 @@ class FeedController < ApplicationController
       return
   	end
 
-  	@milestones = @project.milestones.open(@logged_user.member_of_owner?)
-  	@milestones_url = milestones_url(@project)
+    @milestones = @project.milestones.is_open
+    @milestones = @milestones.is_public unless @logged_user.member_of_owner? 
+    @milestones_url = milestones_url(@project)
 
   	respond_to do |format|
       format.html do
@@ -189,7 +190,7 @@ class FeedController < ApplicationController
         return
       end
 
-      @times = @logged_user.member_of_owner? ? @project.time_records : @project.time_records.public
+      @times = @logged_user.member_of_owner? ? @project.time_records : @project.time_records.is_public
     else
       @times = TimeRecord.all_by_user(@logged_user).where('done_date IS NOT NULL')
     end

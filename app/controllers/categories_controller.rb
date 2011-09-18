@@ -165,8 +165,6 @@ class CategoriesController < ApplicationController
     
     authorize! :show, @category
     
-    include_private = @logged_user.member_of_owner?
-    
     # conditions
     msg_conditions = {}
     msg_conditions['is_private'] = false unless @logged_user.member_of_owner?

@@ -29,7 +29,7 @@
 
 <!-- Comments -->
 <div id="taskComments">
-<%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @task.comments : @task.comments.public} %>
+<%= render :partial => 'comments/object_comments', :locals => {:comments => @logged_user.member_of_owner? ? @task.comments : @task.comments.is_public} %>
 
 <% if can? :comment, @task %>
 <%= render :partial => 'comments/add_form', :locals => {:commented_object => @task} %>

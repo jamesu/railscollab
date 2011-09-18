@@ -28,12 +28,12 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.xml
   def index
-    include_private = @logged_user.member_of_owner?
-
     respond_to do |format|
       format.html {
-        @open_task_lists = @active_project.task_lists.open(include_private)
-        @completed_task_lists = @active_project.task_lists.completed(include_private)
+        @open_task_lists = @active_project.task_lists.is_open
+        @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
+        @completed_task_lists = @active_project.task_lists.completed
+        @completed_task_lists = @completed_task_lists.is_public unless @logged_user.member_of_owner?
         @content_for_sidebar = 'task_lists/index_sidebar'
       }
       format.xml  {
@@ -150,7 +150,6 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default(task_lists_url) }
-      format.js
       format.xml  { head :ok }
     end
   end

@@ -42,7 +42,7 @@ class CommentsController < ApplicationController
     # Check permissions
     authorize! :show, @commented_object
     
-    @comments = @logged_user.member_of_owner? ? @commented_object.comments : @commented_object.comments.public
+    @comments = @logged_user.member_of_owner? ? @commented_object.comments : @commented_object.comments.is_public
     
     respond_to do |format|
       format.html {}

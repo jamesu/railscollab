@@ -36,7 +36,7 @@ class TimeRecord < ActiveRecord::Base
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   
   scope :running, where('start_date IS NOT NULL AND done_date IS NULL')
-  scope :public, where(:is_private => false)
+  scope :is_public, where(:is_private => false)
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -70,7 +70,7 @@ class TimeRecord < ActiveRecord::Base
   end
   
   def process_create
-    Activity::new_log(self, self.created_by, :add, self.is_private)
+    Activity.new_log(self, self.created_by, :add, self.is_private)
   end
   
   def process_update_params
@@ -81,7 +81,7 @@ class TimeRecord < ActiveRecord::Base
       write_attribute("assigned_to_company_id", 0)
     end
     
-    Activity::new_log(self, self.updated_by, :edit, self.is_private)
+    Activity.new_log(self, self.updated_by, :edit, self.is_private)
   end
   
   def process_destroy
@@ -192,16 +192,6 @@ class TimeRecord < ActiveRecord::Base
   
   def last_edited_by_owner?
    return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
-  end
-  
-  def self.priv_scope(include_private)
-    if include_private
-      yield
-    else
-      with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
-        yield 
-      end
-    end
   end
   
   def self.find_by_task_lists(task_lists, time_conds)

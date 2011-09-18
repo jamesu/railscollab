@@ -28,15 +28,14 @@ class MilestonesController < ApplicationController
   after_filter  :user_track,       :only   => [:index, :show]
 
   def index
-    include_private = @logged_user.member_of_owner?
     @content_for_sidebar = 'index_sidebar'
     
     respond_to do |format|
       format.html {
-        index_lists(include_private, false)
+        index_lists(@logged_user.member_of_owner?, false)
       }
       format.xml  {
-        @milestones = include_private ? @active_project.milestones : @active_project.milestones.public
+        @milestones = @logged_user.member_of_owner? ? @active_project.milestones : @active_project.milestones.is_public
         render :xml => @milestones.to_xml(:root => 'milestones')
       }
     end
@@ -163,9 +162,15 @@ class MilestonesController < ApplicationController
   def index_lists(include_private, calendar_only)
     @time_now = Time.zone.now
 
-    @late_milestones = @active_project.milestones.late(include_private) unless calendar_only
+    unless calendar_only
+      @late_milestones = @active_project.milestones.late
+      @late_milestones = @late_milestones.is_public unless include_private
+    end
     @upcoming_milestones = Milestone.all_assigned_to(@logged_user, nil, @time_now.utc.to_date, nil, [@active_project])
-    @completed_milestones = @active_project.milestones.completed(include_private) unless calendar_only
+    unless calendar_only
+      @completed_milestones = @active_project.milestones.completed
+      @completed_milestones = @completed_milestones.is_public unless include_private
+    end
 
     end_date = (@time_now + 14.days).to_date
     @calendar_milestones = @upcoming_milestones.select{|m| m.due_date < end_date}.group_by do |obj|

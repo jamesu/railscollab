@@ -31,7 +31,7 @@ class Comment < ActiveRecord::Base
 	before_update :process_update_params
 	before_destroy :process_destroy
 	
-	scope :public, where(:is_private => false)
+	scope :is_public, where(:is_private => false)
 	 
 	def process_params
 	  self.is_anonymous = self.created_by.is_anonymous?
@@ -55,18 +55,8 @@ class Comment < ActiveRecord::Base
 	def last_edited_by_owner?
 	 return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
 	end
-	
-	def self.priv_scope(include_private)
-	  if include_private
-	    yield
-	  else
-	    with_scope :find => { :conditions =>  ['is_private = ?', false] } do 
-	      yield 
-	    end
-	  end
-	end
     
-    # Helpers
+  # Helpers
 
 	def object_name
 		self.text.excerpt(50)

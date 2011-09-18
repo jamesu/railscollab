@@ -164,7 +164,8 @@ class FoldersController < ApplicationController
         result_set.total_pages.times {|page| @pagination << page+1}
         
         # Important files and folders (html only)
-        @important_files = @active_project.project_files.important(@logged_user.member_of_owner?)
+        @important_files = @active_project.project_files.important
+        @important_files = @important_files.is_public unless @logged_user.member_of_owner?
         @folders = @active_project.folders
         
         render :template => 'files/index'

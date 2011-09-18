@@ -49,13 +49,13 @@ class Task < ActiveRecord::Base
   def process_create
     self.task_list.ensure_completed(self.created_by)
     self.task_list.save!
-    ApplicationLog.new_log(self, self.created_by, :add, self.task_list.is_private, self.task_list.project)
+    Activity.new_log(self, self.created_by, :add, self.task_list.is_private, self.task_list.project)
   end
 
   def process_update_params
     if @update_completed.nil?
       if @update_is_minor.nil?
-        ApplicationLog.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
+        Activity.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
       end
     else
       write_attribute('completed_on', @update_completed ? Time.now.utc : nil)
@@ -63,13 +63,13 @@ class Task < ActiveRecord::Base
       
       # If closed, we log before the task list 
       if @update_completed
-        ApplicationLog::new_log(self, @update_completed_user, :close, self.task_list.is_private, self.task_list.project)
+        Activity.new_log(self, @update_completed_user, :close, self.task_list.is_private, self.task_list.project)
       end
     end
   end
 
   def process_destroy
-    ApplicationLog.new_log(self, self.updated_by, :delete, true, self.task_list.project)
+    Activity.new_log(self, self.updated_by, :delete, true, self.task_list.project)
     @update_completed = true
     @update_completed_user = self.updated_by
   end
@@ -83,7 +83,7 @@ class Task < ActiveRecord::Base
     
     # If opened, we log after the task list
     if !@update_completed
-     ApplicationLog::new_log(self, @update_completed_user, :open, self.task_list.is_private, self.task_list.project)
+     Activity.new_log(self, @update_completed_user, :open, self.task_list.is_private, self.task_list.project)
     end
   end
 

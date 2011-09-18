@@ -173,7 +173,7 @@ xml.elements.each('account/projects/project') do |bproject|
 		puts "  Adding folder '#{folder.name}'"
 		folder.save!
 		MAP_IDS[:folders][attach_category.elements['id'].text.to_i] = folder.id
-		Activity::new_log(folder, MAP_IDS[:owner], :add)
+		Activity.new_log(folder, MAP_IDS[:owner], :add)
 	end
 	
 	# Message categories...
@@ -184,7 +184,7 @@ xml.elements.each('account/projects/project') do |bproject|
 		puts "  Adding category '#{category.name}'"
 		category.save!
 		MAP_IDS[:categories][post_category.elements['id'].text.to_i] = category.id
-		Activity::new_log(category, MAP_IDS[:owner], :add)
+		Activity.new_log(category, MAP_IDS[:owner], :add)
 	end
 	
 	# Milestones...

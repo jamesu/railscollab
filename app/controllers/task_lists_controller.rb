@@ -55,12 +55,10 @@ class TaskListsController < ApplicationController
     end
     
     authorize! :show, @task_list
-    
-    include_private = @logged_user.member_of_owner?
 
     respond_to do |format|
       format.html {
-        index_lists(include_private)
+        index_lists(@logged_user.member_of_owner?)
       }
       
       format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
@@ -75,8 +73,8 @@ class TaskListsController < ApplicationController
     @task_list = @active_project.task_lists.build()
     
     begin
-      @task_list.project_milestone = @active_project.milestones.find(params[:milestone_id])
-      @task_list.is_private = @task_list.project_milestone.is_private
+      @task_list.milestone = @active_project.milestones.find(params[:milestone_id])
+      @task_list.is_private = @task_list.milestone.is_private
     rescue ActiveRecord::RecordNotFound
       @task_list.milestone_id = 0
     end
@@ -190,7 +188,7 @@ class TaskListsController < ApplicationController
     
     authorize! :edit, @task_list
     
-    order = params[:tasks].collect { |id| id.to_i }
+    order = (params[:tasks]||[]).collect { |id| id.to_i }
     
     @task_list.tasks.each do |item|
         idx = order.index(item.id)
@@ -208,8 +206,10 @@ class TaskListsController < ApplicationController
 protected
 
   def index_lists(include_private)
-    @open_task_lists = @active_project.task_lists.open(include_private)
-    @completed_task_lists = @active_project.task_lists.completed(include_private)
+    @open_task_lists = @active_project.task_lists.is_open
+    @open_task_lists = @open_task_lists.is_public unless include_private
+    @completed_task_lists = @active_project.task_lists.completed
+    @completed_task_lists = @completed_task_lists.is_public unless include_private
     @content_for_sidebar = 'index_sidebar'
   end
 
