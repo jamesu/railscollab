@@ -15,7 +15,7 @@ class WikiPage < ActiveRecord::Base
   # self.friendly_id_options[:scope] = :project
   self.friendly_id_options[:scope] = :scope_value
   self.non_versioned_columns << :project_id
-  scope :main, lambda{ |project| {:conditions => {:main => true, :project_id => project.id}} }
+  scope :main, lambda{ |project| where(:main => true, :project_id => project.id) }
 
   after_create  :process_create
   before_update :process_update_params

@@ -30,6 +30,8 @@ class Comment < ActiveRecord::Base
 	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
+	
+	scope :public, where(:is_private => false)
 	 
 	def process_params
 	  self.is_anonymous = self.created_by.is_anonymous?

@@ -59,7 +59,7 @@ class Category < ActiveRecord::Base
   # Helpers
 
   def self.select_list(project)
-    categories = Category.all(:conditions => ['project_id = ?', project.id], :select => 'id, name')
+    categories = Category.where(:project_id => project.id).select('id, name')
     categories.collect{ |category| [category.name, category.id] }
   end
 

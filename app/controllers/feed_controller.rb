@@ -191,7 +191,7 @@ class FeedController < ApplicationController
 
       @times = @logged_user.member_of_owner? ? @project.time_records : @project.time_records.public
     else
-      @times = TimeRecord.all_by_user(@logged_user, :conditions => 'done_date IS NOT NULL')
+      @times = TimeRecord.all_by_user(@logged_user).where('done_date IS NOT NULL')
     end
 
     respond_to do |format|

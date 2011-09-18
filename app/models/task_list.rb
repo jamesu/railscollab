@@ -30,6 +30,10 @@ class TaskList < ActiveRecord::Base
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
 
+  scope :public, where(:is_private => false)
+  scope :open, lambda { |include_private| TaskList.priv_scope(include_private) { where('task_lists.completed_on IS NULL') } }
+  scope :completed, lambda { |include_private| TaskList.priv_scope(include_private) { where('task_lists.completed_on IS NOT NULL') } }
+
   before_validation :process_params, :on => :create
   after_create   :process_create
   before_update  :process_update_params
@@ -148,7 +152,7 @@ class TaskList < ActiveRecord::Base
   end
 
   def self.select_list(project)
-    TaskList.all(:conditions => ['project_id = ?', project.id], :select => 'id, name').collect do |tasklist|
+    TaskList.where(:project_id => project.id).select('id, name').collect do |tasklist|
       [tasklist.name, tasklist.id]
     end
   end

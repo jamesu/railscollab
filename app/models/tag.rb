@@ -57,7 +57,7 @@ class Tag < ActiveRecord::Base
       ['project_id = ? AND tag = ? AND is_private = ?', project.id, tag_name, false] :
       ['project_id = ? AND tag = ?', project.id, tag_name]
 
-    Tag.all(:conditions => tag_conditions).collect{ |tag| tag.rel_object }
+    Tag.where(tag_conditions).collect{ |tag| tag.rel_object }
   end
 
   def self.clear_by_object(object)
@@ -77,7 +77,7 @@ class Tag < ActiveRecord::Base
   end
 
   def self.list_by_object(object)
-    tags = Tag.all(:conditions => ['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
+    tags = Tag.where(['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
 
     tags.collect{ |tag| tag.tag }
   end
@@ -87,7 +87,7 @@ class Tag < ActiveRecord::Base
       ['project_id = ? AND is_private = ?', project.id, false] :
       ['project_id = ?', project.id]
 
-    tags = Tag.all(:group => 'tag', :conditions => tag_conditions, :order => 'tag', :select => 'tag')
+    tags = Tag.where(tag_conditions).group('tag').order('tag ASC').select('tag')
 
     to_text ? tags.collect{ |tag| tag.tag } : tags
   end
@@ -97,7 +97,7 @@ class Tag < ActiveRecord::Base
       ['project_id = ? AND is_private = ? AND tag = ?', project.id, false, tag_name] :
       ['project_id = ? AND tag = ?', project.id, tag_name]
 
-    tags = Tag.all(:conditions => tag_conditions, :select => 'id')
+    tags = Tag.where(tag_conditions).select('id')
 
     tags.length
   end

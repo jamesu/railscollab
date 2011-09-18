@@ -66,6 +66,6 @@ class Person < ActiveRecord::Base
   end
 
   def self.check_permission(user, project, permission)
-    return Person.first(:conditions => ['project_id = ? AND user_id = ? AND ? = 1', project.id, user.id, permission], :select => [:user_id, :username])
+    Person.where(['project_id = ? AND user_id = ? AND ? = 1', project.id, user.id, permission]).select([:user_id, :username])
   end
 end

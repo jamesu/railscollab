@@ -159,7 +159,7 @@ class MessagesController < ApplicationController
           real_id = user_id.to_i
           next if real_id == @logged_user.id # will be subscribed below
 
-          number_of_users = Person.count(:conditions => ['user_id = ? AND project_id = ?', real_id, @active_project.id])
+          number_of_users = Person.count(['user_id = ? AND project_id = ?', real_id, @active_project.id])
           next if number_of_users == 0
 
           real_id

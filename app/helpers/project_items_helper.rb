@@ -32,7 +32,7 @@ module ProjectItemsHelper
     conds = {'project_id' => project.id, 'is_visible' => true}
     conds['is_private'] = false unless @logged_user.member_of_owner?
 
-    [['-- None --', 0]] + ProjectFile.all(:conditions => conds, :select => 'id, filename').collect do |file|
+    [['-- None --', 0]] + ProjectFile.where(conds).select('id, filename').collect do |file|
       if file_ids.include?(file.id)
         nil
       else
@@ -45,7 +45,7 @@ module ProjectItemsHelper
     conds = {'project_id' => project.id}
     conds['is_private'] = false unless @logged_user.member_of_owner?
     
-    [['-- None --', 0]] + Milestone.all(:conditions => conds).collect do |milestone|
+    [['-- None --', 0]] + Milestone.where(conds).select('id, name').collect do |milestone|
       [milestone.name, milestone.id]
     end
   end
@@ -54,7 +54,7 @@ module ProjectItemsHelper
     conds = {'project_id' => project.id}
     conds['is_private'] = false unless @logged_user.member_of_owner?
     
-    Message.all(:conditions => conds, :select => 'id, title').collect do |message|
+    Message.where(conds).select('id, title').collect do |message|
       [message.title, message.id]
     end
   end

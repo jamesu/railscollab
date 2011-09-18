@@ -61,7 +61,7 @@ class Company < ActiveRecord::Base
 
   def self.owner(reload=false)
     @@cached_owner = nil if reload
-    @@cached_owner ||= Company.first(:conditions => 'client_of_id IS NULL')
+    @@cached_owner ||= Company.where('client_of_id IS NULL').first
   end
 
   def is_owner?
@@ -91,9 +91,9 @@ class Company < ActiveRecord::Base
   end
 
   def users_on_project(project)
-    proj_users = Person.all(:conditions => ['project_id = ?', project.id], :select => 'user_id')
+    proj_users = Person.where(:project_id => project).select('user_id')
     query_users = proj_users.collect{ |user| user.user_id }
-    User.all(:conditions => { :id => query_users, :company_id => self.id })
+    User.where(:id => query_users, :company_id => id)
   end
 
   def object_name

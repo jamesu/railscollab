@@ -28,107 +28,21 @@ class Project < ActiveRecord::Base
 	has_many :people
 	has_many :users, :through => :people
 	
-	has_many :time_records, :dependent => :destroy do
-		def public(reload=false)
-			# Grab public logs only
-			@public_project_times = nil if reload
-			@public_project_times ||= where(['is_private = ?', false])
-		end
-  end
+  has_many :time_records, :dependent => :destroy
 	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
 	
-	has_many :milestones, :dependent => :destroy do
-		def public(reload=false)
-			# Grab public logs only
-			@public_project_milestones = nil if reload
-			@public_project_milestones ||= where(['is_private = ?', false])
-		end
+	has_many :milestones, :dependent => :destroy
 	
-		def open(include_private=true, reload=false)
-			# Grab open milestones only
-			Milestone.priv_scope(include_private) do
-			  where('milestones.completed_on IS NULL', :order => 'milestones.due_date ASC')
-			end
-		end
-		
-		def late(include_private=true, reload=false)
-			Milestone.priv_scope(include_private) do
-			  where(['due_date < ? AND completed_on IS NULL', Date.today])
-			end
-		end
-		
-		def todays(include_private=true, reload=false)
-			Milestone.priv_scope(include_private) do
-			  where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1])
-			end
-		end
-		
-		def upcoming(include_private=true, reload=false)
-			Milestone.priv_scope(include_private) do
-			  where(['completed_on IS NULL AND due_date >= ?', Date.today+1])
-			end
-		end
-		
-		def completed(include_private=true, reload=false)
-			Milestone.priv_scope(include_private) do 
-			  where('completed_on IS NOT NULL')
-			end
-		end
-	end
-	
-	has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy do
-		def public(reload=false)
-			# Grab public logs only
-			@public_project_task_lists = nil if reload
-			@public_project_task_lists ||= where(['is_private = ?', false])
-		end
-		
-		def open(include_private = true, reload=false)
-			TaskList.priv_scope(include_private) do
-			  # Grab open task lists only
-			  where('task_lists.completed_on IS NULL')
-			end
-		end
-		
-		def completed(include_private = true, reload=false)
-			TaskList.priv_scope(include_private) do
-			  # Grab completed task lists only
-			  where('task_lists.completed_on IS NOT NULL')
-			end
-		end
-	end
+	has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy
 	
 	has_many :tasks, :through => :project_task_lists
 	
 	has_many :folders, :dependent => :destroy
-	has_many :project_files, :dependent => :destroy do
-		def important(include_private = true, reload=false)
-			ProjectFile.priv_scope(include_private) do
-			  where(['is_important = ?', true])
-			end
-		end
-	end
-  has_many :messages, :order => 'created_on DESC', :dependent => :destroy do
-    def important(include_private = true, reload=false)
-      Message.priv_scope(include_private) do
-        where(['is_important = ?', true])
-      end
-    end
-    
-    def public(conditions={}, reload=false)
-      @public_project_messages = nil if reload
-      @public_project_messages ||= where(['is_private = ?', false])
-    end
-  end
+  has_many :project_files, :dependent => :destroy
+  has_many :messages, :order => 'created_on DESC', :dependent => :destroy
 	has_many :categories, :dependent => :destroy
 	
-	has_many :activities, :order => 'created_on DESC, id DESC', :dependent => :destroy do
-		def public(reload=false)
-			# Grab public logs only
-			@public_application_logs = nil if reload
-			@public_application_logs ||= where(['is_private = ?', false])
-		end
-	end
+  has_many :activities, :order => 'created_on DESC, id DESC', :dependent => :destroy
 	
   has_many :wiki_pages, :dependent => :destroy
 	

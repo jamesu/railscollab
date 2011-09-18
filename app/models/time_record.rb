@@ -35,7 +35,8 @@ class TimeRecord < ActiveRecord::Base
   
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   
-  scope :running, :conditions => 'start_date IS NOT NULL AND done_date IS NULL'
+  scope :running, where('start_date IS NOT NULL AND done_date IS NULL')
+  scope :public, where(:is_private => false)
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -252,21 +253,12 @@ class TimeRecord < ActiveRecord::Base
   end
   
   def self.all_by_user(user)
-    projects = user.active_projects
+    project_ids = user.active_project_ids
     
-    project_ids = projects.collect do |p|
-      p.id
-    end.join ','
+    time_conditions = {:project_id => project_ids}
+    time_conditions[:is_private] = false if !user.member_of_owner?
     
-    if project_ids.length == 0
-      return []
-    end
-    
-    time_conditions = user.member_of_owner? ?
-                     ["project_id IN (#{project_ids})"] :
-                     ["project_id IN (#{project_ids}) AND is_private = ?", false]
-    
-    return where(:conditions => time_conditions)
+    return where(time_conditions)
   end
   
   # Accesibility

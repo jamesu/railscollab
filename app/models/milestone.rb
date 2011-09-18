@@ -31,23 +31,18 @@ class Milestone < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify do
-    def public(reload=false)
-      # Grab public comments only
-      @public_task_lists = nil if reload
-      @public_task_lists ||= all(:conditions => ['is_private = ?', false])
-    end
-  end
+  has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify
 
-  has_many :messages, :dependent => :nullify do
-    def public(reload=false)
-      # Grab public comments only
-      @public_messages = nil if reload
-      @public_messages ||= all(:conditions => ['is_private = ?', false])
-    end
-  end
+  has_many :messages, :dependent => :nullify
 
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
+
+  scope :public, where(:is_private => false)
+  scope :open, lambda { |include_private| Milestone.priv_scope(include_private) { where('milestones.completed_on IS NULL', :order => 'milestones.due_date ASC') } }
+  scope :late, lambda { |include_private| Milestone.priv_scope(include_private) { where(['due_date < ? AND completed_on IS NULL', Date.today]) } }
+  scope :todays, lambda { |include_private| Milestone.priv_scope(include_private) { where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1]) } }
+  scope :upcoming, lambda { |include_private| Milestone.priv_scope(include_private) { where(['completed_on IS NULL AND due_date >= ?', Date.today+1]) } }
+  scope :completed, lambda { |include_private| Milestone.priv_scope(include_private) { where('completed_on IS NOT NULL') } }
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -217,7 +212,14 @@ class Milestone < ActiveRecord::Base
     msg_joins = nil
     if exclude_inactive
       msg_conditions['projects.completed_on'] = nil
-      msg_joins = 'INNER JOIN projects ON projects.id = project_milestones.project_id'
+      msg_joins = [:project]
+    end
+    
+    # Limit by assignee
+    if assignee.class == User
+      msg_conditions['assigned_to_user_id'] = assignee.id
+    elsif assignee.class == Company
+      msg_conditions['assigned_to_company_id'] = assignee.id
     end
 
     # Restrict by time
@@ -234,13 +236,6 @@ class Milestone < ActiveRecord::Base
         time_conditions[0] += ' AND due_date <= ?'
         time_conditions << end_time
       end
-    end
-
-    # Limit by assignee
-    if assignee.class == User
-      msg_conditions['assigned_to_user_id'] = assignee.id
-    elsif assignee.class == Company
-      msg_conditions['assigned_to_company_id'] = assignee.id
     end
 
     where(time_conditions).where(msg_conditions).order('due_date ASC').joins(msg_joins)

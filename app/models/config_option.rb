@@ -21,7 +21,7 @@ class ConfigOption < ActiveRecord::Base
   #belongs_to :config_category
 
   def category
-    @config_category ||= ConfigCategory.first(:conditions => ['name = ?', self.category_name])
+    @config_category ||= ConfigCategory.where(:name => category_name).first
   end
 
   def display_name

@@ -15,7 +15,7 @@ class PasswordsController < ApplicationController
       return
     end
 
-    user = User.first(:conditions => ['email = ?', @your_email])
+    user = User.where(:email => @your_email).first
     if user.nil?
       error_status(false, :invalid_email_not_in_use)
       render :action => 'new'

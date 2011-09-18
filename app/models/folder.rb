@@ -59,7 +59,7 @@ class Folder < ActiveRecord::Base
   # Helpers
 
   def self.select_list(project)
-    [['None', 0]] + Folder.all(:conditions => ['project_id = ?', project.id], :select => 'id, name').collect do |folder|
+    [['None', 0]] + Folder.where(:project_id => project.id).select('id, name').collect do |folder|
       [folder.name, folder.id]
     end
   end

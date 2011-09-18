@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
       salt = Digest::SHA1.hexdigest(sprintf("%s%08x%05x%.8f", rand(32767), sec, usec, rval))[roffs..roffs+12]
       token = Digest::SHA1.hexdigest(salt + value)
 
-      break if User.first(:conditions => ['token = ?', token]).nil?
+      break if User.where({:token => token}).first.nil?
     end
 
     self.salt = salt
@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
   end
 
   def member_of(project)
-    return Person.all(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]).length > 0
+    Person.where(:user_id => id, :project_id => project.id).length > 0
   end
 
   def has_all_permissions(project, reload=false)
@@ -290,7 +290,7 @@ class User < ActiveRecord::Base
 
   def self.get_online(active_in=15)
     datetime = Time.now.utc - (active_in.minutes)
-    User.all(:conditions => ['last_activity > ?', datetime], :select => 'id, company_id, username, display_name')
+    User.where(['last_activity > ?', datetime]).select('id, company_id, username, display_name')
   end
 
   def self.select_list

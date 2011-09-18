@@ -28,14 +28,10 @@ class ProjectFile < ActiveRecord::Base
 
   has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
   has_many :attached_files, :foreign_key => 'file_id'
-  has_many :comments, :as => 'rel_object', :dependent => :destroy do
-    def public(reload=false)
-      # Grab public comments only
-      @public_comments = nil if reload
-      @public_comments ||= all(:conditions => ['is_private = ?', false])
-    end
-  end
+  has_many :comments, :as => 'rel_object', :dependent => :destroy
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
+  
+  scope :important, lambda { |include_private| ProjectFile.priv_scope(include_private) { where(:is_important => true) } }
 
   before_validation :process_params, :on => :create
   after_create  :process_create

@@ -131,7 +131,7 @@ class ProjectsController < ApplicationController
       @project.companies.clear
       @project.companies << Company.owner
       if params[:project_company]
-        valid_companies = Company.all(:conditions => { :id => params[:project_company] }, :select => 'id')
+        valid_companies = Company.where(:id => params[:project_company]).select('id')
         valid_companies.each{ |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
       end
 
@@ -168,7 +168,7 @@ class ProjectsController < ApplicationController
 
       # Create new Person entries for new users
 
-      users = User.all :conditions => {:id => valid_user_ids}, :include => :company
+      users = User.where(:id => valid_user_ids).includes(:company)
       users.each do |user|
         next unless valid_companies.include? user.company
         person = @project.people.create(:user => user)

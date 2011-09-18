@@ -27,7 +27,7 @@ def setup
   end
 
   # Ensure owner user exists
-  unless User.first(:conditions => ['users.is_admin = ? AND users.company_id = ?', true, owner_company.id])
+  unless User.where(['users.is_admin = ? AND users.company_id = ?', true, owner_company.id]).first
   	puts 'Creating owner user...'
   	initial_user = User.new(:display_name => OPTIONS[:initial_user_displayname], :email => OPTIONS[:initial_user_email])
   	initial_user.username = OPTIONS[:initial_user_name]
@@ -40,7 +40,7 @@ def setup
   	unless initial_user.save
   		puts 'User already exists, attempting to reset...'
   		# Try resetting the password
-  		initial_user = User.first(:conditions => ['username = ?', OPTIONS[:initial_user_name]])
+  		initial_user = User.where(:username => OPTIONS[:initial_user_name]).first
   		if initial_user.nil?
   			puts "\nCouldn't create or reset the owner user!\n"
   			return
@@ -103,7 +103,7 @@ def setup
 
   # Set site_url if available
   unless OPTIONS[:initial_site_url].nil?
-      opt = ConfigOption.first(:conditions => ['name = ?', 'site_url'])
+      opt = ConfigOption.where(:name => 'site_url').first
       opt.value = OPTIONS[:initial_site_url]
       opt.save
   end

@@ -193,7 +193,7 @@ private
   def obtain_folder
     if params[:folder_name]
       begin
-        @folder = @active_project.folders.find(:first, :conditions => ['name = ?', params[:folder_name]])
+        @folder = @active_project.folders.where(:name => params[:folder_name]).first!
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
         redirect_back_or_default files_path

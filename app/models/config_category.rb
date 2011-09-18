@@ -29,6 +29,6 @@ class ConfigCategory < ActiveRecord::Base
   end
 
   def options
-    @config_options ||= ConfigOption.all(:conditions => ['category_name = ?', self.name], :order => 'config_options.option_order ASC')
+    @config_options ||= ConfigOption.where(:category_name => self.name).order('config_options.option_order ASC')
   end
 end

@@ -22,6 +22,8 @@ class Activity < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :rel_object, :polymorphic => true
 
+  scope :public, where(:is_private => false)
+
   before_create :process_params
 
   @@action_lookup = {:add => 0, :upload => 1, :open => 2, :close => 3, :edit => 4, :delete => 5}
@@ -95,20 +97,16 @@ class Activity < ActiveRecord::Base
   end
 
   def self.logs_for(project, include_private, include_silent, limit=50)
-  	if project.class == Array
-      project_ids = project.collect{ |p| p.id }.join(',')
+    conditions = if project.class == Array
+      {:project_id => project}
+    else
+      {:project_id => project.id}
+    end
 
-      return [] if project_ids.empty?
+    private_conditions = ''
+    private_conditions += 'AND is_private = 0' unless include_private
+    private_conditions += 'AND is_silent = 0'  unless include_silent
 
-      conditions = "project_id IN (#{project_ids})"
-  	else
-      conditions = "project_id = #{project.id}"
-  	end
-
-  	private_conditions = ''
-  	private_conditions += 'AND is_private = 0' unless include_private
-  	private_conditions += 'AND is_silent = 0'  unless include_silent
-
-  	Activity.all(:conditions => "#{conditions} #{private_conditions}", :order => 'created_on DESC', :limit => limit)
+    Activity.where(conditions).where(private_conditions).order('created_on DESC').limit(limit)
   end
 end

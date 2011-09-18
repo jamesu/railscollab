@@ -27,19 +27,17 @@ class Message < ActiveRecord::Base
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
 
-  has_many :comments, :as => 'rel_object', :order => 'created_on ASC', :dependent => :destroy do
-    def public(reload=false)
-      # Grab public comments only
-      @public_comments = nil if reload
-      @public_comments ||= all(:conditions => ['is_private = ?', false])
-    end
-  end
+  has_many :comments, :as => 'rel_object', :order => 'created_on ASC', :dependent => :destroy
   #has_many :tags, :as => 'rel_object', :dependent => :destroy
   has_many :attached_file, :as => 'rel_object'
 
   has_many :project_file, :through => :attached_file
 
   has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
+
+  scope :public, where(:is_private => false)
+  
+  scope :important, lambda { |include_private| Message.priv_scope(include_private) { where(:is_important => true) } }
 
   before_validation :process_params, :on => :create
   after_create  :process_create

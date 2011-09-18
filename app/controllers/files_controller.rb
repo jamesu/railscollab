@@ -253,7 +253,7 @@ class FilesController < ApplicationController
 
     unless revision_id.nil?
       begin
-        @file_revision = ProjectFileRevision.first(:conditions => ['file_id = ? AND revision_number = ?', @file.id, revision_id])
+        @file_revision = ProjectFileRevision.where(:file_id => @file.id, :revision_number => revision_id).first!
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_file_revision)
         redirect_back_or_default files_path
