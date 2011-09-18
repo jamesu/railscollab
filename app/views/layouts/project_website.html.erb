@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="csrf-token" content="<%= form_authenticity_token %>" />
+    <meta name="csrf-param" content="authenticity_token" />
     <% unless @active_project.nil? %>
     <title><%= h @active_project.name %> - <%= h page_title %> @ <%= h Company.owner.name %></title>
     <% else %>
@@ -12,12 +14,7 @@
 <% additional_stylesheets.each do |ss| -%>
     <%= stylesheet_link_tag ss %>
 <% end unless additional_stylesheets.nil? -%>
-    <%= javascript_include_tag 'jquery.js' %>
-    <%= javascript_include_tag 'jquery-ui.js' %>
-    <%= javascript_include_tag 'jrails.js' %>
     <%= javascript_include_tag 'application.js' %>
-
-    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
     <%= javascript_tag "var PROJECT_ID = #{@active_project.id}; var LOGGED_USER_ID=#{@logged_user.id};" %>
 <!-- head needs to go here? -->
   </head>

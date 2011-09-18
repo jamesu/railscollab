@@ -166,11 +166,11 @@ class FilesController < ApplicationController
           error_status(false, :success_added_file)
           redirect_back_or_default(@file)
         }
-        format.js {}
+        
         format.xml  { render :xml => @file.to_xml(:root => 'file'), :status => :created, :location => @file }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
       end
     end
@@ -219,11 +219,11 @@ class FilesController < ApplicationController
           error_status(false, :success_edited_file)
           redirect_back_or_default(@file)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
       end
     end
@@ -242,7 +242,7 @@ class FilesController < ApplicationController
         error_status(false, :success_deleted_file)
         redirect_to files_url
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

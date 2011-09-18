@@ -35,10 +35,6 @@ class MilestonesController < ApplicationController
       format.html {
         index_lists(include_private, false)
       }
-      format.js { 
-        index_lists(include_private, false)
-        render :template => 'milestones/index'
-      }
       format.xml  {
         @milestones = include_private ? @active_project.milestones : @active_project.milestones.public
         render :xml => @milestones.to_xml(:root => 'milestones')
@@ -75,11 +71,9 @@ class MilestonesController < ApplicationController
           error_status(false, :success_added_milestone)
           redirect_back_or_default(@milestone)
         }
-        format.js { return index }
         format.xml  { render :xml => @milestone.to_xml(:root => 'milestone'), :status => :created, :location => @milestone }
       else
         format.html { render :action => "new" }
-        format.js {}
         format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
       end
     end
@@ -107,11 +101,9 @@ class MilestonesController < ApplicationController
           error_status(false, :success_edited_milestone)
           redirect_back_or_default(@milestone)
         }
-        format.js {}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
         format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
       end
     end
@@ -130,7 +122,6 @@ class MilestonesController < ApplicationController
         error_status(false, :success_deleted_milestone)
         redirect_back_or_default(milestones_url)
       }
-      format.js { index_lists(@logged_user.member_of_owner?, true) }
       format.xml  { head :ok }
     end
   end

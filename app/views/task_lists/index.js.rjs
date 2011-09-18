@@ -1,5 +1,0 @@
-# Update page elements rather than the whole page
-page.replace_html('openTaskLists', :partial => 'show',
-                                   :collection => @open_task_lists,
-                                   :locals => {:on_list_page => false})
-page.replace_html('sidebar', :partial => @content_for_sidebar)

@@ -1,1 +1,0 @@
-page.remove "task_item_#{@task.id}"

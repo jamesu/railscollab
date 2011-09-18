@@ -94,13 +94,13 @@ class TimesController < ApplicationController
           error_status(false, :success_added_time)
           redirect_back_or_default(@time)
         }
-        format.js {}
+        
         format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
       else
         @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
         @task_filter = Proc.new {|task| task.is_completed? }
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
       end
     end
@@ -126,14 +126,14 @@ class TimesController < ApplicationController
           error_status(false, :success_edited_time)
           redirect_back_or_default(@time)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         @open_task_lists = @active_project.task_lists.open(@logged_user.member_of_owner?)
         @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
         @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
       end
     end
@@ -154,7 +154,7 @@ class TimesController < ApplicationController
         error_status(false, :success_stopped_time)
         redirect_back_or_default(@time)
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
     
@@ -173,7 +173,7 @@ class TimesController < ApplicationController
         error_status(false, :success_deleted_time)
         redirect_back_or_default(times_url)
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

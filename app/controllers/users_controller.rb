@@ -134,11 +134,11 @@ class UsersController < ApplicationController
           error_status(false, :success_added_user)
           redirect_back_or_default :controller => 'administration', :action => 'people'
         }
-        format.js {}
+        
         format.xml  { render :xml => @user.to_xml(:root => 'user'), :status => :created, :location => @user }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
@@ -214,11 +214,11 @@ class UsersController < ApplicationController
           error_status(false, :success_updated_profile)
           redirect_back_or_default :controller => 'administration', :action => 'people'
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
@@ -243,7 +243,7 @@ class UsersController < ApplicationController
         error_status(false, :success_deleted_user, {:name => old_name})
         redirect_back_or_default :controller => 'administration', :action => 'people'
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end
@@ -282,7 +282,7 @@ class UsersController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.js {}
+      
       format.xml  {
         if @user.is_admin
           render :xml => @user.to_xml

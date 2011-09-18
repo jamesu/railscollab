@@ -85,11 +85,11 @@ class FoldersController < ApplicationController
           error_status(false, :success_added_folder)
           redirect_back_or_default(@folder)
         }
-        format.js {}
+        
         format.xml  { render :xml => @folder.to_xml(:root => 'folder'), :status => :created, :location => @folder }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @folder.errors, :status => :unprocessable_entity }
       end
     end
@@ -108,11 +108,11 @@ class FoldersController < ApplicationController
           error_status(false, :success_edited_folder)
           redirect_back_or_default(@folder)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @folder.errors, :status => :unprocessable_entity }
       end
     end
@@ -131,7 +131,7 @@ class FoldersController < ApplicationController
         error_status(false, :success_deleted_folder)
         redirect_back_or_default(files_url)
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

@@ -57,8 +57,7 @@ module ApplicationHelper
 
         extras[:confirm] = action[:confirm] if action.has_key? :confirm
         extras[:method]  = action[:method]  if action.has_key? :method
-        extras[:aconfirm] = action[:aconfirm] if action.has_key? :aconfirm
-        extras[:amethod]  = action[:amethod]  if action.has_key? :amethod
+        extras[:method]  = action[:method]  if action.has_key? :method
         extras[:onclick] = action[:onclick] if action.has_key? :onclick
         extras[:id]      = action[:id]      if action.has_key? :id
         extras[:class] = action[:class] if action.has_key? :class
@@ -130,12 +129,12 @@ module ApplicationHelper
 
   def actions_for_milestone(milestone)
     [{:name => I18n.t('edit'),   :url => edit_milestone_path(:id => milestone.id), :cond => can?(:edit,milestone)},
-     {:name => I18n.t('delete'), :url => milestone_path(:id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :amethod => :delete, :aconfirm => I18n.t('milestone_confirm_delete')}]
+     {:name => I18n.t('delete'), :url => milestone_path(:id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :method => :delete, :confirm => I18n.t('milestone_confirm_delete')}]
   end
 
   def actions_for_task_list(task_list)
     [{:name => I18n.t('edit'),          :url => edit_task_list_path(:id => task_list.id), :cond => can?(:edit,task_list)},
-     {:name => I18n.t('delete'),        :url => task_list_path(:id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :amethod => :delete, :aconfirm => I18n.t('task_list_confirm_delete')},
+     {:name => I18n.t('delete'),        :url => task_list_path(:id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :method => :delete, :confirm => I18n.t('task_list_confirm_delete')},
      {:name => I18n.t('reorder_tasks'), :url => reorder_task_list_path(:id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
   end
 

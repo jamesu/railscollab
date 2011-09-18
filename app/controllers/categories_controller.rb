@@ -96,11 +96,9 @@ class CategoriesController < ApplicationController
           error_status(false, :success_added_message_category)
           redirect_back_or_default(@category)
         }
-        format.js {}
         format.xml  { render :xml => @category.to_xml(:root => 'category'), :status => :created, :location => @category }
       else
         format.html { render :action => "new" }
-        format.js {}
         format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
       end
     end
@@ -125,11 +123,9 @@ class CategoriesController < ApplicationController
           error_status(false, :success_edited_message_category)
           redirect_back_or_default(@category)
         }
-        format.js {}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
         format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
       end
     end
@@ -154,7 +150,6 @@ class CategoriesController < ApplicationController
         error_status(false, :success_deleted_message_category)
         redirect_back_or_default(categories_url)
       }
-      format.js {}
       format.xml  { head :ok }
     end
   end

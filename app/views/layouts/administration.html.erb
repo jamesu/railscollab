@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="csrf-token" content="<%= form_authenticity_token %>" />
+    <meta name="csrf-param" content="authenticity_token" />
     <title><%= "#{h(page_title)} @ #{h(Company.owner.name)}" %></title>
     <%= stylesheet_link_tag 'project_website' %>
 <% additional_stylesheets.each do |ss| -%>
@@ -11,8 +13,6 @@
     <%= javascript_include_tag 'jquery-ui.js' %>
     <%= javascript_include_tag 'jrails.js' %>
     <%= javascript_include_tag 'application.js' %>
-
-    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">

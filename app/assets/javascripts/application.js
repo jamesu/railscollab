@@ -1,9 +1,5 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
-
-// TODO: re-write and consolidate where needed
-
-// Quick jQuery extensions for missing prototype functions
+//= require jquery
+//= require jquery_ujs
 
 jQuery.fn.extend({
   request: function( callback, type ) {
@@ -261,31 +257,6 @@ function bindDynamic() {
 
       $('#action_dialog a.cancel').click(function(evt) {
         $('#action_dialog').hide();
-
-        return false;
-      });
-
-      $('a.oaction').click(function(evt) {
-        var el = $(this);
-        var on_page = $('#content .pageList:first').length == 1 ? 1 : 0;
-
-        if (!confirm(el.attr('aconfirm')))
-            return false;
-
-        switch(el.attr('amethod')) {
-          case 'delete':
-            $.del(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
-            break;
-          case 'post':
-            $.post(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
-            break;
-          case 'put':
-            $.put(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
-            break;
-          case 'get':
-            $.get(el.attr('href'), {'on_page':on_page}, JustRebind, 'script');
-            break;
-        };
 
         return false;
       });

@@ -187,11 +187,11 @@ class MessagesController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@message)
         }
-        format.js {}
+        
         format.xml  { render :xml => @message.to_xml(:root => 'message'), :status => :created, :location => @message }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
       end
     end
@@ -224,11 +224,11 @@ class MessagesController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@message)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
       end
     end
@@ -247,7 +247,7 @@ class MessagesController < ApplicationController
         error_status(false, :success_deleted_message)
         redirect_back_or_default(messages_url(:category_id => params[:category_id]))
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end
@@ -263,7 +263,7 @@ class MessagesController < ApplicationController
         error_status(false, :success_deleted_message)
         redirect_back_or_default(message_url(:id => @message.id))
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end
@@ -279,7 +279,7 @@ class MessagesController < ApplicationController
         error_status(false, :success_deleted_message)
         redirect_back_or_default(message_url(:id => @message.id))
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

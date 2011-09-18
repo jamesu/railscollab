@@ -1,2 +1,0 @@
-# Update page elements rather than the whole page
-page.replace_html('milestones', :partial => 'list')

@@ -277,11 +277,11 @@ class ProjectsController < ApplicationController
           error_status(false, :success_added_project)
           redirect_to permissions_project_path(:id => @project.id)
         }
-        format.js {}
+        
         format.xml  { render :xml => @project.to_xml(:root => 'project'), :status => :created, :location => @project }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
       end
     end
@@ -303,11 +303,11 @@ class ProjectsController < ApplicationController
           error_status(false, :success_edited_project)
           redirect_back_or_default(@project)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
       end
     end
@@ -324,7 +324,7 @@ class ProjectsController < ApplicationController
         error_status(false, :success_deleted_project)
         redirect_back_or_default(:controller => 'dashboard')
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end
@@ -341,7 +341,7 @@ class ProjectsController < ApplicationController
         error_status(false, :error_saving) unless saved
         redirect_back_or_default :controller => 'administration', :action => 'projects'
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end
@@ -358,7 +358,7 @@ class ProjectsController < ApplicationController
         error_status(false, :error_saving) unless saved
         redirect_back_or_default :controller => 'administration', :action => 'projects'
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

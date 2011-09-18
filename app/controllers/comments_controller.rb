@@ -163,11 +163,9 @@ class CommentsController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@comment.object_url)
         }
-        format.js {}
         format.xml  { render :xml => @comment.to_xml(:root => 'comment'), :status => :created, :location => @comment.object_url }
       else
         format.html { render :action => "new" }
-        format.js {}
         format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
       end
     end
@@ -205,11 +203,9 @@ class CommentsController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@commented_object.object_url)
         }
-        format.js {}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
         format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
       end
     end
@@ -228,7 +224,6 @@ class CommentsController < ApplicationController
         error_status(false, :success_deleted_comment)
         redirect_back_or_default(project_path(:id => @active_project.id))
       }
-      format.js {}
       format.xml  { head :ok }
     end
   end

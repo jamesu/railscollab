@@ -1,3 +1,0 @@
-page.replace_html('action_dialog', :partial => 'dialog_form')
-page.visual_effect :appear, 'action_dialog'
-page['action_dialog'].autofocus

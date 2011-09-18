@@ -1,7 +1,0 @@
-# Update and remove page elements rather than the whole page
-if @on_page
-  page.replace_html('milestoneCalendar', :partial => 'calendar')
-  page.select("#milestone_#{@removed_id}").fancyRemove
-else
-  page.redirect_to milestones_path
-end

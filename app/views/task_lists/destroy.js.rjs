@@ -1,8 +1,0 @@
-# Update and remove page elements rather than the whole page
-if @on_page
-  # TODO: update sidebar
-  page.select("#list_#{@removed_id}").fancyRemove
-  page.replace_html('sidebar', :partial => @content_for_sidebar)
-else
-  page.redirect_to task_lists_path
-end

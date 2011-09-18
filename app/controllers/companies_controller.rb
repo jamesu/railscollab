@@ -31,7 +31,7 @@ class CompaniesController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.js {}
+      
       format.xml  {
         render :xml => @company.to_xml 
       }
@@ -75,11 +75,11 @@ class CompaniesController < ApplicationController
           error_status(false, :success_added_client)
           redirect_back_or_default :controller => 'administration', :action => 'people'
         }
-        format.js {}
+        
         format.xml  { render :xml => @company.to_xml(:root => 'company'), :status => :created, :location => @company }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
       end
     end
@@ -101,11 +101,11 @@ class CompaniesController < ApplicationController
           error_status(false, :success_edited_client)
           redirect_back_or_default :controller => 'administration', :action => 'people'
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
       end
     end
@@ -147,7 +147,7 @@ class CompaniesController < ApplicationController
         error_status(false, estatus)
         redirect_back_or_default :controller => 'administration', :action => 'people'
       }
-      format.js {}
+      
       format.xml  { head :ok }
     end
   end

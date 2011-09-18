@@ -62,7 +62,7 @@ class TaskListsController < ApplicationController
       format.html {
         index_lists(include_private)
       }
-      format.js {}
+      
       format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
     end
   end
@@ -83,7 +83,7 @@ class TaskListsController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.js {}
+      
       format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
     end
   end
@@ -118,7 +118,7 @@ class TaskListsController < ApplicationController
         format.xml  { render :xml => @task_list.to_xml(:root => 'task-list'), :status => :created, :location => @task_list }
       else
         format.html { render :action => "new" }
-        format.js {}
+        
         format.xml  { render :xml => @list.errors, :status => :unprocessable_entity }
       end
     end
@@ -144,11 +144,11 @@ class TaskListsController < ApplicationController
           error_status(false, :success_edited_task_list)
           redirect_back_or_default(@task_list)
         }
-        format.js {}
+        
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js {}
+        
         format.xml  { render :xml => @list.errors, :status => :unprocessable_entity }
       end
     end

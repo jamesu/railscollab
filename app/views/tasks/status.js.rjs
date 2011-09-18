@@ -1,6 +1,0 @@
-page.remove "task_item_#{@task.id}" 
-if @task.is_completed?
-  page.select("#list_#{@task_list.id} .completedTasks ul:first").prepend(render({:partial => 'show', :collection => [@task]}))
-else
-  page.select("#list_#{@task_list.id} .openTasks ul:first").append(render({:partial => 'show', :collection => [@task]}))
-end
