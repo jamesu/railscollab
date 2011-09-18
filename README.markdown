@@ -38,30 +38,6 @@ Check out the [wiki on github] [2].
 
 Please refer to the project entry on [OpenSourceRails] [5] for any screenshots or demos.
 
-## Can I run RailsCollab on Heroku?
-
-Yes you can! And this is how:
-
-1. Run setup script
-
-    script/setup
-
-2. Setup heroku app
-
-    heroku create
-
-3. Push database onto heroku
-
-    heroku db:push
-
-4. Push config onto heroku
-
-    rake heroku:config --app [heroku app name]
-
-5. Launch in browser
-
-    heroku open
-
 ## Licensing
 
 For licensing details, refer to the [LICENSE] [6] file in the root directory.

@@ -7,20 +7,9 @@ especially if you are not planning on deploying using Phusion Passenger.
 
 ## Requirements
 
-Along with a working installation of the Ruby on Rails Framework, you will need the 
-following to deploy & run RailsCollab:
+To install all required gems, simply run the following:
 
-* *iCalendar* - `sudo gem install icalendar`
-* *RedCloth* - `sudo gem install RedCloth`
-* *ruby-openid* - `gem install ruby-openid`
-* *ActionMailer* - `gem install actionmailer`
-* *Ferret* - `gem install ferret`
-* *Rspec* - `gem install rspec`
-
-Plus the following which are *optional*:
-
-* *Phusion Passenger* - http://www.modrails.com/ (for easy deployment)
-* *ImageMagick* - for generating thumbnails
+    bundle install
 
 ## Config files
 
@@ -83,4 +72,4 @@ The snippit:
 	script/setup 
 
 
-For more advanced deployment (e.g. using FastCGI or load balancing proxies), refer to the Ruby on Rails documentation.
+For more advanced deployment, refer to the Ruby on Rails documentation.
