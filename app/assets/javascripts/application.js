@@ -198,14 +198,6 @@ function bindDynamic() {
         return false;
       });
       
-      $('.taskList .taskDelete').click(function(evt) {
-        var el = $(this);
-        if (confirm(el.attr('aconfirm')))
-           $.del(this.href, null, JustRebind, 'script');
-        
-        return false;
-      });
-      
       $('.doEditTaskList').click(function(evt) {
         var el = $(this);
         var list = el.parents('.taskList:first');
@@ -306,15 +298,12 @@ function rebindDynamic() {
   $('.taskItem form .cancel').unbind();
   $('.taskList .completion').unbind();
   $('.taskList .taskEdit').unbind();
-  $('.taskList .taskDelete').unbind();
   
   $('.doSortTaskList').unbind();
   $('.doEditTaskList').unbind();
 
   $('#action_dialog form').unbind();
   $('#action_dialog a.cancel').unbind();
-
-  $('a.oaction').unbind();
 
   $('.startTime').unbind();
   $('.stopTime').unbind();

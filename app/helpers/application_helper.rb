@@ -24,7 +24,7 @@ module ApplicationHelper
   end
 
   def product_signature
-    I18n.t('product_signature')
+    I18n.t('product_signature').html_safe
   end
 
   def pagination_links(url, ids)

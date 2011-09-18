@@ -9,7 +9,7 @@
 <div class="taskItemContent">
 <% if can?(:edit,task_item) %>
 	<div class="taskControls">
-			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => t('task_delete_confirm'), :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
+			<%= link_to render_icon('trash', 'Trash'), task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => t('task_delete_confirm'), :method => :delete, :class => 'blank taskDelete'} %><%= link_to 'Edit', edit_task_path(:id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit'} %>
 	</div>
 <% end %>
 <% if can?(:edit,task_item) %>

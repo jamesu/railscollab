@@ -4,7 +4,7 @@
 %>
 
 <% if @tagged_objects_count > 0 %>
-<p><%= t('objects_tagged_with', {:count => @tagged_objects_count, :tag => h(@tag_name)}) %>:</p>
+<p><%= t('objects_tagged_with', {:count => @tagged_objects_count, :tag => h(@tag_name)}).html_safe %>:</p>
 
 <% if not @tagged_objects[:messages].empty? %>
 <h2><%= t('messages') %></h2>
@@ -60,5 +60,5 @@
 <% end %>
 
 <% else %>
-<p><%= t('no_objects_tagged_with', {:tag => h(@tag_name)}) %></p>
+<p><%= t('no_objects_tagged_with', {:tag => h(@tag_name)}).html_safe %></p>
 <% end %>
