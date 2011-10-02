@@ -120,14 +120,7 @@ class CompaniesController < ApplicationController
     
     respond_to do |format|
       format.html {
-        error_status(false, :welcome_info_hidden) if saved
         redirect_back_or_default :controller => 'dashboard'
-      }
-      format.js {
-        # Quick update here, no need for a whole .rjs!
-        render :update do |pg|
-          pg.select('#new_account_info').fancyRemove
-        end
       }
     end
   end
