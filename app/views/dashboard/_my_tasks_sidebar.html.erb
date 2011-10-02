@@ -2,7 +2,7 @@
   <h2><%= t('calendar_feeds') %></h2>
   <div class="blockContent">
     <a href="<%= @logged_user.milestone_feed_url(nil, 'ics') %>" class="iCalSubscribe"><%= t('ical') %></a>
-    <p><%= t('calendar_feed_milestone_info') %></p>
-    <p><%= t('calendar_feeds_password_warning') %></p>
+    <p><%= t('calendar_feed_milestone_info').html_safe %></p>
+    <p><%= t('calendar_feeds_password_warning').html_safe %></p>
   </div>
 </div>

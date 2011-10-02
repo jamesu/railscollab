@@ -22,9 +22,10 @@
   <div class="addTask">
     <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to t('add_task'), new_task_path(:task_list_id => task_list.id) %></div>
     <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
-      <%= form_tag tasks_path(:task_list_id => task_list.id) do %>
+      <%= form_tag tasks_path(:task_list_id => task_list.id), { 'data-remote' => true, 'data-type' => :json } do %>
         <%= render :partial => 'tasks/form', :object => Task.new(:task_list => task_list) %>
-        <div><button class="submit" type="submit"><%= t('add_task') %></button> <%= t('or') %> <a class="cancel" href="#"><%= t('cancel') %></a></div>
+        <%= loading_spinner %>
+        <div class="buttons"><button class="submit" type="submit"><%= t('add_task') %></button> <%= t('or') %> <a class="cancel" href="#"><%= t('cancel') %></a></div>
       <% end %>
     </div>
   </div>

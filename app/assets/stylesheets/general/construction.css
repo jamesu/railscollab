@@ -568,3 +568,8 @@ div.billable span {
   background: #FFFFFF;
   color: #000;
 }
+
+.loadingSpinner
+{
+  display: none;
+}

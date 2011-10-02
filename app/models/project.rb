@@ -35,7 +35,7 @@ class Project < ActiveRecord::Base
 	
 	has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy
 	
-	has_many :tasks, :through => :project_task_lists
+	has_many :tasks, :through => :task_lists
 	
 	has_many :folders, :dependent => :destroy
   has_many :project_files, :dependent => :destroy
@@ -85,7 +85,7 @@ class Project < ActiveRecord::Base
 	end
 	
 	def tasks_by_user(user, completed=false)
-		self.tasks.where(["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND project_tasks.completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
+		self.tasks.where(["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND tasks.completed_on #{completed ? 'IS NOT' : 'IS'} NULL", user.company_id, user.id])
 	end
 	
 	def is_active?

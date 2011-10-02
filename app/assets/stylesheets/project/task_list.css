@@ -111,3 +111,11 @@ div.taskList .taskItemHandle div.inner {
     
     cursor: move;
 }
+
+div.taskList form.loading .loadingSpinner {
+    display: block;
+}
+
+div.taskList form.loading .buttons {
+    display: none;
+}

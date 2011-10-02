@@ -49,6 +49,10 @@ module ApplicationHelper
 
     "<img src='/assets/icons/#{filename}.gif' alt='#{alt}' #{attr_values}/>".html_safe
   end
+  
+  def loading_spinner
+    image_tag 'spinner.gif', {:class => 'loadingSpinner'}
+  end
 
   def action_list(actions)
     actions.collect do |action|

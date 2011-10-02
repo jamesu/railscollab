@@ -54,7 +54,7 @@ class TasksController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.js
+      f.js { respond_with_task(@task) }
       format.xml  { render :xml => @task.to_xml(:root => 'task') }
     end
   end
@@ -81,6 +81,11 @@ class TasksController < ApplicationController
     end
     
     authorize! :edit, @task
+    
+    respond_to do |f|
+      f.html
+      f.js { respond_with_task(@task, 'ajax_form') }
+    end
   end
 
   # POST /tasks
@@ -90,17 +95,17 @@ class TasksController < ApplicationController
     
     @task = @task_list.tasks.build(params[:task])
     @task.created_by = @logged_user
-
+    
     respond_to do |format|
       if @task.save
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_back_or_default(task_lists_path) }
-        format.js
+        format.js { respond_with_task(@task) }
         format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
       else
         format.html { render :action => "new" }
-        format.js
+        format.js { respond_with_task(@task) }
         format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
@@ -124,11 +129,11 @@ class TasksController < ApplicationController
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(task_lists_path) }
-        format.js
+        format.js { respond_with_task(@task) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js
+        format.js { respond_with_task(@task) }
         format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
@@ -150,6 +155,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default(task_lists_url) }
+      format.js { render :json => { :id => @task.id } }
       format.xml  { head :ok }
     end
   end
@@ -171,13 +177,22 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default(task_lists_url) }
-      format.js
+      format.js { respond_with_task(@task) }
       format.xml  { head :ok }
     end
 
   end
 
 protected
+
+  def respond_with_task(task, partial='show')
+    task_class = @task.is_completed? ? 'completedTasks' : 'openTasks'
+    if task.errors
+      render :json => {:task_class => task_class, :id => @task.id, :content => render_to_string({:partial => partial, :collection => [@task]})}
+    else
+      render :json => {:task_class => task_class, :id => @task.id, :errors => @task.errors.to_json}, :status => :unprocessable_entity
+    end
+  end
 
   def grab_list
     begin
