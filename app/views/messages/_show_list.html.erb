@@ -13,9 +13,7 @@
         <span><%= t('tags') %>:</span> <%= tag_list message %>
       </div>
 
-      <% fc = message.attached_files
-         fc = fc.is_public unless @logged_user.member_of_owner?
-         fc = fc.length %>
+      <% fc = message.attached_files(@logged_user.member_of_owner?).length %>
       <% if fc > 0 %>
       <div class="objectFilesTitle">
         <span><%= t('attached_files') %>:</span> <%= fc %>
@@ -33,7 +31,7 @@
 <% if not message.created_by.nil? %>
       <div class="messageAuthor"><%= t('message_created_with_user', 
             :time => format_usertime(message.created_on, :message_created_format),
-            :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))) %></div>
+            :user => link_to( h(message.created_by.display_name), user_path(:id => message.created_by.id))).html_safe %></div>
 <% else %>
       <div class="messageAuthor"><%= format_usertime(message.created_on, :message_created_format) %></div>
 <% end %>

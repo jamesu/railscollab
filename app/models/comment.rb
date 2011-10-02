@@ -78,9 +78,13 @@ class Comment < ActiveRecord::Base
 		self.rel_object.project_id
 	end
 	
-	def attached_files(with_private)
-		self.project_file
-	end
+  def attached_files(with_private)
+    if with_private
+      project_file
+    else
+      project_file.where(:is_private => false)
+    end
+  end
 	
 	# Accesibility
 	

@@ -84,7 +84,11 @@ class Message < ActiveRecord::Base
   end
 
   def attached_files(with_private)
-    self.project_file
+    if with_private
+      project_file
+    else
+      project_file.where(:is_private => false)
+    end
   end
 
   def ensure_subscribed(user)
