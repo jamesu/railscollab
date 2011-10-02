@@ -1,13 +1,13 @@
 # Upgrading from a previous version of RailsCollab
 
-The first thing you should do is migrate the database schema to ensure RailsCollab's models 
+The only thing you should do is migrate the database schema to ensure RailsCollab's models 
 continue to function. This can be achieved by running the following command:
 
     rake db:migrate
 
-Next you should reload your configuration schema, in case any new configuration options have 
-been added. This can be accomplished by running the following commands:
+## Change in file storage location
 
-    rake db:railscollab:reload_config
+If you are updating from the rails2 version of RailsCollab, the default location for Company logos, User avatars, and File data has changed. These are now located in "logo", "avatar" and "data".
+If you have any existing files you should be able to copy them to the new location to make them work again.
 
 Thats it!

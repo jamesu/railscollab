@@ -1,7 +1,4 @@
 .DS_Store
-config/app_keys.yml
-config/config.yml
-config/database.yml
 config/deploy.rb
 coverage
 log/*.log
@@ -14,4 +11,3 @@ tmp/restart.txt
 tmp/**/*
 public/themes/*
 *.sqlite3
-db/schema.rb
