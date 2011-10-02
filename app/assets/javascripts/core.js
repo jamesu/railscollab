@@ -146,6 +146,42 @@ function stopLoadingForm(evt) {
     .find('input, select, textarea, button').attr('disabled', null);
 }
 
+function replaceTask(data, content) {
+  var task = $('#task_item_' + data.id);
+  var in_list = task.parents('.taskItems:first').parent();
+
+  // Replace or insert into correct list
+  if (data.task_class != null && !in_list.hasClass(data.task_class)) {
+    var task_list = task.parents('.taskList:first');
+    in_list.children('.taskItems').insert(task);
+  }
+
+  if (content)
+    task.html(data.content);
+  else
+    task.replaceWith(data.content);
+}
+
+function reloadTask(data) {
+  $.get('/projects/' + PROJECT_ID + '/tasks/' + data.id, {}, function(data){
+    replaceTask(data, false);
+    JustRebind();
+  }, 'json');
+}
+
+function updateRunningTimes() {
+  var time_list = $('#running_times_menu ul li');
+  var count = time_list.length;
+  if (count > 0) {
+    $('#running_times_count span').html('You have ' + count + ' running times');
+    $('#running_times_count').show();
+  } else {	
+    $('#running_times_count').hide();
+    $('#running_times_menu').hide();
+    time_list.hide();
+  }
+}
+
 function bindDynamic() {
 
     // Popup form for Add Item
@@ -197,7 +233,7 @@ function bindDynamic() {
     .bind('ajax:complete', stopLoading)
     .bind('ajax:success',
     function(evt, data, status, xhr) {
-        $('#task_item_' + data.id).replaceWith(data.content);
+        replaceTask(data, false);
         JustRebind();
         return false;
     });
@@ -207,7 +243,7 @@ function bindDynamic() {
     .bind('ajax:complete', stopLoadingForm)
     .bind('ajax:success',
     function(evt, data, status, xhr) {
-        $('#task_item_' + data.id).replaceWith(data.content);
+        replaceTask(data, false);
         JustRebind();
         return false;
     });
@@ -220,12 +256,7 @@ function bindDynamic() {
             'task[completed]': evt.target.checked
         },
         function(data, status, xhr) {
-            // Remove previous
-            var task_list = $(evt.target).parents('.taskList:first');
-            $('#task_item_' + data.id).remove();
-
-            // Add content in the correct location
-            task_list.find('.' + data.task_class + ' .taskItems').append(data.content);
+            replaceTask(data, false);
             JustRebind();
             return false;
         },
@@ -239,8 +270,7 @@ function bindDynamic() {
     .bind('ajax:complete', stopLoading)
     .bind('ajax:success',
     function(evt, data, status, xhr) {
-        console.log("WTF", evt, data, status, xhr)
-        $('#task_item_' + data.id).html(data.content);
+        replaceTask(data, true);
         JustRebind();
         return false;
     });
@@ -250,7 +280,6 @@ function bindDynamic() {
     .bind('ajax:complete', stopLoading)
     .bind('ajax:success',
     function(evt, data, status, xhr) {
-        console.log("WTF", evt, data, status, xhr)
         $('#task_item_' + data.id).remove();
         return false;
     });
@@ -270,7 +299,6 @@ function bindDynamic() {
     });
 
     $('.doSortTaskList').click(function(evt) {
-        console.log('....');
         var el = $(evt.target);
         var url = el.attr('href');
         var list = el.parents('.taskList:first');
@@ -319,7 +347,16 @@ function bindDynamic() {
             'time[open_task_id]': el.attr('task_id'),
             'time[assigned_to_id]': LOGGED_USER_ID,
         },
-        JustRebind, 'script');
+        function(data){
+          reloadTask(data.task, false);
+          var listed_time = $('#listed_time_' + data.id);
+          if (listed_time.length == 0)
+            $('#running_times_menu ul').append(data.content);
+          else
+            listed_time.replaceWith(data.content);
+          updateRunningTimes();
+          JustRebind();
+        }, 'json');
 
         return false;
     });
@@ -330,7 +367,12 @@ function bindDynamic() {
             'time[open_task_id]': el.attr('task_id'),
             'time[assigned_to_id]': LOGGED_USER_ID,
         },
-        JustRebind, 'script');
+        function(data){
+          reloadTask(data.task, false);
+          $('#listed_time_' + data.id).remove();
+          updateRunningTimes();
+          JustRebind();
+        }, 'json');
 
         return false;
     });

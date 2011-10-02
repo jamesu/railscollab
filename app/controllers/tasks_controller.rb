@@ -22,7 +22,8 @@ class TasksController < ApplicationController
   helper 'project_items'
 
   before_filter :process_session
-  before_filter :grab_list
+  before_filter :grab_list, :except => [:create, :new]
+  before_filter :grab_list_required, :only => [:index, :create, :new]
   after_filter  :user_track, :only => [:index, :show]
   
   # GET /tasks
@@ -47,14 +48,14 @@ class TasksController < ApplicationController
   # GET /tasks/1.xml
   def show
     begin
-      @task = @task_list.tasks.find(params[:id])
+      @task = (@task_list||@active_project).tasks.find(params[:id])
     rescue
       return error_status(true, :invalid_task)
     end
     
     respond_to do |format|
       format.html { }
-      f.js { respond_with_task(@task) }
+      format.js { respond_with_task(@task) }
       format.xml  { render :xml => @task.to_xml(:root => 'task') }
     end
   end
@@ -186,15 +187,24 @@ class TasksController < ApplicationController
 protected
 
   def respond_with_task(task, partial='show')
-    task_class = @task.is_completed? ? 'completedTasks' : 'openTasks'
+    task_class = task.is_completed? ? 'completedTasks' : 'openTasks'
     if task.errors
-      render :json => {:task_class => task_class, :id => @task.id, :content => render_to_string({:partial => partial, :collection => [@task]})}
+      render :json => {:task_class => task_class, :id => task.id, :content => render_to_string({:partial => partial, :collection => [task]})}
     else
-      render :json => {:task_class => task_class, :id => @task.id, :errors => @task.errors.to_json}, :status => :unprocessable_entity
+      render :json => {:task_class => task_class, :id => task.id, :errors => task.errors}, :status => :unprocessable_entity
     end
+  end
+  
+  def grab_list_required
+    if params[:task_list_id].nil?
+      error_status(true, :invalid_task)
+      return false
+    end
+    grab_list
   end
 
   def grab_list
+    return if params[:task_list_id].nil?
     begin
       @task_list = @active_project.task_lists.find(params[:task_list_id])
       authorize! :show, @task_list
