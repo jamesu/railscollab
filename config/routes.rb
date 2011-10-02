@@ -133,8 +133,6 @@ Railscollab::Application.routes.draw do
       put :permissions
     end
   end
-  
-  resources :configurations, :only => [:index, :edit, :update]
 
   match 'administration', :controller => 'administration', :action => 'index', :as => :administration
 

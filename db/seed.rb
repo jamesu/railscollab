@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby
-require File.expand_path('../../config/environment',  __FILE__)
-
 OPTIONS = {
 :initial_user_name        => ENV['RAILSCOLLAB_INITIAL_USER']        || 'admin',
 :initial_user_displayname => ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME'] || 'Administrator',

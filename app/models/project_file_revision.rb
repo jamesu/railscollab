@@ -25,19 +25,13 @@ class ProjectFileRevision < ActiveRecord::Base
 
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
-	
-	has_attached_file :data, {
-		:styles => { :thumb => "50x50" },
-		:storage => Rails.configuration.attach_to_s3 ? :s3 : :filesystem,
-		:default_url => ''
-	}.merge(Rails.configuration.attach_to_s3 ? {
-		:s3_credentials => {
-			:access_key_id => Rails.configuration.s3_access_key,
-			:secret_access_key => Rails.configuration.s3_secret_key
-		},
-		:path => ":attachment/:id/:style.:extension",
-		:bucket => "#{Rails.configuration.s3_bucket_prefix}project_file_revision_data"
-	} : {})
+
+  has_attached_file :data,
+    :styles => { :thumb => "50x50" },
+    :default_url => '',
+    :path => Rails.configuration.attach_to_s3 ?
+      "data/:id/:style.:extension" :
+      ":rails_root/data/:id/:style/:filename"
 
   before_create :process_params
   before_update :process_update_params

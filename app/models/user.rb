@@ -46,20 +46,14 @@ class User < ActiveRecord::Base
   has_many :finished_projects, :through => :people, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
 
   has_and_belongs_to_many :subscriptions, :class_name => 'Message', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
-	
-	has_attached_file :avatar, {
-		:styles => { :thumb => "50x50" },
-		:storage => Rails.configuration.attach_to_s3 ? :s3 : :filesystem,
-		:default_url => ''
-	}.merge(Rails.configuration.attach_to_s3 ? {
-		:s3_credentials => {
-			:access_key_id => Rails.configuration.s3_access_key,
-			:secret_access_key => Rails.configuration.s3_secret_key
-		},
-		:path => ":attachment/:id/:style.:extension",
-		:bucket => "#{Rails.configuration.s3_bucket_prefix}user_avatar"
-	} : {})
-	
+
+  has_attached_file :avatar,
+    :styles => { :thumb => "50x50" },
+    :default_url => '',
+    :path => Rails.configuration.attach_to_s3 ?
+      "avatar/:id/:style.:extension" :
+      ":rails_root/avatar/:id/:style/:filename"
+
   has_many :assigned_times, :class_name => 'TimeRecord', :foreign_key => 'assigned_to_user_id'
 
   def twister_array=(value)

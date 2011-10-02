@@ -42,8 +42,7 @@ module NavigationHelper
     items = [
       {:id => :index,         :url => administration_path},
       {:id => :people,        :url => companies_path},
-      {:id => :projects,      :url => projects_path},
-      {:id => :configuration, :url => configurations_path},
+      {:id => :projects,      :url => projects_path}
     ]
   end
 

@@ -6,26 +6,13 @@ def randomize_secret
 end
 
 session_store_file = <<-SESSION_STORE
-session_key: _railscollab_session
-session_secret: #{randomize_secret}
-
+Railscollab::Application.config.secret_token = '#{randomize_secret}'
 SESSION_STORE
 
 # write session store
-if !File.exists? 'config/app_keys.yml'
-  puts 'Generating session keys'
-  File.open('config/app_keys.yml', 'w') { |f| f.write(session_store_file) }
-end
-
-# Copy over example files!
-Dir["config/example/*"].each do |file|
-  name = "config/#{File.basename(file)}"
-  unless File.exists? name
-    FileUtils.cp(file, name)
-    puts "Copied #{name}"
-  end
-end
+puts 'Generating session keys'
+File.open('config/initializers/session_store.rb', 'w') { |f| f.write(session_store_file) }
 
 # Run normal install scripts
 system "bundle install"
-system "rake db:railscollab:install --trace"
+system "rake db:seed --trace"

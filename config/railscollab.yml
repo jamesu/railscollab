@@ -1,14 +1,84 @@
 defaults: &defaults
+  # Name of the installation
+  site_name: RailsCollab
+  
+  # Location you use to access RailsCollab
+  site_url: http://localhost:3000
+  
+  # Default folders in a project
+  default_project_folders: 
+  - images
+  - documents
+  - other
+  
+  # Default message categories in a project
+  default_project_message_categories: 
+  - General
+  - Projects
+  - Problems
+  
+  # Default message category to list
+  default_project_message_category: General
+  
+  # Allow anonymous posting of comments
+  allow_anonymous: false
+  
+  # Default locale
+  default_language: en
+  
+  # Enable search
+  search_enabled: false
+  
+  # Log deletions
+  log_really_silent: false
+  
+  # First day of week for calendar
+  first_day_of_week: "7"
+  
+  # Email
+  notification_email_address: RailsCollab Notification <fill.this.in@localhost>
+  notification_email_method: test
+  notification_email_smtp: 
+    address: localhost
+    port: 123
+    user_name: user
+    password: password
+    authentication: login
+    domain: domain.com
+  notification_email_sendmail: 
+    location: /usr/bin/sendmail
+    arguments: -i -t -O DeliveryMode='b'
+
+  # Enables S3 for file uploads
   attach_to_s3: false
-  s3_access_key: ''
-  s3_secret_key: ''
-  s3_bucket_prefix: ''
+  amazon_s3:
+    access_key_id:
+    secret_access_key:
+    bucket:
+    s3_protocol: http
+
+  # Forces ssl
   using_ssl: false
-  site_url: 'http://localhost'
+  
+  # Various metrics
+  project_logs_per_page: 10
+  logs_per_project: 5
+  messages_per_page: 10
+  times_per_page: 10
+  files_per_page: 10
+  search_results_per_page: 20
+  minutes_to_comment_edit_expire: 3
+  minutes_to_activity_log_expire: 5
+  max_upload_size: 10485760
+  max_attachments: 5
 
 development:
   <<: *defaults
+  notification_email_method: test
+
 test:
   <<: *defaults
+  notification_email_method: test
+
 production:
   <<: *defaults
