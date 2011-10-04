@@ -15,4 +15,4 @@ File.open('config/initializers/session_store.rb', 'w') { |f| f.write(session_sto
 
 # Run normal install scripts
 system "bundle install"
-system "rake db:seed --trace"
+system "rake db:migrate && rake db:seed --trace"
