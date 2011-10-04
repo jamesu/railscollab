@@ -303,8 +303,7 @@ class User < ActiveRecord::Base
         :twister,
         :last_login,
         :last_visit,
-        :last_activity,
-        :identity_url
+        :last_activity
       ]}
     self.ar_to_xml(options.merge(default_options), &block)
   end

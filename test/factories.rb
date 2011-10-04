@@ -21,8 +21,6 @@ Factory.define :user do |u|
   u.is_admin false
   u.auto_assign true
   
-  u.identity_url ''
-  
   u.sequence(:email) {|n| "#{n}#{Faker::Internet.email}" }
   
   u.password 'password'

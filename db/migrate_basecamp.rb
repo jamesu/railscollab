@@ -115,7 +115,6 @@ def import_company(firm_attribs, owner=nil)
 		user.username = user_attribs['user-name'].text
         user.is_admin = user_attribs['administrator'].nil? ? false : user_attribs['administrator'].text
         user.auto_assign = user_attribs['has-access-to-new-projects'].text
-        user.identity_url = user_attribs['identity-url'].text
 		user.company = company
 		
 		user.password = "password"

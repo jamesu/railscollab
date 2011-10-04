@@ -111,8 +111,6 @@ class UsersController < ApplicationController
     else
       @user.company_id = @company.id
     end
-      
-    @user.identity_url = user_attribs[:identity_url] if user_attribs[:identity_url]
 
     # Process core parameters
 
@@ -191,8 +189,6 @@ class UsersController < ApplicationController
       @user.password = user_params[:password]
       @user.password_confirmation = user_params[:password_confirmation]
     end
-      
-    @user.identity_url = user_params[:identity_url] if user_params[:identity_url]
 
     # Process core parameters
 
