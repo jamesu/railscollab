@@ -91,4 +91,13 @@ class Tag < ActiveRecord::Base
 
     tags.length
   end
+  
+  # Indexing
+  define_index do
+    indexes :tag
+    
+    has :project_id
+    has :is_private
+    has :created_on
+  end
 end

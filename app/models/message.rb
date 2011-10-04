@@ -70,6 +70,10 @@ class Message < ActiveRecord::Base
     Tag.list_by_object(self).join(' ')
   end
 
+  def tag_list
+    Tag.where(['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
+  end
+
   def tags=(val)
     Tag.clear_by_object(self)
     Tag.set_to_object(self, val.split(',')) unless val.nil?
@@ -138,5 +142,18 @@ class Message < ActiveRecord::Base
 
   validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == false
+  end
+  
+  # Indexing
+  define_index do
+    indexes :title
+    indexes :text
+    indexes tag_list(:tag), :as => :tags
+    
+    has :project_id
+    has :category_id
+    has :is_private
+    has :created_on
+    has :updated_on
   end
 end

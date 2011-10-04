@@ -43,6 +43,16 @@ class WikiPage < ActiveRecord::Base
   def object_url(host = nil)
     url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => project_id
   end
+  
+  # Indexing
+  define_index do
+    indexes :title
+    indexes :content
+    
+    has :project_id
+    has :created_at
+    has :updated_at
+  end
 
   protected
   

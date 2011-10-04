@@ -1,21 +1,21 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0rc4'
+gem 'rails', '3.1.0'
 gem 'sqlite3'
 gem 'cancan'
-gem 'sass-rails', "~> 3.1.0.rc"
 gem 'haml'
+gem 'sass-rails', '~> 3.1.0'
 gem 'uglifier'
 gem 'paperclip'
 gem 'dynamic_form'
 gem 'will_paginate', '~> 3.0'
 gem 'RedCloth'
 gem 'icalendar'
-gem 'faker'
-gem 'factory_girl'
 gem 'friendly_id', '~> 4.0.0.beta8'
 gem 'acts_as_versioned', :git => "git://github.com/firien/acts_as_versioned.git"
 gem 'jquery-rails', '>= 1.0.12'
+gem 'thinking-sphinx', '2.0.5'
+gem 'mysql', :require => nil, :group => :mysql
 
 #group :test, :development do
 #  gem 'rspec-rails', '~> 2.3.1'
@@ -23,6 +23,11 @@ gem 'jquery-rails', '>= 1.0.12'
 
 #gem 'immortal', :git => "git://github.com/teambox/immortal.git"
 gem 'choices', :git => "git://github.com/teambox/choices.git"
+
+group :test do
+  gem 'faker'
+  gem 'factory_girl'
+end
 
 # Rails 3.1 - Heroku
 group :production do

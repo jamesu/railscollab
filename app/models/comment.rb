@@ -34,6 +34,7 @@ class Comment < ActiveRecord::Base
 	scope :is_public, where(:is_private => false)
 	 
 	def process_params
+	  self.project_id ||= self.rel_object.try(:project_id)
 	  self.is_anonymous = self.created_by.is_anonymous?
 	  
 	  true
@@ -70,14 +71,6 @@ class Comment < ActiveRecord::Base
 		end
 	end
 	
-	def project
-		self.rel_object.project
-	end
-	
-	def project_id
-		self.rel_object.project_id
-	end
-	
   def attached_files(with_private)
     if with_private
       project_file
@@ -99,4 +92,14 @@ class Comment < ActiveRecord::Base
 	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
 		record.errors.add attr, I18n.t('not_allowed') if value == true
 	end
+  
+  # Indexing
+  define_index do
+    indexes :text
+    
+    has :project_id
+    has :is_private
+    has :created_on
+    has :updated_on
+  end
 end

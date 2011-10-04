@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111002151122) do
+ActiveRecord::Schema.define(:version => 20111004100837) do
 
   create_table "activities", :force => true do |t|
     t.integer  "project_id",                    :default => 0,     :null => false
@@ -55,9 +56,11 @@ ActiveRecord::Schema.define(:version => 20111002151122) do
     t.datetime "updated_on"
     t.integer  "updated_by_id"
     t.integer  "attached_files_count",                :default => 0
+    t.integer  "project_id"
   end
 
   add_index "comments", ["created_on"], :name => "index_comments_on_created_on"
+  add_index "comments", ["project_id"], :name => "index_comments_on_project_id"
   add_index "comments", ["rel_object_id", "rel_object_type"], :name => "index_comments_on_rel_object_id_and_rel_object_type"
 
   create_table "companies", :force => true do |t|
@@ -196,9 +199,11 @@ ActiveRecord::Schema.define(:version => 20111002151122) do
     t.integer  "data_file_size"
     t.datetime "data_updated_at"
     t.boolean  "has_thumbnail",                   :default => false
+    t.integer  "project_id"
   end
 
   add_index "project_file_revisions", ["file_id"], :name => "index_project_file_revisions_on_file_id"
+  add_index "project_file_revisions", ["project_id"], :name => "index_project_file_revisions_on_project_id"
   add_index "project_file_revisions", ["revision_number"], :name => "index_project_file_revisions_on_revision_number"
   add_index "project_file_revisions", ["updated_on"], :name => "index_project_file_revisions_on_updated_on"
 
@@ -300,11 +305,13 @@ ActiveRecord::Schema.define(:version => 20111002151122) do
     t.integer  "order",                               :default => 0, :null => false
     t.integer  "comments_count",                      :default => 0
     t.float    "estimated_hours"
+    t.integer  "project_id"
   end
 
   add_index "tasks", ["completed_on"], :name => "index_project_tasks_on_completed_on"
   add_index "tasks", ["created_on"], :name => "index_project_tasks_on_created_on"
   add_index "tasks", ["order"], :name => "index_project_tasks_on_order"
+  add_index "tasks", ["project_id"], :name => "index_tasks_on_project_id"
   add_index "tasks", ["task_list_id"], :name => "index_project_tasks_on_task_list_id"
 
   create_table "time_records", :force => true do |t|
@@ -347,7 +354,7 @@ ActiveRecord::Schema.define(:version => 20111002151122) do
     t.string   "salt",                      :limit => 13,  :default => "",    :null => false
     t.string   "twister",                   :limit => 10,  :default => "",    :null => false
     t.string   "display_name",              :limit => 50
-    t.string   "title",                     :limit => 30
+    t.string   "title"
     t.string   "office_number",             :limit => 20
     t.string   "fax_number",                :limit => 20
     t.string   "mobile_number",             :limit => 20

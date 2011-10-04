@@ -108,6 +108,10 @@ class TaskList < ActiveRecord::Base
     Tag.list_by_object(self).join(' ')
   end
 
+  def tag_list
+    Tag.where(['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
+  end
+
   def tags=(val)
     @update_tags = val.split(',')
   end
@@ -177,5 +181,18 @@ class TaskList < ActiveRecord::Base
 
   validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == true
+  end
+  
+  # Indexing
+  define_index do
+    indexes :name
+    indexes :description
+    indexes tag_list(:tag), :as => :tags
+    
+    has :milestone_id
+    has :project_id
+    has :is_private
+    has :created_on
+    has :updated_on
   end
 end

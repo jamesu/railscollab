@@ -20,6 +20,7 @@
 class ProjectFileRevision < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
+  belongs_to :project
   belongs_to :project_file, :foreign_key => 'file_id'
   belongs_to :file_type,    :foreign_key => 'file_type_id'
 
@@ -36,8 +37,6 @@ class ProjectFileRevision < ActiveRecord::Base
   before_create :process_params
   before_update :process_update_params
   before_destroy :process_destroy
-  
-  def project; self.project_file.project; end
 
   @@content_types = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png', 'image/jpg']
   def thumbnailable?(file)
@@ -45,6 +44,7 @@ class ProjectFileRevision < ActiveRecord::Base
   end
     
   def process_params
+    self.project ||= project_file.project
   end
 
   def process_update_params
@@ -107,4 +107,17 @@ class ProjectFileRevision < ActiveRecord::Base
   # Validation
 
   #validates_presence_of :repository_id
+  
+  # Indexing
+  define_index do
+    indexes :comment
+    indexes :type_string
+    indexes :data_file_name
+    indexes :data_content_type
+    
+    has :project_id
+    has :file_id
+    has :file_type_id
+    has :data_updated_at
+  end
 end

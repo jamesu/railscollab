@@ -115,22 +115,18 @@ class Project < ActiveRecord::Base
 
   def self.search(query, is_private, projects, options={}, tag_search=false)
     results = []
-    return results, 0 unless Rails.configuration.search_enabled
-
-    project_ids = projects.collect { |project| project.id }.join('|')
-    real_query = if is_private
-      "is_private:false project_id:\"#{project_ids}\" #{query}"
-    else
-      "project_id:\"#{project_ids}\" #{query}"
-    end
+    return results, 0 if !Rails.configuration.search_enabled or query.blank?
+    options[:with] ||= {}
+    options[:with][:is_private] = false unless is_private
+    options[:with][:project_id] = projects.map(&:id)
 
     results = if tag_search
-      Tag.find_with_ferret(real_query, options)
+      Tag.search(query, options)
     else
-      ActsAsFerret::find(real_query, :shared, options)
+      ThinkingSphinx.search query, options.merge(:classes => [Comment, Message, TimeRecord, Task, TaskList, Milestone, ProjectFile, ProjectFileRevision, WikiPage])
     end
 
-    return results, results.total_hits
+    return results, results.total_entries
   end
 	
 	# Helpers

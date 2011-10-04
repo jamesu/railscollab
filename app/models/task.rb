@@ -20,8 +20,8 @@
 class Task < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  def project; self.task_list.project; end
   belongs_to :task_list
+  belongs_to :project
 
   belongs_to :company, :foreign_key => 'assigned_to_company_id'
   belongs_to :user,    :foreign_key => 'assigned_to_user_id'
@@ -42,6 +42,7 @@ class Task < ActiveRecord::Base
   after_destroy  :update_task_list
 
   def process_params
+    self.project ||= self.task_list.project
     write_attribute('completed_on', nil)
     write_attribute('order', self.task_list.tasks.length)
   end
@@ -191,5 +192,18 @@ class Task < ActiveRecord::Base
 
   validates_each :assigned_to, :allow_nil => true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if !value.nil? and !value.is_part_of(record.task_list.project)
+  end
+  
+  # Indexing
+  define_index do
+    indexes :text
+    
+    has :assigned_to_company_id
+    has :assigned_to_user_id
+    has :task_list_id
+    has :project_id
+    has task_list(:is_private), :as => :is_private
+    has :created_on
+    has :updated_on
   end
 end
