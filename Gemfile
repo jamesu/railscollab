@@ -11,7 +11,10 @@ gem 'dynamic_form'
 gem 'will_paginate', '~> 3.0'
 gem 'RedCloth'
 gem 'icalendar'
+gem 'faker'
 gem 'factory_girl'
+gem 'friendly_id', '~> 4.0.0.beta8'
+gem 'acts_as_versioned', :git => "git://github.com/firien/acts_as_versioned.git"
 gem 'jquery-rails', '>= 1.0.12'
 
 #group :test, :development do

@@ -20,7 +20,6 @@ class WikiPagesController < ApplicationController
   layout 'project_website'
 
   before_filter :process_session
-  before_filter :set_created_by, :only => [:create, :update]
   before_filter :find_sidebar_page, :only => [:index, :show]
   after_filter  :user_track, :only => [:index, :show]
 
@@ -56,10 +55,10 @@ class WikiPagesController < ApplicationController
   end
 
   def create
-    @wiki_page = wiki_pages.new(params[:wiki_page])
+    @wiki_page = wiki_pages.new(params[:wiki_page].merge(:created_by => @logged_user))
 
     if @wiki_page.save
-      flash[:message] = I18n.t :success_creating_wiki_page, :scope => :wiki_engine
+      flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
       redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'new'
@@ -70,8 +69,8 @@ class WikiPagesController < ApplicationController
   end
 
   def update
-    if @wiki_page.update_attributes(params[:wiki_page])
-      flash[:message] = I18n.t :success_updating_wiki_page, :scope => :wiki_engine
+    if @wiki_page.update_attributes(params[:wiki_page].merge(:created_by => @logged_user))
+      flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
       redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
       render :action => 'edit'
@@ -81,7 +80,7 @@ class WikiPagesController < ApplicationController
   def destroy
     @wiki_page.destroy
 
-    flash[:message] = I18n.t :success_deleting_wiki_page, :scope => :wiki_engine
+    flash[:message] = I18n.t 'wiki_engine.success_deleting_wiki_page'
     redirect_to wiki_pages_path
   end
 
@@ -106,7 +105,7 @@ class WikiPagesController < ApplicationController
 
   # Find main wiki page. This is by default used only for index action.
   def find_main_wiki_page
-    @wiki_page = wiki_pages.main.first
+    @wiki_page = wiki_pages.main(@active_project).first
   end
 
   # Find all wiki pages. This is by default used only for list action.
@@ -130,10 +129,6 @@ class WikiPagesController < ApplicationController
 
   def check_delete_permissions
     authorize! :delete, @wiki_page
-  end
-
-  def set_created_by
-    params[:wiki_page][:created_by] = @logged_user
   end
 
   def wiki_pages

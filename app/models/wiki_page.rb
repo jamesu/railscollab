@@ -1,10 +1,11 @@
 class WikiPage < ActiveRecord::Base
+  extend FriendlyId
   include Rails.application.routes.url_helpers
   include WikiPageUser
   
   before_save :set_main_page
   acts_as_versioned :extend => WikiPageUser
-  has_friendly_id :title, :use_slug => true, :strip_diacritics => true
+  friendly_id :title, :use => :slugged, :slug_column => :title
   validates_presence_of :title
 
   def title_from_id=(id)
@@ -12,8 +13,6 @@ class WikiPage < ActiveRecord::Base
   end
   
   belongs_to :project
-  # self.friendly_id_options[:scope] = :project
-  self.friendly_id_options[:scope] = :scope_value
   self.non_versioned_columns << :project_id
   scope :main, lambda{ |project| where(:main => true, :project_id => project.id) }
 
@@ -22,36 +21,37 @@ class WikiPage < ActiveRecord::Base
   before_destroy :process_destroy
 
   def scope_value
-    self.project.id.to_s
+    project.id.to_s
   end
 
   def process_create
-    Activity.new_log(self, self.created_by, :add)
+    Activity.new_log(self, created_by, :add)
   end
 
   def process_update_params
-    Activity.new_log(self, self.created_by, :edit)
+    Activity.new_log(self, created_by, :edit)
   end
 
   def process_destroy
-    Activity.new_log(self, self.created_by, :delete)
+    Activity.new_log(self, created_by, :delete)
   end
 
   def object_name
-    self.title
+    title
   end
 
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => self.project_id
+    url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => project_id
   end
 
   protected
   
   def main_page
-    @main_page ||= self.class.main(project).first
+    @main_page ||= WikiPage.main(project).first
   end
 
   def set_main_page
-    self.main_page.update_attribute :main, false if self.main && !self.main_was && self.main_page
+    main_page.update_attribute :main, false if main && !main_was && main_page
+    true
   end
 end

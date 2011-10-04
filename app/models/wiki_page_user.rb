@@ -4,10 +4,10 @@ module WikiPageUser
   end
 
   def user
-    self.created_by
+    created_by
   end
 
   def user_name
-    user.display_name if self.user
+    user.display_name if user
   end
 end
