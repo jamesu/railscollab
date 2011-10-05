@@ -11,7 +11,9 @@ jQuery.fn.extend({
     },
 
     autofocus: function() {
-        this.find('.autofocus:first').focus();
+        var el = this.find('.autofocus:first')[0];
+        if (el)
+          el.focus();
     },
 
     fancyRemove: function() {
@@ -153,7 +155,7 @@ function replaceTask(data, content) {
   // Replace or insert into correct list
   if (data.task_class != null && !in_list.hasClass(data.task_class)) {
     var task_list = task.parents('.taskList:first');
-    in_list.children('.taskItems').insert(task);
+    task_list.find('.' + data.task_class + ' .taskItems:first').append(task);
   }
 
   if (content)
@@ -187,7 +189,7 @@ function bindDynamic() {
     // Popup form for Add Item
     $('.addTask form')
     .bind('ajax:beforeSend', startLoading)
-    .bind('ajax:complete', stopLoading)
+    .bind('ajax:complete', function(evt){stopLoading(evt); $(evt.target).autofocus();})
     .bind('ajax:success',
     function(evt, data, status, xhr) {
         var form = $(evt.target);
@@ -310,7 +312,7 @@ function bindDynamic() {
             opacity: 0.75,
             update: function(e, ui) {
                 $.post(url, list.find('.openTasks:first ul').sortable('serialize', {
-                    key: 'tasks'
+                    key: 'tasks[]'
                 }));
             }
         });
