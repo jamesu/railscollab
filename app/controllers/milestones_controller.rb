@@ -139,7 +139,7 @@ class MilestonesController < ApplicationController
     authorize! :change_status, @milestone
     return error_status(true, :milestone_already_open) unless (@milestone.is_completed?)
 
-    @milestone.set_completed(false)
+    @milestone.set_completed(false, @logged_user)
     
     error_status(true, :error_saving) unless @milestone.save
     redirect_back_or_default milestone_path(:id => @milestone.id)

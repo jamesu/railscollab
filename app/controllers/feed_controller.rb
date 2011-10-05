@@ -135,7 +135,7 @@ class FeedController < ApplicationController
   	end
   end
 
-  def project_milestones
+  def milestones
   	begin
       @project = Project.find(params[:project])
   	rescue ActiveRecord::RecordNotFound
