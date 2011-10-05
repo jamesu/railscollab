@@ -49,6 +49,7 @@ class TasksController < ApplicationController
   def show
     begin
       @task = (@task_list||@active_project).tasks.find(params[:id])
+      @task_list ||= @task.task_list
     rescue
       return error_status(true, :invalid_task)
     end
