@@ -209,9 +209,9 @@ class FeedController < ApplicationController
       end
 
       format.csv do
-        build_str = ''
-        CSV.generate_row(['Project', 'Date (UTC)', 'Attributed to', 'Hours', 'Name', 'Description', 'Task list', 'Task'], 8, build_str)
-        @times.each { |time| CSV.generate_row([time.project.name,
+        build_str = CSV.generate do |csv|
+        csv << ['Project', 'Date (UTC)', 'Attributed to', 'Hours', 'Name', 'Description', 'Task list', 'Task']
+        @times.each { |time| csv << [time.project.name,
               time.running? ? '' : time.done_date.strftime('%m/%d/%Y'),
               time.assigned_to.nil? ? 'Anyone' : time.assigned_to.display_name,
               time.hours,
@@ -219,8 +219,8 @@ class FeedController < ApplicationController
               time.description,
               time.task_list.nil? ? '' : time.task_list.object_name,
               time.task.nil? ? '' : time.task.object_name,
-            ], 8, build_str) }
-
+            ] }
+        end
         render :text => build_str, :content_type => 'application/vnd.ms-excel'
       end
     end
