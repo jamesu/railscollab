@@ -7,7 +7,7 @@ continue to function. This can be achieved by running the following command:
 
 ## Change in file storage location
 
-If you are updating from the rails2 version of RailsCollab, the default location for Company logos, User avatars, and File data has changed. These are now located in "logo", "avatar" and "data".
+If you are updating from the rails2 version of RailsCollab, the default location for Company logos, User avatars, and File data has changed. These are now located in "public/system/logos", "public/system/avatars" and "public/system/data".
 If you have any existing files you should be able to copy them to the new location to make them work again.
 
 Thats it!

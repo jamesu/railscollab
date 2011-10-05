@@ -7,6 +7,8 @@ especially if you are not planning on deploying using Phusion Passenger.
 
 ## Requirements
 
+RailsCollab requires Ruby 1.9.2 or later. There is no support for Ruby 1.8.x.
+
 To install all required gems, simply run the following:
 
     bundle install
