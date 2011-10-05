@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2008 James S Urquhart
+# Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # Portions Copyright (C) Ariejan de Vroom
 # 

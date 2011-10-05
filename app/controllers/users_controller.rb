@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2009 James S Urquhart
+# Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
 #
 # This program is free software: you can redistribute it and/or modify
