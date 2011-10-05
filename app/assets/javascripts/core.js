@@ -124,7 +124,11 @@ function bindStatic() {
 
     $('.PopupMenuWidgetAttachTo').click(function(evt) {
         $(this).title = '';
-        $('#' + this.id + '_menu').toggle();
+        var menu = $('#' + this.id + '_menu');
+        if (menu.is(':hidden')) {
+          $('.PopupMenuWidgetDiv').hide();
+        }
+        menu.toggle();
     });
 }
 
