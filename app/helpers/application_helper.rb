@@ -194,8 +194,8 @@ module ApplicationHelper
   end
 
   def actions_for_wiki_page(page)
-    [{:name => I18n.t('edit'),    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page}, :cond => can?(:edit,page)},
-     {:name => I18n.t('delete'),  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page}, :cond => can?(:delete,page), :method => :delete, :confirm => I18n.t('wiki_page_confirm_delete')}]
+    [{:name => I18n.t('edit'),    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page.slug}, :cond => can?(:edit,page)},
+     {:name => I18n.t('delete'),  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page.slug}, :cond => can?(:delete,page), :method => :delete, :confirm => I18n.t('wiki_page_confirm_delete')}]
   end
   
   def running_time_for_task(task)

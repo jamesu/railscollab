@@ -59,7 +59,7 @@ class WikiPagesController < ApplicationController
 
     if @wiki_page.save
       flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
-      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
+      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page.slug)
     else
       render :action => 'new'
     end
@@ -140,11 +140,11 @@ class WikiPagesController < ApplicationController
   end
 
   def find_wiki_page
-    @wiki_page = wiki_pages.where(:project_id => @active_project.id).find_by_title(params[:id])
+    @wiki_page = wiki_pages.where(:project_id => @active_project.id).find_by_slug(params[:id])
   end
   
   def find_sidebar_page
-    @wiki_sidebar = wiki_pages.where(:project_id => @active_project.id).find_by_title("sidebar") rescue nil
+    @wiki_sidebar = wiki_pages.where(:project_id => @active_project.id).find_by_slug("sidebar") rescue nil
     @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
   end
 end

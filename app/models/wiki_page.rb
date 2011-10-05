@@ -5,7 +5,7 @@ class WikiPage < ActiveRecord::Base
   
   before_save :set_main_page
   acts_as_versioned :extend => WikiPageUser
-  friendly_id :title, :use => :slugged, :slug_column => :title
+  friendly_id :title, :use => :slugged
   validates_presence_of :title
 
   def title_from_id=(id)
@@ -14,6 +14,8 @@ class WikiPage < ActiveRecord::Base
   
   belongs_to :project
   self.non_versioned_columns << :project_id
+  self.non_versioned_columns << :title
+  self.non_versioned_columns << :slug
   scope :main, lambda{ |project| where(:main => true, :project_id => project.id) }
 
   after_create  :process_create

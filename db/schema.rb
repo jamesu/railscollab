@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111004100837) do
+ActiveRecord::Schema.define(:version => 20111005191500) do
 
   create_table "activities", :force => true do |t|
     t.integer  "project_id",                    :default => 0,     :null => false
@@ -406,9 +406,11 @@ ActiveRecord::Schema.define(:version => 20111004100837) do
     t.integer  "version"
     t.integer  "project_id"
     t.integer  "created_by_id"
+    t.string   "slug"
   end
 
   add_index "wiki_pages", ["main"], :name => "index_wiki_pages_on_main"
   add_index "wiki_pages", ["project_id"], :name => "index_wiki_pages_on_project_id"
+  add_index "wiki_pages", ["slug"], :name => "index_wiki_pages_on_slug"
 
 end

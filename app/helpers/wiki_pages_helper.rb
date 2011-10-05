@@ -98,6 +98,6 @@ module WikiPagesHelper
   end
 
   def wiki_title_to_id(title)
-    WikiPage.new(:title => title).slug_text
+    WikiPage.new(:title => title).normalize_friendly_id(title)
   end
 end
