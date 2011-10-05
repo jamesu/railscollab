@@ -299,7 +299,7 @@ class FilesController < ApplicationController
 
     authorize! :add_file, @attach_object
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :put
       attach_attribs = params[:attach]
 

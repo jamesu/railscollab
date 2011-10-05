@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
     :default_url => '',
     :path => Rails.configuration.attach_to_s3 ?
       "avatar/:id/:style.:extension" :
-      ":rails_root/avatar/:id/:style/:filename"
+      ":rails_root/public/system/:attachment/:id/:style/:filename"
 
   has_many :assigned_times, :class_name => 'TimeRecord', :foreign_key => 'assigned_to_user_id'
 

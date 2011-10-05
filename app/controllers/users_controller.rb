@@ -246,8 +246,8 @@ class UsersController < ApplicationController
 
   def avatar
     authorize! :update_profile, @user
-
-    case request.method_symbol
+    
+    case request.request_method_symbol
     when :put
       user_attribs = params[:user]
 
@@ -263,6 +263,8 @@ class UsersController < ApplicationController
         end
         
         redirect_to edit_user_path(:id => @user.id)
+      else
+        render 'edit'
       end
     when :delete
       @user.avatar = nil
@@ -307,7 +309,7 @@ class UsersController < ApplicationController
     @projects = @user.company.projects
     @permissions = Person.permission_names()
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :put
       update_project_permissions(@user, params[:user_project], params[:project_permission], @projects)
       #Activity.new_log(@project, @logged_user, :edit, true)

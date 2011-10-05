@@ -36,7 +36,7 @@ class Company < ActiveRecord::Base
     :default_url => '',
     :path => Rails.configuration.attach_to_s3 ?
       "logo/:id/:style.:extension" :
-      ":rails_root/logo/:id/:style/:filename"
+      ":rails_root/public/system/:attachment/:id/:style/:filename"
 
   before_create :process_params
   before_update :process_update_params

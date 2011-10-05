@@ -420,11 +420,11 @@ class Ability
       user.member_of_owner? or user.company_id == target_user.company_id or target_user.member_of_owner?
     end
     
-    can :update_profile do |target_user|
+    can :update_profile, User do |target_user|
       (target_user.id == user.id and !user.is_anonymous?) or (user.member_of_owner? and user.is_admin)
     end
 
-    can :update_permissions do |target_user|
+    can :update_permissions, User do |target_user|
       if target_user.owner_of_owner?
         false
       else

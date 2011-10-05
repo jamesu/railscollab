@@ -116,7 +116,7 @@ class ProjectsController < ApplicationController
   def permissions
     authorize! :manage, @project
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :get
       @people = @project.users
       @user_projects = @logged_user.projects
@@ -191,7 +191,7 @@ class ProjectsController < ApplicationController
   def users
     authorize! :manage, @project
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :delete
       user = User.find(params[:user_id])
       unless user.owner_of_owner?
@@ -208,7 +208,7 @@ class ProjectsController < ApplicationController
   def companies
     authorize! :manage, @project
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :delete
       company = Company.find(params[:company_id])
       unless company.is_owner?

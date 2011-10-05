@@ -155,7 +155,7 @@ class CompaniesController < ApplicationController
       return
   	end
 
-    case request.method_symbol
+    case request.request_method_symbol
     when :put
       project_list = params[:project]
       project_list ||= []
@@ -181,7 +181,7 @@ class CompaniesController < ApplicationController
   def logo
     authorize! :edit, @company
     
-    case request.method_symbol
+    case request.request_method_symbol
     when :put
       company_attribs = params[:company]
 
