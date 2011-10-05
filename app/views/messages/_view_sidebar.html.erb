@@ -46,7 +46,7 @@
         </div>
       </div>
       <button class="submit" type="submit"><%= t('update_options') %></button>
-      <p><%= link_to t('edit_message_sidebar_link'), edit_message_path(:id => @message.id) %></p>
+      <p><%= link_to t('edit_message_sidebar_link').html_safe, edit_message_path(:id => @message.id) %></p>
     </form>
   </div>
 </div>

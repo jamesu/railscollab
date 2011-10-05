@@ -10,7 +10,7 @@
 
   <div>
     <label for="addTaskText<%= task.id %>"><%= t('text') %>: <span class="label_required">*</span></label>
-    <%= text_area 'task', 'text', :id => "addTaskText#{task.id}", :class => 'short', :rows => 10, :cols => 40  %>
+    <%= text_area 'task', 'text', :id => "addTaskText#{task.id}", :class => 'short autofocus', :rows => 10, :cols => 40  %>
   </div>
   <div>
     <label for="taskAssignedTo<%= task.id %>"><%= t('assign_to') %>:</label>

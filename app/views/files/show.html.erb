@@ -29,10 +29,10 @@
 <% if !@last_revision.created_by.nil? %>
 		<%= t('revision_created_by', :number => @last_revision.revision_number,
 		                                     :user => "<a href=\"#{@last_revision.created_by.object_url}\">#{h @last_revision.created_by.display_name}</a>",
-		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short)) %>
+		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short)).html_safe %>
 <% else %>
 		<%= t('revision_created_by', :number => @last_revision.revision_number,
-		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short)) %>
+		                                     :date => format_usertime(@last_revision.created_on, :revision_date_format_short)).html_safe %>
 <% end %>
       </div>
 <% end %>
@@ -53,10 +53,10 @@
 <% if !revision.created_by.nil? %>
 		<%= t('revision_created_by', :number => revision.revision_number,
 		                                     :user => "<a href=\"#{revision.created_by.object_url}\">#{h revision.created_by.display_name}</a>",
-		                                     :date => format_usertime(revision.created_on, :revision_date_format)) %>
+		                                     :date => format_usertime(revision.created_on, :revision_date_format)).html_safe %>
 <% else %>
 		<%= t('revision_created_by', :number => revision.revision_number,
-		                                     :date => format_usertime(revision.created_on, :revision_date_format)) %>
+		                                     :date => format_usertime(revision.created_on, :revision_date_format)).html_safe %>
 <% end %>
     </div>
 <% if !revision.comment.empty? %>

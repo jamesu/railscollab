@@ -29,7 +29,7 @@
       <li><%= link_to h(project.name), project_path(:id => project.id) %></li>
 <% end %>
     </ul>
-    <p><%= link_to t('my_projects_sidebar_link'), :controller => 'dashboard', :action => 'my_projects' %></p>
+    <p><%= link_to t('my_projects_sidebar_link').html_safe, :controller => 'dashboard', :action => 'my_projects' %></p>
   </div>
 </div>
 <% end %>
