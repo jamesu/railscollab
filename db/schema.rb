@@ -354,7 +354,7 @@ ActiveRecord::Schema.define(:version => 20111005191500) do
     t.string   "salt",                      :limit => 13,  :default => "",    :null => false
     t.string   "twister",                   :limit => 10,  :default => "",    :null => false
     t.string   "display_name",              :limit => 50
-    t.string   "title"
+    t.string   "title",                     :limit => 30
     t.string   "office_number",             :limit => 20
     t.string   "fax_number",                :limit => 20
     t.string   "mobile_number",             :limit => 20

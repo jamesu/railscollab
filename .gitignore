@@ -11,3 +11,4 @@ tmp/restart.txt
 tmp/**/*
 public/themes/*
 *.sqlite3
+public/system/data/*
