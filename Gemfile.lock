@@ -49,7 +49,7 @@ GEM
     bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-java)
     builder (3.0.0)
-    cancan (1.6.6)
+    cancan (1.6.7)
     cocaine (0.2.0)
     dynamic_form (1.1.4)
     erubis (2.7.0)
