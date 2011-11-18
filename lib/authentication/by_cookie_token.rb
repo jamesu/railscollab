@@ -35,14 +35,14 @@ module Authentication
       def remember_me_until(time)
         self.remember_token_expires_at = time
         self.remember_token            = self.class.make_token
-        save(false)
+        save(:validate => false)
       end
 
       # refresh token (keeping same expires_at) if it exists
       def refresh_token
         if remember_token?
           self.remember_token = self.class.make_token 
-          save(false)      
+          save(:validate => false)      
         end
       end
 
