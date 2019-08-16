@@ -132,7 +132,7 @@ GEM
     uglifier (1.0.3)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
-    will_paginate (3.0.2)
+    will_paginate (3.1.7)
 
 PLATFORMS
   java
@@ -159,4 +159,4 @@ DEPENDENCIES
   therubyracer-heroku (= 0.8.1.pre3)
   thinking-sphinx (= 2.0.5)
   uglifier
-  will_paginate (~> 3.0)
+  will_paginate (~> 3.1)
