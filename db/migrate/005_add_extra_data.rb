@@ -1,4 +1,4 @@
-class AddExtraData < ActiveRecord::Migration
+class AddExtraData < ActiveRecord::Migration[4.2]
   def self.up
   end
 

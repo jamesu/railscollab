@@ -1,4 +1,4 @@
-class UpdateOpenid < ActiveRecord::Migration
+class UpdateOpenid < ActiveRecord::Migration[4.2]
   def self.up
     create_table :open_id_authentication_associations, :force => true do |t|
       t.integer :issued, :lifetime

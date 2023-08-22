@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ConfigOption < ActiveRecord::Base
+class ConfigOption < ApplicationRecord
   #belongs_to :config_category
 
   def category

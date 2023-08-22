@@ -1,4 +1,4 @@
-class NewTimezone < ActiveRecord::Migration
+class NewTimezone < ActiveRecord::Migration[4.2]
   def self.up
     add_column :users, :time_zone, :string, :null => false, :default => ''
     add_column :companies, :time_zone, :string, :null => false, :default => ''

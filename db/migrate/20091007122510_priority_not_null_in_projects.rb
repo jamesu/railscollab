@@ -1,4 +1,4 @@
-class PriorityNotNullInProjects < ActiveRecord::Migration
+class PriorityNotNullInProjects < ActiveRecord::Migration[4.2]
   def self.up
     change_column_null :projects, :priority, false, 0
   end

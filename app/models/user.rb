@@ -19,7 +19,7 @@
 
 require 'digest/sha1'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Rails.application.routes.url_helpers
   include Authentication
   include Authentication::ByCookieToken

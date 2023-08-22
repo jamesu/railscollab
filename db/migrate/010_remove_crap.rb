@@ -1,4 +1,4 @@
-class RemoveCrap < ActiveRecord::Migration
+class RemoveCrap < ActiveRecord::Migration[4.2]
   def self.up
     drop_table "searchable_objects"
   end

@@ -1,4 +1,4 @@
-class NomoreForms < ActiveRecord::Migration
+class NomoreForms < ActiveRecord::Migration[4.2]
   def self.up
     drop_table 'project_forms'
   end

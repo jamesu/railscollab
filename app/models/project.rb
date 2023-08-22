@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
 	include Rails.application.routes.url_helpers
 	
 	belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'

@@ -1,4 +1,4 @@
-class TimeTrackingSchema < ActiveRecord::Migration
+class TimeTrackingSchema < ActiveRecord::Migration[4.2]
   def self.up
   end
 

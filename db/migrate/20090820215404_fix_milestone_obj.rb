@@ -1,4 +1,4 @@
-class FixMilestoneObj < ActiveRecord::Migration
+class FixMilestoneObj < ActiveRecord::Migration[4.2]
   def self.up
     change_column :project_task_lists, :milestone_id,  :integer, :default => nil,   :null => true
     change_column :project_messages, :milestone_id,    :integer, :default => nil,   :null => true

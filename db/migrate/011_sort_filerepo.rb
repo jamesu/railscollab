@@ -1,4 +1,4 @@
-class SortFilerepo < ActiveRecord::Migration
+class SortFilerepo < ActiveRecord::Migration[4.2]
   def self.up
     drop_table "file_repo_attributes"
     

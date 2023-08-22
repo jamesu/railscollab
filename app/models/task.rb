@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class Task < ActiveRecord::Base
+class Task < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :task_list

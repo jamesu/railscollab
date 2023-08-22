@@ -1,4 +1,4 @@
-class WikiPage < ActiveRecord::Base
+class WikiPage < ApplicationRecord
   extend FriendlyId
   include Rails.application.routes.url_helpers
   include WikiPageUser

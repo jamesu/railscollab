@@ -1,4 +1,4 @@
-class AddFieldsToWikiPages < ActiveRecord::Migration
+class AddFieldsToWikiPages < ActiveRecord::Migration[4.2]
   def self.up
     change_table :wiki_pages do |t|
       t.references :project, :created_by

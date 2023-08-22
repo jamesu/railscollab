@@ -1,41 +1,22 @@
-require File.expand_path('../boot', __FILE__)
+require_relative "boot"
 
-require 'rails/all'
+require "rails/all"
 
-# If you have a Gemfile, require the gems listed there, including any gems
+# Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+Bundler.require(*Rails.groups)
 
 module Railscollab
   class Application < Rails::Application
-    config.encoding = "utf-8"
-    config.filter_parameters += [:password]
-    
-    def config.from_file(file)
-      super
-      
-      self.i18n.default_locale = default_language
-      
-      # Configure mailer
-      self.action_mailer.default_url_options = { :host => URI.parse(site_url).host }
-      self.action_mailer.delivery_method                 = notification_email_method.to_sym
-      self.action_mailer.smtp_settings                   = notification_email_smtp.symbolize_keys.delete_if{ |key, value| value.nil? or value.to_s.empty? }
-      self.action_mailer.smtp_settings[:authentication]  = self.action_mailer.smtp_settings[:authentication].to_sym
-      self.action_mailer.sendmail_settings               = Rails.configuration.notification_email_sendmail
-    end
-      
-    config.from_file 'railscollab.yml'
-    config.assets.enabled = true
-    config.sass.preferred_syntax = :sass
-  end
-  
-  def self.config
-    Rails.configuration
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 7.0
+
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
   end
 end
-
-require 'authenticated_system'
-require 'authentication'
-require 'authentication/by_cookie_token'
-require 'railscollab_extras'
-YAML::ENGINE.yamler = 'syck'

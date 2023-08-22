@@ -6,7 +6,7 @@ class SlugFix < ActiveRecord::Base
   set_table_name 'slugs'
 end
 
-class KillSlugs < ActiveRecord::Migration
+class KillSlugs < ActiveRecord::Migration[4.2]
   def up
     add_column :wiki_pages, :slug, :string
     add_index :wiki_pages, :slug

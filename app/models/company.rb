@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class Company < ActiveRecord::Base
+class Company < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :client_of, :class_name => 'Company', :foreign_key => 'client_of_id'

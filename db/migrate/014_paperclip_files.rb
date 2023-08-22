@@ -1,4 +1,4 @@
-class PaperclipFiles < ActiveRecord::Migration
+class PaperclipFiles < ActiveRecord::Migration[4.2]
   def self.up
     add_column :project_file_revisions, "data_file_name",    :string
     add_column :project_file_revisions, "data_content_type", :string

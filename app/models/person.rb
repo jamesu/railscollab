@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   belongs_to :user
   belongs_to :project
 

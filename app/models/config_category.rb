@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ConfigCategory < ActiveRecord::Base
+class ConfigCategory < ApplicationRecord
   #has_many :config_options
 
   def display_name

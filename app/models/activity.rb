@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class Activity < ActiveRecord::Base
+class Activity < ApplicationRecord
   belongs_to :project
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
   belongs_to :rel_object, :polymorphic => true

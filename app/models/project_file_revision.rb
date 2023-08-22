@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class ProjectFileRevision < ActiveRecord::Base
+class ProjectFileRevision < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project

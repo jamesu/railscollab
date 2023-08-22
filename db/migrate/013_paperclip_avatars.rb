@@ -1,4 +1,4 @@
-class PaperclipAvatars < ActiveRecord::Migration
+class PaperclipAvatars < ActiveRecord::Migration[4.2]
   def self.up
     remove_column :companies, 'logo_file'
     remove_column :users, 'avatar_file'

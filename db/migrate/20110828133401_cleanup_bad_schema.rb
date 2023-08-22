@@ -1,4 +1,4 @@
-class CleanupBadSchema < ActiveRecord::Migration
+class CleanupBadSchema < ActiveRecord::Migration[4.2]
   
   def self.up
     drop_table "administration_tools"

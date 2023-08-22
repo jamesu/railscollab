@@ -1,4 +1,4 @@
-class Nomoreconfig < ActiveRecord::Migration
+class Nomoreconfig < ActiveRecord::Migration[4.2]
   def up
     drop_table "config_categories"
     drop_table "config_options"

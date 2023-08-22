@@ -1,4 +1,4 @@
-class BaseSchema < ActiveRecord::Migration
+class BaseSchema < ActiveRecord::Migration[4.2]
   def self.up
     create_table "administration_tools", :force => true do |t|
       t.string  "name",       :limit => 50, :default => "", :null => false

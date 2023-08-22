@@ -13,7 +13,7 @@ class FileRevisionFix < ActiveRecord::Base
   belongs_to :project_file
 end
 
-class ProjectsOnObjects < ActiveRecord::Migration
+class ProjectsOnObjects < ActiveRecord::Migration[4.2]
   def up
     add_column :comments, :project_id, :integer
     add_index :comments, :project_id
