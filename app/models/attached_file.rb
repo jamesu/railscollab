@@ -18,10 +18,10 @@
 #++
 
 class AttachedFile < ApplicationRecord
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
 	
-	belongs_to :project_file, :foreign_key => 'file_id'
-	belongs_to :rel_object, :polymorphic => true, :counter_cache => true
+	belongs_to :project_file, foreign_key:  'file_id'
+	belongs_to :rel_object, polymorphic:  true, counter_cache:  true
 	
 	def self.clear_attachment(object, attach_id)
 	  conds = ['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
@@ -35,7 +35,7 @@ class AttachedFile < ApplicationRecord
 	    end
 	  end
 	  
-	  AttachedFile.delete_all(conds)
+	  AttachedFile.where(conds).delete_all
 	end
 	
 	def self.clear_attachments(object)
@@ -45,14 +45,14 @@ class AttachedFile < ApplicationRecord
 	                                 
 	  AttachedFile.where(conds).each do |attach|
 	    if !attach.project_file.nil? and !attach.project_file.is_visible and attach.project_file.attached_files.length <= 1
-	      AttachedFile.delete_all(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
+	      AttachedFile.where(['rel_object_type = ? AND rel_object_id = ? AND file_id = ?', 
                object.class.to_s, 
-               object.id, attach.file_id])
+               object.id, attach.file_id]).delete_all
       end
 	  end
 	end
 	
 	def self.clear_files(file_id)
-		AttachedFile.delete_all(['file_id = ?', file_id])
+		AttachedFile.where(['file_id = ?', file_id]).delete_all
 	end
 end

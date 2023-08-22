@@ -20,21 +20,20 @@
 class Company < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :client_of, :class_name => 'Company', :foreign_key => 'client_of_id'
+  belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id'
 
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :clients, :class_name => 'Company', :foreign_key => 'client_of_id'
+  has_many :clients, class_name: 'Company', foreign_key:  'client_of_id'
   has_many :users
-  has_many :auto_assign_users, :class_name => 'User', :foreign_key => 'company_id', :conditions => ['auto_assign = ?', true]
 
   has_and_belongs_to_many :projects,  :join_table => :project_companies
 
   has_attached_file :logo,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.attach_to_s3 ?
+    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
       "logo/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 
@@ -51,6 +50,10 @@ class Company < ApplicationRecord
   end
 
   def process_destroy
+  end
+
+  def auto_assign_users
+    self.users.where(:auto_assign => true)
   end
 
   def self.owner(reload=false)
@@ -104,7 +107,7 @@ class Company < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country
+  #attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country
 
   # Validation
 

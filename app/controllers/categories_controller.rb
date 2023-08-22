@@ -87,7 +87,7 @@ class CategoriesController < ApplicationController
   def create
     authorize! :create_message_category, @active_project
     
-    @category = @active_project.categories.build(params[:category])
+    @category = @active_project.categories.build(category_params)
     @category.created_by = @logged_user
     
     respond_to do |format|
@@ -118,7 +118,7 @@ class CategoriesController < ApplicationController
     @category.updated_by = @logged_user
     
     respond_to do |format|
-      if @category.update_attributes(params[:category])
+      if @category.update_attributes(category_params)
         format.html {
           error_status(false, :success_edited_message_category)
           redirect_back_or_default(@category)
@@ -185,7 +185,7 @@ class CategoriesController < ApplicationController
         @page = 1 unless @page > 0
         
         @messages = @category.messages.where(msg_conditions)
-                                              .paginate(:page => @page, :per_page => Rails.configuration.messages_per_page)
+                                              .paginate(:page => @page, :per_page => Rails.configuration.x.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -200,7 +200,7 @@ class CategoriesController < ApplicationController
       format.xml  { 
         @messages = @category.messages.where(msg_conditions)
                                               .offset(params[:offset])
-                                              .limit(params[:limit] || Rails.configuration.messages_per_page)
+                                              .limit(params[:limit] || Rails.configuration.x.railscollab.messages_per_page)
         
         render :xml => @messages.to_xml(:only => [:id,
                                                   :title,
@@ -214,6 +214,12 @@ class CategoriesController < ApplicationController
                                                   :comments_enabled], :root => 'messages')
       }
     end
+  end
+
+protected
+
+  def category_params
+    params[:category].nil? ? {} : params[:category].permit(:name)
   end
   
 end

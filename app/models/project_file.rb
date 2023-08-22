@@ -21,17 +21,17 @@ class ProjectFile < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :folder, :counter_cache => true
+  belongs_to :folder, counter_cache:  true
 
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :project_file_revisions, :foreign_key => 'file_id', :order => 'revision_number DESC', :dependent => :destroy
-  has_many :attached_files, :foreign_key => 'file_id'
-  has_many :comments, :as => 'rel_object', :dependent => :destroy
-  #has_many :tags, :as => 'rel_object', :dependent => :destroy
+  has_many :project_file_revisions, foreign_key:  'file_id', dependent:  :destroy
+  has_many :attached_files, foreign_key:  'file_id'
+  has_many :comments, as:  'rel_object', dependent:  :destroy
+  #has_many :tags, as:  'rel_object', dependent:  :destroy
   
-  scope :important, where(:is_important => true)
+  scope :important, -> { where(:is_important => true) }
 
   before_validation :process_params, :on => :create
   after_create  :process_create
@@ -54,6 +54,10 @@ class ProjectFile < ApplicationRecord
     AttachedFile.clear_files(self.id)
     Tag.clear_by_object(self)
     Activity.new_log(self, self.updated_by, :delete)
+  end
+
+  def ordered_project_file_revisions
+    self.project_file_revisions.order('revision_number DESC')
   end
 
   def tags
@@ -200,7 +204,7 @@ class ProjectFile < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
+  #attr_accessible :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 
   # Validation
 
@@ -221,7 +225,7 @@ class ProjectFile < ApplicationRecord
   define_index do
     indexes :name
     indexes :description
-    indexes tag_list(:tag), :as => :tags
+    indexes tag_list(:tag), as:  :tags
     
     has :folder_id
     has :project_id

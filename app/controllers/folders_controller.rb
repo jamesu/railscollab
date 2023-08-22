@@ -76,7 +76,7 @@ class FoldersController < ApplicationController
   def create
     authorize! :create_folder, @active_project
     
-    @folder = @active_project.folders.build(params[:folder])
+    @folder = @active_project.folders.build(folder_params)
     @folder.created_by = @logged_user
     
     respond_to do |format|
@@ -103,7 +103,7 @@ class FoldersController < ApplicationController
     @folder.updated_by = @logged_user
     
     respond_to do |format|
-      if @folder.update_attributes(params[:folder])
+      if @folder.update_attributes(folder_params)
         format.html {
           error_status(false, :success_edited_folder)
           redirect_back_or_default(@folder)
@@ -159,7 +159,7 @@ class FoldersController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.files_per_page, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.x.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.total_pages.times {|page| @pagination << page+1}
         
@@ -173,7 +173,7 @@ class FoldersController < ApplicationController
       format.xml  { 
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
-                            .limit(params[:limit] || Rails.configuration.files_per_page)
+                            .limit(params[:limit] || Rails.configuration.x.railscollab.files_per_page)
         
         render :xml => @files.to_xml(:only => [:id,
                                                :filename,
@@ -190,6 +190,10 @@ class FoldersController < ApplicationController
   end
 
 private
+
+  def folder_params
+    params[:folder].nil? ? {} : params[:folder].permit(:name)
+  end
 
   def obtain_folder
     if params[:folder_name]

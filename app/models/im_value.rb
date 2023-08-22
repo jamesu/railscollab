@@ -17,7 +17,7 @@
 #++
 
 class ImValue < ApplicationRecord
-	set_table_name 'user_im_values'
+	self.table_name =  'user_im_values'
 	
 	belongs_to :user
 	belongs_to :im_type

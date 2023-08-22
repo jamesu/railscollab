@@ -76,7 +76,7 @@ class PaperclipFiles < ActiveRecord::Migration[4.2]
 end
 
 class TempRepo < ActiveRecord::Base
-  set_table_name 'file_repo'
+  self.table_name = 'file_repo'
 
   @@storage_lookup = {:database => 0, :s3 => 1}
   @@storage_id_lookup = @@storage_lookup.invert

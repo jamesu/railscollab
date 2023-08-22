@@ -23,26 +23,26 @@ class Milestone < ApplicationRecord
 
   belongs_to :project
 
-  belongs_to :company, :foreign_key => 'assigned_to_company_id'
-  belongs_to :user,    :foreign_key => 'assigned_to_user_id'
+  belongs_to :company, foreign_key:  'assigned_to_company_id'
+  belongs_to :user,    foreign_key:  'assigned_to_user_id'
 
-  belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
+  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
 
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :nullify
+  has_many :task_lists, dependent:  :nullify
 
-  has_many :messages, :dependent => :nullify
+  has_many :messages, dependent:  :nullify
 
-  #has_many :tags, :as => 'rel_object', :dependent => :destroy
+  #has_many :tags, as:  'rel_object', dependent:  :destroy
 
-  scope :is_public, where(:is_private => false)
-  scope :is_open, where('milestones.completed_on IS NULL').order('milestones.due_date ASC')
-  scope :late, where(['due_date < ? AND completed_on IS NULL', Date.today])
-  scope :todays, where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1])
-  scope :upcoming, where(['completed_on IS NULL AND due_date >= ?', Date.today+1])
-  scope :completed, where('completed_on IS NOT NULL')
+  scope :is_public, -> { where(:is_private => false) }
+  scope :is_open,   -> { where('milestones.completed_on IS NULL').order('milestones.due_date ASC') }
+  scope :late,      -> { where(['due_date < ? AND completed_on IS NULL', Date.today]) }
+  scope :todays,    -> { where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1]) }
+  scope :upcoming,  -> { where(['completed_on IS NULL AND due_date >= ?', Date.today+1]) }
+  scope :completed, -> { where('completed_on IS NOT NULL') }
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -92,6 +92,10 @@ class Milestone < ApplicationRecord
 
   def object_url(host = nil)
     url_for hash_for_milestone_path(:id => self.id, :active_project => self.project_id, :only_path => host.nil?, :host => host)
+  end
+
+  def ordered_task_lists
+    self.task_lists.order(order: :desc)
   end
 
   def tags
@@ -268,7 +272,7 @@ class Milestone < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :name, :description, :due_date, :assigned_to_id, :is_private
+  #attr_accessible :name, :description, :due_date, :assigned_to_id, :is_private
 
   # Validation
 
@@ -285,7 +289,7 @@ class Milestone < ApplicationRecord
   define_index do
     indexes :name
     indexes :description
-    indexes tag_list(:tag), :as => :tags
+    indexes tag_list(:tag), as:  :tags
     
     has :assigned_to_company_id
     has :assigned_to_user_id

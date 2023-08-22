@@ -15,6 +15,8 @@ gem 'activemodel-serializers-xml'
 
 gem 'actionpack-page_caching'
 
+gem 'friendly_id', '~> 5.4.0'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

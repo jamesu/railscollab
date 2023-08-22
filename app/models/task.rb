@@ -23,16 +23,16 @@ class Task < ApplicationRecord
   belongs_to :task_list
   belongs_to :project
 
-  belongs_to :company, :foreign_key => 'assigned_to_company_id'
-  belongs_to :user,    :foreign_key => 'assigned_to_user_id'
+  belongs_to :company, foreign_key:  'assigned_to_company_id'
+  belongs_to :user,    foreign_key:  'assigned_to_user_id'
 
-  belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
-  belongs_to :created_by,   :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by,   :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+  belongs_to :created_by,   class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by,   class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :comments, :as => 'rel_object', :order => 'created_on ASC',  :dependent => :destroy
+  has_many :comments, as:  'rel_object',  dependent:  :destroy
 
-  has_many :time_records, :dependent => :nullify
+  has_many :time_records, dependent:  :nullify
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -86,6 +86,10 @@ class Task < ApplicationRecord
     if !@update_completed
      Activity.new_log(self, @update_completed_user, :open, self.task_list.is_private, self.task_list.project)
     end
+  end
+
+  def ordered_comments
+    self.comments.order('created_on ASC')
   end
 
   def object_name
@@ -160,7 +164,6 @@ class Task < ApplicationRecord
   end
   
   # Serialization
-  alias_method :ar_to_xml, :to_xml
   
   def to_xml(options = {}, &block)
     default_options = { 
@@ -175,12 +178,12 @@ class Task < ApplicationRecord
         :created_on,
         :updated_on
       ]}
-    self.ar_to_xml(options.merge(default_options), &block)
+    super(options.merge(default_options), &block)
   end
 
   # Accesibility
 
-  attr_accessible :text, :assigned_to_id, :task_list_id, :estimated_hours
+  #attr_accessible :text, :assigned_to_id, :task_list_id, :estimated_hours
 
   # Validation
 
@@ -202,7 +205,7 @@ class Task < ApplicationRecord
     has :assigned_to_user_id
     has :task_list_id
     has :project_id
-    has task_list(:is_private), :as => :is_private
+    has task_list(:is_private), as:  :is_private
     has :created_on
     has :updated_on
   end

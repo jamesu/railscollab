@@ -21,23 +21,23 @@ class Message < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :milestone
-  belongs_to :category,         :counter_cache => true
+  belongs_to :category,         counter_cache:  true
   belongs_to :project
 
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :comments, :as => 'rel_object', :order => 'created_on ASC', :dependent => :destroy
-  #has_many :tags, :as => 'rel_object', :dependent => :destroy
-  has_many :attached_file, :as => 'rel_object'
+  has_many :comments, as:  'rel_object', dependent:  :destroy
+  #has_many :tags, as:  'rel_object', dependent:  :destroy
+  has_many :attached_file, as:  'rel_object'
 
-  has_many :project_file, :through => :attached_file
+  has_many :project_file, through:  :attached_file
 
-  has_and_belongs_to_many :subscribers, :class_name => 'User', :join_table => 'message_subscriptions', :foreign_key => 'message_id'
+  has_and_belongs_to_many :subscribers, class_name: 'User', :join_table => 'message_subscriptions', foreign_key:  'message_id'
 
-  scope :is_public, where(:is_private => false)
+  scope :is_public, -> { where(:is_private => false) }
   
-  scope :important, where(:is_important => true)
+  scope :important, -> { where(:is_important => true) }
 
   before_validation :process_params, :on => :create
   after_create  :process_create
@@ -60,6 +60,10 @@ class Message < ApplicationRecord
     Tag.clear_by_object(self)
     AttachedFile.clear_attachments(self)
     Activity.new_log(self, self.updated_by, :delete, self.is_private)
+  end
+
+  def ordered_comments
+    self.comments.order('created_on ASC')
   end
 
   def tags
@@ -122,7 +126,7 @@ class Message < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
+  #attr_accessible :title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 
   # Validation
 
@@ -148,7 +152,7 @@ class Message < ApplicationRecord
   define_index do
     indexes :title
     indexes :text
-    indexes tag_list(:tag), :as => :tags
+    indexes tag_list(:tag), as:  :tags
     
     has :project_id
     has :category_id

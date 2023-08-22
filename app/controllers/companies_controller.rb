@@ -65,7 +65,7 @@ class CompaniesController < ApplicationController
 
     @company = Company.new
 
-    @company.attributes = params[:company]
+    @company.attributes = company_params
     @company.client_of = Company.owner
     @company.created_by = @logged_user
 
@@ -92,7 +92,7 @@ class CompaniesController < ApplicationController
   def update
     authorize! :edit, @company
 
-    @company.attributes = params[:company]
+    @company.attributes = company_params
     @company.updated_by = @logged_user
 
     respond_to do |format|
@@ -183,7 +183,7 @@ class CompaniesController < ApplicationController
     
     case request.request_method_symbol
     when :put
-      company_attribs = params[:company]
+      company_attribs = company_params
 
       new_logo = company_attribs[:logo]
       @company.errors.add(:logo, 'Required') if new_logo.nil?
@@ -209,6 +209,10 @@ class CompaniesController < ApplicationController
   end
 
   private
+
+  def company_params
+    params[:company].nil? ? {} : params[:company].permit(::name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+  end
 
   def obtain_company
     begin

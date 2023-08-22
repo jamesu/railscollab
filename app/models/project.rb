@@ -21,30 +21,30 @@
 class Project < ApplicationRecord
 	include Rails.application.routes.url_helpers
 	
-	belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
-	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+	belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+	belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 	
 	has_many :people
-	has_many :users, :through => :people
+	has_many :users, through:  :people
 	
-  has_many :time_records, :dependent => :destroy
-	has_many :tags, :as => :rel_object # Dependent objects sould destroy all of these for us
+  has_many :time_records, dependent:  :destroy
+	has_many :tags, as:  :rel_object # Dependent objects sould destroy all of these for us
 	
-	has_many :milestones, :dependent => :destroy
+	has_many :milestones, dependent:  :destroy
 	
-	has_many :task_lists, :order => "#{self.connection.quote_column_name 'order'} DESC", :dependent => :destroy
+	has_many :task_lists, dependent:  :destroy
 	
-	has_many :tasks, :through => :task_lists
+	has_many :tasks, through:  :task_lists
 	
-	has_many :folders, :dependent => :destroy
-  has_many :project_files, :dependent => :destroy
-  has_many :messages, :order => 'created_on DESC', :dependent => :destroy
-	has_many :categories, :dependent => :destroy
+	has_many :folders, dependent:  :destroy
+  has_many :project_files, dependent:  :destroy
+  has_many :messages, dependent:  :destroy
+	has_many :categories, dependent:  :destroy
 	
-  has_many :activities, :order => 'created_on DESC, id DESC', :dependent => :destroy
+  has_many :activities, dependent:  :destroy
 	
-  has_many :wiki_pages, :dependent => :destroy
+  has_many :wiki_pages, dependent:  :destroy
 	
 	has_and_belongs_to_many :companies, :join_table => :project_companies
 	
@@ -63,17 +63,29 @@ class Project < ApplicationRecord
 	
 	def process_update_params
 	  if @update_completed.nil?
-		Activity.new_log(self, self.updated_by, :edit, true)
+			Activity.new_log(self, self.updated_by, :edit, true)
 	  else
-		write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
-		self.completed_by = @update_completed_user
-		Activity.new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
+			write_attribute("completed_on", @update_completed ? Time.now.utc : nil)
+			self.completed_by = @update_completed_user
+			Activity.new_log(self, @update_completed_user, @update_completed ? :close : :open, true)
 	  end
 	end
 	
 	def process_destroy
 	  people.destroy_all
 	  Activity.new_log(self, self.updated_by, :delete, true)
+	end
+
+	def ordered_messages
+		self.messages.order('created_on DESC')
+	end
+
+	def ordered_task_lists
+		self.tasks_lists.order(order: :desc)
+	end
+
+	def ordered_activities
+		self.activities.order('created_on DESC, id DESC')
 	end
 	
 	def object_name
@@ -115,7 +127,7 @@ class Project < ApplicationRecord
 
   def self.search(query, is_private, projects, options={}, tag_search=false)
     results = []
-    return results, 0 if !Rails.configuration.search_enabled or query.blank?
+    return results, 0 if !Rails.configuration.x.railscollab.search_enabled or query.blank?
     options[:with] ||= {}
     options[:with][:is_private] = false unless is_private
     options[:with][:project_id] = projects.map(&:id)
@@ -139,7 +151,7 @@ class Project < ApplicationRecord
 	
 	# Accesibility
 	
-	attr_accessible :name, :description, :priority, :show_description_in_overview
+	#attr_accessible :name, :description, :priority, :show_description_in_overview
 	
 	# Validation
 	

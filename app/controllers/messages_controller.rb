@@ -58,7 +58,7 @@ class MessagesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         @messages = @active_project.messages.where(msg_conditions)
-                                                    .paginate(:page => @page, :per_page => Rails.configuration.messages_per_page)
+                                                    .paginate(:page => @page, :per_page => Rails.configuration.x.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -74,7 +74,7 @@ class MessagesController < ApplicationController
       format.xml  { 
         @messages = @active_project.messages.where(msg_conditions)
                                                     .offset(params[:offset])
-                                                    .limit(params[:limit] || Rails.configuration.messages_per_page)
+                                                    .limit(params[:limit] || Rails.configuration.x.railscollab.messages_per_page)
         render :xml => @messages.to_xml(:root => 'messages')
       }
     end
@@ -118,10 +118,10 @@ class MessagesController < ApplicationController
     if @category
       @message.category_id = @category.id
     else
-      @category = @active_project.categories.where(['name = ?', Rails.configuration.default_project_message_category]).first
+      @category = @active_project.categories.where(['name = ?', Rails.configuration.x.railscollab.default_project_message_category]).first
     end
 
-    @message.comments_enabled = true unless (params[:message] and params[:message].has_key?(:comments_enabled))
+    @message.comments_enabled = true unless (message_params and message_params.has_key?(:comments_enabled))
     
     respond_to do |format|
       format.html # new.html.erb
@@ -139,9 +139,9 @@ class MessagesController < ApplicationController
   def create
     authorize! :create_message, @active_project
     
-    @message = @active_project.messages.build(params[:message])
+    @message = @active_project.messages.build(message_params)
     
-    message_attribs = params[:message]
+    message_attribs = message_params
     @message.attributes = message_attribs
     @message.created_by = @logged_user
     
@@ -200,7 +200,7 @@ class MessagesController < ApplicationController
   def update
     authorize! :edit, @message
     
-    message_attribs = params[:message]
+    message_attribs = message_params
     @message.attributes = message_attribs
     
     @message.updated_by = @logged_user
@@ -283,6 +283,10 @@ class MessagesController < ApplicationController
   end
 
 private
+
+  def message_params
+    params[:message].nil? ? {} : params[:message].permit(:title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
+  end
 
    def obtain_message
      begin

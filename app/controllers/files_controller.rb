@@ -50,7 +50,7 @@ class FilesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.files_per_page, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.x.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.total_pages.times {|page| @pagination << page+1}
         
@@ -62,7 +62,7 @@ class FilesController < ApplicationController
       format.xml  {
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
-                            .limit(params[:limit] || Rails.configuration.files_per_page)
+                            .limit(params[:limit] || Rails.configuration.x.railscollab.files_per_page)
         
         render :xml => @files.to_xml(:only => [:id,
                                                :filename,
@@ -136,7 +136,7 @@ class FilesController < ApplicationController
   def create
     authorize! :create_file, @active_project
 
-    file_attribs = params[:file]
+    file_attribs = file_params
     @file = @active_project.project_files.build(file_attribs)
     @file.created_by = @logged_user
 
@@ -190,7 +190,7 @@ class FilesController < ApplicationController
       end
     end
 
-    file_attribs = params[:file]
+    file_attribs = file_params
     @file.attributes = file_attribs
     @file.updated_by = @logged_user
     @file.is_visible = true
@@ -381,6 +381,10 @@ class FilesController < ApplicationController
   end
 
 private
+
+  def file_params
+    params[:file].nil? ? {} : params[:file].permit(:folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
+  end
 
   def obtain_file
      begin

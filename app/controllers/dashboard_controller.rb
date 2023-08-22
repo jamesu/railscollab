@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
   helper :dashboard
 
   def index
-    when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
+    when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.x.railscollab.minutes_to_activity_log_expire) do
       if @active_projects.length > 0
         project_ids = @active_projects.collect{ |project| project.id }
 
@@ -30,7 +30,7 @@ class DashboardController < ApplicationController
           { :project_id => project_ids } :
           { :project_id => project_ids, :is_private => false }
 
-        @activity_log = Activity.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.project_logs_per_page)
+        @activity_log = Activity.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.x.railscollab.project_logs_per_page)
       else
         @activity_log = []
       end
@@ -131,12 +131,12 @@ class DashboardController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => Rails.configuration.search_results_per_page})
+      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => Rails.configuration.x.railscollab.search_results_per_page})
 
       @tag_names = []
       @pagination = []
-      @start_search_results = Rails.configuration.search_results_per_page * (current_page-1)
-      (@total_search_results.to_f / Rails.configuration.search_results_per_page).ceil.times {|page| @pagination << page+1}
+      @start_search_results = Rails.configuration.x.railscollab.search_results_per_page * (current_page-1)
+      (@total_search_results.to_f / Rails.configuration.x.railscollab.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
       @last_search = I18n.t('search_box_default')
       @search_results = []

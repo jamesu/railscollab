@@ -22,23 +22,27 @@ class TaskList < ApplicationRecord
 
   belongs_to :milestone
   belongs_to :project
-  belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
-  belongs_to :created_by,   :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by,   :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+  belongs_to :created_by,   class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by,   class_name: 'User', foreign_key:  'updated_by_id'
 
-  has_many :tasks, :order => "#{self.connection.quote_column_name 'order'} ASC", :dependent => :destroy
+  has_many :tasks, dependent:  :destroy
 
-  #has_many :tags, :as => 'rel_object', :dependent => :destroy
+  #has_many :tags, as:  'rel_object', dependent:  :destroy
 
-  scope :is_public, where(:is_private => false)
-  scope :is_open, where('task_lists.completed_on IS NULL')
-  scope :completed, where('task_lists.completed_on IS NOT NULL')
+  scope :is_public, -> { where(:is_private => false) }
+  scope :is_open,   -> { where('task_lists.completed_on IS NULL') }
+  scope :completed, -> { where('task_lists.completed_on IS NOT NULL') }
 
   before_validation :process_params, :on => :create
   after_create   :process_create
   before_update  :process_update_params
   after_update   :update_tags
   before_destroy :process_destroy
+
+  def ordered_tasks
+    self.tasks.order(order: :asc)
+  end
 
   def update_tags
     return true if @update_tags.nil?
@@ -152,7 +156,6 @@ class TaskList < ApplicationRecord
   end
   
   # Serialization
-  alias_method :ar_to_xml, :to_xml
   
   def to_xml(options = {}, &block)
     default_options = {
@@ -165,12 +168,12 @@ class TaskList < ApplicationRecord
         :description,
         :is_private
       ]}
-    self.ar_to_xml(options.merge(default_options), &block)
+    super(options.merge(default_options), &block)
   end
 
   # Accesibility
 
-  attr_accessible :name, :priority, :description, :milestone_id, :is_private, :tags
+  #attr_accessible :name, :priority, :description, :milestone_id, :is_private, :tags
 
   # Validation
 
@@ -187,7 +190,7 @@ class TaskList < ApplicationRecord
   define_index do
     indexes :name
     indexes :description
-    indexes tag_list(:tag), :as => :tags
+    indexes tag_list(:tag), as:  :tags
     
     has :milestone_id
     has :project_id

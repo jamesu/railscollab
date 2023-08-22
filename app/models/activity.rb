@@ -18,11 +18,11 @@
 #++
 
 class Activity < ApplicationRecord
-  belongs_to :project
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :rel_object, :polymorphic => true
+  belongs_to :project, optional: true
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :rel_object, polymorphic:  true, optional: true
 
-  scope :is_public, where(:is_private => false)
+  scope :is_public, -> { where(:is_private => false) }
 
   before_create :process_params
 
@@ -53,7 +53,7 @@ class Activity < ApplicationRecord
   end
 
   def self.new_log(obj, user, action, private=false, real_project=nil)
-    really_silent = Rails.configuration.log_really_silent && action == :delete
+    really_silent = Rails.configuration.x.railscollab.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
       @log = Activity.new()
@@ -92,7 +92,7 @@ class Activity < ApplicationRecord
     else
       # Destroy all occurrences of this object from the log
       # (assuming no audit trail is required here)
-      Activity.destroy_all({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id})
+      Activity.where({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id}).destroy_all
     end
   end
 
@@ -103,9 +103,9 @@ class Activity < ApplicationRecord
       {:project_id => project.id}
     end
 
-    private_conditions = ''
-    private_conditions += 'AND is_private = 0' unless include_private
-    private_conditions += 'AND is_silent = 0'  unless include_silent
+    private_conditions = {}
+    private_conditions[:is_private] = 0 unless include_private
+    private_conditions[:is_silent] = 0 unless include_silent
 
     Activity.where(conditions).where(private_conditions).order('created_on DESC').limit(limit)
   end

@@ -1,15 +1,15 @@
 Railscollab::Application.routes.draw do
   # feed url's
-  match 'feed/:user/:token/:action.:format',  :controller => 'feed'
-  match 'feed/:user/:token/:action.::format', :controller => 'feed'
+  get 'feed/:user/:token/:action.:format',  :controller => 'feed'
+  get 'feed/:user/:token/:action.::format', :controller => 'feed'
   
   # The rest of the simple controllers
-  match "dashboard/(/:action(/:id))",        :controller => 'dashboard'
-  match "dashboard/:action/:id.format", :controller => 'dashboard'
+  get "dashboard/(/:action(/:id))",        :controller => 'dashboard'
+  get "dashboard/:action/:id.format", :controller => 'dashboard'
   
   resource :session, :only => [:new, :create, :destroy]
-  match 'login', :controller => 'sessions', :action => 'new'
-  match 'logout', :controller => 'sessions', :action => 'destroy', :method => :delete
+  get 'login', :controller => 'sessions', :action => 'new'
+  delete 'logout', :controller => 'sessions', :action => 'destroy'
     
   # project & project object url's
   resources :projects do
@@ -53,7 +53,7 @@ Railscollab::Application.routes.draw do
         get :list
       end
     end
-    match 'wiki_pages/:id/:version', :controller => 'wiki_pages', :action => 'show', :conditions => {:method => :get}, :as => :version_wiki_page
+    get 'wiki_pages/:id/:version', :controller => 'wiki_pages', :action => 'show', as:  :version_wiki_page
 
     resources :comments
     # Note: filter by category is done via "posts" on the category controller
@@ -134,7 +134,7 @@ Railscollab::Application.routes.draw do
     end
   end
 
-  match 'administration', :controller => 'administration', :action => 'index', :as => :administration
+  get 'administration', :controller => 'administration', :action => 'index', as:  :administration
 
   root :to => 'dashboard#index'
 end

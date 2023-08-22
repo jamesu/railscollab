@@ -1,15 +1,15 @@
 class CommentFix < ActiveRecord::Base
-  set_table_name 'comments'
-  belongs_to :rel_object, :polymorphic => true
+  self.table_name =  'comments'
+  belongs_to :rel_object, polymorphic:  true
 end
 
 class TaskFix < ActiveRecord::Base
-  set_table_name 'tasks'
+  self.table_name =  'tasks'
   belongs_to :task_list
 end
 
 class FileRevisionFix < ActiveRecord::Base
-  set_table_name 'project_file_revisions'
+  self.table_name =  'project_file_revisions'
   belongs_to :project_file
 end
 

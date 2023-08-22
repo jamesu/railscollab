@@ -39,8 +39,8 @@ class ProjectsController < ApplicationController
   def show
     respond_to do |format|
       format.html {
-        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.minutes_to_activity_log_expire) do
-          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.is_public)[0..(Rails.configuration.project_logs_per_page-1)]
+        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.x.railscollab.minutes_to_activity_log_expire) do
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.is_public)[0..(Rails.configuration.x.railscollab.project_logs_per_page-1)]
         end
 
         @time_now = Time.zone.now
@@ -76,12 +76,12 @@ class ProjectsController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.search_results_per_page})
+      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.x.railscollab.search_results_per_page})
 
       @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
       @pagination = []
-      @start_search_results = Rails.configuration.search_results_per_page * (current_page-1)
-      (@total_search_results.to_f / Rails.configuration.search_results_per_page).ceil.times {|page| @pagination << page+1}
+      @start_search_results = Rails.configuration.x.railscollab.search_results_per_page * (current_page-1)
+      (@total_search_results.to_f / Rails.configuration.x.railscollab.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
       @last_search = I18n.t('search_box_default')
       @search_results = []
@@ -195,7 +195,7 @@ class ProjectsController < ApplicationController
     when :delete
       user = User.find(params[:user_id])
       unless user.owner_of_owner?
-        Person.delete_all(['user_id = ? AND project_id = ?', params[:user], @project.id])
+        Person.where(['user_id = ? AND project_id = ?', params[:user], @project.id]).delete_all
       end
     end
 
@@ -213,7 +213,7 @@ class ProjectsController < ApplicationController
       company = Company.find(params[:company_id])
       unless company.is_owner?
         company_user_ids = company.users.collect{ |user| user.id }
-        Person.delete_all({ :user_id => company_user_ids, :project_id => @project.id })
+        Person.where({ :user_id => company_user_ids, :project_id => @project.id }).delete_all
         @project.companies.delete(company)
       end
     end
@@ -240,7 +240,7 @@ class ProjectsController < ApplicationController
 
     @project = Project.new
     
-    project_attribs = params[:project]
+    project_attribs = project_params
 
     @project.attributes = project_attribs
     @project.created_by = @logged_user
@@ -258,14 +258,14 @@ class ProjectsController < ApplicationController
       @project.users << @logged_user
 
       # Add default folders
-      Rails.configuration.default_project_folders.each do |folder_name|
+      Rails.configuration.x.railscollab.default_project_folders.each do |folder_name|
         folder = Folder.new(:name => folder_name)
         folder.project = @project
         folder.save
       end
 
       # Add default message categories
-      Rails.configuration.default_project_message_categories.each do |category_name|
+      Rails.configuration.x.railscollab.default_project_message_categories.each do |category_name|
         category = Category.new(:name => category_name)
         category.project = @project
         category.save
@@ -295,7 +295,7 @@ class ProjectsController < ApplicationController
   def update
     authorize! :edit, @project
 
-    @project.attributes = params[:project]
+    @project.attributes = project_params
     @project.updated_by = @logged_user
     
     respond_to do |format|
@@ -368,6 +368,10 @@ protected
 
   def project_layout
     ['new', 'create', 'edit' 'update'].include?(action_name) ? 'administration' : 'project_website'
+  end
+
+  def project_params
+    params[:project].nil? ? {} : params[:project].permit(:name, :description, :priority, :show_description_in_overview)
   end
 
    def obtain_project

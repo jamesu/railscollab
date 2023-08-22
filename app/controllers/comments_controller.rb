@@ -135,7 +135,7 @@ class CommentsController < ApplicationController
     estatus = :success_added_comment
     
     Comment.transaction do
-      comment_attribs = params[:comment]
+      comment_attribs = comment_params
 
       @comment.attributes = comment_attribs
       @comment.rel_object = @commented_object
@@ -183,7 +183,7 @@ class CommentsController < ApplicationController
   	estatus = :success_edited_comment
 
     Comment.transaction do
-      comment_attribs = params[:comment]
+      comment_attribs = comment_params
 
       @comment.attributes = comment_attribs
       @comment.updated_by = @logged_user
@@ -262,6 +262,12 @@ private
      [:file_id, :ProjectFile],
      [:task_id, :Task],
      [:task_list_id, :TaskList]]
+  end
+
+protected
+
+  def comment_params
+    params[:comment].nil? ? {} : params[:comment].permit(:text, :is_private, :author_name, :author_email)
   end
 
 end

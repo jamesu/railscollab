@@ -20,7 +20,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def site_name
-    html_escape Rails.configuration.site_name
+    html_escape Rails.configuration.x.railscollab.site_name
   end
 
   def product_signature

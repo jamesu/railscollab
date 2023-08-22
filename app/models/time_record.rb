@@ -22,21 +22,21 @@ class TimeRecord < ApplicationRecord
   
   belongs_to :project
   
-  belongs_to :company, :foreign_key => 'assigned_to_company_id'
-  belongs_to :user, :foreign_key => 'assigned_to_user_id'
+  belongs_to :company, foreign_key:  'assigned_to_company_id'
+  belongs_to :user, foreign_key:  'assigned_to_user_id'
   
   belongs_to :task_list
   belongs_to :task
   
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
   
   has_many :messages
   
-  #has_many :tags, :as => 'rel_object', :dependent => :destroy
+  #has_many :tags, as:  'rel_object', dependent:  :destroy
   
-  scope :running, where('start_date IS NOT NULL AND done_date IS NULL')
-  scope :is_public, where(:is_private => false)
+  scope :running, -> { where('start_date IS NOT NULL AND done_date IS NULL') }
+  scope :is_public, -> { where(:is_private => false) }
 
   before_validation :process_params, :on => :create
   after_create   :process_create
@@ -257,7 +257,7 @@ class TimeRecord < ApplicationRecord
   
   # Accesibility
   
-  attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable
+  #attr_accessible :name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable
   
   # Validation
   
@@ -274,7 +274,7 @@ class TimeRecord < ApplicationRecord
   define_index do
     indexes :name
     indexes :description
-    indexes tag_list(:tag), :as => :tags
+    indexes tag_list(:tag), as:  :tags
     
     has :assigned_to_company_id
     has :assigned_to_user_id

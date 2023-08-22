@@ -56,7 +56,7 @@ class WikiPagesController < ApplicationController
   end
 
   def create
-    @wiki_page = wiki_pages.new(params[:wiki_page].merge(:created_by => @logged_user))
+    @wiki_page = wiki_pages.new(wiki_page_params.merge(:created_by => @logged_user))
 
     if @wiki_page.save
       flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
@@ -70,7 +70,7 @@ class WikiPagesController < ApplicationController
   end
 
   def update
-    if @wiki_page.update_attributes(params[:wiki_page].merge(:created_by => @logged_user))
+    if @wiki_page.update_attributes(wiki_page_params.merge(:created_by => @logged_user))
       flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
       redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
     else
@@ -86,7 +86,7 @@ class WikiPagesController < ApplicationController
   end
 
   def preview
-    @wiki_page = wiki_pages.new(params[:wiki_page])
+    @wiki_page = wiki_pages.new(wiki_page_params)
     @wiki_page.readonly!
 
     respond_to do |format|
@@ -148,4 +148,11 @@ class WikiPagesController < ApplicationController
     @wiki_sidebar = wiki_pages.where(:project_id => @active_project.id).find_by_slug("sidebar") rescue nil
     @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
   end
+
+protected
+
+  def wiki_page_params
+    params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:title, :content, :project_id)
+  end
+
 end

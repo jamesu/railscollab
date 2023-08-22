@@ -66,7 +66,7 @@ class Folder < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :name
+  #attr_accessible :name
 
   # Validation
 

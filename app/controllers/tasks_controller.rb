@@ -95,7 +95,7 @@ class TasksController < ApplicationController
   def create
     authorize! :create_task, @task_list
     
-    @task = @task_list.tasks.build(params[:task])
+    @task = @task_list.tasks.build(task_params)
     @task.created_by = @logged_user
     
     respond_to do |format|
@@ -127,7 +127,7 @@ class TasksController < ApplicationController
     @task.updated_by = @logged_user
 
     respond_to do |format|
-      if @task.update_attributes(params[:task])
+      if @task.update_attributes(task_params)
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(task_lists_path) }
@@ -173,7 +173,7 @@ class TasksController < ApplicationController
     
     authorize! :complete, @task
     
-    @task.set_completed(params[:task][:completed] == 'true', @logged_user)
+    @task.set_completed(task_params[:completed] == 'true', @logged_user)
     @task.order = @task_list.tasks.length
     @task.save
 
@@ -186,6 +186,10 @@ class TasksController < ApplicationController
   end
 
 protected
+
+  def task_params
+    params[:task].nil? ? {} : params[:task].permit(:text, :assigned_to_id, :task_list_id, :estimated_hours)
+  end
 
   def respond_with_task(task, partial='show')
     task_class = task.is_completed? ? 'completedTasks' : 'openTasks'

@@ -84,7 +84,7 @@ class UsersController < ApplicationController
     @permissions = Person.permission_names()
     @projects = @active_projects
     
-    user_attribs = params[:user]
+    user_attribs = user_params
 
     # Process extra parameters
 
@@ -152,7 +152,7 @@ class UsersController < ApplicationController
     @projects = @active_projects
     @permissions = Person.permission_names()
     
-    user_params = params[:user]
+    user_params = user_params
 
     # Process IM Values
     all_im_values = user_params[:im_values] || {}
@@ -249,7 +249,7 @@ class UsersController < ApplicationController
     
     case request.request_method_symbol
     when :put
-      user_attribs = params[:user]
+      user_attribs = user_params
 
       new_avatar = user_attribs[:avatar]
       @user.errors.add(:avatar, 'Required') if new_avatar.nil?
@@ -345,9 +345,15 @@ class UsersController < ApplicationController
       end.compact
 
       unless delete_list.empty?
-        Person.delete_all(:user_id => user.id, :project_id => delete_list)
+        Person.where(:user_id => user.id, :project_id => delete_list).delete_all
       end
     end
+  end
+
+protected
+
+  def user_params
+    params[:user].nil? ? {} : params[:user].permit(:display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification)
   end
 
   def obtain_user

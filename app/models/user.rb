@@ -25,36 +25,55 @@ class User < ApplicationRecord
   include Authentication::ByCookieToken
 
   belongs_to :company
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
 
-  has_many :im_values, :order => 'im_type_id DESC', :dependent => :delete_all
-  has_many :activities, :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :im_values, dependent:  :delete_all
+  has_many :activities, foreign_key:  'created_by_id', dependent:  :destroy
 
-  has_many :milestones, :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :tasks,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :task_lists, :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :time_records,           :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_file_revisions, :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :project_files,      :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :messages,           :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :comments,           :foreign_key => 'created_by_id', :dependent => :destroy
-  has_many :tags,               :foreign_key => 'created_by_id', :dependent => :destroy
+  has_many :milestones, foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :tasks,      foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :task_lists, foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :time_records,           foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :project_file_revisions, foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :project_files,      foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :messages,           foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :comments,           foreign_key:  'created_by_id', dependent:  :destroy
+  has_many :tags,               foreign_key:  'created_by_id', dependent:  :destroy
 
-  has_many :people,            :dependent => :delete_all
-  has_many :projects,          :through => :people
-  has_many :active_projects,   :through => :people, :source => :project, :conditions => 'projects.completed_on IS NULL',     :order => 'projects.priority ASC, projects.name ASC'
-  has_many :finished_projects, :through => :people, :source => :project, :conditions => 'projects.completed_on IS NOT NULL', :order => 'projects.completed_on DESC'
+  has_many :people,            dependent:  :delete_all
+  has_many :projects,          through:  :people
 
-  has_and_belongs_to_many :subscriptions, :class_name => 'Message', :association_foreign_key => 'message_id', :join_table => :message_subscriptions
+  has_and_belongs_to_many :subscriptions, class_name: 'Message', association_foreign_key: 'message_id', :join_table => :message_subscriptions
 
   has_attached_file :avatar,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.attach_to_s3 ?
+    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
       "avatar/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 
-  has_many :assigned_times, :class_name => 'TimeRecord', :foreign_key => 'assigned_to_user_id'
+  has_many :assigned_times, class_name: 'TimeRecord', foreign_key:  'assigned_to_user_id'
+
+  def active_projects
+    self.projects.where('projects.completed_on IS NULL')
+  end
+
+  def finished_projects
+    self.projects.where('projects.completed_on IS NOT NULL')
+  end
+
+  def ordered_im_values
+    self.im_values.order('im_type_id DESC')
+  end
+
+  def ordered_active_projects
+    self.active_projects.order('projects.priority ASC, projects.name ASC')
+  end
+
+  def ordered_finished_projects
+    self.finished_projects.order('projects.completed_on DESC')
+  end
+
 
   def twister_array=(value)
     self.twister = value.join()
@@ -201,7 +220,7 @@ class User < ApplicationRecord
   end
 
   def is_anonymous?
-    Rails.configuration.allow_anonymous and self.username == 'Anonymous'
+    Rails.configuration.x.railscollab.allow_anonymous and self.username == 'Anonymous'
   end
 
   def is_part_of(project)
@@ -264,7 +283,7 @@ class User < ApplicationRecord
 
   def avatar_url
     if !avatar?
-      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.site_url}/assets/avatar.gif")
+      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.x.railscollab.site_url}/assets/avatar.gif")
     else
       avatar.url(:thumb)
     end
@@ -293,8 +312,7 @@ class User < ApplicationRecord
   end
 
   # Serialization
-  alias_method :ar_to_xml, :to_xml
-  
+
   def to_xml(options = {}, &block)
     default_options = {
       :except => [
@@ -305,7 +323,7 @@ class User < ApplicationRecord
         :last_visit,
         :last_activity
       ]}
-    self.ar_to_xml(options.merge(default_options), &block)
+    super(options.merge(default_options), &block)
   end
 
   before_create :process_params
@@ -326,7 +344,7 @@ class User < ApplicationRecord
 
   # Accesibility
 
-  attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
+  #attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
 
   attr_accessor :password_confirmation
   attr_reader :password

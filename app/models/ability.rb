@@ -17,7 +17,10 @@
 #++
 
 class Ability
-  include CanCan::Ability
+  def can(ability, klass, &block)
+    @abilityCheckers ||= {}
+    @abilityCheckers["#{ability}_#{klass}"] = block
+  end
 
   def initialize(user)
 
@@ -367,7 +370,7 @@ class Ability
           true
         elsif comment.created_by == user and !user.is_anonymous?
           now = Time.now.utc
-          (now <= (comment.created_on + (60 * Rails.configuration.minutes_to_comment_edit_expire)))
+          (now <= (comment.created_on + (60 * Rails.configuration.x.railscollab.minutes_to_comment_edit_expire)))
         end
       end
 

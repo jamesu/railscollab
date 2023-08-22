@@ -17,17 +17,17 @@
 #++
 
 class Notifier < ActionMailer::Base
-  default_url_options[:host] = Rails.configuration.site_url
+  default_url_options[:host] = Rails.configuration.x.railscollab.site_url
 
   def message(user, msg, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_message', :title => msg.title)}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_new_message', :title => msg.title)}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:message => msg,
 		:user => user,
 		:sent_on => sent_at
@@ -35,14 +35,14 @@ class Notifier < ActionMailer::Base
   end
 
   def task(user, task, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_task')}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_new_task')}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:task => task,
 		:user => user,
 		:sent_on => sent_at
@@ -50,14 +50,14 @@ class Notifier < ActionMailer::Base
   end
 
   def milestone(user, milestone, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_milestone', :name => milestone.name)}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_new_milestone', :name => milestone.name)}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:milestone => milestone,
 		:user => user,
 		:sent_on => sent_at
@@ -65,14 +65,14 @@ class Notifier < ActionMailer::Base
   end
 
   def message_comment(user, comment, msg, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_comment', :title => msg.title)}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_new_comment', :title => msg.title)}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:message => msg,
 		:comment => comment,
 		:user => user,
@@ -81,28 +81,28 @@ class Notifier < ActionMailer::Base
   end
   
   def password_reset(user, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_reset_password_request')}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_reset_password_request')}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:user => user,
 		:sent_on => sent_at
 	}
   end
   
   def account_new_info(user, password, sent_at = Time.now)
-    @subject    = "#{Rails.configuration.site_name} - #{I18n.t('notifier_subject_new_account')}"
+    @subject    = "#{Rails.configuration.x.railscollab.site_name} - #{I18n.t('notifier_subject_new_account')}"
     @recipients = user.email
-    @from       = Rails.configuration.notification_email_address
+    @from       = Rails.configuration.x.railscollab.notification_email_address
     @sent_on    = sent_at
     @headers    = {}
 	
 	@body       = {
-		:site_name => Rails.configuration.site_name,
+		:site_name => Rails.configuration.x.railscollab.site_name,
 		:user => user,
 		:password => password,
 		:sent_on => sent_at

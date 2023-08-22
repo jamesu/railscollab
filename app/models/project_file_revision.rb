@@ -21,16 +21,16 @@ class ProjectFileRevision < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :project_file, :foreign_key => 'file_id'
-  belongs_to :file_type,    :foreign_key => 'file_type_id'
+  belongs_to :project_file, foreign_key:  'file_id'
+  belongs_to :file_type,    foreign_key:  'file_type_id'
 
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-  belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 
   has_attached_file :data,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.attach_to_s3 ?
+    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
       "data/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 

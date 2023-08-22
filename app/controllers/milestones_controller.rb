@@ -54,7 +54,7 @@ class MilestonesController < ApplicationController
     authorize! :create_milestone, @active_project
     @milestone = @active_project.milestones.build
     
-    milestone_attribs = params[:milestone]
+    milestone_attribs = milestone_params
     @milestone.attributes = milestone_attribs
     @milestone.created_by = @logged_user
     
@@ -85,7 +85,7 @@ class MilestonesController < ApplicationController
   def update
     authorize! :edit, @milestone
  
-    milestone_attribs = params[:milestone]
+    milestone_attribs = milestone_params
     @milestone.attributes = milestone_attribs
     
     @milestone.updated_by = @logged_user
@@ -146,6 +146,10 @@ class MilestonesController < ApplicationController
   end
 
   private
+
+  def milestone_params
+    params[:milestone].nil? ? {} : params[:milestone].permit(:name, :description, :due_date, :assigned_to_id, :is_private)
+  end
 
   def obtain_milestone
     begin

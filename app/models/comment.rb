@@ -18,20 +18,20 @@
 #++
 
 class Comment < ApplicationRecord
-	belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
-	belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
+	belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
 	
-	belongs_to :rel_object, :polymorphic => true, :counter_cache => true
+	belongs_to :rel_object, polymorphic:  true, counter_cache:  true
 	
-	has_many :attached_file, :as => 'rel_object'
-	has_many :project_file, :through => :attached_file
+	has_many :attached_file, as:  'rel_object'
+	has_many :project_file, through:  :attached_file
 
 	before_validation :process_params, :on => :create
 	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	
-	scope :is_public, where(:is_private => false)
+	scope :is_public, -> { where(:is_private => false) }
 	 
 	def process_params
 	  self.project_id ||= self.rel_object.try(:project_id)
@@ -81,7 +81,7 @@ class Comment < ApplicationRecord
 	
 	# Accesibility
 	
-	attr_accessible :text, :is_private, :author_name, :author_email
+	#attr_accessible :text, :is_private, :author_name, :author_email
 	
 	# Validation
 	

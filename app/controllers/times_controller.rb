@@ -36,7 +36,7 @@ class TimesController < ApplicationController
         @content_for_sidebar = 'index_sidebar'
     
         @times = @project.time_records.where(@time_conditions)
-                                       .paginate(:page => @current_page, :per_page => Rails.configuration.times_per_page)
+                                       .paginate(:page => @current_page, :per_page => Rails.configuration.x.railscollab.times_per_page)
                                        .order("#{@sort_type} #{@sort_order}")
         
         @pagination = []
@@ -46,7 +46,7 @@ class TimesController < ApplicationController
       format.xml  {
         @times = @project.time_records.where(@time_conditions)
                                        .offset(params[:offset])
-                                       .limit(params[:limit] || Rails.configuration.times_per_page) 
+                                       .limit(params[:limit] || Rails.configuration.x.railscollab.times_per_page) 
                                        .order("#{@sort_type} #{@sort_order}")
         
         render :xml => @times.to_xml(:root => 'times')
@@ -83,7 +83,7 @@ class TimesController < ApplicationController
 
     @time = @active_project.time_records.build
     
-    @time.attributes = params[:time]
+    @time.attributes = time_params
     @time.start_date = Time.current unless @time.done_date
     @time.created_by = @logged_user
     
@@ -120,7 +120,7 @@ class TimesController < ApplicationController
   def update
     authorize! :edit, @time
 
-    @time.attributes = params[:time]
+    @time.attributes = time_params
     @time.updated_by = @logged_user
     
     respond_to do |format|
@@ -181,6 +181,10 @@ class TimesController < ApplicationController
   end
 
 private
+
+  def time_params
+    params[:time].nil? ? {} : params[:time].permit(:name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable)
+  end
 
   def respond_with_time(time)
     if time.errors

@@ -21,9 +21,9 @@ class Tag < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
 
-  belongs_to :rel_object, :polymorphic => true
+  belongs_to :rel_object, polymorphic:  true
 
   before_create :process_params
 
@@ -51,7 +51,7 @@ class Tag < ApplicationRecord
   end
 
   def self.clear_by_object(object)
-    Tag.delete_all(['project_id = ? AND rel_object_type = ? AND rel_object_id = ?', object.project_id, object.class.to_s, object.id])
+    Tag.where(['project_id = ? AND rel_object_type = ? AND rel_object_id = ?', object.project_id, object.class.to_s, object.id]).delete_all
   end
 
   def self.set_to_object(object, taglist, force_user=0)

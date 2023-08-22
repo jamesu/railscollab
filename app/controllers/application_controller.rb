@@ -40,7 +40,7 @@ protected
   end
 
   def ssl_required?
-	Rails.configuration.using_ssl
+	Rails.configuration.x.railscollab.using_ssl
   end
 
   def error_status(error, message, args={})

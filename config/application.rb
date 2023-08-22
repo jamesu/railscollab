@@ -11,6 +11,19 @@ module Railscollab
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    config.time_zone = 'UTC'
+    config.i18n.default_locale = :en
+    config.encoding = "utf-8"
+    config.filter_parameters += [:password]
+
+    config.assets.enabled = true
+    config.assets.version = '1.0'
+
+    #config.generators.stylesheet_engine = :sass
+
+
+    config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -20,3 +33,8 @@ module Railscollab
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
+
+require 'railscollab_extras'
+require 'authenticated_system'
+require 'authentication'
+require 'authentication/by_cookie_token'

@@ -1,9 +1,9 @@
 class PageFix < ActiveRecord::Base
-  set_table_name 'wiki_pages'
+  self.table_name =  'wiki_pages'
 end
 
 class SlugFix < ActiveRecord::Base
-  set_table_name 'slugs'
+  self.table_name =  'slugs'
 end
 
 class KillSlugs < ActiveRecord::Migration[4.2]

@@ -102,7 +102,7 @@ class TaskListsController < ApplicationController
   def create
     authorize! :create_task_list, @active_project
     
-    @task_list = @active_project.task_lists.build(params[:task_list])
+    @task_list = @active_project.task_lists.build(task_list_params)
     @task_list.created_by = @logged_user
 
     respond_to do |format|
@@ -136,7 +136,7 @@ class TaskListsController < ApplicationController
     @task_list.updated_by = @logged_user
 
     respond_to do |format|
-      if @task_list.update_attributes(params[:task_list])
+      if @task_list.update_attributes(task_list_params)
         flash[:notice] = 'List was successfully updated.'
         format.html {
           error_status(false, :success_edited_task_list)
@@ -204,6 +204,11 @@ class TaskListsController < ApplicationController
   end
 
 protected
+
+  def task_list_params
+    params[:task_list].nil? ? {} : params[:task_list].permit(:name, :priority, :description, :milestone_id, :is_private, :tags)
+  end
+
 
   def index_lists(include_private)
     @open_task_lists = @active_project.task_lists.is_open

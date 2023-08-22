@@ -4,7 +4,7 @@ class WikiPage < ApplicationRecord
   include WikiPageUser
   
   before_save :set_main_page
-  acts_as_versioned :extend => WikiPageUser
+  #acts_as_versioned :extend => WikiPageUser
   friendly_id :title, :use => :slugged
   validates_presence_of :title
 
@@ -13,9 +13,9 @@ class WikiPage < ApplicationRecord
   end
   
   belongs_to :project
-  self.non_versioned_columns << :project_id
-  self.non_versioned_columns << :title
-  self.non_versioned_columns << :slug
+  #self.non_versioned_columns << :project_id
+  #self.non_versioned_columns << :title
+  #self.non_versioned_columns << :slug
   scope :main, lambda{ |project| where(:main => true, :project_id => project.id) }
 
   after_create  :process_create
