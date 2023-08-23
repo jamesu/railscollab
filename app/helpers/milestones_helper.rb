@@ -17,48 +17,4 @@
 #++
 
 module MilestonesHelper
-  def current_tab
-    :milestones
-  end
-
-  def current_crumb
-    case action_name
-      when 'index' then :milestones
-      when 'new', 'create' then :add_milestone
-      when 'edit', 'update' then :edit_milestone
-      when 'show' then @milestone.name
-      else super
-    end
-  end
-
-  def extra_crumbs
-    crumbs = []
-    crumbs << {:title => :milestones, :url => milestones_path} unless action_name == 'index'
-    crumbs
-  end
-
-  def page_actions
-    @page_actions = []
-
-    if action_name == 'index'
-      if can? :create_milestone, @active_project
-        @page_actions << {:title => :add_milestone, :url => new_milestone_path, :ajax => true}
-      end
-    elsif action_name == 'show'
-      if not @milestone.is_completed?
-        if can? :create_message, @active_project
-          @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
-        end
-        if can? :create_task_list, @active_project
-          @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
-        end
-      end
-    end
-
-    @page_actions
-  end
-
-  def additional_stylesheets
-    ['project/milestones']
-  end
 end

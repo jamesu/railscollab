@@ -20,8 +20,8 @@ class CommentsController < ApplicationController
 
   layout 'project_website'
 
-  before_action :process_session
-  before_action :obtain_comment, :except => [:index, :new, :create]
+  
+  
   after_action  :user_track, :only => [:index, :show]
   
   # GET /comments
@@ -242,7 +242,7 @@ private
     return nil, nil
   end
   
-  def obtain_comment
+  def load_related_object
     @active_projects = @logged_user.active_projects
 
     begin
@@ -266,6 +266,18 @@ private
 
 protected
 
+  def current_tab
+    nil
+  end
+
+  def current_crumb
+    "#{action_name}_comment".to_sym
+  end
+
+  def extra_crumbs
+    [{:title => @commented_object.object_name, :url => @commented_object.object_url}]
+  end
+  
   def comment_params
     params[:comment].nil? ? {} : params[:comment].permit(:text, :is_private, :author_name, :author_email)
   end

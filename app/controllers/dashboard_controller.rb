@@ -19,7 +19,6 @@
 
 class DashboardController < ApplicationController
   after_action  :user_track
-  helper :dashboard
 
   def index
     #when_fragment_expired "user#{@logged_user.id}_dblog", Time.now.utc + (60 * Rails.configuration.railscollab.minutes_to_activity_log_expire) do
@@ -146,4 +145,22 @@ class DashboardController < ApplicationController
 
     @content_for_sidebar = 'projects/search_sidebar'
   end
+
+protected
+
+  def current_tab
+    case action_name
+      when 'index', 'search' then :overview
+      else action_name.to_sym
+    end
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :overview
+      when 'search' then :search_results
+      else super
+    end
+  end
+
 end

@@ -19,9 +19,9 @@
 class TaskListsController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
+  
   after_action  :user_track, :only => [:index, :show]
   
   # GET /task_lists
@@ -204,6 +204,38 @@ class TaskListsController < ApplicationController
   end
 
 protected
+
+  def current_tab
+    :tasks
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :tasks
+      when 'new', 'create' then :add_task_list
+      when 'edit', 'update' then :edit_task_list
+      when 'show' then @task_list.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :tasks, :url => task_lists_path} unless action_name == 'index'
+    crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+
+    if action_name == 'index'
+      if can?(:create_task_list, @active_project)
+        @page_actions << {:title => :add_task_list, :url=> new_task_list_path, :ajax => true}
+      end
+    end
+
+    @page_actions
+  end
 
   def task_list_params
     params[:task_list].nil? ? {} : params[:task_list].permit(:name, :priority, :description, :milestone_id, :is_private, :tags)

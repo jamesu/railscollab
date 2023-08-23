@@ -1,3 +1,24 @@
+@import 'general/rewrites.scss';
+@import 'general/forms.scss';
+@import 'general/construction.scss';
+
+@import 'admin/user_permissions.scss';
+@import 'admin/user_list.scss';
+@import 'project/attach_files.scss';
+@import 'project/task_list.scss';
+@import 'project/people.scss';
+@import 'project/search_results.scss';
+@import 'project/wiki.scss';
+@import 'project/time.scss';
+@import 'project/files.scss';
+@import 'project/project_log.scss';
+@import 'project/task.scss';
+@import 'project/milestones.scss';
+@import 'project/messages.scss';
+@import 'project/permissions.scss';
+@import 'project/attach_document.scss';
+@import 'project/comments.scss';
+
 table.applicationLogs {
   width: 530px;
 }

@@ -19,13 +19,25 @@
 
 class AdministrationController < ApplicationController
 
-  before_action :process_session
+  
   before_action :user_track
 
   def index
   end
 
   protected
+
+  def page_title
+    case action_name
+      when 'index' then I18n.t('administration')
+      else super
+    end
+  end
+
+  def current_tab
+    action_name.to_sym
+  end
+  
   def authorize?(user)
   	user.is_admin
   end

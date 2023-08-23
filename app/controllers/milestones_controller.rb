@@ -21,10 +21,10 @@
 class MilestonesController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
-  before_action :obtain_milestone, :except => [:index, :new, :create]
+  
+  
   after_action  :user_track,       :only   => [:index, :show]
 
   def index
@@ -147,11 +147,52 @@ class MilestonesController < ApplicationController
 
   private
 
+  def current_tab
+    :milestones
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :milestones
+      when 'new', 'create' then :add_milestone
+      when 'edit', 'update' then :edit_milestone
+      when 'show' then @milestone.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :milestones, :url => milestones_path} unless action_name == 'index'
+    crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+
+    if action_name == 'index'
+      if can? :create_milestone, @active_project
+        @page_actions << {:title => :add_milestone, :url => new_milestone_path, :ajax => true}
+      end
+    elsif action_name == 'show'
+      if not @milestone.is_completed?
+        if can? :create_message, @active_project
+          @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
+        end
+        if can? :create_task_list, @active_project
+          @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
+        end
+      end
+    end
+
+    @page_actions
+  end
+  
   def milestone_params
     params[:milestone].nil? ? {} : params[:milestone].permit(:name, :description, :due_date, :assigned_to_id, :is_private)
   end
 
-  def obtain_milestone
+  def load_related_object
     begin
       @milestone = @active_project.milestones.find(params[:id])
     rescue ActiveRecord::RecordNotFound

@@ -20,7 +20,7 @@
 class WikiPagesController < ApplicationController
   layout 'project_website'
 
-  before_action :process_session
+  
   before_action :find_sidebar_page, :only => [:index, :show]
   after_action  :user_track, :only => [:index, :show]
 
@@ -150,6 +150,27 @@ class WikiPagesController < ApplicationController
   end
 
 protected
+
+  def current_tab
+    :wiki
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :wiki
+      when 'new', 'create' then :add_page
+      when 'edit', 'update' then :edit_page
+      when 'show' then @wiki_page.title if @wiki_page
+      when 'list' then :all_pages
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :wiki, :url => wiki_pages_path(@active_project)} unless action_name == 'index'
+    crumbs
+  end
 
   def wiki_page_params
     params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:title, :content, :project_id)

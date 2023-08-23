@@ -19,10 +19,10 @@
 class MessagesController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
-  before_action :obtain_message, :except => [:index, :new, :create]
+  
+  
   after_action  :user_track, :only => [:index, :show]
   
   # GET /messages
@@ -284,11 +284,59 @@ class MessagesController < ApplicationController
 
 private
 
+  def page_title
+    case action_name
+      when 'category' then I18n.t('category_messages', :category => @category.name)
+      else super
+    end
+  end
+
+  def current_tab
+    :messages
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :messages
+      when 'new', 'create' then :add_message
+      when 'edit', 'update' then :edit_message
+      when 'show' then @message.title
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :messages, :url => messages_path} unless action_name == 'index'
+    crumbs << {:title => @message.category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show' && @message.category
+    crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+
+    if action_name == 'index'
+
+      if can? :create_message, @active_project
+        @page_actions << {:title => :add_message, :url => (@category.nil? ?
+                          new_message_path : new_message_path(:category_id => @category.id))}
+      end
+
+      if @display_list
+        @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+      else
+        @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+      end
+    end
+
+    @page_actions
+  end
+
   def message_params
     params[:message].nil? ? {} : params[:message].permit(:title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
   end
 
-   def obtain_message
+   def load_related_object
      begin
         @message = @active_project.messages.find(params[:id])
      rescue ActiveRecord::RecordNotFound

@@ -21,7 +21,7 @@ class TagsController < ApplicationController
 
   layout 'project_website'
 
-  before_action :process_session
+  
   after_action  :user_track
   
   def show
@@ -34,6 +34,18 @@ class TagsController < ApplicationController
   end
 
 private
+
+  def current_tab
+    :tags
+  end
+  
+  def page_title
+    I18n.t('tags')
+  end
+
+  def current_crumb
+    :tags
+  end
 
   def tags_in_project
   	@tag_name = CGI.unescape(params[:id])

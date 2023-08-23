@@ -19,9 +19,7 @@
 class CategoriesController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
 
-  before_action :process_session
   after_action  :user_track, :only => [:index, :show]
   
   # GET /categories
@@ -217,6 +215,53 @@ class CategoriesController < ApplicationController
   end
 
 protected
+
+  def page_title
+    case action_name
+      when 'posts' then  @category.name
+      else super
+    end
+  end
+
+  def current_tab
+    :messages
+  end
+
+  def current_crumb
+    case action_name
+      when 'new', 'create' then :add_message_category
+      when 'edit', 'update' then :edit_message_category
+      when 'index' then :messages
+      when 'posts' then @category.name
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :messages, :url => messages_path(@active_project.id)}
+    crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+    
+    if can? :create_message_category, @active_project
+      @page_actions << {:title => :add_category, :url => new_category_path } if action_name == 'index'
+    end
+    
+    if can? :create_message, @active_project
+      @page_actions << {:title => :add_message, :url => new_message_path(:category_id => @category.id)} if action_name == 'posts'
+    end
+
+    if @display_list
+      @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+    else
+      @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+    end
+    
+    @page_actions
+  end
 
   def category_params
     params[:category].nil? ? {} : params[:category].permit(:name)

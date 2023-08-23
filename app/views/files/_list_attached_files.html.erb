@@ -1,7 +1,3 @@
-<%
-	@additional_stylesheets ||= []
-	@additional_stylesheets << 'project/attach_files'
-%>
 <% if !attached_files.empty? or (!dont_add and can?(:add_file, attached_files_object)) %>
 <div class="objectFiles">
   <ul>

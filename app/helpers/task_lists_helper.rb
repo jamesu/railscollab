@@ -17,39 +17,4 @@
 #++
 
 module TaskListsHelper
-  def current_tab
-    :tasks
-  end
-
-  def current_crumb
-    case action_name
-      when 'index' then :tasks
-      when 'new', 'create' then :add_task_list
-      when 'edit', 'update' then :edit_task_list
-      when 'show' then @task_list.name
-      else super
-    end
-  end
-
-  def extra_crumbs
-    crumbs = []
-    crumbs << {:title => :tasks, :url => task_lists_path} unless action_name == 'index'
-    crumbs
-  end
-
-  def additional_stylesheets
-    ['project/task_list']
-  end
-
-  def page_actions
-    @page_actions = []
-
-    if action_name == 'index'
-      if can?(:create_task_list, @active_project)
-        @page_actions << {:title => :add_task_list, :url=> new_task_list_path, :ajax => true}
-      end
-    end
-
-    @page_actions
-  end
 end

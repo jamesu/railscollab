@@ -18,45 +18,4 @@
 #++
 
 module ProjectsHelper
-  def current_tab
-    case action_name
-      when 'people', 'permissions' then :people
-      when 'new', 'create', 'edit', 'update', 'index' then :projects
-      else :overview
-    end
-  end
-
-  def current_crumb
-    case action_name
-      when 'new', 'create' then :add_project
-      when 'edit', 'update' then :edit_project
-      when 'search' then :search_results
-      when 'show' then :overview
-      else super
-    end
-  end
-
-  def extra_crumbs
-    case action_name
-      when 'new', 'create', 'edit', 'update', 'permissions' then [{:title => :projects, :url => "/administration/projects"}]
-      else super
-    end
-  end
-
-  def page_title
-    case action_name
-      when 'show' then I18n.t('overview')
-      when 'index' then I18n.t('projects')
-      else super
-    end
-  end
-
-  def additional_stylesheets
-    case action_name
-      when 'permissions' then ['project/permissions']
-      when 'people' then ['project/people']
-      when 'search' then ['project/search_results']
-      when 'show' then ['project/project_log', 'application_logs']
-    end
-  end
 end

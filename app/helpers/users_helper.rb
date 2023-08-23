@@ -17,40 +17,4 @@
 #++
 
 module UsersHelper
-  def page_title
-    case action_name
-      when 'show' then I18n.t('user_card', :user => @user.display_name)
-      else super
-    end
-  end
-
-  def administration_tabbed_navigation
-    super if @logged_user.company.is_owner?
-  end
-
-  def current_tab
-    :people
-  end
-
-  def administration_crumbs
-    super if @logged_user.company.is_owner?
-  end
-
-  def current_crumb
-    case action_name
-      when 'new', 'create' then :add_user
-      when 'show' then @user.display_name
-      when 'edit', 'update', 'current' then :edit_user
-      else super
-    end
-  end
-
-  def extra_crumbs
-    crumbs = [
-      {:title => :people, :url => '/companies'},
-      {:title => @user.company.name, :url => company_path(:id => @user.company.id)}
-    ]
-    crumbs << {:title => @user.display_name, :url => user_path(:id => @user.id)} if action_name == 'permissions'
-    crumbs
-  end
 end

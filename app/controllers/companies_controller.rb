@@ -21,8 +21,8 @@ class CompaniesController < ApplicationController
 
   layout 'administration'
 
-  before_action :process_session
-  before_action :obtain_company, :except => [:index, :create, :new]
+  
+  
   after_action  :user_track, :only => [:card]
   after_action  :reload_owner
 
@@ -40,7 +40,7 @@ class CompaniesController < ApplicationController
 
   def index
     company = Company.owner
-  	clients = Company.owner.clients(true)
+  	clients = Company.owner.clients
   	@companies = [company] + clients
     respond_to do |format|
       format.html
@@ -210,11 +210,37 @@ class CompaniesController < ApplicationController
 
   private
 
-  def company_params
-    params[:company].nil? ? {} : params[:company].permit(::name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+  def page_title
+    case action_name
+      when 'show' then I18n.t('company_card', :company => @company.name)
+      else super
+    end
   end
 
-  def obtain_company
+  def current_tab
+    :people
+  end
+
+  def current_crumb
+    case action_name
+      when 'new', 'create' then :add_client
+      when 'show' then @company.name
+      when 'edit', 'update' then @company.is_owner? ? :edit_company : :edit_client
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = [{:title => :people, :url => companies_path}]
+    crumbs << {:title => @company.name, :url => company_path(:id => @company.id)} if action_name == 'permissions'
+    crumbs
+  end
+  
+  def company_params
+    params[:company].nil? ? {} : params[:company].permit(:name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+  end
+
+  def load_related_object
     begin
       @company = Company.find(params[:id])
     rescue ActiveRecord::RecordNotFound

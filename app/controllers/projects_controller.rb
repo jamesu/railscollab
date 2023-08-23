@@ -22,8 +22,8 @@ class ProjectsController < ApplicationController
 
   layout :project_layout
 
-  before_action :process_session
-  before_action :obtain_project, :except => [:index, :new, :create]
+  
+  
   after_action  :user_track, :only => [:index, :search, :people]
 
   def index
@@ -369,12 +369,45 @@ protected
   def project_layout
     ['new', 'create', 'edit' 'update'].include?(action_name) ? 'administration' : 'project_website'
   end
+  
+  def current_tab
+    case action_name
+      when 'people', 'permissions' then :people
+      when 'new', 'create', 'edit', 'update', 'index' then :projects
+      else :overview
+    end
+  end
+
+  def current_crumb
+    case action_name
+      when 'new', 'create' then :add_project
+      when 'edit', 'update' then :edit_project
+      when 'search' then :search_results
+      when 'show' then :overview
+      else super
+    end
+  end
+
+  def extra_crumbs
+    case action_name
+      when 'new', 'create', 'edit', 'update', 'permissions' then [{:title => :projects, :url => "/administration/projects"}]
+      else super
+    end
+  end
+
+  def page_title
+    case action_name
+      when 'show' then I18n.t('overview')
+      when 'index' then I18n.t('projects')
+      else super
+    end
+  end
 
   def project_params
     params[:project].nil? ? {} : params[:project].permit(:name, :description, :priority, :show_description_in_overview)
   end
 
-   def obtain_project
+   def load_related_object
      begin
         @project = Project.find(params[:id])
         @active_project = @project

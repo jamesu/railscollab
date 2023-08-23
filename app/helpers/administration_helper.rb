@@ -17,14 +17,4 @@
 #++
 
 module AdministrationHelper
-  def page_title
-    case action_name
-      when 'index' then I18n.t('administration')
-      else super
-    end
-  end
-
-  def current_tab
-    action_name.to_sym
-  end
 end

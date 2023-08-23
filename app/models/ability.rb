@@ -30,13 +30,13 @@ class Ability
     key = "#{ability}_#{instance.class}"
     if @abilityCheckers.has_key?(ability)
       func = @abilityCheckers[key]
-      return func(instance)
+      return func.call(instance)
     else
       return false
     end
   end
 
-  def initialize(user)
+  def init(user)
 
     # Task
 
@@ -481,6 +481,7 @@ class Ability
       user.is_admin and page.project.is_active? and user.member_of(page.project)
     end
 
+    return self
   end
 
 end

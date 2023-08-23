@@ -19,10 +19,10 @@
 class FoldersController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
-  before_action :obtain_folder, :except => [:index, :create, :new]
+  
+  
   after_action  :user_track, :only => [:files]
   
   # GET /folders
@@ -191,11 +191,54 @@ class FoldersController < ApplicationController
 
 private
 
+  def page_title
+    case action_name
+      when 'files' then I18n.t('folder_name', :folder => @current_folder.name)
+      when 'new', 'create' then I18n.t('add_folder')
+      when 'edit', 'update' then I18n.t('edit_folder')
+      else super
+    end
+  end
+
+  def current_tab
+    :files
+  end
+
+  def current_crumb
+    case action_name
+      when 'show' then @folder.nil? ? :files : @folder.name
+      when 'new', 'create' then :add_folder
+      when 'edit', 'update' then :edit_folder
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :files, :url => files_path(@active_project.id)}
+    crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil? or @folder.new_record?
+    crumbs
+  end
+
+  def page_actions
+    @page_actions = []
+  
+    if can? :create_file, @active_project
+      @page_actions << {:title => :add_file, :url => new_file_path(:folder_id => @folder.id)}
+    end
+
+    if can? :create_folder, @active_project
+      @page_actions << {:title => :add_folder, :url => new_folder_path}
+    end
+    
+    @page_actions
+  end
+  
   def folder_params
     params[:folder].nil? ? {} : params[:folder].permit(:name)
   end
 
-  def obtain_folder
+  def load_related_object
     if params[:folder_name]
       begin
         @folder = @active_project.folders.where(:name => params[:folder_name]).first!

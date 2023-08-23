@@ -17,29 +17,6 @@
 #++
 
 module DashboardHelper
-  def current_tab
-    case action_name
-      when 'index', 'search' then :overview
-      else action_name.to_sym
-    end
-  end
-
-  def current_crumb
-    case action_name
-      when 'index' then :overview
-      when 'search' then :search_results
-      else super
-    end
-  end
-
-  def additional_stylesheets
-    case action_name
-      when 'index' then ['project/project_log', 'application_logs']
-      when 'milestones', 'my_tasks' then ['dashboard/my_tasks']
-      when 'search' then ['project/search_results']
-    end
-  end
-
   def new_account_steps(user)
     [{:title   => I18n.t('new_account_step1'),
 	  :content => I18n.t('new_account_step1_info', :url => edit_company_path(:id => Company.owner.id)),

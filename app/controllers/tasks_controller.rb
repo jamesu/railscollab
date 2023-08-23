@@ -19,9 +19,9 @@
 class TasksController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
+  
   before_action :grab_list, :except => [:create, :new]
   before_action :grab_list_required, :only => [:index, :create, :new]
   after_action  :user_track, :only => [:index, :show]
@@ -186,6 +186,30 @@ class TasksController < ApplicationController
   end
 
 protected
+
+  def current_tab
+    :tasks
+  end
+
+  def current_crumb
+    case action_name
+      when 'new', 'create' then :add_task
+      when 'edit', 'update' then :edit_task
+      when 'show' then truncate(@task.text, :length => 25)
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :tasks, :url => task_lists_path}
+    unless @task_list.nil?
+      crumbs << {:title => @task_list.name, :url => task_list_path(:id => @task_list.id)}
+    else
+      crumbs << {:title => @logged_user.display_name, :url => "/dashboard/my_tasks"}
+    end
+    crumbs
+  end
 
   def task_params
     params[:task].nil? ? {} : params[:task].permit(:text, :assigned_to_id, :task_list_id, :estimated_hours)

@@ -21,8 +21,8 @@ class UsersController < ApplicationController
 
   layout 'administration'
   
-  before_action :process_session
-  before_action :obtain_user, :except => [:index, :create, :new]
+  
+  
   after_action :user_track, :only => [:index, :show]
 
   def index
@@ -352,11 +352,40 @@ class UsersController < ApplicationController
 
 protected
 
+  def page_title
+    case action_name
+      when 'show' then I18n.t('user_card', :user => @user.display_name)
+      else super
+    end
+  end
+
+  def current_crumb
+    case action_name
+      when 'new', 'create' then :add_user
+      when 'show' then @user.display_name
+      when 'edit', 'update', 'current' then :edit_user
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = [
+      {:title => :people, :url => '/companies'},
+      {:title => @user.company.name, :url => company_path(:id => @user.company.id)}
+    ]
+    crumbs << {:title => @user.display_name, :url => user_path(:id => @user.id)} if action_name == 'permissions'
+    crumbs
+  end
+
+  def current_tab
+    :people
+  end
+
   def user_params
     params[:user].nil? ? {} : params[:user].permit(:display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification)
   end
 
-  def obtain_user
+  def load_related_object
     begin
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound

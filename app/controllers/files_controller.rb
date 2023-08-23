@@ -19,9 +19,9 @@
 class FilesController < ApplicationController
 
   layout 'project_website'
-  helper 'project_items'
+  
 
-  before_action :process_session
+  
   before_action  :obtain_file, :except => [:index, :new, :create]
   after_action  :user_track, :only => [:index, :show]
   
@@ -382,11 +382,42 @@ class FilesController < ApplicationController
 
 private
 
+  def page_title
+    case action_name
+      when 'index' then @current_folder.nil? ? I18n.t('files') : I18n.t('folder_name', :folder => @current_folder.name)
+      when 'new', 'create' then I18n.t('add_file')
+      when 'edit', 'update' then I18n.t('edit_file')
+      else super
+    end
+  end
+
+  def current_tab
+    :files
+  end
+
+  def current_crumb
+    case action_name
+      when 'index' then :files
+      when 'attach' then :attach_files
+      when 'new', 'create' then :add_file
+      when 'edit', 'update' then :edit_file
+      when 'show' then @file.filename
+      else super
+    end
+  end
+
+  def extra_crumbs
+    crumbs = []
+    crumbs << {:title => :files, :url => files_path(@active_project.id)} unless action_name == 'index'
+    crumbs << {:title => @folder.name, :url => @folder.object_url} if !@folder.nil? and action_name == 'show'
+    crumbs
+  end
+  
   def file_params
     params[:file].nil? ? {} : params[:file].permit(:folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
   end
 
-  def obtain_file
+  def load_related_object
      begin
         @file = @active_project.project_files.find(params[:id])
      rescue ActiveRecord::RecordNotFound

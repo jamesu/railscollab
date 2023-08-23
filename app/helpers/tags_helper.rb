@@ -17,15 +17,4 @@
 #++
 
 module TagsHelper
-  def current_tab
-    :tags
-  end
-  
-  def page_title
-    I18n.t('tags')
-  end
-
-  def current_crumb
-    :tags
-  end
 end

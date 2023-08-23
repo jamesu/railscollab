@@ -17,33 +17,4 @@
 #++
 
 module CompaniesHelper
-  def page_title
-    case action_name
-      when 'show' then I18n.t('company_card', :company => @company.name)
-      else super
-    end
-  end
-
-  def current_tab
-    :people
-  end
-
-  def current_crumb
-    case action_name
-      when 'new', 'create' then :add_client
-      when 'show' then @company.name
-      when 'edit', 'update' then @company.is_owner? ? :edit_company : :edit_client
-      else super
-    end
-  end
-
-  def extra_crumbs
-    crumbs = [{:title => :people, :url => companies_path}]
-    crumbs << {:title => @company.name, :url => company_path(:id => @company.id)} if action_name == 'permissions'
-    crumbs
-  end
-
-  def additional_stylesheets
-    ['project/people'] if action_name == 'index'
-  end
 end

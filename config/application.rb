@@ -19,7 +19,7 @@ module Railscollab
     config.assets.enabled = true
     config.assets.version = '1.0'
 
-    #config.generators.stylesheet_engine = :sass
+    config.generators.stylesheet_engine = :sass
 
 
     config.action_mailer.default_url_options = { host: 'localhost:3000' }

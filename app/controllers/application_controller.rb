@@ -24,13 +24,14 @@ class ApplicationController < ActionController::Base
   include AuthenticatedSystem
 
   protect_from_forgery
-  clear_helpers
-  helper :navigation
 
   before_action :reload_owner
   before_action :login_required
   before_action :logged_user_info
   before_action :set_time_zone
+  before_action :process_session
+  before_action :load_related_object, :except => [:index, :create, :new, :by_task]
+  before_action :config_page
 
 protected
 
@@ -101,5 +102,62 @@ protected
     end
 
     true
+  end
+
+  def can?(ability, instance)
+    return false if @logged_user.nil?
+    if @logged_user_can.nil?
+      @logged_user_can = Ability.new.init(@logged_user)
+    end
+    return @logged_user_can.can?(ability, instance)
+  end
+
+  def authorize!(action, instance)
+    if !can?(action, instance)
+      error_status(false, :insufficient_permissions)
+      false
+    else
+      true
+    end
+  end
+
+  # navigation
+
+  def page_title
+    title = current_crumb
+    title = I18n.t(title) if title.is_a? Symbol
+    title
+  end
+
+  def current_crumb
+    action_name.to_sym
+  end
+
+  def crumbs
+    []
+  end
+
+  def extra_crumbs
+    []
+  end
+
+  def page_actions
+    @page_actions||[]
+  end
+
+  def current_tab
+    nil
+  end
+
+  def load_related_object
+  end
+
+  def config_page
+    @page_title = page_title
+    @crumbs = crumbs
+    @current_tab = current_tab
+    @current_crumb = current_crumb
+    @extra_crumbs = extra_crumbs
+    @page_actions = page_actions
   end
 end

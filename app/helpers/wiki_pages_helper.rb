@@ -66,33 +66,6 @@ module WikiPagesHelper
     options_for_select [current_version(@versions.first), *versions(@versions[1..-1])], :selected => request.path
   end
 
-  def current_tab
-    :wiki
-  end
-
-  def current_crumb
-    case action_name
-      when 'index' then :wiki
-      when 'new', 'create' then :add_page
-      when 'edit', 'update' then :edit_page
-      when 'show' then @wiki_page.title if @wiki_page
-      when 'list' then :all_pages
-      else super
-    end
-  end
-
-  def extra_crumbs
-    crumbs = []
-    crumbs << {:title => :wiki, :url => wiki_pages_path} unless action_name == 'index'
-    crumbs
-  end
-
-  def additional_stylesheets
-    ['project/wiki']
-  end
-
-  private
-
   def wiki_id_to_title(id)
     id.underscore.humanize
   end

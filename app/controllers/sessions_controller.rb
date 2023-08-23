@@ -52,6 +52,14 @@ class SessionsController < ApplicationController
   end
 
 protected
+
+  def page_title
+    case action_name
+      when 'new', 'create' then I18n.t('login')
+      else super
+    end
+  end
+
   # Track failed login attempts
   def note_failed_signin
     error_status(true, :login_failure, {}, false)
