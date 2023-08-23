@@ -53,7 +53,7 @@ class Activity < ApplicationRecord
   end
 
   def self.new_log(obj, user, action, private=false, real_project=nil)
-    really_silent = Rails.configuration.x.railscollab.log_really_silent && action == :delete
+    really_silent = Rails.configuration.railscollab.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
       @log = Activity.new()

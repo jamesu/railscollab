@@ -21,8 +21,8 @@ class TaskListsController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /task_lists
   # GET /task_lists.xml

@@ -21,9 +21,9 @@ class FilesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  before_filter  :obtain_file, :except => [:index, :new, :create]
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action  :obtain_file, :except => [:index, :new, :create]
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /files
   # GET /files.xml
@@ -50,7 +50,7 @@ class FilesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.x.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.total_pages.times {|page| @pagination << page+1}
         
@@ -62,7 +62,7 @@ class FilesController < ApplicationController
       format.xml  {
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
-                            .limit(params[:limit] || Rails.configuration.x.railscollab.files_per_page)
+                            .limit(params[:limit] || Rails.configuration.railscollab.files_per_page)
         
         render :xml => @files.to_xml(:only => [:id,
                                                :filename,

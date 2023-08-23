@@ -9,7 +9,7 @@
 <% additional_stylesheets.each do |ss| -%>
     <%= stylesheet_link_tag ss %>
 <% end unless additional_stylesheets.nil? -%>
-    <%= javascript_include_tag 'application.js' %>
+    <%= javascript_importmap_tags %>
     <%= javascript_tag "var LOGGED_USER_ID=#{@logged_user.id};" %>
 <!-- head needs to go here? -->
   </head>
@@ -31,7 +31,7 @@
         <div id="crumbsBlock">
           <%= render :partial => 'layouts/crumbs', :object => dashboard_crumbs %>
           
-          <% if Rails.configuration.search_enabled %>
+          <% if Rails.configuration.railscollab.search_enabled %>
           <div id="searchBox">
             <%= form_tag :controller => 'dashboard', :action => 'search' %>
               <div>

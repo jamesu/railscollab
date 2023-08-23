@@ -21,10 +21,10 @@ class TasksController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  before_filter :grab_list, :except => [:create, :new]
-  before_filter :grab_list_required, :only => [:index, :create, :new]
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action :grab_list, :except => [:create, :new]
+  before_action :grab_list_required, :only => [:index, :create, :new]
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /tasks
   # GET /tasks.xml

@@ -4,11 +4,11 @@
 
 <%= t('notifier_new_comment', :title => @message.title) %>
 
-- <%= @comment.object_url(Rails.configuration.site_url) %>
+- <%= @comment.object_url(Rails.configuration.railscollab.site_url) %>
 
 <%= t('company') %>: <%= Company.owner.name %>
 <%= t('project') %>: <%= @message.project.name %>
 <%= t('author') %>: <%= @comment.created_by.display_name %>
 
 --
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>

@@ -25,7 +25,7 @@ class User < ApplicationRecord
   include Authentication::ByCookieToken
 
   belongs_to :company
-  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id', optional: true
 
   has_many :im_values, dependent:  :delete_all
   has_many :activities, foreign_key:  'created_by_id', dependent:  :destroy
@@ -48,7 +48,7 @@ class User < ApplicationRecord
   has_attached_file :avatar,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
+    :path => Rails.configuration.railscollab.attach_to_s3 ?
       "avatar/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 
@@ -220,7 +220,7 @@ class User < ApplicationRecord
   end
 
   def is_anonymous?
-    Rails.configuration.x.railscollab.allow_anonymous and self.username == 'Anonymous'
+    Rails.configuration.railscollab.allow_anonymous and self.username == 'Anonymous'
   end
 
   def is_part_of(project)
@@ -283,14 +283,16 @@ class User < ApplicationRecord
 
   def avatar_url
     if !avatar?
-      "http://gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=50&d=" + URI.encode("#{Rails.configuration.x.railscollab.site_url}/assets/avatar.gif")
+      "/assets/avatar.gif"
     else
       avatar.url(:thumb)
     end
   end
 
   def display_name
-    display_name? ? read_attribute(:display_name) : username
+    self.attributes[:display_name] ? 
+      self.attributes[:display_name] : 
+      username
   end
 
   def object_name

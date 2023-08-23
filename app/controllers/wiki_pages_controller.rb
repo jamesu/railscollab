@@ -20,19 +20,19 @@
 class WikiPagesController < ApplicationController
   layout 'project_website'
 
-  before_filter :process_session
-  before_filter :find_sidebar_page, :only => [:index, :show]
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action :find_sidebar_page, :only => [:index, :show]
+  after_action  :user_track, :only => [:index, :show]
 
-  before_filter :find_wiki_page, :only => [:show, :edit, :update, :destroy]
-  before_filter :find_main_wiki_page, :only => :index
-  before_filter :find_wiki_pages, :only => :list
+  before_action :find_wiki_page, :only => [:show, :edit, :update, :destroy]
+  before_action :find_main_wiki_page, :only => :index
+  before_action :find_wiki_pages, :only => :list
 
   rescue_from ActiveRecord::RecordNotFound, :with => :not_found
   
-  before_filter :check_create_permissions, :only => [:new, :create]
-  before_filter :check_update_permissions, :only => [:edit, :update]
-  before_filter :check_delete_permissions, :only => :destroy
+  before_action :check_create_permissions, :only => [:new, :create]
+  before_action :check_update_permissions, :only => [:edit, :update]
+  before_action :check_delete_permissions, :only => :destroy
 
   def index
     unless @wiki_page.nil?

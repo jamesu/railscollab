@@ -22,10 +22,10 @@ class TimesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  before_filter :obtain_time,     :except => [:index, :by_task, :new, :create]
-  before_filter :prepare_times,   :only   => [:index, :by_task, :export]
-  after_filter  :user_track,      :only   => [:index, :by_task, :view]
+  before_action :process_session
+  before_action :obtain_time,     :except => [:index, :by_task, :new, :create]
+  before_action :prepare_times,   :only   => [:index, :by_task, :export]
+  after_action  :user_track,      :only   => [:index, :by_task, :view]
 
   def index
     authorize! :manage_time, @active_project
@@ -36,7 +36,7 @@ class TimesController < ApplicationController
         @content_for_sidebar = 'index_sidebar'
     
         @times = @project.time_records.where(@time_conditions)
-                                       .paginate(:page => @current_page, :per_page => Rails.configuration.x.railscollab.times_per_page)
+                                       .paginate(:page => @current_page, :per_page => Rails.configuration.railscollab.times_per_page)
                                        .order("#{@sort_type} #{@sort_order}")
         
         @pagination = []
@@ -46,7 +46,7 @@ class TimesController < ApplicationController
       format.xml  {
         @times = @project.time_records.where(@time_conditions)
                                        .offset(params[:offset])
-                                       .limit(params[:limit] || Rails.configuration.x.railscollab.times_per_page) 
+                                       .limit(params[:limit] || Rails.configuration.railscollab.times_per_page) 
                                        .order("#{@sort_type} #{@sort_order}")
         
         render :xml => @times.to_xml(:root => 'times')

@@ -21,10 +21,10 @@ class CompaniesController < ApplicationController
 
   layout 'administration'
 
-  before_filter :process_session
-  before_filter :obtain_company, :except => [:index, :create, :new]
-  after_filter  :user_track, :only => [:card]
-  after_filter  :reload_owner
+  before_action :process_session
+  before_action :obtain_company, :except => [:index, :create, :new]
+  after_action  :user_track, :only => [:card]
+  after_action  :reload_owner
 
   def show
     authorize! :show, @company

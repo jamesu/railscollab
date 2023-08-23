@@ -4,10 +4,10 @@
 
 <%= t('notifier_new_milestone', :name => @milestone.name, :project => @milestone.project.name) %>
 
-- <%= @milestone.object_url(Rails.configuration.site_url) %>
+- <%= @milestone.object_url(Rails.configuration.railscollab.site_url) %>
 
 <%= t('company') %>: <%= Company.owner.name %>
 <%= t('project') %>: <%= @milestone.project.name %>
 
 --
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>

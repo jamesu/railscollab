@@ -23,9 +23,9 @@ class MilestonesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  before_filter :obtain_milestone, :except => [:index, :new, :create]
-  after_filter  :user_track,       :only   => [:index, :show]
+  before_action :process_session
+  before_action :obtain_milestone, :except => [:index, :new, :create]
+  after_action  :user_track,       :only   => [:index, :show]
 
   def index
     @content_for_sidebar = 'index_sidebar'

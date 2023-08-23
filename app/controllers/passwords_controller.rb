@@ -1,7 +1,7 @@
 class PasswordsController < ApplicationController
   layout 'dialog'
-  before_filter :find_user, :only => [:edit, :update]
-  before_filter :validate_token, :only => [:edit, :update]
+  before_action :find_user, :only => [:edit, :update]
+  before_action :validate_token, :only => [:edit, :update]
 
   def new
   end

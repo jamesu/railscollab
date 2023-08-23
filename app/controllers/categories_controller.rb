@@ -21,8 +21,8 @@ class CategoriesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /categories
   # GET /categories.xml
@@ -185,7 +185,7 @@ class CategoriesController < ApplicationController
         @page = 1 unless @page > 0
         
         @messages = @category.messages.where(msg_conditions)
-                                              .paginate(:page => @page, :per_page => Rails.configuration.x.railscollab.messages_per_page)
+                                              .paginate(:page => @page, :per_page => Rails.configuration.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -200,7 +200,7 @@ class CategoriesController < ApplicationController
       format.xml  { 
         @messages = @category.messages.where(msg_conditions)
                                               .offset(params[:offset])
-                                              .limit(params[:limit] || Rails.configuration.x.railscollab.messages_per_page)
+                                              .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
         
         render :xml => @messages.to_xml(:only => [:id,
                                                   :title,

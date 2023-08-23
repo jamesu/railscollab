@@ -19,8 +19,8 @@
 
 class AdministrationController < ApplicationController
 
-  before_filter :process_session
-  before_filter :user_track
+  before_action :process_session
+  before_action :user_track
 
   def index
   end

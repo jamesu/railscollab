@@ -4,11 +4,11 @@
 
 <%= t('notifier_new_task', :project => @task.project.name) %>
 
-- <%= @task.object_url(Rails.configuration.site_url) %>
+- <%= @task.object_url(Rails.configuration.railscollab.site_url) %>
 
 <%= t('company') %>: <%= Company.owner.name %>
 <%= t('project') %>: <%= @task.project.name %>
 
 <%= @task.text %>
 --
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>

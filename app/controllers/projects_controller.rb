@@ -22,9 +22,9 @@ class ProjectsController < ApplicationController
 
   layout :project_layout
 
-  before_filter :process_session
-  before_filter :obtain_project, :except => [:index, :new, :create]
-  after_filter  :user_track, :only => [:index, :search, :people]
+  before_action :process_session
+  before_action :obtain_project, :except => [:index, :new, :create]
+  after_action  :user_track, :only => [:index, :search, :people]
 
   def index
     @projects = @logged_user.is_admin ? Project.all : @logged_user.projects
@@ -39,9 +39,9 @@ class ProjectsController < ApplicationController
   def show
     respond_to do |format|
       format.html {
-        when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.x.railscollab.minutes_to_activity_log_expire) do
-          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.is_public)[0..(Rails.configuration.x.railscollab.project_logs_per_page-1)]
-        end
+        #when_fragment_expired "user#{@logged_user.id}_#{@project.id}_dblog", Time.now.utc + (60 * Rails.configuration.railscollab.minutes_to_activity_log_expire) do
+          @project_log_entries = (@logged_user.member_of_owner? ? @project.activities : @project.activities.is_public)[0..(Rails.configuration.railscollab.project_logs_per_page-1)]
+        #end
 
         @time_now = Time.zone.now
         @late_milestones = @project.milestones.late
@@ -76,12 +76,12 @@ class ProjectsController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.x.railscollab.search_results_per_page})
+      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.railscollab.search_results_per_page})
 
       @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
       @pagination = []
-      @start_search_results = Rails.configuration.x.railscollab.search_results_per_page * (current_page-1)
-      (@total_search_results.to_f / Rails.configuration.x.railscollab.search_results_per_page).ceil.times {|page| @pagination << page+1}
+      @start_search_results = Rails.configuration.railscollab.search_results_per_page * (current_page-1)
+      (@total_search_results.to_f / Rails.configuration.railscollab.search_results_per_page).ceil.times {|page| @pagination << page+1}
     else
       @last_search = I18n.t('search_box_default')
       @search_results = []
@@ -258,14 +258,14 @@ class ProjectsController < ApplicationController
       @project.users << @logged_user
 
       # Add default folders
-      Rails.configuration.x.railscollab.default_project_folders.each do |folder_name|
+      Rails.configuration.railscollab.default_project_folders.each do |folder_name|
         folder = Folder.new(:name => folder_name)
         folder.project = @project
         folder.save
       end
 
       # Add default message categories
-      Rails.configuration.x.railscollab.default_project_message_categories.each do |category_name|
+      Rails.configuration.railscollab.default_project_message_categories.each do |category_name|
         category = Category.new(:name => category_name)
         category.project = @project
         category.save

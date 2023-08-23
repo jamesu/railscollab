@@ -20,7 +20,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def site_name
-    html_escape Rails.configuration.x.railscollab.site_name
+    html_escape Rails.configuration.railscollab.site_name
   end
 
   def product_signature
@@ -310,5 +310,11 @@ module ApplicationHelper
     textilized = RedCloth.new(text, [ :hard_breaks, :filter_html ])
     textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
     textilized.to_html.html_safe
+  end
+
+  def can?(ability, instance)
+    return false if @logged_user.nil?
+    @logged_user_can ||= Ability.new.initialize(@logged_user)
+    return @logged_user_can.can?(ability, instancr)
   end
 end

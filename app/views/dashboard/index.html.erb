@@ -7,7 +7,7 @@
 <div class="hint" id="new_account_info">
 
   <div class="header"><%= t('welcome_to_new_account') %></div>
-  <div class="content"><%= t('welcome_to_new_account_info', :user => h(@logged_user.display_name), :url => "<a href=\"#{Rails.configuration.site_url}\">#{Rails.configuration.site_url}</a>").html_safe %></div>
+  <div class="content"><%= t('welcome_to_new_account_info', :user => h(@logged_user.display_name), :url => "<a href=\"#{Rails.configuration.railscollab.site_url}\">#{Rails.configuration.railscollab.site_url}</a>").html_safe %></div>
   
    <% new_account_steps(@logged_user).each do |step| %>
     <div class='header'><%= raw step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}" %></div>

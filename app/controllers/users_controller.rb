@@ -21,9 +21,9 @@ class UsersController < ApplicationController
 
   layout 'administration'
   
-  before_filter :process_session
-  before_filter :obtain_user, :except => [:index, :create, :new]
-  after_filter :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action :obtain_user, :except => [:index, :create, :new]
+  after_action :user_track, :only => [:index, :show]
 
   def index
     respond_to do |format|

@@ -13,7 +13,7 @@
 
 <div id="myMilestones">
 <%= now = @time_now.to_date
-months_calendar @date_start, @date_end, 'monthsCal', Rails.configuration.first_day_of_week.to_i do |date|
+months_calendar @date_start, @date_end, 'monthsCal', Rails.configuration.railscollab.first_day_of_week.to_i do |date|
   unless date == now
     calendar_block(date.day, @milestones["#{date.month}-#{date.day}"], 'day')  
   else

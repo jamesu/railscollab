@@ -21,8 +21,8 @@ class TagsController < ApplicationController
 
   layout 'project_website'
 
-  before_filter :process_session
-  after_filter  :user_track
+  before_action :process_session
+  after_action  :user_track
   
   def show
     tags_in_project

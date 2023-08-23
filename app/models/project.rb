@@ -127,7 +127,7 @@ class Project < ApplicationRecord
 
   def self.search(query, is_private, projects, options={}, tag_search=false)
     results = []
-    return results, 0 if !Rails.configuration.x.railscollab.search_enabled or query.blank?
+    return results, 0 if !Rails.configuration.railscollab.search_enabled or query.blank?
     options[:with] ||= {}
     options[:with][:is_private] = false unless is_private
     options[:with][:project_id] = projects.map(&:id)

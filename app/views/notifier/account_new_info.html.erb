@@ -4,7 +4,7 @@
 
 <%= t('notifier_greeting', :user => @user.display_name) %>
 
-<%= t('notifier_new_account', :user => @user.created_by.display_name, :site => Rails.configuration.site_name) %>
+<%= t('notifier_new_account', :user => @user.created_by.display_name, :site => Rails.configuration.railscollab.site_name) %>
 
 <%= t('notifier_new_account_access') %>
 
@@ -13,7 +13,7 @@
 
 <%= t('notifier_new_account_access_login', :login => @user.username) %>
 <% else %>
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>
 
 <%= t('notifier_new_account_credentials') %>
 
@@ -21,4 +21,4 @@
 <%= t('password') %>: <%= @password %>
 <% end %>
 --
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>

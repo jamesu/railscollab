@@ -36,6 +36,7 @@ class SessionsController < ApplicationController
       @remember_me = params[:remember_me]
       @login_token = params[:token]
       @login_email = params[:token_email]
+
       render :action => (@login_token.nil? ? 'new' : 'new_token')
     end
   end
@@ -53,7 +54,7 @@ class SessionsController < ApplicationController
 protected
   # Track failed login attempts
   def note_failed_signin
-    error_status(true, :login_failure)
+    error_status(true, :login_failure, {}, false)
     logger.warn "Failed login for '#{params[:login]}' from #{request.remote_ip} at #{Time.now.utc}"
   end
   

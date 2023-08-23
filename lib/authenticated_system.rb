@@ -39,15 +39,15 @@ module AuthenticatedSystem
     #
     # To require logins for all actions, use this in your controllers:
     #
-    #   before_filter :login_required
+    #   before_action :login_required
     #
     # To require logins for specific actions, use this in your controllers:
     #
-    #   before_filter :login_required, :only => [ :edit, :update ]
+    #   before_action :login_required, :only => [ :edit, :update ]
     #
     # To skip this in a subclassed controller:
     #
-    #   skip_before_filter :login_required
+    #   skip_before_action :login_required
     #
     def login_required
       authorized? || access_denied
@@ -90,7 +90,7 @@ module AuthenticatedSystem
 
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.  Set an appropriately modified
-    #   after_filter :store_location, :only => [:index, :new, :show, :edit]
+    #   after_action :store_location, :only => [:index, :new, :show, :edit]
     # for any controller you want to be bounce-backable.
     def redirect_back_or_default(default)
       redirect_to(session[:return_to] || default)

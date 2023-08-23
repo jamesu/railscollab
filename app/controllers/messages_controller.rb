@@ -21,9 +21,9 @@ class MessagesController < ApplicationController
   layout 'project_website'
   helper 'project_items'
 
-  before_filter :process_session
-  before_filter :obtain_message, :except => [:index, :new, :create]
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action :obtain_message, :except => [:index, :new, :create]
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /messages
   # GET /messages.xml
@@ -58,7 +58,7 @@ class MessagesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         @messages = @active_project.messages.where(msg_conditions)
-                                                    .paginate(:page => @page, :per_page => Rails.configuration.x.railscollab.messages_per_page)
+                                                    .paginate(:page => @page, :per_page => Rails.configuration.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -74,7 +74,7 @@ class MessagesController < ApplicationController
       format.xml  { 
         @messages = @active_project.messages.where(msg_conditions)
                                                     .offset(params[:offset])
-                                                    .limit(params[:limit] || Rails.configuration.x.railscollab.messages_per_page)
+                                                    .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
         render :xml => @messages.to_xml(:root => 'messages')
       }
     end
@@ -118,7 +118,7 @@ class MessagesController < ApplicationController
     if @category
       @message.category_id = @category.id
     else
-      @category = @active_project.categories.where(['name = ?', Rails.configuration.x.railscollab.default_project_message_category]).first
+      @category = @active_project.categories.where(['name = ?', Rails.configuration.railscollab.default_project_message_category]).first
     end
 
     @message.comments_enabled = true unless (message_params and message_params.has_key?(:comments_enabled))

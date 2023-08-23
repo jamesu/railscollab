@@ -30,7 +30,7 @@ class ProjectFileRevision < ApplicationRecord
   has_attached_file :data,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
+    :path => Rails.configuration.railscollab.attach_to_s3 ?
       "data/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 

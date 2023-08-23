@@ -20,10 +20,10 @@
 class Company < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id'
+  belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id', optional: true
 
-  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id', optional: true
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :clients, class_name: 'Company', foreign_key:  'client_of_id'
   has_many :users
@@ -33,7 +33,7 @@ class Company < ApplicationRecord
   has_attached_file :logo,
     :styles => { :thumb => "50x50" },
     :default_url => '',
-    :path => Rails.configuration.x.railscollab.attach_to_s3 ?
+    :path => Rails.configuration.railscollab.attach_to_s3 ?
       "logo/:id/:style.:extension" :
       ":rails_root/public/system/:attachment/:id/:style/:filename"
 

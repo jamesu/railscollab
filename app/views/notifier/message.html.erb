@@ -4,10 +4,10 @@
 
 <%= t('notifier_new_message', :title => @message.title, :project => @message.project.name) %>
 
-- <%= @message.object_url(Rails.configuration.site_url) %>
+- <%= @message.object_url(Rails.configuration.railscollab.site_url) %>
 
 <%= t('company') %>: <%= Company.owner.name %>
 <%= t('project') %>: <%= @message.project.name %>
 
 --
-<%= Rails.configuration.site_url %>
+<%= Rails.configuration.railscollab.site_url %>

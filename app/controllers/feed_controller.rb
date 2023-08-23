@@ -22,7 +22,7 @@ require 'csv'
 
 class FeedController < ApplicationController
 
-  after_filter :user_track
+  after_action :user_track
 
   def recent_activities
   	@activity_log = Activity.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)

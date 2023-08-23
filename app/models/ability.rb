@@ -17,9 +17,23 @@
 #++
 
 class Ability
+
+  class AccessDenied < Exception
+  end
+  
   def can(ability, klass, &block)
     @abilityCheckers ||= {}
     @abilityCheckers["#{ability}_#{klass}"] = block
+  end
+
+  def can?(ability, instance)
+    key = "#{ability}_#{instance.class}"
+    if @abilityCheckers.has_key?(ability)
+      func = @abilityCheckers[key]
+      return func(instance)
+    else
+      return false
+    end
   end
 
   def initialize(user)
@@ -370,7 +384,7 @@ class Ability
           true
         elsif comment.created_by == user and !user.is_anonymous?
           now = Time.now.utc
-          (now <= (comment.created_on + (60 * Rails.configuration.x.railscollab.minutes_to_comment_edit_expire)))
+          (now <= (comment.created_on + (60 * Rails.configuration.railscollab.minutes_to_comment_edit_expire)))
         end
       end
 

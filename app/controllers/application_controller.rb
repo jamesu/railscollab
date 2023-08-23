@@ -21,31 +21,43 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include SslRequirement
   include AuthenticatedSystem
 
   protect_from_forgery
   clear_helpers
   helper :navigation
 
-  before_filter :reload_owner
-  before_filter :login_required
-  before_filter :logged_user_info
-  before_filter :set_time_zone
+  before_action :reload_owner
+  before_action :login_required
+  before_action :logged_user_info
+  before_action :set_time_zone
 
 protected
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from Ability::AccessDenied do |exception|
     return error_status(true, :insufficient_permissions)
   end
-
-  def ssl_required?
-	Rails.configuration.x.railscollab.using_ssl
-  end
-
-  def error_status(error, message, args={})
-  	flash[:error] = error
-  	flash[:message] = I18n.t(message, args)
+  
+  def error_status(error, message, args={}, continue_ok=true)
+    if request.format == :html
+      flash[:error] = error
+      flash[:message] = t(message, *args)
+    else
+      @flash_error = error
+      @flash_message = t(message, *args)
+    end
+    
+    return unless (error and continue_ok)
+    
+    # Construct a reply with a relevant error
+    respond_to do |format|
+        format.html { redirect_back_or_default('/') }
+        format.js { render(:update) do |page| 
+                      page.replace_html('statusBar', h(flash[:message]))
+                      page.show 'statusBar'
+                    end }
+        format.xml  { head(error ? :unprocessable_entity : :ok) }
+    end
   end
 
   def set_time_zone

@@ -20,9 +20,9 @@ class CommentsController < ApplicationController
 
   layout 'project_website'
 
-  before_filter :process_session
-  before_filter :obtain_comment, :except => [:index, :new, :create]
-  after_filter  :user_track, :only => [:index, :show]
+  before_action :process_session
+  before_action :obtain_comment, :except => [:index, :new, :create]
+  after_action  :user_track, :only => [:index, :show]
   
   # GET /comments
   # GET /comments.xml

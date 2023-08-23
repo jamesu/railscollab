@@ -42,7 +42,7 @@
     <div class="optionDesc"><%= t('enable_comments_info') %></div>
   </div>
 
-<% if Rails.configuration.allow_anonymous %>    
+<% if Rails.configuration.railscollab.allow_anonymous %>    
   <div class="objectOption">
     <div class="optionLabel"><label><%= t('enable_anonymous_comments') %>:</label></div>
     <div class="optionControl"><%= yesno_toggle 'message', 'anonymous_comments_enabled', :class => 'yes_no', :id => 'messageFormEnableAnonymousComments' %></div>
@@ -92,6 +92,6 @@
 <% if can? :create_file, @active_project %>
   <%= render :partial => 'files/attach_file' %>
   <script type="text/javascript">
-    file_form_attach_init(<%= Rails.configuration.max_attachments %>);
+    file_form_attach_init(<%= Rails.configuration.railscollab.max_attachments %>);
   </script>
 <% end %>
