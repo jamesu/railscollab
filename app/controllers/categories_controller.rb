@@ -183,7 +183,7 @@ class CategoriesController < ApplicationController
         @page = 1 unless @page > 0
         
         @messages = @category.messages.where(msg_conditions)
-                                              .paginate(:page => @page, :per_page => Rails.configuration.railscollab.messages_per_page)
+                                              .page(@page).per(Rails.configuration.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -239,7 +239,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => messages_path(@active_project.id)}
+    crumbs << {:title => :messages, :url => project_messages_path(@active_project)}
     crumbs
   end
 
@@ -247,11 +247,11 @@ protected
     @page_actions = []
     
     if can? :create_message_category, @active_project
-      @page_actions << {:title => :add_category, :url => new_category_path } if action_name == 'index'
+      @page_actions << {:title => :add_category, :url => new_project_category_path(@active_project) } if action_name == 'index'
     end
     
     if can? :create_message, @active_project
-      @page_actions << {:title => :add_message, :url => new_message_path(:category_id => @category.id)} if action_name == 'posts'
+      @page_actions << {:title => :add_message, :url => new_project_message_path(project_id: @active_project.id, :category_id => @category.id)} if action_name == 'posts'
     end
 
     if @display_list

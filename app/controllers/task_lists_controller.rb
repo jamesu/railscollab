@@ -221,7 +221,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :tasks, :url => task_lists_path} unless action_name == 'index'
+    crumbs << {:title => :tasks, :url => project_task_lists_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 
@@ -230,11 +230,23 @@ protected
 
     if action_name == 'index'
       if can?(:create_task_list, @active_project)
-        @page_actions << {:title => :add_task_list, :url=> new_task_list_path, :ajax => true}
+        @page_actions << {:title => :add_task_list, :url=> new_project_task_list_path(@active_project), :ajax => true}
       end
     end
 
     @page_actions
+  end
+
+  def load_related_object
+    begin
+      @task_list = @active_project.task_lists.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_task_list)
+      redirect_back_or_default project_task_lists_path(@active_project)
+      return false
+    end
+
+    true
   end
 
   def task_list_params

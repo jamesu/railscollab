@@ -31,7 +31,7 @@ class FoldersController < ApplicationController
     @folders = @active_project.folders
     
     respond_to do |format|
-      format.html { redirect_to(files_path) }
+      format.html { redirect_to(project_files_path(@active_project)) }
       format.xml  {
         render :xml => @folders.to_xml(:root => 'folders')
       }
@@ -45,7 +45,7 @@ class FoldersController < ApplicationController
     
     respond_to do |format|
       format.html {
-        redirect_to(files_folder_path)
+        redirect_to(files_project_folder_path(@active_project))
       }
       format.xml  { 
         render :xml => @folder.to_xml
@@ -149,7 +149,6 @@ class FoldersController < ApplicationController
     sort_type = 'created_on' unless ['filename'].include?(params[:orderBy])
     sort_order = 'DESC'
 
-    @current_folder = @folder
     @order = sort_type
     
     respond_to do |format|
@@ -215,7 +214,7 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => files_path(@active_project.id)}
+    crumbs << {:title => :files, :url => project_files_path(@active_project)}
     crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil? or @folder.new_record?
     crumbs
   end
@@ -224,11 +223,15 @@ private
     @page_actions = []
   
     if can? :create_file, @active_project
-      @page_actions << {:title => :add_file, :url => new_file_path(:folder_id => @folder.id)}
+      if @folder.nil?
+        @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project)}
+      else
+        @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project, :folder_id => @folder.id)}
+      end
     end
 
     if can? :create_folder, @active_project
-      @page_actions << {:title => :add_folder, :url => new_folder_path}
+      @page_actions << {:title => :add_folder, :url => new_project_folder_path(@active_project)}
     end
     
     @page_actions
@@ -242,17 +245,19 @@ private
     if params[:folder_name]
       begin
         @folder = @active_project.folders.where(:name => params[:folder_name]).first!
+        @current_folder = @folder
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
-        redirect_back_or_default files_path
+        redirect_back_or_default project_files_path(@active_project)
         return false
       end
     elsif params[:id]
       begin
         @folder = @active_project.folders.find(params[:id])
+        @current_folder = @folder
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder)
-        redirect_back_or_default files_path
+        redirect_back_or_default project_files_path(@active_project)
         return false
       end
     end

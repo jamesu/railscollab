@@ -84,7 +84,7 @@ class UsersController < ApplicationController
     @permissions = Person.permission_names()
     @projects = @active_projects
     
-    user_attribs = user_params
+    user_attribs = admin_user_params
 
     # Process extra parameters
 
@@ -93,24 +93,9 @@ class UsersController < ApplicationController
 
     if user_attribs.has_key?(:generate_password)
       @user.password = @user.password_confirmation = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
-    else
-      unless user_attribs[:password].blank?
-        @user.password = user_attribs[:password]
-        @user.password_confirmation = user_attribs[:password_confirmation]
-      end
     end
       
     new_account_password = @user.password
-
-    if @logged_user.member_of_owner?
-      @user.company_id = user_attribs[:company_id]
-      if @user.member_of_owner?
-        @user.is_admin = user_attribs[:is_admin]
-        @user.auto_assign = user_attribs[:auto_assign]
-      end
-    else
-      @user.company_id = @company.id
-    end
 
     # Process core parameters
 
@@ -151,19 +136,19 @@ class UsersController < ApplicationController
   	
     @projects = @active_projects
     @permissions = Person.permission_names()
-    
-    user_params = user_params
+
+    input_params = (@logged_user.is_admin && @logged_user.member_of_owner?) ? admin_user_params : user_params
 
     # Process IM Values
-    all_im_values = user_params[:im_values] || {}
+    all_im_values = input_params[:im_values] || {}
     all_im_values.reject! do |key, value|
       value[:value].strip.length == 0
     end
 
-    if user_params[:default_im_value].nil?
+    if input_params[:default_im_value].nil?
       default_value = '-1'
     else
-      default_value = user_params[:default_im_value]
+      default_value = input_params[:default_im_value]
     end
 
     real_im_values = all_im_values.collect do |type_id,value|
@@ -171,28 +156,9 @@ class UsersController < ApplicationController
       ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
     end
 
-    # Process extra parameters
-
-    if @logged_user.is_admin?
-      @user.username = user_params[:username]
-
-      if @logged_user.member_of_owner?
-        @user.company_id = user_params[:company_id] unless user_params[:company_id].nil?
-        if @user.member_of_owner?
-          @user.is_admin = user_params[:is_admin]
-          @user.auto_assign = user_params[:auto_assign]
-        end
-      end
-    end
-
-    unless user_params[:password].blank?
-      @user.password = user_params[:password]
-      @user.password_confirmation = user_params[:password_confirmation]
-    end
-
     # Process core parameters
 
-    @user.attributes = user_params
+    @user.attributes = input_params
 
     # Send it off
     saved = @user.save
@@ -381,8 +347,23 @@ protected
     :people
   end
 
+  def user_permit_list
+    return [:password, :password_confirmation, :im_values, :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification]
+  end
+
   def user_params
-    params[:user].nil? ? {} : params[:user].permit(:display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification)
+    params[:user].nil? ? {} : params[:user].permit(*user_permit_list)
+  end
+
+  def admin_user_params
+    nl = user_permit_list
+    nl << :username
+    nl << :company_id
+    nl << :is_admin
+    nl << :auto_assign
+    nl << :user_project
+    nl << :project_permission
+    params[:user].nil? ? {} : params[:user].permit(*nl)
   end
 
   def load_related_object

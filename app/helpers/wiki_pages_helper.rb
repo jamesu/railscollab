@@ -26,17 +26,17 @@ module WikiPagesHelper
 
     # Convert wiki links of type "Some stuff":[[hello-world]]
     string.gsub!(/"([^"]+)":\[\[\s*([^\]]+)\s*\]\]/) do
-      "\"#{$1}\":#{wiki_page_path(:id => wiki_title_to_id($2))}"
+      "\"#{$1}\":#{project_wiki_page_path(@active_project, :id => wiki_title_to_id($2))}"
     end
 
     # Convert wiki links of type [[hello-world]]
     string.gsub!(/\[\[\s*([a-z0-9_\-]+)\s*\]\]/) do
-      "\"#{wiki_id_to_title($1)}\":#{wiki_page_path(:id => $1)}"
+      "\"#{wiki_id_to_title($1)}\":#{project_wiki_page_path(@active_project, :id => $1)}"
     end
 
     # Convert wiki links of type [[Hello world]]
     string.gsub!(/\[\[\s*([^\]]+)\s*\]\]/) do
-      "\"#{$1}\":#{wiki_page_path(:id => wiki_title_to_id($1))}"
+      "\"#{$1}\":#{project_wiki_page_path(@active_project, :id => wiki_title_to_id($1))}"
     end
 
     string = textilize(string)
@@ -53,12 +53,12 @@ module WikiPagesHelper
   end
 
   def current_version(version)
-    [t("wiki_engine.current_version#{'_edited_by' unless version.user_name.blank?}", :user => version.user_name), wiki_page_path(:id => version.wiki_page)]
+    [t("wiki_engine.current_version#{'_edited_by' unless version.user_name.blank?}", :user => version.user_name), project_wiki_page_path(@active_project, :id => version.wiki_page)]
   end
 
   def versions(versions)
     versions.collect do |version|
-      [t("wiki_engine.version#{'_edited_by' unless version.user_name.blank?}", :version => version.version, :user => version.user_name), version_wiki_page_path(:id => version.wiki_page, :version => version.version)]
+      [t("wiki_engine.version#{'_edited_by' unless version.user_name.blank?}", :version => version.version, :user => version.user_name), version_project_wiki_page_path(@active_project, :id => version.wiki_page, :version => version.version)]
     end
   end
 

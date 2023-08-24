@@ -132,19 +132,19 @@ module ApplicationHelper
   end
 
   def actions_for_milestone(milestone)
-    [{:name => I18n.t('edit'),   :url => edit_milestone_path(:id => milestone.id), :cond => can?(:edit,milestone)},
-     {:name => I18n.t('delete'), :url => milestone_path(:id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :method => :delete, :confirm => I18n.t('milestone_confirm_delete')}]
+    [{:name => I18n.t('edit'),   :url => edit_project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:edit,milestone)},
+     {:name => I18n.t('delete'), :url => project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :method => :delete, :confirm => I18n.t('milestone_confirm_delete')}]
   end
 
   def actions_for_task_list(task_list)
-    [{:name => I18n.t('edit'),          :url => edit_task_list_path(:id => task_list.id), :cond => can?(:edit,task_list)},
-     {:name => I18n.t('delete'),        :url => task_list_path(:id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :method => :delete, :confirm => I18n.t('task_list_confirm_delete')},
-     {:name => I18n.t('reorder_tasks'), :url => reorder_task_list_path(:id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
+    [{:name => I18n.t('edit'),          :url => edit_project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:edit,task_list)},
+     {:name => I18n.t('delete'),        :url => project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :method => :delete, :confirm => I18n.t('task_list_confirm_delete')},
+     {:name => I18n.t('reorder_tasks'), :url => reorder_project_task_list_path(task_list.project, :id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
   end
 
   def actions_for_message(message)
-    [{:name => I18n.t('edit'),   :url => edit_message_path(:id => message.id), :cond => can?(:edit,message)},
-     {:name => I18n.t('delete'), :url => message_path(:id => message.id), :cond => can?(:delete,message), :method => :delete, :confirm => I18n.t('message_confirm_delete')}]
+    [{:name => I18n.t('edit'),   :url => edit_project_message_path(message.project, :id => message.id), :cond => can?(:edit,message)},
+     {:name => I18n.t('delete'), :url => project_message_path(message.project, :id => message.id), :cond => can?(:delete,message), :method => :delete, :confirm => I18n.t('message_confirm_delete')}]
   end
 
   def actions_for_company(company)
@@ -162,40 +162,40 @@ module ApplicationHelper
   end
 
   def actions_for_comment(comment)
-    [{:name => I18n.t('edit'),   :url => edit_comment_path(:id => comment.id),   :cond => can?(:edit,comment)},
-     {:name => I18n.t('delete'), :url => comment_path(:id => comment.id), :cond => can?(:delete,comment), :method => :delete, :confirm => I18n.t('comment_delete_confirm')}]
+    [{:name => I18n.t('edit'),   :url => edit_project_comment_path(comment.project, :id => comment.id),   :cond => can?(:edit,comment)},
+     {:name => I18n.t('delete'), :url => project_comment_path(comment.project, :id => comment.id), :cond => can?(:delete,comment), :method => :delete, :confirm => I18n.t('comment_delete_confirm')}]
   end
 
   def actions_for_file(file, last_revision)
-    [{:name => I18n.t('details_size', :size => format_size(last_revision.filesize)), :url => file_path(:id => file.id), :cond => can?(:download, file)},
-     {:name => I18n.t('edit'),   :url => edit_file_path(:id => file.id), :cond => can?(:edit,file)},
-     {:name => I18n.t('delete'), :url => file_path(:id => file.id), :cond => can?(:delete,file), :method => :delete, :confirm => I18n.t('file_delete_confirmation')}]
+    [{:name => I18n.t('details_size', :size => format_size(last_revision.filesize)), :url => project_file_path(file.project, :id => file.id), :cond => can?(:download, file)},
+     {:name => I18n.t('edit'),   :url => edit_project_file_path(file.project, :id => file.id), :cond => can?(:edit,file)},
+     {:name => I18n.t('delete'), :url => project_file_path(file.project, :id => file.id), :cond => can?(:delete,file), :method => :delete, :confirm => I18n.t('file_delete_confirmation')}]
   end
 
   def actions_for_file_revision(file, revision)
-    [{:name => I18n.t('download_size', :size => format_size(revision.filesize)), :url => download_file_path(:id => file.id, :revision => revision.revision_number), :cond => can?(:download, file)},
-     {:name => I18n.t('edit'),                                                             :url => edit_file_path(:id => file.id, :revision => revision.revision_number), :cond => can?(:edit,file)}]
+    [{:name => I18n.t('download_size', :size => format_size(revision.filesize)), :url => download_project_file_path(file.project, :id => file.id, :revision => revision.revision_number), :cond => can?(:download, file)},
+     {:name => I18n.t('edit'),                                                   :url => edit_project_file_path(file.project, :id => file.id, :revision => revision.revision_number), :cond => can?(:edit,file)}]
   end
 
   def actions_for_attached_files(attached_file, object)
-    [{:name => I18n.t('details'), :url => file_path(:id => attached_file.id), :cond => true},
-     {:name => I18n.t('detatch'), :url => detatch_file_path(:id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :method => :put, :confirm => I18n.t('detatch_file_confirm')}]
+    [{:name => I18n.t('details'), :url => project_file_path(attached_file.project, :id => attached_file.id), :cond => true},
+     {:name => I18n.t('detatch'), :url => detatch_project_file_path(attached_file.project, :id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :method => :put, :confirm => I18n.t('detatch_file_confirm')}]
   end
 
   def actions_for_time(time)
-    [{:name => I18n.t('details'), :url => time_path(:id => time.id), :cond => true},
-     {:name => I18n.t('edit'),    :url => edit_time_path(:id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => time_path(:id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
+    [{:name => I18n.t('details'), :url => project_time_path(time.project, :id => time.id), :cond => true},
+     {:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
+     {:name => I18n.t('delete'),  :url => project_time_path(@actitime.project_project, :id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
   end
 
   def actions_for_time_short(time)
-    [{:name => I18n.t('edit'),    :url => edit_time_path(:id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => time_path(:id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
+    [{:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
+     {:name => I18n.t('delete'),  :url => project_time_path(time.project, :id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
   end
 
   def actions_for_wiki_page(page)
-    [{:name => I18n.t('edit'),    :url => {:controller => 'wiki_pages', :action => 'edit',   :id => page.slug}, :cond => can?(:edit,page)},
-     {:name => I18n.t('delete'),  :url => {:controller => 'wiki_pages', :action => 'destroy', :id => page.slug}, :cond => can?(:delete,page), :method => :delete, :confirm => I18n.t('wiki_page_confirm_delete')}]
+    [{:name => I18n.t('edit'),    :url => edit_project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:edit,page)},
+     {:name => I18n.t('delete'),  :url => project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:delete,page), :method => :delete, :confirm => I18n.t('wiki_page_confirm_delete')}]
   end
   
   def running_time_for_task(task)
@@ -304,12 +304,22 @@ module ApplicationHelper
     "<div class=\"#{classname}\">#{content} #{list}</div>".html_safe
   end
 
-  def textilize(text)
-    return '' if text.blank?
+  def textilize(text, lite=false, force_attrs=nil)
+    if text.blank?
+      ""
+    else
 
-    textilized = RedCloth.new(text, [ :hard_breaks, :filter_html ])
-    textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
-    textilized.to_html.html_safe
+      renderer = Redcarpet::Render::HTML.new
+      markdown = Redcarpet::Markdown.new(renderer)
+      text = markdown.render(text).html_safe
+
+      unless force_attrs.nil?
+        attrs = force_attrs.map{ |key,value| "#{key}='#{value}'"}.join(' ')
+        text.gsub(/<\b([a-z]*)\w/, "\\0 #{attrs}")
+      else
+        text
+      end
+    end
   end
 
   def can?(ability, instance)
@@ -386,12 +396,12 @@ module ApplicationHelper
   def project_tabbed_navigation
     project_id = @active_project.id
     items = [{:id => :overview,   :url => project_path(@active_project)}]
-    items << {:id => :messages,   :url => messages_path(@active_project)}
-    items << {:id => :tasks,      :url => task_lists_path(@active_project)}
-    items << {:id => :milestones, :url => milestones_path(@active_project)}
-    items << {:id => :ptime,      :url => times_path(@active_project)} if @logged_user.has_permission(@active_project, :can_manage_time)
-    items << {:id => :files,      :url => files_path(@active_project)}
-    items << {:id => :wiki,       :url => wiki_pages_path(@active_project)}
+    items << {:id => :messages,   :url => project_messages_path(@active_project)}
+    items << {:id => :tasks,      :url => project_task_lists_path(@active_project)}
+    items << {:id => :milestones, :url => project_milestones_path(@active_project)}
+    items << {:id => :ptime,      :url => project_times_path(@active_project)} if @logged_user.has_permission(@active_project, :can_manage_time)
+    items << {:id => :files,      :url => project_files_path(@active_project)}
+    items << {:id => :wiki,       :url => project_wiki_pages_path(@active_project)}
     items << {:id => :people,     :url => people_project_path(@active_project)}
 
     items
@@ -478,5 +488,8 @@ module ApplicationHelper
   def object_comments_url(object)
     # comments 
     "#{object.object_url}/comments"
+  end
+
+  def error_messages_for(object, other=nil)
   end
 end

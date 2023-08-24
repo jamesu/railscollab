@@ -132,7 +132,7 @@ class MilestonesController < ApplicationController
     @milestone.set_completed(true, @logged_user)
     
     error_status(true, :error_saving) unless @milestone.save
-    redirect_back_or_default milestone_path(:id => @milestone.id)
+    redirect_back_or_default project_milestone_path(@active_project, :id => @milestone.id)
   end
 
   def open
@@ -142,7 +142,7 @@ class MilestonesController < ApplicationController
     @milestone.set_completed(false, @logged_user)
     
     error_status(true, :error_saving) unless @milestone.save
-    redirect_back_or_default milestone_path(:id => @milestone.id)
+    redirect_back_or_default project_milestone_path(@active_project, :id => @milestone.id)
   end
 
   private
@@ -163,7 +163,7 @@ class MilestonesController < ApplicationController
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :milestones, :url => milestones_path} unless action_name == 'index'
+    crumbs << {:title => :milestones, :url => project_milestones_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 
@@ -172,15 +172,15 @@ class MilestonesController < ApplicationController
 
     if action_name == 'index'
       if can? :create_milestone, @active_project
-        @page_actions << {:title => :add_milestone, :url => new_milestone_path, :ajax => true}
+        @page_actions << {:title => :add_milestone, :url => new_project_milestone_path(@active_project), :ajax => true}
       end
     elsif action_name == 'show'
       if not @milestone.is_completed?
         if can? :create_message, @active_project
-          @page_actions << {:title => :add_message, :url => new_message_path(:milestone_id => @milestone.id)}
+          @page_actions << {:title => :add_message, :url => new_project_message_path(@active_project, :milestone_id => @milestone.id)}
         end
         if can? :create_task_list, @active_project
-          @page_actions << {:title => :add_task_list, :url => new_task_list_path(:milestone_id => @milestone.id) }
+          @page_actions << {:title => :add_task_list, :url => new_project_task_list_path(@active_project, :milestone_id => @milestone.id) }
         end
       end
     end
@@ -197,7 +197,7 @@ class MilestonesController < ApplicationController
       @milestone = @active_project.milestones.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_milestone)
-      redirect_back_or_default milestones_path
+      redirect_back_or_default project_milestones_path(@active_project)
       return false
     end
 

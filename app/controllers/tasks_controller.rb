@@ -102,7 +102,7 @@ class TasksController < ApplicationController
       if @task.save
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully created.'
-        format.html { redirect_back_or_default(task_lists_path) }
+        format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { respond_with_task(@task) }
         format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
       else
@@ -130,7 +130,7 @@ class TasksController < ApplicationController
       if @task.update_attributes(task_params)
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
-        format.html { redirect_back_or_default(task_lists_path) }
+        format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { respond_with_task(@task) }
         format.xml  { head :ok }
       else
@@ -202,9 +202,9 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :tasks, :url => task_lists_path}
+    crumbs << {:title => :tasks, :url => project_task_lists_path(@active_project)}
     unless @task_list.nil?
-      crumbs << {:title => @task_list.name, :url => task_list_path(:id => @task_list.id)}
+      crumbs << {:title => @task_list.name, :url => project_task_list_path(@active_project, :id => @task_list.id)}
     else
       crumbs << {:title => @logged_user.display_name, :url => "/dashboard/my_tasks"}
     end

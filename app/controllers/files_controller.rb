@@ -20,8 +20,6 @@ class FilesController < ApplicationController
 
   layout 'project_website'
   
-
-  
   before_action  :obtain_file, :except => [:index, :new, :create]
   after_action  :user_track, :only => [:index, :show]
   
@@ -89,7 +87,7 @@ class FilesController < ApplicationController
         
         if @revisions.empty?
           error_status(true, :no_file_revisions)
-          redirect_back_or_default files_path
+          redirect_back_or_default project_files_path(@active_project)
         end
         
         @content_for_sidebar = 'index_sidebar'
@@ -258,7 +256,7 @@ class FilesController < ApplicationController
         @file_revision = ProjectFileRevision.where(:file_id => @file.id, :revision_number => revision_id).first!
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_file_revision)
-        redirect_back_or_default files_path
+        redirect_back_or_default project_files_path(@active_project)
         return
       end
     else
@@ -351,7 +349,7 @@ class FilesController < ApplicationController
 
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'Message'].include?(rel_object_type))
       error_status(true, :invalid_request)
-      redirect_back_or_default files_path
+      redirect_back_or_default project_files_path(@active_project)
       return
     end
 
@@ -360,7 +358,7 @@ class FilesController < ApplicationController
       @attach_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_object)
-      redirect_back_or_default files_path
+      redirect_back_or_default project_files_path(@active_project)
       return
     end
 
@@ -408,7 +406,7 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => files_path(@active_project.id)} unless action_name == 'index'
+    crumbs << {:title => :files, :url => project_files_path(@active_project)} unless action_name == 'index'
     crumbs << {:title => @folder.name, :url => @folder.object_url} if !@folder.nil? and action_name == 'show'
     crumbs
   end
@@ -422,7 +420,7 @@ private
         @file = @active_project.project_files.find(params[:id])
      rescue ActiveRecord::RecordNotFound
        error_status(true, :invalid_file)
-       redirect_back_or_default files_path
+       redirect_back_or_default project_files_path(@active_project)
        return false
      end
      

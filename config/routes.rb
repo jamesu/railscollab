@@ -26,10 +26,7 @@ Railscollab::Application.routes.draw do
     end
     
     resources :tags
-  end
-  
-  # Nested routes don't seem to work with path_prefix...
-  scope 'projects/:active_project' do
+
     resources :task_lists do
       member do
         get :reorder
@@ -37,14 +34,14 @@ Railscollab::Application.routes.draw do
         put :reorder
         delete :reorder
       end
-    end
-    
-    resources :tasks, :path_prefix => 'projects/:active_project/task_lists/:task_list_id' do
-      member do
-        put :status
+
+      resources :tasks do
+        member do
+          put :status
+        end
+        
+        resources :comments
       end
-      
-      resources :comments
     end
     
     resources :wiki_pages do
@@ -104,7 +101,6 @@ Railscollab::Application.routes.draw do
       end
     end
   end
-  
  
   resource :password, :only => [:new, :create]
   resources :users do

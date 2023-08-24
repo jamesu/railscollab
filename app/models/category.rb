@@ -53,7 +53,7 @@ class Category < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'message', :action => 'category', :id => self.id, :active_project => self.project_id
+    project_category_url(self, only_path: host.nil?, host: host, project_id: self.project_id)
   end
 
   # Helpers

@@ -85,7 +85,7 @@ class User < ApplicationRecord
 
   def im_info
     # Grab all types
-    all_types = ImType.all(:select => 'id, name')
+    all_types = ImType.select([:id, :name]).all
     return [] if all_types.empty?
 
     # Get an id list
@@ -248,7 +248,7 @@ class User < ApplicationRecord
   def permissions_for(project, reload=false)
     @@cached_permissions ||= {}
     @@cached_permissions[project] = nil if reload
-    @@cached_permissions[project] = (Person.first(:conditions => ['user_id = ? AND project_id = ?', self.id, project.id]) || false)
+    @@cached_permissions[project] = (Person.where(['user_id = ? AND project_id = ?', self.id, project.id]).first || false)
     
     @@cached_permissions[project].class == FalseClass ? nil : @@cached_permissions[project]
   end
@@ -259,25 +259,25 @@ class User < ApplicationRecord
 
   def recent_activity_feed_url(project=nil, format='rss')
     if project.nil?
-      return (url_for :only_path => true, :controller => 'feed', :action => 'recent_activities',  :user => self.id, :format => format, :token => self.twisted_token())
+      return (url_for only_path: true, :controller => 'feed', :action => 'recent_activities',  :user => self.id, :format => format, :token => self.twisted_token())
     else
-      return (url_for :only_path => true, :controller => 'feed', :action => 'project_activities', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
+      return (url_for only_path: true, :controller => 'feed', :action => 'project_activities', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
     end
   end
 
   def milestone_feed_url(project=nil, format='ics')
     if project.nil?
-      return (url_for :only_path => true, :controller => 'feed', :action => 'recent_milestones',  :user => self.id, :format => format, :token => self.twisted_token())
+      return (url_for only_path: true, :controller => 'feed', :action => 'recent_milestones',  :user => self.id, :format => format, :token => self.twisted_token())
     else
-      return (url_for :only_path => true, :controller => 'feed', :action => 'milestones', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
+      return (url_for only_path: true, :controller => 'feed', :action => 'milestones', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
     end
   end
 
   def time_export_url(project=nil, format='csv')
     if project.nil?
-      return (url_for :only_path => true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-')
+      return (url_for only_path: true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-')
     else
-      return (url_for :only_path => true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-', :project => project.id)
+      return (url_for only_path: true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-', :project => project.id)
     end
   end
 
@@ -300,7 +300,7 @@ class User < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for hash_for_user_path(:only_path => host.nil?, :host => host, :id => self.id)
+    user_url(self, only_path: host.nil?, host: host)
   end
 
   def self.get_online(active_in=15)

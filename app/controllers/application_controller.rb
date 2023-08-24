@@ -30,14 +30,11 @@ class ApplicationController < ActionController::Base
   before_action :logged_user_info
   before_action :set_time_zone
   before_action :process_session
+  before_action :load_related_object_index, :only => [:index, :create, :new]
   before_action :load_related_object, :except => [:index, :create, :new, :by_task]
   before_action :config_page
 
 protected
-
-  rescue_from Ability::AccessDenied do |exception|
-    return error_status(true, :insufficient_permissions)
-  end
   
   def error_status(error, message, args={}, continue_ok=true)
     if request.format == :html
@@ -72,8 +69,8 @@ protected
   def process_session
     # Set active project based on parameter or session
     @active_project = nil
-    if params[:active_project]
-      @active_project = Project.find(params[:active_project]) rescue ActiveRecord::RecordNotFound
+    if params[:project_id]
+      @active_project = Project.find(params[:project_id]) rescue ActiveRecord::RecordNotFound
       return false unless verify_project
     end
   end
@@ -147,6 +144,9 @@ protected
 
   def current_tab
     nil
+  end
+
+  def load_related_object_index
   end
 
   def load_related_object

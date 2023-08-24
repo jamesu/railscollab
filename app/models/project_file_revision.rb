@@ -25,7 +25,7 @@ class ProjectFileRevision < ApplicationRecord
   belongs_to :file_type,    foreign_key:  'file_type_id'
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_attached_file :data,
     :styles => { :thumb => "50x50" },
@@ -96,7 +96,7 @@ class ProjectFileRevision < ApplicationRecord
   end
 
   def object_url(host = nil)
-    (url_for hash_for_download_file_path(:only_path => host.nil?, :host => host, :id => self.id, :active_project => self.project_id)) + "\#revision#{self.id}"
+    download_file_url(only_path: host.nil?, host: host, self, project_id: self.project_id) + "\#revision#{self.id}"
   end
 
   def icon_url

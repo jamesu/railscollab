@@ -21,10 +21,10 @@ class ProjectFile < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :folder, counter_cache:  true
+  belongs_to :folder, counter_cache:  true, optional: true
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :project_file_revisions, foreign_key:  'file_id', dependent:  :destroy
   has_many :attached_files, foreign_key:  'file_id'
@@ -91,11 +91,11 @@ class ProjectFile < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for hash_for_file_path(:only_path => true, :host => host, :id => self.id, :active_project => self.project_id)
+    file_url(self, only_path: true, host: host, project_id: self.project_id)
   end
 
   def download_url
-    url_for hash_for_download_file_path(:only_path => true, :id => self.id, :active_project => self.project_id)
+    download_file_url(self, only_path: true, host: host, project_id: self.project_id)
   end
 
   def filetype_icon_url
@@ -178,8 +178,8 @@ class ProjectFile < ApplicationRecord
   def self.find_grouped(group_field, params)
     grouped_fields = {}
     found_files = ProjectFile.where(params[:conditions])
-    found_files = found_files.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:page].nil?
     found_files = found_files.order(params[:order]) unless params[:order].nil?
+    found_files = found_files.page(params[:page]).per(params[:per_page]) unless params[:page].nil?
     
     @pagination = []
 

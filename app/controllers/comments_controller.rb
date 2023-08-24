@@ -27,18 +27,6 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.xml
   def index
-    # Grab related object class + id
-    object_class, object_id = find_comment_object
-    if object_class.nil?
-      error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'dashboard', :action => 'index'
-      return
-    end
-    
-    # Find object
-    @commented_object = object_class.find(object_id)
-    return error_status(true, :invalid_object) if @commented_object.nil?
-    
     # Check permissions
     authorize! :show, @commented_object
     
@@ -75,18 +63,6 @@ class CommentsController < ApplicationController
   # GET /comments/new
   # GET /comments/new.xml
   def new
-    # Grab related object class + id
-    object_class, object_id = find_comment_object
-    if object_class.nil?
-      error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'dashboard', :action => 'index'
-      return
-    end
-    
-    # Find object
-    @commented_object = object_class.find(object_id)
-    return error_status(true, :invalid_object) if @commented_object.nil?
-    
     # Check permissions
     authorize! :comment, @commented_object
 
@@ -113,18 +89,6 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.xml
   def create
-    # Grab related object class + id
-    object_class, object_id = find_comment_object
-    if object_class.nil?
-      error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'dashboard', :action => 'index'
-      return
-    end
-    
-    # Find object
-    @commented_object = object_class.find(object_id)
-    return error_status(true, :invalid_object) if @commented_object.nil?
-    
     # Check permissions
     authorize! :comment, @commented_object
 
@@ -276,6 +240,32 @@ protected
 
   def extra_crumbs
     [{:title => @commented_object.object_name, :url => @commented_object.object_url}]
+  end
+
+  def load_related_object
+    begin
+      @object_class, object_id = find_comment_object
+      if @object_class.nil?
+        error_status(true, :invalid_request)
+        redirect_back_or_default :controller => 'dashboard', :action => 'index'
+        return
+      end
+      
+      # Find object
+      @commented_object = @object_class.find(object_id)
+      return error_status(true, :invalid_object) if @commented_object.nil?
+
+    rescue ActiveRecord::RecordNotFound
+      error_status(true, :invalid_request)
+      redirect_back_or_default :controller => 'dashboard', :action => 'index'
+      return false
+    end
+
+    return true
+  end
+
+  def load_related_object_index
+    load_related_object
   end
   
   def comment_params

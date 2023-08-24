@@ -25,11 +25,11 @@ class TimeRecord < ApplicationRecord
   belongs_to :company, foreign_key:  'assigned_to_company_id'
   belongs_to :user, foreign_key:  'assigned_to_user_id'
   
-  belongs_to :task_list
-  belongs_to :task
+  belongs_to :task_list, optional: true
+  belongs_to :task, optional: true
   
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
   
   has_many :messages
   
@@ -94,7 +94,7 @@ class TimeRecord < ApplicationRecord
   end
   
   def object_url(host = nil)
-    url_for hash_for_time_path(:only_path => host.nil?, :host => host, :id => self.id, :active_project => self.project_id)
+    project_time_url(self, only_path: host.nil?, host: host, project_id: self.project_id)
   end
   
   # Responsible party assignment
@@ -224,8 +224,8 @@ class TimeRecord < ApplicationRecord
   def self.find_grouped(group_field, params)
     grouped_fields = {}
     found_times = TimeRecord.where(params[:conditions])
-    found_times = found_times.paginate(:page => params[:page], :per_page => params[:per_page]) unless params[:page].nil?
     found_times = found_times.order(params[:order]) unless params[:order].nil?
+    found_times = found_times.page([:page]).per(params[:per_page]) unless params[:page].nil?
     
     group_type = TimeRecord if ['assigned_to','project','project_task','project_task_list'].include?(group_field)
     group_type ||= String

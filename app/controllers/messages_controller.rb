@@ -58,7 +58,7 @@ class MessagesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         @messages = @active_project.messages.where(msg_conditions)
-                                                    .paginate(:page => @page, :per_page => Rails.configuration.railscollab.messages_per_page)
+                                                     .page(@page).per(Rails.configuration.railscollab.messages_per_page)
         
         @pagination = []
         @messages.total_pages.times {|page| @pagination << page+1}
@@ -307,8 +307,8 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => messages_path} unless action_name == 'index'
-    crumbs << {:title => @message.category.name, :url => posts_category_path(:id => @message.category_id)} if action_name == 'show' && @message.category
+    crumbs << {:title => :messages, :url => project_messages_path(@active_project)} unless action_name == 'index'
+    crumbs << {:title => @message.category.name, :url => posts_project_category_path(@active_project, :id => @message.category_id)} if action_name == 'show' && @message.category
     crumbs
   end
 
@@ -319,7 +319,7 @@ private
 
       if can? :create_message, @active_project
         @page_actions << {:title => :add_message, :url => (@category.nil? ?
-                          new_message_path : new_message_path(:category_id => @category.id))}
+                          new_project_message_path(@active_project) : new_project_message_path(@active_project, :category_id => @category.id))}
       end
 
       if @display_list
@@ -341,7 +341,7 @@ private
         @message = @active_project.messages.find(params[:id])
      rescue ActiveRecord::RecordNotFound
        error_status(true, :invalid_message)
-       redirect_back_or_default messages_path
+       redirect_back_or_default project_messages_path(@active_project)
        return false
      end
      

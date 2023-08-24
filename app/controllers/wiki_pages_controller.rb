@@ -37,7 +37,7 @@ class WikiPagesController < ApplicationController
   def index
     unless @wiki_page.nil?
       @version = @wiki_page
-      @versions = @wiki_page.versions.all.reverse!
+      @versions = [@wiki_page] # TOFIX @wiki_page.versions.all.reverse!
       render :action => 'show'
     end
   end
@@ -50,8 +50,8 @@ class WikiPagesController < ApplicationController
   end
 
   def show
-    @versions = @wiki_page.versions.all.reverse!
-    @version = @wiki_page.versions.find_by_version(params[:version]) if params[:version]
+    @versions = [@wiki_page] # TOFIX @wiki_page.versions.all.reverse!
+    @version = @versions.find_by_version(params[:version]) if params[:version]
     @version ||= @wiki_page
   end
 
@@ -60,7 +60,7 @@ class WikiPagesController < ApplicationController
 
     if @wiki_page.save
       flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
-      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page.slug)
+      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, :id => @wiki_page.slug)
     else
       render :action => 'new'
     end
@@ -72,7 +72,7 @@ class WikiPagesController < ApplicationController
   def update
     if @wiki_page.update_attributes(wiki_page_params.merge(:created_by => @logged_user))
       flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
-      redirect_to @wiki_page.main ? wiki_pages_path : wiki_page_path(:id => @wiki_page)
+      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, :id => @wiki_page)
     else
       render :action => 'edit'
     end
@@ -82,7 +82,7 @@ class WikiPagesController < ApplicationController
     @wiki_page.destroy
 
     flash[:message] = I18n.t 'wiki_engine.success_deleting_wiki_page'
-    redirect_to wiki_pages_path
+    redirect_to project_wiki_pages_path(@active_project)
   end
 
   def preview
@@ -168,7 +168,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :wiki, :url => wiki_pages_path(@active_project)} unless action_name == 'index'
+    crumbs << {:title => :wiki, :url => project_wiki_pages_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 

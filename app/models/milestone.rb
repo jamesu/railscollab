@@ -23,13 +23,13 @@ class Milestone < ApplicationRecord
 
   belongs_to :project
 
-  belongs_to :company, foreign_key:  'assigned_to_company_id'
-  belongs_to :user,    foreign_key:  'assigned_to_user_id'
+  belongs_to :company, foreign_key:  'assigned_to_company_id', optional: true
+  belongs_to :user,    foreign_key:  'assigned_to_user_id', optional: true
 
-  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id', optional: true
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :task_lists, dependent:  :nullify
 
@@ -91,7 +91,7 @@ class Milestone < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for hash_for_milestone_path(:id => self.id, :active_project => self.project_id, :only_path => host.nil?, :host => host)
+    project_milestone_url(self, project_id: self.project_id, only_path: host.nil?, host: host)
   end
 
   def ordered_task_lists

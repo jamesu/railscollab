@@ -20,12 +20,12 @@
 class Message < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :milestone
-  belongs_to :category,         counter_cache:  true
+  belongs_to :milestone,        optional: true
+  belongs_to :category,         counter_cache:  true, optional: true
   belongs_to :project
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :comments, as:  'rel_object', dependent:  :destroy
   #has_many :tags, as:  'rel_object', dependent:  :destroy
@@ -88,7 +88,7 @@ class Message < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for hash_for_message_path(:id => self.id, :active_project => self.project_id, :only_path => host.nil?, :host => host)
+    project_message_url(self.project, self, only_path: true, host: host)
   end
 
   def attached_files(with_private)

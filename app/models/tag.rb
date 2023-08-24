@@ -39,7 +39,7 @@ class Tag < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'projects', :action => 'tags', :id => self.tag, :active_project => self.project_id
+    project_tags_url(self.project, self.tag, only_path: host.nil?, host: host)
   end
 
   def self.find_objects(tag_name, project, is_public)

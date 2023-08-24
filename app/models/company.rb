@@ -23,7 +23,7 @@ class Company < ApplicationRecord
   belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id', optional: true
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id', optional: true
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true, optional: true
 
   has_many :clients, class_name: 'Company', foreign_key:  'client_of_id'
   has_many :users
@@ -98,7 +98,7 @@ class Company < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for hash_for_company_path(:only_path => host.nil?, :host => host, :id => self.id)
+    company_url(self, only_path: host.nil?, host: host)
   end
 
   def self.select_list

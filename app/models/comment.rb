@@ -19,7 +19,7 @@
 
 class Comment < ApplicationRecord
 	belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 	
 	belongs_to :rel_object, polymorphic:  true, counter_cache:  true
 	
@@ -77,6 +77,10 @@ class Comment < ApplicationRecord
     else
       project_file.where(:is_private => false)
     end
+  end
+
+  def project
+  	rel_object.nil? ? nil : rel_object.project
   end
 	
 	# Accesibility

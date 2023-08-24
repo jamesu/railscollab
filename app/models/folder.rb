@@ -53,7 +53,7 @@ class Folder < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'folders', :action => 'files', :id => self.id, :active_project => self.project_id
+    project_folder_url(self.project, self, only_path: host.nil?, host: host)
   end
 
   # Helpers

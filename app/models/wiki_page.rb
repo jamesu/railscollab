@@ -42,8 +42,12 @@ class WikiPage < ApplicationRecord
     title
   end
 
+  def wiki_page
+    self
+  end
+
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'wiki_pages', :action => 'show', :id => self, :active_project => project_id
+    project_wiki_page_url(project, id: self.id, only_path: host.nil?, host: host)
   end
   
   # Indexing

@@ -36,7 +36,7 @@ class TimesController < ApplicationController
         @content_for_sidebar = 'index_sidebar'
     
         @times = @project.time_records.where(@time_conditions)
-                                       .paginate(:page => @current_page, :per_page => Rails.configuration.railscollab.times_per_page)
+                                       .page(@current_page).per(Rails.configuration.railscollab.times_per_page)
                                        .order("#{@sort_type} #{@sort_order}")
         
         @pagination = []
@@ -219,7 +219,7 @@ private
       @time = @active_project.time_records.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_time)
-      redirect_back_or_default times_path
+      redirect_back_or_default project_times_path(@active_project)
       return false
     end
 

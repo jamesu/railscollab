@@ -28,7 +28,7 @@ class Ability
 
   def can?(ability, instance)
     key = "#{ability}_#{instance.class}"
-    if @abilityCheckers.has_key?(ability)
+    if @abilityCheckers.has_key?(key)
       func = @abilityCheckers[key]
       return func.call(instance)
     else
@@ -264,7 +264,7 @@ class Ability
     # Folder
 
     can :create_folder, Project do |project|
-      folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
+      project.is_active? and user.has_permission(project, :can_manage_files)
     end
 
     can :edit, Folder do |folder|
@@ -452,6 +452,7 @@ class Ability
     end
 
     can :show, User do |target_user|
+      puts "CAN SHOW USER??? #{target_user}"
       user.member_of_owner? or user.company_id == target_user.company_id or target_user.member_of_owner?
     end
     

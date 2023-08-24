@@ -21,9 +21,9 @@
 class Project < ApplicationRecord
 	include Rails.application.routes.url_helpers
 	
-	belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+	belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id', optional: true, optional: true
 	belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id'
+	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true, optional: true
 	
 	has_many :people
 	has_many :users, through:  :people
@@ -93,7 +93,7 @@ class Project < ApplicationRecord
 	end
 	
 	def object_url(host = nil)
-		url_for hash_for_project_path(:only_path => host.nil?, :host => host, :id => self.id)
+		project_url(self, only_path: host.nil?, host: host)
 	end
 	
 	def tasks_by_user(user, completed=false)

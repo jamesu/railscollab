@@ -20,11 +20,11 @@
 class TaskList < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :milestone
+  belongs_to :milestone, optional: true
   belongs_to :project
-  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id'
+  belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id', optional: true
   belongs_to :created_by,   class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by,   class_name: 'User', foreign_key:  'updated_by_id'
+  belongs_to :updated_by,   class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :tasks, dependent:  :destroy
 
@@ -97,7 +97,7 @@ class TaskList < ApplicationRecord
   end
 
   def object_url(host = nil)
-    url_for :only_path => host.nil?, :host => host, :controller => 'task_lists', :action => 'show', :id => self.id, :active_project => self.project_id
+    project_task_list_url(self, only_path: host.nil?, host: host, project_id: self.project_id)
   end
 
   def tags
