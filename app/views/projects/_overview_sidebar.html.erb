@@ -4,7 +4,7 @@
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @important_messages.each do |important_message| -%>
-      <li><%= link_to (h important_message.title), message_path(:id => important_message.id, :active_project => @active_project.id) %><br />
+      <li><%= link_to (h important_message.title), project_message_path(@active_project, :id => important_message.id) %><br />
       <span class="desc"><%= t('important_messages_comments_count', :count => important_message.comments.length) %></span></li>
 <% end %>
     </ul>

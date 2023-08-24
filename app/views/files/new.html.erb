@@ -2,14 +2,14 @@
   @page_actions = []
   
   if can? :create_file, @active_project
-	@page_actions << {:title => :add_file, :url => new_file_path}
+	@page_actions << {:title => :add_file, :url => new_project_file_path(@active_project)}
   end
 
   if can? :create_folder, @active_project
-    @page_actions << {:title => :add_folder, :url => new_folder_path}
+    @page_actions << {:title => :add_folder, :url => new_project_folder_path(@active_project)}
   end
 %>
-<%= form_tag( files_path, :multipart => true ) %>
+<%= form_tag( project_files_path(@active_project), :multipart => true ) %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('add_file') %></button>
 </form>

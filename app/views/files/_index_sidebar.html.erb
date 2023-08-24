@@ -4,9 +4,9 @@
   <div class="blockContent" id="sidebarFolderList">
     <ul>
 <% if !@folder.nil? %>
-      <li><%= link_to t('all_files'), files_path %></li>
+      <li><%= link_to t('all_files'), project_files_path(@active_project) %></li>
 <% else %>
-      <li><%= link_to t('all_files'), files_path, :class => 'selected' %></li>
+      <li><%= link_to t('all_files'), project_files_path(@active_project), :class => 'selected' %></li>
 <% end %>
     
 <% @folders.each do |folder| -%>
@@ -15,14 +15,14 @@
 <% else %>
 <% selected_class = {} %>
 <% end %>
-      <li><%= link_to (h folder.name), files_folder_path(:id => folder.id), selected_class %> 
-      <% if can?(:edit,folder) %><%= link_to render_icon('edit',''), edit_folder_path(:id => folder.id) %><% end %>
-      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), folder_path(:id => folder.id), :method => :delete, :confirm => t('folder_delete_confirmation') %><% end %>
+      <li><%= link_to (h folder.name), files_project_folder_path(folder.project, :id => folder.id), selected_class %> 
+      <% if can?(:edit,folder) %><%= link_to render_icon('edit',''), edit_project_folder_path(folder.project, :id => folder.id) %><% end %>
+      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), project_folder_path(folder.project, :id => folder.id), :method => :delete, :confirm => t('folder_delete_confirmation') %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= new_folder_path %>"><%= t('add_folder') %></a></p>
+    <p><a href="<%= new_project_folder_path(@active_project) %>"><%= t('add_folder') %></a></p>
 	<% end %>
   </div>
 </div>

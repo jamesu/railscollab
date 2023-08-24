@@ -5,7 +5,7 @@
 <% if task_list.is_private? %>
     <div class="private" title="<%= t('private_task_list') %>"><span><%= t('private_task_list') %></span></div>
 <% end %>
-  <div class="header"><%= link_to (h task_list.name), task_list_path(:id => task_list.id) %></div>
+  <div class="header"><%= link_to (h task_list.name), project_task_list_path(task_list.project, :id => task_list.id) %></div>
 <% if task_list.description %>
   <div class="desc"><%= textilize task_list.description %></div>
 <% end %>
@@ -20,9 +20,9 @@
 <% if can?(:edit,task_list) %>
 <%  show_form = @new_list.nil? ? false : true %>
   <div class="addTask">
-    <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to t('add_task'), new_task_path(:task_list_id => task_list.id) %></div>
+    <div class="newTask" <% if show_form %>style="display:none;"<% end %>><%= link_to t('add_task'), new_project_task_list_task_path(task_list.project, :task_list_id => task_list.id) %></div>
     <div class="inner" <% unless show_form %>style="display: none;"<% end %>>
-      <%= form_tag tasks_path(:task_list_id => task_list.id), { 'data-remote' => true, 'data-type' => :json } do %>
+      <%= form_tag project_task_list_tasks_path(task_list.project, :task_list_id => task_list.id), { 'data-remote' => true, 'data-type' => :json } do %>
         <%= render :partial => 'tasks/form', :object => Task.new(:task_list => task_list) %>
         <%= loading_spinner %>
         <div class="buttons"><button class="submit" type="submit"><%= t('add_task') %></button> <%= t('or') %> <a class="cancel" href="#"><%= t('cancel') %></a></div>

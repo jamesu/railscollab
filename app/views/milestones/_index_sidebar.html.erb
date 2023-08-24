@@ -13,7 +13,7 @@
   <div class="blockContent">
     <ul class="listWithDetails">
 <% @completed_milestones.each do |milestone| -%>
-      <li><%= link_to (h milestone.name), milestone_path(:id => milestone.id) %>
+      <li><%= link_to (h milestone.name), project_milestone_path(milestone.project, :id => milestone.id) %>
 <% if not milestone.completed_by.nil? %>
         <br /><span class="desc"><%= 
           t('milestone_completed_time_with_user', 

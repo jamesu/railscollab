@@ -5,15 +5,15 @@
     @page_actions << {:title => :add_time, :url => new_time_path}
   end
   
-  @page_actions << {:title => :sort_by_finished_date, :url => "#{times_path}?orderBy=done_date"}
-  @page_actions << {:title => :sort_by_hours, :url => "#{times_path}?orderBy=hours"}
-  @page_actions << {:title => :report_by_task, :url => "#{by_task_times_path}?orderBy=hours"}
+  @page_actions << {:title => :sort_by_finished_date, :url => "#{project_times_path(@active_project)}?orderBy=done_date"}
+  @page_actions << {:title => :sort_by_hours, :url => "#{project_times_path(@active_project)}?orderBy=hours"}
+  @page_actions << {:title => :report_by_task, :url => "#{by_task_project_times_path(@active_project)}?orderBy=hours"}
 %>
 
 <% if not @times.empty? %>
 <div id="time">
 
-  <div id="timesPaginationTop"><%= pagination_links "#{times_path}?", @pagination unless @pagination.length <= 1 %></div>
+  <div id="timesPaginationTop"><%= pagination_links "#{project_times_path(@active_project)}?", @pagination unless @pagination.length <= 1 %></div>
 
 <table class="timeLogs blank">
   <tr>
@@ -70,7 +70,7 @@
   </tr>
 <% end %>
 </table>
-<div id="timesPaginationBottom"><%= pagination_links "#{times_path}?", @pagination unless @pagination.length <= 1 %></div>
+<div id="timesPaginationBottom"><%= pagination_links "#{project_times_path(@active_project)}?", @pagination unless @pagination.length <= 1 %></div>
 
 </div>
 <% else %>

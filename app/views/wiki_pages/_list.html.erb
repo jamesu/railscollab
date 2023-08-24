@@ -9,7 +9,7 @@
     <tbody>
       <% list.each do |wiki_page| %>
         <tr class="<%= cycle('odd', 'even') %>">
-          <td><%= link_to h(wiki_page.title), wiki_page_path(:id => wiki_page.slug) %></td>
+          <td><%= link_to h(wiki_page.title), new_project_wiki_page_path(wiki_page.project, :id => wiki_page.slug) %></td>
           <td><%= wiki_page.updated_at.to_s(:long) %></td>
           <td class="operations"><%= render :partial => 'operations', :locals => {:wiki_page => wiki_page} %></td>
         </tr>

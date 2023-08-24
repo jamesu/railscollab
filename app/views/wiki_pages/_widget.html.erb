@@ -4,7 +4,7 @@
 
     <ul>
       <% wiki_pages.each do |wiki_page| %>
-        <li><%= link_to_unless_current h(wiki_page.title), wiki_page_path(:id => wiki_page.slug)) %></li>
+        <li><%= link_to_unless_current h(wiki_page.title), project_wiki_page_path(wiki_page.project, :id => wiki_page.slug)) %></li>
       <% end %>
     </ul>
   </div>

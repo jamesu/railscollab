@@ -8,7 +8,7 @@
 <% end %>
   </ul>
 <% if !dont_add and can?(:add_file, attached_files_object) %>
-  <p>&raquo; <%= link_to t('attach_files'), attach_file_path(:object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id) %></p>
+  <p>&raquo; <%= link_to t('attach_files'), attach_project_file_path(attached_files_object.project, :object_type => attached_files_object.class.to_s , :object_id => attached_files_object.id) %></p>
 <% end %>
 </div>
 <% end %>

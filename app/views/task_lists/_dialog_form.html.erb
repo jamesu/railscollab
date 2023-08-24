@@ -1,4 +1,4 @@
-<%= form_tag task_lists_path :method => :post %>
+<%= form_tag project_task_lists_path(@active_project) :method => :post %>
 <%= error_messages_for :task_list %>
 
   <div>

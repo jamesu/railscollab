@@ -18,9 +18,9 @@
   <div class="blockContent" id="sidebarMessageCategoryList">
     <ul>
 <% if !@category.nil? %>
-      <li><%= link_to t('all_categories'), messages_path %></li>
+      <li><%= link_to t('all_categories'), project_messages_path(@active_project) %></li>
 <% else %>
-      <li><%= link_to t('all_categories'), messages_path, :class => 'selected' %></li>
+      <li><%= link_to t('all_categories'), project_messages_path(@active_project), :class => 'selected' %></li>
 <% end %>
     
 <% @active_project.categories.each do |category| -%>
@@ -29,14 +29,14 @@
 <% else %>
 <% selected_class = {} %>
 <% end %>
-      <li><%= link_to (h category.name), posts_category_path(:id => category.id), selected_class %> 
-      <% if can?(:edit,category) %><%= link_to render_icon('edit',''), edit_category_path(:id => category.id) %><% end %>
-      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), category_path(:id => category.id), :method => :delete, :confirm => t('category_delete_confirmation') %><% end %>
+      <li><%= link_to (h category.name), posts_project_category_path(@active_project, :id => category.id), selected_class %> 
+      <% if can?(:edit,category) %><%= link_to render_icon('edit',''), edit_project_category_path(@active_project, :id => category.id) %><% end %>
+      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), project_category_path(@active_project, :id => category.id), :method => :delete, :confirm => t('category_delete_confirmation') %><% end %>
       </li>
 <% end %>
     </ul>
 	<% if @active_project.is_active? %>
-    <p><a href="<%= new_category_path %>"><%= t('add_category') %></a></p>
+    <p><a href="<%= new_project_category_path(@active_project) %>"><%= t('add_category') %></a></p>
 	<% end %>
   </div>
 </div>

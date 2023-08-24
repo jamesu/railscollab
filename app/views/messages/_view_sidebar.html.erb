@@ -6,7 +6,7 @@
     <ul>
 <% @subscribers.each do |subscriber| %>
 <% if subscriber.id == @logged_user.id %>
-      <li><%= link_to (h subscriber.display_name), user_path(:id => subscriber.id) %> (<%= link_to t('message_unsubscribe'), unsubscribe_message_path(:id => @message.id), {:method => :put, :confirm => t('message_unsubscription_confirmation')} %>)</li>
+      <li><%= link_to (h subscriber.display_name), user_path(:id => subscriber.id) %> (<%= link_to t('message_unsubscribe'), unsubscribe_project_message_path(@message.project, :id => @message.id), {:method => :put, :confirm => t('message_unsubscription_confirmation')} %>)</li>
 <% else %>
       <li><%= link_to (h subscriber.display_name), user_path(:id => subscriber.id) %></li>
 <% end %>
@@ -16,7 +16,7 @@
     <p><%= t('no_subscribers') %></p>
 <% end %>
 <% if can?(:subscribe, @message) and !@subscribers.include?(@logged_user) %>
-    <p><%= link_to t('message_subscribe'), subscribe_message_path(:id => @message.id), {:method => :put, :confirm => t('message_subscription_confirmation')} %></p>
+    <p><%= link_to t('message_subscribe'), subscribe_project_message_path(@message.project, :id => @message.id), {:method => :put, :confirm => t('message_subscription_confirmation')} %></p>
 <% end %>
   </div>
 </div>
@@ -25,7 +25,7 @@
 <div class="sidebarBlock">
   <h2><%= t('options') %></h2>
   <div class="blockContent">
-    <%= form_tag message_path(:id => @message.id), :method => :put %>
+    <%= form_tag project_message_path(@message.project, :id => @message.id), :method => :put %>
       <div class="formBlock">
         <div>
           <label><%= t('private_message') %>:</label>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <button class="submit" type="submit"><%= t('update_options') %></button>
-      <p><%= link_to t('edit_message_sidebar_link').html_safe, edit_message_path(:id => @message.id) %></p>
+      <p><%= link_to t('edit_message_sidebar_link').html_safe, edit_project_message_path(@message.project, :id => @message.id) %></p>
     </form>
   </div>
 </div>

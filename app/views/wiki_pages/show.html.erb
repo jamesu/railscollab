@@ -1,9 +1,9 @@
 <%
   @page_actions = []
   if can? :create_wiki_page, @active_project
-    @page_actions << {:title => :add_page, :url => new_wiki_page_path}
+    @page_actions << {:title => :add_page, :url => new_project_wiki_page_path(@active_project)}
   end
-  @page_actions << {:title => :all_pages, :url => list_wiki_pages_path}
+  @page_actions << {:title => :all_pages, :url => list_project_wiki_pages_path(@active_project)}
 -%>
 <%= render :partial => 'wiki_page', :object => @version %>
 

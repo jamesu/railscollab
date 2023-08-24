@@ -4,7 +4,7 @@
 <% if message.is_private? %>
     <div class="private" title="<%= t('private_message') %>"><span><%= t('private_message') %></span></div>
 <% end %>
-    <div class="header"><%= link_to (h message.title), message_path(:id => message.id) %></div>
+    <div class="header"><%= link_to (h message.title), project_message_path(message.project, :id => message.id) %></div>
     <div class="content">
 <% if not message.created_by.nil? %>
       <div class="messageAuthor"><%= t('message_created_with_user', 
@@ -20,7 +20,7 @@
 <%= render :partial => 'files/list_attached_files', :locals => {:dont_add => @message.nil?, :attached_files => message.attached_files(@logged_user.member_of_owner?), :attached_files_object => message} %>
       <div class="messageCommentCount">
 <% if not message.comments.empty? %>
-        <span><%= t('comments') %>:</span> <a href="<%= "#{message_path(:id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
+        <span><%= t('comments') %>:</span> <a href="<%= "#{project_message_path(message.project, :id => message.id)}#objectComments" %>"><%= message.comments.length %></a>
 <% else %>
         <span><%= t('comments') %>:</span> <%= message.comments.length %>
 <% end %>

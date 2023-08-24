@@ -3,14 +3,14 @@
   
   if can? :create_file, @active_project
     if @folder.nil?
-      @page_actions << {:title => :add_file, :url => new_file_path}
+      @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project)}
     else
-      @page_actions << {:title => :add_file, :url => new_file_path(:folder_id => @folder.id)}
+      @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project, :folder_id => @folder.id)}
     end
   end
 
   if can? :create_folder, @active_project
-    @page_actions << {:title => :add_folder, :url => new_folder_path}
+    @page_actions << {:title => :add_folder, :url => new_project_folder_path(@active_project)}
   end
 %>
 <% if @files.empty? %>

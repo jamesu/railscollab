@@ -1,4 +1,4 @@
-<%= form_tag task_list_path(:id => @task_list.id), :method => :put %>
+<%= form_tag project_task_list_path(@task_list.project, :id => @task_list.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_task_list') %></button>
 </form>

@@ -8,7 +8,6 @@
 @import 'project/task_list.scss';
 @import 'project/people.scss';
 @import 'project/search_results.scss';
-@import 'project/wiki.scss';
 @import 'project/time.scss';
 @import 'project/files.scss';
 @import 'project/project_log.scss';
@@ -18,7 +17,7 @@
 @import 'project/permissions.scss';
 @import 'project/attach_document.scss';
 @import 'project/comments.scss';
-
+@import 'project/wiki.scss';
 
 select.select_milestone, select.select_task_list, select.select_message {
   width: 250px;
