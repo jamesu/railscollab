@@ -7,11 +7,12 @@
     <title><%= "#{h(page_title)} @ #{h(Company.owner.name)}" %></title>
     <%= stylesheet_link_tag 'company_website' %>
     <%= javascript_importmap_tags %>
-    <%= javascript_tag "var LOGGED_USER_ID=#{@logged_user.id};" %>
+    <meta name="user-id"  content="<%= @logged_user.id %>" />
+    <%= yield(:page_head) %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">
-    <div id="wrapper">
+    <div id="wrapper" data-controller="core">
     
       <!-- header -->
       <div id="headerWrapper">

@@ -1,4 +1,4 @@
-<%= form_tag time_path(:id => @time.id), :method => :put %>
+<%= form_tag project_time_path(@time.project, :id => @time.id), :method => :put %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_time') %></button>
 </form>

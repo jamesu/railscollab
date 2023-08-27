@@ -12,7 +12,9 @@
 
     <%= stylesheet_link_tag 'project_website' %>
     <%= javascript_importmap_tags %>
-    <%= javascript_tag "var PROJECT_ID = #{@active_project.id}; var LOGGED_USER_ID=#{@logged_user.id};" %>
+    <meta name="project-id"  content="<%= @active_project.id %>" />
+    <meta name="user-id"  content="<%= @logged_user.id %>" />
+    <%= yield(:page_head) %>
 <!-- head needs to go here? -->
   </head>
   <body id="body">
@@ -26,7 +28,7 @@
 			</h5>
 		</div>
 	<% end %>
-    <div id="wrapper">
+    <div id="wrapper" data-controller="core">
       
       <!-- header -->
       <div id="headerWrapper">

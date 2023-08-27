@@ -127,7 +127,7 @@ class TasksController < ApplicationController
     @task.updated_by = @logged_user
 
     respond_to do |format|
-      if @task.update_attributes(task_params)
+      if @task.update(task_params)
         Notifier.deliver_task(@task.user, @task) if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }

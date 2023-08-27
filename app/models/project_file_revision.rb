@@ -96,7 +96,7 @@ class ProjectFileRevision < ApplicationRecord
   end
 
   def object_url(host = nil)
-    download_file_url(only_path: host.nil?, host: host, self, project_id: self.project_id) + "\#revision#{self.id}"
+    download_project_file_url(self.project, only_path: host.nil?, host: host, self, project_id: self.project_id) + "\#revision#{self.id}"
   end
 
   def icon_url

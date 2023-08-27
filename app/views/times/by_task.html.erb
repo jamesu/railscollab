@@ -2,7 +2,7 @@
   @page_actions = []
   
   if can? :create_time, @active_project
-    @page_actions << {:title => :add_time, :url => new_time_path}
+    @page_actions << {:title => :add_time, :url => new_project_time_path(@active_project)}
   end
   
   @page_actions << {:title => :sort_by_finished_date, :url => "#{project_times_path(@active_project)}?orderBy=done_date"}

@@ -136,7 +136,7 @@ class TaskListsController < ApplicationController
     @task_list.updated_by = @logged_user
 
     respond_to do |format|
-      if @task_list.update_attributes(task_list_params)
+      if @task_list.update(task_list_params)
         flash[:notice] = 'List was successfully updated.'
         format.html {
           error_status(false, :success_edited_task_list)

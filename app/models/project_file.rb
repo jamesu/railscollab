@@ -95,7 +95,7 @@ class ProjectFile < ApplicationRecord
   end
 
   def download_url
-    download_file_url(self, only_path: true, host: host, project_id: self.project_id)
+    download_project_file_url(self.project, self, only_path: true, host: host, project_id: self.project_id)
   end
 
   def filetype_icon_url

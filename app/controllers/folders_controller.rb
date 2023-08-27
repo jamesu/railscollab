@@ -103,7 +103,7 @@ class FoldersController < ApplicationController
     @folder.updated_by = @logged_user
     
     respond_to do |format|
-      if @folder.update_attributes(folder_params)
+      if @folder.update(folder_params)
         format.html {
           error_status(false, :success_edited_folder)
           redirect_back_or_default(@folder)

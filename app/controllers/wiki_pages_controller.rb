@@ -70,7 +70,7 @@ class WikiPagesController < ApplicationController
   end
 
   def update
-    if @wiki_page.update_attributes(wiki_page_params.merge(:created_by => @logged_user))
+    if @wiki_page.update(wiki_page_params.merge(:created_by => @logged_user))
       flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
       redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, :id => @wiki_page)
     else

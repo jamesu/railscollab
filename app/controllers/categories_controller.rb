@@ -116,7 +116,7 @@ class CategoriesController < ApplicationController
     @category.updated_by = @logged_user
     
     respond_to do |format|
-      if @category.update_attributes(category_params)
+      if @category.update(category_params)
         format.html {
           error_status(false, :success_edited_message_category)
           redirect_back_or_default(@category)
