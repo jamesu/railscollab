@@ -340,7 +340,7 @@ private
      begin
         @message = @active_project.messages.find(params[:id])
      rescue ActiveRecord::RecordNotFound
-       error_status(true, :invalid_message)
+       error_status(true, :invalid_message, {}, false)
        redirect_back_or_default project_messages_path(@active_project)
        return false
      end

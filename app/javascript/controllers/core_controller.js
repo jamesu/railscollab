@@ -36,10 +36,27 @@ export default class extends Controller
 
     // Login form stuff
     // Permissions form stuff
-    this.permissions_form_items = [];
+    var pi = $('meta[name="permissions-form-items"]').attr('value');
+    pi = pi == null ? [] : JSON.parse(pi);
+    this.permissions_form_items = pi;
 
     // Notification form stuff (mainly for message posting)
-    this.notify_form_companies = {};
+    var pi = $('meta[name="notify-form-companies"]').attr('value');
+    pi = pi == null ? [] : JSON.parse(pi);
+    this.notify_form_companies = pi;
+
+    var pi = $('meta[name="notify-form-company"]').attr('value');
+    if (pi != null)
+    {
+      this.notify_form_set_company(pi);
+    }
+
+    var pi = $('meta[name="file-attachment-limit"]').attr('value');
+    if (pi != null)
+    {
+      this.file_form_attach_init(parseInt(pi));
+      this.file_form_attach_update_action();
+    }
 
     // File form stuff
     this.file_form_controls = null;
@@ -163,23 +180,23 @@ export default class extends Controller
   }
 
   startLoadingForm(evt) {
-    $(evt.target).parents('form:first').addClass('loading')
+    $(evt.target).parents('form').first().addClass('loading')
     .find('input, select, textarea, button').attr('disabled', 'disabled');
   }
 
   stopLoadingForm(evt) {
-    $(evt.target).parents('form:first').removeClass('loading')
+    $(evt.target).parents('form').first().removeClass('loading')
     .find('input, select, textarea, button').attr('disabled', null);
   }
 
   replaceTask(data, content) {
     var task = $('#task_item_' + data.id);
-    var in_list = task.parents('.taskItems:first').parent();
+    var in_list = task.parents('.taskItems').first().parent();
 
       // Replace or insert into correct list
     if (data.task_class != null && !in_list.hasClass(data.task_class)) {
-      var task_list = task.parents('.taskList:first');
-      task_list.find('.' + data.task_class + ' .taskItems:first').append(task);
+      var task_list = task.parents('.taskList').first();
+      task_list.find('.' + data.task_class + ' .taskItems').first().append(task);
     }
 
     if (content)
@@ -212,7 +229,7 @@ export default class extends Controller
 
     var controller = this;
 
-        // Popup form for Add Item
+    // Popup form for Add Item
     this.bindDynamicEvent($('.addTask form'), 'submit', 
       (origEvt) => {
         var theForm = $(this);
@@ -225,21 +242,21 @@ export default class extends Controller
           theForm.reset();
 
           // set task list back to edit mode when new task is added (otherwise new item will be in edit mode, and rest will be in reorder mode)
-          //var list = theForm.parents('.taskList:first');
+          //var list = theForm.parents('.taskList').first();
           //if (list.hasClass('reorder')) {
           //  theForm.find('.doEditTaskList').click();
           //}
 
           // Add content in the correct location
-          theForm.parents('.taskList:first').find('.' + data.task_class + ' .taskItems').append(data.content);
+          theForm.parents('.taskList').first().find('.' + data.task_class + ' .taskItems').append(data.content);
           controller.JustRebind();
         }) 
       }
     );
 
     this.bindDynamicEvent($('.addTask form .cancel'), 'click', function(evt) {
-      var addItemInner = $(evt.target).parents('.inner:first');
-      var newItem = addItemInner.parents('.addTask:first').find('.newTask:first');
+      var addItemInner = $(evt.target).parents('.inner').first();
+      var newItem = addItemInner.parents('.addTask').first().find('.newTask').first();
 
       addItemInner.hide();
       addItemInner.children('form')[0].reset();
@@ -251,7 +268,7 @@ export default class extends Controller
     // Add Item link
     this.bindDynamicEvent($('.newTask a'), 'click', function(evt) {
       var newItem = $(evt.target.parentNode);
-      var addItemInner = newItem.parents('.addTask:first').find('.inner:first');
+      var addItemInner = newItem.parents('.addTask').first().find('.inner').first();
 
       addItemInner.show();
       addItemInner.autofocus();
@@ -322,7 +339,7 @@ export default class extends Controller
 
     this.bindDynamicEvent($('.doEditTaskList'), 'click', function(evt) {
       var el = $(this);
-      var list = el.parents('.taskList:first');
+      var list = el.parents('.taskList').first();
       list.removeClass('reorder');
 
       list.find('.openTasks:first ul').sortable('destroy');
@@ -337,7 +354,7 @@ export default class extends Controller
     this.bindDynamicEvent($('.doSortTaskList'), 'click', function(evt) {
       var el = $(evt.target);
       var url = el.attr('href');
-      var list = el.parents('.taskList:first');
+      var list = el.parents('.taskList').first();
       list.addClass('reorder');
 
       list.find('.openTasks:first ul').sortable({
@@ -365,7 +382,7 @@ export default class extends Controller
       var form = $(this);
       RailsCollabHelpers.request(form, RebindAction);
 
-      form.find('.submit:first').attr('disabled', true);
+      form.find('.submit').first().attr('disabled', true);
       //form.reset();
       return false;
     });
@@ -376,7 +393,7 @@ export default class extends Controller
       return false;
     });
 
-        // Start & stop time
+    // Start & stop time
     this.bindDynamicEvent($('.startTime'), 'click', function(evt) {
       var el = $(this);
       RailsCollabHelpers.post(el.attr('href'), {
@@ -455,7 +472,7 @@ export default class extends Controller
     var val = $('#projectPermissions' + id + 'All').attr('checked');
 
     // Select all items then!
-    permissions_form_items.forEach(
+    this.permissions_form_items.forEach(
       function(sel) {
         $('#projectPermission' + id + sel).attr('checked', val);
       });
@@ -465,7 +482,7 @@ export default class extends Controller
     var do_all = true;
 
     // Check to see if everything has been selected
-    permissions_form_items.forEach(
+    this.permissions_form_items.forEach(
       function(sel) {
         if (!$('#projectPermission' + id + this).attr('checked'))
           do_all = false;

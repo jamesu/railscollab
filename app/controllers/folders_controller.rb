@@ -83,7 +83,7 @@ class FoldersController < ApplicationController
       if @folder.save
         format.html {
           error_status(false, :success_added_folder)
-          redirect_back_or_default(@folder)
+          redirect_back_or_default(project_folder_path(@active_project, @folder))
         }
         
         format.xml  { render :xml => @folder.to_xml(:root => 'folder'), :status => :created, :location => @folder }
@@ -106,7 +106,7 @@ class FoldersController < ApplicationController
       if @folder.update(folder_params)
         format.html {
           error_status(false, :success_edited_folder)
-          redirect_back_or_default(@folder)
+          redirect_back_or_default(project_folder_path(@active_project, @folder))
         }
         
         format.xml  { head :ok }
@@ -129,7 +129,7 @@ class FoldersController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_folder)
-        redirect_back_or_default(files_url)
+        redirect_back_or_default(project_files_path(@active_project))
       }
       
       format.xml  { head :ok }
@@ -247,7 +247,7 @@ private
         @folder = @active_project.folders.where(:name => params[:folder_name]).first!
         @current_folder = @folder
       rescue ActiveRecord::RecordNotFound
-        error_status(true, :invalid_folder)
+        error_status(true, :invalid_folder, {}, false)
         redirect_back_or_default project_files_path(@active_project)
         return false
       end
@@ -256,7 +256,7 @@ private
         @folder = @active_project.folders.find(params[:id])
         @current_folder = @folder
       rescue ActiveRecord::RecordNotFound
-        error_status(true, :invalid_folder)
+        error_status(true, :invalid_folder, {}, false)
         redirect_back_or_default project_files_path(@active_project)
         return false
       end

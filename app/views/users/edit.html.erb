@@ -1,16 +1,16 @@
-<%= form_tag user_path(:id => @user.id), :method => :put %>
+<%= form_tag user_path(:id => @user.id), :data => { turbo_method: :put } %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_user') %></button>
 </form>
 
-<%= form_tag( avatar_user_path(:id => @user.id), :multipart => true, :method => :put ) %>
+<%= form_tag( avatar_user_path(:id => @user.id), :multipart => true, :data => { turbo_method: :put } ) %>
 <%= error_messages_for :user %>
   
   <fieldset>
     <legend><%= t('current_avatar') %></legend>
 <% if @user.has_avatar? %>
     <img src="<%= @user.avatar_url %>" alt="<%= h @user.display_name %> avatar" />
-    <p><%= link_to t('delete_current_avatar'), avatar_user_path(:id => @user.id), {:onclick => :avatar_confirm_delete, :method => :delete} %></p>
+    <p><%= link_to t('delete_current_avatar'), avatar_user_path(:id => @user.id), {:onclick => :avatar_confirm_delete, :data => { turbo_method: :delete }} %></p>
 <% else %>
     <%= t('avatar_not_uploaded') %>
 <% end %>

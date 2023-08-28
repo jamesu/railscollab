@@ -20,7 +20,6 @@ class FilesController < ApplicationController
 
   layout 'project_website'
   
-  before_action  :obtain_file, :except => [:index, :new, :create]
   after_action  :user_track, :only => [:index, :show]
   
   # GET /files
@@ -93,10 +92,10 @@ class FilesController < ApplicationController
         @content_for_sidebar = 'index_sidebar'
         @pagination = []
 
-        @folder = @file.project_folder
+        @folder = @file.folder
         @last_revision = @revisions[0]
 
-        @current_folder = @file.project_folder
+        @current_folder = @file.folder
         @order = nil
         @page = nil
         @folders = @active_project.folders
@@ -419,7 +418,7 @@ private
      begin
         @file = @active_project.project_files.find(params[:id])
      rescue ActiveRecord::RecordNotFound
-       error_status(true, :invalid_file)
+       error_status(true, :invalid_file, {}, false)
        redirect_back_or_default project_files_path(@active_project)
        return false
      end

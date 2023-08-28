@@ -212,7 +212,7 @@ private
     begin
       @comment = Comment.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_comment)
+      error_status(true, :invalid_comment, {}, false)
       redirect_back_or_default project_path(:id => @active_project.id)
       return false
     end

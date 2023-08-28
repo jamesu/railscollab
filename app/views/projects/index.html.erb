@@ -17,7 +17,7 @@
   <tr>
     <td class="middle">
 <% if can?(:change_status, project) %>
-<%= project.is_active? ? checkbox_link(complete_project_path(:id => project.id), false, nil, {:method => :put}) : checkbox_link(open_project_path(:id => project.id), true, nil, {:method => :put}) %>
+<%= project.is_active? ? checkbox_link(complete_project_path(:id => project.id), false, nil, {:data => { turbo_method: :put }}) : checkbox_link(open_project_path(:id => project.id), true, nil, {:data => { turbo_method: :put }}) %>
 <% else %>
 <% if project.is_active? %>
 <img src="<%= icon_url('not-checked') %>" alt="" title="<%= t('active_project') %>" />

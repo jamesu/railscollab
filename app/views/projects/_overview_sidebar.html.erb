@@ -43,9 +43,9 @@
 
 <% if can?(:change_status, @active_project) %>
 <% if @active_project.is_active? %>
-      <li><%= link_to t('mark_project_as_finished'), complete_project_path(:id => @active_project.id), :method => :put, :confirm => t('mark_project_as_finished_confirmation') %></li>
+      <li><%= link_to t('mark_project_as_finished'), complete_project_path(:id => @active_project.id), :data => { turbo_method: :put }, :confirm => t('mark_project_as_finished_confirmation') %></li>
 <% else %>
-      <li><%= link_to t('mark_project_as_active'), open_project_path(:id => @active_project.id), :method => :put, :confirm => t('mark_project_as_active_confirmation') %></li>
+      <li><%= link_to t('mark_project_as_active'), open_project_path(:id => @active_project.id), :data => { turbo_method: :put }, :confirm => t('mark_project_as_active_confirmation') %></li>
 <% end %>
 <% end %>
 

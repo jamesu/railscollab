@@ -17,7 +17,7 @@
 <% end %>
       <li><%= link_to (h folder.name), files_project_folder_path(folder.project, :id => folder.id), selected_class %> 
       <% if can?(:edit,folder) %><%= link_to render_icon('edit',''), edit_project_folder_path(folder.project, :id => folder.id) %><% end %>
-      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), project_folder_path(folder.project, :id => folder.id), :method => :delete, :confirm => t('folder_delete_confirmation') %><% end %>
+      <% if can?(:delete,folder) %><%= link_to render_icon('cancel_gray',''), project_folder_path(folder.project, :id => folder.id), :data => { turbo_method: :delete, :turbo_confirm => t('folder_delete_confirmation') } %><% end %>
       </li>
 <% end %>
     </ul>

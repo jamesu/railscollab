@@ -196,7 +196,7 @@ class MilestonesController < ApplicationController
     begin
       @milestone = @active_project.milestones.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_milestone)
+      error_status(true, :invalid_milestone, {}, false)
       redirect_back_or_default project_milestones_path(@active_project)
       return false
     end

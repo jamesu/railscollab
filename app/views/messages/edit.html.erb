@@ -1,4 +1,4 @@
-<%= form_tag( project_message_path(@message.project, :id => @message.id), :method => :put, :multipart => true ) %>
+<%= form_tag( project_message_path(@message.project, :id => @message.id), :data => { turbo_method: :put }, :multipart => true ) %>
 <%= render :partial => 'form', :locals => {:is_new => false} %>
     <button class="submit" type="submit"><%= t('edit_message') %></button>
 </form>

@@ -1,10 +1,10 @@
-<script type="text/javascript">
-  permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
-</script>
+<% content_for :page_head do %>
+  <meta name="permissions-form-items" content="<%= h((@permissions.keys).to_json) %>" />
+<% end %>
 
 <% unless @projects.empty? %>
 <div id="userPermissions">
-  <%= form_tag permissions_user_path(:id => @user.id), :method => :put %>
+  <%= form_tag permissions_user_path(:id => @user.id), :data => { turbo_method: :put } %>
     <div id="userProjects">
       <table class="blank">
 <%= render :partial => 'projects/permissions', :locals => {:user => @user}, :collection => @projects %>

@@ -1,5 +1,5 @@
 <% if @companies.length > 0%>
-<%= form_tag permissions_project_path(:id => @active_project.id), :method => :put %>
+<%= form_tag permissions_project_path(:id => @active_project.id), :data => { turbo_method: :put } %>
 <div id="projectCompanies">
 <% @companies.each do |company| -%>
 <% if company.users.length > 0 %>
@@ -36,6 +36,6 @@
 </form>
 <% end %>
 
-<script type="text/javascript">
-  permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
-</script>
+<% content_for :page_head do %>
+  <meta name="permissions-form-items" content="<%= h((@permissions.keys).to_json) %>" />
+<% end %>

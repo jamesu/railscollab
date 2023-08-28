@@ -244,7 +244,7 @@ class CompaniesController < ApplicationController
     begin
       @company = Company.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_company)
+      error_status(true, :invalid_company, {}, false)
       redirect_back_or_default :controller => 'dashboard'
       return false
     end

@@ -10,7 +10,7 @@
       <table class="blank">
 <% project[:milestones].each do |milestone| -%>
         <tr>
-          <td class="milestoneCheckbox"><%= checkbox_link complete_project_milestone_path(project, :id => milestone.id), false, nil, {:method => :put} %></td>
+          <td class="milestoneCheckbox"><%= checkbox_link complete_project_milestone_path(project, :id => milestone.id), false, nil, {:data => { turbo_method: :put }} %></td>
           <td class="milestoneText">
 <% if not milestone.assigned_to.nil? %>
             <span class="assignedTo"><%= h milestone.assigned_to.object_name %>:</span> 

@@ -9,7 +9,7 @@
     @page_actions << {:title => :add_folder, :url => new_project_folder_path(@active_project}
   end
 %>
-<%= form_tag(project_file_path(file.project, :id => @file.id), :method => :put, :multipart => true ) %>
+<%= form_tag(project_file_path(file.project, :id => @file.id), :data => { turbo_method: :put }, :multipart => true ) %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_file') %></button>
 </form>

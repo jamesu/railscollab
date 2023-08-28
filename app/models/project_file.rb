@@ -91,11 +91,11 @@ class ProjectFile < ApplicationRecord
   end
 
   def object_url(host = nil)
-    file_url(self, only_path: true, host: host, project_id: self.project_id)
+    project_file_url(self.project, self, only_path: true, host: host)
   end
 
-  def download_url
-    download_project_file_url(self.project, self, only_path: true, host: host, project_id: self.project_id)
+  def download_url(host = nil)
+    download_project_file_url(self.project, self, only_path: true, host: host)
   end
 
   def filetype_icon_url
@@ -119,6 +119,7 @@ class ProjectFile < ApplicationRecord
 
   def add_revision(file, new_revision, user, comment)
     file_revision = ProjectFileRevision.new(:revision_number => new_revision)
+    file_revision.project = self.project
     file_revision.project_file = self
     file_revision.upload_file = file
     file_revision.created_by = user

@@ -31,7 +31,7 @@
 <% end %>
       <li><%= link_to (h category.name), posts_project_category_path(@active_project, :id => category.id), selected_class %> 
       <% if can?(:edit,category) %><%= link_to render_icon('edit',''), edit_project_category_path(@active_project, :id => category.id) %><% end %>
-      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), project_category_path(@active_project, :id => category.id), :method => :delete, :confirm => t('category_delete_confirmation') %><% end %>
+      <% if can?(:delete,category) %><%= link_to render_icon('cancel_gray',''), project_category_path(@active_project, :id => category.id), :data => { turbo_method: :delete, :turbo_confirm => t('category_delete_confirmation') } %><% end %>
       </li>
 <% end %>
     </ul>

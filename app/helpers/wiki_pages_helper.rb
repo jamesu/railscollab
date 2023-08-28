@@ -49,7 +49,7 @@ module WikiPagesHelper
   end
 
   def preview_button
-    ''#button_to_remote t('wiki_engine.preview'), {:url => preview_wiki_pages_path, :method => :put, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'}, :class => 'preview'
+    ''#button_to_remote t('wiki_engine.preview'), {:url => preview_wiki_pages_path, :data => { turbo_method: :put }, :update => 'preview', :with => 'Form.serialize(this.form)', :complete => 'Element.scrollTo("preview")'}, :class => 'preview'
   end
 
   def current_version(version)

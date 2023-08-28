@@ -9,7 +9,7 @@
 <div class="taskItemContent">
 <% if can?(:edit,task_item) %>
 	<div class="taskControls">
-			<%= link_to render_icon('trash', 'Trash'), project_task_list_task_path(task_item.project, :id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => t('task_delete_confirm'), :method => :delete, :class => 'blank taskDelete', 'data-remote' => true, 'data-type' => :json} %><%= link_to 'Edit', edit_project_task_list_task_path(task_item.project, :id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit', 'data-remote' => true, 'data-type' => :json} %>
+			<%= link_to render_icon('trash', 'Trash'), project_task_list_task_path(task_item.project, :id => task_item.id, :task_list_id => task_item.task_list_id), {:confirm => t('task_delete_confirm'), :data => { turbo_method: :delete }, :class => 'blank taskDelete', 'data-remote' => true, 'data-type' => :json} %><%= link_to 'Edit', edit_project_task_list_task_path(task_item.project, :id => task_item.id, :task_list_id => task_item.task_list_id), {:class => 'blank taskEdit edit', 'data-remote' => true, 'data-type' => :json} %>
 	</div>
 <% end %>
 <% if can?(:edit,task_item) %>

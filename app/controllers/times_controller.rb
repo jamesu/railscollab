@@ -218,7 +218,7 @@ private
     begin
       @time = @active_project.time_records.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_time)
+      error_status(true, :invalid_time, {}, false)
       redirect_back_or_default project_times_path(@active_project)
       return false
     end

@@ -149,9 +149,9 @@
 
 <% if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty? %>
 
-<script type="text/javascript">
-  permissions_form_items_set(['<%= @permissions.keys.join('\',\'')%>']);
-</script>
+<% content_for :page_head do %>
+  <meta name="permissions-form-items" content="<%= h((@permissions.keys).to_json) %>" />
+<% end %>
 
 <fieldset>
   <legend><%= t('permissions') %></legend>

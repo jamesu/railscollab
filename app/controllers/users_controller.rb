@@ -370,7 +370,7 @@ protected
     begin
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_user)
+      error_status(true, :invalid_user, {}, false)
       redirect_back_or_default :controller => 'dashboard'
       return false
     end

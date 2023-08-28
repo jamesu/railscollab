@@ -241,7 +241,7 @@ protected
     begin
       @task_list = @active_project.task_lists.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_task_list)
+      error_status(true, :invalid_task_list, {}, false)
       redirect_back_or_default project_task_lists_path(@active_project)
       return false
     end

@@ -23,7 +23,7 @@
 			<h5>
 			  <%= t('project_locked_header') %>
 			  <% if can?(:change_status, @active_project) %>
-			      <%= link_to t('mark_project_as_active'), open_project_path(:id => @active_project.id), :method => :put, :confirm => t('mark_project_as_active_confirmation') %>
+			      <%= link_to t('mark_project_as_active'), open_project_path(:id => @active_project.id), :data => { turbo_method: :put }, :confirm => t('mark_project_as_active_confirmation') %>
 			<% end %>
 			</h5>
 		</div>

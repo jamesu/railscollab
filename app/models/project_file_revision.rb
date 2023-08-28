@@ -96,7 +96,10 @@ class ProjectFileRevision < ApplicationRecord
   end
 
   def object_url(host = nil)
-    download_project_file_url(self.project, only_path: host.nil?, host: host, self, project_id: self.project_id) + "\#revision#{self.id}"
+    download_project_file_url(self.project,
+                              self,  
+                              only_path: host.nil?, 
+                              host: host) + "\#revision#{self.id}"
   end
 
   def icon_url
@@ -107,6 +110,7 @@ class ProjectFileRevision < ApplicationRecord
   # Validation
 
   #validates_presence_of :repository_id
+  do_not_validate_attachment_file_type :data
   
   # Indexing
   define_index do

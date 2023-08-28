@@ -31,7 +31,11 @@
 
 <% if can? :create_file, @active_project %>
   <%= render :partial => 'files/attach_file' %>
-  <script type="text/javascript">
-    file_form_attach_init(<%= Rails.configuration.railscollab.max_attachments %>);
-  </script>
 <% end %>
+
+<% content_for :page_head do %>
+  <% if can? :create_file, @active_project %>
+  <meta name="file-attachment-limit" content="<%= Rails.configuration.railscollab.max_attachments %>" />
+  <% end %>
+<% end %>
+

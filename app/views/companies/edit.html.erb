@@ -1,14 +1,14 @@
-<%= form_tag company_path(:id => @company.id), :method => :put %>
+<%= form_tag company_path(:id => @company.id), :data => { turbo_method: :put } %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_company') %></button>
 </form>
 
-<%= form_tag(logo_company_path(:id => @company.id), :method => :put, :multipart => true) %>
+<%= form_tag(logo_company_path(:id => @company.id), :data => { turbo_method: :put }, :multipart => true) %>
   <fieldset>
     <legend><%= t('current_logo') %></legend>
 <% if @company.has_logo? %>
     <img src="<%= @company.logo_url %>" alt="<%= h @company.name %> logo" />
-    <p><%= link_to t('delete_current_logo'), logo_company_path(:id => @company.id), {:onclick => t('current_logo_confirm_delete'), :method => :delete} %></p>
+    <p><%= link_to t('delete_current_logo'), logo_company_path(:id => @company.id), {:onclick => t('current_logo_confirm_delete'), :data => { turbo_method: :delete }} %></p>
 <% else %>
     <%= t('logo_not_uploaded') %>
 <% end %>

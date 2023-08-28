@@ -16,9 +16,9 @@
     <div class="header">
 <% if can?(:change_status, milestone) %>
 <% if milestone.is_completed? %>
-<%= checkbox_link open_project_milestone_path(milestone.project, :id => milestone.id), true, nil, {:method => :put} %>
+<%= checkbox_link open_project_milestone_path(milestone.project, :id => milestone.id), true, nil, {:data => { turbo_method: :put }} %>
 <% else %>
-<%= checkbox_link complete_project_milestone_path(milestone.project, :id => milestone.id), false, nil, {:method => :put} %>
+<%= checkbox_link complete_project_milestone_path(milestone.project, :id => milestone.id), false, nil, {:data => { turbo_method: :put }} %>
 <% end %>
 <% end %>
 

@@ -1,5 +1,11 @@
 <%= error_messages_for :message %>
 
+    <% json_data = @active_project.companies.map { |company| ["company_#{company.id}", "users": company.users_on_project(@active_project).map(&:id)] }.to_h %>
+    <% content_for :page_head do %>
+      <meta name="permissions-form-items" content="<%= h(json_data.to_json) %>" />
+      <meta name="notify-form-company" content="<%= @logged_user.company.id %>" />
+    <% end %>
+
  <div>
     <label for="messageFormTitle"><%= t('title') %>: <span class="label_required">*</span></label>
     <%= text_field 'message', 'title', :id => 'messageFormTitle', :class => 'title' %>
@@ -61,12 +67,6 @@
     <legend><%= t('email_notification') %></legend>
     <p><%= t('email_notification_info') %></p>
 <% @active_project.companies.each do |company| -%>
-    <script type="text/javascript">
-      notify_form_companies.company_<%= company.id %> = {
-        id          : <%= company.id %>,
-        users       : []
-      };
-    </script>
 <% users_on_project = company.users_on_project(@active_project) %>
    <div class="companyDetails">
       <div class="companyName"><%= check_box_tag "notify_company[]", "#{company.id}", false, {:id => "notifyCompany#{company.id}", :class => 'checkbox', :onclick => "notify_form_select_company(#{company.id})"} %> <label for="<%= "notifyCompany#{company.id}" %>" class="checkbox"><%= h company.name %></label></div> 
@@ -75,23 +75,22 @@
 <% users_on_project.each do |user| -%>
           <li><%= check_box_tag "notify_user[]", "#{user.id}", false, {:id => "notifyUser#{user.id}", :class => 'checkbox', :onclick => "notify_form_select(#{company.id}, #{user.id})"} %> <label for="<%= "notifyUser#{user.id}" %>" class="checkbox"><%= h user.display_name %></label>
           </li>
-          <script type="text/javascript">
-            notify_form_companies.company_<%= company.id %>.users.push(<%= user.id %>);
-          </script>
 <% end %>
         </ul>
       </div>
     </div>
-    <script type="text/javascript">
-      notify_form_set_company(<%= company.id %>);
-    </script>
 <% end %>
   </fieldset>
 <% end %>
  
 <% if can? :create_file, @active_project %>
   <%= render :partial => 'files/attach_file' %>
-  <script type="text/javascript">
-    file_form_attach_init(<%= Rails.configuration.railscollab.max_attachments %>);
-  </script>
 <% end %>
+
+
+<% if can? :create_file, @active_project %>
+  <% content_for :page_head do %>
+    <meta name="file-attachment-limit" content="<%= Rails.configuration.railscollab.max_attachments %>" />
+  <% end %>
+<% end %>
+

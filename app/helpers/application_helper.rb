@@ -117,10 +117,10 @@ module ApplicationHelper
 	   
 	   if @active_project.nil?
 	     actions += [
-	       {:name => I18n.t('delete'), :url => user_path(:id => user.id), :cond => can?(:delete,user), :method => :delete, :confirm => I18n.t('confirm_user_delete')},
+	       {:name => I18n.t('delete'), :url => user_path(:id => user.id), :cond => can?(:delete,user), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_user_delete') }},
 	       {:name => I18n.t('permissions'), :url => permissions_user_path(:id => user.id), :cond => can?(:update_permissions, user)}]
 	   else
-	     actions << {:name => I18n.t('remove'), :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => can?(:delete,user), :method => :delete, :confirm => I18n.t('confirm_user_remove')}
+	     actions << {:name => I18n.t('remove'), :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => can?(:delete,user), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_user_remove') }}
 	   end
 	   
 	   actions
@@ -128,23 +128,23 @@ module ApplicationHelper
 
   def actions_for_project(project)
     [{:name => I18n.t('edit'),   :url => edit_project_path(:id => project.id), :cond => can?(:edit,project)},
-     {:name => I18n.t('delete'), :url => project_path(:id => project.id), :cond => can?(:delete,project), :method => :delete, :confirm => I18n.t('project_confirm_delete')}]
+     {:name => I18n.t('delete'), :url => project_path(:id => project.id), :cond => can?(:delete,project), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('project_confirm_delete') }}]
   end
 
   def actions_for_milestone(milestone)
     [{:name => I18n.t('edit'),   :url => edit_project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:edit,milestone)},
-     {:name => I18n.t('delete'), :url => project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :method => :delete, :confirm => I18n.t('milestone_confirm_delete')}]
+     {:name => I18n.t('delete'), :url => project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :data => { turbo_method: :delete, :turbo_confirm => I18n.t('milestone_confirm_delete') }}]
   end
 
   def actions_for_task_list(task_list)
     [{:name => I18n.t('edit'),          :url => edit_project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:edit,task_list)},
-     {:name => I18n.t('delete'),        :url => project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :method => :delete, :confirm => I18n.t('task_list_confirm_delete')},
+     {:name => I18n.t('delete'),        :url => project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :data => { turbo_method: :delete, :turbo_confirm => I18n.t('task_list_confirm_delete') }},
      {:name => I18n.t('reorder_tasks'), :url => reorder_project_task_list_path(task_list.project, :id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
   end
 
   def actions_for_message(message)
     [{:name => I18n.t('edit'),   :url => edit_project_message_path(message.project, :id => message.id), :cond => can?(:edit,message)},
-     {:name => I18n.t('delete'), :url => project_message_path(message.project, :id => message.id), :cond => can?(:delete,message), :method => :delete, :confirm => I18n.t('message_confirm_delete')}]
+     {:name => I18n.t('delete'), :url => project_message_path(message.project, :id => message.id), :cond => can?(:delete,message), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('message_confirm_delete') }}]
   end
 
   def actions_for_company(company)
@@ -153,7 +153,7 @@ module ApplicationHelper
       {:name => I18n.t('edit'),   :url => edit_company_path(:id => company.id), :cond => can?(:edit,company)}]
     
     unless @active_project.nil?
-      actions << {:name => I18n.t('remove'), :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => can?(:remove, company), :method => :delete, :confirm => I18n.t('confirm_client_remove')}
+      actions << {:name => I18n.t('remove'), :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => can?(:remove, company), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_client_remove') }}
     else
       actions << {:name => I18n.t('permissions'), :url => permissions_company_path(:id => company.id), :cond => can?(:manage, company)}
     end
@@ -163,13 +163,13 @@ module ApplicationHelper
 
   def actions_for_comment(comment)
     [{:name => I18n.t('edit'),   :url => edit_project_comment_path(comment.project, :id => comment.id),   :cond => can?(:edit,comment)},
-     {:name => I18n.t('delete'), :url => project_comment_path(comment.project, :id => comment.id), :cond => can?(:delete,comment), :method => :delete, :confirm => I18n.t('comment_delete_confirm')}]
+     {:name => I18n.t('delete'), :url => project_comment_path(comment.project, :id => comment.id), :cond => can?(:delete,comment), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('comment_delete_confirm') }}]
   end
 
   def actions_for_file(file, last_revision)
     [{:name => I18n.t('details_size', :size => format_size(last_revision.filesize)), :url => project_file_path(file.project, :id => file.id), :cond => can?(:download, file)},
      {:name => I18n.t('edit'),   :url => edit_project_file_path(file.project, :id => file.id), :cond => can?(:edit,file)},
-     {:name => I18n.t('delete'), :url => project_file_path(file.project, :id => file.id), :cond => can?(:delete,file), :method => :delete, :confirm => I18n.t('file_delete_confirmation')}]
+     {:name => I18n.t('delete'), :url => project_file_path(file.project, :id => file.id), :cond => can?(:delete,file), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('file_delete_confirmation') }}]
   end
 
   def actions_for_file_revision(file, revision)
@@ -179,23 +179,23 @@ module ApplicationHelper
 
   def actions_for_attached_files(attached_file, object)
     [{:name => I18n.t('details'), :url => project_file_path(attached_file.project, :id => attached_file.id), :cond => true},
-     {:name => I18n.t('detatch'), :url => detatch_project_file_path(attached_file.project, :id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :method => :put, :confirm => I18n.t('detatch_file_confirm')}]
+     {:name => I18n.t('detatch'), :url => detatch_project_file_path(attached_file.project, :id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('detatch_file_confirm') }}]
   end
 
   def actions_for_time(time)
     [{:name => I18n.t('details'), :url => project_time_path(time.project, :id => time.id), :cond => true},
      {:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => project_time_path(@actitime.project_project, :id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
+     {:name => I18n.t('delete'),  :url => project_time_path(@actitime.project_project, :id => time.id), :cond => can?(:delete,time), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('time_confirm_delete') }}]
   end
 
   def actions_for_time_short(time)
     [{:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => project_time_path(time.project, :id => time.id), :cond => can?(:delete,time), :method => :delete, :confirm => I18n.t('time_confirm_delete')}]
+     {:name => I18n.t('delete'),  :url => project_time_path(time.project, :id => time.id), :cond => can?(:delete,time), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('time_confirm_delete') }}]
   end
 
   def actions_for_wiki_page(page)
     [{:name => I18n.t('edit'),    :url => edit_project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:edit,page)},
-     {:name => I18n.t('delete'),  :url => project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:delete,page), :method => :delete, :confirm => I18n.t('wiki_page_confirm_delete')}]
+     {:name => I18n.t('delete'),  :url => project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:delete,page), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('wiki_page_confirm_delete') }}]
   end
   
   def running_time_for_task(task)
