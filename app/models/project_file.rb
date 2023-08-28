@@ -98,10 +98,6 @@ class ProjectFile < ApplicationRecord
     download_project_file_url(self.project, self, only_path: true, host: host)
   end
 
-  def filetype_icon_url
-    project_file_revisions.empty? ? "/assets/filetypes/unknown.png" : project_file_revisions[0].filetype_icon_url
-  end
-
   def file_size
     project_file_revisions.empty? ? 0 : project_file_revisions[0].filesize
   end

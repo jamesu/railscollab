@@ -9,8 +9,8 @@
   </head>
   <body>
     <div id="dialog">
-      <% if !Company.owner.nil? and Company.owner.logo? %>
-      <div id="dialogLogo"><img src="<%= Company.owner.logo.url %>"/></div>
+      <% if !Company.owner.nil? and Company.owner.logo.attached? %>
+      <div id="dialogLogo"><img src="<%= url_for(Company.owner.logo) %>"/></div>
       <% end %>
       <div class="inner">
       <h1><%= h page_title %></h1>

@@ -31,7 +31,7 @@
 <% if file.is_private %>
     <div class="private" title="<%= t('private_file') %>"><span><%= t('private_file') %></span></div>
 <% end %>
-    <div class="fileIcon"><img src="<%= file.filetype_icon_url %>" alt="<%= h file.filename %>" /></div>
+    <div class="fileIcon"><img src="<%= filetype_icon_url(file) %>" alt="<%= h file.filename %>" /></div>
     <div class="fileInfo">
       <div class="fileName"><a href="<%= file.download_url %>" title="<%= t('file_view_details') %>"><%= h file.filename %></a></div>
 

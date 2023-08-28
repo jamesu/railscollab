@@ -268,7 +268,7 @@ class FilesController < ApplicationController
     end
 
     if @file_revision.data.attached?
-      redirect_to @file_revision.data.url, :status => 302
+      redirect_to url_for(@file_revision.data), :status => 302
     else
       render :text => '404 Not Found', :status => 404
     end

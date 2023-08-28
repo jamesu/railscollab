@@ -75,15 +75,6 @@ class ProjectFileRevision < ApplicationRecord
     self.has_thumbnail = thumbnailable?(value)
   end
 
-  def filetype_icon_url
-    if !has_thumbnail
-      ext = self.file_type ? self.file_type.icon : "unknown.png"
-      return "/assets/filetypes/#{ext}"
-    else
-      data.variant(:thumb).url
-    end
-  end
-
   def is_private
     self.project_file.is_private
   end

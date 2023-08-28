@@ -15,7 +15,7 @@
 <% end %>
   <div class="header"><%= h @file.filename %></div>
   <div class="content">
-    <div id="fileIcon"><img src="<%= @file.filetype_icon_url %>" alt="<%= h @file.filename %>" /></div>
+    <div id="fileIcon"><img src="<%= filetype_icon_url(@file) %>" alt="<%= h @file.filename %>" /></div>
     <div id="fileInfo">
 <% if @file.description %>
       <div id="fileDescription"><%= textilize @file.description %></div>

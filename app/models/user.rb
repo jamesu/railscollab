@@ -282,7 +282,7 @@ class User < ApplicationRecord
     if !avatar.attached?
       "/assets/avatar.gif"
     else
-      avatar.variant(:thumb).url
+      url_for avatar.variant(:thumb)
     end
   end
 

@@ -493,4 +493,17 @@ module ApplicationHelper
 
   def error_messages_for(object, other=nil)
   end
+
+  def filetype_icon_url(file)
+    if file.is_a?(ProjectFile)
+      file.project_file_revisions.empty? ? "/assets/filetypes/unknown.png" : filetype_icon_url(file.project_file_revisions[0])
+    else
+      if !file.has_thumbnail
+        ext = file.file_type ? file.file_type.icon : "unknown.png"
+        return "/assets/filetypes/#{ext}"
+      else
+        url_for file.data.variant(:thumb)
+      end
+    end
+  end
 end
