@@ -22,6 +22,7 @@
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
+  include ActiveStorage::SetCurrent
 
   protect_from_forgery
 

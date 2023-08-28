@@ -30,12 +30,9 @@ class Company < ApplicationRecord
 
   has_and_belongs_to_many :projects,  :join_table => :project_companies
 
-  has_attached_file :logo,
-    :styles => { :thumb => "50x50" },
-    :default_url => '',
-    :path => Rails.configuration.railscollab.attach_to_s3 ?
-      "logo/:id/:style.:extension" :
-      ":rails_root/public/system/:attachment/:id/:style/:filename"
+  has_one_attached :logo do |attachable|
+    attachable.variant :thumb, resize_to_limit: [50, 50]
+  end
 
   before_create :process_params
   before_update :process_update_params
@@ -76,14 +73,14 @@ class Company < ApplicationRecord
   end
 
   def has_logo?
-    self.logo?
+    self.logo.attached?
   end
 
   def logo_url
-    if !logo?
+    if !logo.attached?
       "/assets/logo.gif"
     else
-      logo.url(:thumb)
+      logo.variant(:thumb).url
     end
   end
 

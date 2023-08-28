@@ -239,7 +239,7 @@ class FilesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_file)
-        redirect_to files_url
+        redirect_to project_files_url(@active_project)
       }
       
       format.xml  { head :ok }
@@ -267,7 +267,7 @@ class FilesController < ApplicationController
       return
     end
 
-    if @file_revision.data?
+    if @file_revision.data.attached?
       redirect_to @file_revision.data.url, :status => 302
     else
       render :text => '404 Not Found', :status => 404
@@ -411,7 +411,7 @@ private
   end
   
   def file_params
-    params[:file].nil? ? {} : params[:file].permit(:folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
+    params[:file].nil? ? {} : params[:file].permit(:tags, :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
   end
 
   def load_related_object

@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require "active_storage/engine"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -21,7 +22,7 @@ module Railscollab
 
     config.generators.stylesheet_engine = :sass
 
-
+    config.active_job.queue_name_prefix = Rails.env
     config.action_mailer.default_url_options = { host: 'localhost:3000' }
     config.railscollab = config_for(:railscollab)
 

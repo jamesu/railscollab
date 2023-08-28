@@ -65,6 +65,7 @@ module ApplicationHelper
         extras[:onclick] = action[:onclick] if action.has_key? :onclick
         extras[:id]      = action[:id]      if action.has_key? :id
         extras[:class] = action[:class] if action.has_key? :class
+        extras[:data] = action[:data] if action.has_key? :data
 
         link_to action[:name], action[:url], extras
       else

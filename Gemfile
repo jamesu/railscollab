@@ -7,8 +7,6 @@ gem "rails", "~> 7.0.7"
 
 gem "chronic", "~> 0.10.2"
 
-gem 'kt-paperclip', '~> 7.2'
-
 gem 'redcarpet'
 
 gem 'activemodel-serializers-xml'
@@ -18,6 +16,10 @@ gem 'actionpack-page_caching'
 gem 'kaminari'
 
 gem 'friendly_id', '~> 5.4.0'
+
+gem 'ruby-vips'
+
+gem 'image_processing'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"

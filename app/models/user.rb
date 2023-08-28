@@ -45,12 +45,9 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :subscriptions, class_name: 'Message', association_foreign_key: 'message_id', :join_table => :message_subscriptions
 
-  has_attached_file :avatar,
-    :styles => { :thumb => "50x50" },
-    :default_url => '',
-    :path => Rails.configuration.railscollab.attach_to_s3 ?
-      "avatar/:id/:style.:extension" :
-      ":rails_root/public/system/:attachment/:id/:style/:filename"
+  has_one_attached :avatar do |attachable|
+    attachable.variant :thumb, resize_to_limit: [50, 50]
+  end
 
   has_many :assigned_times, class_name: 'TimeRecord', foreign_key:  'assigned_to_user_id'
 
@@ -254,7 +251,7 @@ class User < ApplicationRecord
   end
 
   def has_avatar?
-    self.avatar?
+    self.avatar.attached?
   end
 
   def recent_activity_feed_url(project=nil, format='rss')
@@ -282,10 +279,10 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    if !avatar?
+    if !avatar.attached?
       "/assets/avatar.gif"
     else
-      avatar.url(:thumb)
+      avatar.variant(:thumb).url
     end
   end
 

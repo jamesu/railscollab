@@ -27,12 +27,9 @@ class ProjectFileRevision < ApplicationRecord
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
   belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
-  has_attached_file :data,
-    :styles => { :thumb => "50x50" },
-    :default_url => '',
-    :path => Rails.configuration.railscollab.attach_to_s3 ?
-      "data/:id/:style.:extension" :
-      ":rails_root/public/system/:attachment/:id/:style/:filename"
+  has_one_attached :data do |attachable|
+    attachable.variant :thumb, resize_to_limit: [50, 50]
+  end
 
   before_create :process_params
   before_update :process_update_params
@@ -83,7 +80,7 @@ class ProjectFileRevision < ApplicationRecord
       ext = self.file_type ? self.file_type.icon : "unknown.png"
       return "/assets/filetypes/#{ext}"
     else
-      data.url(:thumb)
+      data.variant(:thumb).url
     end
   end
 
@@ -110,7 +107,6 @@ class ProjectFileRevision < ApplicationRecord
   # Validation
 
   #validates_presence_of :repository_id
-  do_not_validate_attachment_file_type :data
   
   # Indexing
   define_index do
