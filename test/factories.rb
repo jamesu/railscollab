@@ -5,41 +5,44 @@ require "faker"
 
 # Companies / Clients
 
-Factory.define :company do |u|
-  u.sequence(:client_of) {|n| Company.owner}
-  u.sequence(:name) {|n| Faker::Company.name }
-  u.sequence(:email) {|n| Faker::Internet.email }
-  
-  u.sequence(:created_by) {|n| Company.owner.created_by}
+FactoryBot.define do
+  factory :company do
+    sequence(:client_of) {|n| Company.owner}
+    sequence(:name) {|n| Faker::Company.name }
+    sequence(:email) {|n| Faker::Internet.email }
+    
+    sequence(:created_by) { |n| Company.owner.created_by }
+  end
 end
 
 # Users
 
-Factory.define :user do |u|
-  u.sequence(:username) {|n| "#{Faker::Internet.user_name}#{n}" }
-  u.sequence(:display_name) {|n| Faker::Name.name }
-  u.is_admin false
-  u.auto_assign true
-  
-  u.sequence(:email) {|n| "#{n}#{Faker::Internet.email}" }
-  
-  u.password 'password'
-  u.password_confirmation 'password'
-  
-  u.association :company, :factory => :company
-end
+FactoryBot.define do
+  factory :user do
+    sequence(:username) { |n| "#{Faker::Internet.user_name}#{n}" }
+    sequence(:display_name) { |n| Faker::Name.name }
+    is_admin { false }
+    auto_assign { true }
+    
+    sequence(:email) {|n| "#{n}#{Faker::Internet.email}" }
+    
+    password { 'password' }
+    password_confirmation { 'password' }
+    
+    association :company, :factory => :company
+  end
 
-Factory.define :admin, :parent => :user do |u|
-  u.sequence(:company) {|n| Company.owner}
-  u.is_admin true
-end
+  factory :admin, :parent => :user do
+    sequence(:company) {|n| Company.owner}
+    is_admin { true }
+  end
 
-Factory.define :owner_user, :parent => :user do |u|
-  u.sequence(:company) {|n| Company.owner}
-  u.is_admin false
-end
+  factory :owner_user, :parent => :user do
+    sequence(:company) {|n| Company.owner}
+    is_admin { false }
+  end
 
-Factory.define :im_type do |u|
-  u.sequence(:name) {|n| Faker::Company.name }
+  factory :im_type do
+    sequence(:name) {|n| Faker::Company.name }
+  end
 end
-

@@ -38,8 +38,6 @@ class Company < ApplicationRecord
   before_update :process_update_params
   before_destroy :process_destroy
 
-  @@cached_owner = nil
-
   def process_params
   end
 
@@ -49,13 +47,12 @@ class Company < ApplicationRecord
   def process_destroy
   end
 
-  def auto_assign_users
-    self.users.where(:auto_assign => true)
+  def self.owner
+    Company.where(client_of_id: nil).first
   end
 
-  def self.owner(reload=false)
-    @@cached_owner = nil if reload
-    @@cached_owner ||= Company.where('client_of_id IS NULL').first
+  def auto_assign_users
+    self.users.where(:auto_assign => true)
   end
 
   def is_owner?

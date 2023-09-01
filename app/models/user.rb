@@ -287,9 +287,7 @@ class User < ApplicationRecord
   end
 
   def display_name
-    self.attributes[:display_name] ? 
-      self.attributes[:display_name] : 
-      username
+    (super()||'').empty? ? self.username : super()
   end
 
   def object_name

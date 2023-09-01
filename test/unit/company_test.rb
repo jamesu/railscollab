@@ -16,57 +16,63 @@ class CompanyTest < ActiveSupport::TestCase
   test "Permissions" do
     # Within owner company
     master_user = Company.owner.created_by
-    admin_user = Factory.create(:admin)
-    owner_user = Factory.create(:owner_user)
+    admin_user = FactoryBot.create(:admin)
+    owner_user = FactoryBot.create(:owner_user)
     
-    client_company = Factory.create(:company)
-    client_user = Factory.create(:user, :company => client_company)
+    client_company = FactoryBot.create(:company)
+    client_user = FactoryBot.create(:user, :company => client_company)
     
     # can_be_created_by
-    assert Company.can_be_created_by(master_user)
-    assert_equal Company.can_be_created_by(owner_user), false
-    assert Company.can_be_created_by(admin_user)
-    assert_equal Company.can_be_created_by(client_user), false
+    master_can = Ability.new.init(master_user)
+    owner_can = Ability.new.init(owner_user)
+    admin_can = Ability.new.init(admin_user)
+    client_can = Ability.new.init(client_user)
+    company_owner_can = Ability.new.init(Company.owner)
+
+    assert master_can.can?(:create_company, User.new), true
+    assert_equal owner_can.can?(:create_company, User.new), false
+    assert admin_can.can?(:create_company, User.new), false
+    assert_equal client_can.can?(:create_company, User.new), false
     
     # can_be_edited_by
-    assert Company.owner.can_be_edited_by(master_user)
-    assert_equal Company.owner.can_be_edited_by(owner_user), false
-    assert_equal Company.owner.can_be_edited_by(client_user), false
-    assert client_company.can_be_edited_by(master_user)
-    assert_equal client_company.can_be_edited_by(owner_user), false
-    assert_equal client_company.can_be_edited_by(client_user), false
+    assert master_can.can?(:edit, Company.owner)
+    assert_equal owner_can.can?(:edit, Company.owner), false
+    assert_equal client_can.can?(:edit, Company.owner), false
+    assert master_can.can?(:edit, client_company)
+    assert_equal owner_can.can?(:edit, client_company), false
+    assert_equal client_can.can?(:edit, client_company), false
     
     # can_be_deleted_by
-    assert Company.owner.can_be_deleted_by(master_user)
-    assert_equal Company.owner.can_be_deleted_by(owner_user), false
-    assert_equal Company.owner.can_be_deleted_by(client_user), false
-    assert client_company.can_be_deleted_by(master_user)
-    assert_equal client_company.can_be_deleted_by(owner_user), false
-    assert_equal client_company.can_be_deleted_by(client_user), false
+    assert master_can.can?(:delete, Company.owner)
+    assert_equal owner_can.can?(:delete, Company.owner), false
+    assert_equal client_can.can?(:delete, Company.owner), false
+    assert master_can.can?(:delete, client_company)
+    assert_equal owner_can.can?(:delete, client_company), false
+    assert_equal client_can.can?(:delete, client_company), false
     
     # client_can_be_added_by
-    assert Company.owner.client_can_be_added_by(master_user)
-    assert_equal Company.owner.client_can_be_added_by(owner_user), false
-    assert_equal Company.owner.client_can_be_added_by(client_user), false
-    assert client_company.client_can_be_added_by(master_user)
-    assert_equal client_company.client_can_be_added_by(owner_user), false
-    assert_equal client_company.client_can_be_added_by(client_user), false
+    assert master_can.can?(:add_client, Company.owner)
+    assert_equal owner_can.can?(:add_client, Company.owner), false
+    assert_equal client_can.can?(:add_client, Company.owner), false
+    assert master_can.can?(:add_client, client_company)
+    assert_equal owner_can.can?(:add_client, client_company), false
+    assert_equal client_can.can?(:add_client, client_company), false
     
     # can_be_removed_by
-    assert_equal Company.owner.can_be_removed_by(master_user), false
-    assert_equal Company.owner.can_be_removed_by(owner_user), false
-    assert_equal Company.owner.can_be_removed_by(client_user), false
-    assert client_company.can_be_removed_by(master_user)
-    assert_equal client_company.can_be_removed_by(owner_user), false
-    assert_equal client_company.can_be_removed_by(client_user), false
+    assert_equal master_can.can?(:remove, Company.owner), false
+    assert_equal owner_can.can?(:remove, Company.owner), false
+    assert_equal client_can.can?(:remove, Company.owner), false
+    assert master_can.can?(:remove, client_company)
+    assert_equal owner_can.can?(:remove, client_company), false
+    assert_equal client_can.can?(:remove, client_company), false
     
     # can_be_managed_by
-    assert_equal Company.owner.can_be_managed_by(master_user), false
-    assert_equal Company.owner.can_be_managed_by(owner_user), false
-    assert_equal Company.owner.can_be_managed_by(client_user), false
-    assert client_company.can_be_managed_by(master_user)
-    assert_equal client_company.can_be_managed_by(owner_user), false
-    assert_equal client_company.can_be_managed_by(client_user), false
+    assert_equal master_can.can?(:manage, Company.owner), false
+    assert_equal owner_can.can?(:manage, Company.owner), false
+    assert_equal client_can.can?(:manage, Company.owner), false
+    assert master_can.can?(:manage, client_company)
+    assert_equal owner_can.can?(:manage, client_company), false
+    assert_equal client_can.can?(:manage, client_company), false
     
     # cleanup
     admin_user.destroy

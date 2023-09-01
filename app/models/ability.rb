@@ -26,7 +26,7 @@ class Ability
     @abilityCheckers["#{ability}_#{klass}"] = block
   end
 
-  def can?(ability, instance)
+  def can?(ability, instance=nil)
     key = "#{ability}_#{instance.class}"
     if @abilityCheckers.has_key?(key)
       func = @abilityCheckers[key]
@@ -334,7 +334,7 @@ class Ability
 
     # Project
 
-    can :create_project, User do
+    can :create_project, User do |in_user|
       user.member_of_owner? and user.is_admin
     end
 
@@ -409,7 +409,7 @@ class Ability
 
     # Company
 
-    can :create_company, User do
+    can :create_company, User do |in_user|
       user.is_admin and user.member_of_owner?
     end
 
@@ -439,7 +439,7 @@ class Ability
 
     # User
 
-    can :create_user, User do
+    can :create_user, User do |in_user|
       user.member_of_owner? and user.is_admin
     end
 
@@ -452,7 +452,6 @@ class Ability
     end
 
     can :show, User do |target_user|
-      puts "CAN SHOW USER??? #{target_user}"
       user.member_of_owner? or user.company_id == target_user.company_id or target_user.member_of_owner?
     end
     
