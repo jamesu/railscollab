@@ -23,12 +23,12 @@ class Company < ApplicationRecord
   belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id', optional: true
 
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id', optional: true
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true, optional: true
+  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 
   has_many :clients, class_name: 'Company', foreign_key:  'client_of_id'
   has_many :users
 
-  has_and_belongs_to_many :projects,  :join_table => :project_companies
+  has_and_belongs_to_many :projects,  join_table: :project_companies
 
   has_one_attached :logo do |attachable|
     attachable.variant :thumb, resize_to_limit: [50, 50]
@@ -47,12 +47,12 @@ class Company < ApplicationRecord
   def process_destroy
   end
 
-  def self.owner
+  def self.owner(reload=false)
     Company.where(client_of_id: nil).first
   end
 
   def auto_assign_users
-    self.users.where(:auto_assign => true)
+    self.users.where(auto_assign: true)
   end
 
   def is_owner?

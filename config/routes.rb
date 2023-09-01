@@ -1,15 +1,20 @@
 Railscollab::Application.routes.draw do
   # feed url's
-  get 'feed/:user/:token/:action.:format',  :controller => 'feed'
-  get 'feed/:user/:token/:action.::format', :controller => 'feed'
+  %w(recent_activities project_activities recent_milestones milestones export_times).each do |act|
+    get "feed/:user/:token/#{act}.:format",  controller: 'feed', action: act
+    get "feed/:user/:token/#{act}.::format", controller: 'feed', action: act
+  end
   
   # The rest of the simple controllers
-  get "dashboard/(/:action(/:id))",        :controller => 'dashboard'
-  get "dashboard/:action/:id.format", :controller => 'dashboard'
+
+  %w(my_projects my_tasks milestones search).each do |act|
+    get "dashboard/(/#{act}(/:id))",   controller: 'dashboard', action: act
+    get "dashboard/#{act}/:id.format", controller: 'dashboard', action: act
+  end
   
-  resource :session, :only => [:new, :create, :destroy]
-  get 'login', :controller => 'sessions', :action => 'new'
-  delete 'logout', :controller => 'sessions', :action => 'destroy'
+  resource :session, only: [:new, :create, :destroy]
+  get 'login', controller: 'sessions', action: 'new'
+  delete 'logout', controller: 'sessions', action: 'destroy'
     
   # project & project object url's
   resources :projects do
@@ -50,7 +55,7 @@ Railscollab::Application.routes.draw do
         get :list
       end
     end
-    get 'wiki_pages/:id/:version', :controller => 'wiki_pages', :action => 'show', as:  :version_wiki_page
+    get 'wiki_pages/:id/:version', controller: 'wiki_pages', action: 'show', as:  :version_wiki_page
 
     resources :comments
     # Note: filter by category is done via "posts" on the category controller
@@ -102,7 +107,7 @@ Railscollab::Application.routes.draw do
     end
   end
  
-  resource :password, :only => [:new, :create]
+  resource :password, only: [:new, :create]
   resources :users do
     member do
       get :avatar
@@ -116,7 +121,7 @@ Railscollab::Application.routes.draw do
       get :current
     end
     
-    resource :password, :only => [:edit, :update]
+    resource :password, only: [:edit, :update]
   end
 
   resources :companies do
@@ -130,7 +135,7 @@ Railscollab::Application.routes.draw do
     end
   end
 
-  get 'administration', :controller => 'administration', :action => 'index', as:  :administration
+  get 'administration', controller: 'administration', action: 'index', as:  :administration
 
   root :to => 'dashboard#index'
 end
