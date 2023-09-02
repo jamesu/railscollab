@@ -110,7 +110,7 @@ class TaskListsController < ApplicationController
         flash[:notice] = 'List was successfully created.'
         format.html {
           error_status(false, :success_added_task_list)
-          redirect_back_or_default(@task_list)
+          redirect_back_or_default(@task_list.object_url)
         }
         format.js { return index }
         format.xml  { render :xml => @task_list.to_xml(:root => 'task-list'), :status => :created, :location => @task_list }
@@ -140,7 +140,7 @@ class TaskListsController < ApplicationController
         flash[:notice] = 'List was successfully updated.'
         format.html {
           error_status(false, :success_edited_task_list)
-          redirect_back_or_default(@task_list)
+          redirect_back_or_default(@task_list.object_url)
         }
         
         format.xml  { head :ok }

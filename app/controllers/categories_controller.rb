@@ -92,7 +92,7 @@ class CategoriesController < ApplicationController
       if @category.save
         format.html {
           error_status(false, :success_added_message_category)
-          redirect_back_or_default(@category)
+          redirect_back_or_default(@category.object_url)
         }
         format.xml  { render :xml => @category.to_xml(:root => 'category'), :status => :created, :location => @category }
       else
@@ -119,7 +119,7 @@ class CategoriesController < ApplicationController
       if @category.update(category_params)
         format.html {
           error_status(false, :success_edited_message_category)
-          redirect_back_or_default(@category)
+          redirect_back_or_default(@category.object_url)
         }
         format.xml  { head :ok }
       else

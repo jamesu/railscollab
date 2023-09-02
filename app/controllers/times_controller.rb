@@ -93,7 +93,7 @@ class TimesController < ApplicationController
         
         format.html {
           error_status(false, :success_added_time)
-          redirect_back_or_default(@time)
+          redirect_back_or_default(@time.object_url)
         }
         format.js   { respond_with_time(@time) }
         format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
@@ -127,7 +127,7 @@ class TimesController < ApplicationController
       if @time.save
         format.html {
           error_status(false, :success_edited_time)
-          redirect_back_or_default(@time)
+          redirect_back_or_default(@time.object_url)
         }
         format.xml  { head :ok }
       else
@@ -154,7 +154,7 @@ class TimesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_stopped_time)
-        redirect_back_or_default(@time)
+        redirect_back_or_default(@time.object_url)
       }
       format.js { respond_with_time(@time) }
       format.xml  { head :ok }

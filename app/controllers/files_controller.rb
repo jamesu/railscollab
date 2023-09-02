@@ -163,7 +163,7 @@ class FilesController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_added_file)
-          redirect_back_or_default(@file)
+          redirect_back_or_default(@file.object_url)
         }
         
         format.xml  { render :xml => @file.to_xml(:root => 'file'), :status => :created, :location => @file }
@@ -216,7 +216,7 @@ class FilesController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_edited_file)
-          redirect_back_or_default(@file)
+          redirect_back_or_default(@file.object_url)
         }
         
         format.xml  { head :ok }

@@ -68,7 +68,7 @@ class MilestonesController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_added_milestone)
-          redirect_back_or_default(@milestone)
+          redirect_back_or_default(@milestone.object_url)
         }
         format.xml  { render :xml => @milestone.to_xml(:root => 'milestone'), :status => :created, :location => @milestone }
       else
@@ -98,7 +98,7 @@ class MilestonesController < ApplicationController
         MailNotifier.milestone(@milestone.user, @milestone).deliver_now if params[:send_notification] and @milestone.user
         format.html {
           error_status(false, :success_edited_milestone)
-          redirect_back_or_default(@milestone)
+          redirect_back_or_default(@milestone.object_url)
         }
         format.xml  { head :ok }
       else

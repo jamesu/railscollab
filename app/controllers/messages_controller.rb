@@ -183,7 +183,7 @@ class MessagesController < ApplicationController
       if saved
         format.html {
           error_status(false, estatus)
-          redirect_back_or_default(@message)
+          redirect_back_or_default(@message.object_url)
         }
         
         format.xml  { render :xml => @message.to_xml(:root => 'message'), :status => :created, :location => @message }
@@ -220,7 +220,7 @@ class MessagesController < ApplicationController
       if saved
         format.html {
           error_status(false, estatus)
-          redirect_back_or_default(@message)
+          redirect_back_or_default(@message.object_url)
         }
         
         format.xml  { head :ok }

@@ -132,14 +132,14 @@ class ProjectsController < ApplicationController
       @project.companies.clear
       @project.companies << Company.owner
       if params[:project_company]
-        valid_companies = Company.where(:id => params[:project_company]).select('id')
+        valid_companies = Company.where(:id => params[:project_company]).select('id', 'client_of_id')
         valid_companies.each{ |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
       end
 
       valid_user_ids = params[:people] || []
 
       # Grab the old user set
-      people = @project.people.all :include => {:user => :company}
+      people = @project.people.all
 
       # Destroy the Person entry for each non-active user
       people.each do |person|
@@ -302,7 +302,7 @@ class ProjectsController < ApplicationController
       if @project.save
         format.html {
           error_status(false, :success_edited_project)
-          redirect_back_or_default(@project)
+          redirect_back_or_default(@project.object_url)
         }
         
         format.xml  { head :ok }
