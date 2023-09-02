@@ -17,7 +17,7 @@
 #++
 
 class TasksController < ApplicationController
-
+  include ActionView::Helpers::TextHelper
   layout 'project_website'
   
 
@@ -48,7 +48,6 @@ class TasksController < ApplicationController
   # GET /tasks/1.xml
   def show
     begin
-      @task = (@task_list||@active_project).tasks.find(params[:id])
       @task_list ||= @task.task_list
     rescue
       return error_status(true, :invalid_task)
@@ -76,12 +75,6 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/edit
   def edit
-    begin
-      @task = @task_list.tasks.find(params[:id])
-    rescue
-      return error_status(true, :invalid_task)
-    end
-    
     authorize! :edit, @task
     
     respond_to do |f|
@@ -116,12 +109,6 @@ class TasksController < ApplicationController
   # PUT /tasks/1
   # PUT /tasks/1.xml
   def update
-    begin
-      @task = @task_list.tasks.find(params[:id])
-    rescue
-      return error_status(true, :invalid_task)
-    end
-    
     authorize! :edit, @task
     
     @task.updated_by = @logged_user
@@ -144,12 +131,6 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.xml
   def destroy
-    begin
-      @task = @task_list.tasks.find(params[:id])
-    rescue
-      return error_status(true, :invalid_task)
-    end
-    
     authorize! :delete, @task
     
     @task.updated_by = @logged_user
@@ -165,12 +146,6 @@ class TasksController < ApplicationController
   # PUT /tasks/1/status
   # PUT /tasks/1/status.xml
   def status
-    begin
-      @task = @task_list.tasks.find(params[:id])
-    rescue
-      return error_status(true, :invalid_task)
-    end
-    
     authorize! :complete, @task
     
     @task.set_completed(task_params[:completed] == 'true', @logged_user)
@@ -214,14 +189,6 @@ protected
   def task_params
     params[:task].nil? ? {} : params[:task].permit(:text, :assigned_to_id, :task_list_id, :estimated_hours)
   end
-  
-  def grab_list_required
-    if params[:task_list_id].nil?
-      error_status(true, :invalid_task)
-      return false
-    end
-    grab_list
-  end
 
   def grab_list
     return if params[:task_list_id].nil?
@@ -234,5 +201,26 @@ protected
     end
     
     true
+  end
+  
+  def grab_list_required
+    if params[:task_list_id].nil?
+      error_status(true, :invalid_task)
+      return false
+    end
+    grab_list
+  end
+
+  def load_related_object
+    if !params[:task_list_id].nil?
+      grab_list_required
+      begin
+        @task = (@task_list||@active_project).tasks.find(params[:id])
+      rescue
+        return error_status(true, :invalid_task)
+      end
+    else
+      grab_list
+    end
   end
 end

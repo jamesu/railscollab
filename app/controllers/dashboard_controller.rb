@@ -73,9 +73,9 @@ class DashboardController < ApplicationController
 
   def my_tasks
     @has_assigned_tasks = nil
-    @projects_milestonestasks = @active_projects.collect do |project|
-    @has_assigned_tasks ||= true unless (project.milestones_by_user(@logged_user).empty? and 
-                                         project.tasks_by_user(@logged_user).empty?)
+    @projects_milestonestasks = @active_projects.map do |project|
+      @has_assigned_tasks ||= true unless (project.milestones_by_user(@logged_user).empty? and 
+                                           project.tasks_by_user(@logged_user).empty?)
 
       {
         :name       => project.name,
@@ -84,6 +84,7 @@ class DashboardController < ApplicationController
         :tasks      => project.tasks_by_user(@logged_user)
       }
     end
+
     @has_assigned_tasks ||= false
 
     @content_for_sidebar = 'my_tasks_sidebar'
