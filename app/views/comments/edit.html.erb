@@ -1,4 +1,4 @@
-<%= form_tag( comment_path(:id => @comment.id), :data => { turbo_method: :put }, :multipart => true ) %>
+<%= form_tag( comment_path(:id => @comment.id), :method => :put, :data => { turbo_method: :put }, :multipart => true ) %>
 <%= render :partial => 'form' %>
     <button class="submit" type="submit"><%= t('edit_comment') %></button>
 </form>

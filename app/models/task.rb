@@ -97,7 +97,7 @@ class Task < ApplicationRecord
   end
 
   def object_url(host = nil)
-    project_task_list_task_url(self, project_id: self.project_id, only_path: host.nil?, host: host)
+    project_task_list_task_url(self.project, self.task_list, self, only_path: host.nil?, host: host)
   end
 
   def assigned_to=(obj)

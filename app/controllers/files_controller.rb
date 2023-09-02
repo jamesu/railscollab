@@ -281,7 +281,7 @@ class FilesController < ApplicationController
 
     if (rel_object_type.nil? or rel_object_id.nil?) or (!['Comment', 'Message'].include?(rel_object_type))
       error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'files'
+      redirect_back_or_default project_files_path(@active_project)
       return
     end
 
@@ -290,7 +290,7 @@ class FilesController < ApplicationController
       @attach_object = Kernel.const_get(rel_object_type).find(params[:object_id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_object)
-      redirect_back_or_default :controller => 'files'
+      redirect_back_or_default project_files_path(@active_project)
       return
     end
 

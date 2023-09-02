@@ -75,7 +75,7 @@ class TaskList < ApplicationRecord
   def ensure_completed(completed_by)
     # If we don't think we are complete either, exit (vice versa)
     @ensured_complete = true
-    self.tasks(true)
+    self.tasks.reload
     
     # Ok now lets check if we are *really* complete
     if self.finished_all_tasks?

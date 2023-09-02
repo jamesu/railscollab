@@ -214,15 +214,6 @@ protected
   def task_params
     params[:task].nil? ? {} : params[:task].permit(:text, :assigned_to_id, :task_list_id, :estimated_hours)
   end
-
-  def respond_with_task(task, partial='show')
-    task_class = task.is_completed? ? 'completedTasks' : 'openTasks'
-    if task.errors
-      render :json => {:task_class => task_class, :id => task.id, :content => render_to_string({:partial => partial, :collection => [task]})}
-    else
-      render :json => {:task_class => task_class, :id => task.id, :errors => task.errors}, :status => :unprocessable_entity
-    end
-  end
   
   def grab_list_required
     if params[:task_list_id].nil?

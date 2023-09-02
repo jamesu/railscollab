@@ -58,7 +58,7 @@ class UsersController < ApplicationController
       end
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_company)
-      redirect_back_or_default :controller => 'dashboard'
+      redirect_back_or_default root_path
       return
     end
 
@@ -90,10 +90,6 @@ class UsersController < ApplicationController
 
     @user.username = user_attribs[:username]
     new_account_password = nil
-
-    if user_attribs.has_key?(:generate_password)
-      @user.password = @user.password_confirmation = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{@user.username}"))[0..7]
-    end
       
     new_account_password = @user.password
 
@@ -115,7 +111,7 @@ class UsersController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_added_user)
-          redirect_back_or_default :controller => 'administration', :action => 'people'
+          redirect_back_or_default companies_path
         }
         
         format.xml  { render :xml => @user.to_xml(:root => 'user'), :status => :created, :location => @user }
@@ -174,7 +170,7 @@ class UsersController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_updated_profile)
-          redirect_back_or_default :controller => 'administration', :action => 'people'
+          redirect_back_or_default company_people_path(@user.company)
         }
         
         format.xml  { head :ok }
@@ -203,7 +199,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_user, {:name => old_name})
-        redirect_back_or_default :controller => 'administration', :action => 'people'
+        redirect_back_or_default companies_path
       }
       
       format.xml  { head :ok }
@@ -335,11 +331,12 @@ protected
   end
 
   def extra_crumbs
+    user = (@user||@logged_user)
     crumbs = [
       {:title => :people, :url => '/companies'},
-      {:title => @user.company.name, :url => company_path(:id => @user.company.id)}
+      {:title => user.company.name, :url => company_path(user.company)}
     ]
-    crumbs << {:title => @user.display_name, :url => user_path(:id => @user.id)} if action_name == 'permissions'
+    crumbs << {:title => user.display_name, :url => user_path(user)} if action_name == 'permissions'
     crumbs
   end
 
@@ -348,7 +345,7 @@ protected
   end
 
   def user_permit_list
-    return [:password, :password_confirmation, :im_values, :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification]
+    return [:generate_password, :password, :password_confirmation, :im_values, :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification]
   end
 
   def user_params
@@ -371,7 +368,7 @@ protected
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_user, {}, false)
-      redirect_back_or_default :controller => 'dashboard'
+      redirect_back_or_default root_path
       return false
     end
 

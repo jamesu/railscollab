@@ -41,7 +41,7 @@
     <%= render :partial => 'tasks/show', :collection => (!on_list_page ? task_list.completed_tasks.last(5).reverse : task_list.completed_tasks), :locals => {:tprefix => "openTasksList#{task_list.id}"} %>
 <% if !on_list_page and task_list.completed_tasks.length > 5 %>
       <li>
-        <%= link_to t('view_all_completed_tasks'), :controller => 'task_lists', :action => 'show', :id => task_list.id %>
+        <%= link_to t('view_all_completed_tasks'), project_task_lists_path(task_list.project, task_list) %>
       </li>
 <% end %>
     </ul>

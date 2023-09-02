@@ -64,7 +64,7 @@ protected
   end
   
   def reload_owner
-    Company.owner(true)
+    Company.owner.reload
   end
 
   def process_session

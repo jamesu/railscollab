@@ -247,7 +247,7 @@ protected
       @object_class, object_id = find_comment_object
       if @object_class.nil?
         error_status(true, :invalid_request)
-        redirect_back_or_default :controller => 'dashboard', :action => 'index'
+        redirect_back_or_default root_path
         return
       end
       
@@ -257,7 +257,7 @@ protected
 
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_request)
-      redirect_back_or_default :controller => 'dashboard', :action => 'index'
+      redirect_back_or_default root_path
       return false
     end
 

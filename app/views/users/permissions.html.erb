@@ -4,7 +4,7 @@
 
 <% unless @projects.empty? %>
 <div id="userPermissions">
-  <%= form_tag permissions_user_path(:id => @user.id), :data => { turbo_method: :put } %>
+  <%= form_tag permissions_user_path(:id => @user.id), :method => :put, :data => { turbo_method: :put } %>
     <div id="userProjects">
       <table class="blank">
 <%= render :partial => 'projects/permissions', :locals => {:user => @user}, :collection => @projects %>

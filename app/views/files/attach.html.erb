@@ -1,4 +1,4 @@
-<%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :data => { turbo_method: :put }, :multipart => true) %>
+<%= form_tag({:object_id => @attach_object.id, :object_type => @attach_object.class.to_s}, :method => :put, :data => { turbo_method: :put }, :multipart => true) %>
 
   <div class="hint"><%= t('hint_attach_files', :link => "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name)}</a>") %></div>
   <div>

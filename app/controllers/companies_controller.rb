@@ -73,7 +73,7 @@ class CompaniesController < ApplicationController
       if @company.save
         format.html {
           error_status(false, :success_added_client)
-          redirect_back_or_default :controller => 'administration', :action => 'people'
+          redirect_back_or_default companies_path
         }
         
         format.xml  { render :xml => @company.to_xml(:root => 'company'), :status => :created, :location => @company }
@@ -99,7 +99,7 @@ class CompaniesController < ApplicationController
       if @company.save
         format.html {
           error_status(false, :success_edited_client)
-          redirect_back_or_default :controller => 'administration', :action => 'people'
+          redirect_back_or_default companies_path()
         }
         
         format.xml  { head :ok }
@@ -120,7 +120,7 @@ class CompaniesController < ApplicationController
     
     respond_to do |format|
       format.html {
-        redirect_back_or_default :controller => 'dashboard'
+        redirect_back_or_default root_path
       }
     end
   end
@@ -138,7 +138,7 @@ class CompaniesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, estatus)
-        redirect_back_or_default :controller => 'administration', :action => 'people'
+        redirect_back_or_default companies_path
       }
       
       format.xml  { head :ok }
@@ -151,7 +151,7 @@ class CompaniesController < ApplicationController
   	@projects = Project.all(:order => 'name')
   	if @projects.empty?
       error_status(true, :no_projects)
-      redirect_back_or_default :controller => 'administration', :action => 'people'
+      redirect_back_or_default companies_path
       return
   	end
 
@@ -245,7 +245,7 @@ class CompaniesController < ApplicationController
       @company = Company.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_company, {}, false)
-      redirect_back_or_default :controller => 'dashboard'
+      redirect_back_or_default root_path
       return false
     end
 

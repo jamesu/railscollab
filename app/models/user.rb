@@ -101,7 +101,31 @@ class User < ApplicationRecord
     values
   end
 
+  def generate_password
+    @generated_password||false
+  end
+
+  def generate_password=(value)
+    return if value.nil? or value == false
+    self.password = self.password_confirmation = Base64.encode64(Digest::SHA1.digest("#{rand(1 << 64)}/#{Time.now.to_f}/#{self.username}"))[0..7]
+    @generated_password = true
+  end
+
+  def password_confirmation
+    @password_confirmation
+  end
+
+  def password_confirmation=(value)
+    return if @generated_password
+    @password_confirmation = value
+  end
+
+  def password
+    @password
+  end
+
   def password=(value)
+    return if @generated_password
     salt = nil
     token = nil
 
@@ -342,9 +366,6 @@ class User < ApplicationRecord
   # Accesibility
 
   #attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
-
-  attr_accessor :password_confirmation
-  attr_reader :password
 
   # Validation
   

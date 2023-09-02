@@ -340,7 +340,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :error_saving) unless saved
-        redirect_back_or_default :controller => 'administration', :action => 'projects'
+        redirect_back_or_default projects_path
       }
       
       format.xml  { head :ok }
@@ -357,7 +357,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :error_saving) unless saved
-        redirect_back_or_default :controller => 'administration', :action => 'projects'
+        redirect_back_or_default projects_path
       }
       
       format.xml  { head :ok }
@@ -413,7 +413,7 @@ protected
         @active_project = @project
      rescue ActiveRecord::RecordNotFound
        error_status(true, :invalid_project)
-       redirect_back_or_default :controller => 'dashboard'
+       redirect_back_or_default root_path
        return false
      end
      

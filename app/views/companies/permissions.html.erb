@@ -4,7 +4,7 @@
     <div class="header"><%= t('hint') %></div>
     <div class="content"><%= t('hint_permissions_info') %></div>
   </div>
-  <%= form_tag permissions_company_path(:id => @company.id), :data => { turbo_method: :put } %>
+  <%= form_tag permissions_company_path(:id => @company.id), :method => :put, :data => { turbo_method: :put } %>
     <table class="blank">
 <% @projects.each do |project| -%>
       <tr>

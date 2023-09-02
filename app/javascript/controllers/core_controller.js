@@ -8,6 +8,7 @@ export default class extends Controller
 {
   init() {
     var us = this;
+    window.CoreController = this;
 
     var node = document.querySelector('meta[name="project-id"]');
     this.PROJECT_ID = node ? node.getAttribute("content") : null;
@@ -113,7 +114,7 @@ export default class extends Controller
     });
 
     this.bindStaticEvent($('.ajax_action', 'click'), function(evt) {
-      RailsCollabHelpers.get($(this).attr('href'), {},
+      RailscollabHelpers.get($(this).attr('href'), {},
         JustRebind, 'script');
 
       return false;
@@ -141,7 +142,7 @@ export default class extends Controller
       var el = $(evt.target);
       var url = el.next('a').attr('href');
 
-      RailsCollabHelpers.put(url, {
+      RailscollabHelpers.put(url, {
         'task[completed]': evt.target.checked
       },
       JustReload, 'script');
@@ -206,7 +207,7 @@ export default class extends Controller
   }
 
   reloadTask(data) {
-    RailsCollabHelpers.get('/projects/' + this.PROJECT_ID + '/tasks/' + data.id, {}, function(data){
+    RailscollabHelpers.get('/projects/' + this.PROJECT_ID + '/tasks/' + data.id, {}, function(data){
       replaceTask(data, false);
       controller.JustRebind();
     });
@@ -231,11 +232,10 @@ export default class extends Controller
 
     // Popup form for Add Item
     this.bindDynamicEvent($('.addTask form'), 'submit', 
-      (origEvt) => {
-        var theForm = $(this);
-        controller.startLoading(origEvt); 
-        RailsCollabHelpers.request(theForm, (evt) => {
-          controller.stopLoading(origEvt); 
+      function(origEvt) {
+        origEvt.preventDefault();
+        var theForm = $(origEvt.target);
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
           theForm.autofocus();
 
           // TODO: check error
@@ -301,7 +301,7 @@ export default class extends Controller
       var el = $(evt.target);
       var url = el.next('a').attr('href');
 
-      RailsCollabHelpers.put(url, {
+      RailscollabHelpers.put(url, {
         'task[completed]': evt.target.checked
       },
       function(data, status, xhr) {
@@ -315,10 +315,10 @@ export default class extends Controller
     });
 
     this.bindDynamicEvent($('.taskList .taskEdit'), 'submit', 
-      (origEvt) => {
+      function(origEvt) {
+        origEvt.preventDefault();
         var theForm = $(this);
-        controller.startLoading(origEvt); 
-        RailsCollabHelpers.request(theForm, (evt) => {
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
           controller.stopLoading(origEvt); 
           controller.replaceTask(data, true);
           controller.JustRebind();
@@ -327,10 +327,10 @@ export default class extends Controller
     );
 
     this.bindDynamicEvent($('.taskList .taskDelete'), 'submit', 
-      (origEvt) => {
+      function(origEvt) {
+        origEvt.preventDefault();
         var theForm = $(this);
-        controller.startLoading(origEvt); 
-        RailsCollabHelpers.request(theForm, (evt) => {
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
           controller.stopLoading(origEvt); 
           $('#task_item_' + data.id).remove();
         }) 
@@ -362,7 +362,7 @@ export default class extends Controller
         handle: '.taskItemHandle .inner',
         opacity: 0.75,
         update: function(e, ui) {
-          RailsCollabHelpers.post(url, list.find('.openTasks:first ul').sortable('serialize', {
+          RailscollabHelpers.post(url, list.find('.openTasks:first ul').sortable('serialize', {
             key: 'tasks[]'
           }));
         }
@@ -376,11 +376,11 @@ export default class extends Controller
       return false;
     });
 
-
-        // Generic action form
+    // Generic action form
     this.bindDynamicEvent($('#action_dialog form'), 'submit', function(evt) {
+      evt.preventDefault();
       var form = $(this);
-      RailsCollabHelpers.request(form, RebindAction);
+      RailscollabHelpers.request(form, (evt) => {}, RebindAction);
 
       form.find('.submit').first().attr('disabled', true);
       //form.reset();
@@ -388,6 +388,7 @@ export default class extends Controller
     });
 
     this.bindDynamicEvent($('#action_dialog a.cancel'), 'click', function(evt) {
+      evt.preventDefault();
       $('#action_dialog').hide();
 
       return false;
@@ -396,7 +397,7 @@ export default class extends Controller
     // Start & stop time
     this.bindDynamicEvent($('.startTime'), 'click', function(evt) {
       var el = $(this);
-      RailsCollabHelpers.post(el.attr('href'), {
+      RailscollabHelpers.post(el.attr('href'), {
         'time[open_task_id]': el.attr('task_id'),
         'time[assigned_to_id]': controller.USER_ID,
       },
@@ -416,7 +417,7 @@ export default class extends Controller
 
     this.bindDynamicEvent($('.stopTime'), 'click', function(evt) {
       var el = $(this);
-      RailsCollabHelpers.put(el.attr('href'), {
+      RailscollabHelpers.put(el.attr('href'), {
         'time[open_task_id]': el.attr('task_id'),
         'time[assigned_to_id]': controller.USER_ID,
       },

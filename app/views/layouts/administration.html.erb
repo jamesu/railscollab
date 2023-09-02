@@ -39,7 +39,7 @@
 <% end %>
           <h1 id="pageTitle"><%= h page_title %></h1>
           <div id="pageContent">
-            <div id="content" <%= @content_for_sidebar.nil? ? '' : 'class=\'sidebar\'' %>>
+            <div id="content" class="<%= @content_for_sidebar.nil? ? '' : 'sidebar' %>">
               <%= render :partial => 'layouts/actions' unless page_actions.nil? %>
               <!-- Content -->
               <%= yield %>

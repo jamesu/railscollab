@@ -59,7 +59,7 @@
     <% if @user.new_record? %>
     <div>
         <label for="userFormGeneratePassword"><%= t('generate_password') %></label>
-        <input type="checkbox" checked="true" name="user[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="user_form_update_passwordgen()"/>      
+        <input type="checkbox" checked="true" name="user[generate_password]" value="true" class="checkbox" id="userFormGeneratePassword" onclick="CoreController.user_form_update_passwordgen();"/>      
     </div>
     <% end %>
     <div id="userFormPasswordInputs">
@@ -74,9 +74,6 @@
       </div>
     </div>
   </fieldset>
-  <script type="text/javascript">
-    user_form_update_passwordgen();
-  </script>
   </div>
 
 <% if @user.new_record? %>
@@ -131,12 +128,12 @@
         <th><%= t('primary_im') %></th>
       </tr>
 <% @count = 0 %>
-<% all_im_values.each do |im_value| -%>
+<% all_im_values.each_with_index do |im_value, idx| -%>
       <tr>
         <td style="vertical-align: middle"><img src="<%= im_value.im_type.icon_url %>" alt="<%= im_value.im_type.name %> icon" /></td>
         <td style="vertical-align: middle"><label class="checkbox" for="<%= "userFormIm#{@count}" %>"><%= im_value.im_type.name %></label></td>
         <td style="vertical-align: middle"><%= text_field_tag "user[im_values][#{im_value.im_type_id}][value]", im_value.value, :id => "userFormIm#{@count}" %></td>
-        <td style="vertical-align: middle"><%= radio_button_tag "user[default_im_value]", im_value.im_type_id, im_value.is_default, :id => 'im_default', :class => 'checkbox' %></td>
+        <td style="vertical-align: middle"><%= radio_button_tag "user[default_im_value]", im_value.im_type_id, im_value.is_default, :id => "im_default_#{idx}", :class => 'checkbox' %></td>
       </tr>
 <% @count += 1 %>
 <% end %>

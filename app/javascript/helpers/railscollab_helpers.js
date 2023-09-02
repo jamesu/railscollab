@@ -36,9 +36,9 @@ export default {
     }).then(callback);
   },
 
-  request: function(el, callback) {
+  request: function(el, preCallback, callback) {
     var formData = new FormData(el[0]);
-    console.log(formData);
+    preCallback({target: el});
 
     return fetch(el.attr('action'), {
       headers: {
