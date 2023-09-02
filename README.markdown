@@ -7,9 +7,9 @@ the communication-oriented project management solution from 37signals.
 Its roots come from a similar project called ProjectPier, 
 which instead of Ruby is written in PHP.
 
-##Note regarding future development
+## Note regarding current development
 
-As of 16-Feb-2012, development of RailsCollab from this branch has been permanently discontinued. Please refer to alternative forks for any future releases.
+Major development was suspended in 2012. Despite this, work is now underway to port the current codebase to use Rails 7. Think of it like a testcase for porting an old project to Rails 7.
 
 ## Manage projects. How?
 
