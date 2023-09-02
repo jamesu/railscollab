@@ -61,7 +61,7 @@ class MilestonesController < ApplicationController
     saved = @milestone.save
     if saved
       @milestone.tags = milestone_attribs[:tags]
-      Notifier.deliver_milestone(@milestone.user, @milestone) if params[:send_notification] and @milestone.user
+      MailNotifier.milestone(@milestone.user, @milestone).deliver_now if params[:send_notification] and @milestone.user
     end
     
     respond_to do |format|
@@ -95,7 +95,7 @@ class MilestonesController < ApplicationController
     
     respond_to do |format|
       if saved
-        Notifier.deliver_milestone(@milestone.user, @milestone) if params[:send_notification] and @milestone.user
+        MailNotifier.milestone(@milestone.user, @milestone).deliver_now if params[:send_notification] and @milestone.user
         format.html {
           error_status(false, :success_edited_milestone)
           redirect_back_or_default(@milestone)

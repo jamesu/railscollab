@@ -112,7 +112,7 @@ class Message < ApplicationRecord
   def send_comment_notifications(comment)
     self.subscribers.each do |subscriber|
       next if subscriber == comment.created_by
-      Notifier.deliver_message_comment(subscriber, comment, self)
+      MailNotifier.message_comment(subscriber, comment, self).deliver_now
     end
   end
 
@@ -121,7 +121,7 @@ class Message < ApplicationRecord
   end
 
   def send_notification(user)
-    Notifier.deliver_message(user, self)
+    MailNotifier.new_message(user, self).deliver_now
   end
 
   # Accesibility

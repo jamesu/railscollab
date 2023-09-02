@@ -108,7 +108,7 @@ class UsersController < ApplicationController
       # Time to update permissions
       update_project_permissions(@user, params[:user_project], params[:project_permission])
       # ... and send details!
-      Notifier.deliver_account_new_info(@user, new_account_password) if @send_email
+      MailNotifier.account_new_info(@user, new_account_password).deliver_now if @send_email
     end
     
     respond_to do |format|

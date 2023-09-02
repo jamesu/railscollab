@@ -23,7 +23,7 @@ class PasswordsController < ApplicationController
     end
 
     # Send the reset!
-    Notifier.deliver_password_reset user
+    MailNotifier.password_reset(user).deliver_now
     error_status(false, :forgot_password_sent_email)
     redirect_to login_path
   end
