@@ -119,7 +119,7 @@ class MilestonesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_milestone)
-        redirect_back_or_default(milestones_url)
+        redirect_back_or_default(project_milestones_url(@active_project))
       }
       format.xml  { head :ok }
     end
