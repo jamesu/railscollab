@@ -5,9 +5,6 @@ continue to function. This can be achieved by running the following command:
 
     rake db:migrate
 
-## Change in file storage location
+## Change in storage backend
 
-If you are updating from the rails2 version of RailsCollab, the default location for Company logos, User avatars, and File data has changed. These are now located in "public/system/logos", "public/system/avatars" and "public/system/data".
-If you have any existing files you should be able to copy them to the new location to make them work again.
-
-Thats it!
+File attachments now use ActiveStorage. If somehow you were previously using railscollab under Rails 3 and want it to work with the current Rails 7 version, you will need to migrate the file data manually.

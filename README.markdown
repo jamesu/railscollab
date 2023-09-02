@@ -4,7 +4,7 @@
 RailsCollab is a free web based Project Management and Collaboration tool largely inspired by [Basecamp] [1], 
 the communication-oriented project management solution from 37signals. 
 
-Its roots come from a similar project called ProjectPier (previously known as ActiveCollab), 
+Its roots come from a similar project called ProjectPier, 
 which instead of Ruby is written in PHP.
 
 ##Note regarding future development
