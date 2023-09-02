@@ -171,7 +171,7 @@ class TaskListsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_task_list)
-        redirect_to(task_lists_url)
+        redirect_to(project_task_lists_url(@active_project))
       }
       format.js { index_lists(@logged_user.member_of_owner?) }
       format.xml  { head :ok }

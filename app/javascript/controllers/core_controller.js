@@ -143,7 +143,7 @@ export default class extends Controller
       var url = el.next('a').attr('href');
 
       RailscollabHelpers.put(url, {
-        'task[completed]': evt.target.checked
+        'task': {'completed': evt.target.checked }
       },
       JustReload, 'script');
 
@@ -192,18 +192,32 @@ export default class extends Controller
 
   replaceTask(data, content) {
     var task = $('#task_item_' + data.id);
-    var in_list = task.parents('.taskItems').first().parent();
+    var appropriate_list = data.completed == true ? 'completedTasks' : 'openTasks';
+    var new_list = false;
 
-      // Replace or insert into correct list
-    if (data.task_class != null && !in_list.hasClass(data.task_class)) {
-      var task_list = task.parents('.taskList').first();
-      task_list.find('.' + data.task_class + ' .taskItems').first().append(task);
+    if (task.length == 0)
+    {
+      new_list = true;
+    }
+    else
+    {
+      if (!task[0].parentNode.parentNode.classList.contains(appropriate_list))
+      {
+        task.remove();
+        new_list = true;
+      }
+      else
+      {
+        task.replaceWith(data.content);
+      }
     }
 
-    if (content)
-      task.html(data.content);
-    else
-      task.replaceWith(data.content);
+
+    if (new_list)
+    {
+      var task_list_items = $('#list_' + data.task_list_id + ' .' + appropriate_list + ' ul');
+      task_list_items.first().append(data.content);
+    }
   }
 
   reloadTask(data) {
@@ -226,6 +240,15 @@ export default class extends Controller
     }
   }
 
+  cancelAddTask(element) {
+    var addItemInner = element.parents('.inner').first();
+    var newItem = addItemInner.parents('.addTask').first().find('.newTask').first();
+
+    addItemInner.hide();
+    addItemInner.children('form')[0].reset();
+    newItem.show();
+  }
+
   bindDynamic() {
 
     var controller = this;
@@ -235,32 +258,22 @@ export default class extends Controller
       function(origEvt) {
         origEvt.preventDefault();
         var theForm = $(origEvt.target);
-        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, () => {
           theForm.autofocus();
+          controller.stopLoading(origEvt);
 
           // TODO: check error
-          theForm.reset();
+          theForm[0].reset();
 
-          // set task list back to edit mode when new task is added (otherwise new item will be in edit mode, and rest will be in reorder mode)
-          //var list = theForm.parents('.taskList').first();
-          //if (list.hasClass('reorder')) {
-          //  theForm.find('.doEditTaskList').click();
-          //}
-
-          // Add content in the correct location
-          theForm.parents('.taskList').first().find('.' + data.task_class + ' .taskItems').append(data.content);
           controller.JustRebind();
         }) 
       }
     );
 
     this.bindDynamicEvent($('.addTask form .cancel'), 'click', function(evt) {
-      var addItemInner = $(evt.target).parents('.inner').first();
-      var newItem = addItemInner.parents('.addTask').first().find('.newTask').first();
-
-      addItemInner.hide();
-      addItemInner.children('form')[0].reset();
-      newItem.show();
+      var element = $(evt.target);
+      evt.preventDefault();
+      controller.cancelAddTask(element);
 
       return false;
     });
@@ -277,39 +290,17 @@ export default class extends Controller
       return false;
     });
 
-    /*$('.taskItem form.editTaskItem')
-    .bind('ajax:beforeSend', startLoading)
-    .bind('ajax:complete', stopLoading)
-    .bind('ajax:success',
-      function(evt, data, status, xhr) {
-        replaceTask(data, false);
-        JustRebind();
-        return false;
-      });
-
-    $('.taskItem form.editTaskItem .cancel')
-    .bind('ajax:beforeSend', startLoadingForm)
-    .bind('ajax:complete', stopLoadingForm)
-    .bind('ajax:success',
-      function(evt, data, status, xhr) {
-        replaceTask(data, false);
-        JustRebind();
-        return false;
-      });*/
-
     this.bindDynamicEvent($('.taskList .completion'), 'click', function(evt) {
       var el = $(evt.target);
       var url = el.next('a').attr('href');
 
       RailscollabHelpers.put(url, {
-        'task[completed]': evt.target.checked
+        'task': {'completed': evt.target.checked }
       },
-      function(data, status, xhr) {
-        controller.replaceTask(data, false);
+      () => {
         controller.JustRebind();
         return false;
-      },
-      'json');
+      });
 
       return false;
     });
@@ -318,9 +309,8 @@ export default class extends Controller
       function(origEvt) {
         origEvt.preventDefault();
         var theForm = $(this);
-        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, () => {
           controller.stopLoading(origEvt); 
-          controller.replaceTask(data, true);
           controller.JustRebind();
         }) 
       }
@@ -330,7 +320,7 @@ export default class extends Controller
       function(origEvt) {
         origEvt.preventDefault();
         var theForm = $(this);
-        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, (evt) => {
+        RailscollabHelpers.request(theForm, (evt) => { controller.startLoading(evt); }, () => {
           controller.stopLoading(origEvt); 
           $('#task_item_' + data.id).remove();
         }) 

@@ -55,7 +55,7 @@ class TasksController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.js { respond_with_task(@task) }
+      format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
       format.xml  { render :xml => @task.to_xml(:root => 'task') }
     end
   end
@@ -96,11 +96,11 @@ class TasksController < ApplicationController
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { respond_with_task(@task) }
+        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
         format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
       else
         format.html { render :action => "new" }
-        format.js { respond_with_task(@task) }
+        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
         format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
@@ -118,11 +118,11 @@ class TasksController < ApplicationController
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { respond_with_task(@task) }
+        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.js { respond_with_task(@task) }
+        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
         format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
       end
     end
@@ -137,7 +137,7 @@ class TasksController < ApplicationController
     @task.destroy
 
     respond_to do |format|
-      format.html { redirect_back_or_default(task_lists_url) }
+      format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
       format.js { render :json => { :id => @task.id } }
       format.xml  { head :ok }
     end
@@ -148,13 +148,13 @@ class TasksController < ApplicationController
   def status
     authorize! :complete, @task
     
-    @task.set_completed(task_params[:completed] == 'true', @logged_user)
+    @task.set_completed(task_params[:completed] == true, @logged_user)
     @task.order = @task_list.tasks.length
     @task.save
 
     respond_to do |format|
-      format.html { redirect_back_or_default(task_lists_url) }
-      format.js { respond_with_task(@task) }
+      format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
+      format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
       format.xml  { head :ok }
     end
 
@@ -187,7 +187,7 @@ protected
   end
 
   def task_params
-    params[:task].nil? ? {} : params[:task].permit(:text, :assigned_to_id, :task_list_id, :estimated_hours)
+    params[:task].nil? ? {} : params[:task].permit(:completed, :text, :assigned_to_id, :task_list_id, :estimated_hours)
   end
 
   def grab_list

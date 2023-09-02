@@ -1,0 +1,7 @@
+<% task_class = @task.is_completed? ? 'completedTasks' : 'openTasks' %>
+<% if !@task.errors.empty? %>
+CoreController.replaceTask(<%= raw({:task_class => task_class, :task_list_id => @task.task_list_id, :id => @task.id, :errors => @task.errors}.to_json) %>);
+<% else %>
+CoreController.cancelAddTask($('#list_<%= @task.task_list_id %> .cancel'));
+CoreController.replaceTask(<%= raw({:completed => @task.is_completed?, :task_class => task_class, :task_list_id => @task.task_list_id, :id => @task.id, :content => @task_content}.to_json) %>);
+<% end %>

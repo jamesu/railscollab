@@ -59,7 +59,7 @@ class Task < ApplicationRecord
         Activity.new_log(self, self.updated_by, :edit, self.task_list.is_private, self.task_list.project)
       end
     else
-      write_attribute('completed_on', @update_completed ? Time.now.utc : nil)
+      self.completed_on = @update_completed ? Time.now.utc : nil
       self.completed_by = @update_completed_user
       
       # If closed, we log before the task list 
