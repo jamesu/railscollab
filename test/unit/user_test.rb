@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
   fixtures :all
 
   test "Password change should product random tokens + salt" do
-    owner_user = FactoryBot.create(:owner_user)
+    owner_user = users(:owner_user)
     
     # Store token,salt and set new password
     orig_token = owner_user.twisted_token
@@ -21,7 +21,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "Password reset key should be tied to the last login time" do
-    owner_user = FactoryBot.create(:owner_user)
+    owner_user = users(:owner_user)
     
     reset_key = owner_user.password_reset_key
     assert reset_key == owner_user.password_reset_key
@@ -34,10 +34,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "IM Values should be created according to available IM Types" do
-    # Make some IM Types
-    5.times { FactoryBot.create(:im_type) }
-    
-    owner_user = FactoryBot.create(:owner_user)
+    owner_user = users(:owner_user)
     values = owner_user.im_info
     assert_equal 5, ImType.all.length
     
@@ -50,7 +47,10 @@ class UserTest < ActiveSupport::TestCase
     end
     
     # New im type present?
-    new_type_id = FactoryBot.create(:im_type).id
+    imtype =
+    new_type = ImType.new(id: 6, name: "Name6", icon: "Icon6")
+    new_type.save!
+    new_type_id = new_type.id
     owner_user.reload
     values = owner_user.im_info
     assert_equal values.length, 6
@@ -65,17 +65,17 @@ class UserTest < ActiveSupport::TestCase
     end
     assert found
     
-    ImType.destroy_all
+    new_type.destroy
     owner_user.destroy
   end
   
   test "Permissions" do
     master_user = Company.owner.created_by
-    admin_user = FactoryBot.create(:admin)
-    owner_user = FactoryBot.create(:owner_user)
+    admin_user = users(:owner_admin_user)
+    owner_user = users(:owner_user)
     
-    client_company = FactoryBot.create(:company)
-    client_user = FactoryBot.create(:user, :company => client_company)
+    client_company = companies(:client_company)
+    client_user = users(:client_user)
     
     # can_be_created_by
     admin_can = Ability.new.init(admin_user)
@@ -102,8 +102,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal client_can.can?(:delete, admin_user), false
     
     # can_be_viewed_by
-    other_client_company = FactoryBot.create(:company)
-    other_client_user = FactoryBot.create(:user, :company => other_client_company)
+    other_client_company = companies(:client_company)
+    other_client_user = users(:client_user)
     other_client_can = Ability.new.init(other_client_user)
     
     assert_equal client_can.can?(:show, owner_user), true
@@ -133,7 +133,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "Default Avatar" do
-    owner_user = FactoryBot.create(:owner_user)
+    owner_user = users(:owner_user)
     assert !owner_user.avatar.attached?
     
     assert owner_user.avatar_url == '/assets/avatar.gif'
@@ -142,7 +142,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "Display Name should equal username if blank" do
-    owner_user = FactoryBot.create(:owner_user)
+    owner_user = users(:owner_user)
 
     assert owner_user.display_name != owner_user.username
     owner_user.display_name = ''
@@ -155,7 +155,15 @@ class UserTest < ActiveSupport::TestCase
     start_count = User.get_online.length
     
     users = []
-    5.times { users << FactoryBot.create(:owner_user) }
+    5.times do |i|
+      u = User.new(:company => companies(:owner_company), 
+                   :display_name => "User #{i}", 
+                   :username => "user#{i}", 
+                   :email => "emailtest#{i}@better.set.this.com",
+                   :password => 'password', :password_confirmation => 'password')
+      u.save!
+      users << u
+    end
     
     assert_equal User.get_online.length, start_count
     

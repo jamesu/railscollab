@@ -16,11 +16,11 @@ class CompanyTest < ActiveSupport::TestCase
   test "Permissions" do
     # Within owner company
     master_user = Company.owner.created_by
-    admin_user = FactoryBot.create(:admin)
-    owner_user = FactoryBot.create(:owner_user)
+    admin_user = users(:admin_user)
+    owner_user = users(:owner_user)
     
-    client_company = FactoryBot.create(:company)
-    client_user = FactoryBot.create(:user, :company => client_company)
+    client_company = companies(:client_company)
+    client_user = users(:client_user)
     
     # can_be_created_by
     master_can = Ability.new.init(master_user)

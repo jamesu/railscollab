@@ -91,8 +91,6 @@ group :test do
 end
 
 
-gem "factory_bot", "~> 6.2"
-
 gem "faker", "~> 3.2"
 
 gem "icalendar", "~> 2.9"

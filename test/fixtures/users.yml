@@ -21,11 +21,131 @@ admin_user:
   remember_token_expires_at: 2009-10-17 08:24:49
   mobile_number: ""
   last_visit: 2009-11-03 16:59:14
-  is_admin: t
+  is_admin: true
   avatar_content_type: 
   company_id: "1"
   office_number_ext: ""
   display_name: Administrator
   time_zone: UTC
   avatar_updated_at: 
-  email: better.set.this@localhost
+  email: better.set.this1@localhost
+owner_admin_user: 
+  salt: 4e970c97ba83a
+  twister: "7980324561"
+  fax_number: ""
+  avatar_file_name: 
+  avatar_file_size: 
+  title: ""
+  home_number: ""
+  created_on: 2009-08-21 16:04:08
+  last_login: 2009-11-03 16:37:06
+  last_activity: 2009-11-03 16:51:13
+  auto_assign: t
+  token: 8cb96562efef94de17d3c3b25494f87ce1d39275
+  office_number: ""
+  created_by_id: 
+  username: owner_admin_user
+  remember_token: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
+  id: "7"
+  updated_on: 2009-11-03 16:59:14
+  remember_token_expires_at: 2009-10-17 08:24:49
+  mobile_number: ""
+  last_visit: 2009-11-03 16:59:14
+  is_admin: true
+  avatar_content_type: 
+  company_id: "1"
+  office_number_ext: ""
+  display_name: Owner User
+  time_zone: UTC
+  avatar_updated_at: 
+  email: better.set.this7@localhost
+owner_user: 
+  salt: 4e970c97ba83a
+  twister: "7980324561"
+  fax_number: ""
+  avatar_file_name: 
+  avatar_file_size: 
+  title: ""
+  home_number: ""
+  created_on: 2009-08-21 16:04:08
+  last_login: 2009-11-03 16:37:06
+  last_activity: 2009-11-03 16:51:13
+  auto_assign: t
+  token: 8cb96562efef94de17d3c3b25494f87ce1d39275
+  office_number: ""
+  created_by_id: 
+  username: owner_user
+  remember_token: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
+  id: "2"
+  updated_on: 2009-11-03 16:59:14
+  remember_token_expires_at: 2009-10-17 08:24:49
+  mobile_number: ""
+  last_visit: 2009-11-03 16:59:14
+  is_admin: false
+  avatar_content_type: 
+  company_id: "1"
+  office_number_ext: ""
+  display_name: Owner User
+  time_zone: UTC
+  avatar_updated_at: 
+  email: better.set.this2@localhost
+client_admin: 
+  salt: 4e970c97ba83a
+  twister: "7980324561"
+  fax_number: ""
+  avatar_file_name: 
+  avatar_file_size: 
+  title: ""
+  home_number: ""
+  created_on: 2009-08-21 16:04:08
+  last_login: 2009-11-03 16:37:06
+  last_activity: 2009-11-03 16:51:13
+  auto_assign: t
+  token: 8cb96562efef94de17d3c3b25494f87ce1d39275
+  office_number: ""
+  created_by_id: 
+  username: client_admin
+  remember_token: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
+  id: "3"
+  updated_on: 2009-11-03 16:59:14
+  remember_token_expires_at: 2009-10-17 08:24:49
+  mobile_number: ""
+  last_visit: 2009-11-03 16:59:14
+  is_admin: true
+  avatar_content_type: 
+  company_id: "2"
+  office_number_ext: ""
+  display_name: Client Administrator
+  time_zone: UTC
+  avatar_updated_at: 
+  email: better.set.this3@localhost
+client_user: 
+  salt: 4e970c97ba83a
+  twister: "7980324561"
+  fax_number: ""
+  avatar_file_name: 
+  avatar_file_size: 
+  title: ""
+  home_number: ""
+  created_on: 2009-08-21 16:04:08
+  last_login: 2009-11-03 16:37:06
+  last_activity: 2009-11-03 16:51:13
+  auto_assign: t
+  token: 8cb96562efef94de17d3c3b25494f87ce1d39275
+  office_number: ""
+  created_by_id: 
+  username: client_user
+  remember_token: 6e6e2db3eed4cd3a0e779c859a19ac3206a6de7a
+  id: "4"
+  updated_on: 2009-11-03 16:59:14
+  remember_token_expires_at: 2009-10-17 08:24:49
+  mobile_number: ""
+  last_visit: 2009-11-03 16:59:14
+  is_admin: false
+  avatar_content_type: 
+  company_id: "2"
+  office_number_ext: ""
+  display_name: Client User
+  time_zone: UTC
+  avatar_updated_at: 
+  email: better.set.this4@localhost
