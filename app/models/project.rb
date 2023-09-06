@@ -21,9 +21,9 @@
 class Project < ApplicationRecord
 	include Rails.application.routes.url_helpers
 	
-	belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id', optional: true, optional: true
+	belongs_to :completed_by, class_name: 'User', foreign_key:  'completed_by_id', optional: true
 	belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true, optional: true
+	belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
 	
 	has_many :people
 	has_many :users, through:  :people
