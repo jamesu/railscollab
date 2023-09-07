@@ -60,9 +60,6 @@ def setup
   # Ensure IM Types are present
   if ImType.count == 0
   	ImType.create!(:name => 'ICQ',    :icon => 'icq.gif')
-  	ImType.create!(:name => 'AIM',    :icon => 'aim.gif')
-  	ImType.create!(:name => 'MSN',    :icon => 'msn.gif')
-  	ImType.create!(:name => 'Yahoo!', :icon => 'yahoo.gif')
   	ImType.create!(:name => 'Skype',  :icon => 'skype.gif')
   	ImType.create!(:name => 'Jabber', :icon => 'jabber.gif')
   end
