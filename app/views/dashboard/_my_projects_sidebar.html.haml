@@ -1,0 +1,19 @@
+- unless @active_projects.empty?
+  .sidebarBlock
+    %h2= t('active_projects')
+    .blockContent
+      %ul
+        - @active_projects.each do |project|
+          %li= link_to (h project.name), project_path(id: project.id)
+- unless @finished_projects.empty?
+  .sidebarBlock
+    %h2= t('finished_projects')
+    .blockContent
+      %p= t('archived_projects_list_info')
+      %ul.listWithDetails
+        - @finished_projects.each do |project|
+          %li
+            = link_to (h project.name), project_path(id: project.id)
+            %br/
+            %span.desc
+              (#{t('project_completed_time_with_user',  time: format_usertime(project.completed_on, :project_completed_time_format), user: link_to(h(project.completed_by.display_name), user_path(id: project.completed_by.id)) )})

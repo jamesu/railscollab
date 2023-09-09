@@ -1,0 +1,52 @@
+= error_messages_for :time
+%div
+  %label{for: "timeFormName"}
+    = t('summary')
+    \:
+    %span.label_required *
+  = form.text_field 'name', id: 'timeFormName', class: 'long'
+#openTaskLists
+  - if @open_task_lists.length > 0
+    %label{for: "timeOpenTasks"}
+      = t('open_tasks')
+      \:
+    = form_task_collection_select form, 'open_task_id', @open_task_lists, @task_filter, id: 'timeOpenTasks'
+- if @time.start_date.nil?
+  %div
+    %label{for: "timeFormHours"}
+      = t('hours')
+      \:
+      %span.label_required *
+    = form.text_field 'hours', id: 'timeFormHours', class: 'short'
+%div
+  %label{for: "timeFormDesc"}
+    = t('description')
+    \:
+  = form.text_area 'description', id: 'timeFormDesc', class: 'short', rows: 10, cols: 40
+- if @time.start_date.nil?
+  %div
+    %label{for: "timeDoneDate"}
+      = t('done_date')
+      \:
+    = form.date_select 'done_date', id: 'timeDoneDate', class: 'short'
+- if @logged_user.member_of_owner?
+  .formBlock
+    %label{for: "timeFormIsPrivate"}
+      = t('private_time')
+      \:
+      %span.desc
+        (#{t('private_time_info')})
+    = form.check_box 'is_private', id: 'timeFormIsPrivate', class: 'checkbox'
+  .formBlock
+    %label{for: "timeFormIsBillable"}
+      = t('billable_time')
+      \:
+      %span.desc
+        (#{t('billable_time_info')})
+    = form.check_box 'is_billable', id: 'timeFormIsBillable', class: 'checkbox'
+.formBlock
+  %div
+    %label{for: "timeFormAssignedTo"}
+      = t('assign_to')
+      \:
+    = form_assign_project_select form, 'assigned_to_id', @active_project, id: 'timeFormAssignedTo'

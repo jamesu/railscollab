@@ -1,0 +1,22 @@
+= form_with(model: @company, url: company_path(@company), method: :put) do |form|
+  = render partial: 'form', locals: {form: form}
+  %button.submit{type: "submit"}= t('edit_company')
+
+= form_with(model: @company, url: logo_company_path(@company), multipart: true, method: :put) do |form|
+  %fieldset
+    %legend= t('current_logo')
+    - if @company.has_logo?
+      %img{alt: "#{h @company.name} logo", src: @company.logo_url}/
+      %p= link_to t('delete_current_logo'), logo_company_path(id: @company), {onclick: t('current_logo_confirm_delete'), data: { turbo_method: :delete }}
+    - else
+      = t('logo_not_uploaded')
+  %div
+    %label{for: "logoFormLogo"}
+      = t('new_logo')
+      \:
+      %span.label_required *
+    #logoFormLogo
+      = form.file_field :logo
+    - if @company.has_logo?
+      %p.desc= t('logo_replace_info')
+  %button.submit{type: "submit"}= t('update_logo')

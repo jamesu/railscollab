@@ -1,0 +1,25 @@
+- if users.empty?
+  %p= t('company_no_users')
+- else
+  #usersList
+    - users.each do |listed_user|
+      %div{class: "listedUser #{cycle('odd', 'even')}"}
+        .userAvatar
+          %img{alt: "#{h listed_user.display_name} avatar", src: "#{listed_user.avatar_url}"}/
+        .userDetails
+          .userName
+            %a{href: "/users/#{listed_user.id}"}= listed_user.display_name
+          - if company.is_owner?
+            .userIsAdmin
+              %span
+                = t('administrator')
+                \:
+              = listed_user.is_admin ? t('yesno_yes') : t('yesno_no')
+            .userAutoAssign
+              %span
+                = t('auto_assign')
+                \:
+              = listed_user.auto_assign ? t('yesno_yes') : t('yesno_no')
+          .userOptions
+            = action_list actions_for_user(listed_user)
+          .clear

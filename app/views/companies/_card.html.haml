@@ -1,0 +1,50 @@
+.card
+  .cardIcon
+    %img{alt: "#{h card.name} logo", src: "#{card.logo_url}"}/
+  .cardData
+    %h2= h card.name
+    .cardBlock
+      %div
+        %span
+          = t('email_address')
+          \:
+        %a{href: "mailto:#{card.email}"}= card.email
+      %div
+        %span
+          = t('phone_number')
+          \:
+        = (not (card.phone_number.nil? or card.phone_number.empty?)) ? h(card.phone_number) : "N/A"
+      %div
+        %span
+          = t('fax_number')
+          \:
+        = (not (card.fax_number.nil? or card.fax_number.empty?)) ? h(card.fax_number) : "N/A"
+      - if card.homepage.nil? or card.homepage.empty?
+        %div
+          %span
+            = t('homepage')
+            \:
+          = "N/A"
+      - else
+        %div
+          %span
+            = t('homepage')
+            \:
+          %a{href: "#{h card.homepage}"}= h card.homepage
+    - if !card.address.nil? or !(card.city.nil? and card.state.nil?)
+      %h2= t('address')
+      .cardBlock
+        - if !card.address.nil? and !card.address.empty?
+          = h card.address
+        - if !card.address2.nil? and !card.address2.empty?
+          %br/
+          = h card.address2
+        - if !card.city.nil? and !card.city.empty? and !card.state.nil? and !card.state.empty?
+          %br/
+          = h card.city
+          , #{h card.state}
+          - if !card.zipcode.nil? and !card.zipcode.empty?
+            = h card.zipcode
+        - if !card.country.nil? and !card.country.empty?
+          %br/
+          = h card.country

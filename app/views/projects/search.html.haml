@@ -1,0 +1,15 @@
+#searchForm
+  = form_with(:url => project_search(@active_project) do |fprm|
+    = form.text_field 'search_id', value: @last_search
+    %button.submit{type: "submit"}= t('search')
+
+- if !@search_results.empty?
+  %p= t('search_displaying_results_for', {start: @start_search_results, finish: @start_search_results+@search_results.length, total: @total_search_results, search: h(@current_search)}).html_safe                            |
+  %ul
+    - @search_results.each do |obj|
+      %li= t('search_project', type: t(obj.class.to_s),              |
+          name: link_to(obj.object_name, obj.object_url)).html_safe |
+  #searchPagination
+    = pagination_links  "#{search_project_path(@active_project)}?search_id=#{CGI::escape(@last_search)}&", @pagination unless @pagination.length <= 1
+- elsif !@current_search.nil?
+  %p= t('search_no_matching_objects', {search: h(@current_search)}).html_safe

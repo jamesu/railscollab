@@ -1,0 +1,4 @@
+
+= form_with(model: @message, url: project_messages_path(@active_project), method: :post, multipart: true) do |form|
+  = render partial: 'form', locals: {form: form, is_new: true}
+  %button.submit{type: "submit"}= t('add_message')

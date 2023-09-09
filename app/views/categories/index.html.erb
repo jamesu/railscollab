@@ -1,7 +1,0 @@
-<% if @categories.length > 0 %>
-<div id="categoryList">
-<%= render :partial => 'show', :collection => @categories %>
-</div>
-<% else %>
-<p><%= t('config_category_empty') %></p>
-<% end %>

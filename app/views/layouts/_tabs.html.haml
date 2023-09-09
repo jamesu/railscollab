@@ -1,0 +1,8 @@
+- unless tabs.nil?
+  #tabsWrapper
+    #tabs
+      %ul
+        - current_tab = self.current_tab
+        - tabs.each do |item|
+          %li{id: "item_#{item[:id]}", class: item[:id] == current_tab ? 'active' : ''}
+            %a{href: item[:url]}= t(item[:id])

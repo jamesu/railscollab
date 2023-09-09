@@ -173,7 +173,7 @@ protected
   end
 
   def wiki_page_params
-    params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:title, :content, :project_id)
+    params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:main, :title, :content, :project_id)
   end
 
 end

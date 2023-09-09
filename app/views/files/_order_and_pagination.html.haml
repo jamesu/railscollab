@@ -1,0 +1,9 @@
+.filesOrderAndPagination
+  .filesOrder
+    %span
+      = t('order_by')
+      \:
+    - temp_actions = [{name: t('filename'), url: {page: (page == 0 ? nil : page), orderBy: 'filename'}, cond: true, class: (order == 'filename' ? 'selected' : nil)}, {name: t('post_time'), url: {page: (page == 0 ? nil : page), orderBy: 'created_on'}, cond: true, class: (order == 'created_on' ? 'selected' : nil)}]
+    = action_list temp_actions
+  .filesPagination
+    = pagination_links "#{url_for {}}?", pagination unless pagination.length <= 1

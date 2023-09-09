@@ -1,0 +1,23 @@
+= error_messages_for :project
+%div
+  %label{for: "projectFormName"}
+    = t('name')
+    \:
+    %span.label_required *
+  = form.text_field 'name', id: 'projectFormName', class: 'long'
+%div
+  %label{for: "projectPriority"}
+    = t('priority')
+    \:
+    %span.label_required *
+  = form.text_field 'priority', id: 'projectPriority', class: 'long'
+%div
+  %label{for: "projectFormDescription"}
+    = t('description')
+    \:
+  = form.text_area 'description', id: 'projectFormDescription', class: 'short', rows: 10, cols: 40
+%div
+  %label
+    = t('project_show_description_in_overview')
+    \:
+  = form.check_box 'show_description_in_overview', id: 'projectFormShowDescription', class: 'yes_no'

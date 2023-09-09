@@ -1,0 +1,20 @@
+- if @options.empty?
+  %p= t('config_category_empty')
+- else
+  = form_with(model: @category, url: project_configuration_path(@active_project, @category), method: :put) do |form|
+    #configCategoryOptions
+      - @options.each do |option|
+        %div{class: "configCategoryOption #{cycle('odd', 'even')}", id: "configCategoryOption_#{option.name}"}
+          .configOptionInfo
+            .configOptionLabel
+              %label
+                = h(option.display_name)
+                \:
+            - option_description = option.display_description.strip
+            - if !option_description.empty?
+              .configOptionDescription.desc= h(option_description)
+          .configOptionControl= option.render("options[#{option.name}]", {})
+          .clear
+    = succeed "\u00A0" do
+      %button.submit{type: "submit"}= t('save')
+    %button{type: "reset"}= t('reset')

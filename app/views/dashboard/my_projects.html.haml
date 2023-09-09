@@ -1,0 +1,34 @@
+- @page_actions = []
+- if @logged_user.is_admin?
+  - @page_actions << {title: :add_project, :url=> new_project_path}
+- @page_actions += [{title: :order_by_name, url: '/dashboard/my_projects?orderBy=name'}, {title: :order_by_priority, url: '/dashboard/my_projects?orderBy=priority'}]
+
+- if @sorted_projects.length > 0
+  - @sorted_projects.each do |project|
+    .block
+      .header
+        %h2= link_to (h project.name), project_path(id: project.id)
+      .content
+        - if not project.description.nil? and project.description.strip.length > 0
+          .description= textilize project.description
+        - if project.companies.length > 0
+          .involvedCompanies
+            %em
+              = t('companies_involved_in')
+              \:
+            = project.companies.collect { |company| link_to( (h company.name), company_path(id: company.id) ) }.join(', ').html_safe
+        - if not project.created_by.nil?
+          .startedOnBy
+            %em
+              = t('started_on')
+              \:
+            = "#{format_usertime(project.created_on, :project_created_format)} | "
+            = link_to (h project.created_by.display_name), user_path(id: project.created_by.id)
+        - else
+          .startedOnBy
+            %em
+              = t('started_on')
+              \:
+            = format_usertime(project.created_on, :project_created_format)
+- else
+  %p= t('no_active_projects')

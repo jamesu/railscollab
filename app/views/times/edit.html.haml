@@ -1,0 +1,3 @@
+= form_with(model: @time, project_time_path(@time.project, @time) do |form|
+  = render partial: 'form', locals: {form: form}
+  %button.submit{type: "submit"}= t('edit_time')

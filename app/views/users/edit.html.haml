@@ -1,0 +1,22 @@
+= form_with(model: @user, url: user_path(@user), method: :put) do |form|
+  = render partial: 'form', locals: {form: form}
+  %button.submit{type: "submit"}= t('edit_user')
+
+= form_with(model: @user, url: avatar_user_path(@user), method: :put, multipart: true) do |form|
+  = error_messages_for :user
+  %fieldset
+    %legend= t('current_avatar')
+    - if @user.has_avatar?
+      %img{alt: "#{h @user.display_name} avatar", src: "#{@user.avatar_url}"}/
+      %p= link_to t('delete_current_avatar'), avatar_user_path(id: @user.id), {onclick: :avatar_confirm_delete, data: { turbo_method: :delete }}
+    - else
+      = t('avatar_not_uploaded')
+  %div
+    %label{for: "avatarFormAvatar"}
+      = t('new_avatar')
+      %span.label_required *
+    #avatarFormAvatar
+      %input{name: "user[avatar]", type: "file"}/
+    - if @user.has_avatar?
+      %p.desc= t('avatar_upload_info')
+  %button.submit{type: "submit"}= t('update_avatar')

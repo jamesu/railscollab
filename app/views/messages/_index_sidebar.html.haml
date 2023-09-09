@@ -1,0 +1,33 @@
+- if !@important_messages.empty?
+  .sidebarBlock
+    %h2= t('important_messages')
+    .blockContent
+      %ul.listWithDetails
+        - @important_messages.each do |important_message|
+          %li
+            %a{href: "#{important_message.object_url}"}= h important_message.title
+            %br/
+            %span.desc= t('important_messages_comments_count', count: important_message.comments.length)
+- if !@active_project.categories.empty?
+  .sidebarBlock
+    %h2= t('categories')
+    #sidebarMessageCategoryList.blockContent
+      %ul
+        - if !@category.nil?
+          %li= link_to t('all_categories'), project_messages_path(@active_project)
+        - else
+          %li= link_to t('all_categories'), project_messages_path(@active_project), class: 'selected'
+        - @active_project.categories.each do |category|
+          - if !@category.nil? and @category.id == category.id
+            - selected_class = {class: 'selected'}
+          - else
+            - selected_class = {}
+          %li
+            = link_to (h category.name), posts_project_category_path(@active_project, id: category.id), selected_class
+            - if can?(:edit,category)
+              = link_to render_icon('edit',''), edit_project_category_path(@active_project, id: category.id)
+            - if can?(:delete,category)
+              = link_to render_icon('cancel_gray',''), project_category_path(@active_project, id: category.id), data: { turbo_method: :delete, turbo_confirm: t('category_delete_confirmation') }
+      - if @active_project.is_active?
+        %p
+          %a{href: "#{new_project_category_path(@active_project)}"}= t('add_category')

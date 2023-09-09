@@ -1,0 +1,5 @@
+- if @categories.length > 0
+  #categoryList
+    = render partial: 'show', collection: @categories
+- else
+  %p= t('config_category_empty')

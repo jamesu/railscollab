@@ -1,0 +1,41 @@
+- if @logged_user.is_admin?
+  - @page_actions = [{title: :add_project, :url=> new_project_path}]
+
+- if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info
+  #new_account_info.hint
+    .header= t('welcome_to_new_account')
+    .content= t('welcome_to_new_account_info', user: h(@logged_user.display_name), url: "<a href=\"#{Rails.configuration.railscollab.site_url}\">#{Rails.configuration.railscollab.site_url}</a>").html_safe
+    - new_account_steps(@logged_user).each do |step|
+      .header= raw step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}"
+      .content= raw step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}"
+    - if @logged_user.is_admin
+      %p= link_to t('hide_welcome_info').html_safe, hide_welcome_info_company_path(Company.owner), method: 'put'
+- if @late_milestones.length > 0 or !@calendar_milestones.empty?
+  #lateOrTodayMilestones.block
+    .header= t('milestones_summary', adjetives: [!@late_milestones.empty? ? t('late') : nil, |
+        !@calendar_milestones.empty? ? t('upcoming') : nil].compact.to_sentence)           |
+    - if @late_milestones.length > 0
+      %h2= t('late_milestones')
+      %ul
+        - @late_milestones.each do |milestone|
+          %li
+            - unless milestone.assigned_to.nil?
+              = h milestone.assigned_to.object_name
+              \:
+            = t('milestone_in', milestone: link_to(h(milestone.name), project_milestone_path(milestone.project, id: milestone.id)), project: link_to(h(milestone.project.name), project_path(id: milestone.project.id))).html_safe
+            (
+            %span.error>= t('milestone_days_late', days: milestone.days_late)
+            )
+    - unless @calendar_milestones.empty?
+      %h2= t('due_in_next_n_days', num: 14)
+      = calendar_block_for_time(@time_now.to_date)
+- cache "user#{@logged_user.id}_dblog" do
+  - if @activity_log.length > 0
+    %table.applicationLogs.blank
+      %tr
+        %th
+        %th= t('details')
+        %th.right= t('project')
+        = render partial: 'layouts/application_logs', collection: @activity_log, locals: {show_project_column: true}
+  - else
+    = t('no_recent_activities')

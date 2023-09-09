@@ -1,0 +1,6 @@
+.sidebarBlock
+  %h2= t('calendar_feeds')
+  .blockContent
+    %a.iCalSubscribe{href: "#{@logged_user.milestone_feed_url(nil, 'ics')}"}= t('ical')
+    %p= t('calendar_feed_milestone_info').html_safe
+    %p= t('calendar_feeds_password_warning').html_safe

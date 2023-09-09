@@ -1,0 +1,12 @@
+- unless crumbs.nil?
+  #crumbs
+    %ul
+      - crumbs.each do |crumb|
+        - if crumb[:url]
+          %li
+            »
+            %a{href: crumb[:url]}= crumb[:title].is_a?(Symbol) ? t(crumb[:title]) : h(crumb[:title])
+        - else
+          %li
+            »
+            %span= crumb[:title].is_a?(Symbol) ? t(crumb[:title]) : h(crumb[:title])

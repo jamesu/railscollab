@@ -1,0 +1,14 @@
+#normal_login
+  = form_with(url: session_path, method: :post) do
+    #loginUsernameDiv
+      %label{for: "loginUsername"}= t('username')
+      = text_field_tag 'login', @login, size: 30, id: 'loginUsername', class: 'medium'
+    #loginPasswordDiv
+      %label{for: "loginPassword"}= t('password')
+      = password_field_tag 'password', nil, size: 30, id: 'loginPassword', class: 'medium'
+    = check_box_tag 'remember_me', '1', @remember_me, class: 'checkbox'
+    %label.checkbox{for: "remember"}= t('remember_me')
+    .clean
+    %span= link_to t('forgot_password_q') , new_password_path
+    #buttonSubmit
+      %button.submit{accesskey: "s", type: "submit"}= t('login')

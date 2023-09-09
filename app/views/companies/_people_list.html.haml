@@ -1,0 +1,103 @@
+- company = people_list; company_card = company
+.peopleList
+  %h2= h company.name
+  .card
+    .cardIcon
+      - link_to company do
+        %img{alt: "#{h company_card.name} logo", src: "#{company_card.logo_url}"}/
+    .cardData
+      %h3= link_to (h company_card.name), company
+      - if company_card.email?
+        .cardBlock
+          %a{href: "mailto:#{h company_card.email}"}= h company_card.email
+      .cardBlock
+        - if company_card.homepage?
+          %div= link_to h(company_card.homepage), company_card.homepage
+        - if company_card.fax_number?
+          %div
+            %span
+              = t('fax')
+              \:
+            = h(company_card.fax_number)
+        - if company_card.phone_number?
+          %div
+            %span
+              = t('home')
+              \:
+            = h(company_card.phone_number)
+      .cardBlock
+        - if company_card.address?
+          = h company_card.address
+        - if company_card.address2?
+          %br/
+          = h company_card.address2
+        - if company_card.city? and company_card.state?
+          %br/
+          = h company_card.city
+          , #{h company_card.state}
+          - if company_card.zipcode?
+            = h company_card.zipcode
+          - if company_card.country?
+            %br/
+            = h company_card.country
+      - if can? :edit, company_card
+        .cardBlock
+          = action_list actions_for_company(company)
+  - num_users = 1
+  - users = @active_project.nil? ? company.users : company.users_on_project(@active_project)
+  - (users.sort{ |x,y| x.display_name <=> y.display_name }).each do |user|
+    - user_card = user
+    .card
+      .cardIcon
+        - link_to user do
+          %img{alt: "#{h user_card.display_name} avatar", src: "#{user_card.avatar_url}"}/
+      .cardData
+        %h3= link_to (h user_card.display_name), user
+        - if user_card.title?
+          .detailsTitle
+            = h user_card.title
+        .cardBlock
+          %a{href: "mailto:#{h user_card.email}"}= h user_card.email
+        .cardBlock
+          - user_card.im_values.each do |im_value|
+            - next if im_value.value.blank?
+            .cardIM
+              %img{alt: "#{im_value.im_type.name}", src: "#{im_value.im_type.icon_url}"}/
+              %span
+                = h im_value.value
+        .cardBlock
+          - if user_card.office_number?
+            .cardOffice
+              %span
+                = t('office')
+                \:
+              = h(user_card.office_number)
+          - if user_card.fax_number?
+            .cardFax
+              %span
+                = t('fax')
+                \:
+              = h(user_card.fax_number)
+          - if user_card.mobile_number?
+            .cardMobile
+              %span
+                = t('mobile')
+                \:
+              = h(user_card.mobile_number)
+          - if user_card.home_number?
+            .cardHome
+              %span
+                = t('home')
+                \:
+              = h(user_card.home_number)
+        .cardBlock
+          - if user_card.owner_of_owner?
+            .cardOwner= t('owner')
+        - if can?(:update_profile, user_card)
+          .cardBlock
+            = action_list actions_for_user(user_card)
+    - num_users += 1
+    - if num_users % 3 == 0
+      .clear
+  - unless num_users % 3 == 0
+    .clear

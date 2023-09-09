@@ -1,0 +1,7 @@
+= form_with(object: @task, url: project_task_list_task_path(@task.project, @task.past_list, @task), method: :put, class: 'editTaskItem') do |form|
+  = render partial: 'form', locals: {form: form}, object: @task
+  = loading_spinner
+  .buttons
+    %button.submit{type: "submit"}= t('edit_task')
+    = t('or')
+    = link_to t('cancel'), task_path(task_list_id: @task.task_list_id, id: @task.id), class: 'cancel', 'data-remote' => true, 'data-type' => :json

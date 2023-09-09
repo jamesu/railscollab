@@ -95,20 +95,6 @@ module ApplicationHelper
     return '' if time.nil?
     I18n.l(time, :format => format.to_sym)
   end
-
-  def yesno_toggle(object_name, method, options = {})
-    radio_button(object_name, method, "true", options.merge({:id => "#{options[:id]}Yes"}))    +
-    " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{I18n.t('yesno_yes')}</label> ".html_safe +
-    radio_button(object_name, method, "false", options.merge({:id => "#{options[:id]}No"}))    +
-    " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{I18n.t('yesno_no')}</label>".html_safe
-  end
-
-  def yesno_toggle_tag(name, is_yes, options = {})
-    radio_button_tag(name, "1", is_yes, options.merge({:id => "#{options[:id]}Yes"})) +
-      " <label for=\"#{options[:id]}Yes\" class=\"#{options[:class]}\">#{I18n.t('yesno_yes')}</label> ".html_safe +
-      radio_button_tag(name, "0", !is_yes, options.merge({:id => "#{options[:id]}No"})) +
-      " <label for=\"#{options[:id]}No\" class=\"#{options[:class]}\">#{I18n.t('yesno_no')}</label>".html_safe
-  end
 	
 	def actions_for_user(user)
 	   profile_updateable = can?(:update_profile, user)
@@ -383,7 +369,7 @@ module ApplicationHelper
   end
 
   def dashboard_tabbed_navigation
-    items = [{:id => :overview,       :url => '/dashboard/index'},
+    items = [{:id => :overview,       :url => root_path},
              {:id => :my_projects,    :url => '/dashboard/my_projects'},
              {:id => :my_tasks,       :url => '/dashboard/my_tasks'},
              {:id => :milestones,     :url => '/dashboard/milestones'}]
@@ -420,9 +406,22 @@ module ApplicationHelper
     select_tag "#{object}[#{method}]", assign_select_grouped_options(project, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
   end
 
-  def task_collection_select(object, method, collection, filter=nil, options = {})
-    select_tag "#{object}[#{method}]", task_select_grouped_options(collection, filter, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
+  def form_assign_project_select(form, mthd, project, options = {})
+    form.select mthd, 
+      assign_select_grouped_options(project, selected: ( options.delete(:object) || form.object.try(mthd.to_sym) )), 
+        {id: "#{form.object.class}_#{mthd}"}.merge(options)
   end
+
+  def task_collection_select(object, mthd, collection, filter=nil, options = {})
+    select_tag mthd, task_select_grouped_options(collection, filter, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(mthd)), {:id => "#{object}_#{mthd}"}.merge(options)
+  end
+
+  def form_task_collection_select(form, mthd, collection, filter=nil, options = {})
+    form.select mthd, 
+      task_select_grouped_options(collection, filter, selected: ( options.delete(:object) || form.object.try(mthd.to_sym) )), 
+        {id: "#{form.object.class}_#{mthd}"}.merge(options)
+  end
+
 
   def select_file_options(project, current_object=nil)
     file_ids = current_object.nil? ? [] : current_object.project_file_ids
@@ -504,5 +503,32 @@ module ApplicationHelper
         url_for file.data.variant(:thumb)
       end
     end
+  end
+
+  def calendar_block_for_time(now)
+    now = @time_now.to_date
+    prev_month = now.month
+    return days_calendar(now, now + 13.days, 'dayCal') do |date|
+      if date == now  
+        calendar_block(t('today'), @calendar_milestones["#{date.month}-#{date.day}"], 'today', true)  
+      else  
+        if date.month != prev_month  
+          prev_month = date.month  
+          calendar_block(l(date, format: '%b %d'), @calendar_milestones["#{date.month}-#{date.day}"], 'day')  
+        else  
+          calendar_block(date.day, @calendar_milestones["#{date.month}-#{date.day}"], 'day')  
+        end  
+      end  
+    end  
+  end
+
+  def calendar_block_for_months(now)
+    return months_calendar(@date_start, @date_end, 'monthsCal', Rails.configuration.railscollab.first_day_of_week.to_i) do |date|
+      unless date == now
+        calendar_block(date.day, @milestones["#{date.month}-#{date.day}"], 'day')  
+      else
+        calendar_block(t('today'), @milestones["#{date.month}-#{date.day}"], 'today', true)  
+      end               
+    end                 
   end
 end

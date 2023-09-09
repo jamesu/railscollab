@@ -1,0 +1,16 @@
+- unless @late_milestones.empty? and @calendar_milestones.empty? and @upcoming_milestones.empty?
+  - unless @late_milestones.empty?
+    #lateMilestones
+      %h2= t('late_milestones')
+      = render partial: 'show', collection: @late_milestones
+  - unless @upcoming_milestones.empty?
+    #upcomingMilestones
+      %h2= t('upcoming_milestones')
+      - unless @calendar_milestones.empty?
+        %h3= t('due_in_next_n_days', num: 14)
+        #milestoneCalendar
+          = render partial: 'calendar'
+      %h3= t('all_upcoming_milestones')
+      = render partial: 'show', collection: @upcoming_milestones
+- else
+  %p= t('no_active_milestones_in_project')

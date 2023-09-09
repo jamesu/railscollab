@@ -1,0 +1,129 @@
+= error_messages_for :user
+- if @logged_user.is_admin
+  .hint
+    .header= t('administration_options_info')
+    .content
+      %div
+        %label{for: "userFormUsername"}
+          = t('username')
+          \:
+          %span.label_required *
+        = text_field 'user', 'username', id: 'userFormUsername'
+      - if @logged_user.member_of_owner?
+        %div
+          %label{for: "userFormCompany"}
+            = t('company')
+            \:
+            %span.label_required *
+          = select 'user', 'company_id', Company.select_list, {}, {id: 'userFormCompany'}
+        %fieldset
+          %legend= t('options')
+          %div
+            %label{for: "userFormIsAdmin"}
+              = t('administrator')
+              \:
+              %span.label_required *
+            = form.check_box 'is_admin', id: 'userFormIsAdmin', class: 'checkbox'
+          %div
+            %label{for: "userFormAutoAssign"}
+              = t('auto_assign_to_new_projects')
+              \:
+              %span.label_required *
+            = form.check_box 'auto_assign', id: 'userFormAutoAssign', class: 'checkbox'
+- else
+  %div
+    %label{for: "userFormUsername"}
+      = t('username')
+      \:
+      %span.label_required *
+    = @user.username
+%div
+  %label{for: "userFormDisplayName"}= t('display_name')
+  = text_field 'user', 'display_name', id: 'userFormDisplayName', class: 'medium'
+%div
+  %label{for: "profileFormEmail"}
+    = t('email_address')
+    %span.label_required *
+  = text_field 'user', 'email', id: 'profileFormEmail', class: 'long'
+%div
+  %label{for: "profileFormTimezone"}
+    = t('timezone')
+    %span.label_required *
+  = time_zone_select 'user', 'time_zone', nil, {}, {id: 'profileFormTimezone', class: 'long'}
+.formBlock
+  %fieldset
+    %legend= t('password')
+    - if @user.new_record?
+      %div
+        %label{for: "userFormGeneratePassword"}= t('generate_password')
+        %input#userFormGeneratePassword.checkbox{checked: "true", name: "user[generate_password]", onclick: "CoreController.user_form_update_passwordgen();", type: "checkbox", value: "true"}/
+    #userFormPasswordInputs
+      %div
+        %label{for: "userFormPassword"}
+          = t('password')
+          %span.label_required *
+        %input#userFormPassword{name: "user[password]", type: "password"}/
+      %div
+        %label{for: "userFormPasswordA"}
+          = t('repeat_password')
+          %span.label_required *
+        %input#userFormPasswordA{name: "user[password_confirmation]", type: "password"}/
+- if @user.new_record?
+  .formBlock
+    %label
+      = t('send_account_email_notification')
+      %span.label_required *
+    = form.check_box 'new_account_notification', {value: !!@send_email, id: 'userFormEmailNotificationYes', class: 'checkbox'}
+    %br/
+    %span.desc= t('send_account_email_notication_info')
+- else
+  .formBlock
+    %fieldset
+      %legend= t('contact_info')
+      %div
+        %label{for: "userFormTitle"}= t('title')
+        = text_field 'user', 'title', id: 'userFormTitle'
+      %div
+        %label{for: "userFormOfficeNumber"}= t('office')
+        = text_field 'user', 'office_number', id: 'userFormOfficeNumber'
+      %div
+        %label{for: "userFormOfficeNumberExt"}= t('office')
+        = text_field 'user', 'office_number_ext', id: 'userFormOfficeNumberExt'
+      %div
+        %label{for: "userFormFaxNumber"}= t('fax')
+        = text_field 'user', 'fax_number', id: 'userFormFaxNumber'
+      %div
+        %label{for: "userFormMobileNumber"}= t('mobile')
+        = text_field 'user', 'mobile_number', id: 'userFormMobileNumber'
+      %div
+        %label{for: "userFormHomeNumber"}= t('home')
+        = text_field 'user', 'home_number', id: 'userFormHomeNumber'
+    - all_im_values = @user.im_info
+    - if all_im_values.length > 0
+      %fieldset
+        %legend= t('instant_messengers')
+        %table.blank
+          %tr
+            %th{colspan: "2"}= t('service')
+            %th= t('value')
+            %th= t('primary_im')
+          - @count = 0
+          - all_im_values.each_with_index do |im_value, idx|
+            %tr
+              %td{style: "vertical-align: middle"}
+                %img{alt: "#{im_value.im_type.name} icon", src: "#{im_value.im_type.icon_url}"}/
+              %td{style: "vertical-align: middle"}
+                %label.checkbox{for: "userFormIm#{@count}"}= im_value.im_type.name
+              %td{style: "vertical-align: middle"}= text_field_tag "user[im_values][#{im_value.im_type_id}][value]", im_value.value, id: "userFormIm#{@count}"
+              %td{style: "vertical-align: middle"}= radio_button_tag "user[default_im_value]", im_value.im_type_id, im_value.is_default, id: "im_default_#{idx}", class: 'checkbox'
+            - @count += 1
+        %p.desc= t('instant_messengers_info')
+- if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty?
+  - content_for :page_head do
+    %meta{content: "#{h((@permissions.keys).to_json)}", name: "permissions-form-items"}/
+  %fieldset
+    %legend= t('permissions')
+    #userPermissions
+      #userProjects
+        %table.blank
+          = render partial: 'projects/permissions', locals: {user: @user}, collection: @projects

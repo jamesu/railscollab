@@ -1,0 +1,5 @@
+#openTaskLists.pageList
+  - if @open_task_lists.length > 0
+    = render partial: 'show', collection: @open_task_lists, locals: {on_list_page: false}
+  - else
+    %p= t('no_open_task_lists_for_project')

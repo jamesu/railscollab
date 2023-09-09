@@ -1,0 +1,45 @@
+.sidebarBlock
+  %h2= t('message_subscribers')
+  .blockContent
+    %p= t('message_subscribers_email_notification_info')
+    - if @subscribers.length > 0
+      %ul
+        - @subscribers.each do |subscriber|
+          - if subscriber.id == @logged_user.id
+            %li
+              = link_to (h subscriber.display_name), user_path(id: subscriber.id)
+              (#{link_to t('message_unsubscribe'), unsubscribe_project_message_path(@message.project, id: @message.id), {data: { turbo_method: :put }, confirm: t('message_unsubscription_confirmation')}})
+          - else
+            %li= link_to (h subscriber.display_name), user_path(id: subscriber.id)
+    - else
+      %p= t('no_subscribers')
+    - if can?(:subscribe, @message) and !@subscribers.include?(@logged_user)
+      %p= link_to t('message_subscribe'), subscribe_project_message_path(@message.project, id: @message.id), {data: { turbo_method: :put }, confirm: t('message_subscription_confirmation')}
+- if can? :change_options, @message
+  .sidebarBlock
+    %h2= t('options')
+    .blockContent
+      = form_with(model: @message, url: project_message_path(@message.project, @message)) do |form|
+        .formBlock
+          %div
+            %label
+              = t('private_message')
+              \:
+            = form.check_box 'is_private', class: 'yes_no', id: 'messageFormIsPrivate'
+          %div
+            %label
+              = t('important_message')
+              \:
+            = form.check_box 'is_important', class: 'yes_no', id: 'messageFormIsImportant'
+          %div
+            %label
+              = t('enable_comments')
+              \:
+            = form.check_box 'comments_enabled', class: 'yes_no', id: 'messageFormEnableComments'
+          %div
+            %label
+              = t('enable_anonymous_comments')
+              \:
+            = form.check_box 'anonymous_comments_enabled', class: 'yes_no', id: 'messageFormEnableAnonymousComments'
+        %button.submit{type: "submit"}= t('update_options')
+        %p= link_to t('edit_message_sidebar_link').html_safe, edit_project_message_path(@message.project, id: @message.id)

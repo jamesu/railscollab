@@ -1,0 +1,34 @@
+- message = show
+.message
+  .block
+    - if message.is_private?
+      .private{title: "#{t('private_message')}"}
+        %span= t('private_message')
+    .header= link_to (h message.title), project_message_path(message.project, id: message.id)
+    .content
+      - if not message.created_by.nil?
+        .messageAuthor= t('message_created_with_user',                                                                            |
+            time: format_usertime(message.created_on, :message_created_format),                                    |
+            user: link_to( h(message.created_by.display_name), user_path(id: message.created_by.id))).html_safe |
+      - else
+        .messageAuthor= format_usertime(message.created_on, :message_created_format)
+      .messageText
+        = textilize message.text
+      = render partial: 'files/list_attached_files', locals: {dont_add: @message.nil?, attached_files: message.attached_files(@logged_user.member_of_owner?), attached_files_object: message}
+      .messageCommentCount
+        - if not message.comments.empty?
+          %span
+            = t('comments')
+            \:
+          %a{href: "#{project_message_path(message.project, id: message.id)}#objectComments"}= message.comments.length
+        - else
+          %span
+            = t('comments')
+            \:
+          = message.comments.length
+      .messageTags
+        %span
+          = t('tags')
+          \:
+        = tag_list message
+      .messageOptions= action_list actions_for_message(message)

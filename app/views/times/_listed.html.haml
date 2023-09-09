@@ -1,0 +1,3 @@
+%li{id: "listed_time_#{listed.id}"}
+  = link_to h(listed.name), listed.object_url
+  = link_to render_icon('stop', t('stop_time')), stop_project_time_path(listed_user.project , id: listed.id), class: 'blank stopTime'

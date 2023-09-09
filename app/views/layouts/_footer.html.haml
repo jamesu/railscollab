@@ -1,0 +1,10 @@
+#footer
+  #copy
+    - if not Company.owner.homepage.nil?
+      %a{href: "#{Company.owner.homepage}"}= Company.owner.name
+    - else
+      = Company.owner.name
+  #productSignature
+    = product_signature
+    \. Icons by
+    %a{href: "http://dryicons.com"} DryIcons.

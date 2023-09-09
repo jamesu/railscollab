@@ -1,0 +1,52 @@
+- task_list = show
+
+.taskList{id: "list_#{task_list.id}"}
+  .block
+    - if task_list.is_private?
+      .private{title: t('private_task_list')}
+        %span= t('private_task_list')
+    .header
+      = link_to (h task_list.name), project_task_list_path(task_list.project, :id => task_list.id)
+      - if task_list.description
+        .desc= textilize task_list.description
+    .openTasks
+      %ul.taskItems{id: "openTasksList<%= task_list.id"}
+        - if task_list.open_tasks.length > 0
+          = render :partial => 'tasks/show', :collection => task_list.open_tasks, :locals => {:tprefix => "openTasksList#{task_list.id}"}
+
+    - show_form = @new_list.nil? ? false : true
+    - if can?(:edit,task_list)
+      .addTask
+        .newTask{style: show_form ? 'display: none' : ''}
+          = link_to t('add_task'), new_project_task_list_task_path(task_list.project, task_list)
+          .inner{style: !show_form ? 'display: none' : ''}
+            = form_with(model: task_list.tasks.new, url: project_task_list_tasks_path(task_list.project, task_list), method: :post) do |form|
+              = render :partial => 'tasks/form', locals: {form: form}
+              = loading_spinner
+              .buttons
+                %button.submit{type: "submit"}= t('add_task')
+                = t('or') 
+                %a{class: "cancel", href: ""}= t('cancel')
+
+    .completedTasks
+      - if on_list_page
+        = t('completed_tasks')
+        = ":"
+      - else
+        = t('recent_completed_tasks')
+        = ":"
+      %ul.taskItems
+        = render :partial => 'tasks/show', :collection => (!on_list_page ? task_list.completed_tasks.last(5).reverse : task_list.completed_tasks), :locals => {:tprefix => "openTasksList#{task_list.id}"}
+        - if !on_list_page and task_list.completed_tasks.length > 5
+          %li
+            = link_to t('view_all_completed_tasks'), project_task_lists_path(task_list.project, task_list)
+    .taskListTags
+      %span
+        = t('tags')
+        = ": "
+        = tag_list task_list
+
+    .options
+      = action_list actions_for_task_list(task_list)
+      %a.doEditTaskList{style:"display: none;", href: "#"}= t('edit_tasks')
+

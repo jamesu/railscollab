@@ -1,0 +1,36 @@
+#objectComments
+  %h2= t('comments')
+  - if comments.empty?
+    %p= t('no_comments_for_object')
+  - else
+    - counter = 0
+    - comments.each do |comment|
+      - counter += 1
+      %div{class: "comment #{cycle('odd', 'even')}", id: "comment#{comment.id}"}
+        - if comment.is_private
+          .private{title: "#{t('private_comment')}"}
+            %span= t('private_comment')
+        .commentHead
+          %span
+            %a{href: "#{comment.rel_object.object_url}\#comment#{counter}", title: "#{t('permalink')}"}>
+              \##{counter}
+            \:
+          - if comment.is_anonymous?
+            = t('comment_posted',  name: comment.author_name, time: format_usertime(comment.created_on, :comment_posted_format))
+            - if @logged_user.is_admin
+              (
+              %span.commentAddress>= h(comment.author_homepage)
+              )
+          - elsif not comment.created_by.nil?
+            = t('comment_posted_with_user', time: format_usertime(comment.created_on, :comment_posted_format), user: "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>").html_safe
+          - else
+            = format_usertime(comment.created_on, :comment_posted_format)
+          \:
+        .commentBody
+          - unless comment.created_by.nil?
+            .commentUserAvatar
+              %img{alt: "#{h comment.created_by.display_name} Avatar", src: "#{comment.created_by.avatar_url}"}/
+          .commentText= textilize comment.text
+          .clear
+          = render partial: 'files/list_attached_files', locals: {dont_add: false, attached_files: comment.attached_files(@logged_user.member_of_owner?), attached_files_object: comment}
+        .options= action_list actions_for_comment(comment)

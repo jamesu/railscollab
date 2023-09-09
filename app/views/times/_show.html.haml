@@ -1,0 +1,36 @@
+- view_time = show
+.time.block
+  - if view_time.is_private
+    .private{title: "#{t('private_time')}"}
+      %span= t('private_time')
+  - if view_time.is_billable
+    .billable{title: "#{t('billable_time')}"}
+      %span= t('billable_time')
+  .header
+    - if !view_time.assigned_to.nil?
+      %span.assignedTo
+        = h view_time.assigned_to.object_name
+        \:
+    %a{href: "#{view_time.object_url}"}= h view_time.name
+  .content
+    - if view_time.running?
+      %div= t('time_running')
+    - else
+      .doneDate
+        %span
+          = "Done date"
+          \:
+        = format_usertime(view_time.done_date, "done_date_long_format#{'_with_year' if view_time.done_date.year != Time.now.year}")
+    .hours
+      %span
+        = "Hours"
+        \:
+      - if view_time.running?
+        = seconds_to_time Time.now - view_time.start_date
+      - else
+        = view_time.hours
+    .description
+      - if !view_time.open_task.nil?
+        %p= link_to(view_time.open_task.text, view_time.open_task.object_url)
+      = textilize view_time.description
+    .timeOptions= action_list actions_for_time_short(view_time)

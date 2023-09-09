@@ -1,0 +1,6 @@
+= content_tag :h2, h(form.object.title) unless form.object.new_record?
+%fieldset.wiki
+  = render partial: 'title_field', locals: {form: form} if form.object.new_record?
+  = render partial: 'content_field', locals: {form: form}
+  = render partial: 'main_field', locals: {form: form}
+= render partial: 'help'

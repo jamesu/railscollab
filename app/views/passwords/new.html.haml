@@ -1,0 +1,10 @@
+
+= form_with(model: @user, url: password_path(), method: :post) do |form|
+  %div
+    %label{for: "forgotPasswordEmail"}= t('email_address')
+    = text_field_tag 'your_email', '', id: 'forgotPasswordEmail', class: 'medium'
+  %input{name: "submited", type: "hidden", value: "submited"}/
+  #buttonSubmit
+    %button.submit{accesskey: "s", type: "submit"}= t('send_password')
+    %span
+      | #{link_to t('cancel'), login_path}

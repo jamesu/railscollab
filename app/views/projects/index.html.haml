@@ -1,0 +1,23 @@
+- @page_actions = []
+- if can? :create_project, current_user
+  - @page_actions << {title: :add_project, url: new_project_path}
+- if @projects.length > 0
+  %table#projects
+    %tr
+      %th
+      %th= t('name')
+      %th= t('options')
+    - @projects.each do |project|
+      %tr
+        %td.middle
+          - if can?(:change_status, project)
+            = project.is_active? ? checkbox_link(complete_project_path(id: project.id), false, nil, {data: { turbo_method: :put }}) : checkbox_link(open_project_path(id: project.id), true, nil, {data: { turbo_method: :put }})
+          - else
+            - if project.is_active?
+              %img{alt: "", src: "#{icon_url('not-checked')}", title: "#{t('active_project')}"}/
+            - else
+              %img{alt: "", src: "#{icon_url('checked')}", title: "#{t('finished_project')}"}/
+        %td.long.middle= link_to h(project.name), project_path(id: project.id)
+        %td.middle= action_list actions_for_project(project)
+- else
+  = t('no_projects_owned_by_company')

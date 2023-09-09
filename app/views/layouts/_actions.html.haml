@@ -1,0 +1,6 @@
+#page_actions
+  %ul
+    - page_actions.each do |action|
+      %li
+        %a{id: "action_#{action[:title]}", href: action[:url], class: (action[:ajax] ? 'ajax_action' : 'action')}= t(action[:title])
+#action_dialog.dialog{style: "display:none;"} Loading...

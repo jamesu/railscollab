@@ -1,0 +1,5 @@
+.sidebarBlock
+  %h2= t('csv_export')
+  .blockContent
+    %a.csvExport{href: "#{@logged_user.time_export_url(@active_project, 'csv')}"}= t('csv')
+    %p= t('csv_export_times_info')

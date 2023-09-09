@@ -1,0 +1,7 @@
+= form_with(model: @wiki_page, url: project_wiki_page_path(@wiki_page.project, id: @wiki_page.slug), method: :put) do |form|
+  = render partial: form, locals: {form: form}
+  .buttons
+    %button.submit{type: "submit"}= t('edit_page')
+    = preview_button
+#preview
+  = render @wiki_page

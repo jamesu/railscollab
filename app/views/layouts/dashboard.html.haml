@@ -1,0 +1,51 @@
+!!! 1.1
+%html
+  %head
+    %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
+    %meta{content: form_authenticity_token, name: "csrf-token"}/
+    %meta{content: "authenticity_token", name: "csrf-param"}/
+    %title= "#{h(page_title)} @ #{h(Company.owner.name)}"
+    = stylesheet_link_tag 'company_website'
+    = javascript_importmap_tags
+    %meta{content: "#{@logged_user.id}", name: "user-id"}/
+    = yield(:page_head)
+    / head needs to go here?
+  %body#body
+    #wrapper{"data-controller" => "core"}
+      / header
+      #headerWrapper
+        #header
+          %h1= link_to site_name, controller: 'dashboard'
+          #userboxWrapper= render partial: 'layouts/user_box', locals: {user: @logged_user, projects: @active_projects, running_times: @running_times}
+      / /header
+      = render partial: 'layouts/tabs', object: dashboard_tabbed_navigation
+      #crumbsWrapper
+        #crumbsBlock
+          = render partial: 'layouts/crumbs', object: dashboard_crumbs
+          - if Rails.configuration.railscollab.search_enabled
+            #searchBox
+              = form_with(url: url_for(controller: dashboard, action: 'search')) do |form|
+                %div
+                  - @search_field_default_value = t('search_box_default')
+                  - @last_search ||= @search_field_default_value
+                  - @search_field_attrs = { onfocus: "if (event.target.value == '#{@search_field_default_value}') event.target.value=''", onblur: "if (event.target.value == '#{@search_field_default_value}') event.target.value=''" }
+                  = text_field_tag 'search_id', (h @last_search), @search_field_attrs
+                  %button{type: "submit"}= t('go')
+      / content wrapper
+      #outerContentWrapper
+        #innerContentWrapper
+          - if flash[:message]
+            %div{class: "StatusMessage #{flash[:error] ? 'flash_error' : 'flash_success'}", id: flash[:error] ? 'error' : 'success'}= h flash[:message]
+          %h1#pageTitle= h page_title
+          #pageContent
+            #content{class: "#{@content_for_sidebar.nil? ? '' : 'sidebar'}"}
+              = render partial: 'layouts/actions' unless page_actions.nil?
+              / Content
+              = yield
+              / /Content
+            - unless @content_for_sidebar.nil?
+              #sidebar= render partial: @content_for_sidebar
+            .clear
+        / Footer
+        = render partial: 'layouts/footer'
+      / /content wrapper

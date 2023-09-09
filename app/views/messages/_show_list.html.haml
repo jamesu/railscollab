@@ -1,0 +1,41 @@
+- message = show_list
+.message
+  .list
+    .meta
+      .messageCommentCount
+        - if not message.comments.empty?
+          %span
+            = t('comments')
+            \:
+          %a{href: "#{project_message_path(message.project, id: message.id)}#objectComments"}= message.comments.length
+        - else
+          %span
+            = t('comments')
+            \:
+          = message.comments.length
+      .messageTags
+        %span
+          = t('tags')
+          \:
+        = tag_list message
+      - fc = message.attached_files(@logged_user.member_of_owner?).length
+      - if fc > 0
+        .objectFilesTitle
+          %span
+            = t('attached_files')
+            \:
+          = fc
+      .messageOptions= action_list actions_for_message(message)
+    .desc
+      .title
+        = link_to (h message.title), project_message_path(message.project, id: message.id)
+        - if message.is_private?
+          .private{title: "#{t('private_message')}"}
+            %span= t('private_message')
+      - if not message.created_by.nil?
+        .messageAuthor= t('message_created_with_user',                                                                            |
+            time: format_usertime(message.created_on, :message_created_format),                                    |
+            user: link_to( h(message.created_by.display_name), user_path(id: message.created_by.id))).html_safe |
+      - else
+        .messageAuthor= format_usertime(message.created_on, :message_created_format)
+    .clear

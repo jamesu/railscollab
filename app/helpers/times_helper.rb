@@ -1,6 +1,6 @@
 #==
 # RailsCollab
-# Copyright (C) 2007 - 2009 James S Urquhart
+# Copyright (C) 2007 2009 James S Urquhart
 # Portions Copyright (C) René Scheibe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -21,4 +21,17 @@ module TimesHelper
   def seconds_to_time(seconds)
     Time.at(seconds).utc.strftime('%R')
   end
+
+  def calc_time_class(time)
+    if time.running?
+      'timeRunning'
+    elsif time.is_today?
+      'timeToday'
+    elsif time.is_yesterday?
+      'timeYesterday'
+    else
+      'timeOlder'
+    end
+  end
+
 end

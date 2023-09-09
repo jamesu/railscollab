@@ -1,0 +1,4 @@
+- @page_actions = []
+- if can? :create_wiki_page, @active_project
+  - @page_actions << {title: :add_page, url: new_project_wiki_page_path(@active_project)}
+= render partial: 'list', object: @wiki_pages unless @wiki_pages.empty?

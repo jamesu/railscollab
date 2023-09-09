@@ -1,0 +1,9 @@
+- content_for :page_head do
+  %meta{content: h((@permissions.keys).to_json), name: "permissions-form-items"}/
+- unless @projects.empty?
+  #userPermissions
+    = form_with(model: @user, url: permissions_user_path(@user), method: :put) do |form|
+      #userProjects
+        %table.blank
+          = render partial: 'projects/permissions', locals: {form: form, user: @user}, collection: @projects
+      %button.submit{type: "submit"}= t('update_permissions')

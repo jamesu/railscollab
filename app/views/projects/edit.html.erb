@@ -1,4 +1,0 @@
-<%= form_tag project_path(:id => @active_project.id), :method => :put, :data => { turbo_method: :put } %>
-<%= render :partial => 'form' %>
-    <button class="submit" type="submit"><%= t('save_changes') %></button> <%= t('or') %> <%= link_to t('cancel'), :back %>
-</form>

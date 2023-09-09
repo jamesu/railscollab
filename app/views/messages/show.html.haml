@@ -1,0 +1,35 @@
+.message
+  .messageDetails
+    - if not @message.created_by.nil?
+      .messageUserAvatar{style: "float:right"}
+        %img{alt: "#{h @message.created_by.display_name} Avatar", src: @message.created_by.avatar_url}/
+      .messageAuthor
+        %span
+          = t('from')
+          \:
+        = link_to( h(@message.created_by.display_name), user_path(id: @message.created_by.id))
+    .messageDate
+      %span
+        = t('log_date')
+        \:
+      = format_usertime(@message.created_on, :message_created_format)
+    - unless @message.milestone.nil?
+      .messageMilestone
+        %span
+          = t('milestone')
+          \:
+        = link_to h(@message.milestone.object_name), @message.milestone.object_url
+    .messageTags
+      %span
+        = t('tags')
+        \:
+      = @message.tags
+  .messageText
+    = textilize @message.text
+  = render partial: 'files/list_attached_files', locals: {dont_add: true, attached_files: @message.attached_files(@logged_user.member_of_owner?), attached_files_object: @message}
+  .messageOptions= action_list actions_for_message(@message)
+/ Comments
+#messageComments
+  = render partial: 'comments/object_comments', locals: {comments: @logged_user.member_of_owner? ? @message.comments : @message.comments.is_public}
+  - if can? :comment, @message
+    = render partial: 'comments/add_form', locals: {commented_object: @message}

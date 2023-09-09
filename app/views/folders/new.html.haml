@@ -1,0 +1,3 @@
+= form_with(model: @folder, url: project_folders_path(@active_project), method: :post) do |form|
+  = render partial: 'form', locals: {form: form}
+  %button.submit{type: "submit"}= t('add_folder')

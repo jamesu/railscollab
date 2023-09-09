@@ -1,0 +1,13 @@
+- if @late_milestones.length > 0
+  #lateMilestones.important
+    .header= t('late_milestones')
+    - if @late_milestones.length > 0
+      %ul
+        - @late_milestones.each do |milestone|
+          %li
+            = t('milestone_days_late', days: milestone.days_late)
+            \: #{t('milestone_in', milestone: link_to(h(milestone.name), project_milestone_path(milestone.project, id: milestone.id)), project: link_to(h(milestone.project.name), project_path(id: milestone.project.id))).html_safe}
+            - unless milestone.assigned_to.nil?
+              (#{h milestone.assigned_to.object_name})
+#myMilestones
+  = calendar_block_for_months(@time_now.to_date)

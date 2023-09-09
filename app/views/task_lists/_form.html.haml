@@ -1,0 +1,37 @@
+= error_messages_for :task_list
+%div
+  %label{for: "taskListFormName"}
+    = t('name')
+    \:
+    %span.label_required *
+  = form.text_field 'name', id: 'taskListFormName', class: 'long'
+%div
+  %label{for: "taskListPriority"}
+    = t('priority')
+    \:
+    %span.label_required *
+  = form.text_field 'priority', id: 'taskListPriority', class: 'long'
+%div
+  %label{for: "taskListFormDescription"}
+    = t('description')
+    \:
+  = form.text_area 'description', id: 'taskListFormDescription', class: 'short', rows: 10, cols: 40
+.formBlock
+  %label{for: "taskListFormMilestone"}
+    = t('milestone')
+    \:
+  = select 'milestone_id', select_milestone_options(@active_project), {}, {class: 'select_milestone', id: 'taskListFormMilestone'}
+- if @logged_user.member_of_owner?
+  .formBlock
+    %label{for: "taskListFormIsPrivate"}
+      = t('is_private_list')
+      \:
+      %span.desc= t('is_private_list_info')
+    = form.check_box 'is_private', id: 'taskListFormIsPrivate', class: 'yes_no'
+.formBlock
+  %label{for: "taskListFormTags"}
+    = t('tags')
+    \:
+  = form.text_field 'tags', id: 'taskListFormTags', class: 'long'
+  %br/
+  %span.desc= t('tags_info')

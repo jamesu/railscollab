@@ -1,0 +1,42 @@
+!!! 1.1
+%html
+  %head
+    %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
+    %meta{content: form_authenticity_token, name: "csrf-token"}/
+    %meta{content: "authenticity_token", name: "csrf-param"}/
+    %title= "#{h(page_title)} @ #{h(Company.owner.name)}"
+    = stylesheet_link_tag 'project_website'
+    = javascript_importmap_tags
+    %meta{content: "#{@logged_user.id}", name: "user-id"}/
+    = yield(:page_head)
+    / head needs to go here?
+  %body#body
+    #wrapper{"data-controller" => "core"}
+      / header
+      #headerWrapper
+        #header
+          %h1= link_to t('administration'), controller: 'administration'
+          #userboxWrapper= render partial: 'layouts/user_box', locals: {user: @logged_user, projects: @active_projects, running_times: @running_times}
+      / /header
+      = render partial: 'layouts/tabs', object: administration_tabbed_navigation
+      #crumbsWrapper
+        #crumbsBlock
+          = render partial: 'layouts/crumbs', object: administration_crumbs
+      / content wrapper
+      #outerContentWrapper
+        #innerContentWrapper
+          - if flash[:message]
+            %div{class: "StatusMessage #{flash[:error] ? 'flash_error' : 'flash_success'}", id: "#{flash[:error] ? 'error' : 'success'}"}= h flash[:message]
+          %h1#pageTitle= h page_title
+          #pageContent
+            #content{class: "#{@content_for_sidebar.nil? ? '' : 'sidebar'}"}
+              = render partial: 'layouts/actions' unless page_actions.nil?
+              / Content
+              = yield
+              / /Content
+            - unless @content_for_sidebar.nil?
+              #sidebar= render partial: @content_for_sidebar
+            .clear
+        / Footer
+        = render partial: 'layouts/footer'
+      / /content wrapper

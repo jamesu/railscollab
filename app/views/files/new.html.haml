@@ -1,0 +1,9 @@
+- @page_actions = []
+- if can? :create_file, @active_project
+  - @page_actions << {title: :add_file, url: new_project_file_path(@active_project)}
+- if can? :create_folder, @active_project
+  - @page_actions << {title: :add_folder, url: new_project_folder_path(@active_project)}
+
+= form_with(model: @file, url: project_files_path(@active_project), method: :post, multipart: true) do |form|
+  = render partial: 'form', locals: {form: form}
+  %button.submit{type: "submit"}= t('add_file')

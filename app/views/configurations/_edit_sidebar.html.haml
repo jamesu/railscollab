@@ -1,0 +1,7 @@
+- if !@categories.empty?
+  .sidebarBlock
+    %h2= t('configuration_categories')
+    .blockContent
+      %ul.listWithDetails
+        - @categories.each do |category|
+          %li= link_to h(category.display_name), edit_configuration_path(category)

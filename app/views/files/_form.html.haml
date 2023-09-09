@@ -1,0 +1,91 @@
+= error_messages_for :file
+- if @file.new_record?
+  .hint
+    .content
+      #selectFileControl
+        %label{for: "fileFormFile"}
+          = t('file')
+          \:
+          %span.label_required *
+        %input#fileFormFile{name: "file_data[file]", type: "file"}/
+      #selectFolderControl
+        %label{for: "fileFormFolder"}
+          = t('folder')
+          \:
+          %span.label_required *
+        = form.select 'folder_id', Folder.select_list(@active_project), {}, {id: 'fileFormFolder'}
+      %p= t('file_upload_info', max: format_size(Rails.configuration.railscollab.max_upload_size))
+- else
+  .hint
+    .header
+      = form.check_box 'updated_file', '1', false, class: 'checkbox', id: 'fileFormUpdateFile', onclick: "file_form_select_update()"
+      %label.checkbox{for: "fileFormUpdateFile"}= t('update_file')
+    .content
+      #updateFileDescription
+        %p= t('file_update_info')
+      #updateFileForm
+        %p
+          %strong
+            = t('existing_file')
+            \:
+          %a{href: "#{@file.download_url}"}= h @file.filename
+          | #{format_size @file.file_size}
+        %div
+          %label{for: "fileFormFile"}
+            = t('new_file')
+            \:
+          %input#fileFormFile{name: "file_data[file]", type: "file"}/
+        #revisionControls
+          %div
+            = form.check_box 'version_file_change', '1', false, class: 'checkbox', id: 'fileFormVersionChange', onclick: "file_form_select_revision()"
+            %label.checkbox{for: "fileFormVersionChange"}= t('new_revision')
+          #fileFormRevisionCommentBlock
+            %label{for: "fileFormRevisionComment"}
+              = t('revision_comment')
+              \:
+            = text_area_tag 'file_data[revision_comment]', '', id: 'fileFormRevisionComment', class: 'short'
+      :javascript
+        file_form_select_update();
+        file_form_select_revision();
+%fieldset
+  %label{for: "fileFormDescription"}
+    = t('description')
+    \:
+  = form.text_area 'description', id: 'fileFormDescription', class: 'short', rows: 10, cols: 40
+- if @logged_user.member_of_owner?
+  %fieldset
+    %legend= t('options')
+    .objectOption
+      .optionLabel
+        %label
+          = t('private_file')
+          \:
+      .optionControl= form.check_box 'is_private', class: 'yes_no', id: 'fileFormIsPrivate'
+      .optionDesc= t('private_file_info')
+    .objectOption
+      .optionLabel
+        %label
+          = t('important_file')
+          \:
+      .optionControl= form.check_box 'is_important', class: 'yes_no', id: 'fileFormIsImportant'
+      .optionDesc= t('important_file_info')
+    .objectOption
+      .optionLabel
+        %label
+          = t('enable_comments')
+          \:
+      .optionControl= form.check_box 'comments_enabled', class: 'yes_no', id: 'fileFormEnableComments'
+      .optionDesc= t('enable_comments_info')
+    - if Rails.configuration.railscollab.allow_anonymous
+      .objectOption
+        .optionLabel
+          %label
+            = t('enable_anonymous_comments')
+            \:
+        .optionControl= form.check_box 'anonymous_comments_enabled', class: 'yes_no', id: 'fileFormEnableAnonymousComments'
+        .optionDesc= t('enable_anonymous_comments_info')
+%fieldset
+  %legend= t('tags')
+  = text_field 'file', 'tags', id: 'fileFormTags', class: 'long'
+  %br/
+  %span.desc= t('tags_info')

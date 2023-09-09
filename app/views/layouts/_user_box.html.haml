@@ -1,0 +1,55 @@
+#userbox
+  - if user.is_anonymous?
+    = t('welcome_anonymous')
+    (#{link_to(t('login'), logout_path)}),
+  - else
+    = t('welcome_back', user: h(user.display_name)).html_safe
+    (#{link_to t('logout'), logout_path, confirm: t('are_you_sure_logout')})
+  #running_times_count{style: "display:#{@running_times.empty? ? 'none' : 'block'};"}
+    %span= t('running_times', count: @running_times.size)
+    = render_icon 'bullet_drop_down', '', id: 'running_times', class: 'PopupMenuWidgetAttachTo', title: 'Enable javascript'
+  %ul
+    - unless user.is_anonymous?
+      %li
+        = link_to t('account'), @logged_user
+        = render_icon 'bullet_drop_down', '', id: 'account_more', class: 'PopupMenuWidgetAttachTo', title: 'Enable javascript'
+    - unless projects.blank?
+      %li
+        = link_to t('projects'), controller: 'dashboard', action: 'my_projects'
+        = render_icon 'bullet_drop_down', '', id: 'projects_more', class: 'PopupMenuWidgetAttachTo', title: 'Enable javascript'
+    - if user.is_admin
+      %li
+        = link_to t('administration'), controller: 'administration'
+        = render_icon 'bullet_drop_down', '', id: 'administration_more', class: 'PopupMenuWidgetAttachTo', title: 'Enable javascript'
+  - unless user.is_anonymous?
+    #account_more_menu.PopupMenuWidgetDiv{style: "display:none"}
+      %p
+        = t('account')
+        \:
+      %ul
+        %li= link_to t('edit_profile'), edit_user_path(id: user.id)
+        %li= link_to t('update_avatar'), avatar_user_path(id: user.id)
+      %p= t('userbox_more')
+      %ul
+        %li= link_to t('my_projects'), controller: 'dashboard', action: 'my_projects'
+        %li= link_to t('my_tasks'), controller: 'dashboard', action: 'my_tasks'
+  - unless projects.blank?
+    #projects_more_menu.PopupMenuWidgetDiv{style: "display:none"}
+      %p
+        = t('projects')
+        \:
+      %ul
+        - projects.each do |project|
+          %li= link_to h(project.name), project_path(id: project.id)
+  - if user.is_admin
+    #administration_more_menu.PopupMenuWidgetDiv{style: "display:none"}
+      %p
+        = t('administration')
+        \:
+      %ul
+        %li= link_to t('company'), Company.owner
+        %li= link_to t('members'), companies_path
+        %li= link_to t('projects'), projects_path
+  #running_times_menu.PopupMenuWidgetDiv{style: "display:none"}
+    %ul
+      = render partial: 'times/listed', collection: @running_times

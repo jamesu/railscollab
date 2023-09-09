@@ -1,0 +1,12 @@
+- if !attached_files.empty? or (!dont_add and can?(:add_file, attached_files_object))
+  .objectFiles
+    %ul
+      - attached_files.each do |attached_file|
+        %li
+          %a{href: "#{attached_file.download_url}"}
+            %span= h attached_file.filename
+            (#{format_size attached_file.file_size})
+          | #{action_list actions_for_attached_files(attached_file, attached_files_object)}
+    - if !dont_add and can?(:add_file, attached_files_object)
+      %p
+        » #{link_to t('attach_files'), attach_project_file_path(attached_files_object.project, object_type: attached_files_object.class.to_s , object_id: attached_files_object.id)}

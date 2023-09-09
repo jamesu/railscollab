@@ -1,0 +1,6 @@
+- if wiki_pages.size > 1
+  .wiki_pages_widget
+    %h3= t 'wiki_enginge.pages'
+    %ul
+      - wiki_pages.each do |wiki_page|
+        %li= link_to_unless_current h(wiki_page.title), project_wiki_page_path(wiki_page.project, id: wiki_page.slug))

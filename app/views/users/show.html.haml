@@ -1,0 +1,6 @@
+- @page_actions = []
+- if can?(:update_profile, @user)
+  - @page_actions += [{title: :edit, url: edit_user_path(id: @user.id)}]
+- if can?(:update_permissions, @user)
+  - @page_actions << {title: :update_permissions, url: permissions_user_path(id: @user.id)}
+= render partial: 'users/card', collection: [@user]

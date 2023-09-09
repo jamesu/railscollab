@@ -1,0 +1,14 @@
+- if not @messages.empty?
+  #messages
+    #messagesPaginationTop
+      = pagination_links "#{project_messages_path(@active_project)}?", @pagination unless @pagination.length <= 1
+    = render partial: (@display_list ? 'messages/show_list' : 'messages/show'), |
+      collection: @messages, locals: {on_message_page: false}             |
+    #messagesPaginationBottom
+      = pagination_links "#{project_messages_path(@active_project)}?", @pagination unless @pagination.length <= 1
+- else
+  %p
+    - if @category.nil?
+      = t('no_messages_in_project')
+    - else
+      = t('no_messages_in_category')

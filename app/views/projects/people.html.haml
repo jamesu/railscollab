@@ -1,0 +1,7 @@
+- @page_actions = []
+- if can? :manage, @project
+  - @page_actions << {title: :permissions, :url=> permissions_project_path(id: @active_project.id)}
+#people
+  = render partial: 'companies/people_list', collection: @project_companies
+- if can? :manage, @project
+  .hint= t('permissions_info', link: link_to(t('permissions_form'), permissions_project_path(id: @active_project.id))).html_safe

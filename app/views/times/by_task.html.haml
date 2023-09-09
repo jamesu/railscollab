@@ -1,0 +1,56 @@
+- @page_actions = []
+- if can? :create_time, @active_project
+  - @page_actions << {title: :add_time, url: new_project_time_path(@active_project)}
+- @page_actions << {title: :sort_by_finished_date, url: "#{project_times_path(@active_project)}?orderBy=done_date"}
+- @page_actions << {title: :sort_by_hours, url: "#{project_times_path(@active_project)}?orderBy=hours"}
+- @page_actions << {title: :report_by_task, url: "#{by_task_project_times_path(@active_project)}?orderBy=hours"}
+
+- if not @tasks.empty?
+  #time
+    - @tasks.each do |list|
+      - total_time = list[:tasks].inject(0) { |total, task| total + task[:hours] }
+      - total_billable_time = list[:tasks].inject(0) { |total, task| total + task[:billable_hours] }
+      - total_estimated_time = list[:tasks].inject(0) { |total, task| total + (task[:task].estimated_hours || 0) }
+      - if total_time > 0
+        .timeTaskList
+          %h2
+            = t('task_list_hours', name: h(list[:list].object_name), hours: total_time)
+            = t('billable_hours', hours: total_time) if total_billable_time > 0
+            = t('task_estimated_hours', hours: total_estimated_time) if total_estimated_time > 0
+          %h4= t('task_list_hours_info')
+          - list[:tasks].each do |task_info|
+            - task = task_info[:task]
+            %h4
+              %span
+                %img{alt: "task", src: "/assets/logtypes/tasks.gif", title: "task"}/
+              = t('task_list_task_hours', name: h(task.object_name), hours: task_info[:hours])
+              = t('billable_hours', hours: task_info[:billable_hours]) if task_info[:billable_hours] > 0
+              = t('task_estimated_hours', hours: task.estimated_hours) if task.estimated_hours && task.estimated_hours > 0
+            %table.timeLogs.blank
+              %tr
+                %th= t('log_date')
+                %th= t('name')
+                %th= t('details')
+                %th= t('hours')
+              - task_info[:times].each do |time|
+                %tr
+                  %td.timeDate
+                    - if time.running?
+                      = t('time_running')
+                    - else
+                      = format_usertime(time.done_date, "done_date_format#{'_with_year' if time.done_date.year != Time.now.year}")
+                  %td.timeUser
+                    - if time.assigned_to.nil?
+                      ???
+                    - else
+                      = h time.assigned_to.object_name
+                  %td.timeDetails
+                    = h time.name
+                  %td.timeHours
+                    = '*' if time.is_billable
+                    - if time.running?
+                      = seconds_to_time Time.now - time.start_date
+                    - else
+                      = time.hours
+- else
+  %p= t('no_times_in_project')

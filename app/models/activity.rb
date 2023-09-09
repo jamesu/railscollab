@@ -52,6 +52,16 @@ class Activity < ApplicationRecord
     self.created_on.to_date >= Date.yesterday and self.created_on.to_date < Date.today
   end
 
+  def time_class
+    if is_today?
+      "logToday"
+    elsif is_yesterday?
+      "logYesterday"
+    else
+      "logOlder"
+    end
+  end
+
   def self.new_log(obj, user, action, private=false, real_project=nil)
     really_silent = Rails.configuration.railscollab.log_really_silent && action == :delete
     unless really_silent

@@ -1,0 +1,35 @@
+= error_messages_for :comment
+- if @logged_user.is_anonymous?
+  %div
+    %label{for: "commentFormName"}
+      = t('name')
+      \:
+      %span.label_required *
+    = form.text_field 'author_name', id: 'commentFormName', class: 'long'
+  %div
+    %label{for: "commentFormEmail"}
+      = t('email_address')
+      \:
+      %span.label_required *
+    = form.text_field 'author_email', id: 'commentFormEmail', class: 'long'
+.formAddCommentText
+  %label{for: "addCommentText"}
+    = t('text')
+    \:
+    %span.label_required *
+  = form.text_area 'text', id: 'addCommentText', class: 'comment'
+- if @logged_user.member_of_owner?
+  %fieldset
+    %legend= t('options')
+    .objectOption
+      .optionLabel
+        %label
+          = t('private_comment')
+          \:
+      .optionControl= form.check_box 'is_private', class: 'yes_no', id: 'commentFormIsPrivate'
+      .optionDesc= t('private_comment_info')
+- if can? :create_file, @active_project
+  = render partial: 'files/attach_file'
+- content_for :page_head do
+  - if can? :create_file, @active_project
+    %meta{content: Rails.configuration.railscollab.max_attachments, name: "file-attachment-limit"}/

@@ -1,0 +1,19 @@
+- if @projects.length > 0
+  #companyPermissions
+    .hint
+      .header= t('hint')
+      .content= t('hint_permissions_info')
+    = form_with(url: permissions_company_path(@company), method: :put) do |form|
+      %table.blank
+        - @projects.each do |project|
+          %tr
+            %td
+              = check_box_tag "project[]", project.id.to_s, @company.is_part_of(project), id: "projectPermissionsCheckbox#{project.id}", disabled: !@logged_user.member_of(project)
+            %td
+              %label.checkbox.normal{for: "projectPermissionsCheckbox#{project.id}"}
+                - if !project.is_active?
+                  %del
+                    %span{title: "#{t('project_completed_on', date: format_usertime(project.completed_on, :project_created_format), user: h(project.completed_by.display_name))}"}= h project.name
+                - else
+                  = h project.name
+      %button.submit{type: "submit"}= t('update_permissions')

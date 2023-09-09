@@ -1,0 +1,16 @@
+
+= form_with(model: @user, url: user_password_path(@user), method: :put) do |form|
+  = error_messages_for :user
+  %input{name: "confirm", type: "hidden", value: "#{h params[:confirm]}"}/
+  %div
+    %label{for: "passwordFormNewPassword"}
+      = t('password')
+      %span.label_required *
+    %input#passwordFormNewPassword{name: "user[password]", type: "password"}/
+  %div
+    %label{for: "passwordFormNewPasswordAgain"}
+      = t('repeat_password')
+      %span.label_required *
+    %input#passwordFormNewPasswordAgain{name: "user[password_confirmation]", type: "password"}/
+  #buttonSubmit
+    %button.submit{accesskey: "s", type: "submit"}= @initial_signup ? t('set_password') : t('reset_password')

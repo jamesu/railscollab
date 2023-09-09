@@ -1,0 +1,33 @@
+- if @folders.length > 0
+  .sidebarBlock
+    %h2= t('folders')
+    #sidebarFolderList.blockContent
+      %ul
+        - if !@folder.nil?
+          %li= link_to t('all_files'), project_files_path(@active_project)
+        - else
+          %li= link_to t('all_files'), project_files_path(@active_project), class: 'selected'
+        - @folders.each do |folder|
+          - if !@folder.nil? and @folder.id == folder.id
+            - selected_class = {class: 'selected'}
+          - else
+            - selected_class = {}
+          %li
+            = link_to (h folder.name), files_project_folder_path(folder.project, id: folder.id), selected_class
+            - if can?(:edit,folder)
+              = link_to render_icon('edit',''), edit_project_folder_path(folder.project, id: folder.id)
+            - if can?(:delete,folder)
+              = link_to render_icon('cancel_gray',''), project_folder_path(folder.project, id: folder.id), data: { turbo_method: :delete, turbo_confirm: t('folder_delete_confirmation') }
+      - if @active_project.is_active?
+        %p
+          %a{href: "#{new_project_folder_path(@active_project)}"}= t('add_folder')
+- if @important_files.length > 0
+  .sidebarBlock
+    %h2= t('important_files')
+    .blockContent
+      %ul
+        - @important_files.each do |important_file|
+          %li
+            %a{href: "#{important_file.object_url}"}= important_file.filename
+            %br/
+            %span.desc= t('important_file_revisions_count', count: important_file.project_file_revisions.length)

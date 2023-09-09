@@ -51,6 +51,8 @@ class User < ApplicationRecord
 
   has_many :assigned_times, class_name: 'TimeRecord', foreign_key:  'assigned_to_user_id'
 
+  attr_accessor :new_account_notification
+
   def active_projects
     self.projects.where('projects.completed_on IS NULL')
   end

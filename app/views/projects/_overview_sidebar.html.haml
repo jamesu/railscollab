@@ -1,0 +1,47 @@
+- if @important_messages.length > 0
+  .sidebarBlock
+    %h2= t('important_messages')
+    .blockContent
+      %ul.listWithDetails
+        - @important_messages.each do |important_message|
+          %li
+            = link_to (h important_message.title), project_message_path(@active_project, id: important_message.id)
+            %br/
+            %span.desc= t('important_messages_comments_count', count: important_message.comments.length)
+- if @important_files.length > 0
+  .sidebarBlock
+    %h2= t('important_files')
+    .blockContent
+      %ul
+        - @important_files.each do |important_file|
+          %li
+            %a{href: "#{important_file.object_url}"}= h important_file.filename
+            %br/
+            %span.desc= t('important_file_revisions_count', count: important_file.project_file_revisions.length)
+- if can?(:edit,@active_project) or can?(:change_status, @active_project)
+  .sidebarBlock
+    - if @active_project.is_active?
+      %h2= t('project_status_header', status: t('active'))
+    - else
+      %h2= t('project_status_header', status: t('completed'))
+    .blockContent
+      %ul
+        - if can? :edit, @active_project
+          %li= link_to t('edit_project_details'), edit_project_path(id: @active_project.id)
+        - if can?(:change_status, @active_project)
+          - if @active_project.is_active?
+            %li= link_to t('mark_project_as_finished'), complete_project_path(id: @active_project.id), data: { turbo_method: :put }, confirm: t('mark_project_as_finished_confirmation')
+          - else
+            %li= link_to t('mark_project_as_active'), open_project_path(id: @active_project.id), data: { turbo_method: :put }, confirm: t('mark_project_as_active_confirmation')
+- if @project_companies.length > 0
+  .sidebarBlock
+    %h2= t('involved_companies')
+    .blockContent
+      %ul
+        - @project_companies.each do |project_company|
+          %li= link_to (h project_company.name), company_path(id: project_company.id)
+.sidebarBlock
+  %h2= t('update_feeds')
+  .blockContent
+    %ul#listOfRssFeeds
+      %li= link_to t('recent_activities'), @logged_user.recent_activity_feed_url(@active_project, 'rss')

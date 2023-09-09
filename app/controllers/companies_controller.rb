@@ -148,7 +148,7 @@ class CompaniesController < ApplicationController
   def permissions
     authorize! :manage, @company
 
-  	@projects = Project.all(:order => 'name')
+  	@projects = Project.order(name: :asc).all
   	if @projects.empty?
       error_status(true, :no_projects)
       redirect_back_or_default companies_path
@@ -237,7 +237,7 @@ class CompaniesController < ApplicationController
   end
   
   def company_params
-    params[:company].nil? ? {} : params[:company].permit(:name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+    params[:company].nil? ? {} : params[:company].permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
   end
 
   def load_related_object

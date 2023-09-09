@@ -1,0 +1,7 @@
+= error_messages_for :category
+%div
+  %label{for: "categoryFormName"}
+    = t('name')
+    \:
+    %span.label_required *
+  = form.text_field 'name', id: 'categoryFormName'

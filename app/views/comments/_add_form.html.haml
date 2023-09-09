@@ -1,0 +1,5 @@
+%fieldset
+  %legend= t('post_comment')
+  = form_with(model: Comment.new, url: object_comments_url(commented_object), multipart: true) do |form|
+    = render partial: 'comments/form', locals: {form: form}
+    %button.submit{type: "submit"}= t('add_comment')

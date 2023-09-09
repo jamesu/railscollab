@@ -1,0 +1,17 @@
+- @bread_crumbs = project_crumbs(@task.text, [ {title: :tasks, url: project_task_lists_path(@task_list.project)}, {title: @task.task_list.name, url: project_task_list_path(@task_list.project, id: @task_list.id)} ])
+.task
+  .taskList{id: "list_#{@task_list.id}", url: "#{@task_list.object_url}"}
+    .block
+      .openTasks
+        %ul.taskItems{id: "openTasksList#{@task_list.id}"}
+          - unless @task.is_completed?
+            = render partial: 'tasks/show', collection: [@task], locals: {tprefix: "openTasksList#{@task_list.id}"}
+      .completedTasks
+        %ul.taskItems
+          - if @task.is_completed?
+            = render partial: 'tasks/show', collection: [@task], locals: {tprefix: "openTasksList#{@task_list.id}"}
+/ Comments
+#taskComments
+  = render partial: 'comments/object_comments', locals: {comments: @logged_user.member_of_owner? ? @task.comments : @task.comments.is_public}
+  - if can? :comment, @task
+    = render partial: 'comments/add_form', locals: {commented_object: @task}

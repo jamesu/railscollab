@@ -1,0 +1,18 @@
+= form_with(model: @attach_object, url: attach_project_files_path(@commented_object.project, @commented_object), method: :put, multipart: true) do |form|
+  .hint= t('hint_attach_files', link: "<a href=\"#{@attach_object.object_url}\">#{h(@attach_object.object_name)}</a>")
+  %div
+    = form.radio_button_tag 'attach[what]', 'existing_file', true, {id: 'attachFormExistingFile', class: 'checkbox', onclick: 'file_form_attach_update_action()'}
+    %label.checkbox{for: "attachFormExistingFile"}= t('attach_existing_file')
+  #attachFormExistingFileControls
+    %fieldset
+      %legend= t('select_file')
+      = form.select 'attach[file_id]', options_for_select(select_file_options(@active_project, @attach_object)), {id: 'attachFormSelectFile', style: 'width: 300px'}
+  %div
+    = radio_button_tag 'attach[what]', 'new_file', true, {id: 'attachFormNewFile', class: 'checkbox', onclick: 'file_form_attach_update_action()'}
+    %label.checkbox{for: "attachFormNewFile"}= t('upload_attach_to_message')
+  #attachFormNewFileControls
+    = render partial: 'files/attach_file', locals: {form: form}
+  - content_for :page_head do
+    - if can? :create_file, @active_project
+      %meta{content: "#{Rails.configuration.railscollab.max_attachments}", name: "file-attachment-limit"}/
+  %button.submit{type: "submit"}= t('attach_files')

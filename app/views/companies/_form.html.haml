@@ -1,0 +1,69 @@
+= error_messages_for :company
+%div
+  %label{for: "clientFormName"}
+    = t('name')
+    \:
+    %span.label_required *
+  = form.text_field 'name', id: 'clientFormName'
+%div
+  %label{for: "clientFormTimezone"}
+    = t('timezone')
+    \:
+    %span.label_required *
+  = form.time_zone_select 'time_zone', nil, {}, {id: 'clientFormTimezone', class: 'long'}
+%fieldset
+  %legend= t('contact_online')
+  %div
+    %label{for: "clientFormEmail"}
+      = t('email_address')
+      \:
+    = text_field 'email', id: 'clientFormEmail'
+  %div
+    %label{for: "clientFormHomepage"}
+      = t('homepage')
+      \:
+    = form.text_field 'homepage', id: 'clientFormHomepage'
+%fieldset
+  %legend= t('phone_numbers')
+  %div
+    %label{for: "clientFormPhoneNumber"}
+      = t('phone_number')
+      \:
+    = form.text_field 'phone_number', id: 'clientFormPhoneNumber'
+  %div
+    %label{for: "clientFormFaxNumber"}
+      = t('fax_number')
+      \:
+    = form.text_field 'fax_number', id: 'clientFormFaxNumber'
+%fieldset
+  %legend= t('address')
+  %div
+    %label{for: "clientFormAddress"}
+      = t('address')
+      \:
+    = form.text_field 'address', id: 'clientFormAddress'
+  %div
+    %label{for: "clientFormAddress2"}
+      = I18n.t('address_2')
+      \:
+    = form.text_field 'address2', id: 'clientFormAddress2'
+  %div
+    %label{for: "clientFormCity"}
+      = t('city')
+      \:
+    = form.text_field 'city', id: 'clientFormCity'
+  %div
+    %label{for: "clientFormState"}
+      = t('state')
+      \:
+    = form.text_field 'state', id: 'clientFormState'
+  %div
+    %label{for: "clientFormZipcode"}
+      = t('zipcode')
+      \:
+    = form.text_field 'zipcode', id: 'clientFormZipcode'
+  %div
+    %label{for: "clientFormCountry"}
+      = t('country')
+      \:
+    = form.text_field 'country', id: 'clientFormCountry', limit: 100

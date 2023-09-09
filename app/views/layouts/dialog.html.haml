@@ -1,0 +1,18 @@
+!!! 1.1
+%html
+  %head
+    %title= h page_title
+    %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
+    = stylesheet_link_tag 'dialog'
+    = javascript_importmap_tags
+    = yield(:page_head)
+  %body
+    #dialog
+      - if !Company.owner.nil? and Company.owner.logo.attached?
+        #dialogLogo
+          %img{src: "#{url_for(Company.owner.logo)}"}/
+      .inner
+        %h1= h(page_title)
+        - if flash[:message]
+          %div{class: "StatusMessage #{flash[:error] ? 'flash_error' : 'flash_success'}", id: flash[:error] ? 'error' : 'success'}= h(flash[:message])
+        = yield

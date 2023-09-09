@@ -1,0 +1,27 @@
+.help
+  %p= t 'wiki_engine.help.link_to_format', link: link_to('Textile', 'http://hobix.com/textile/quick.html')
+  %p
+    = t 'wiki_engine.help.links_to_wiki_pages'
+    \:
+    %code [[wiki-page-id]]
+    or
+    %code [[Wiki page title]]
+    or
+    %code "Text of link":[[wiki-page-id]]
+    or
+    = succeed "." do
+      %code "Text of link":[[Wiki page title]]
+  %p
+    = t 'wiki_engine.help.format_code'
+    \:
+  .usercontent
+    %pre
+      %code.html
+        :preserve
+          
+              <pre><code class="javascript">
+                function helloWorld() {
+                  alert("Hello world");
+                }
+              </code></pre>
+                %p= t 'wiki_engine.help.highlight_language'

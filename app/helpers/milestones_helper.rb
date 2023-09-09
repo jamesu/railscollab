@@ -17,4 +17,17 @@
 #++
 
 module MilestonesHelper
+
+  def milestone_class(milestone)
+    if milestone.is_completed?
+      "success"
+    elsif milestone.is_today?
+    	"important"
+    elsif milestone.is_late?
+    	"important"
+    else
+    	"hint"
+    end
+  end
+
 end

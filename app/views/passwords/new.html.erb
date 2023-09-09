@@ -1,9 +1,0 @@
-<%= form_tag password_path, :method => :post do %>
-  <div>
-    <label for="forgotPasswordEmail"><%= t('email_address') %></label>
-    <%= text_field_tag 'your_email', '', :id => 'forgotPasswordEmail', :class => 'medium' %>
-  </div>
-  <input type="hidden" name="submited" value="submited" />
-  <div id="buttonSubmit">
-  <button class="submit" type="submit" accesskey="s"><%= t('send_password') %></button><span> | <%= link_to t('cancel'), login_path %></span></div>
-<% end %>
