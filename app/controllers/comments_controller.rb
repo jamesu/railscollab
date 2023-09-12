@@ -22,7 +22,7 @@ class CommentsController < ApplicationController
 
   
   
-  after_action  :user_track, :only => [:index, :show]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /comments
   # GET /comments.xml
@@ -34,8 +34,8 @@ class CommentsController < ApplicationController
     
     respond_to do |format|
       format.html {}
-      format.xml { render :xml => @comments.to_xml(:root => 'comments', 
-                                                   :only => [:id,
+      format.xml { render xml: @comments.to_xml(root: 'comments', 
+                                                   only: [:id,
                                                              :text,
                                                              :author_name, 
                                                              :created_by_id, 
@@ -55,7 +55,7 @@ class CommentsController < ApplicationController
       format.html {}
       format.xml {
         fields = @logged_user.is_admin? ? [] : [:author_email, :author_homepage]
-        render :xml => @comment.to_xml(:root => 'comment', :except => fields) 
+        render xml: @comment.to_xml(root: 'comment', except: fields) 
       }
     end
   end
@@ -74,7 +74,7 @@ class CommentsController < ApplicationController
         @active_project = @commented_object.project
         @active_projects = @logged_user.active_projects
       }
-      format.xml  { render :xml => @comment.to_xml(:root => 'comment') }
+      format.xml  { render xml: @comment.to_xml(root: 'comment') }
     end
   end
 
@@ -127,10 +127,10 @@ class CommentsController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@comment.object_url)
         }
-        format.xml  { render :xml => @comment.to_xml(:root => 'comment'), :status => :created, :location => @comment.object_url }
+        format.xml  { render xml: @comment.to_xml(root: 'comment'), status: :created, location: @comment.object_url }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -169,8 +169,8 @@ class CommentsController < ApplicationController
         }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -186,7 +186,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_comment)
-        redirect_back_or_default(project_path(:id => @active_project.id))
+        redirect_back_or_default(project_path(id: @active_project.id))
       }
       format.xml  { head :ok }
     end
@@ -213,7 +213,7 @@ private
       @comment = Comment.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_comment, {}, false)
-      redirect_back_or_default project_path(:id => @active_project.id)
+      redirect_back_or_default project_path(id: @active_project.id)
       return false
     end
 
@@ -239,7 +239,7 @@ protected
   end
 
   def extra_crumbs
-    [{:title => @commented_object.object_name, :url => @commented_object.object_url}]
+    [{title: @commented_object.object_name, url: @commented_object.object_url}]
   end
 
   def load_related_object

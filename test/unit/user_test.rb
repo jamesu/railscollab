@@ -156,11 +156,11 @@ class UserTest < ActiveSupport::TestCase
     
     users = []
     5.times do |i|
-      u = User.new(:company => companies(:owner_company), 
-                   :display_name => "User #{i}", 
-                   :username => "user#{i}", 
-                   :email => "emailtest#{i}@better.set.this.com",
-                   :password => 'password', :password_confirmation => 'password')
+      u = User.new(company: companies(:owner_company), 
+                   display_name: "User #{i}", 
+                   username: "user#{i}", 
+                   email: "emailtest#{i}@better.set.this.com",
+                   password: 'password', password_confirmation: 'password')
       u.save!
       users << u
     end

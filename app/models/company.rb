@@ -82,9 +82,9 @@ class Company < ApplicationRecord
   end
 
   def users_on_project(project)
-    proj_users = Person.where(:project_id => project).select('user_id')
+    proj_users = Person.where(project_id: project).select('user_id')
     query_users = proj_users.collect{ |user| user.user_id }
-    User.where(:id => query_users, :company_id => id)
+    User.where(id: query_users, company_id: id)
   end
 
   def object_name

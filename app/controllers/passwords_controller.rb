@@ -1,7 +1,7 @@
 class PasswordsController < ApplicationController
   layout 'dialog'
-  before_action :find_user, :only => [:edit, :update]
-  before_action :validate_token, :only => [:edit, :update]
+  before_action :find_user, only: [:edit, :update]
+  before_action :validate_token, only: [:edit, :update]
 
   def new
   end
@@ -11,14 +11,14 @@ class PasswordsController < ApplicationController
 
     unless @your_email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
       error_status(false, :invalid_email)
-      render :action => 'new'
+      render action: 'new'
       return
     end
 
-    user = User.where(:email => @your_email).first
+    user = User.where(email: @your_email).first
     if user.nil?
       error_status(false, :invalid_email_not_in_use)
-      render :action => 'new'
+      render action: 'new'
       return
     end
 
@@ -43,7 +43,7 @@ class PasswordsController < ApplicationController
       session['user_id'] = @user.id
       redirect_to root_path
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 

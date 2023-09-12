@@ -37,14 +37,14 @@ class Milestone < ApplicationRecord
 
   #has_many :tags, as:  'rel_object', dependent:  :destroy
 
-  scope :is_public, -> { where(:is_private => false) }
+  scope :is_public, -> { where(is_private: false) }
   scope :is_open,   -> { where('milestones.completed_on IS NULL').order('milestones.due_date ASC') }
   scope :late,      -> { where(['due_date < ? AND completed_on IS NULL', Date.today]) }
   scope :todays,    -> { where(['completed_on IS NULL AND (due_date >= ? AND due_date < ?)', Date.today, Date.today+1]) }
   scope :upcoming,  -> { where(['completed_on IS NULL AND due_date >= ?', Date.today+1]) }
   scope :completed, -> { where('completed_on IS NOT NULL') }
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create   :process_create
   before_update  :process_update_params
   before_destroy :process_destroy
@@ -192,8 +192,8 @@ class Milestone < ApplicationRecord
     return [] if project_ids.empty?
 
     msg_conditions = user.member_of_owner? ?
-      { :completed_on => nil, :project_id => project_ids } :
-      { :completed_on => nil, :project_id => project_ids, :is_private => false }
+      { completed_on: nil, project_id: project_ids } :
+      { completed_on: nil, project_id: project_ids, is_private: false }
 
     self.where(msg_conditions)
   end
@@ -277,11 +277,11 @@ class Milestone < ApplicationRecord
   # Validation
 
   validates_presence_of :name
-  validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == true
   end
 
-  validates_each :assigned_to, :allow_nil => true do |record, attr, value|
+  validates_each :assigned_to, allow_nil: true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if !value.nil? and !value.is_part_of(record.project)
   end
   

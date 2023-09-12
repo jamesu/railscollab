@@ -24,14 +24,14 @@ class ProjectsController < ApplicationController
 
   
   
-  after_action  :user_track, :only => [:index, :search, :people]
+  after_action  :user_track, only: [:index, :search, :people]
 
   def index
     @projects = @logged_user.is_admin ? Project.all : @logged_user.projects
     respond_to do |format|
-      format.html { render :layout => 'administration' }
+      format.html { render layout: 'administration' }
       format.xml  { 
-        render :xml => @projects.to_xml(:root => 'projects')
+        render xml: @projects.to_xml(root: 'projects')
       }
     end
   end
@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
         @content_for_sidebar = 'overview_sidebar'
       }
       format.xml  { 
-        render :xml => @project.to_xml(:root => 'project')
+        render xml: @project.to_xml(root: 'project')
       }
     end
   end
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {:page => current_page, :per_page => Rails.configuration.railscollab.search_results_per_page})
+      @search_results, @total_search_results = @project.search(@last_search, !@logged_user.member_of_owner?, {page: current_page, per_page: Rails.configuration.railscollab.search_results_per_page})
 
       @tag_names, @total_search_tags = @project.search(@last_search, !@logged_user.member_of_owner?, {}, true)
       @pagination = []
@@ -94,7 +94,7 @@ class ProjectsController < ApplicationController
         @content_for_sidebar = 'search_sidebar' 
       }
       format.xml {
-        render :xml => [].to_xml(:root => 'results') 
+        render xml: [].to_xml(root: 'results') 
       }
     end
   end
@@ -108,7 +108,7 @@ class ProjectsController < ApplicationController
       format.html {
       }
       format.xml {
-        render :xml => @project_companies.to_xml(:root => 'companies') 
+        render xml: @project_companies.to_xml(root: 'companies') 
       }
     end
   end
@@ -132,7 +132,7 @@ class ProjectsController < ApplicationController
       @project.companies.clear
       @project.companies << Company.owner
       if params[:project_company]
-        valid_companies = Company.where(:id => params[:project_company]).select('id', 'client_of_id')
+        valid_companies = Company.where(id: params[:project_company]).select('id', 'client_of_id')
         valid_companies.each{ |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
       end
 
@@ -169,10 +169,10 @@ class ProjectsController < ApplicationController
 
       # Create new Person entries for new users
 
-      users = User.where(:id => valid_user_ids).includes(:company)
+      users = User.where(id: valid_user_ids).includes(:company)
       users.each do |user|
         next unless valid_companies.include? user.company
-        person = @project.people.create(:user => user)
+        person = @project.people.create(user: user)
         permissions = params[:people_permissions] ? params[:people_permissions][id] : nil
         person.reset_permissions
         person.update_str permissions unless permissions.nil?
@@ -184,7 +184,7 @@ class ProjectsController < ApplicationController
       #@project.updated_by = @logged_user
 
       error_status(false, :success_updated_permissions)
-      redirect_to people_project_path(:id => @project.id)
+      redirect_to people_project_path(id: @project.id)
     end
   end
 
@@ -200,8 +200,8 @@ class ProjectsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_back_or_default people_project_path(:id => @project.id) }
-      format.xml  { render :xml => :ok }
+      format.html { redirect_back_or_default people_project_path(id: @project.id) }
+      format.xml  { render xml: :ok }
     end
   end
 
@@ -213,14 +213,14 @@ class ProjectsController < ApplicationController
       company = Company.find(params[:company_id])
       unless company.is_owner?
         company_user_ids = company.users.collect{ |user| user.id }
-        Person.where({ :user_id => company_user_ids, :project_id => @project.id }).delete_all
+        Person.where({ user_id: company_user_ids, project_id: @project.id }).delete_all
         @project.companies.delete(company)
       end
     end
     
     respond_to do |format|
-      format.html { redirect_back_or_default people_project_path(:id => @project.id) }
-      format.xml  { render :xml => :ok }
+      format.html { redirect_back_or_default people_project_path(id: @project.id) }
+      format.xml  { render xml: :ok }
     end
   end
 
@@ -231,7 +231,7 @@ class ProjectsController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @project.to_xml(:root => 'project') }
+      format.xml  { render xml: @project.to_xml(root: 'project') }
     end
   end
 
@@ -259,14 +259,14 @@ class ProjectsController < ApplicationController
 
       # Add default folders
       Rails.configuration.railscollab.default_project_folders.each do |folder_name|
-        folder = Folder.new(:name => folder_name)
+        folder = Folder.new(name: folder_name)
         folder.project = @project
         folder.save
       end
 
       # Add default message categories
       Rails.configuration.railscollab.default_project_message_categories.each do |category_name|
-        category = Category.new(:name => category_name)
+        category = Category.new(name: category_name)
         category.project = @project
         category.save
       end
@@ -276,14 +276,14 @@ class ProjectsController < ApplicationController
       if saved
         format.html {
           error_status(false, :success_added_project)
-          redirect_to permissions_project_path(:id => @project.id)
+          redirect_to permissions_project_path(id: @project.id)
         }
         
-        format.xml  { render :xml => @project.to_xml(:root => 'project'), :status => :created, :location => @project }
+        format.xml  { render xml: @project.to_xml(root: 'project'), status: :created, location: @project }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -307,9 +307,9 @@ class ProjectsController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -323,7 +323,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_project)
-        redirect_back_or_default(:controller => 'dashboard')
+        redirect_back_or_default(controller: 'dashboard')
       }
       
       format.xml  { head :ok }
@@ -390,7 +390,7 @@ protected
 
   def extra_crumbs
     case action_name
-      when 'new', 'create', 'edit', 'update', 'permissions' then [{:title => :projects, :url => "/administration/projects"}]
+      when 'new', 'create', 'edit', 'update', 'permissions' then [{title: :projects, url: "/administration/projects"}]
       else super
     end
   end

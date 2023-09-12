@@ -43,7 +43,7 @@ module AuthenticatedSystem
     #
     # To require logins for specific actions, use this in your controllers:
     #
-    #   before_action :login_required, :only => [ :edit, :update ]
+    #   before_action :login_required, only: [ :edit, :update ]
     #
     # To skip this in a subclassed controller:
     #
@@ -68,7 +68,7 @@ module AuthenticatedSystem
           if @token_login.nil?
             redirect_to '/login'
           else
-            redirect_to :controller => 'session', :action => 'new', :token => params[:token]
+            redirect_to controller: 'session', action: 'new', token: params[:token]
           end
         end
         # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
@@ -90,7 +90,7 @@ module AuthenticatedSystem
 
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.  Set an appropriately modified
-    #   after_action :store_location, :only => [:index, :new, :show, :edit]
+    #   after_action :store_location, only: [:index, :new, :show, :edit]
     # for any controller you want to be bounce-backable.
     def redirect_back_or_default(default)
       redirect_to(session[:return_to] || default)
@@ -195,7 +195,7 @@ module AuthenticatedSystem
     def send_remember_cookie!
       cookies[:auth_token] = {
         :value   => @logged_user.remember_token,
-        :expires => @logged_user.remember_token_expires_at }
+        expires: @logged_user.remember_token_expires_at }
     end
 
 end

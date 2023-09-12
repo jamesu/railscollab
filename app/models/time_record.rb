@@ -36,9 +36,9 @@ class TimeRecord < ApplicationRecord
   #has_many :tags, as:  'rel_object', dependent:  :destroy
   
   scope :running, -> { where('start_date IS NOT NULL AND done_date IS NULL') }
-  scope :is_public, -> { where(:is_private => false) }
+  scope :is_public, -> { where(is_private: false) }
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create   :process_create
   before_update  :process_update_params
   before_destroy :process_destroy
@@ -201,7 +201,7 @@ class TimeRecord < ApplicationRecord
   def self.find_by_task_lists(task_lists, time_conds)
     lists = []
 
-    task_lists.all(:include => {:tasks => :time_records}).each do |list|
+    task_lists.all(include: {tasks: :time_records}).each do |list|
       tasks = []
       list.tasks.each do |task|
         times = task.time_records.select do |time|
@@ -211,11 +211,11 @@ class TimeRecord < ApplicationRecord
         if (total > 0)
           total_billable = times.select(&:is_billable).inject(0) {|sum, time| sum + time.hours}
           extra_conditions = time_conds.clone.merge({'task_list_id' => list.id, 'task_id' => task.id})
-          tasks << {:task => task, :hours => total, :billable_hours => total_billable || 0, :times => times}
+          tasks << {task: task, hours: total, billable_hours: total_billable || 0, times: times}
         end
       end
 
-      lists << {:list => list, :tasks => tasks}
+      lists << {list: list, tasks: tasks}
     end
 
     return lists
@@ -249,7 +249,7 @@ class TimeRecord < ApplicationRecord
   def self.all_by_user(user)
     project_ids = user.active_project_ids
     
-    time_conditions = {:project_id => project_ids}
+    time_conditions = {project_id: project_ids}
     time_conditions[:is_private] = false if !user.member_of_owner?
     
     return where(time_conditions)
@@ -262,11 +262,11 @@ class TimeRecord < ApplicationRecord
   # Validation
   
   validates_presence_of :name
-  validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add attr, I18n.t('not_allowed') if value == true
   end
   
-  validates_each :assigned_to, :allow_nil => true do |record, attr, value|
+  validates_each :assigned_to, allow_nil: true do |record, attr, value|
     record.errors.add attr, I18n.t('not_part_of_project') if (!value.nil? and !value.is_part_of(record.project))
   end
   

@@ -29,7 +29,7 @@ class TagsController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.xml { render :xml => [].to_xml(:root => 'tags') }
+      format.xml { render xml: [].to_xml(root: 'tags') }
     end
   end
 
@@ -60,8 +60,8 @@ private
   	@tagged_objects_count = @tag_object_list.length
   	@tagged_objects = {
       :messages   => @tag_object_list.select { |obj| obj.class == Message },
-      :milestones => @tag_object_list.select { |obj| obj.class == Milestone },
-      :task_lists => @tag_object_list.select { |obj| obj.class == TaskList },
+      milestones: @tag_object_list.select { |obj| obj.class == Milestone },
+      task_lists: @tag_object_list.select { |obj| obj.class == TaskList },
       :files      => @tag_object_list.select { |obj| obj.class == ProjectFile },
   	}
   end

@@ -29,15 +29,15 @@ FactoryBot.define do
     password { 'password' }
     password_confirmation { 'password' }
     
-    association :company, :factory => :company
+    association :company, factory: :company
   end
 
-  factory :admin, :parent => :user do
+  factory :admin, parent: :user do
     sequence(:company) {|n| Company.owner}
     is_admin { true }
   end
 
-  factory :owner_user, :parent => :user do
+  factory :owner_user, parent: :user do
     sequence(:company) {|n| Company.owner}
     is_admin { false }
   end

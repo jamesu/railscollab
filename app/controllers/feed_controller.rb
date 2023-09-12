@@ -30,11 +30,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.rss do
-        render :text => '404 Not found', :status => 404 unless @activity_log.length > 0
+        render text: '404 Not found', status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
@@ -52,7 +52,7 @@ class FeedController < ApplicationController
           end
         end
 
-        render :text => ical.to_ical, :content_type => 'text/calendar'
+        render text: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
@@ -61,12 +61,12 @@ class FeedController < ApplicationController
   	begin
       @project = Project.find(params[:project])
   	rescue ActiveRecord::RecordNotFound
-      render :text => '404 Not found', :status => 404
+      render text: '404 Not found', status: 404
       return
   	end
 
   	unless @logged_user.member_of(@project)
-      render :text => '404 Not found', :status => 404
+      render text: '404 Not found', status: 404
       return
   	end
 
@@ -75,11 +75,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.rss do
-        render :text => '404 Not found', :status => 404 unless @activity_log.length > 0
+        render text: '404 Not found', status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
@@ -97,22 +97,22 @@ class FeedController < ApplicationController
           end
         end
 
-        render :text => ical.to_ical, :content_type => 'text/calendar'
+        render text: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
 
   def recent_milestones
   	@milestones = Milestone.all_by_user(@logged_user)
-  	@milestones_url = url_for(:controller => 'dashboard', :action => 'milestones')
+  	@milestones_url = url_for(controller: 'dashboard', action: 'milestones')
 
   	respond_to do |format|
       format.html do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.rss do
-        render :text => '404 Not found', :status => 404 unless @milestones.length > 0
+        render text: '404 Not found', status: 404 unless @milestones.length > 0
       end
 
       format.ics do
@@ -130,7 +130,7 @@ class FeedController < ApplicationController
             description milestone.description
           end
         end
-        render :text => ical.to_ical, :content_type => 'text/calendar'
+        render text: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
@@ -139,12 +139,12 @@ class FeedController < ApplicationController
   	begin
       @project = Project.find(params[:project])
   	rescue ActiveRecord::RecordNotFound
-      render :text => 'Not found', :status => 404
+      render text: 'Not found', status: 404
       return
   	end
 
   	unless @logged_user.member_of(@project)
-      render :text => 'Not found', :status => 404
+      render text: 'Not found', status: 404
       return
   	end
 
@@ -154,11 +154,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.rss do
-        render :text => '404 Not found', :status => 404 unless @milestones.length > 0
+        render text: '404 Not found', status: 404 unless @milestones.length > 0
       end
 
       format.ics do
@@ -176,7 +176,7 @@ class FeedController < ApplicationController
             description milestone.description
           end
         end
-        render :text => ical.to_ical, :content_type => 'text/calendar'
+        render text: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
@@ -186,7 +186,7 @@ class FeedController < ApplicationController
       begin
         @project = Project.find(params[:project])
       rescue ActiveRecord::RecordNotFound
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
         return
       end
 
@@ -197,15 +197,15 @@ class FeedController < ApplicationController
 
     respond_to do |format|
       format.html do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.rss do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.ics do
-        render :text => '404 Not found', :status => 404
+        render text: '404 Not found', status: 404
       end
 
       format.csv do
@@ -221,7 +221,7 @@ class FeedController < ApplicationController
               time.task.nil? ? '' : time.task.object_name,
             ] }
         end
-        render :text => build_str, :content_type => 'application/vnd.ms-excel'
+        render text: build_str, content_type: 'application/vnd.ms-excel'
       end
     end
   end

@@ -20,7 +20,7 @@ class CategoriesController < ApplicationController
 
   layout 'project_website'
 
-  after_action  :user_track, :only => [:index, :show]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /categories
   # GET /categories.xml
@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.xml  {
-        render :xml => @categories.to_xml(:root => 'categories')
+        render xml: @categories.to_xml(root: 'categories')
       }
     end
   end
@@ -51,7 +51,7 @@ class CategoriesController < ApplicationController
         @content_for_sidebar = 'messages/index_sidebar'
       }
       format.xml  { 
-        render :xml => @category.to_xml
+        render xml: @category.to_xml
       }
     end
   end
@@ -65,7 +65,7 @@ class CategoriesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @category.to_xml(:root => 'category') }
+      format.xml  { render xml: @category.to_xml(root: 'category') }
     end
   end
 
@@ -94,10 +94,10 @@ class CategoriesController < ApplicationController
           error_status(false, :success_added_message_category)
           redirect_back_or_default(@category.object_url)
         }
-        format.xml  { render :xml => @category.to_xml(:root => 'category'), :status => :created, :location => @category }
+        format.xml  { render xml: @category.to_xml(root: 'category'), status: :created, location: @category }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @category.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -123,8 +123,8 @@ class CategoriesController < ApplicationController
         }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @category.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -193,14 +193,14 @@ class CategoriesController < ApplicationController
         important_conditions['is_private'] = false unless @logged_user.member_of_owner?
         @important_messages = @active_project.messages.where(important_conditions)
 
-        render :template => 'messages/index'
+        render template: 'messages/index'
       }
       format.xml  { 
         @messages = @category.messages.where(msg_conditions)
                                               .offset(params[:offset])
                                               .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
         
-        render :xml => @messages.to_xml(:only => [:id,
+        render xml: @messages.to_xml(only: [:id,
                                                   :title,
                                                   :created_by_id, 
                                                   :created_on,
@@ -209,7 +209,7 @@ class CategoriesController < ApplicationController
                                                   :is_important,
                                                   :milestone_id,
                                                   :attached_files_count, 
-                                                  :comments_enabled], :root => 'messages')
+                                                  :comments_enabled], root: 'messages')
       }
     end
   end
@@ -239,7 +239,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => project_messages_path(@active_project)}
+    crumbs << {title: :messages, url: project_messages_path(@active_project)}
     crumbs
   end
 
@@ -247,17 +247,17 @@ protected
     @page_actions = []
     
     if can? :create_message_category, @active_project
-      @page_actions << {:title => :add_category, :url => new_project_category_path(@active_project) } if action_name == 'index'
+      @page_actions << {title: :add_category, url: new_project_category_path(@active_project) } if action_name == 'index'
     end
     
     if can? :create_message, @active_project
-      @page_actions << {:title => :add_message, :url => new_project_message_path(project_id: @active_project.id, :category_id => @category.id)} if action_name == 'posts'
+      @page_actions << {title: :add_message, url: new_project_message_path(project_id: @active_project.id, category_id: @category.id)} if action_name == 'posts'
     end
 
     if @display_list
-      @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+      @page_actions << {title: :as_summary, url: url_for(display: 'summary')}
     else
-      @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+      @page_actions << {title: :as_list, url: url_for(display: 'list')}
     end
     
     @page_actions

@@ -1,7 +1,7 @@
 class NewTimezone < ActiveRecord::Migration[4.2]
   def self.up
-    add_column :users, :time_zone, :string, :null => false, :default => ''
-    add_column :companies, :time_zone, :string, :null => false, :default => ''
+    add_column :users, :time_zone, :string, null: false, default: ''
+    add_column :companies, :time_zone, :string, null: false, default: ''
     
     User.all.each do |user|
         user.time_zone = TimeZone[user.timezone].name
@@ -18,8 +18,8 @@ class NewTimezone < ActiveRecord::Migration[4.2]
   end
 
   def self.down
-    add_column :users, :timezone, :float, :default => 0.0,   :null => false
-    add_column :companies, :timezone, :float, :default => 0.0,   :null => false
+    add_column :users, :timezone, :float, default: 0.0,   null: false
+    add_column :companies, :timezone, :float, default: 0.0,   null: false
     
     User.all.each do |user|
         time_zone = TimeZone[user.time_zone]

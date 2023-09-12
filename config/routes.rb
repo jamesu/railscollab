@@ -137,5 +137,5 @@ Railscollab::Application.routes.draw do
 
   get 'administration', controller: 'administration', action: 'index', as:  :administration
 
-  root :to => 'dashboard#index'
+  root to: 'dashboard#index'
 end

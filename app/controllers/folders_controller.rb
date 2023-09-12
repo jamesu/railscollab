@@ -23,7 +23,7 @@ class FoldersController < ApplicationController
 
   
   
-  after_action  :user_track, :only => [:files]
+  after_action  :user_track, only: [:files]
   
   # GET /folders
   # GET /folders.xml
@@ -33,7 +33,7 @@ class FoldersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(project_files_path(@active_project)) }
       format.xml  {
-        render :xml => @folders.to_xml(:root => 'folders')
+        render xml: @folders.to_xml(root: 'folders')
       }
     end
   end
@@ -48,7 +48,7 @@ class FoldersController < ApplicationController
         redirect_to(files_project_folder_path(@active_project))
       }
       format.xml  { 
-        render :xml => @folder.to_xml
+        render xml: @folder.to_xml
       }
     end
   end
@@ -62,7 +62,7 @@ class FoldersController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @folder.to_xml(:root => 'folder') }
+      format.xml  { render xml: @folder.to_xml(root: 'folder') }
     end
   end
 
@@ -86,11 +86,11 @@ class FoldersController < ApplicationController
           redirect_back_or_default(project_folder_path(@active_project, @folder))
         }
         
-        format.xml  { render :xml => @folder.to_xml(:root => 'folder'), :status => :created, :location => @folder }
+        format.xml  { render xml: @folder.to_xml(root: 'folder'), status: :created, location: @folder }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @folder.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @folder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -111,9 +111,9 @@ class FoldersController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @folder.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @folder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -158,7 +158,7 @@ class FoldersController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, conditions: file_conditions, page: @page, per_page: Rails.configuration.railscollab.files_per_page, order: "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.total_pages.times {|page| @pagination << page+1}
         
@@ -167,14 +167,14 @@ class FoldersController < ApplicationController
         @important_files = @important_files.is_public unless @logged_user.member_of_owner?
         @folders = @active_project.folders
         
-        render :template => 'files/index'
+        render template: 'files/index'
       }
       format.xml  { 
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
                             .limit(params[:limit] || Rails.configuration.railscollab.files_per_page)
         
-        render :xml => @files.to_xml(:only => [:id,
+        render xml: @files.to_xml(only: [:id,
                                                :filename,
                                                :created_by_id, 
                                                :created_on,
@@ -183,7 +183,7 @@ class FoldersController < ApplicationController
                                                :is_important,
                                                :is_locked,
                                                :comments_count, 
-                                               :comments_enabled], :root => 'files')
+                                               :comments_enabled], root: 'files')
       }
     end
   end
@@ -192,7 +192,7 @@ private
 
   def page_title
     case action_name
-      when 'files' then I18n.t('folder_name', :folder => @current_folder.name)
+      when 'files' then I18n.t('folder_name', folder: @current_folder.name)
       when 'new', 'create' then I18n.t('add_folder')
       when 'edit', 'update' then I18n.t('edit_folder')
       else super
@@ -214,8 +214,8 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => project_files_path(@active_project)}
-    crumbs << {:title => @folder.name, :url => @folder.object_url} unless @folder.nil? or @folder.new_record?
+    crumbs << {title: :files, url: project_files_path(@active_project)}
+    crumbs << {title: @folder.name, url: @folder.object_url} unless @folder.nil? or @folder.new_record?
     crumbs
   end
 
@@ -224,14 +224,14 @@ private
   
     if can? :create_file, @active_project
       if @folder.nil?
-        @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project)}
+        @page_actions << {title: :add_file, url: new_project_file_path(@active_project)}
       else
-        @page_actions << {:title => :add_file, :url => new_project_file_path(@active_project, :folder_id => @folder.id)}
+        @page_actions << {title: :add_file, url: new_project_file_path(@active_project, folder_id: @folder.id)}
       end
     end
 
     if can? :create_folder, @active_project
-      @page_actions << {:title => :add_folder, :url => new_project_folder_path(@active_project)}
+      @page_actions << {title: :add_folder, url: new_project_folder_path(@active_project)}
     end
     
     @page_actions
@@ -244,7 +244,7 @@ private
   def load_related_object
     if params[:folder_name]
       begin
-        @folder = @active_project.folders.where(:name => params[:folder_name]).first!
+        @folder = @active_project.folders.where(name: params[:folder_name]).first!
         @current_folder = @folder
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_folder, {}, false)

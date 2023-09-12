@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   
   
   
-  after_action :user_track, :only => [:index, :show]
+  after_action :user_track, only: [:index, :show]
 
   def index
     respond_to do |format|
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       format.xml  {
         if @logged_user.is_admin
           @users = User.all
-          render :xml => @users.to_xml(:root => 'user')
+          render xml: @users.to_xml(root: 'user')
         else
           return error_status(true, :insufficient_permissions)
         end
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html {}
       format.xml  { 
-        render :xml => @user.to_xml(:root => 'user')
+        render xml: @user.to_xml(root: 'user')
       }
     end
   end
@@ -114,11 +114,11 @@ class UsersController < ApplicationController
           redirect_back_or_default companies_path
         }
         
-        format.xml  { render :xml => @user.to_xml(:root => 'user'), :status => :created, :location => @user }
+        format.xml  { render xml: @user.to_xml(root: 'user'), status: :created, location: @user }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -149,7 +149,7 @@ class UsersController < ApplicationController
 
     real_im_values = all_im_values.collect do |type_id,value|
       real_im_value = value[:value]
-      ImValue.new(:im_type_id => type_id.to_i, :user_id => @user.id, :value => real_im_value, :is_default => (default_value == type_id))
+      ImValue.new(im_type_id: type_id.to_i, user_id: @user.id, value: real_im_value, is_default: (default_value == type_id))
     end
 
     # Process core parameters
@@ -175,9 +175,9 @@ class UsersController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -186,7 +186,7 @@ class UsersController < ApplicationController
     @user = @logged_user
     authorize! :update_profile, @user
 
-    render :action => 'edit'
+    render action: 'edit'
   end
 
   def destroy
@@ -198,7 +198,7 @@ class UsersController < ApplicationController
     
     respond_to do |format|
       format.html {
-        error_status(false, :success_deleted_user, {:name => old_name})
+        error_status(false, :success_deleted_user, {name: old_name})
         redirect_back_or_default companies_path
       }
       
@@ -224,7 +224,7 @@ class UsersController < ApplicationController
           error_status(true, :error_updating_avatar)
         end
         
-        redirect_to edit_user_path(:id => @user.id)
+        redirect_to edit_user_path(id: @user.id)
       else
         render 'edit'
       end
@@ -233,7 +233,7 @@ class UsersController < ApplicationController
       @user.save
 
       error_status(false, :success_deleted_avatar)
-      redirect_to edit_user_path(:id => @user.id)
+      redirect_to edit_user_path(id: @user.id)
     end
   end
 
@@ -245,7 +245,7 @@ class UsersController < ApplicationController
       
       format.xml  {
         if @user.is_admin
-          render :xml => @user.to_xml
+          render xml: @user.to_xml
         else
           attribs = [:id,
                      :company_id,
@@ -259,7 +259,7 @@ class UsersController < ApplicationController
                      :office_number_ext,
                      :time_zone,
                      :title]
-          render :xml => @user.to_xml(:only => attribs)
+          render xml: @user.to_xml(only: attribs)
         end  
       }
     end
@@ -285,7 +285,7 @@ class UsersController < ApplicationController
     project_ids ||= []
 
     # Grab the list of project id's specified
-    project_list = Project.where(:id => project_ids & user.project_ids)
+    project_list = Project.where(id: project_ids & user.project_ids)
 
     # Associate project permissions with user
     project_list.each do |project|
@@ -307,7 +307,7 @@ class UsersController < ApplicationController
       end.compact
 
       unless delete_list.empty?
-        Person.where(:user_id => user.id, :project_id => delete_list).delete_all
+        Person.where(user_id: user.id, project_id: delete_list).delete_all
       end
     end
   end
@@ -316,7 +316,7 @@ protected
 
   def page_title
     case action_name
-      when 'show' then I18n.t('user_card', :user => @user.display_name)
+      when 'show' then I18n.t('user_card', user: @user.display_name)
       else super
     end
   end
@@ -333,10 +333,10 @@ protected
   def extra_crumbs
     user = (@user||@logged_user)
     crumbs = [
-      {:title => :people, :url => '/companies'},
-      {:title => user.company.name, :url => company_path(user.company)}
+      {title: :people, url: '/companies'},
+      {title: user.company.name, url: company_path(user.company)}
     ]
-    crumbs << {:title => user.display_name, :url => user_path(user)} if action_name == 'permissions'
+    crumbs << {title: user.display_name, url: user_path(user)} if action_name == 'permissions'
     crumbs
   end
 

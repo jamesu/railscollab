@@ -2,7 +2,7 @@
  <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= t('notifier_new_milestone', :name => @milestone.name, :project => @milestone.project.name) %>
+<%= t('notifier_new_milestone', name: @milestone.name, project: @milestone.project.name) %>
 
 - <%= @milestone.object_url(Rails.configuration.railscollab.site_url) %>
 

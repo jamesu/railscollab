@@ -21,7 +21,7 @@ class ConfigOption < ApplicationRecord
   #belongs_to :config_category
 
   def category
-    @config_category ||= ConfigCategory.where(:name => category_name).first
+    @config_category ||= ConfigCategory.where(name: category_name).first
   end
 
   def display_name

@@ -23,7 +23,7 @@ class MessagesController < ApplicationController
 
   
   
-  after_action  :user_track, :only => [:index, :show]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /messages
   # GET /messages.xml
@@ -69,13 +69,13 @@ class MessagesController < ApplicationController
         important_conditions['is_private'] = false unless @logged_user.member_of_owner?
         @important_messages = @active_project.messages.where(important_conditions)
 
-        render :template => 'messages/index'
+        render template: 'messages/index'
       }
       format.xml  { 
         @messages = @active_project.messages.where(msg_conditions)
                                                     .offset(params[:offset])
                                                     .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
-        render :xml => @messages.to_xml(:root => 'messages')
+        render xml: @messages.to_xml(root: 'messages')
       }
     end
   end
@@ -93,7 +93,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {}
       format.xml  { 
-        render :xml => @message.to_xml(:root => 'message')
+        render xml: @message.to_xml(root: 'message')
       }
     end
   end
@@ -125,7 +125,7 @@ class MessagesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @message.to_xml(:root => 'message') }
+      format.xml  { render xml: @message.to_xml(root: 'message') }
     end
   end
 
@@ -186,11 +186,11 @@ class MessagesController < ApplicationController
           redirect_back_or_default(@message.object_url)
         }
         
-        format.xml  { render :xml => @message.to_xml(:root => 'message'), :status => :created, :location => @message }
+        format.xml  { render xml: @message.to_xml(root: 'message'), status: :created, location: @message }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @message.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -225,9 +225,9 @@ class MessagesController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @message.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @message.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -243,7 +243,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(messages_url(:category_id => params[:category_id]))
+        redirect_back_or_default(messages_url(category_id: params[:category_id]))
       }
       
       format.xml  { head :ok }
@@ -259,7 +259,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(message_url(:id => @message.id))
+        redirect_back_or_default(message_url(id: @message.id))
       }
       
       format.xml  { head :ok }
@@ -275,7 +275,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(message_url(:id => @message.id))
+        redirect_back_or_default(message_url(id: @message.id))
       }
       
       format.xml  { head :ok }
@@ -286,7 +286,7 @@ private
 
   def page_title
     case action_name
-      when 'category' then I18n.t('category_messages', :category => @category.name)
+      when 'category' then I18n.t('category_messages', category: @category.name)
       else super
     end
   end
@@ -307,8 +307,8 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :messages, :url => project_messages_path(@active_project)} unless action_name == 'index'
-    crumbs << {:title => @message.category.name, :url => posts_project_category_path(@active_project, :id => @message.category_id)} if action_name == 'show' && @message.category
+    crumbs << {title: :messages, url: project_messages_path(@active_project)} unless action_name == 'index'
+    crumbs << {title: @message.category.name, url: posts_project_category_path(@active_project, id: @message.category_id)} if action_name == 'show' && @message.category
     crumbs
   end
 
@@ -318,14 +318,14 @@ private
     if action_name == 'index'
 
       if can? :create_message, @active_project
-        @page_actions << {:title => :add_message, :url => (@category.nil? ?
-                          new_project_message_path(@active_project) : new_project_message_path(@active_project, :category_id => @category.id))}
+        @page_actions << {title: :add_message, url: (@category.nil? ?
+                          new_project_message_path(@active_project) : new_project_message_path(@active_project, category_id: @category.id))}
       end
 
       if @display_list
-        @page_actions << {:title => :as_summary, :url => url_for(:display => 'summary')}
+        @page_actions << {title: :as_summary, url: url_for(display: 'summary')}
       else
-        @page_actions << {:title => :as_list, :url => url_for(:display => 'list')}
+        @page_actions << {title: :as_list, url: url_for(display: 'list')}
       end
     end
 

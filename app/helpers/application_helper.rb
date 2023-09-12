@@ -40,7 +40,7 @@ module ApplicationHelper
   def checkbox_link(link, checked=false, hint=nil, attrs={})
     icon_url = checked ? "/assets/icons/checked.gif" : "/assets/icons/not-checked.gif"
     mthd = attrs[:method] || :post
-    link_to "<img src='#{icon_url}' alt='' />".html_safe, link, attrs.merge({:method => mthd, :class => 'checkboxLink', :title => ( hint.nil? ? '' : (html_escape hint) )})
+    link_to "<img src='#{icon_url}' alt='' />".html_safe, link, attrs.merge({method: mthd, class: 'checkboxLink', title: ( hint.nil? ? '' : (html_escape hint) )})
   end
 
   def render_icon(filename, alt, attrs={})
@@ -50,7 +50,7 @@ module ApplicationHelper
   end
   
   def loading_spinner
-    image_tag 'spinner.gif', {:class => 'loadingSpinner'}
+    image_tag 'spinner.gif', {class: 'loadingSpinner'}
   end
 
   def action_list(actions)
@@ -93,95 +93,95 @@ module ApplicationHelper
 
   def format_usertime(time, format, user=@logged_user)
     return '' if time.nil?
-    I18n.l(time, :format => format.to_sym)
+    I18n.l(time, format: format.to_sym)
   end
 	
 	def actions_for_user(user)
 	   profile_updateable = can?(:update_profile, user)
 	   
-	   actions = [{:name => I18n.t('edit'), :url => edit_user_path(:id => user.id), :cond => profile_updateable}]
+	   actions = [{name: I18n.t('edit'), url: edit_user_path(id: user.id), cond: profile_updateable}]
 	   
 	   if @active_project.nil?
 	     actions += [
-	       {:name => I18n.t('delete'), :url => user_path(:id => user.id), :cond => can?(:delete,user), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_user_delete') }},
-	       {:name => I18n.t('permissions'), :url => permissions_user_path(:id => user.id), :cond => can?(:update_permissions, user)}]
+	       {name: I18n.t('delete'), url: user_path(id: user.id), cond: can?(:delete,user), data: { turbo_method: :delete, turbo_confirm: I18n.t('confirm_user_delete') }},
+	       {name: I18n.t('permissions'), url: permissions_user_path(id: user.id), cond: can?(:update_permissions, user)}]
 	   else
-	     actions << {:name => I18n.t('remove'), :url => users_project_path(:id => @active_project.id, :user => user.id), :cond => can?(:delete,user), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_user_remove') }}
+	     actions << {name: I18n.t('remove'), url: users_project_path(id: @active_project.id, user: user.id), cond: can?(:delete,user), data: { turbo_method: :delete, turbo_confirm: I18n.t('confirm_user_remove') }}
 	   end
 	   
 	   actions
 	end
 
   def actions_for_project(project)
-    [{:name => I18n.t('edit'),   :url => edit_project_path(:id => project.id), :cond => can?(:edit,project)},
-     {:name => I18n.t('delete'), :url => project_path(:id => project.id), :cond => can?(:delete,project), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('project_confirm_delete') }}]
+    [{name: I18n.t('edit'),   url: edit_project_path(id: project.id), cond: can?(:edit,project)},
+     {name: I18n.t('delete'), url: project_path(id: project.id), cond: can?(:delete,project), data: { turbo_method: :delete, turbo_confirm: I18n.t('project_confirm_delete') }}]
   end
 
   def actions_for_milestone(milestone)
-    [{:name => I18n.t('edit'),   :url => edit_project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:edit,milestone)},
-     {:name => I18n.t('delete'), :url => project_milestone_path(milestone.project, :id => milestone.id), :cond => can?(:delete,milestone), :class => 'oaction', :data => { turbo_method: :delete, :turbo_confirm => I18n.t('milestone_confirm_delete') }}]
+    [{name: I18n.t('edit'),   url: edit_project_milestone_path(milestone.project, id: milestone.id), cond: can?(:edit,milestone)},
+     {name: I18n.t('delete'), url: project_milestone_path(milestone.project, id: milestone.id), cond: can?(:delete,milestone), class: 'oaction', data: { turbo_method: :delete, turbo_confirm: I18n.t('milestone_confirm_delete') }}]
   end
 
   def actions_for_task_list(task_list)
-    [{:name => I18n.t('edit'),          :url => edit_project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:edit,task_list)},
-     {:name => I18n.t('delete'),        :url => project_task_list_path(task_list.project, :id => task_list.id), :cond => can?(:delete,task_list), :class => 'oaction', :data => { turbo_method: :delete, :turbo_confirm => I18n.t('task_list_confirm_delete') }},
-     {:name => I18n.t('reorder_tasks'), :url => reorder_project_task_list_path(task_list.project, :id => task_list.id), :class => 'doSortTaskList', :cond => can?(:edit,task_list)}]
+    [{name: I18n.t('edit'),          url: edit_project_task_list_path(task_list.project, id: task_list.id), cond: can?(:edit,task_list)},
+     {name: I18n.t('delete'),        url: project_task_list_path(task_list.project, id: task_list.id), cond: can?(:delete,task_list), class: 'oaction', data: { turbo_method: :delete, turbo_confirm: I18n.t('task_list_confirm_delete') }},
+     {name: I18n.t('reorder_tasks'), url: reorder_project_task_list_path(task_list.project, id: task_list.id), class: 'doSortTaskList', cond: can?(:edit,task_list)}]
   end
 
   def actions_for_message(message)
-    [{:name => I18n.t('edit'),   :url => edit_project_message_path(message.project, :id => message.id), :cond => can?(:edit,message)},
-     {:name => I18n.t('delete'), :url => project_message_path(message.project, :id => message.id), :cond => can?(:delete,message), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('message_confirm_delete') }}]
+    [{name: I18n.t('edit'),   url: edit_project_message_path(message.project, id: message.id), cond: can?(:edit,message)},
+     {name: I18n.t('delete'), url: project_message_path(message.project, id: message.id), cond: can?(:delete,message), data: { turbo_method: :delete, turbo_confirm: I18n.t('message_confirm_delete') }}]
   end
 
   def actions_for_company(company)
     actions = [
-      {:name => I18n.t('add_user'), :url => "/users/new?company_id=#{company.id}", :cond => (@active_project.nil? and can?(:create_user, current_user))}, 
-      {:name => I18n.t('edit'),   :url => edit_company_path(:id => company.id), :cond => can?(:edit,company)}]
+      {name: I18n.t('add_user'), url: "/users/new?company_id=#{company.id}", cond: (@active_project.nil? and can?(:create_user, current_user))}, 
+      {name: I18n.t('edit'),   url: edit_company_path(id: company.id), cond: can?(:edit,company)}]
     
     unless @active_project.nil?
-      actions << {:name => I18n.t('remove'), :url => companies_project_path(:id => @active_project.id, :company_id => company.id), :cond => can?(:remove, company), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('confirm_client_remove') }}
+      actions << {name: I18n.t('remove'), url: companies_project_path(id: @active_project.id, company_id: company.id), cond: can?(:remove, company), data: { turbo_method: :delete, turbo_confirm: I18n.t('confirm_client_remove') }}
     else
-      actions << {:name => I18n.t('permissions'), :url => permissions_company_path(:id => company.id), :cond => can?(:manage, company)}
+      actions << {name: I18n.t('permissions'), url: permissions_company_path(id: company.id), cond: can?(:manage, company)}
     end
     
     actions
   end
 
   def actions_for_comment(comment)
-    [{:name => I18n.t('edit'),   :url => edit_project_comment_path(comment.project, :id => comment.id),   :cond => can?(:edit,comment)},
-     {:name => I18n.t('delete'), :url => project_comment_path(comment.project, :id => comment.id), :cond => can?(:delete,comment), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('comment_delete_confirm') }}]
+    [{name: I18n.t('edit'),   url: edit_project_comment_path(comment.project, id: comment.id),   cond: can?(:edit,comment)},
+     {name: I18n.t('delete'), url: project_comment_path(comment.project, id: comment.id), cond: can?(:delete,comment), data: { turbo_method: :delete, turbo_confirm: I18n.t('comment_delete_confirm') }}]
   end
 
   def actions_for_file(file, last_revision)
-    [{:name => I18n.t('details_size', :size => format_size(last_revision.filesize)), :url => project_file_path(file.project, :id => file.id), :cond => can?(:download, file)},
-     {:name => I18n.t('edit'),   :url => edit_project_file_path(file.project, :id => file.id), :cond => can?(:edit,file)},
-     {:name => I18n.t('delete'), :url => project_file_path(file.project, :id => file.id), :cond => can?(:delete,file), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('file_delete_confirmation') }}]
+    [{name: I18n.t('details_size', size: format_size(last_revision.filesize)), url: project_file_path(file.project, id: file.id), cond: can?(:download, file)},
+     {name: I18n.t('edit'),   url: edit_project_file_path(file.project, id: file.id), cond: can?(:edit,file)},
+     {name: I18n.t('delete'), url: project_file_path(file.project, id: file.id), cond: can?(:delete,file), data: { turbo_method: :delete, turbo_confirm: I18n.t('file_delete_confirmation') }}]
   end
 
   def actions_for_file_revision(file, revision)
-    [{:name => I18n.t('download_size', :size => format_size(revision.filesize)), :url => download_project_file_path(file.project, :id => file.id, :revision => revision.revision_number), :cond => can?(:download, file)},
-     {:name => I18n.t('edit'),                                                   :url => edit_project_file_path(file.project, :id => file.id, :revision => revision.revision_number), :cond => can?(:edit,file)}]
+    [{name: I18n.t('download_size', size: format_size(revision.filesize)), url: download_project_file_path(file.project, id: file.id, revision: revision.revision_number), cond: can?(:download, file)},
+     {name: I18n.t('edit'),                                                   url: edit_project_file_path(file.project, id: file.id, revision: revision.revision_number), cond: can?(:edit,file)}]
   end
 
   def actions_for_attached_files(attached_file, object)
-    [{:name => I18n.t('details'), :url => project_file_path(attached_file.project, :id => attached_file.id), :cond => true},
-     {:name => I18n.t('detatch'), :url => detatch_project_file_path(attached_file.project, :id => attached_file.id, :object_type => object.class.to_s, :object_id => object.id), :cond => can?(:add_file, object), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('detatch_file_confirm') }}]
+    [{name: I18n.t('details'), url: project_file_path(attached_file.project, id: attached_file.id), cond: true},
+     {name: I18n.t('detatch'), url: detatch_project_file_path(attached_file.project, id: attached_file.id, object_type: object.class.to_s, object_id: object.id), cond: can?(:add_file, object), data: { turbo_method: :delete, turbo_confirm: I18n.t('detatch_file_confirm') }}]
   end
 
   def actions_for_time(time)
-    [{:name => I18n.t('details'), :url => project_time_path(time.project, :id => time.id), :cond => true},
-     {:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => project_time_path(@actitime.project_project, :id => time.id), :cond => can?(:delete,time), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('time_confirm_delete') }}]
+    [{name: I18n.t('details'), url: project_time_path(time.project, id: time.id), cond: true},
+     {name: I18n.t('edit'),    url: edit_project_time_path(time.project, id: time.id), cond: can?(:edit,time)},
+     {name: I18n.t('delete'),  url: project_time_path(@actitime.project_project, id: time.id), cond: can?(:delete,time), data: { turbo_method: :delete, turbo_confirm: I18n.t('time_confirm_delete') }}]
   end
 
   def actions_for_time_short(time)
-    [{:name => I18n.t('edit'),    :url => edit_project_time_path(time.project, :id => time.id), :cond => can?(:edit,time)},
-     {:name => I18n.t('delete'),  :url => project_time_path(time.project, :id => time.id), :cond => can?(:delete,time), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('time_confirm_delete') }}]
+    [{name: I18n.t('edit'),    url: edit_project_time_path(time.project, id: time.id), cond: can?(:edit,time)},
+     {name: I18n.t('delete'),  url: project_time_path(time.project, id: time.id), cond: can?(:delete,time), data: { turbo_method: :delete, turbo_confirm: I18n.t('time_confirm_delete') }}]
   end
 
   def actions_for_wiki_page(page)
-    [{:name => I18n.t('edit'),    :url => edit_project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:edit,page)},
-     {:name => I18n.t('delete'),  :url => project_wiki_page_path(page.project, :id => page.slug), :cond => can?(:delete,page), :data => { turbo_method: :delete, :turbo_confirm => I18n.t('wiki_page_confirm_delete') }}]
+    [{name: I18n.t('edit'),    url: edit_project_wiki_page_path(page.project, id: page.slug), cond: can?(:edit,page)},
+     {name: I18n.t('delete'),  url: project_wiki_page_path(page.project, id: page.slug), cond: can?(:delete,page), data: { turbo_method: :delete, turbo_confirm: I18n.t('wiki_page_confirm_delete') }}]
   end
   
   def running_time_for_task(task)
@@ -216,7 +216,7 @@ module ApplicationHelper
   # offset: Use date.wday, so use 0 to start the week in sunday
   def calendar_wdays(starting_day = 0)
     start_week = Date.today.beginning_of_week + (starting_day - 1).days # In rails week start in monday and monday.wday is 1
-    (start_week...start_week+7.days).collect { |day| I18n.l(day, :format => '%A') }
+    (start_week...start_week+7.days).collect { |day| I18n.l(day, format: '%A') }
   end
   
   # offset: Use date.wday, so use 0 to start the week in sunday
@@ -256,7 +256,7 @@ module ApplicationHelper
         end
       end
 
-      month_cell = [:thm, I18n.l(first_day, :format => '%B'), week_rows.size + 1]
+      month_cell = [:thm, I18n.l(first_day, format: '%B'), week_rows.size + 1]
       all_rows.concat [[month_cell], *week_rows]
     end
     
@@ -265,7 +265,7 @@ module ApplicationHelper
 
   def days_calendar(start_date, end_date, tableclass)
     # Day header
-    header = (Date.today..Date.today+6.days).map { |date| [:th, I18n.l(date, :format => '%A')] }
+    header = (Date.today..Date.today+6.days).map { |date| [:th, I18n.l(date, format: '%A')] }
     
     # Iterate until final day
     rows = (start_date..end_date).to_a.in_groups_of(7).inject([header]) do |rows, week|
@@ -354,56 +354,56 @@ module ApplicationHelper
   def administration_tabbed_navigation
     return nil if !@logged_user.company.is_owner?
     items = [
-      {:id => :index,         :url => administration_path},
-      {:id => :people,        :url => companies_path},
-      {:id => :projects,      :url => projects_path}
+      {id: :index,         url: administration_path},
+      {id: :people,        url: companies_path},
+      {id: :projects,      url: projects_path}
     ]
   end
 
   def administration_crumbs
     return nil if !@logged_user.company.is_owner?
     [
-      {:title => :dashboard,      :url => '/dashboard'},
-      {:title => :administration, :url => '/administration'}
-    ] + extra_crumbs + [{:title => current_crumb}]
+      {title: :dashboard,      url: '/dashboard'},
+      {title: :administration, url: '/administration'}
+    ] + extra_crumbs + [{title: current_crumb}]
   end
 
   def dashboard_tabbed_navigation
-    items = [{:id => :overview,       :url => root_path},
-             {:id => :my_projects,    :url => '/dashboard/my_projects'},
-             {:id => :my_tasks,       :url => '/dashboard/my_tasks'},
-             {:id => :milestones,     :url => '/dashboard/milestones'}]
+    items = [{id: :overview,       url: root_path},
+             {id: :my_projects,    url: '/dashboard/my_projects'},
+             {id: :my_tasks,       url: '/dashboard/my_tasks'},
+             {id: :milestones,     url: '/dashboard/milestones'}]
   end
 
   def dashboard_crumbs
-    [{:title => :dashboard, :url => '/dashboard'}, {:title => current_crumb}]
+    [{title: :dashboard, url: '/dashboard'}, {title: current_crumb}]
   end
 
   def project_tabbed_navigation
     project_id = @active_project.id
-    items = [{:id => :overview,   :url => project_path(@active_project)}]
-    items << {:id => :messages,   :url => project_messages_path(@active_project)}
-    items << {:id => :tasks,      :url => project_task_lists_path(@active_project)}
-    items << {:id => :milestones, :url => project_milestones_path(@active_project)}
-    items << {:id => :ptime,      :url => project_times_path(@active_project)} if @logged_user.has_permission(@active_project, :can_manage_time)
-    items << {:id => :files,      :url => project_files_path(@active_project)}
-    items << {:id => :wiki,       :url => project_wiki_pages_path(@active_project)}
-    items << {:id => :people,     :url => people_project_path(@active_project)}
+    items = [{id: :overview,   url: project_path(@active_project)}]
+    items << {id: :messages,   url: project_messages_path(@active_project)}
+    items << {id: :tasks,      url: project_task_lists_path(@active_project)}
+    items << {id: :milestones, url: project_milestones_path(@active_project)}
+    items << {id: :ptime,      url: project_times_path(@active_project)} if @logged_user.has_permission(@active_project, :can_manage_time)
+    items << {id: :files,      url: project_files_path(@active_project)}
+    items << {id: :wiki,       url: project_wiki_pages_path(@active_project)}
+    items << {id: :people,     url: people_project_path(@active_project)}
 
     items
   end
 
   def project_crumbs(current=nil, extras=[])
     [
-      {:title => :dashboard,           :url => '/dashboard'},
-      {:title => @active_project.name, :url => project_path(:id => @active_project.id)}
-    ] + extra_crumbs + [{:title => current_crumb}]
+      {title: :dashboard,           url: '/dashboard'},
+      {title: @active_project.name, url: project_path(id: @active_project.id)}
+    ] + extra_crumbs + [{title: current_crumb}]
   end
 
   # Project items
 
   def assign_project_select(object, method, project, options = {})
-    select_tag "#{object}[#{method}]", assign_select_grouped_options(project, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {:id => "#{object}_#{method}"}.merge(options)
+    select_tag "#{object}[#{method}]", assign_select_grouped_options(project, selected: (options.delete(:object) || instance_variable_get("@#{object}")).try(method)), {id: "#{object}_#{method}"}.merge(options)
   end
 
   def form_assign_project_select(form, mthd, project, options = {})
@@ -413,7 +413,7 @@ module ApplicationHelper
   end
 
   def task_collection_select(object, mthd, collection, filter=nil, options = {})
-    select_tag mthd, task_select_grouped_options(collection, filter, :selected => (options.delete(:object) || instance_variable_get("@#{object}")).try(mthd)), {:id => "#{object}_#{mthd}"}.merge(options)
+    select_tag mthd, task_select_grouped_options(collection, filter, selected: (options.delete(:object) || instance_variable_get("@#{object}")).try(mthd)), {id: "#{object}_#{mthd}"}.merge(options)
   end
 
   def form_task_collection_select(form, mthd, collection, filter=nil, options = {})
@@ -460,7 +460,7 @@ module ApplicationHelper
     permissions = @logged_user.permissions_for(project)
     return [] if permissions.nil? or !(permissions.can_assign_to_owners or permissions.can_assign_to_other)
 
-    default_option = permissions.can_assign_to_other ? content_tag(:option, I18n.t('anyone'), :value => 0) : ''
+    default_option = permissions.can_assign_to_other ? content_tag(:option, I18n.t('anyone'), value: 0) : ''
     items = {}
     project.companies.each do |company|
       next if company.is_owner? and !permissions.can_assign_to_owners
@@ -478,10 +478,10 @@ module ApplicationHelper
     items = {}
     task_lists.each do |task_list|
       list = filter.nil? ? task_list.tasks : task_list.tasks.reject(&filter)
-      items[task_list.name] = list.collect {|task| [truncate(task.text, :length => 50), task.id.to_s]}
+      items[task_list.name] = list.collect {|task| [truncate(task.text, length: 50), task.id.to_s]}
     end
 
-    content_tag(:option, I18n.t('none'), :value => 0) + grouped_options_for_select(items, options)
+    content_tag(:option, I18n.t('none'), value: 0) + grouped_options_for_select(items, options)
   end
   
   def object_comments_url(object)

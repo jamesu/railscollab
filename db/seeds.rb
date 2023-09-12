@@ -1,6 +1,6 @@
 OPTIONS = {
 :initial_user_name        => ENV['RAILSCOLLAB_INITIAL_USER']        || 'admin',
-:initial_user_displayname => ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME'] || 'Administrator',
+initial_user_displayname: ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME'] || 'Administrator',
 :initial_user_password    => ENV['RAILSCOLLAB_INITIAL_PASSWORD']    || 'password',
 :initial_user_email       => ENV['RAILSCOLLAB_INITIAL_EMAIL']       || 'better.set.this@localhost',
 :initial_company_name     => ENV['RAILSCOLLAB_INITIAL_COMPANY']     || 'Company',
@@ -14,7 +14,7 @@ def setup
   # Ensure owner company exists
   if owner_company.nil?
   	puts 'Creating owner company...'
-  	owner_company = Company.new(:name => OPTIONS[:initial_company_name])
+  	owner_company = Company.new(name: OPTIONS[:initial_company_name])
   	owner_company.time_zone = 'UTC'
   	unless owner_company.save
   		puts "\nCouldn't create a new owner company!\n"
@@ -26,7 +26,7 @@ def setup
   # Ensure owner user exists
   unless User.where(['users.is_admin = ? AND users.company_id = ?', true, owner_company.id]).first
   	puts 'Creating owner user...'
-  	initial_user = User.new(:display_name => OPTIONS[:initial_user_displayname], :email => OPTIONS[:initial_user_email])
+  	initial_user = User.new(display_name: OPTIONS[:initial_user_displayname], email: OPTIONS[:initial_user_email])
   	initial_user.username = OPTIONS[:initial_user_name]
   	initial_user.password = OPTIONS[:initial_user_password]
   	initial_user.company = Company.first
@@ -37,7 +37,7 @@ def setup
   	unless initial_user.save
   		puts 'User already exists, attempting to reset...'
   		# Try resetting the password
-  		initial_user = User.where(:username => OPTIONS[:initial_user_name]).first
+  		initial_user = User.where(username: OPTIONS[:initial_user_name]).first
   		if initial_user.nil?
   			puts "\nCouldn't create or reset the owner user!\n"
   			return
@@ -59,45 +59,45 @@ def setup
 
   # Ensure IM Types are present
   if ImType.count == 0
-  	ImType.create!(:name => 'ICQ',    :icon => 'icq.gif')
-  	ImType.create!(:name => 'Skype',  :icon => 'skype.gif')
-  	ImType.create!(:name => 'Jabber', :icon => 'jabber.gif')
+  	ImType.create!(name: 'ICQ',    icon: 'icq.gif')
+  	ImType.create!(name: 'Skype',  icon: 'skype.gif')
+  	ImType.create!(name: 'Jabber', icon: 'jabber.gif')
   end
 
   # Ensure File Types are present
   if FileType.count == 0
-  	FileType.create!(:extension => 'zip',  :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'rar',  :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'bz',   :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'bz2',  :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'gz',   :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'ace',  :icon => 'archive.png', :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'mp3',  :icon => 'audio.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'wma',  :icon => 'audio.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'ogg',  :icon => 'audio.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'doc',  :icon => 'doc.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'xsl',  :icon => 'doc.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'gif',  :icon => 'image.png',   :is_searchable => 0, :is_image => 1)
-  	FileType.create!(:extension => 'jpg',  :icon => 'image.png',   :is_searchable => 0, :is_image => 1)
-  	FileType.create!(:extension => 'jpeg', :icon => 'image.png',   :is_searchable => 0, :is_image => 1)
-  	FileType.create!(:extension => 'png',  :icon => 'image.png',   :is_searchable => 0, :is_image => 1)
-  	FileType.create!(:extension => 'mov',  :icon => 'mov.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'pdf',  :icon => 'pdf.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'psd',  :icon => 'psd.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'rm',   :icon => 'rm.png',      :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'svg',  :icon => 'svg.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'swf',  :icon => 'swf.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'avi',  :icon => 'video.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'mpeg', :icon => 'video.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'mpg',  :icon => 'video.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'qt',   :icon => 'mov.png',     :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'vob',  :icon => 'video.png',   :is_searchable => 0, :is_image => 0)
-  	FileType.create!(:extension => 'txt',  :icon => 'doc.png',     :is_searchable => 1, :is_image => 0)
+  	FileType.create!(extension: 'zip',  icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'rar',  icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'bz',   icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'bz2',  icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'gz',   icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'ace',  icon: 'archive.png', is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'mp3',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'wma',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'ogg',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'doc',  icon: 'doc.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'xsl',  icon: 'doc.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'gif',  icon: 'image.png',   is_searchable: 0, is_image: 1)
+  	FileType.create!(extension: 'jpg',  icon: 'image.png',   is_searchable: 0, is_image: 1)
+  	FileType.create!(extension: 'jpeg', icon: 'image.png',   is_searchable: 0, is_image: 1)
+  	FileType.create!(extension: 'png',  icon: 'image.png',   is_searchable: 0, is_image: 1)
+  	FileType.create!(extension: 'mov',  icon: 'mov.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'pdf',  icon: 'pdf.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'psd',  icon: 'psd.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'rm',   icon: 'rm.png',      is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'svg',  icon: 'svg.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'swf',  icon: 'swf.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'avi',  icon: 'video.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'mpeg', icon: 'video.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'mpg',  icon: 'video.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'qt',   icon: 'mov.png',     is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'vob',  icon: 'video.png',   is_searchable: 0, is_image: 0)
+  	FileType.create!(extension: 'txt',  icon: 'doc.png',     is_searchable: 1, is_image: 0)
   end
 
   # Set site_url if available
   unless OPTIONS[:initial_site_url].nil?
-      opt = ConfigOption.where(:name => 'site_url').first
+      opt = ConfigOption.where(name: 'site_url').first
       opt.value = OPTIONS[:initial_site_url]
       opt.save
   end

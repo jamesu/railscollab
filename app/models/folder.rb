@@ -59,7 +59,7 @@ class Folder < ApplicationRecord
   # Helpers
 
   def self.select_list(project)
-    [['None', 0]] + Folder.where(:project_id => project.id).select('id, name').collect do |folder|
+    [['None', 0]] + Folder.where(project_id: project.id).select('id, name').collect do |folder|
       [folder.name, folder.id]
     end
   end
@@ -71,5 +71,5 @@ class Folder < ApplicationRecord
   # Validation
 
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :project_id
+  validates_uniqueness_of :name, scope: :project_id
 end

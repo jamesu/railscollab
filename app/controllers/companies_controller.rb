@@ -23,7 +23,7 @@ class CompaniesController < ApplicationController
 
   
   
-  after_action  :user_track, :only => [:card]
+  after_action  :user_track, only: [:card]
   after_action  :reload_owner
 
   def show
@@ -33,7 +33,7 @@ class CompaniesController < ApplicationController
       format.html { }
       
       format.xml  {
-        render :xml => @company.to_xml 
+        render xml: @company.to_xml 
       }
     end
   end
@@ -46,7 +46,7 @@ class CompaniesController < ApplicationController
       format.html
       format.xml  {
         if @logged_user.is_admin
-          render :xml => @companies.to_xml(:root => 'companies')
+          render xml: @companies.to_xml(root: 'companies')
         else
           return error_status(true, :insufficient_permissions)
         end
@@ -76,11 +76,11 @@ class CompaniesController < ApplicationController
           redirect_back_or_default companies_path
         }
         
-        format.xml  { render :xml => @company.to_xml(:root => 'company'), :status => :created, :location => @company }
+        format.xml  { render xml: @company.to_xml(root: 'company'), status: :created, location: @company }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -104,9 +104,9 @@ class CompaniesController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @company.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -197,14 +197,14 @@ class CompaniesController < ApplicationController
         error_status(true, :error_uploading_logo)
       end
       
-      redirect_to edit_company_path(:id => @company.id)
+      redirect_to edit_company_path(id: @company.id)
       
     when :delete
       @company.logo = nil
       @company.save
 
       error_status(false, :success_deleted_logo)
-      redirect_to edit_company_path(:id => @company.id)
+      redirect_to edit_company_path(id: @company.id)
     end
   end
 
@@ -212,7 +212,7 @@ class CompaniesController < ApplicationController
 
   def page_title
     case action_name
-      when 'show' then I18n.t('company_card', :company => @company.name)
+      when 'show' then I18n.t('company_card', company: @company.name)
       else super
     end
   end
@@ -231,8 +231,8 @@ class CompaniesController < ApplicationController
   end
 
   def extra_crumbs
-    crumbs = [{:title => :people, :url => companies_path}]
-    crumbs << {:title => @company.name, :url => company_path(:id => @company.id)} if action_name == 'permissions'
+    crumbs = [{title: :people, url: companies_path}]
+    crumbs << {title: @company.name, url: company_path(id: @company.id)} if action_name == 'permissions'
     crumbs
   end
   

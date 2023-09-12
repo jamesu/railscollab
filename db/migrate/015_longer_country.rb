@@ -2,7 +2,7 @@ require 'tzinfo'
 
 class LongerCountry < ActiveRecord::Migration[4.2]
   def self.up
-    change_column :companies, 'country', :string, :limit => 100
+    change_column :companies, 'country', :string, limit: 100
     
     # Convert to full name
     Company.all.each do |company|

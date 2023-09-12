@@ -22,11 +22,11 @@ class Activity < ApplicationRecord
   belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
   belongs_to :rel_object, polymorphic:  true, optional: true
 
-  scope :is_public, -> { where(:is_private => false) }
+  scope :is_public, -> { where(is_private: false) }
 
   before_create :process_params
 
-  @@action_lookup = {:add => 0, :upload => 1, :open => 2, :close => 3, :edit => 4, :delete => 5}
+  @@action_lookup = {add: 0, upload: 1, open: 2, close: 3, edit: 4, delete: 5}
   @@action_id_lookup = @@action_lookup.invert
 
   def process_params
@@ -108,9 +108,9 @@ class Activity < ApplicationRecord
 
   def self.logs_for(project, include_private, include_silent, limit=50)
     conditions = if project.class == Array
-      {:project_id => project}
+      {project_id: project}
     else
-      {:project_id => project.id}
+      {project_id: project.id}
     end
 
     private_conditions = {}

@@ -34,7 +34,7 @@ class Task < ApplicationRecord
 
   has_many :time_records, dependent:  :nullify
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create   :process_create
   before_update  :process_update_params
   after_update   :update_task_list
@@ -167,8 +167,8 @@ class Task < ApplicationRecord
   
   def to_xml(options = {}, &block)
     default_options = { 
-      :methods => [ :assigned_to_id ],
-      :only => [ 
+      methods: [ :assigned_to_id ],
+      only: [ 
         :id,
         :created_by_id,
         :completed_by_id,
@@ -189,11 +189,11 @@ class Task < ApplicationRecord
 
   validates_presence_of :text
 
-  validates_each :task_list, :allow_nil => false do |record, attr, value|
+  validates_each :task_list, allow_nil: false do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if (value.project_id != record.project_id)
   end
 
-  validates_each :assigned_to, :allow_nil => true do |record, attr, value|
+  validates_each :assigned_to, allow_nil: true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if !value.nil? and !value.is_part_of(record.task_list.project)
   end
   

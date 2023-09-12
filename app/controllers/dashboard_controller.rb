@@ -26,8 +26,8 @@ class DashboardController < ApplicationController
         project_ids = @active_projects.collect{ |project| project.id }
 
         activity_conditions = @logged_user.member_of_owner? ?
-          { :project_id => project_ids } :
-          { :project_id => project_ids, :is_private => false }
+          { project_id: project_ids } :
+          { project_id: project_ids, is_private: false }
 
         @activity_log = Activity.where(activity_conditions).order('created_on DESC, id DESC').limit(Rails.configuration.railscollab.project_logs_per_page)
       else
@@ -80,7 +80,7 @@ class DashboardController < ApplicationController
       {
         :name       => project.name,
         :id         => project.id,
-        :milestones => project.milestones_by_user(@logged_user),
+        milestones: project.milestones_by_user(@logged_user),
         :tasks      => project.tasks_by_user(@logged_user)
       }
     end
@@ -131,7 +131,7 @@ class DashboardController < ApplicationController
       current_page = params[:page].to_i
       current_page = 1 unless current_page > 0
 
-      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {:page => current_page, :per_page => Rails.configuration.railscollab.search_results_per_page})
+      @search_results, @total_search_results = Project.search_for_user(@last_search, @logged_user, {page: current_page, per_page: Rails.configuration.railscollab.search_results_per_page})
 
       @tag_names = []
       @pagination = []

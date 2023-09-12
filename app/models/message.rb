@@ -33,13 +33,13 @@ class Message < ApplicationRecord
 
   has_many :project_file, through:  :attached_file
 
-  has_and_belongs_to_many :subscribers, class_name: 'User', :join_table => 'message_subscriptions', foreign_key:  'message_id'
+  has_and_belongs_to_many :subscribers, class_name: 'User', join_table: 'message_subscriptions', foreign_key:  'message_id'
 
-  scope :is_public, -> { where(:is_private => false) }
+  scope :is_public, -> { where(is_private: false) }
   
-  scope :important, -> { where(:is_important => true) }
+  scope :important, -> { where(is_important: true) }
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create  :process_create
   before_update :process_update_params
   before_destroy :process_destroy
@@ -95,7 +95,7 @@ class Message < ApplicationRecord
     if with_private
       project_file
     else
-      project_file.where(:is_private => false)
+      project_file.where(is_private: false)
     end
   end
 
@@ -132,7 +132,7 @@ class Message < ApplicationRecord
 
   validates_presence_of :title
   validates_presence_of :text
-  validates_each :milestone, :allow_nil => true do |record, attr, value|
+  validates_each :milestone, allow_nil: true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 
@@ -140,11 +140,11 @@ class Message < ApplicationRecord
     record.errors.add(attr, I18n.t('not_part_of_project')) if value && value.project_id != record.project_id
   end
 
-  validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, :is_important, :anonymous_comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == true
   end
 
-  validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == false
   end
   

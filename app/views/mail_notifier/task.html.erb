@@ -2,7 +2,7 @@
  <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= t('notifier_new_task', :project => @task.project.name) %>
+<%= t('notifier_new_task', project: @task.project.name) %>
 
 - <%= @task.object_url(Rails.configuration.railscollab.site_url) %>
 

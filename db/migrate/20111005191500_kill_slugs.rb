@@ -11,7 +11,7 @@ class KillSlugs < ActiveRecord::Migration[4.2]
     add_column :wiki_pages, :slug, :string
     add_index :wiki_pages, :slug
     PageFix.all.each do |page|
-      page.slug = SlugFix.where(:sluggable_type => 'WikiPage', :sluggable_id => page.id).first.try(:name)
+      page.slug = SlugFix.where(sluggable_type: 'WikiPage', sluggable_id: page.id).first.try(:name)
     end
   end
 

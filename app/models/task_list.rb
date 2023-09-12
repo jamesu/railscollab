@@ -30,11 +30,11 @@ class TaskList < ApplicationRecord
 
   #has_many :tags, as:  'rel_object', dependent:  :destroy
 
-  scope :is_public, -> { where(:is_private => false) }
+  scope :is_public, -> { where(is_private: false) }
   scope :is_open,   -> { where('task_lists.completed_on IS NULL') }
   scope :completed, -> { where('task_lists.completed_on IS NOT NULL') }
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create   :process_create
   before_update  :process_update_params
   after_update   :update_tags
@@ -150,7 +150,7 @@ class TaskList < ApplicationRecord
   end
 
   def self.select_list(project)
-    TaskList.where(:project_id => project.id).select('id, name').collect do |tasklist|
+    TaskList.where(project_id: project.id).select('id, name').collect do |tasklist|
       [tasklist.name, tasklist.id]
     end
   end
@@ -159,8 +159,8 @@ class TaskList < ApplicationRecord
   
   def to_xml(options = {}, &block)
     default_options = {
-      :methods => [ :tags ],
-      :only => [ 
+      methods: [ :tags ],
+      only: [ 
         :id,
         :milestone_id,
         :priority,
@@ -178,11 +178,11 @@ class TaskList < ApplicationRecord
   # Validation
 
   validates_presence_of :name
-  validates_each :milestone, :allow_nil => true do |record, attr, value|
+  validates_each :milestone, allow_nil: true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 
-  validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == true
   end
   

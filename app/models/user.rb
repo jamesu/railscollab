@@ -43,7 +43,7 @@ class User < ApplicationRecord
   has_many :people,            dependent:  :delete_all
   has_many :projects,          through:  :people
 
-  has_and_belongs_to_many :subscriptions, class_name: 'Message', association_foreign_key: 'message_id', :join_table => :message_subscriptions
+  has_and_belongs_to_many :subscriptions, class_name: 'Message', association_foreign_key: 'message_id', join_table: :message_subscriptions
 
   has_one_attached :avatar do |attachable|
     attachable.variant :thumb, resize_to_limit: [50, 50]
@@ -97,7 +97,7 @@ class User < ApplicationRecord
     all_types.each do |type|
       found_type = values.any?{ |value| value.im_type_id == type.id }
 
-      values << ImValue.new(:user => self, :im_type_id => type.id) unless found_type
+      values << ImValue.new(user: self, im_type_id: type.id) unless found_type
     end
 
     values
@@ -151,7 +151,7 @@ class User < ApplicationRecord
       salt = Digest::SHA1.hexdigest(sprintf("%s%08x%05x%.8f", rand(32767), sec, usec, rval))[roffs..roffs+12]
       token = Digest::SHA1.hexdigest(salt + value)
 
-      break if User.where({:token => token}).first.nil?
+      break if User.where({token: token}).first.nil?
     end
 
     self.salt = salt
@@ -203,7 +203,7 @@ class User < ApplicationRecord
   end
 
   def self.authenticate(login, pass)
-    user = User.where(:username => login).first
+    user = User.where(username: login).first
     if (!user.nil?) and (user.valid_password(pass))
       now = Time.now.utc
       user.last_login = now
@@ -251,7 +251,7 @@ class User < ApplicationRecord
   end
 
   def member_of(project)
-    Person.where(:user_id => id, :project_id => project.id).length > 0
+    Person.where(user_id: id, project_id: project.id).length > 0
   end
 
   def has_all_permissions(project, reload=false)
@@ -282,25 +282,25 @@ class User < ApplicationRecord
 
   def recent_activity_feed_url(project=nil, format='rss')
     if project.nil?
-      return (url_for only_path: true, :controller => 'feed', :action => 'recent_activities',  :user => self.id, :format => format, :token => self.twisted_token())
+      return (url_for only_path: true, controller: 'feed', action: 'recent_activities',  user: self.id, format: format, token: self.twisted_token())
     else
-      return (url_for only_path: true, :controller => 'feed', :action => 'project_activities', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
+      return (url_for only_path: true, controller: 'feed', action: 'project_activities', user: self.id, format: format, token: self.twisted_token(), project: project.id)
     end
   end
 
   def milestone_feed_url(project=nil, format='ics')
     if project.nil?
-      return (url_for only_path: true, :controller => 'feed', :action => 'recent_milestones',  :user => self.id, :format => format, :token => self.twisted_token())
+      return (url_for only_path: true, controller: 'feed', action: 'recent_milestones',  user: self.id, format: format, token: self.twisted_token())
     else
-      return (url_for only_path: true, :controller => 'feed', :action => 'milestones', :user => self.id, :format => format, :token => self.twisted_token(), :project => project.id)
+      return (url_for only_path: true, controller: 'feed', action: 'milestones', user: self.id, format: format, token: self.twisted_token(), project: project.id)
     end
   end
 
   def time_export_url(project=nil, format='csv')
     if project.nil?
-      return (url_for only_path: true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-')
+      return (url_for only_path: true, controller: 'feed', action: 'export_times', user: self.id, format: format, token: '-')
     else
-      return (url_for only_path: true, :controller => 'feed', :action => 'export_times', :user => self.id, :format => format, :token => '-', :project => project.id)
+      return (url_for only_path: true, controller: 'feed', action: 'export_times', user: self.id, format: format, token: '-', project: project.id)
     end
   end
 
@@ -338,7 +338,7 @@ class User < ApplicationRecord
 
   def to_xml(options = {}, &block)
     default_options = {
-      :except => [
+      except: [
         :salt,
         :token,
         :twister,
@@ -371,12 +371,12 @@ class User < ApplicationRecord
 
   # Validation
   
-  validates_presence_of :username, :on => :create
-  validates_length_of :username, :within => 3..40
+  validates_presence_of :username, on: :create
+  validates_length_of :username, within: 3..40
 
-  validates_presence_of :password, :if => :password_required?
-  validates_length_of :password, :minimum => 4, :if => :password_required?
-  validates_confirmation_of :password, :if => :password_required?
+  validates_presence_of :password, if: :password_required?
+  validates_length_of :password, minimum: 4, if: :password_required?
+  validates_confirmation_of :password, if: :password_required?
   
   validates_uniqueness_of :username
   validates_uniqueness_of :email

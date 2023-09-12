@@ -31,9 +31,9 @@ class ProjectFile < ApplicationRecord
   has_many :comments, as:  'rel_object', dependent:  :destroy
   #has_many :tags, as:  'rel_object', dependent:  :destroy
   
-  scope :important, -> { where(:is_important => true) }
+  scope :important, -> { where(is_important: true) }
 
-  before_validation :process_params, :on => :create
+  before_validation :process_params, on: :create
   after_create  :process_create
   before_update :process_update_params
   before_destroy :process_destroy
@@ -114,7 +114,7 @@ class ProjectFile < ApplicationRecord
   end
 
   def add_revision(file, new_revision, user, comment)
-    file_revision = ProjectFileRevision.new(:revision_number => new_revision)
+    file_revision = ProjectFileRevision.new(revision_number: new_revision)
     file_revision.project = self.project
     file_revision.project_file = self
     file_revision.upload_file = file
@@ -158,10 +158,10 @@ class ProjectFile < ApplicationRecord
           attached_file.add_revision(file, 1, user, '')
           
           # Attach to object
-          AttachedFile.create!(:created_on => attached_file.created_on, 
-                               :created_by => user, 
-                               :rel_object => to_object, 
-                               :project_file => attached_file)
+          AttachedFile.create!(created_on: attached_file.created_on, 
+                               created_by: user, 
+                               rel_object: to_object, 
+                               project_file: attached_file)
           #to_object.project_file << attached_file
 
           count += 1
@@ -206,15 +206,15 @@ class ProjectFile < ApplicationRecord
   # Validation
 
   validates_presence_of :filename
-  validates_each :folder, :allow_nil => true do |record, attr, value|
+  validates_each :folder, allow_nil: true do |record, attr, value|
     record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
   end
 
-  validates_each :is_private, :is_important, :anonymous_comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, :is_important, :anonymous_comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == true
   end
 
-  validates_each :comments_enabled, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t('not_allowed')) if value == false
   end
   

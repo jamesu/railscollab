@@ -22,7 +22,7 @@ class TaskListsController < ApplicationController
   
 
   
-  after_action  :user_track, :only => [:index, :show]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /task_lists
   # GET /task_lists.xml
@@ -35,12 +35,12 @@ class TaskListsController < ApplicationController
       }
       format.js {
         index_lists(include_private)
-        render :template => 'task_lists/index'
+        render template: 'task_lists/index'
       }
       format.xml  {
         conds = include_private ? {} : {'is_private' => false}
         @task_lists = @active_project.task_lists.where(conds)
-        render :xml => @task_lists.to_xml(:root => 'task-lists')
+        render xml: @task_lists.to_xml(root: 'task-lists')
       }
     end
   end
@@ -61,7 +61,7 @@ class TaskListsController < ApplicationController
         index_lists(@logged_user.member_of_owner?)
       }
       
-      format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
+      format.xml  { render xml: @task_list.to_xml(root: 'task-list') }
     end
   end
 
@@ -82,7 +82,7 @@ class TaskListsController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       
-      format.xml  { render :xml => @task_list.to_xml(:root => 'task-list') }
+      format.xml  { render xml: @task_list.to_xml(root: 'task-list') }
     end
   end
 
@@ -113,11 +113,11 @@ class TaskListsController < ApplicationController
           redirect_back_or_default(@task_list.object_url)
         }
         format.js { return index }
-        format.xml  { render :xml => @task_list.to_xml(:root => 'task-list'), :status => :created, :location => @task_list }
+        format.xml  { render xml: @task_list.to_xml(root: 'task-list'), status: :created, location: @task_list }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @list.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @list.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -145,9 +145,9 @@ class TaskListsController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @list.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @list.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -221,7 +221,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :tasks, :url => project_task_lists_path(@active_project)} unless action_name == 'index'
+    crumbs << {title: :tasks, url: project_task_lists_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 
@@ -230,7 +230,7 @@ protected
 
     if action_name == 'index'
       if can?(:create_task_list, @active_project)
-        @page_actions << {:title => :add_task_list, :url=> new_project_task_list_path(@active_project), :ajax => true}
+        @page_actions << {title: :add_task_list, :url=> new_project_task_list_path(@active_project), ajax: true}
       end
     end
 

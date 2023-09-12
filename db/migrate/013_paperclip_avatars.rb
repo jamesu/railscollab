@@ -15,8 +15,8 @@ class PaperclipAvatars < ActiveRecord::Migration[4.2]
   end
 
   def self.down
-    add_column :companies, 'logo_file',     :string, :limit => 44
-    add_column :users, 'avatar_file',       :string, :limit => 44
+    add_column :companies, 'logo_file',     :string, limit: 44
+    add_column :users, 'avatar_file',       :string, limit: 44
     
     remove_column :companies, "logo_file_name"
     remove_column :companies, "logo_content_type"

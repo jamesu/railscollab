@@ -1,5 +1,5 @@
 #searchForm
-  = form_with(:url => project_search(@active_project) do |fprm|
+  = form_with(url: project_search(@active_project) do |fprm|
     = form.text_field 'search_id', value: @last_search
     %button.submit{type: "submit"}= t('search')
 

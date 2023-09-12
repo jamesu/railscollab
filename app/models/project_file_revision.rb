@@ -67,8 +67,8 @@ class ProjectFileRevision < ApplicationRecord
 
     # Figure out the intended file type
     extension = value.original_filename.split('.', 2)[-1]
-    self.file_type = FileType.where(:extension => extension).first
-    self.file_type ||= FileType.where(:extension => 'txt').first
+    self.file_type = FileType.where(extension: extension).first
+    self.file_type ||= FileType.where(extension: 'txt').first
 
     # Store
     self.data = value

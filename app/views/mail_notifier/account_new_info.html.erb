@@ -2,16 +2,16 @@
  <%= t('notifier_donotreply') %>
 ------------------------------------------------------------
 
-<%= t('notifier_greeting', :user => @user.display_name) %>
+<%= t('notifier_greeting', user: @user.display_name) %>
 
-<%= t('notifier_new_account', :user => @user.created_by.display_name, :site => Rails.configuration.railscollab.site_name) %>
+<%= t('notifier_new_account', user: @user.created_by.display_name, site: Rails.configuration.railscollab.site_name) %>
 
 <%= t('notifier_new_account_access') %>
 
 <% if @password.nil? %>
-<%= edit_user_password_url(@user, :confirm => @user.password_reset_key, :initial => 1) %>
+<%= edit_user_password_url(@user, confirm: @user.password_reset_key, initial: 1) %>
 
-<%= t('notifier_new_account_access_login', :login => @user.username) %>
+<%= t('notifier_new_account_access_login', login: @user.username) %>
 <% else %>
 <%= Rails.configuration.railscollab.site_url %>
 

@@ -22,9 +22,9 @@ class TasksController < ApplicationController
   
 
   
-  before_action :grab_list, :except => [:create, :new]
-  before_action :grab_list_required, :only => [:index, :create, :new]
-  after_action  :user_track, :only => [:index, :show]
+  before_action :grab_list, except: [:create, :new]
+  before_action :grab_list_required, only: [:index, :create, :new]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /tasks
   # GET /tasks.xml
@@ -39,7 +39,7 @@ class TasksController < ApplicationController
       }
       format.xml  {
         @tasks = @task_list.tasks
-        render :xml => @tasks.to_xml(:root => 'tasks')
+        render xml: @tasks.to_xml(root: 'tasks')
       }
     end
   end
@@ -55,8 +55,8 @@ class TasksController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
-      format.xml  { render :xml => @task.to_xml(:root => 'task') }
+      format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
+      format.xml  { render xml: @task.to_xml(root: 'task') }
     end
   end
 
@@ -69,7 +69,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @task.to_xml(:root => 'task') }
+      format.xml  { render xml: @task.to_xml(root: 'task') }
     end
   end
 
@@ -96,12 +96,12 @@ class TasksController < ApplicationController
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
-        format.xml  { render :xml => @task.to_xml(:root => 'task'), :status => :created, :location => @task }
+        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
+        format.xml  { render xml: @task.to_xml(root: 'task'), status: :created, location: @task }
       else
-        format.html { render :action => "new" }
-        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
-        format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
+        format.xml  { render xml: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -118,12 +118,12 @@ class TasksController < ApplicationController
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
+        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
-        format.xml  { render :xml => @task.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
+        format.xml  { render xml: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -138,7 +138,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
-      format.js { render :json => { :id => @task.id } }
+      format.js { render json: { id: @task.id } }
       format.xml  { head :ok }
     end
   end
@@ -154,7 +154,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
-      format.js { @task_content = render_to_string({:partial => 'show', :collection => [@task]}); render :task_update_response }
+      format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
       format.xml  { head :ok }
     end
 
@@ -170,18 +170,18 @@ protected
     case action_name
       when 'new', 'create' then :add_task
       when 'edit', 'update' then :edit_task
-      when 'show' then truncate(@task.text, :length => 25)
+      when 'show' then truncate(@task.text, length: 25)
       else super
     end
   end
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :tasks, :url => project_task_lists_path(@active_project)}
+    crumbs << {title: :tasks, url: project_task_lists_path(@active_project)}
     unless @task_list.nil?
-      crumbs << {:title => @task_list.name, :url => project_task_list_path(@active_project, :id => @task_list.id)}
+      crumbs << {title: @task_list.name, url: project_task_list_path(@active_project, id: @task_list.id)}
     else
-      crumbs << {:title => @logged_user.display_name, :url => "/dashboard/my_tasks"}
+      crumbs << {title: @logged_user.display_name, url: "/dashboard/my_tasks"}
     end
     crumbs
   end

@@ -59,7 +59,7 @@ class Category < ApplicationRecord
   # Helpers
 
   def self.select_list(project)
-    categories = Category.where(:project_id => project.id).select('id, name')
+    categories = Category.where(project_id: project.id).select('id, name')
     categories.collect{ |category| [category.name, category.id] }
   end
 
@@ -70,5 +70,5 @@ class Category < ApplicationRecord
   # Validation
 
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :project_id
+  validates_uniqueness_of :name, scope: :project_id
 end

@@ -3,7 +3,7 @@ class CreateWikiPages < ActiveRecord::Migration[4.2]
     create_table :wiki_pages do |t|
       t.string :title
       t.text :content
-      t.boolean :main, :null => false, :default => false
+      t.boolean :main, null: false, default: false
 
       t.timestamps
     end

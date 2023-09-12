@@ -4,6 +4,6 @@ class EnlargeTitleFieldInUsers < ActiveRecord::Migration[4.2]
   end
 
   def self.down
-    change_column :users, :title, :string, :limit => 30
+    change_column :users, :title, :string, limit: 30
   end
 end

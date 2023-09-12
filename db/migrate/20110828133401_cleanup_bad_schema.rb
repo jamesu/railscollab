@@ -45,7 +45,7 @@ class CleanupBadSchema < ActiveRecord::Migration[4.2]
     remove_column "activities", "taken_by_id"
     
     # Fix for schema
-    change_column "projects", "priority", :integer, :null => true
+    change_column "projects", "priority", :integer, null: true
     
     # Combine additional text into message text
     Message.all.each {|m| m.update_attribute(:text, m.text+"\n"+m.additional_text) }

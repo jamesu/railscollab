@@ -46,7 +46,7 @@ class Project < ApplicationRecord
 	
   has_many :wiki_pages, dependent:  :destroy
 	
-	has_and_belongs_to_many :companies, :join_table => :project_companies
+	has_and_belongs_to_many :companies, join_table: :project_companies
 	
 	before_create  :process_params
 	after_create   :process_create
@@ -109,7 +109,7 @@ class Project < ApplicationRecord
   end
 
   def has_member(user)
-    return Person.where("project_id = #{self.id} AND user_id = #{user.id}", :select => 'user_id')
+    return Person.where("project_id = #{self.id} AND user_id = #{user.id}", select: 'user_id')
   end
 
   def set_completed(value, user=nil)
@@ -135,7 +135,7 @@ class Project < ApplicationRecord
     results = if tag_search
       Tag.search(query, options)
     else
-      ThinkingSphinx.search query, options.merge(:classes => [Comment, Message, TimeRecord, Task, TaskList, Milestone, ProjectFile, ProjectFileRevision, WikiPage])
+      ThinkingSphinx.search query, options.merge(classes: [Comment, Message, TimeRecord, Task, TaskList, Milestone, ProjectFile, ProjectFileRevision, WikiPage])
     end
 
     return results, results.total_entries

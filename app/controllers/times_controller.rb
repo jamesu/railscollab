@@ -49,7 +49,7 @@ class TimesController < ApplicationController
                                        .limit(params[:limit] || Rails.configuration.railscollab.times_per_page) 
                                        .order("#{@sort_type} #{@sort_order}")
         
-        render :xml => @times.to_xml(:root => 'times')
+        render xml: @times.to_xml(root: 'times')
       }
     end
   end
@@ -96,14 +96,14 @@ class TimesController < ApplicationController
           redirect_back_or_default(@time.object_url)
         }
         format.js   { respond_with_time(@time) }
-        format.xml  { render :xml => @time.to_xml(:root => 'time'), :status => :created, :location => @time }
+        format.xml  { render xml: @time.to_xml(root: 'time'), status: :created, location: @time }
       else
         @open_task_lists = @active_project.task_lists.is_open
         @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @task_filter = Proc.new {|task| task.is_completed? }
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         format.js   { respond_with_time(@time) }
-        format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @time.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -135,8 +135,8 @@ class TimesController < ApplicationController
         @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
         @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @time.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @time.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -198,7 +198,7 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :ptime, :url => times_url} unless ['index', 'by_task'].include? action_name
+    crumbs << {title: :ptime, url: times_url} unless ['index', 'by_task'].include? action_name
     crumbs
   end
 
@@ -208,9 +208,9 @@ private
 
   def respond_with_time(time)
     if time.errors
-      render :json => {:id => time.id, :time => time, :task => time.task, :content => render_to_string({:partial => 'listed', :collection => [time]})}
+      render json: {id: time.id, time: time, task: time.task, content: render_to_string({partial: 'listed', collection: [time]})}
     else
-      render :json => {:id => time.id, :time => time, :task => time.task, :errors => time.errors}, :status => :unprocessable_entity
+      render json: {id: time.id, time: time, task: time.task, errors: time.errors}, status: :unprocessable_entity
     end
   end
 

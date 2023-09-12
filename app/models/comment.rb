@@ -26,12 +26,12 @@ class Comment < ApplicationRecord
 	has_many :attached_file, as:  'rel_object'
 	has_many :project_file, through:  :attached_file
 
-	before_validation :process_params, :on => :create
+	before_validation :process_params, on: :create
 	after_create :process_create
 	before_update :process_update_params
 	before_destroy :process_destroy
 	
-	scope :is_public, -> { where(:is_private => false) }
+	scope :is_public, -> { where(is_private: false) }
 	 
 	def process_params
 	  self.project_id ||= self.rel_object.try(:project_id)
@@ -75,7 +75,7 @@ class Comment < ApplicationRecord
     if with_private
       project_file
     else
-      project_file.where(:is_private => false)
+      project_file.where(is_private: false)
     end
   end
 
@@ -89,11 +89,11 @@ class Comment < ApplicationRecord
 	
 	# Validation
 	
-	validates_presence_of :author_name, :if => Proc.new { |obj| obj.is_anonymous }
-	validates_presence_of :author_email, :if => Proc.new { |obj| obj.is_anonymous }
+	validates_presence_of :author_name, if: Proc.new { |obj| obj.is_anonymous }
+	validates_presence_of :author_email, if: Proc.new { |obj| obj.is_anonymous }
 	
 	validates_presence_of :text
-	validates_each :is_private, :if => Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+	validates_each :is_private, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
 		record.errors.add attr, I18n.t('not_allowed') if value == true
 	end
   

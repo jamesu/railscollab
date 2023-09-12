@@ -20,7 +20,7 @@ class FilesController < ApplicationController
 
   layout 'project_website'
   
-  after_action  :user_track, :only => [:index, :show]
+  after_action  :user_track, only: [:index, :show]
   
   # GET /files
   # GET /files.xml
@@ -47,7 +47,7 @@ class FilesController < ApplicationController
         @page = params[:page].to_i
         @page = 1 unless @page > 0
         
-        result_set, @files = ProjectFile.find_grouped(sort_type, :conditions => file_conditions, :page => @page, :per_page => Rails.configuration.railscollab.files_per_page, :order => "#{sort_type} #{sort_order}")
+        result_set, @files = ProjectFile.find_grouped(sort_type, conditions: file_conditions, page: @page, per_page: Rails.configuration.railscollab.files_per_page, order: "#{sort_type} #{sort_order}")
         @pagination = []
         result_set.total_pages.times {|page| @pagination << page+1}
         
@@ -61,7 +61,7 @@ class FilesController < ApplicationController
                             .offset(params[:offset])
                             .limit(params[:limit] || Rails.configuration.railscollab.files_per_page)
         
-        render :xml => @files.to_xml(:only => [:id,
+        render xml: @files.to_xml(only: [:id,
                                                :filename,
                                                :created_by_id, 
                                                :created_on,
@@ -70,7 +70,7 @@ class FilesController < ApplicationController
                                                :is_important,
                                                :is_locked,
                                                :comments_count, 
-                                               :comments_enabled], :root => 'files')
+                                               :comments_enabled], root: 'files')
       }
     end
   end
@@ -105,7 +105,7 @@ class FilesController < ApplicationController
         @important_files = @important_files.is_public unless @logged_user.member_of_owner?
       }
       format.xml  { 
-        render :xml => @file.to_xml(:include => [:project_file_revisions])
+        render xml: @file.to_xml(include: [:project_file_revisions])
       }
     end
   end
@@ -119,7 +119,7 @@ class FilesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @file.to_xml(:root => 'file') }
+      format.xml  { render xml: @file.to_xml(root: 'file') }
     end
   end
 
@@ -166,11 +166,11 @@ class FilesController < ApplicationController
           redirect_back_or_default(@file.object_url)
         }
         
-        format.xml  { render :xml => @file.to_xml(:root => 'file'), :status => :created, :location => @file }
+        format.xml  { render xml: @file.to_xml(root: 'file'), status: :created, location: @file }
       else
-        format.html { render :action => "new" }
+        format.html { render action: "new" }
         
-        format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -221,9 +221,9 @@ class FilesController < ApplicationController
         
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
         
-        format.xml  { render :xml => @file.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -252,7 +252,7 @@ class FilesController < ApplicationController
 
     unless revision_id.nil?
       begin
-        @file_revision = ProjectFileRevision.where(:file_id => @file.id, :revision_number => revision_id).first!
+        @file_revision = ProjectFileRevision.where(file_id: @file.id, revision_number: revision_id).first!
       rescue ActiveRecord::RecordNotFound
         error_status(true, :invalid_file_revision)
         redirect_back_or_default project_files_path(@active_project)
@@ -263,14 +263,14 @@ class FilesController < ApplicationController
     end
 
     if @file_revision.nil?
-      render :text => '404 Not Found', :status => 404
+      render text: '404 Not Found', status: 404
       return
     end
 
     if @file_revision.data.attached?
-      redirect_to url_for(@file_revision.data), :status => 302
+      redirect_to url_for(@file_revision.data), status: 302
     else
-      render :text => '404 Not Found', :status => 404
+      render text: '404 Not Found', status: 404
     end
   end
   
@@ -322,10 +322,10 @@ class FilesController < ApplicationController
         # Make sure its unique
         does_exist = @attach_object.project_file.any?{ |file| file == existing_file }
         if !does_exist
-          AttachedFile.create!(:created_on => existing_file.created_on, 
-                               :created_by => @logged_user, 
-                               :rel_object => @attach_object, 
-                               :project_file => existing_file)
+          AttachedFile.create!(created_on: existing_file.created_on, 
+                               created_by: @logged_user, 
+                               rel_object: @attach_object, 
+                               project_file: existing_file)
           #@attach_object.project_file << existing_file
         end
         
@@ -381,7 +381,7 @@ private
 
   def page_title
     case action_name
-      when 'index' then @current_folder.nil? ? I18n.t('files') : I18n.t('folder_name', :folder => @current_folder.name)
+      when 'index' then @current_folder.nil? ? I18n.t('files') : I18n.t('folder_name', folder: @current_folder.name)
       when 'new', 'create' then I18n.t('add_file')
       when 'edit', 'update' then I18n.t('edit_file')
       else super
@@ -405,8 +405,8 @@ private
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :files, :url => project_files_path(@active_project)} unless action_name == 'index'
-    crumbs << {:title => @folder.name, :url => @folder.object_url} if !@folder.nil? and action_name == 'show'
+    crumbs << {title: :files, url: project_files_path(@active_project)} unless action_name == 'index'
+    crumbs << {title: @folder.name, url: @folder.object_url} if !@folder.nil? and action_name == 'show'
     crumbs
   end
   

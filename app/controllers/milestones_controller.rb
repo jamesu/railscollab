@@ -36,7 +36,7 @@ class MilestonesController < ApplicationController
       }
       format.xml  {
         @milestones = @logged_user.member_of_owner? ? @active_project.milestones : @active_project.milestones.is_public
-        render :xml => @milestones.to_xml(:root => 'milestones')
+        render xml: @milestones.to_xml(root: 'milestones')
       }
     end
   end
@@ -70,10 +70,10 @@ class MilestonesController < ApplicationController
           error_status(false, :success_added_milestone)
           redirect_back_or_default(@milestone.object_url)
         }
-        format.xml  { render :xml => @milestone.to_xml(:root => 'milestone'), :status => :created, :location => @milestone }
+        format.xml  { render xml: @milestone.to_xml(root: 'milestone'), status: :created, location: @milestone }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @milestone.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -102,8 +102,8 @@ class MilestonesController < ApplicationController
         }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @milestone.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -132,7 +132,7 @@ class MilestonesController < ApplicationController
     @milestone.set_completed(true, @logged_user)
     
     error_status(true, :error_saving) unless @milestone.save
-    redirect_back_or_default project_milestone_path(@active_project, :id => @milestone.id)
+    redirect_back_or_default project_milestone_path(@active_project, id: @milestone.id)
   end
 
   def open
@@ -142,7 +142,7 @@ class MilestonesController < ApplicationController
     @milestone.set_completed(false, @logged_user)
     
     error_status(true, :error_saving) unless @milestone.save
-    redirect_back_or_default project_milestone_path(@active_project, :id => @milestone.id)
+    redirect_back_or_default project_milestone_path(@active_project, id: @milestone.id)
   end
 
   private
@@ -163,7 +163,7 @@ class MilestonesController < ApplicationController
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :milestones, :url => project_milestones_path(@active_project)} unless action_name == 'index'
+    crumbs << {title: :milestones, url: project_milestones_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 
@@ -172,15 +172,15 @@ class MilestonesController < ApplicationController
 
     if action_name == 'index'
       if can? :create_milestone, @active_project
-        @page_actions << {:title => :add_milestone, :url => new_project_milestone_path(@active_project), :ajax => true}
+        @page_actions << {title: :add_milestone, url: new_project_milestone_path(@active_project), ajax: true}
       end
     elsif action_name == 'show'
       if not @milestone.is_completed?
         if can? :create_message, @active_project
-          @page_actions << {:title => :add_message, :url => new_project_message_path(@active_project, :milestone_id => @milestone.id)}
+          @page_actions << {title: :add_message, url: new_project_message_path(@active_project, milestone_id: @milestone.id)}
         end
         if can? :create_task_list, @active_project
-          @page_actions << {:title => :add_task_list, :url => new_project_task_list_path(@active_project, :milestone_id => @milestone.id) }
+          @page_actions << {title: :add_task_list, url: new_project_task_list_path(@active_project, milestone_id: @milestone.id) }
         end
       end
     end

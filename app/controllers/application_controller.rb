@@ -31,8 +31,8 @@ class ApplicationController < ActionController::Base
   before_action :logged_user_info
   before_action :set_time_zone
   before_action :process_session
-  before_action :load_related_object_index, :only => [:index, :create, :new]
-  before_action :load_related_object, :except => [:index, :create, :new, :by_task]
+  before_action :load_related_object_index, only: [:index, :create, :new]
+  before_action :load_related_object, except: [:index, :create, :new, :by_task]
   before_action :config_page
 
 protected
@@ -86,7 +86,7 @@ protected
   def verify_project
     if @active_project.nil? or not (can?(:show, @active_project))
       error_status(false, :insufficient_permissions)
-      redirect_to :controller => 'dashboard'
+      redirect_to controller: 'dashboard'
       return false
     end
 

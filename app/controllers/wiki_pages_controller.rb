@@ -21,24 +21,24 @@ class WikiPagesController < ApplicationController
   layout 'project_website'
 
   
-  before_action :find_sidebar_page, :only => [:index, :show]
-  after_action  :user_track, :only => [:index, :show]
+  before_action :find_sidebar_page, only: [:index, :show]
+  after_action  :user_track, only: [:index, :show]
 
-  before_action :find_wiki_page, :only => [:show, :edit, :update, :destroy]
-  before_action :find_main_wiki_page, :only => :index
-  before_action :find_wiki_pages, :only => :list
+  before_action :find_wiki_page, only: [:show, :edit, :update, :destroy]
+  before_action :find_main_wiki_page, only: :index
+  before_action :find_wiki_pages, only: :list
 
-  rescue_from ActiveRecord::RecordNotFound, :with => :not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   
-  before_action :check_create_permissions, :only => [:new, :create]
-  before_action :check_update_permissions, :only => [:edit, :update]
-  before_action :check_delete_permissions, :only => :destroy
+  before_action :check_create_permissions, only: [:new, :create]
+  before_action :check_update_permissions, only: [:edit, :update]
+  before_action :check_delete_permissions, only: :destroy
 
   def index
     unless @wiki_page.nil?
       @version = @wiki_page
       @versions = [@wiki_page] # TOFIX @wiki_page.versions.all.reverse!
-      render :action => 'show'
+      render action: 'show'
     end
   end
 
@@ -46,7 +46,7 @@ class WikiPagesController < ApplicationController
   end
 
   def new
-    @wiki_page = wiki_pages.new(:title_from_id => params[:id])
+    @wiki_page = wiki_pages.new(title_from_id: params[:id])
   end
 
   def show
@@ -56,13 +56,13 @@ class WikiPagesController < ApplicationController
   end
 
   def create
-    @wiki_page = wiki_pages.new(wiki_page_params.merge(:created_by => @logged_user))
+    @wiki_page = wiki_pages.new(wiki_page_params.merge(created_by: @logged_user))
 
     if @wiki_page.save
       flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
-      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, :id => @wiki_page.slug)
+      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, id: @wiki_page.slug)
     else
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
@@ -70,11 +70,11 @@ class WikiPagesController < ApplicationController
   end
 
   def update
-    if @wiki_page.update(wiki_page_params.merge(:created_by => @logged_user))
+    if @wiki_page.update(wiki_page_params.merge(created_by: @logged_user))
       flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
-      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, :id => @wiki_page)
+      redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, id: @wiki_page)
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
@@ -117,7 +117,7 @@ class WikiPagesController < ApplicationController
   # This is called when wiki page is not found. By default it display a page explaining
   # that the wiki page does not exist yet and link to create it.
   def not_found
-    render :action => 'not_found', :status => :not_found
+    render action: 'not_found', status: :not_found
   end
   
   def check_create_permissions
@@ -141,11 +141,11 @@ class WikiPagesController < ApplicationController
   end
 
   def find_wiki_page
-    @wiki_page = wiki_pages.where(:project_id => @active_project.id).find_by_slug(params[:id])
+    @wiki_page = wiki_pages.where(project_id: @active_project.id).find_by_slug(params[:id])
   end
   
   def find_sidebar_page
-    @wiki_sidebar = wiki_pages.where(:project_id => @active_project.id).find_by_slug("sidebar") rescue nil
+    @wiki_sidebar = wiki_pages.where(project_id: @active_project.id).find_by_slug("sidebar") rescue nil
     @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
   end
 
@@ -168,7 +168,7 @@ protected
 
   def extra_crumbs
     crumbs = []
-    crumbs << {:title => :wiki, :url => project_wiki_pages_path(@active_project)} unless action_name == 'index'
+    crumbs << {title: :wiki, url: project_wiki_pages_path(@active_project)} unless action_name == 'index'
     crumbs
   end
 
