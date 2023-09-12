@@ -25,48 +25,48 @@ class FeedController < ApplicationController
   after_action :user_track
 
   def recent_activities
-  	@activity_log = Activity.logs_for(@logged_user.projects, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+  	@activity_log = Activity.logs_for(@logged_user.projects.all.to_a, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
   	@activity_url = root_url
 
   	respond_to do |format|
       format.html do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.rss do
-        render text: '404 Not found', status: 404 unless @activity_log.length > 0
+        render plain: '404 Not found', status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = I18n.t('recent_activities')
+        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_activities')
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
-          ical.event do
-            dtstart activity_date
-            dtend activity_date
-            uid "#{activity.rel_object_type}-#{activity.rel_object_id}"
-            summary "#{activity.project.name} - #{activity.action} #{activity.object_name}"
-            description "#{activity.project.name} - #{activity.action} #{activity.object_name}"
+          ical.event do |e|
+            e.dtstart = activity_date
+            e.dtend = activity_date
+            e.uid = "#{activity.rel_object_type}-#{activity.rel_object_id}"
+            e.summary = "#{activity.project.name} - #{activity.action} #{activity.object_name}"
+            e.description = "#{activity.project.name} - #{activity.action} #{activity.object_name}"
           end
         end
 
-        render text: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
 
   def project_activities
   	begin
-      @project = Project.find(params[:project])
+      @project = Project.find(params[:project_id])
   	rescue ActiveRecord::RecordNotFound
-      render text: '404 Not found', status: 404
+      render plain: '404 Not found', status: 404
       return
   	end
 
   	unless @logged_user.member_of(@project)
-      render text: '404 Not found', status: 404
+      render plain: '404 Not found', status: 404
       return
   	end
 
@@ -75,29 +75,29 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.rss do
-        render text: '404 Not found', status: 404 unless @activity_log.length > 0
+        render plain: '404 Not found', status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = I18n.t('recent_activities')
+        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_activities')
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
-          ical.event do
-            dtstart activity_date
-            dtend activity_date
-            uid "#{activity.rel_object_type}-#{activity.rel_object_id}"
-            summary "#{activity.project.name} - #{activity.action} #{activity.object_name}"
-            description "#{activity.project.name} - #{activity.action} #{activity.object_name}"
+          ical.event do |e|
+            e.dtstart = activity_date
+            e.dtend = activity_date
+            e.uid = "#{activity.rel_object_type}-#{activity.rel_object_id}"
+            e.summary = "#{activity.project.name} - #{activity.action} #{activity.object_name}"
+            e.description = "#{activity.project.name} - #{activity.action} #{activity.object_name}"
           end
         end
 
-        render text: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
@@ -108,75 +108,75 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.rss do
-        render text: '404 Not found', status: 404 unless @milestones.length > 0
+        render plain: '404 Not found', status: 404 unless @milestones.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = I18n.t('recent_milestones')
+        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_milestones')
         # TODO: timezone
 
         @milestones.each do |milestone|
           milestone_date = milestone.due_date.to_date
-          ical.event do
-            dtstart milestone_date
-            dtend milestone_date
-            uid milestone.id
-            summary "#{milestone.name} (#{milestone.project.name})"
-            description milestone.description
+          ical.event do |e|
+            e.dtstart = milestone_date
+            e.dtend = milestone_date
+            e.uid = milestone.id.to_s
+            e.summary = "#{milestone.name} (#{milestone.project.name})"
+            e.description = milestone.description
           end
         end
-        render text: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
 
   def milestones
   	begin
-      @project = Project.find(params[:project])
+      @project = Project.find(params[:project_id])
   	rescue ActiveRecord::RecordNotFound
-      render text: 'Not found', status: 404
+      render plain: 'Not found', status: 404
       return
   	end
 
   	unless @logged_user.member_of(@project)
-      render text: 'Not found', status: 404
+      render plain: 'Not found', status: 404
       return
   	end
 
     @milestones = @project.milestones.is_open
     @milestones = @milestones.is_public unless @logged_user.member_of_owner? 
-    @milestones_url = milestones_url(@project)
+    @milestones_url = project_milestones_url(@project)
 
   	respond_to do |format|
       format.html do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.rss do
-        render text: '404 Not found', status: 404 unless @milestones.length > 0
+        render plain: '404 Not found', status: 404 unless @milestones.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.properties['X-WR-CALNAME'] = "#{@project.name} #{I18n.t('milestones')}"
+        ical.append_custom_property 'X-WR-CALNAME', "#{@project.name} #{I18n.t('milestones')}"
         # TODO: timezone
 
         @milestones.each do |milestone|
           milestone_date = milestone.due_date.to_date
-          ical.event do
-            dtstart milestone_date
-            dtend milestone_date
-            uid milestone.id
-            summary milestone.name
-            description milestone.description
+          ical.event do |e|
+            e.dtstart = milestone_date
+            e.dtend = milestone_date
+            e.uid = milestone.id.to_s
+            e.summary = milestone.name
+            e.description = milestone.description
           end
         end
-        render text: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: 'text/calendar'
       end
   	end
   end
@@ -184,9 +184,9 @@ class FeedController < ApplicationController
   def export_times
     if params.has_key?(:project)
       begin
-        @project = Project.find(params[:project])
+        @project = Project.find(params[:project_id])
       rescue ActiveRecord::RecordNotFound
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
         return
       end
 
@@ -197,15 +197,15 @@ class FeedController < ApplicationController
 
     respond_to do |format|
       format.html do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.rss do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.ics do
-        render text: '404 Not found', status: 404
+        render plain: '404 Not found', status: 404
       end
 
       format.csv do
@@ -221,7 +221,7 @@ class FeedController < ApplicationController
               time.task.nil? ? '' : time.task.object_name,
             ] }
         end
-        render text: build_str, content_type: 'application/vnd.ms-excel'
+        render plain: build_str, content_type: 'application/vnd.ms-excel'
       end
     end
   end

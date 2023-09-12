@@ -282,25 +282,25 @@ class User < ApplicationRecord
 
   def recent_activity_feed_url(project=nil, format='rss')
     if project.nil?
-      return (url_for only_path: true, controller: 'feed', action: 'recent_activities',  user: self.id, format: format, token: self.twisted_token())
+      return feed_recent_activities_path(user: self.id, format: format, token: self.twisted_token())
     else
-      return (url_for only_path: true, controller: 'feed', action: 'project_activities', user: self.id, format: format, token: self.twisted_token(), project: project.id)
+      return feed_project_activities_path(user: self.id, project_id: project.id, format: format, token: self.twisted_token())
     end
   end
 
   def milestone_feed_url(project=nil, format='ics')
     if project.nil?
-      return (url_for only_path: true, controller: 'feed', action: 'recent_milestones',  user: self.id, format: format, token: self.twisted_token())
+      return feed_recent_miletsones_path(user: self.id, format: format, token: self.twisted_token())
     else
-      return (url_for only_path: true, controller: 'feed', action: 'milestones', user: self.id, format: format, token: self.twisted_token(), project: project.id)
+      return feed_milestones_path(user: self.id, project_id: project.id, format: format, token: self.twisted_token())
     end
   end
 
   def time_export_url(project=nil, format='csv')
     if project.nil?
-      return (url_for only_path: true, controller: 'feed', action: 'export_times', user: self.id, format: format, token: '-')
+      return feed_export_times_path(user: self.id, format: format, token: self.twisted_token())
     else
-      return (url_for only_path: true, controller: 'feed', action: 'export_times', user: self.id, format: format, token: '-', project: project.id)
+      return feed_export_times_path(user: self.id, project_id: project.id, format: format, token: self.twisted_token())
     end
   end
 

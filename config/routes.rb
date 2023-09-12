@@ -1,8 +1,8 @@
 Railscollab::Application.routes.draw do
   # feed url's
+
   %w(recent_activities project_activities recent_milestones milestones export_times).each do |act|
-    get "feed/:user/:token/#{act}.:format",  controller: 'feed', action: act
-    get "feed/:user/:token/#{act}.::format", controller: 'feed', action: act
+    get "#{act}.:user.:format",  as: "feed_#{act}".to_sym, controller: 'feed', action: act
   end
   
   # The rest of the simple controllers

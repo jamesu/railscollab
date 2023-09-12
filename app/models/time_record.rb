@@ -247,7 +247,7 @@ class TimeRecord < ApplicationRecord
   end
   
   def self.all_by_user(user)
-    project_ids = user.active_project_ids
+    project_ids = user.active_projects.select(:id).map(&:id)
     
     time_conditions = {project_id: project_ids}
     time_conditions[:is_private] = false if !user.member_of_owner?

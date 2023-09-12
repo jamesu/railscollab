@@ -10,7 +10,7 @@ xml.rss "version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
     xml.language 'en-us'
     @activity_log.each do |activity|
       xml.item do
-        item_url = activity.rel_object ? activity.rel_object.object_url(Rails.configuration.site_url) : root_url
+        item_url = activity.rel_object ? activity.rel_object.object_url(Rails.configuration.railscollab.site_url) : root_url
 
         xml.title "#{activity.friendly_action} #{activity.object_name}"
         xml.category activity.project.name, activity.created_by.display_name
