@@ -97,8 +97,8 @@ class TaskListsController < ApplicationController
     authorize! :edit, @task_list
   end
 
-  # POST /task_lists
-  # POST /task_lists.xml
+  
+  
   def create
     authorize! :create_task_list, @active_project
     
@@ -121,8 +121,8 @@ class TaskListsController < ApplicationController
     end
   end
 
-  # PUT /task_lists/1
-  # PUT /task_lists/1.xml
+  
+  
   def update
     begin
       @task_list = @active_project.task_lists.find(params[:id])
@@ -176,7 +176,7 @@ class TaskListsController < ApplicationController
     end
   end
   
-  # POST /task_lists/1/reorder
+  
   def reorder
     begin
       @task_list = @active_project.task_lists.find(params[:id])

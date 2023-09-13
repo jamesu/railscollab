@@ -128,8 +128,8 @@ class FilesController < ApplicationController
     authorize! :edit, @file
   end
 
-  # POST /files
-  # POST /files.xml
+  
+  
   def create
     authorize! :create_file, @active_project
 
@@ -175,8 +175,8 @@ class FilesController < ApplicationController
     end
   end
 
-  # PUT /files/1
-  # PUT /files/1.xml
+  
+  
   def update
     authorize! :edit, @file
 
@@ -274,7 +274,7 @@ class FilesController < ApplicationController
     end
   end
   
-  # PUT /files/1/attach
+  
   def attach
     rel_object_type = params[:object_type]
     rel_object_id = params[:object_id]
@@ -340,7 +340,7 @@ class FilesController < ApplicationController
     end
   end
   
-  # PUT /files/1/detatch
+  
   def detatch
     # params: manager, file_id, object_id
     rel_object_type = params[:object_type]

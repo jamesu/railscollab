@@ -85,8 +85,8 @@ class CommentsController < ApplicationController
 	  @active_project = @commented_object.project
   end
 
-  # POST /comments
-  # POST /comments.xml
+  
+  
   def create
     # Check permissions
     authorize! :comment, @commented_object
@@ -134,8 +134,8 @@ class CommentsController < ApplicationController
     end
   end
 
-  # PUT /comments/1
-  # PUT /comments/1.xml
+  
+  
   def update
     authorize! :edit, @comment
 

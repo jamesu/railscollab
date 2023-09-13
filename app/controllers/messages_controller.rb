@@ -134,8 +134,8 @@ class MessagesController < ApplicationController
     authorize! :edit, @message
   end
 
-  # POST /messages
-  # POST /messages.xml
+  
+  
   def create
     authorize! :create_message, @active_project
     
@@ -195,8 +195,8 @@ class MessagesController < ApplicationController
     end
   end
 
-  # PUT /messages/1
-  # PUT /messages/1.xml
+  
+  
   def update
     authorize! :edit, @message
     
@@ -250,7 +250,7 @@ class MessagesController < ApplicationController
     end
   end
 
-  # PUT /messages/1/subscribe
+  
   def subscribe
     authorize! :show, @message
 
@@ -266,7 +266,7 @@ class MessagesController < ApplicationController
     end
   end
 
-  # PUT /messages/1/unsubscribe
+  
   def unsubscribe
     authorize! :show, @message
 

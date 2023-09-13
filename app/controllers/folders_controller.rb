@@ -71,8 +71,8 @@ class FoldersController < ApplicationController
     authorize! :edit, @folder
   end
 
-  # POST /folders
-  # POST /folders.xml
+  
+  
   def create
     authorize! :create_folder, @active_project
     
@@ -95,8 +95,8 @@ class FoldersController < ApplicationController
     end
   end
 
-  # PUT /folders/1
-  # PUT /folders/1.xml
+  
+  
   def update
     authorize! :edit, @folder
     

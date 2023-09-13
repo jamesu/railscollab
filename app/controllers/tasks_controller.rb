@@ -83,8 +83,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # POST /tasks
-  # POST /tasks.xml
+  
+  
   def create
     authorize! :create_task, @task_list
     
@@ -106,8 +106,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # PUT /tasks/1
-  # PUT /tasks/1.xml
+  
+  
   def update
     authorize! :edit, @task
     
@@ -143,8 +143,8 @@ class TasksController < ApplicationController
     end
   end
 
-  # PUT /tasks/1/status
-  # PUT /tasks/1/status.xml
+  
+  
   def status
     authorize! :complete, @task
     

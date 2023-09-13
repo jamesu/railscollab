@@ -80,8 +80,8 @@ class CategoriesController < ApplicationController
     authorize! :edit, @category
   end
 
-  # POST /categories
-  # POST /categories.xml
+  
+  
   def create
     authorize! :create_message_category, @active_project
     
@@ -102,8 +102,8 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # PUT /categories/1
-  # PUT /categories/1.xml
+  
+  
   def update
     begin
       @category = @active_project.categories.find(params[:id])
