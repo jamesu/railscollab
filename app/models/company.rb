@@ -2,17 +2,17 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
@@ -20,15 +20,15 @@
 class Company < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :client_of, class_name: 'Company', foreign_key:  'client_of_id', optional: true
+  belongs_to :client_of, class_name: "Company", foreign_key: "client_of_id", optional: true
 
-  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id', optional: true
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
+  belongs_to :created_by, class_name: "User", foreign_key: "created_by_id", optional: true
+  belongs_to :updated_by, class_name: "User", foreign_key: "updated_by_id", optional: true
 
-  has_many :clients, class_name: 'Company', foreign_key:  'client_of_id'
+  has_many :clients, class_name: "Company", foreign_key: "client_of_id"
   has_many :users
 
-  has_and_belongs_to_many :projects,  join_table: :project_companies
+  has_and_belongs_to_many :projects, join_table: :project_companies
 
   has_one_attached :logo do |attachable|
     attachable.variant :thumb, resize_to_limit: [50, 50]
@@ -47,7 +47,7 @@ class Company < ApplicationRecord
   def process_destroy
   end
 
-  def self.owner(reload=false)
+  def self.owner(reload = false)
     Company.where(client_of_id: nil).first
   end
 
@@ -82,8 +82,8 @@ class Company < ApplicationRecord
   end
 
   def users_on_project(project)
-    proj_users = Person.where(project_id: project).select('user_id')
-    query_users = proj_users.collect{ |user| user.user_id }
+    proj_users = Person.where(project_id: project).select("user_id")
+    query_users = proj_users.collect { |user| user.user_id }
     User.where(id: query_users, company_id: id)
   end
 
@@ -96,7 +96,7 @@ class Company < ApplicationRecord
   end
 
   def self.select_list
-    self.all.collect{ |company| [company.name, company.id] }
+    self.all.collect { |company| [company.name, company.id] }
   end
 
   # Accesibility

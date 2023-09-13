@@ -1,33 +1,29 @@
 #==
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
 class TasksController < ApplicationController
   include ActionView::Helpers::TextHelper
-  layout 'project_website'
-  
+  layout "project_website"
 
-  
   before_action :grab_list, except: [:create, :new]
   before_action :grab_list_required, only: [:index, :create, :new]
-  after_action  :user_track, only: [:index, :show]
-  
-  
-  
+  after_action :user_track, only: [:index, :show]
+
   def index
     respond_to do |format|
       format.html {
@@ -35,95 +31,86 @@ class TasksController < ApplicationController
         @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @completed_task_lists = @active_project.task_lists.completed
         @completed_task_lists = @completed_task_lists.is_public unless @logged_user.member_of_owner?
-        @content_for_sidebar = 'task_lists/index_sidebar'
+        @content_for_sidebar = "task_lists/index_sidebar"
       }
-      format.json  {
+      format.json {
         @tasks = @task_list.tasks
         render json: @tasks.to_json
       }
     end
   end
 
-  
-  
   def show
     begin
       @task_list ||= @task.task_list
     rescue
       return error_status(true, :invalid_task)
     end
-    
+
     respond_to do |format|
       format.html { }
-      format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-      format.json  { render json: @task.to_json }
+      format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+      format.json { render json: @task.to_json }
     end
   end
 
-  
-  
   def new
     authorize! :create_task, @task_list
-    
+
     @task = @task_list.tasks.build
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json  { render json: @task.to_json }
+      format.json { render json: @task.to_json }
     end
   end
 
-  
   def edit
     authorize! :edit, @task
-    
+
     respond_to do |f|
       f.html
-      f.js { respond_with_task(@task, 'ajax_form') }
+      f.js { respond_with_task(@task, "ajax_form") }
     end
   end
 
-  
-  
   def create
     authorize! :create_task, @task_list
-    
+
     @task = @task_list.tasks.build(task_params)
     @task.created_by = @logged_user
-    
+
     respond_to do |format|
       if @task.save
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
 
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.json  { render json: @task.to_json, status: :created, location: @task }
+        format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+        format.json { render json: @task.to_json, status: :created, location: @task }
       else
         format.html { render action: "new" }
-        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.json  { render json: @task.errors, status: :unprocessable_entity }
+        format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  
-  
   def update
     authorize! :edit, @task
-    
+
     @task.updated_by = @logged_user
 
     respond_to do |format|
       if @task.update(task_params)
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
-        
+
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
-        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.json  { head :ok }
+        format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+        format.json { head :ok }
       else
         format.html { render action: "edit" }
-        format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.json  { render json: @task.errors, status: :unprocessable_entity }
+        format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -132,35 +119,32 @@ class TasksController < ApplicationController
   # DELETE /tasks/1.xml
   def destroy
     authorize! :delete, @task
-    
+
     @task.updated_by = @logged_user
     @task.destroy
 
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
       format.js { render json: { id: @task.id } }
-      format.json  { head :ok }
+      format.json { head :ok }
     end
   end
 
-  
-  
   def status
     authorize! :complete, @task
-    
+
     @task.set_completed(task_params[:completed] == true, @logged_user)
     @task.order = @task_list.tasks.length
     @task.save
 
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
-      format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-      format.json  { head :ok }
+      format.js { @task_content = render_to_string({ partial: "show", collection: [@task] }); render :task_update_response }
+      format.json { head :ok }
     end
-
   end
 
-protected
+  protected
 
   def current_tab
     :tasks
@@ -168,20 +152,20 @@ protected
 
   def current_crumb
     case action_name
-      when 'new', 'create' then :add_task
-      when 'edit', 'update' then :edit_task
-      when 'show' then truncate(@task.text, length: 25)
-      else super
+    when "new", "create" then :add_task
+    when "edit", "update" then :edit_task
+    when "show" then truncate(@task.text, length: 25)
+    else super
     end
   end
 
   def extra_crumbs
     crumbs = []
-    crumbs << {title: :tasks, url: project_task_lists_path(@active_project)}
+    crumbs << { title: :tasks, url: project_task_lists_path(@active_project) }
     unless @task_list.nil?
-      crumbs << {title: @task_list.name, url: project_task_list_path(@active_project, id: @task_list.id)}
+      crumbs << { title: @task_list.name, url: project_task_list_path(@active_project, id: @task_list.id) }
     else
-      crumbs << {title: @logged_user.display_name, url: "/dashboard/my_tasks"}
+      crumbs << { title: @logged_user.display_name, url: "/dashboard/my_tasks" }
     end
     crumbs
   end
@@ -199,10 +183,10 @@ protected
       error_status(true, :invalid_task)
       return false
     end
-    
+
     true
   end
-  
+
   def grab_list_required
     if params[:task_list_id].nil?
       error_status(true, :invalid_task)
@@ -215,7 +199,7 @@ protected
     if !params[:task_list_id].nil?
       grab_list_required
       begin
-        @task = (@task_list||@active_project).tasks.find(params[:id])
+        @task = (@task_list || @active_project).tasks.find(params[:id])
       rescue
         return error_status(true, :invalid_task)
       end

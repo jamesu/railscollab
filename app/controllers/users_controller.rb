@@ -18,11 +18,8 @@
 #++
 
 class UsersController < ApplicationController
+  layout "administration"
 
-  layout 'administration'
-  
-  
-  
   after_action :user_track, only: [:index, :show]
 
   def index
@@ -30,7 +27,7 @@ class UsersController < ApplicationController
       format.html {
         redirect_to companies_path
       }
-      format.json  {
+      format.json {
         if @logged_user.is_admin
           @users = User.all
           render json: @users.to_json
@@ -48,10 +45,10 @@ class UsersController < ApplicationController
     @company = @logged_user.company
     @permissions = Person.permission_names()
 
-    @send_email = params[:new_account_notification] == 'false' ? false : true
+    @send_email = params[:new_account_notification] == "false" ? false : true
     @permissions = Person.permission_names()
     @projects = @active_projects
-    
+
     begin
       if @logged_user.member_of_owner? and !params[:company_id].nil?
         @company = Company.find(params[:company_id])
@@ -64,15 +61,15 @@ class UsersController < ApplicationController
 
     @user.company_id = @company.id
     @user.time_zone = @company.time_zone
-    
+
     respond_to do |format|
-      format.html {}
-      format.json  { 
+      format.html { }
+      format.json {
         render json: @user.to_json
       }
     end
   end
-  
+
   def create
     authorize! :create_user, current_user
 
@@ -80,17 +77,17 @@ class UsersController < ApplicationController
     @company = @logged_user.company
     @permissions = Person.permission_names()
 
-    @send_email = params[:new_account_notification] == 'false' ? false : true
+    @send_email = params[:new_account_notification] == "false" ? false : true
     @permissions = Person.permission_names()
     @projects = @active_projects
-    
+
     user_attribs = admin_user_params
 
     # Process extra parameters
 
     @user.username = user_attribs[:username]
     new_account_password = nil
-      
+
     new_account_password = @user.password
 
     # Process core parameters
@@ -106,19 +103,19 @@ class UsersController < ApplicationController
       # ... and send details!
       MailNotifier.account_new_info(@user, new_account_password).deliver_now if @send_email
     end
-    
+
     respond_to do |format|
       if saved
         format.html {
           error_status(false, :success_added_user)
           redirect_back_or_default companies_path
         }
-        
-        format.json  { render json: @user.to_json, status: :created, location: @user }
+
+        format.json { render json: @user.to_json, status: :created, location: @user }
       else
         format.html { render action: "new" }
-        
-        format.json  { render json: @user.errors, status: :unprocessable_entity }
+
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -126,10 +123,10 @@ class UsersController < ApplicationController
   def edit
     authorize! :update_profile, @user
   end
-  
+
   def update
     authorize! :update_profile, @user
-  	
+
     @projects = @active_projects
     @permissions = Person.permission_names()
 
@@ -142,12 +139,12 @@ class UsersController < ApplicationController
     end
 
     if input_params[:default_im_value].nil?
-      default_value = '-1'
+      default_value = "-1"
     else
       default_value = input_params[:default_im_value]
     end
 
-    real_im_values = all_im_values.collect do |type_id,value|
+    real_im_values = all_im_values.collect do |type_id, value|
       real_im_value = value[:value]
       ImValue.new(im_type_id: type_id.to_i, user_id: @user.id, value: real_im_value, is_default: (default_value == type_id))
     end
@@ -172,12 +169,12 @@ class UsersController < ApplicationController
           error_status(false, :success_updated_profile)
           redirect_back_or_default company_people_path(@user.company)
         }
-        
-        format.json  { head :ok }
+
+        format.json { head :ok }
       else
         format.html { render action: "edit" }
-        
-        format.json  { render json: @user.errors, status: :unprocessable_entity }
+
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -186,35 +183,35 @@ class UsersController < ApplicationController
     @user = @logged_user
     authorize! :update_profile, @user
 
-    render action: 'edit'
+    render action: "edit"
   end
 
   def destroy
     authorize! :delete, @user
-    
+
     old_name = @user.display_name
     #@user.updated_by = @logged_user
     @user.destroy
-    
+
     respond_to do |format|
       format.html {
-        error_status(false, :success_deleted_user, {name: old_name})
+        error_status(false, :success_deleted_user, { name: old_name })
         redirect_back_or_default companies_path
       }
-      
-      format.json  { head :ok }
+
+      format.json { head :ok }
     end
   end
 
   def avatar
     authorize! :update_profile, @user
-    
+
     case request.request_method_symbol
     when :put
       user_attribs = user_params
 
       new_avatar = user_attribs[:avatar]
-      @user.errors.add(:avatar, 'Required') if new_avatar.nil?
+      @user.errors.add(:avatar, "Required") if new_avatar.nil?
       @user.avatar = new_avatar
 
       if @user.errors.empty?
@@ -223,10 +220,10 @@ class UsersController < ApplicationController
         else
           error_status(true, :error_updating_avatar)
         end
-        
+
         redirect_to edit_user_path(id: @user.id)
       else
-        render 'edit'
+        render "edit"
       end
     when :delete
       @user.avatar = nil
@@ -239,18 +236,18 @@ class UsersController < ApplicationController
 
   def show
     authorize! :show, @user
-    
+
     respond_to do |format|
       format.html { }
-      
-      format.json  {
+
+      format.json {
         if @user.is_admin
           render json: @user.to_json
         else
           attribs = [:id,
                      :company_id,
                      :avatar_file_name,
-                     :display-name,
+                     :display - name,
                      :email,
                      :fax,
                      :home_number,
@@ -260,7 +257,7 @@ class UsersController < ApplicationController
                      :time_zone,
                      :title]
           render json: @user.to_json(only: attribs)
-        end  
+        end
       }
     end
   end
@@ -280,7 +277,7 @@ class UsersController < ApplicationController
   end
 
   private
-  
+
   def update_project_permissions(user, project_ids, project_permission, old_projects = nil)
     project_ids ||= []
 
@@ -301,7 +298,7 @@ class UsersController < ApplicationController
     end
 
     unless old_projects.nil?
-    # Delete all permissions that aren't in the project list
+      # Delete all permissions that aren't in the project list
       delete_list = old_projects.collect do |project|
         project.id unless project_list.include?(project)
       end.compact
@@ -312,31 +309,31 @@ class UsersController < ApplicationController
     end
   end
 
-protected
+  protected
 
   def page_title
     case action_name
-      when 'show' then I18n.t('user_card', user: @user.display_name)
-      else super
+    when "show" then I18n.t("user_card", user: @user.display_name)
+    else super
     end
   end
 
   def current_crumb
     case action_name
-      when 'new', 'create' then :add_user
-      when 'show' then @user.display_name
-      when 'edit', 'update', 'current' then :edit_user
-      else super
+    when "new", "create" then :add_user
+    when "show" then @user.display_name
+    when "edit", "update", "current" then :edit_user
+    else super
     end
   end
 
   def extra_crumbs
-    user = (@user||@logged_user)
+    user = (@user || @logged_user)
     crumbs = [
-      {title: :people, url: '/companies'},
-      {title: user.company.name, url: company_path(user.company)}
+      { title: :people, url: "/companies" },
+      { title: user.company.name, url: company_path(user.company) },
     ]
-    crumbs << {title: user.display_name, url: user_path(user)} if action_name == 'permissions'
+    crumbs << { title: user.display_name, url: user_path(user) } if action_name == "permissions"
     crumbs
   end
 

@@ -2,49 +2,46 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
 class CompaniesController < ApplicationController
+  layout "administration"
 
-  layout 'administration'
-
-  
-  
-  after_action  :user_track, only: [:card]
-  after_action  :reload_owner
+  after_action :user_track, only: [:card]
+  after_action :reload_owner
 
   def show
     authorize! :show, @company
-    
+
     respond_to do |format|
       format.html { }
-      
-      format.json  {
-        render json: @company.to_json 
+
+      format.json {
+        render json: @company.to_json
       }
     end
   end
 
   def index
     company = Company.owner
-  	clients = Company.owner.clients
-  	@companies = [company] + clients
+    clients = Company.owner.clients
+    @companies = [company] + clients
     respond_to do |format|
       format.html
-      format.json  {
+      format.json {
         if @logged_user.is_admin
           render json: @companies.to_json
         else
@@ -56,7 +53,7 @@ class CompaniesController < ApplicationController
 
   def new
     authorize! :create_company, current_user
-    
+
     @company = Company.new
   end
 
@@ -75,12 +72,12 @@ class CompaniesController < ApplicationController
           error_status(false, :success_added_client)
           redirect_back_or_default companies_path
         }
-        
-        format.json  { render json: @company.to_json, status: :created, location: @company }
+
+        format.json { render json: @company.to_json, status: :created, location: @company }
       else
         format.html { render action: "new" }
-        
-        format.json  { render json: @company.errors, status: :unprocessable_entity }
+
+        format.json { render json: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -88,7 +85,7 @@ class CompaniesController < ApplicationController
   def edit
     authorize! :edit, @company
   end
-  
+
   def update
     authorize! :edit, @company
 
@@ -101,23 +98,23 @@ class CompaniesController < ApplicationController
           error_status(false, :success_edited_client)
           redirect_back_or_default companies_path()
         }
-        
-        format.json  { head :ok }
+
+        format.json { head :ok }
       else
         format.html { render action: "edit" }
-        
-        format.json  { render json: @company.errors, status: :unprocessable_entity }
+
+        format.json { render json: @company.errors, status: :unprocessable_entity }
       end
     end
   end
-  
+
   def hide_welcome_info
     error_status(true, :invalid_company) unless @company.is_owner?
     authorize! :edit, @company
 
     @company.hide_welcome_info = true
     saved = @company.save
-    
+
     respond_to do |format|
       format.html {
         redirect_back_or_default root_path
@@ -129,37 +126,37 @@ class CompaniesController < ApplicationController
     authorize! :delete, @company
 
     estatus = :success_deleted_client
-  	begin
+    begin
       @company.destroy
-  	rescue
+    rescue
       estatus = :error_deleting_client
-  	end
+    end
 
     respond_to do |format|
       format.html {
         error_status(false, estatus)
         redirect_back_or_default companies_path
       }
-      
-      format.json  { head :ok }
+
+      format.json { head :ok }
     end
   end
 
   def permissions
     authorize! :manage, @company
 
-  	@projects = Project.order(name: :asc).all
-  	if @projects.empty?
+    @projects = Project.order(name: :asc).all
+    if @projects.empty?
       error_status(true, :no_projects)
       redirect_back_or_default companies_path
       return
-  	end
+    end
 
     case request.request_method_symbol
     when :put
       project_list = params[:project]
       project_list ||= []
-      project_ids = project_list.collect{ |ids| ids.to_i }
+      project_ids = project_list.collect { |ids| ids.to_i }
 
       # Add and remove project associations
       @projects.each do |project|
@@ -180,13 +177,13 @@ class CompaniesController < ApplicationController
 
   def logo
     authorize! :edit, @company
-    
+
     case request.request_method_symbol
     when :put
       company_attribs = company_params
 
       new_logo = company_attribs[:logo]
-      @company.errors.add(:logo, 'Required') if new_logo.nil?
+      @company.errors.add(:logo, "Required") if new_logo.nil?
       @company.logo = new_logo
 
       return unless @company.errors.empty?
@@ -196,9 +193,8 @@ class CompaniesController < ApplicationController
       else
         error_status(true, :error_uploading_logo)
       end
-      
+
       redirect_to edit_company_path(id: @company.id)
-      
     when :delete
       @company.logo = nil
       @company.save
@@ -212,8 +208,8 @@ class CompaniesController < ApplicationController
 
   def page_title
     case action_name
-      when 'show' then I18n.t('company_card', company: @company.name)
-      else super
+    when "show" then I18n.t("company_card", company: @company.name)
+    else super
     end
   end
 
@@ -223,19 +219,19 @@ class CompaniesController < ApplicationController
 
   def current_crumb
     case action_name
-      when 'new', 'create' then :add_client
-      when 'show' then @company.name
-      when 'edit', 'update' then @company.is_owner? ? :edit_company : :edit_client
-      else super
+    when "new", "create" then :add_client
+    when "show" then @company.name
+    when "edit", "update" then @company.is_owner? ? :edit_company : :edit_client
+    else super
     end
   end
 
   def extra_crumbs
-    crumbs = [{title: :people, url: companies_path}]
-    crumbs << {title: @company.name, url: company_path(id: @company.id)} if action_name == 'permissions'
+    crumbs = [{ title: :people, url: companies_path }]
+    crumbs << { title: @company.name, url: company_path(id: @company.id) } if action_name == "permissions"
     crumbs
   end
-  
+
   def company_params
     params[:company].nil? ? {} : params[:company].permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
   end

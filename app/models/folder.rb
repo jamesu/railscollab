@@ -2,17 +2,17 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
@@ -24,7 +24,7 @@ class Folder < ApplicationRecord
 
   has_many :project_files
 
-  after_create  :process_create
+  after_create :process_create
   before_update :process_update_params
   before_destroy :process_destroy
 
@@ -39,11 +39,11 @@ class Folder < ApplicationRecord
   def process_destroy
     Activity.new_log(self, @updated_by, :delete, false) unless @updated_by.nil?
   end
-  
+
   def created_by=(user)
     @created_by = user
   end
-  
+
   def updated_by=(user)
     @updated_by = user
   end
@@ -59,7 +59,7 @@ class Folder < ApplicationRecord
   # Helpers
 
   def self.select_list(project)
-    [['None', 0]] + Folder.where(project_id: project.id).select('id, name').collect do |folder|
+    [["None", 0]] + Folder.where(project_id: project.id).select("id, name").collect do |folder|
       [folder.name, folder.id]
     end
   end

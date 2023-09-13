@@ -2,31 +2,31 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
 class Activity < ApplicationRecord
   belongs_to :project, optional: true
-  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :rel_object, polymorphic:  true, optional: true
+  belongs_to :created_by, class_name: "User", foreign_key: "created_by_id"
+  belongs_to :rel_object, polymorphic: true, optional: true
 
   scope :is_public, -> { where(is_private: false) }
 
   before_create :process_params
 
-  @@action_lookup = {add: 0, upload: 1, open: 2, close: 3, edit: 4, delete: 5}
+  @@action_lookup = { add: 0, upload: 1, open: 2, close: 3, edit: 4, delete: 5 }
   @@action_id_lookup = @@action_lookup.invert
 
   def process_params
@@ -37,11 +37,11 @@ class Activity < ApplicationRecord
   end
 
   def action
-  	@@action_id_lookup[self.action_id]
+    @@action_id_lookup[self.action_id]
   end
 
   def action=(val)
-  	self.action_id = @@action_lookup[val.to_sym]
+    self.action_id = @@action_lookup[val.to_sym]
   end
 
   def is_today?
@@ -62,7 +62,7 @@ class Activity < ApplicationRecord
     end
   end
 
-  def self.new_log(obj, user, action, private=false, real_project=nil)
+  def self.new_log(obj, user, action, private = false, real_project = nil)
     really_silent = Rails.configuration.railscollab.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
@@ -102,21 +102,21 @@ class Activity < ApplicationRecord
     else
       # Destroy all occurrences of this object from the log
       # (assuming no audit trail is required here)
-      Activity.where({'rel_object_type' => obj.class.to_s, 'rel_object_id' => obj.id}).destroy_all
+      Activity.where({ "rel_object_type" => obj.class.to_s, "rel_object_id" => obj.id }).destroy_all
     end
   end
 
-  def self.logs_for(project, include_private, include_silent, limit=50)
+  def self.logs_for(project, include_private, include_silent, limit = 50)
     conditions = if project.class == Array
-      {project_id: project}
-    else
-      {project_id: project.id}
-    end
+        { project_id: project }
+      else
+        { project_id: project.id }
+      end
 
     private_conditions = {}
     private_conditions[:is_private] = 0 unless include_private
     private_conditions[:is_silent] = 0 unless include_silent
 
-    Activity.where(conditions).where(private_conditions).order('created_on DESC').limit(limit)
+    Activity.where(conditions).where(private_conditions).order("created_on DESC").limit(limit)
   end
 end

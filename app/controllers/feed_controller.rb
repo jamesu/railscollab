@@ -2,44 +2,43 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'icalendar'
-require 'csv'
+require "icalendar"
+require "csv"
 
 class FeedController < ApplicationController
-
   after_action :user_track
 
   def recent_activities
-  	@activity_log = Activity.logs_for(@logged_user.projects.all.to_a, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
-  	@activity_url = root_url
+    @activity_log = Activity.logs_for(@logged_user.projects.all.to_a, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+    @activity_url = root_url
 
-  	respond_to do |format|
+    respond_to do |format|
       format.html do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.rss do
-        render plain: I18n.t('error_404'), status: 404 unless @activity_log.length > 0
+        render plain: I18n.t("error_404"), status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_activities')
+        ical.append_custom_property "X-WR-CALNAME", I18n.t("recent_activities")
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
@@ -52,39 +51,39 @@ class FeedController < ApplicationController
           end
         end
 
-        render plain: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: "text/calendar"
       end
-  	end
+    end
   end
 
   def project_activities
-  	begin
+    begin
       @project = Project.find(params[:project_id])
-  	rescue ActiveRecord::RecordNotFound
-      render plain: I18n.t('error_404'), status: 404
+    rescue ActiveRecord::RecordNotFound
+      render plain: I18n.t("error_404"), status: 404
       return
-  	end
+    end
 
-  	unless @logged_user.member_of(@project)
-      render plain: I18n.t('error_404'), status: 404
+    unless @logged_user.member_of(@project)
+      render plain: I18n.t("error_404"), status: 404
       return
-  	end
+    end
 
-  	@activity_log = Activity.logs_for(@project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
-  	@activity_url = project_url(@project)
+    @activity_log = Activity.logs_for(@project, @logged_user.member_of_owner?, @logged_user.is_admin, 50)
+    @activity_url = project_url(@project)
 
-  	respond_to do |format|
+    respond_to do |format|
       format.html do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.rss do
-        render plain: I18n.t('error_404'), status: 404 unless @activity_log.length > 0
+        render plain: I18n.t("error_404"), status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_activities')
+        ical.append_custom_property "X-WR-CALNAME", I18n.t("recent_activities")
 
         @activity_log.each do |activity|
           activity_date = activity.created_on.to_date
@@ -97,27 +96,27 @@ class FeedController < ApplicationController
           end
         end
 
-        render plain: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: "text/calendar"
       end
-  	end
+    end
   end
 
   def recent_milestones
-  	@milestones = Milestone.all_by_user(@logged_user)
-  	@milestones_url = url_for(controller: 'dashboard', action: 'milestones')
+    @milestones = Milestone.all_by_user(@logged_user)
+    @milestones_url = url_for(controller: "dashboard", action: "milestones")
 
-  	respond_to do |format|
+    respond_to do |format|
       format.html do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.rss do
-        render plain: I18n.t('error_404'), status: 404 unless @milestones.length > 0
+        render plain: I18n.t("error_404"), status: 404 unless @milestones.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.append_custom_property 'X-WR-CALNAME', I18n.t('recent_milestones')
+        ical.append_custom_property "X-WR-CALNAME", I18n.t("recent_milestones")
         # TODO: timezone
 
         @milestones.each do |milestone|
@@ -130,40 +129,40 @@ class FeedController < ApplicationController
             e.description = milestone.description
           end
         end
-        render plain: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: "text/calendar"
       end
-  	end
+    end
   end
 
   def milestones
-  	begin
+    begin
       @project = Project.find(params[:project_id])
-  	rescue ActiveRecord::RecordNotFound
-      render plain: 'Not found', status: 404
+    rescue ActiveRecord::RecordNotFound
+      render plain: "Not found", status: 404
       return
-  	end
+    end
 
-  	unless @logged_user.member_of(@project)
-      render plain: 'Not found', status: 404
+    unless @logged_user.member_of(@project)
+      render plain: "Not found", status: 404
       return
-  	end
+    end
 
     @milestones = @project.milestones.is_open
-    @milestones = @milestones.is_public unless @logged_user.member_of_owner? 
+    @milestones = @milestones.is_public unless @logged_user.member_of_owner?
     @milestones_url = project_milestones_url(@project)
 
-  	respond_to do |format|
+    respond_to do |format|
       format.html do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.rss do
-        render plain: I18n.t('error_404'), status: 404 unless @milestones.length > 0
+        render plain: I18n.t("error_404"), status: 404 unless @milestones.length > 0
       end
 
       format.ics do
         ical = Icalendar::Calendar.new
-        ical.append_custom_property 'X-WR-CALNAME', "#{@project.name} #{I18n.t('milestones')}"
+        ical.append_custom_property "X-WR-CALNAME", "#{@project.name} #{I18n.t("milestones")}"
         # TODO: timezone
 
         @milestones.each do |milestone|
@@ -176,9 +175,9 @@ class FeedController < ApplicationController
             e.description = milestone.description
           end
         end
-        render plain: ical.to_ical, content_type: 'text/calendar'
+        render plain: ical.to_ical, content_type: "text/calendar"
       end
-  	end
+    end
   end
 
   def export_times
@@ -186,42 +185,43 @@ class FeedController < ApplicationController
       begin
         @project = Project.find(params[:project_id])
       rescue ActiveRecord::RecordNotFound
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
         return
       end
 
       @times = @logged_user.member_of_owner? ? @project.time_records : @project.time_records.is_public
     else
-      @times = TimeRecord.all_by_user(@logged_user).where('done_date IS NOT NULL')
+      @times = TimeRecord.all_by_user(@logged_user).where("done_date IS NOT NULL")
     end
 
     respond_to do |format|
       format.html do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.rss do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.ics do
-        render plain: I18n.t('error_404'), status: 404
+        render plain: I18n.t("error_404"), status: 404
       end
 
       format.csv do
         build_str = CSV.generate do |csv|
-        csv << ['Project', 'Date (UTC)', 'Attributed to', 'Hours', 'Name', 'Description', 'Task list', 'Task']
-        @times.each { |time| csv << [time.project.name,
-              time.running? ? '' : time.done_date.strftime('%m/%d/%Y'),
-              time.assigned_to.nil? ? 'Anyone' : time.assigned_to.display_name,
-              time.hours,
-              time.name,
-              time.description,
-              time.task_list.nil? ? '' : time.task_list.object_name,
-              time.task.nil? ? '' : time.task.object_name,
-            ] }
+          csv << ["Project", "Date (UTC)", "Attributed to", "Hours", "Name", "Description", "Task list", "Task"]
+          @times.each { |time|
+            csv << [time.project.name,
+                    time.running? ? "" : time.done_date.strftime("%m/%d/%Y"),
+                    time.assigned_to.nil? ? "Anyone" : time.assigned_to.display_name,
+                    time.hours,
+                    time.name,
+                    time.description,
+                    time.task_list.nil? ? "" : time.task_list.object_name,
+                    time.task.nil? ? "" : time.task.object_name]
+          }
         end
-        render plain: build_str, content_type: 'application/vnd.ms-excel'
+        render plain: build_str, content_type: "application/vnd.ms-excel"
       end
     end
   end
@@ -229,6 +229,6 @@ class FeedController < ApplicationController
   protected
 
   def protect_token?(action)
-    action != 'export_times'
+    action != "export_times"
   end
 end

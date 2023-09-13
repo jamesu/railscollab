@@ -1,32 +1,31 @@
 #==
 # RailsCollab
 # Copyright (C) 2011 James S Urquhart
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
 class Ability
-
   class AccessDenied < Exception
   end
-  
+
   def can(ability, klass, &block)
     @abilityCheckers ||= {}
     @abilityCheckers["#{ability}_#{klass}"] = block
   end
 
-  def can?(ability, instance=nil)
+  def can?(ability, instance = nil)
     key = "#{ability}_#{instance.class}"
     if @abilityCheckers.has_key?(key)
       func = @abilityCheckers[key]
@@ -47,7 +46,7 @@ class Ability
     can :edit, Task do |task|
       task_list = task.task_list
       project = task_list.project
-      
+
       if !user.member_of(project) or !project.is_active? or user.is_anonymous?
         false
       elsif user.is_admin
@@ -172,7 +171,7 @@ class Ability
     can :manage, Milestone do |milestone|
       milestone.project.is_active? and user.has_permission(milestone.project, :can_manage_milestones)
     end
-    
+
     can :change_status, Milestone do |milestone|
       if can?(:edit, milestone)
         true
@@ -181,7 +180,7 @@ class Ability
         (milestone_assigned_to == user) or (milestone_assigned_to == user.company)
       end
     end
-    
+
     can :comment, Milestone do |milestone|
       milestone.project.is_active? and milestone.project.has_member(user) and !user.is_anonymous?
     end
@@ -235,7 +234,7 @@ class Ability
         !(message.is_private and !user.member_of_owner?)
       end
     end
-    
+
     can :subscribe, Message do |message|
       message.comments_enabled and message.project.is_active? and user.member_of(message.project) and !(message.is_private and !user.member_of_owner?)
     end
@@ -247,11 +246,11 @@ class Ability
     can :add_file, Message do |message|
       can?(:edit, message) and user.has_permission(message.project, :can_upload_files)
     end
-    
+
     can :change_options, Message do |message|
       user.member_of_owner? and can?(:edit, message)
     end
-    
+
     can :comment, Message do |message|
       project = message.project
       if user.is_anonymous?
@@ -318,11 +317,11 @@ class Ability
     can :download, ProjectFile do |project_file|
       can? :show, project_file
     end
-    
+
     can :change_options, ProjectFile do |project_file|
       user.member_of_owner? and can?(:edit, project_file)
     end
-    
+
     can :comment, ProjectFile do |project_file|
       project = project_file.project
       if user.is_anonymous?
@@ -353,7 +352,7 @@ class Ability
     can :manage, Project do |project|
       user.member_of_owner? and user.is_admin
     end
-    
+
     can :remove_company, Project do |project, company|
       if company.is_owner?
         false
@@ -454,7 +453,7 @@ class Ability
     can :show, User do |target_user|
       user.member_of_owner? or user.company_id == target_user.company_id or target_user.member_of_owner?
     end
-    
+
     can :update_profile, User do |target_user|
       (target_user.id == user.id and !user.is_anonymous?) or (user.member_of_owner? and user.is_admin)
     end
@@ -466,9 +465,9 @@ class Ability
         user.member_of_owner? and user.is_admin
       end
     end
-    
+
     # WikiPage
-    
+
     can :create_wiki_page, Project do |project|
       project.is_active? and user.member_of(project) and user.has_permission(project, :can_manage_wiki_pages)
     end
@@ -483,5 +482,4 @@ class Ability
 
     return self
   end
-
 end

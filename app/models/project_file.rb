@@ -2,17 +2,17 @@
 # RailsCollab
 # Copyright (C) 2007 - 2011 James S Urquhart
 # Portions Copyright (C) René Scheibe
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
@@ -21,25 +21,25 @@ class ProjectFile < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :project
-  belongs_to :folder, counter_cache:  true, optional: true
+  belongs_to :folder, counter_cache: true, optional: true
 
-  belongs_to :created_by, class_name: 'User', foreign_key:  'created_by_id'
-  belongs_to :updated_by, class_name: 'User', foreign_key:  'updated_by_id', optional: true
+  belongs_to :created_by, class_name: "User", foreign_key: "created_by_id"
+  belongs_to :updated_by, class_name: "User", foreign_key: "updated_by_id", optional: true
 
-  has_many :project_file_revisions, foreign_key: 'file_id', dependent:  :destroy
-  has_many :attached_files, foreign_key:  'file_id'
-  has_many :comments, as:  'rel_object', dependent:  :destroy
+  has_many :project_file_revisions, foreign_key: "file_id", dependent: :destroy
+  has_many :attached_files, foreign_key: "file_id"
+  has_many :comments, as: "rel_object", dependent: :destroy
   #has_many :tags, as:  'rel_object', dependent:  :destroy
-  
+
   scope :important, -> { where(is_important: true) }
 
   before_validation :process_params, on: :create
-  after_create  :process_create
+  after_create :process_create
   before_update :process_update_params
   before_destroy :process_destroy
 
   def process_params
-    write_attribute('comments_enabled', true) unless self.created_by.member_of_owner?
+    write_attribute("comments_enabled", true) unless self.created_by.member_of_owner?
   end
 
   def process_create
@@ -57,25 +57,25 @@ class ProjectFile < ApplicationRecord
   end
 
   def ordered_project_file_revisions
-    self.project_file_revisions.order('revision_number DESC')
+    self.project_file_revisions.order("revision_number DESC")
   end
 
   def tags
-    Tag.list_by_object(self).join(',')
+    Tag.list_by_object(self).join(",")
   end
 
   def tags_with_spaces
-    Tag.list_by_object(self).join(' ')
+    Tag.list_by_object(self).join(" ")
   end
 
   def tag_list
-    Tag.where(['rel_object_type = ? AND rel_object_id = ?', object.class.to_s, object.id])
+    Tag.where(["rel_object_type = ? AND rel_object_id = ?", object.class.to_s, object.id])
   end
 
   def tags=(val)
     Tag.clear_by_object(self)
     real_owner = project_file_revisions.empty? ? nil : self.project_file_revisions[0].created_by
-    Tag.set_to_object(self, val.split(','), real_owner) unless val.nil?
+    Tag.set_to_object(self, val.split(","), real_owner) unless val.nil?
   end
 
   def last_created_by
@@ -121,7 +121,7 @@ class ProjectFile < ApplicationRecord
     file_revision.created_by = user
     file_revision.comment = comment
     file_revision.save!
-    
+
     Activity.new_log(file_revision, user, :add, self.is_private, self.project) unless new_revision == 1
   end
 
@@ -134,7 +134,7 @@ class ProjectFile < ApplicationRecord
 
   def self.handle_files(files, to_object, user, is_private)
     return 0 if files.nil?
-    
+
     count = 0
     files.each do |file|
       if !file.respond_to?(:original_filename)
@@ -143,7 +143,7 @@ class ProjectFile < ApplicationRecord
       end
 
       filename = file.original_filename.sanitize_filename
-      
+
       ProjectFile.transaction do
         attached_file = ProjectFile.new()
         attached_file.filename = filename
@@ -155,12 +155,12 @@ class ProjectFile < ApplicationRecord
 
         if attached_file.save
           # Upload revision
-          attached_file.add_revision(file, 1, user, '')
-          
+          attached_file.add_revision(file, 1, user, "")
+
           # Attach to object
-          AttachedFile.create!(created_on: attached_file.created_on, 
-                               created_by: user, 
-                               rel_object: to_object, 
+          AttachedFile.create!(created_on: attached_file.created_on,
+                               created_by: user,
+                               rel_object: to_object,
                                project_file: attached_file)
           #to_object.project_file << attached_file
 
@@ -177,10 +177,10 @@ class ProjectFile < ApplicationRecord
     found_files = ProjectFile.where(params[:conditions])
     found_files = found_files.order(params[:order]) unless params[:order].nil?
     found_files = found_files.page(params[:page]).per(params[:per_page]) unless params[:page].nil?
-    
+
     @pagination = []
 
-    group_type = DateTime if ['created_on', 'updated_on'].include?(group_field)
+    group_type = DateTime if ["created_on", "updated_on"].include?(group_field)
     group_type ||= String
 
     grouped_fields = found_files.group_by do |file|
@@ -207,23 +207,23 @@ class ProjectFile < ApplicationRecord
 
   validates_presence_of :filename
   validates_each :folder, allow_nil: true do |record, attr, value|
-    record.errors.add(attr, I18n.t('not_part_of_project')) if value.project_id != record.project_id
+    record.errors.add(attr, I18n.t("not_part_of_project")) if value.project_id != record.project_id
   end
 
   validates_each :is_private, :is_important, :anonymous_comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-    record.errors.add(attr, I18n.t('not_allowed')) if value == true
+    record.errors.add(attr, I18n.t("not_allowed")) if value == true
   end
 
   validates_each :comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
-    record.errors.add(attr, I18n.t('not_allowed')) if value == false
+    record.errors.add(attr, I18n.t("not_allowed")) if value == false
   end
-  
+
   # Indexing
   define_index do
     indexes :name
     indexes :description
-    indexes tag_list(:tag), as:  :tags
-    
+    indexes tag_list(:tag), as: :tags
+
     has :folder_id
     has :project_id
     has :is_private

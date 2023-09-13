@@ -2,34 +2,33 @@
 # RailsCollab
 # Copyright (C) 2009 Sergio Cambra
 # Portions Copyright (C) 2011 James S Urquhart
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
 class WikiPagesController < ApplicationController
-  layout 'project_website'
+  layout "project_website"
 
-  
   before_action :find_sidebar_page, only: [:index, :show]
-  after_action  :user_track, only: [:index, :show]
+  after_action :user_track, only: [:index, :show]
 
   before_action :find_wiki_page, only: [:show, :edit, :update, :destroy]
   before_action :find_main_wiki_page, only: :index
   before_action :find_wiki_pages, only: :list
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  
+
   before_action :check_create_permissions, only: [:new, :create]
   before_action :check_update_permissions, only: [:edit, :update]
   before_action :check_delete_permissions, only: :destroy
@@ -38,7 +37,7 @@ class WikiPagesController < ApplicationController
     unless @wiki_page.nil?
       @version = @wiki_page
       @versions = [@wiki_page] # TOFIX @wiki_page.versions.all.reverse!
-      render action: 'show'
+      render action: "show"
     end
   end
 
@@ -59,10 +58,10 @@ class WikiPagesController < ApplicationController
     @wiki_page = wiki_pages.new(wiki_page_params.merge(created_by: @logged_user))
 
     if @wiki_page.save
-      flash[:message] = I18n.t 'wiki_engine.success_creating_wiki_page'
+      flash[:message] = I18n.t "wiki_engine.success_creating_wiki_page"
       redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, id: @wiki_page.slug)
     else
-      render action: 'new'
+      render action: "new"
     end
   end
 
@@ -71,17 +70,17 @@ class WikiPagesController < ApplicationController
 
   def update
     if @wiki_page.update(wiki_page_params.merge(created_by: @logged_user))
-      flash[:message] = I18n.t 'wiki_engine.success_updating_wiki_page'
+      flash[:message] = I18n.t "wiki_engine.success_updating_wiki_page"
       redirect_to @wiki_page.main ? project_wiki_pages_path(@active_project) : project_wiki_page_path(@active_project, id: @wiki_page)
     else
-      render action: 'edit'
+      render action: "edit"
     end
   end
 
   def destroy
     @wiki_page.destroy
 
-    flash[:message] = I18n.t 'wiki_engine.success_deleting_wiki_page'
+    flash[:message] = I18n.t "wiki_engine.success_deleting_wiki_page"
     redirect_to project_wiki_pages_path(@active_project)
   end
 
@@ -99,7 +98,7 @@ class WikiPagesController < ApplicationController
   def wiki_pages
     WikiPage
   end
-  
+
   def find_wiki_page
     @wiki_page = wiki_pages.find(params[:id])
   end
@@ -117,9 +116,9 @@ class WikiPagesController < ApplicationController
   # This is called when wiki page is not found. By default it display a page explaining
   # that the wiki page does not exist yet and link to create it.
   def not_found
-    render action: 'not_found', status: :not_found
+    render action: "not_found", status: :not_found
   end
-  
+
   def check_create_permissions
     authorize! :create_wiki_page, @active_project
   end
@@ -143,13 +142,13 @@ class WikiPagesController < ApplicationController
   def find_wiki_page
     @wiki_page = wiki_pages.where(project_id: @active_project.id).find_by_slug(params[:id])
   end
-  
+
   def find_sidebar_page
     @wiki_sidebar = wiki_pages.where(project_id: @active_project.id).find_by_slug("sidebar") rescue nil
-    @content_for_sidebar = @wiki_sidebar.nil? ? nil : 'wiki_sidebar' 
+    @content_for_sidebar = @wiki_sidebar.nil? ? nil : "wiki_sidebar"
   end
 
-protected
+  protected
 
   def current_tab
     :wiki
@@ -157,23 +156,22 @@ protected
 
   def current_crumb
     case action_name
-      when 'index' then :wiki
-      when 'new', 'create' then :add_page
-      when 'edit', 'update' then :edit_page
-      when 'show' then @wiki_page.title if @wiki_page
-      when 'list' then :all_pages
-      else super
+    when "index" then :wiki
+    when "new", "create" then :add_page
+    when "edit", "update" then :edit_page
+    when "show" then @wiki_page.title if @wiki_page
+    when "list" then :all_pages
+    else super
     end
   end
 
   def extra_crumbs
     crumbs = []
-    crumbs << {title: :wiki, url: project_wiki_pages_path(@active_project)} unless action_name == 'index'
+    crumbs << { title: :wiki, url: project_wiki_pages_path(@active_project) } unless action_name == "index"
     crumbs
   end
 
   def wiki_page_params
     params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:main, :title, :content, :project_id)
   end
-
 end
