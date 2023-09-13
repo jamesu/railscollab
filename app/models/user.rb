@@ -289,7 +289,7 @@ class User < ApplicationRecord
 
   def milestone_feed_url(project = nil, format = "ics")
     if project.nil?
-      return feed_recent_miletsones_path(user: self.id, format: format, token: self.twisted_token())
+      return feed_recent_milestones_path(user: self.id, format: format, token: self.twisted_token())
     else
       return feed_milestones_path(user: self.id, project_id: project.id, format: format, token: self.twisted_token())
     end
