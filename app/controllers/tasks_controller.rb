@@ -94,7 +94,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.save
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
-        flash[:notice] = 'ListItem was successfully created.'
+
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
         format.json  { render json: @task.to_json, status: :created, location: @task }
@@ -116,7 +116,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @task.update(task_params)
         MailNotifier.task(@task.user, @task).deliver_now if params[:send_notification] and @task.user
-        flash[:notice] = 'ListItem was successfully updated.'
+        
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
         format.json  { head :ok }

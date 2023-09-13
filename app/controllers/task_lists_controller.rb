@@ -107,7 +107,6 @@ class TaskListsController < ApplicationController
 
     respond_to do |format|
       if @task_list.save
-        flash[:notice] = 'List was successfully created.'
         format.html {
           error_status(false, :success_added_task_list)
           redirect_back_or_default(@task_list.object_url)
@@ -137,7 +136,6 @@ class TaskListsController < ApplicationController
 
     respond_to do |format|
       if @task_list.update(task_list_params)
-        flash[:notice] = 'List was successfully updated.'
         format.html {
           error_status(false, :success_edited_task_list)
           redirect_back_or_default(@task_list.object_url)
