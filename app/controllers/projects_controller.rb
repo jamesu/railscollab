@@ -30,8 +30,8 @@ class ProjectsController < ApplicationController
     @projects = @logged_user.is_admin ? Project.all : @logged_user.projects
     respond_to do |format|
       format.html { render layout: 'administration' }
-      format.xml  { 
-        render xml: @projects.to_xml(root: 'projects')
+      format.json  { 
+        render json: @projects.to_json
       }
     end
   end
@@ -61,8 +61,8 @@ class ProjectsController < ApplicationController
 
         @content_for_sidebar = 'overview_sidebar'
       }
-      format.xml  { 
-        render xml: @project.to_xml(root: 'project')
+      format.json  { 
+        render json: @project.to_json
       }
     end
   end
@@ -93,8 +93,8 @@ class ProjectsController < ApplicationController
       format.html {
         @content_for_sidebar = 'search_sidebar' 
       }
-      format.xml {
-        render xml: [].to_xml(root: 'results') 
+      format.json {
+        render json: [].to_json 
       }
     end
   end
@@ -107,8 +107,8 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html {
       }
-      format.xml {
-        render xml: @project_companies.to_xml(root: 'companies') 
+      format.json {
+        render json: @project_companies.to_json 
       }
     end
   end
@@ -201,7 +201,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default people_project_path(id: @project.id) }
-      format.xml  { render xml: :ok }
+      format.json  { render json: :ok }
     end
   end
 
@@ -220,7 +220,7 @@ class ProjectsController < ApplicationController
     
     respond_to do |format|
       format.html { redirect_back_or_default people_project_path(id: @project.id) }
-      format.xml  { render xml: :ok }
+      format.json  { render json: :ok }
     end
   end
 
@@ -231,7 +231,7 @@ class ProjectsController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @project.to_xml(root: 'project') }
+      format.json  { render json: @project.to_json }
     end
   end
 
@@ -279,11 +279,11 @@ class ProjectsController < ApplicationController
           redirect_to permissions_project_path(id: @project.id)
         }
         
-        format.xml  { render xml: @project.to_xml(root: 'project'), status: :created, location: @project }
+        format.json  { render json: @project.to_json, status: :created, location: @project }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @project.errors, status: :unprocessable_entity }
+        format.json  { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -305,11 +305,11 @@ class ProjectsController < ApplicationController
           redirect_back_or_default(@project.object_url)
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @project.errors, status: :unprocessable_entity }
+        format.json  { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -326,7 +326,7 @@ class ProjectsController < ApplicationController
         redirect_back_or_default(controller: 'dashboard')
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -343,7 +343,7 @@ class ProjectsController < ApplicationController
         redirect_back_or_default projects_path
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -360,7 +360,7 @@ class ProjectsController < ApplicationController
         redirect_back_or_default projects_path
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

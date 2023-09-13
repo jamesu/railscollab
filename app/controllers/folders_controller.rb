@@ -25,21 +25,21 @@ class FoldersController < ApplicationController
   
   after_action  :user_track, only: [:files]
   
-  # GET /folders
-  # GET /folders.xml
+  
+  
   def index
     @folders = @active_project.folders
     
     respond_to do |format|
       format.html { redirect_to(project_files_path(@active_project)) }
-      format.xml  {
-        render xml: @folders.to_xml(root: 'folders')
+      format.json  {
+        render json: @folders.to_json
       }
     end
   end
 
-  # GET /folders/1
-  # GET /folders/1.xml
+  
+  
   def show
     authorize! :show, @folder
     
@@ -47,14 +47,14 @@ class FoldersController < ApplicationController
       format.html {
         redirect_to(files_project_folder_path(@active_project))
       }
-      format.xml  { 
-        render xml: @folder.to_xml
+      format.json  { 
+        render json: @folder.to_json
       }
     end
   end
 
-  # GET /folders/new
-  # GET /folders/new.xml
+  
+  
   def new
     authorize! :create_folder, @active_project
     
@@ -62,11 +62,11 @@ class FoldersController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @folder.to_xml(root: 'folder') }
+      format.json  { render json: @folder.to_json }
     end
   end
 
-  # GET /folders/1/edit
+  
   def edit
     authorize! :edit, @folder
   end
@@ -86,11 +86,11 @@ class FoldersController < ApplicationController
           redirect_back_or_default(project_folder_path(@active_project, @folder))
         }
         
-        format.xml  { render xml: @folder.to_xml(root: 'folder'), status: :created, location: @folder }
+        format.json  { render json: @folder.to_json, status: :created, location: @folder }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @folder.errors, status: :unprocessable_entity }
+        format.json  { render json: @folder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -109,11 +109,11 @@ class FoldersController < ApplicationController
           redirect_back_or_default(project_folder_path(@active_project, @folder))
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @folder.errors, status: :unprocessable_entity }
+        format.json  { render json: @folder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -132,7 +132,7 @@ class FoldersController < ApplicationController
         redirect_back_or_default(project_files_path(@active_project))
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
   
@@ -169,12 +169,12 @@ class FoldersController < ApplicationController
         
         render template: 'files/index'
       }
-      format.xml  { 
+      format.json  { 
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
                             .limit(params[:limit] || Rails.configuration.railscollab.files_per_page)
         
-        render xml: @files.to_xml(only: [:id,
+        render json: @files.to_json(only: [:id,
                                                :filename,
                                                :created_by_id, 
                                                :created_on,
@@ -183,7 +183,7 @@ class FoldersController < ApplicationController
                                                :is_important,
                                                :is_locked,
                                                :comments_count, 
-                                               :comments_enabled], root: 'files')
+                                               :comments_enabled])
       }
     end
   end

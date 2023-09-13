@@ -22,21 +22,21 @@ class CategoriesController < ApplicationController
 
   after_action  :user_track, only: [:index, :show]
   
-  # GET /categories
-  # GET /categories.xml
+  
+  
   def index
     @categories = @active_project.categories
     
     respond_to do |format|
       format.html {}
-      format.xml  {
-        render xml: @categories.to_xml(root: 'categories')
+      format.json  {
+        render json: @categories.to_json
       }
     end
   end
 
-  # GET /categories/1
-  # GET /categories/1.xml
+  
+  
   def show
     begin
       @category = @active_project.categories.find(params[:id])
@@ -50,14 +50,14 @@ class CategoriesController < ApplicationController
       format.html {
         @content_for_sidebar = 'messages/index_sidebar'
       }
-      format.xml  { 
-        render xml: @category.to_xml
+      format.json  { 
+        render json: @category.to_json
       }
     end
   end
 
-  # GET /categories/new
-  # GET /categories/new.xml
+  
+  
   def new
     authorize! :create_message_category, @active_project
     
@@ -65,11 +65,11 @@ class CategoriesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @category.to_xml(root: 'category') }
+      format.json  { render json: @category.to_json }
     end
   end
 
-  # GET /categories/1/edit
+  
   def edit
     begin
       @category = @active_project.categories.find(params[:id])
@@ -94,10 +94,10 @@ class CategoriesController < ApplicationController
           error_status(false, :success_added_message_category)
           redirect_back_or_default(@category.object_url)
         }
-        format.xml  { render xml: @category.to_xml(root: 'category'), status: :created, location: @category }
+        format.json  { render json: @category.to_json, status: :created, location: @category }
       else
         format.html { render action: "new" }
-        format.xml  { render xml: @category.errors, status: :unprocessable_entity }
+        format.json  { render json: @category.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -121,10 +121,10 @@ class CategoriesController < ApplicationController
           error_status(false, :success_edited_message_category)
           redirect_back_or_default(@category.object_url)
         }
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
-        format.xml  { render xml: @category.errors, status: :unprocessable_entity }
+        format.json  { render json: @category.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -148,7 +148,7 @@ class CategoriesController < ApplicationController
         error_status(false, :success_deleted_message_category)
         redirect_back_or_default(categories_url)
       }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
   
@@ -195,12 +195,12 @@ class CategoriesController < ApplicationController
 
         render template: 'messages/index'
       }
-      format.xml  { 
+      format.json  { 
         @messages = @category.messages.where(msg_conditions)
                                               .offset(params[:offset])
                                               .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
         
-        render xml: @messages.to_xml(only: [:id,
+        render json: @messages.to_json(only: [:id,
                                                   :title,
                                                   :created_by_id, 
                                                   :created_on,
@@ -209,7 +209,7 @@ class CategoriesController < ApplicationController
                                                   :is_important,
                                                   :milestone_id,
                                                   :attached_files_count, 
-                                                  :comments_enabled], root: 'messages')
+                                                  :comments_enabled])
       }
     end
   end

@@ -34,9 +34,9 @@ class MilestonesController < ApplicationController
       format.html {
         index_lists(@logged_user.member_of_owner?, false)
       }
-      format.xml  {
+      format.json  {
         @milestones = @logged_user.member_of_owner? ? @active_project.milestones : @active_project.milestones.is_public
-        render xml: @milestones.to_xml(root: 'milestones')
+        render json: @milestones.to_json
       }
     end
   end
@@ -70,10 +70,10 @@ class MilestonesController < ApplicationController
           error_status(false, :success_added_milestone)
           redirect_back_or_default(@milestone.object_url)
         }
-        format.xml  { render xml: @milestone.to_xml(root: 'milestone'), status: :created, location: @milestone }
+        format.json  { render json: @milestone.to_json, status: :created, location: @milestone }
       else
         format.html { render action: "new" }
-        format.xml  { render xml: @milestone.errors, status: :unprocessable_entity }
+        format.json  { render json: @milestone.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -100,10 +100,10 @@ class MilestonesController < ApplicationController
           error_status(false, :success_edited_milestone)
           redirect_back_or_default(@milestone.object_url)
         }
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
-        format.xml  { render xml: @milestone.errors, status: :unprocessable_entity }
+        format.json  { render json: @milestone.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -121,7 +121,7 @@ class MilestonesController < ApplicationController
         error_status(false, :success_deleted_milestone)
         redirect_back_or_default(project_milestones_url(@active_project))
       }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

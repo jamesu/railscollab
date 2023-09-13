@@ -43,13 +43,13 @@ class TimesController < ApplicationController
         @times.total_pages.times {|page| @pagination << page+1}
     
       }
-      format.xml  {
+      format.json  {
         @times = @project.time_records.where(@time_conditions)
                                        .offset(params[:offset])
                                        .limit(params[:limit] || Rails.configuration.railscollab.times_per_page) 
                                        .order("#{@sort_type} #{@sort_order}")
         
-        render xml: @times.to_xml(root: 'times')
+        render json: @times.to_json
       }
     end
   end
@@ -96,14 +96,14 @@ class TimesController < ApplicationController
           redirect_back_or_default(@time.object_url)
         }
         format.js   { respond_with_time(@time) }
-        format.xml  { render xml: @time.to_xml(root: 'time'), status: :created, location: @time }
+        format.json  { render json: @time.to_json, status: :created, location: @time }
       else
         @open_task_lists = @active_project.task_lists.is_open
         @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @task_filter = Proc.new {|task| task.is_completed? }
         format.html { render action: "new" }
         format.js   { respond_with_time(@time) }
-        format.xml  { render xml: @time.errors, status: :unprocessable_entity }
+        format.json  { render json: @time.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -129,14 +129,14 @@ class TimesController < ApplicationController
           error_status(false, :success_edited_time)
           redirect_back_or_default(@time.object_url)
         }
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         @open_task_lists = @active_project.task_lists.is_open
         @open_task_lists = @open_task_lists.is_public unless @logged_user.member_of_owner?
         @open_task_lists << @time.task_list unless @time.task_list.nil? || @open_task_lists.include?(@time.task_list)
         @task_filter = Proc.new {|task| task.is_completed? && task != @time.task}
         format.html { render action: "edit" }
-        format.xml  { render xml: @time.errors, status: :unprocessable_entity }
+        format.json  { render json: @time.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -157,7 +157,7 @@ class TimesController < ApplicationController
         redirect_back_or_default(@time.object_url)
       }
       format.js { respond_with_time(@time) }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
     
   end
@@ -176,7 +176,7 @@ class TimesController < ApplicationController
         redirect_back_or_default(times_url)
       }
       format.js { respond_with_time(@time) }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

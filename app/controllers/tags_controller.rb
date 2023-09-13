@@ -29,7 +29,7 @@ class TagsController < ApplicationController
     
     respond_to do |format|
       format.html { }
-      format.xml { render xml: [].to_xml(root: 'tags') }
+      format.json { render json: [].to_json }
     end
   end
 

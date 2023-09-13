@@ -32,8 +32,8 @@ class CompaniesController < ApplicationController
     respond_to do |format|
       format.html { }
       
-      format.xml  {
-        render xml: @company.to_xml 
+      format.json  {
+        render json: @company.to_json 
       }
     end
   end
@@ -44,9 +44,9 @@ class CompaniesController < ApplicationController
   	@companies = [company] + clients
     respond_to do |format|
       format.html
-      format.xml  {
+      format.json  {
         if @logged_user.is_admin
-          render xml: @companies.to_xml(root: 'companies')
+          render json: @companies.to_json
         else
           return error_status(true, :insufficient_permissions)
         end
@@ -76,11 +76,11 @@ class CompaniesController < ApplicationController
           redirect_back_or_default companies_path
         }
         
-        format.xml  { render xml: @company.to_xml(root: 'company'), status: :created, location: @company }
+        format.json  { render json: @company.to_json, status: :created, location: @company }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @company.errors, status: :unprocessable_entity }
+        format.json  { render json: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -102,11 +102,11 @@ class CompaniesController < ApplicationController
           redirect_back_or_default companies_path()
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @company.errors, status: :unprocessable_entity }
+        format.json  { render json: @company.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -141,7 +141,7 @@ class CompaniesController < ApplicationController
         redirect_back_or_default companies_path
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

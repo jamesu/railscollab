@@ -30,10 +30,10 @@ class UsersController < ApplicationController
       format.html {
         redirect_to companies_path
       }
-      format.xml  {
+      format.json  {
         if @logged_user.is_admin
           @users = User.all
-          render xml: @users.to_xml(root: 'user')
+          render json: @users.to_json
         else
           return error_status(true, :insufficient_permissions)
         end
@@ -67,8 +67,8 @@ class UsersController < ApplicationController
     
     respond_to do |format|
       format.html {}
-      format.xml  { 
-        render xml: @user.to_xml(root: 'user')
+      format.json  { 
+        render json: @user.to_json
       }
     end
   end
@@ -114,11 +114,11 @@ class UsersController < ApplicationController
           redirect_back_or_default companies_path
         }
         
-        format.xml  { render xml: @user.to_xml(root: 'user'), status: :created, location: @user }
+        format.json  { render json: @user.to_json, status: :created, location: @user }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
+        format.json  { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -173,11 +173,11 @@ class UsersController < ApplicationController
           redirect_back_or_default company_people_path(@user.company)
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
+        format.json  { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -202,7 +202,7 @@ class UsersController < ApplicationController
         redirect_back_or_default companies_path
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -243,9 +243,9 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { }
       
-      format.xml  {
+      format.json  {
         if @user.is_admin
-          render xml: @user.to_xml
+          render json: @user.to_json
         else
           attribs = [:id,
                      :company_id,
@@ -259,7 +259,7 @@ class UsersController < ApplicationController
                      :office_number_ext,
                      :time_zone,
                      :title]
-          render xml: @user.to_xml(only: attribs)
+          render json: @user.to_json(only: attribs)
         end  
       }
     end

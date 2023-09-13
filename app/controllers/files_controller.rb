@@ -22,8 +22,8 @@ class FilesController < ApplicationController
   
   after_action  :user_track, only: [:index, :show]
   
-  # GET /files
-  # GET /files.xml
+  
+  
   def index
     file_conditions = {'project_id' => @active_project.id, 'is_visible' => true}
     file_conditions['is_private'] = false unless @logged_user.member_of_owner?
@@ -56,12 +56,12 @@ class FilesController < ApplicationController
         @important_files = @important_files.is_public unless @logged_user.member_of_owner?
         @folders = @active_project.folders
       }
-      format.xml  {
+      format.json  {
         @files = ProjectFile.where(file_conditions)
                             .offset(params[:offset])
                             .limit(params[:limit] || Rails.configuration.railscollab.files_per_page)
         
-        render xml: @files.to_xml(only: [:id,
+        render json: @files.to_json(only: [:id,
                                                :filename,
                                                :created_by_id, 
                                                :created_on,
@@ -70,13 +70,13 @@ class FilesController < ApplicationController
                                                :is_important,
                                                :is_locked,
                                                :comments_count, 
-                                               :comments_enabled], root: 'files')
+                                               :comments_enabled])
       }
     end
   end
 
-  # GET /files/1
-  # GET /files/1.xml
+  
+  
   def show
     authorize! :show, @file
     
@@ -104,14 +104,14 @@ class FilesController < ApplicationController
         @important_files = @active_project.project_files.important
         @important_files = @important_files.is_public unless @logged_user.member_of_owner?
       }
-      format.xml  { 
-        render xml: @file.to_xml(include: [:project_file_revisions])
+      format.json  { 
+        render json: @file.to_json(include: [:project_file_revisions])
       }
     end
   end
 
-  # GET /files/new
-  # GET /files/new.xml
+  
+  
   def new
     authorize! :create_file, @active_project
     
@@ -119,11 +119,11 @@ class FilesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @file.to_xml(root: 'file') }
+      format.json  { render json: @file.to_json }
     end
   end
 
-  # GET /files/1/edit
+  
   def edit
     authorize! :edit, @file
   end
@@ -166,11 +166,11 @@ class FilesController < ApplicationController
           redirect_back_or_default(@file.object_url)
         }
         
-        format.xml  { render xml: @file.to_xml(root: 'file'), status: :created, location: @file }
+        format.json  { render json: @file.to_json, status: :created, location: @file }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @file.errors, status: :unprocessable_entity }
+        format.json  { render json: @file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -219,11 +219,11 @@ class FilesController < ApplicationController
           redirect_back_or_default(@file.object_url)
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @file.errors, status: :unprocessable_entity }
+        format.json  { render json: @file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -242,11 +242,11 @@ class FilesController < ApplicationController
         redirect_to project_files_url(@active_project)
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
   
-  # GET /files/1/download
+  
   def download
     revision_id = params[:revision]
 

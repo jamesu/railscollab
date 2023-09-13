@@ -24,8 +24,8 @@ class TaskListsController < ApplicationController
   
   after_action  :user_track, only: [:index, :show]
   
-  # GET /task_lists
-  # GET /task_lists.xml
+  
+  
   def index
     include_private = @logged_user.member_of_owner?
     
@@ -37,16 +37,16 @@ class TaskListsController < ApplicationController
         index_lists(include_private)
         render template: 'task_lists/index'
       }
-      format.xml  {
+      format.json  {
         conds = include_private ? {} : {'is_private' => false}
         @task_lists = @active_project.task_lists.where(conds)
-        render xml: @task_lists.to_xml(root: 'task-lists')
+        render json: @task_lists.to_json
       }
     end
   end
 
-  # GET /task_lists/1
-  # GET /task_lists/1.xml
+  
+  
   def show
     begin
       @task_list = @active_project.task_lists.find(params[:id])
@@ -61,12 +61,12 @@ class TaskListsController < ApplicationController
         index_lists(@logged_user.member_of_owner?)
       }
       
-      format.xml  { render xml: @task_list.to_xml(root: 'task-list') }
+      format.json  { render json: @task_list.to_json }
     end
   end
 
-  # GET /task_lists/new
-  # GET /task_lists/new.xml
+  
+  
   def new
     authorize! :create_task_list, @active_project
     
@@ -82,11 +82,11 @@ class TaskListsController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       
-      format.xml  { render xml: @task_list.to_xml(root: 'task-list') }
+      format.json  { render json: @task_list.to_json }
     end
   end
 
-  # GET /task_lists/1/edit
+  
   def edit
     begin
       @task_list = @active_project.task_lists.find(params[:id])
@@ -113,11 +113,11 @@ class TaskListsController < ApplicationController
           redirect_back_or_default(@task_list.object_url)
         }
         format.js { return index }
-        format.xml  { render xml: @task_list.to_xml(root: 'task-list'), status: :created, location: @task_list }
+        format.json  { render json: @task_list.to_json, status: :created, location: @task_list }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @list.errors, status: :unprocessable_entity }
+        format.json  { render json: @list.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -143,11 +143,11 @@ class TaskListsController < ApplicationController
           redirect_back_or_default(@task_list.object_url)
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @list.errors, status: :unprocessable_entity }
+        format.json  { render json: @list.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -174,7 +174,7 @@ class TaskListsController < ApplicationController
         redirect_to(project_task_lists_url(@active_project))
       }
       format.js { index_lists(@logged_user.member_of_owner?) }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
   
@@ -199,7 +199,6 @@ class TaskListsController < ApplicationController
     respond_to do |format|
       format.html { head :ok }
       format.json { head :ok }
-      format.xml  { head :ok }
     end
   end
 

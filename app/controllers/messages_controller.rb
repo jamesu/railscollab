@@ -25,8 +25,8 @@ class MessagesController < ApplicationController
   
   after_action  :user_track, only: [:index, :show]
   
-  # GET /messages
-  # GET /messages.xml
+  
+  
   def index
     begin
       @category = @active_project.categories.find(params[:category_id])
@@ -71,17 +71,17 @@ class MessagesController < ApplicationController
 
         render template: 'messages/index'
       }
-      format.xml  { 
+      format.json  { 
         @messages = @active_project.messages.where(msg_conditions)
                                                     .offset(params[:offset])
                                                     .limit(params[:limit] || Rails.configuration.railscollab.messages_per_page)
-        render xml: @messages.to_xml(root: 'messages')
+        render json: @messages.to_json
       }
     end
   end
 
-  # GET /messages/1
-  # GET /messages/1.xml
+  
+  
   def show
     authorize! :show, @message
     
@@ -92,14 +92,14 @@ class MessagesController < ApplicationController
     
     respond_to do |format|
       format.html {}
-      format.xml  { 
-        render xml: @message.to_xml(root: 'message')
+      format.json  { 
+        render json: @message.to_json
       }
     end
   end
 
-  # GET /messages/new
-  # GET /messages/new.xml
+  
+  
   def new
     authorize! :create_message, @active_project
     
@@ -125,11 +125,11 @@ class MessagesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @message.to_xml(root: 'message') }
+      format.json  { render json: @message.to_json }
     end
   end
 
-  # GET /messages/1/edit
+  
   def edit
     authorize! :edit, @message
   end
@@ -186,11 +186,11 @@ class MessagesController < ApplicationController
           redirect_back_or_default(@message.object_url)
         }
         
-        format.xml  { render xml: @message.to_xml(root: 'message'), status: :created, location: @message }
+        format.json  { render json: @message.to_json, status: :created, location: @message }
       else
         format.html { render action: "new" }
         
-        format.xml  { render xml: @message.errors, status: :unprocessable_entity }
+        format.json  { render json: @message.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -223,11 +223,11 @@ class MessagesController < ApplicationController
           redirect_back_or_default(@message.object_url)
         }
         
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         
-        format.xml  { render xml: @message.errors, status: :unprocessable_entity }
+        format.json  { render json: @message.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -246,7 +246,7 @@ class MessagesController < ApplicationController
         redirect_back_or_default(messages_url(category_id: params[:category_id]))
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -262,7 +262,7 @@ class MessagesController < ApplicationController
         redirect_back_or_default(message_url(id: @message.id))
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -278,7 +278,7 @@ class MessagesController < ApplicationController
         redirect_back_or_default(message_url(id: @message.id))
       }
       
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 

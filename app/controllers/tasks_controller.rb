@@ -26,8 +26,8 @@ class TasksController < ApplicationController
   before_action :grab_list_required, only: [:index, :create, :new]
   after_action  :user_track, only: [:index, :show]
   
-  # GET /tasks
-  # GET /tasks.xml
+  
+  
   def index
     respond_to do |format|
       format.html {
@@ -37,15 +37,15 @@ class TasksController < ApplicationController
         @completed_task_lists = @completed_task_lists.is_public unless @logged_user.member_of_owner?
         @content_for_sidebar = 'task_lists/index_sidebar'
       }
-      format.xml  {
+      format.json  {
         @tasks = @task_list.tasks
-        render xml: @tasks.to_xml(root: 'tasks')
+        render json: @tasks.to_json
       }
     end
   end
 
-  # GET /tasks/1
-  # GET /tasks/1.xml
+  
+  
   def show
     begin
       @task_list ||= @task.task_list
@@ -56,12 +56,12 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html { }
       format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-      format.xml  { render xml: @task.to_xml(root: 'task') }
+      format.json  { render json: @task.to_json }
     end
   end
 
-  # GET /tasks/new
-  # GET /tasks/new.xml
+  
+  
   def new
     authorize! :create_task, @task_list
     
@@ -69,11 +69,11 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render xml: @task.to_xml(root: 'task') }
+      format.json  { render json: @task.to_json }
     end
   end
 
-  # GET /tasks/1/edit
+  
   def edit
     authorize! :edit, @task
     
@@ -97,11 +97,11 @@ class TasksController < ApplicationController
         flash[:notice] = 'ListItem was successfully created.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.xml  { render xml: @task.to_xml(root: 'task'), status: :created, location: @task }
+        format.json  { render json: @task.to_json, status: :created, location: @task }
       else
         format.html { render action: "new" }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.xml  { render xml: @task.errors, status: :unprocessable_entity }
+        format.json  { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -119,11 +119,11 @@ class TasksController < ApplicationController
         flash[:notice] = 'ListItem was successfully updated.'
         format.html { redirect_back_or_default(project_task_lists_path(@active_project)) }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
         format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-        format.xml  { render xml: @task.errors, status: :unprocessable_entity }
+        format.json  { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -139,7 +139,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
       format.js { render json: { id: @task.id } }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
@@ -155,7 +155,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.html { redirect_back_or_default(project_task_lists_url(@active_project)) }
       format.js { @task_content = render_to_string({partial: 'show', collection: [@task]}); render :task_update_response }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
 
   end

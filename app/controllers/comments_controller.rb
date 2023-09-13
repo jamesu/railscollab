@@ -24,8 +24,8 @@ class CommentsController < ApplicationController
   
   after_action  :user_track, only: [:index, :show]
   
-  # GET /comments
-  # GET /comments.xml
+  
+  
   def index
     # Check permissions
     authorize! :show, @commented_object
@@ -34,8 +34,7 @@ class CommentsController < ApplicationController
     
     respond_to do |format|
       format.html {}
-      format.xml { render xml: @comments.to_xml(root: 'comments', 
-                                                   only: [:id,
+      format.json { render json: @comments.to_json(only: [:id,
                                                              :text,
                                                              :author_name, 
                                                              :created_by_id, 
@@ -46,22 +45,22 @@ class CommentsController < ApplicationController
     end
   end
 
-  # GET /comments/1
-  # GET /comments/1.xml
+  
+  
   def show
     authorize! :show, @comment
     
     respond_to do |format|
       format.html {}
-      format.xml {
+      format.json {
         fields = @logged_user.is_admin? ? [] : [:author_email, :author_homepage]
-        render xml: @comment.to_xml(root: 'comment', except: fields) 
+        render json: @comment.to_json(except: fields) 
       }
     end
   end
 
-  # GET /comments/new
-  # GET /comments/new.xml
+  
+  
   def new
     # Check permissions
     authorize! :comment, @commented_object
@@ -74,11 +73,11 @@ class CommentsController < ApplicationController
         @active_project = @commented_object.project
         @active_projects = @logged_user.active_projects
       }
-      format.xml  { render xml: @comment.to_xml(root: 'comment') }
+      format.json  { render json: @comment.to_json }
     end
   end
 
-  # GET /comments/1/edit
+  
   def edit
     authorize! :edit, @comment
     
@@ -127,10 +126,10 @@ class CommentsController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@comment.object_url)
         }
-        format.xml  { render xml: @comment.to_xml(root: 'comment'), status: :created, location: @comment.object_url }
+        format.json  { render json: @comment.to_json, status: :created, location: @comment.object_url }
       else
         format.html { render action: "new" }
-        format.xml  { render xml: @comment.errors, status: :unprocessable_entity }
+        format.json  { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -167,10 +166,10 @@ class CommentsController < ApplicationController
           error_status(false, estatus)
           redirect_back_or_default(@commented_object.object_url)
         }
-        format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render action: "edit" }
-        format.xml  { render xml: @comment.errors, status: :unprocessable_entity }
+        format.json  { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -188,7 +187,7 @@ class CommentsController < ApplicationController
         error_status(false, :success_deleted_comment)
         redirect_back_or_default(project_path(id: @active_project.id))
       }
-      format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
 
