@@ -643,6 +643,7 @@ en:
   # system
   
   product_signature: "Powered by <a href=\"http://rubyforge.org/projects/railscollab\">RailsCollab</a>"
+  error_404: "404 Not Found"
   
   wiki_engine:
     success_creating_wiki_page: 'New wiki page has been created'

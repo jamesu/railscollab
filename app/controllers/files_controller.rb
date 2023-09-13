@@ -263,14 +263,14 @@ class FilesController < ApplicationController
     end
 
     if @file_revision.nil?
-      render plain: '404 Not Found', status: 404
+      render plain: I18n.t('error_404'), status: 404
       return
     end
 
     if @file_revision.data.attached?
       redirect_to url_for(@file_revision.data), status: 302
     else
-      render plain: '404 Not Found', status: 404
+      render plain: I18n.t('error_404'), status: 404
     end
   end
   

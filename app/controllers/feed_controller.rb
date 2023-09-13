@@ -30,11 +30,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.rss do
-        render plain: '404 Not found', status: 404 unless @activity_log.length > 0
+        render plain: I18n.t('error_404'), status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
@@ -61,12 +61,12 @@ class FeedController < ApplicationController
   	begin
       @project = Project.find(params[:project_id])
   	rescue ActiveRecord::RecordNotFound
-      render plain: '404 Not found', status: 404
+      render plain: I18n.t('error_404'), status: 404
       return
   	end
 
   	unless @logged_user.member_of(@project)
-      render plain: '404 Not found', status: 404
+      render plain: I18n.t('error_404'), status: 404
       return
   	end
 
@@ -75,11 +75,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.rss do
-        render plain: '404 Not found', status: 404 unless @activity_log.length > 0
+        render plain: I18n.t('error_404'), status: 404 unless @activity_log.length > 0
       end
 
       format.ics do
@@ -108,11 +108,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.rss do
-        render plain: '404 Not found', status: 404 unless @milestones.length > 0
+        render plain: I18n.t('error_404'), status: 404 unless @milestones.length > 0
       end
 
       format.ics do
@@ -154,11 +154,11 @@ class FeedController < ApplicationController
 
   	respond_to do |format|
       format.html do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.rss do
-        render plain: '404 Not found', status: 404 unless @milestones.length > 0
+        render plain: I18n.t('error_404'), status: 404 unless @milestones.length > 0
       end
 
       format.ics do
@@ -186,7 +186,7 @@ class FeedController < ApplicationController
       begin
         @project = Project.find(params[:project_id])
       rescue ActiveRecord::RecordNotFound
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
         return
       end
 
@@ -197,15 +197,15 @@ class FeedController < ApplicationController
 
     respond_to do |format|
       format.html do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.rss do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.ics do
-        render plain: '404 Not found', status: 404
+        render plain: I18n.t('error_404'), status: 404
       end
 
       format.csv do
