@@ -106,4 +106,7 @@ class Company < ApplicationRecord
   # Validation
 
   validates_uniqueness_of :name
+
+  # Search
+  register_meilisearch
 end

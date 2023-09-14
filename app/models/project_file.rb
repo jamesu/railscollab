@@ -68,10 +68,6 @@ class ProjectFile < ApplicationRecord
     Tag.list_by_object(self).join(" ")
   end
 
-  def tag_list
-    Tag.where(["rel_object_type = ? AND rel_object_id = ?", object.class.to_s, object.id])
-  end
-
   def tags=(val)
     Tag.clear_by_object(self)
     real_owner = project_file_revisions.empty? ? nil : self.project_file_revisions[0].created_by
@@ -218,17 +214,6 @@ class ProjectFile < ApplicationRecord
     record.errors.add(attr, I18n.t("not_allowed")) if value == false
   end
 
-  # Indexing
-  define_index do
-    indexes :name
-    indexes :description
-    indexes tag_list(:tag), as: :tags
-
-    has :folder_id
-    has :project_id
-    has :is_private
-    has :is_visible
-    has :created_on
-    has :updated_on
-  end
+  # Search
+  register_meilisearch
 end

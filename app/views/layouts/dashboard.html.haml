@@ -24,7 +24,7 @@
           = render partial: 'layouts/crumbs', object: dashboard_crumbs
           - if Rails.configuration.railscollab.search_enabled
             #searchBox
-              = form_with(url: url_for(controller: dashboard, action: 'search')) do |form|
+              = form_with(url: perform_dashboard_search_url, html: {"data-turbo" => "false"}) do |form|
                 %div
                   - @search_field_default_value = t('search_box_default')
                   - @last_search ||= @search_field_default_value

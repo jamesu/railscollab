@@ -8,7 +8,7 @@
 - if can? :create_file, @active_project
   - @page_actions << {title: :add_file, :url=> new_project_file_path(@active_project)}
 
-- if @active_project.description.chop and @active_project.show_description_in_overview
+- if !(@active_project.description||'').chop.empty? and @active_project.show_description_in_overview
   .hint
     .header= h @active_project.name
     .content= textilize @active_project.description

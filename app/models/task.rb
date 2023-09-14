@@ -198,16 +198,7 @@ class Task < ApplicationRecord
     record.errors.add(attr, I18n.t("not_part_of_project")) if !value.nil? and !value.is_part_of(record.task_list.project)
   end
 
-  # Indexing
-  define_index do
-    indexes :text
+  # Search
+  register_meilisearch
 
-    has :assigned_to_company_id
-    has :assigned_to_user_id
-    has :task_list_id
-    has :project_id
-    has task_list(:is_private), as: :is_private
-    has :created_on
-    has :updated_on
-  end
 end

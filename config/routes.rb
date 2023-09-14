@@ -8,8 +8,11 @@ Railscollab::Application.routes.draw do
   # The rest of the simple controllers
 
   %w(my_projects my_tasks milestones search).each do |act|
-    get "dashboard/(/#{act}(/:id))",   controller: 'dashboard', action: act
-    get "dashboard/#{act}/:id.format", controller: 'dashboard', action: act
+    get "dashboard/(/#{act}(/:id))",   as: "dashboard_#{act}".to_sym, controller: 'dashboard', action: act
+  end
+
+  %w(my_projects my_tasks milestones search).each do |act|
+    post "dashboard/(/#{act}(/:id))",   as: "perform_dashboard_#{act}".to_sym, controller: 'dashboard', action: act
   end
   
   resource :session, only: [:new, :create, :destroy]

@@ -172,6 +172,6 @@ class WikiPagesController < ApplicationController
   end
 
   def wiki_page_params
-    params[:wiki_page].nil? ? {} : params[:wiki_page].permit(:main, :title, :content, :project_id)
+    params.require(:wiki_page).permit(:main, :title, :content, :project_id)
   end
 end

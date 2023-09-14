@@ -128,17 +128,29 @@ class Project < ApplicationRecord
   def self.search(query, is_private, projects, options = {}, tag_search = false)
     results = []
     return results, 0 if !Rails.configuration.railscollab.search_enabled or query.blank?
-    options[:with] ||= {}
-    options[:with][:is_private] = false unless is_private
-    options[:with][:project_id] = projects.map(&:id)
 
-    results = if tag_search
-        Tag.search(query, options)
-      else
-        ThinkingSphinx.search query, options.merge(classes: [Comment, Message, TimeRecord, Task, TaskList, Milestone, ProjectFile, ProjectFileRevision, WikiPage])
-      end
+    filters = []
+    filters << ('(' + projects.map{ |pr| "project.id = #{pr.id}" }.join(' OR ') + ')')
+    total = 0
+    results = []
 
-    return results, results.total_entries
+    if tag_search
+      # Use tag index for tag search
+      items = Tag.index.search(query,  { filter: filters.join(' AND ') })
+    else
+      # Use project index for everything else
+      filters << "(is_private = false)" unless is_private
+
+      items = Project.index.search(query,  { filter: filters.join(' AND ') })
+    end
+    
+    item_list = items['hits'].map do |entry|
+      Kernel.const_get(entry['class_name'].to_sym).find(entry['id'])
+    end.compact
+
+    total = item_list.count
+
+    return item_list, total
   end
 
   # Helpers
@@ -152,6 +164,9 @@ class Project < ApplicationRecord
   # Accesibility
 
   #attr_accessible :name, :description, :priority, :show_description_in_overview
+
+  # Search
+  register_meilisearch
 
   # Validation
 

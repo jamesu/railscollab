@@ -100,16 +100,6 @@ class ProjectFileRevision < ApplicationRecord
 
   #validates_presence_of :repository_id
 
-  # Indexing
-  define_index do
-    indexes :comment
-    indexes :type_string
-    indexes :data_file_name
-    indexes :data_content_type
-
-    has :project_id
-    has :file_id
-    has :file_type_id
-    has :data_updated_at
-  end
+  # Search
+  register_meilisearch
 end

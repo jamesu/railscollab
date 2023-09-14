@@ -92,12 +92,14 @@ class Tag < ApplicationRecord
     tags.length
   end
 
-  # Indexing
-  define_index do
-    indexes :tag
 
-    has :project_id
-    has :is_private
-    has :created_on
+  # Search
+  register_meilisearch
+
+  meilisearch index_uid: 'Tag', primary_key: :ms_id do
+    attribute :tag
+    attribute :project
+
+    filterable_attributes [:project]
   end
 end

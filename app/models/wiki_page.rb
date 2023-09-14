@@ -50,15 +50,8 @@ class WikiPage < ApplicationRecord
     project_wiki_page_url(project, id: self.id, only_path: host.nil?, host: host)
   end
 
-  # Indexing
-  define_index do
-    indexes :title
-    indexes :content
-
-    has :project_id
-    has :created_at
-    has :updated_at
-  end
+  # Search
+  register_meilisearch
 
   protected
 

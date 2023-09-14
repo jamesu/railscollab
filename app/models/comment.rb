@@ -60,7 +60,7 @@ class Comment < ApplicationRecord
   # Helpers
 
   def object_name
-    self.text.excerpt(50)
+    (self.text||'').excerpt(50)
   end
 
   def object_url(host = nil)
@@ -97,13 +97,5 @@ class Comment < ApplicationRecord
     record.errors.add attr, I18n.t("not_allowed") if value == true
   end
 
-  # Indexing
-  define_index do
-    indexes :text
-
-    has :project_id
-    has :is_private
-    has :created_on
-    has :updated_on
-  end
+  register_meilisearch
 end
