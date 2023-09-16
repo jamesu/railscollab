@@ -232,7 +232,7 @@ class TaskListsController < ApplicationController
   end
 
   def task_list_params
-    params[:task_list].nil? ? {} : params[:task_list].permit(:name, :priority, :description, :milestone_id, :is_private, :tags)
+    params.require(:task_list).permit(:name, :priority, :description, :milestone_id, :is_private, :tags)
   end
 
   def index_lists(include_private)

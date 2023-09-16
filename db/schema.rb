@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_163315) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_15_212949) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -401,8 +401,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_163315) do
     t.integer "project_id"
     t.integer "created_by_id"
     t.string "slug"
+    t.boolean "current_revision", default: false
+    t.integer "revision_number", default: 0
+    t.index ["current_revision"], name: "index_wiki_pages_on_current_revision"
     t.index ["main"], name: "index_wiki_pages_on_main"
     t.index ["project_id"], name: "index_wiki_pages_on_project_id"
+    t.index ["revision_number"], name: "index_wiki_pages_on_revision_number"
     t.index ["slug"], name: "index_wiki_pages_on_slug"
   end
 

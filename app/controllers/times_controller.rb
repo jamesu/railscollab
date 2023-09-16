@@ -197,7 +197,7 @@ class TimesController < ApplicationController
   end
 
   def time_params
-    params[:time].nil? ? {} : params[:time].permit(:name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable)
+    params.require(:time).permit(:name, :description, :done_date, :hours, :open_task_id, :assigned_to_id, :is_private, :is_billable)
   end
 
   def respond_with_time(time)

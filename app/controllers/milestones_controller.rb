@@ -185,7 +185,7 @@ class MilestonesController < ApplicationController
   end
 
   def milestone_params
-    params[:milestone].nil? ? {} : params[:milestone].permit(:name, :description, :due_date, :assigned_to_id, :is_private)
+    params.require(:milestone).permit(:name, :description, :due_date, :assigned_to_id, :is_private)
   end
 
   def load_related_object

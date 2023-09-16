@@ -223,7 +223,7 @@ class FoldersController < ApplicationController
   end
 
   def folder_params
-    params[:folder].nil? ? {} : params[:folder].permit(:name)
+    pparams.require(:folder).permit(:name)
   end
 
   def load_related_object

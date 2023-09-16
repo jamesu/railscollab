@@ -315,7 +315,7 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params[:message].nil? ? {} : params[:message].permit(:title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
+    params.fetch(:message, {}).permit(:title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
   end
 
   def load_related_object

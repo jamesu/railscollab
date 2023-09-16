@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   before_action :set_time_zone
   before_action :process_session
   before_action :load_related_object_index, only: [:index, :create, :new]
-  before_action :load_related_object, except: [:index, :create, :new, :by_task]
+  before_action :load_related_object, except: [:index, :create, :new, :by_task, :list]
   before_action :config_page
 
   protected
@@ -163,4 +163,5 @@ class ApplicationController < ActionController::Base
     @extra_crumbs = extra_crumbs
     @page_actions = page_actions
   end
+
 end

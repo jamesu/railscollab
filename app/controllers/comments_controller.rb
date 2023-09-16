@@ -255,6 +255,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params[:comment].nil? ? {} : params[:comment].permit(:text, :is_private, :author_name, :author_email)
+    params.require(:comment).permit(:text, :is_private, :author_name, :author_email)
   end
 end

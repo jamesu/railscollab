@@ -53,12 +53,12 @@ module WikiPagesHelper
   end
 
   def current_version(version)
-    [t("wiki_engine.current_version#{"_edited_by" unless version.user_name.blank?}", user: version.user_name), project_wiki_page_path(@active_project, id: version.wiki_page)]
+    [t("wiki_engine.current_version#{"_edited_by" unless version.user_name.blank?}", user: version.user_name), project_wiki_page_path(@active_project, id: version.slug)]
   end
 
   def versions(versions)
     versions.collect do |version|
-      [t("wiki_engine.version#{"_edited_by" unless version.user_name.blank?}", version: version.version, user: version.user_name), version_project_wiki_page_path(@active_project, id: version.wiki_page, version: version.version)]
+      [t("wiki_engine.version#{"_edited_by" unless version.user_name.blank?}", version: version.revision_number, user: version.user_name), project_wiki_page_path(@active_project, id: version.slug, version: version.revision_number)]
     end
   end
 

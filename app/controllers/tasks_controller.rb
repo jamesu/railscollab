@@ -171,7 +171,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params[:task].nil? ? {} : params[:task].permit(:completed, :text, :assigned_to_id, :task_list_id, :estimated_hours)
+    params.require(:task).permit(:completed, :text, :assigned_to_id, :task_list_id, :estimated_hours)
   end
 
   def grab_list

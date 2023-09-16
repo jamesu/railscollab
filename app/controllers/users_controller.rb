@@ -346,7 +346,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params[:user].nil? ? {} : params[:user].permit(*user_permit_list)
+    params.require(:user).permit(*user_permit_list)
   end
 
   def admin_user_params

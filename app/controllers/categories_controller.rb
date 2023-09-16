@@ -252,6 +252,6 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params[:category].nil? ? {} : params[:category].permit(:name)
+    params.require(:category].permit(:name)
   end
 end

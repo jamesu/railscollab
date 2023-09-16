@@ -233,7 +233,7 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params[:company].nil? ? {} : params[:company].permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+    params.require(:company).permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
   end
 
   def load_related_object
