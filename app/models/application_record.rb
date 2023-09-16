@@ -1,10 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-  def self.define_index(&block)
-    # TODO
-  end
-
   def ms_id
     "#{self.class}#{self.id}"
   end
@@ -20,6 +16,7 @@ class ApplicationRecord < ActiveRecord::Base
   def self.register_meilisearch
     include MeiliSearch::Rails
     us = self
+    inst = self.new
 
     # Search
     meilisearch index_uid: 'GlobalProject', primary_key: :ms_id do
@@ -42,14 +39,14 @@ class ApplicationRecord < ActiveRecord::Base
        :content,
        :title].each do |field|
       
-        if !us.method_defined?(field)
+        if !inst.respond_to?(field)
           us.attr_accessor field
         end
 
         attribute field
       end
 
-      if !us.method_defined?(:is_private)
+      if !inst.respond_to?(:is_private)
         us.define_method(:is_private) { @is_private||false }
         us.define_method(:"is_private=") { |value| @is_private = value }
       end
@@ -58,7 +55,7 @@ class ApplicationRecord < ActiveRecord::Base
 
       filterable_attributes [:class_name, :tag, :project, :created_by, :is_private]
 
-      if !us.method_defined?(:tag_list)
+      if !inst.respond_to?(:tag_list)
         us.attr_accessor :tag_list
       end
 
