@@ -130,14 +130,17 @@ body {
 #tabs ul li {
   margin: 0 1px;
   float: left;
-  background: url('../../assets/layout/tab_right.gif') no-repeat top right;
+  background-color: rgb(205,205,205);
+  border-radius: 6px 6px 0px 0px;
+  border-color: rgb(174, 174, 174);
+  border-width: 1px;
+  border-style: solid solid none solid;
 }
 
 #tabs ul li a {
   border: 0;
   display: block;
   padding: 2px 12px;
-  background: url('../../assets/layout/tab_left.gif') no-repeat top left;
   text-align: center;
   color: #333;
   font-size: 10px;
@@ -153,11 +156,15 @@ body {
 }
 
 #tabs ul li.active {
-  background: url('../../assets/layout/tab_active_right.gif') no-repeat top right;
+  background: linear-gradient(
+    rgb(205,205,205) 0px, 
+    rgb(68,68,68) 3px,
+    rgb(68,68,68) 100%
+  );
+  border-color: rgb(205, 205, 205);
 }
 
 #tabs ul li.active a {
-  background: url('../../assets/layout/tab_active_left.gif') no-repeat top left;
   color: white;
 }
 
@@ -250,7 +257,10 @@ body {
 
 #outerContentWrapper {
   clear: both;
-  background: url('../../assets/layout/content-back.gif') repeat-x;
+  background: linear-gradient(180deg,
+    #E8F2FE 0%, 
+    #FEFEFF 50%,
+    white 100%);
 }
 
 #innerContentWrapper {
