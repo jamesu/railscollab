@@ -9,7 +9,7 @@
       .header= raw step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}"
       .content= raw step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}"
     - if @logged_user.is_admin
-      %p= link_to t('hide_welcome_info').html_safe, hide_welcome_info_company_path(Company.owner), method: 'put'
+      %p= link_to t('hide_welcome_info').html_safe, hide_welcome_info_company_path(Company.owner), data: { turbo_method: :put }
 - if @late_milestones.length > 0 or !@calendar_milestones.empty?
   #lateOrTodayMilestones.block
     .header= t('milestones_summary', adjetives: [!@late_milestones.empty? ? t('late') : nil, |
