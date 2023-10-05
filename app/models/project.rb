@@ -27,6 +27,7 @@ class Project < ApplicationRecord
 
   has_many :people
   has_many :users, through: :people
+  has_many :comments
 
   has_many :time_records, dependent: :destroy
   has_many :tags, as: :rel_object # Dependent objects sould destroy all of these for us

@@ -46,7 +46,8 @@ class ApplicationController < ActionController::Base
       flash[:message] = @flash_message
     end
 
-    return unless (error and continue_ok)
+    return if !error
+    return if !continue_ok
 
     # Construct a reply with a relevant error
     respond_to do |format|

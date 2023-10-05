@@ -182,37 +182,22 @@ class CommentsController < ApplicationController
   private
 
   def find_comment_object
-    rmap = comment_route_map
-    rmap.each do |rtc|
-      value = params[rtc[0]]
-      if !value.nil?
-        return Kernel.const_get(rtc[1]) || nil, value.to_i
+    comment_route_map.each do |map|
+      if params.has_key?(map[0])
+        return [map[1], params[map[0]]]
       end
     end
 
-    return nil, nil
-  end
-
-  def load_related_object
-    @active_projects = @logged_user.active_projects
-
-    begin
-      @comment = Comment.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_comment, {}, false)
-      redirect_back_or_default project_path(id: @active_project.id)
-      return false
-    end
-
-    true
+    return [nil, nil]
   end
 
   def comment_route_map
-    [[:message_id, :Message],
-     [:milestone_id, :Milestone],
-     [:file_id, :ProjectFile],
-     [:task_id, :Task],
-     [:task_list_id, :TaskList]]
+    [[:message_id, Message],
+     [:milestone_id, Milestone],
+     [:file_id, ProjectFile],
+     [:task_id, Task],
+     [:task_list_id, TaskList],
+     [:project_id, Project]]
   end
 
   protected
@@ -232,8 +217,11 @@ class CommentsController < ApplicationController
   def load_related_object
     begin
       @object_class, object_id = find_comment_object
+
+      puts "KLASS=#{@object_class.inspect} ident=#{object_id} params=#{params}"
+
       if @object_class.nil?
-        error_status(true, :invalid_request)
+        error_status(true, :invalid_request, {}, false)
         redirect_back_or_default root_path
         return
       end
@@ -242,10 +230,12 @@ class CommentsController < ApplicationController
       @commented_object = @object_class.find(object_id)
       return error_status(true, :invalid_object) if @commented_object.nil?
     rescue ActiveRecord::RecordNotFound
-      error_status(true, :invalid_request)
+      error_status(true, :invalid_request, {}, false)
       redirect_back_or_default root_path
       return false
     end
+
+    @comment = @commented_object.comments.find(params[:id])
 
     return true
   end
