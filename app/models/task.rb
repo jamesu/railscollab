@@ -181,11 +181,7 @@ class Task < ApplicationRecord
     }
     super(options.merge(default_options), &block)
   end
-
-  # Accesibility
-
-  #attr_accessible :text, :assigned_to_id, :task_list_id, :estimated_hours
-
+  
   # Validation
 
   validates_presence_of :text

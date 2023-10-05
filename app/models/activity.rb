@@ -62,7 +62,7 @@ class Activity < ApplicationRecord
     end
   end
 
-  def self.new_log(obj, user, action, private = false, real_project = nil)
+  def self.new_log(obj, user, action, is_private = false, real_project = nil)
     really_silent = Rails.configuration.railscollab.log_really_silent && action == :delete
     unless really_silent
       # Lets go...
@@ -97,12 +97,12 @@ class Activity < ApplicationRecord
         user.last_activity = Time.now.utc
         user.save
       end
-      @log.is_private = private
+      @log.is_private = is_private
       @log.save
     else
       # Destroy all occurrences of this object from the log
       # (assuming no audit trail is required here)
-      Activity.where({ "rel_object_type" => obj.class.to_s, "rel_object_id" => obj.id }).destroy_all
+      Activity.where({ rel_object_type: obj.class.to_s, rel_object_id: obj.id }).destroy_all
     end
   end
 

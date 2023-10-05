@@ -78,7 +78,7 @@ class Project < ApplicationRecord
   end
 
   def ordered_messages
-    self.messages.order("created_on DESC")
+    self.messages.order(created_on: :desc)
   end
 
   def ordered_task_lists
@@ -86,7 +86,7 @@ class Project < ApplicationRecord
   end
 
   def ordered_activities
-    self.activities.order("created_on DESC, id DESC")
+    self.activities.order(created_on: :desc, id: :desc)
   end
 
   def object_name
@@ -98,7 +98,13 @@ class Project < ApplicationRecord
   end
 
   def tasks_by_user(user, completed = false)
-    self.tasks.where(["((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND tasks.completed_on #{completed ? "IS NOT" : "IS"} NULL", user.company_id, user.id])
+    base_cond = tasks.where(assigned_to_company_id: [0, user.company_id]).and(tasks.where(assigned_to_user_id: [0, user.id]))
+
+    if completed
+      base_cond.where.not(completed_on: nil)
+    else
+      base_cond.where(completed_on: nil)
+    end
   end
 
   def is_active?
@@ -106,11 +112,17 @@ class Project < ApplicationRecord
   end
 
   def milestones_by_user(user, completed = false)
-    Milestone.where(["project_id = #{self.id} AND ((assigned_to_company_id = ? OR assigned_to_user_id = ?) OR (assigned_to_company_id = 0 OR assigned_to_user_id = 0)) AND completed_on #{completed ? "IS NOT" : "IS"} NULL", user.company_id, user.id])
+    base_cond = milestones.where(assigned_to_company_id: [0, user.company_id]).and(milestones.where(assigned_to_user_id: [0, user.id]))
+
+    if completed
+      base_cond.where.not(completed_on: nil)
+    else
+      base_cond.where(completed_on: nil)
+    end
   end
 
   def has_member(user)
-    return Person.where("project_id = #{self.id} AND user_id = #{user.id}", select: "user_id")
+    return people.where(project_id: self.id, user_id: user.id).count > 0
   end
 
   def set_completed(value, user = nil)
@@ -161,10 +173,6 @@ class Project < ApplicationRecord
       [project.name, project.id]
     end
   end
-
-  # Accesibility
-
-  #attr_accessible :name, :description, :priority, :show_description_in_overview
 
   # Search
   register_meilisearch
