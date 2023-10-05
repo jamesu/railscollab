@@ -400,7 +400,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project].permit(:name, :description, :priority, :show_description_in_overview)
+    params.require(:project).permit(:name, :description, :priority, :show_description_in_overview)
   end
 
   def load_related_object
