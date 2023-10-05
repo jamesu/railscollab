@@ -266,7 +266,7 @@ class FilesController < ApplicationController
     rel_object_id = params[:object_id]
 
     if (rel_object_type.nil? or rel_object_id.nil?) or (!["Comment", "Message"].include?(rel_object_type))
-      error_status(true, :invalid_request)
+      error_status(true, :invalid_request, {}, false)
       redirect_back_or_default project_files_path(@active_project)
       return
     end
@@ -332,7 +332,7 @@ class FilesController < ApplicationController
     rel_object_id = params[:object_id]
 
     if (rel_object_type.nil? or rel_object_id.nil?) or (!["Comment", "Message"].include?(rel_object_type))
-      error_status(true, :invalid_request)
+      error_status(true, :invalid_request, {}, false)
       redirect_back_or_default project_files_path(@active_project)
       return
     end

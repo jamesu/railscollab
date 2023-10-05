@@ -228,7 +228,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(messages_url(category_id: params[:category_id]))
+        redirect_back_or_default(project_messages_url(@active_project, category_id: params[:category_id]))
       }
 
       format.json { head :ok }
@@ -243,7 +243,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(message_url(id: @message.id))
+        redirect_back_or_default(project_message_url(@message.project, @message))
       }
 
       format.json { head :ok }
@@ -258,7 +258,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html {
         error_status(false, :success_deleted_message)
-        redirect_back_or_default(message_url(id: @message.id))
+        redirect_back_or_default(project_message_url(@message.project, @message))
       }
 
       format.json { head :ok }
