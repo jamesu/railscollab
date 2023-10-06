@@ -1,0 +1,13 @@
+---
+owner_welcome_message:
+  title: Welcome to Owner
+  project_id: 1
+  category_id: 1
+  text: Welcome
+  created_by_id: 1
+client_welcome_message:
+  title: Welcome to Client
+  project_id: 2
+  category_id: 2
+  text: Welcome
+  created_by_id: 3

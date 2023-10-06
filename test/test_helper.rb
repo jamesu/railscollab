@@ -10,4 +10,21 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  
+  def do_test_tags(owm)
+    klass = owm.class
+
+    owm.tags = "1,2,3"
+    assert_equal "1 2 3", owm.tags_with_spaces
+    owm.save!
+
+    msg = klass.where(id: owm.id).first
+    assert_equal "1,2,3", msg.tags
+
+    msg.tags = "4,5,6"
+    msg.save!
+
+    msg = klass.where(id: owm.id).first
+    assert_equal "4,5,6", msg.tags
+  end
 end

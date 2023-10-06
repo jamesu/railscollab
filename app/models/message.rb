@@ -36,7 +36,6 @@ class Message < ApplicationRecord
   has_and_belongs_to_many :subscribers, class_name: "User", join_table: "message_subscriptions", foreign_key: "message_id"
 
   scope :is_public, -> { where(is_private: false) }
-
   scope :important, -> { where(is_important: true) }
 
   before_validation :process_params, on: :create
@@ -49,10 +48,12 @@ class Message < ApplicationRecord
   end
 
   def process_create
+    new_tags(@new_tags)
     Activity.new_log(self, self.created_by, :add, self.is_private)
   end
 
   def process_update_params
+    update_tags(@new_tags)
     Activity.new_log(self, self.updated_by, :edit, self.is_private)
   end
 
@@ -64,19 +65,6 @@ class Message < ApplicationRecord
 
   def ordered_comments
     self.comments.order("created_on ASC")
-  end
-
-  def tags
-    Tag.list_by_object(self).join(",")
-  end
-
-  def tags_with_spaces
-    Tag.list_by_object(self).join(" ")
-  end
-
-  def tags=(val)
-    Tag.clear_by_object(self)
-    Tag.set_to_object(self, val.split(",")) unless val.nil?
   end
 
   def object_name
@@ -113,7 +101,11 @@ class Message < ApplicationRecord
   end
 
   def last_edited_by_owner?
-    self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?)
+    if !self.updated_by.nil?
+      self.updated_by.member_of_owner?
+    else
+      self.created_by.member_of_owner?
+    end
   end
 
   def send_notification(user)

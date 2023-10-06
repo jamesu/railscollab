@@ -29,7 +29,6 @@ class ProjectFile < ApplicationRecord
   has_many :project_file_revisions, foreign_key: "file_id", dependent: :destroy
   has_many :attached_files, foreign_key: "file_id"
   has_many :comments, as: "rel_object", dependent: :destroy
-  #has_many :tags, as:  'rel_object', dependent:  :destroy
 
   scope :important, -> { where(is_important: true) }
 
@@ -43,10 +42,12 @@ class ProjectFile < ApplicationRecord
   end
 
   def process_create
+    new_tags(@new_tags)
     Activity.new_log(self, self.created_by, :add)
   end
 
   def process_update_params
+    update_tags(@new_tags)
     Activity.new_log(self, self.updated_by, :edit)
   end
 
@@ -58,20 +59,6 @@ class ProjectFile < ApplicationRecord
 
   def ordered_project_file_revisions
     self.project_file_revisions.order("revision_number DESC")
-  end
-
-  def tags
-    Tag.list_by_object(self).join(",")
-  end
-
-  def tags_with_spaces
-    Tag.list_by_object(self).join(" ")
-  end
-
-  def tags=(val)
-    Tag.clear_by_object(self)
-    real_owner = project_file_revisions.empty? ? nil : self.project_file_revisions[0].created_by
-    Tag.set_to_object(self, val.split(","), real_owner) unless val.nil?
   end
 
   def last_created_by

@@ -56,6 +56,8 @@ class TimeRecord < ApplicationRecord
   end
 
   def process_params
+    update_tags(@new_tags)
+    
     if self.assigned_to_user_id.nil?
       write_attribute("assigned_to_user_id", 0)
     end
@@ -70,6 +72,7 @@ class TimeRecord < ApplicationRecord
   end
 
   def process_create
+    new_tags(@new_tags)
     Activity.new_log(self, self.created_by, :add, self.is_private)
   end
 
@@ -167,19 +170,6 @@ class TimeRecord < ApplicationRecord
     else
       "0"
     end
-  end
-
-  def tags
-    return Tag.list_by_object(self).join(",")
-  end
-
-  def tags_with_spaces
-    return Tag.list_by_object(self).join(" ")
-  end
-
-  def tags=(val)
-    Tag.clear_by_object(self)
-    Tag.set_to_object(self, val.split(",")) unless val.nil?
   end
 
   def is_today?

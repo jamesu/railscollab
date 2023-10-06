@@ -6,11 +6,39 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def tag_list
-    Tag.where(rel_object_type: self.class.to_s, rel_object_id: self.id)
+    if !@new_tags.nil?
+      @new_tags
+    else
+      Tag.where(rel_object_type: self.class.to_s, rel_object_id: self.id)
+    end
   end
 
   def class_name
     self.class.to_s
+  end
+
+  def new_tags(val)
+    Tag.set_to_object(self, val) unless val.nil?
+  end
+
+  def update_tags(val)
+    return if val.nil?
+    Tag.clear_by_object(self)
+    Tag.set_to_object(self, val)
+  end
+
+  def tags
+    tl = !@new_tags.nil? ? @new_tags : Tag.list_by_object(self)
+    tl.join(",")
+  end
+
+  def tags_with_spaces
+    tl = !@new_tags.nil? ? @new_tags : Tag.list_by_object(self)
+    tl.join(" ")
+  end
+
+  def tags=(val)
+    @new_tags = val.split(",")
   end
 
   def self.register_meilisearch

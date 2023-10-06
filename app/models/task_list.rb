@@ -37,19 +37,10 @@ class TaskList < ApplicationRecord
   before_validation :process_params, on: :create
   after_create :process_create
   before_update :process_update_params
-  after_update :update_tags
   before_destroy :process_destroy
 
   def ordered_tasks
     self.tasks.order(order: :asc)
-  end
-
-  def update_tags
-    return true if @update_tags.nil?
-    Tag.clear_by_object(self)
-    Tag.set_to_object(self, @update_tags)
-
-    true
   end
 
   def process_params
@@ -57,11 +48,12 @@ class TaskList < ApplicationRecord
   end
 
   def process_create
+    new_tags(@new_tags)
     Activity.new_log(self, self.created_by, :add, self.is_private)
-    update_tags
   end
 
   def process_update_params
+    update_tags(@new_tags)
     return unless @ensured_complete.nil?
 
     Activity.new_log(self, self.updated_by, :edit, self.is_private)
@@ -98,22 +90,6 @@ class TaskList < ApplicationRecord
 
   def object_url(host = nil)
     project_task_list_url(self, only_path: host.nil?, host: host, project_id: self.project_id)
-  end
-
-  def tags
-    return tags_list.join(",")
-  end
-
-  def tags_list
-    @update_tags.nil? ? Tag.list_by_object(self) : @update_tags
-  end
-
-  def tags_with_spaces
-    Tag.list_by_object(self).join(" ")
-  end
-  
-  def tags=(val)
-    @update_tags = val.split(",")
   end
 
   def is_completed?

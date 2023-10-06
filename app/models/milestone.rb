@@ -61,10 +61,13 @@ class Milestone < ApplicationRecord
   end
 
   def process_create
+    new_tags(@new_tags)
     Activity.new_log(self, self.created_by, :add, self.is_private)
   end
 
   def process_update_params
+    update_tags(@new_tags)
+    
     if self.assigned_to_user_id.nil?
       write_attribute("assigned_to_user_id", 0)
     end
@@ -96,19 +99,6 @@ class Milestone < ApplicationRecord
 
   def ordered_task_lists
     self.task_lists.order(order: :desc)
-  end
-
-  def tags
-    Tag.list_by_object(self).join(",")
-  end
-
-  def tags_with_spaces
-    Tag.list_by_object(self).join(" ")
-  end
-  
-  def tags=(val)
-    Tag.clear_by_object(self)
-    Tag.set_to_object(self, val.split(",")) unless val.nil?
   end
 
   def assigned_to=(obj)

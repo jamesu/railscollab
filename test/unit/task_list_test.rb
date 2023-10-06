@@ -3,8 +3,7 @@ require 'test_helper'
 class TaskListTest < ActiveSupport::TestCase
   fixtures :all
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_task_list_tags
+    do_test_tags(task_lists(:owner_task_list))
   end
 end
