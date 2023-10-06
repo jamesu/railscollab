@@ -3,8 +3,12 @@ require 'test_helper'
 class TimeRecordTest < ActiveSupport::TestCase
   fixtures :all
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_time_tags
+    tr = projects(:owner_project).time_records.new(name: "Time", created_by: User.first)
+    tr.save!
+
+    do_test_tags(project_files(:owner_file))
+
+    tr.destroy
   end
 end

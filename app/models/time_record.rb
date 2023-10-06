@@ -22,8 +22,8 @@ class TimeRecord < ApplicationRecord
 
   belongs_to :project
 
-  belongs_to :company, foreign_key: "assigned_to_company_id"
-  belongs_to :user, foreign_key: "assigned_to_user_id"
+  belongs_to :company, foreign_key: "assigned_to_company_id", optional: true
+  belongs_to :user, foreign_key: "assigned_to_user_id", optional: true
 
   belongs_to :task_list, optional: true
   belongs_to :task, optional: true

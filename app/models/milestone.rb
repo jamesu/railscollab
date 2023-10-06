@@ -255,11 +255,7 @@ class Milestone < ApplicationRecord
 
     self.where(msg_conditions)
   end
-
-  # Accesibility
-
-  #attr_accessible :name, :description, :due_date, :assigned_to_id, :is_private
-
+  
   # Validation
 
   validates_presence_of :name

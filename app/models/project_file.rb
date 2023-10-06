@@ -182,10 +182,6 @@ class ProjectFile < ApplicationRecord
     return found_files, grouped_fields
   end
 
-  # Accesibility
-
-  #attr_accessible :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
-
   # Validation
 
   validates_presence_of :filename
