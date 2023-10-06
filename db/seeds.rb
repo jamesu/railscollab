@@ -3,8 +3,7 @@ OPTIONS = {
 initial_user_displayname: ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME'] || 'Administrator',
 :initial_user_password    => ENV['RAILSCOLLAB_INITIAL_PASSWORD']    || 'password',
 :initial_user_email       => ENV['RAILSCOLLAB_INITIAL_EMAIL']       || 'better.set.this@localhost',
-:initial_company_name     => ENV['RAILSCOLLAB_INITIAL_COMPANY']     || 'Company',
-:initial_site_url         => ENV['RAILSCOLLAB_SITE_URL']
+:initial_company_name     => ENV['RAILSCOLLAB_INITIAL_COMPANY']     || 'Company'
 }
 
 def setup
@@ -93,13 +92,6 @@ def setup
   	FileType.create!(extension: 'qt',   icon: 'mov.png',     is_searchable: 0, is_image: 0)
   	FileType.create!(extension: 'vob',  icon: 'video.png',   is_searchable: 0, is_image: 0)
   	FileType.create!(extension: 'txt',  icon: 'doc.png',     is_searchable: 1, is_image: 0)
-  end
-
-  # Set site_url if available
-  unless OPTIONS[:initial_site_url].nil?
-      opt = ConfigOption.where(name: 'site_url').first
-      opt.value = OPTIONS[:initial_site_url]
-      opt.save
   end
 end
 

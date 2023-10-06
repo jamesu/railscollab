@@ -1,7 +1,0 @@
-#configuration
-  - @categories.each do |category|
-    - if !category.options.empty?
-      .configCategory{id: "category_#{category.name}"}
-        %h2= link_to h(category.display_name), edit_configuration_path(category)
-        - if !category.display_description.empty?
-          .configCategoryDescription= textilize category.display_description
