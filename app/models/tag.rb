@@ -31,7 +31,7 @@ class Tag < ApplicationRecord
   end
 
   def objects
-    return Tag.find_objects(self.name)
+    return Tag.find_objects(self.tag, self.project, !self.is_private)
   end
 
   def object_name
@@ -72,14 +72,12 @@ class Tag < ApplicationRecord
     tags.collect { |tag| tag.tag }
   end
 
-  def self.list_by_project(project, is_public, to_text = true)
+  def self.list_by_project(project, is_public)
     tag_conditions = is_public ?
       ["project_id = ? AND is_private = ?", project.id, false] :
       ["project_id = ?", project.id]
 
-    tags = Tag.where(tag_conditions).group("tag").order("tag ASC").select("tag")
-
-    to_text ? tags.collect { |tag| tag.tag } : tags
+    return Tag.where(tag_conditions).group("tag").order("tag ASC").select("tag")
   end
 
   def self.count_by(tag_name, project, is_public)
