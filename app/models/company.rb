@@ -82,9 +82,8 @@ class Company < ApplicationRecord
   end
 
   def users_on_project(project)
-    proj_users = Person.where(project_id: project).select("user_id")
-    query_users = proj_users.collect { |user| user.user_id }
-    User.where(id: query_users, company_id: id)
+    proj_users = Person.where(project_id: project).select(:user_id).map(&:user_id)
+    User.where(id: proj_users, company_id: id)
   end
 
   def object_name
@@ -98,10 +97,6 @@ class Company < ApplicationRecord
   def self.select_list
     self.all.collect { |company| [company.name, company.id] }
   end
-
-  # Accesibility
-
-  #attr_accessible :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country
 
   # Validation
 

@@ -365,10 +365,6 @@ class User < ApplicationRecord
     token.blank? || !@password.blank?
   end
 
-  # Accesibility
-
-  #attr_accessible :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification
-
   # Validation
 
   validates_presence_of :username, on: :create

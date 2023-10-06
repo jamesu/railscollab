@@ -14,7 +14,7 @@ class CompanyTest < ActiveSupport::TestCase
   end
   
   test "Permissions" do
-    # Within owner company
+    # Within owner company
     master_user = Company.owner.created_by
     admin_user = users(:admin_user)
     owner_user = users(:owner_user)
@@ -79,6 +79,58 @@ class CompanyTest < ActiveSupport::TestCase
     owner_user.destroy
     client_user.destroy
     client_company.destroy
+  end
+
+  test "is_part_of" do
+    project = Project.new(name: "Test", created_by: Company.owner.created_by)
+    project.save!
+
+    assert_equal true, Company.owner.is_part_of(project)
+    assert_equal false, companies(:client_company).is_part_of(project)
+
+    project.companies << companies(:client_company)
+    project.save!
+    assert_equal true, companies(:client_company).is_part_of(project)
+
+    project.destroy
+  end
+
+  test "users_on_project" do
+    project = Project.new(name: "Test", created_by: Company.owner.created_by)
+    project.save!
+
+    assert_equal 0, Company.owner.users_on_project(project).count
+
+    project.companies << companies(:client_company)
+    project.save!
+    assert_equal 0, Company.owner.users_on_project(project).count
+
+    person = Person.new(project: project, user: users(:client_user))
+    person.save!
+    assert_equal 0, Company.owner.users_on_project(project).count
+    assert_equal 1, companies(:client_company).users_on_project(project).count
+
+    project.destroy
+  end
+
+  test "auto_assign_users" do
+    user = User.new(
+      company: companies(:owner_company), 
+      username:"auto_assign_test", 
+      display_name: "Test", 
+      email: "test567@localhost.com", 
+      password: 'password', password_confirmation: 'password')
+    user.save!
+
+    assert_equal [users(:client_admin).id, users(:client_user).id].sort, companies(:client_company).auto_assign_users.map{|a|a[:id]}
+
+    user.company = companies(:client_company)
+    user.auto_assign = true
+    user.save!
+
+    assert_equal [users(:client_admin).id, users(:client_user).id, user.id], companies(:client_company).auto_assign_users.map{|a|a[:id]}
+
+    user.destroy
   end
 
 end
