@@ -145,7 +145,6 @@ class FilesController < ApplicationController
 
       if saved
         @file.add_revision(file_data[:file], 1, @logged_user, "")
-        @file.tags = file_attribs[:tags]
       end
     end
 
@@ -195,8 +194,6 @@ class FilesController < ApplicationController
 
           @file.filename = (file_data[:file].original_filename).sanitize_filename
         end
-
-        @file.tags = file_attribs[:tags]
       end
     end
 

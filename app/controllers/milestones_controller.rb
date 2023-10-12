@@ -56,7 +56,6 @@ class MilestonesController < ApplicationController
 
     saved = @milestone.save
     if saved
-      @milestone.tags = milestone_attribs[:tags]
       MailNotifier.milestone(@milestone.user, @milestone).deliver_now if params[:send_notification] and @milestone.user
     end
 
@@ -85,7 +84,6 @@ class MilestonesController < ApplicationController
     @milestone.attributes = milestone_attribs
 
     @milestone.updated_by = @logged_user
-    @milestone.tags = milestone_attribs[:tags]
 
     saved = @milestone.save
 

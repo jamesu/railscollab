@@ -136,8 +136,6 @@ class MessagesController < ApplicationController
     estatus = :success_added_message
 
     if saved
-      @message.tags = message_attribs[:tags]
-
       # Notify the subscribers
       unless params[:notify_user].nil?
         valid_users = params[:notify_user].collect do |user_id|
@@ -189,7 +187,6 @@ class MessagesController < ApplicationController
     @message.attributes = message_attribs
 
     @message.updated_by = @logged_user
-    @message.tags = message_attribs[:tags]
 
     saved = @message.save
     estatus = :success_edited_message
