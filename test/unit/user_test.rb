@@ -33,42 +33,6 @@ class UserTest < ActiveSupport::TestCase
     owner_user.destroy
   end
   
-  test "IM Values should be created according to available IM Types" do
-    owner_user = users(:owner_user)
-    values = owner_user.im_info
-    assert_equal 5, ImType.all.length
-    
-    # All types present?
-    assert_equal 5, values.length
-    values.each do |v|
-      assert v.value.empty?
-      v.value = Faker::Internet.email
-      assert v.save
-    end
-    
-    # New im type present?
-    imtype =
-    new_type = ImType.new(id: 6, name: "Name6", icon: "Icon6")
-    new_type.save!
-    new_type_id = new_type.id
-    owner_user.reload
-    values = owner_user.im_info
-    assert_equal values.length, 6
-    
-    found = false
-    values.each do |v|
-      if v.im_type_id == new_type_id
-        assert v.value.empty?
-        found = true
-        break
-      end
-    end
-    assert found
-    
-    new_type.destroy
-    owner_user.destroy
-  end
-  
   test "Permissions" do
     master_user = Company.owner.created_by
     admin_user = users(:owner_admin_user)

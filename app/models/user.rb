@@ -27,7 +27,6 @@ class User < ApplicationRecord
   belongs_to :company
   belongs_to :created_by, class_name: "User", foreign_key: "created_by_id", optional: true
 
-  has_many :im_values, dependent: :delete_all
   has_many :activities, foreign_key: "created_by_id", dependent: :destroy
 
   has_many :milestones, foreign_key: "created_by_id", dependent: :destroy
@@ -61,10 +60,6 @@ class User < ApplicationRecord
     self.projects.where("projects.completed_on IS NOT NULL")
   end
 
-  def ordered_im_values
-    self.im_values.order("im_type_id DESC")
-  end
-
   def ordered_active_projects
     self.active_projects.order("projects.priority ASC, projects.name ASC")
   end
@@ -79,27 +74,6 @@ class User < ApplicationRecord
 
   def twister_array
     self.twister.split("").map { |val| val.to_i }
-  end
-
-  def im_info
-    # Grab all types
-    all_types = ImType.select([:id, :name]).all
-    return [] if all_types.empty?
-
-    # Get an id list
-    all_type_ids = all_types.collect { |im_id| im_id.id }
-
-    # Find all values
-    values = self.im_values
-
-    # Add the missing values in as blank's
-    all_types.each do |type|
-      found_type = values.any? { |value| value.im_type_id == type.id }
-
-      values << ImValue.new(user: self, im_type_id: type.id) unless found_type
-    end
-
-    values
   end
 
   def generate_password
