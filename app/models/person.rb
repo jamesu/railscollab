@@ -21,51 +21,69 @@ class Person < ApplicationRecord
   belongs_to :user
   belongs_to :project
 
-  before_create :ensure_permissions
+  before_create :set_all_permissions
 
   # Update these when required
-  @@permission_fields = [
-    :can_manage_messages,
-    :can_manage_tasks,
-    :can_manage_milestones,
-    :can_manage_time,
-    :can_upload_files,
-    :can_manage_files,
-    :can_assign_to_owners,
-    :can_assign_to_other,
-    :can_manage_wiki_pages,
-  ]
+  @@permission_fields = {
+    can_manage_messages: 0x1,
+    can_manage_tasks: 0x2,
+    can_manage_milestones: 0x4,
+    can_manage_time: 0x8,
+    can_upload_files: 0x10,
+    can_manage_files: 0x20,
+    can_assign_to_owners: 0x40,
+    can_assign_to_other: 0x80,
+    can_manage_wiki_pages: 0x100
+  }
 
-  def ensure_permissions(set_val = true)
-    @@permission_fields.each do |field|
-      self[field] ||= set_val
+  def set_all_permissions
+    self.code = 0xFFFFFFFF
+  end
+
+  def clear_all_permissions
+    self.code = 0
+  end
+
+  def set_permission(key, enabled)
+    key = key.to_sym
+    bit = @@permission_fields[key]
+    return if bit.nil?
+
+    if enabled
+      self.code |= bit
+    else
+      self.code &= ~bit
     end
   end
 
-  def update_str(vals)
-    vals.each do |val|
-      self[val] = true
-    end
-
-    self
+  def has_permission(pname)
+    pname = pname.to_sym
+    return false if !@@permission_fields.has_key?(pname)
+    return (user.is_admin or ((self.code & @@permission_fields[pname]) != 0 ))
   end
 
-  def reset_permissions
-    @@permission_fields.each { |field| self[field] = false }
-    self
+  def set_permissions(keys)
+    self.code = 0
+    @@permission_fields.keys.each do |k|
+      set_permission(k, true)
+    end
   end
 
   def has_all_permissions?
-    @@permission_fields.all? { |field| self[field] }
+    return true if user.is_admin
+
+    @@permission_fields.each do |k,v|
+      if (self.code & v) == 0
+        return false
+      end
+    end
+
+    return true
   end
 
-  def self.permission_names()
+  def self.permission_names
     vals = {}
-    @@permission_fields.each { |field| vals[field] = I18n.t(field) }
+    @@permission_fields.keys.each { |field| vals[field] = I18n.t(field) }
     vals
-  end
-
-  def self.check_permission(user, project, permission)
-    Person.where(["project_id = ? AND user_id = ? AND ? = 1", project.id, user.id, permission]).select([:user_id, :username])
   end
 end

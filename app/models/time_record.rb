@@ -180,10 +180,6 @@ class TimeRecord < ApplicationRecord
     return self.done_date.to_date == Date.today - 1
   end
 
-  def last_edited_by_owner?
-    return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
-  end
-
   def self.find_by_task_lists(task_lists, time_conds)
     lists = []
 

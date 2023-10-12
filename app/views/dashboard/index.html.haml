@@ -1,7 +1,7 @@
-- if @logged_user.is_admin?
+- if can?(:create_project, @logged_user)
   - @page_actions = [{title: :add_project, :url=> new_project_path}]
 
-- if @logged_user.member_of_owner? and !Company.owner.hide_welcome_info
+- if @logged_user.member_of_owner? and !@owner.hide_welcome_info
   #new_account_info.hint
     .header= t('welcome_to_new_account')
     .content= t('welcome_to_new_account_info', user: h(@logged_user.display_name), url: "<a href=\"#{Rails.configuration.railscollab.site_url}\">#{Rails.configuration.railscollab.site_url}</a>").html_safe
@@ -9,7 +9,7 @@
       .header= raw step[:del] ? "<del>#{step[:title]}</del>" : "#{step[:title]}"
       .content= raw step[:del] ? "<del>#{step[:content]}</del>" : "#{step[:content]}"
     - if @logged_user.is_admin
-      %p= link_to t('hide_welcome_info').html_safe, hide_welcome_info_company_path(Company.owner), data: { turbo_method: :put }
+      %p= link_to t('hide_welcome_info').html_safe, hide_welcome_info_company_path(@owner), data: { turbo_method: :put }
 - if @late_milestones.length > 0 or !@calendar_milestones.empty?
   #lateOrTodayMilestones.block
     .header= t('milestones_summary', adjetives: [!@late_milestones.empty? ? t('late') : nil, |

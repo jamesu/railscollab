@@ -4,7 +4,7 @@
     %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
     %meta{content: form_authenticity_token, name: "csrf-token"}/
     %meta{content: "authenticity_token", name: "csrf-param"}/
-    %title= "#{h(page_title)} @ #{h(Company.owner.name)}"
+    %title= "#{h(page_title)} @ #{h(@owner.name)}"
     = stylesheet_link_tag 'company_website'
     = javascript_importmap_tags
     %meta{content: "#{@logged_user.id}", name: "user-id"}/

@@ -96,10 +96,6 @@ class TaskList < ApplicationRecord
     self.completed_on != nil
   end
 
-  def last_edited_by_owner?
-    self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?)
-  end
-
   def send_comment_notifications(comment)
   end
 

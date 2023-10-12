@@ -9,7 +9,7 @@
               %img{src: company.logo_url, alt: h(company.name)}/
             .projectCompanyMeta
               .projectCompanyTitle
-                - if company.is_owner?
+                - if company.is_instance_owner?
                   %label= h company.name
                   %input{name: "project_company[]", type: "hidden", value: company.id, checked: 'checked'}/
                 - else

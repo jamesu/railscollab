@@ -7,11 +7,11 @@
     - unless @active_project.nil?
       %title
         = h @active_project.name
-        \- #{h page_title} @ #{h Company.owner.name}
+        \- #{h page_title} @ #{h @owner.name}
     - else
       %title
         = h page_title
-        @ #{h Company.owner.name}
+        @ #{h @owner.name}
     = stylesheet_link_tag 'project_website'
     = javascript_importmap_tags
     %meta{content: "#{@active_project.id}", name: "project-id"}/

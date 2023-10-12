@@ -4,3 +4,8 @@ owner_milestone:
   created_by_id: 1
   name: Fix Tests
   description: Must fix tests
+client_milestone:
+  project_id: 2
+  created_by_id: 3
+  name: Fix Tests
+  description: Must fix tests

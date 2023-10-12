@@ -98,26 +98,6 @@
       %div
         %label{for: "userFormHomeNumber"}= t('home')
         = text_field 'user', 'home_number', id: 'userFormHomeNumber'
-    - all_im_values = @user.im_info
-    - if all_im_values.length > 0
-      %fieldset
-        %legend= t('instant_messengers')
-        %table.blank
-          %tr
-            %th{colspan: "2"}= t('service')
-            %th= t('value')
-            %th= t('primary_im')
-          - @count = 0
-          - all_im_values.each_with_index do |im_value, idx|
-            %tr
-              %td{style: "vertical-align: middle"}
-                %img{alt: "#{im_value.im_type.name} icon", src: "#{im_value.im_type.icon_url}"}/
-              %td{style: "vertical-align: middle"}
-                %label.checkbox{for: "userFormIm#{@count}"}= im_value.im_type.name
-              %td{style: "vertical-align: middle"}= text_field_tag "user[im_values][#{im_value.im_type_id}][value]", im_value.value, id: "userFormIm#{@count}"
-              %td{style: "vertical-align: middle"}= radio_button_tag "user[default_im_value]", im_value.im_type_id, im_value.is_default, id: "im_default_#{idx}", class: 'checkbox'
-            - @count += 1
-        %p.desc= t('instant_messengers_info')
 - if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty?
   - content_for :page_head do
     %meta{content: "#{h((@permissions.keys).to_json)}", name: "permissions-form-items"}/

@@ -132,37 +132,13 @@ class UsersController < ApplicationController
 
     input_params = (@logged_user.is_admin && @logged_user.member_of_owner?) ? admin_user_params : user_params
 
-    # Process IM Values
-    all_im_values = input_params[:im_values] || {}
-    all_im_values.reject! do |key, value|
-      value[:value].strip.length == 0
-    end
-
-    if input_params[:default_im_value].nil?
-      default_value = "-1"
-    else
-      default_value = input_params[:default_im_value]
-    end
-
-    real_im_values = all_im_values.collect do |type_id, value|
-      real_im_value = value[:value]
-      ImValue.new(im_type_id: type_id.to_i, user_id: @user.id, value: real_im_value, is_default: (default_value == type_id))
-    end
-
     # Process core parameters
 
     @user.attributes = input_params
 
     # Send it off
     saved = @user.save
-    if saved
-      # Re-create ImValues for user
-      ActiveRecord::Base.connection.execute("DELETE FROM user_im_values WHERE user_id = #{@user.id}")
-      real_im_values.each do |im_value|
-        im_value.save
-      end
-    end
-
+    
     respond_to do |format|
       if saved
         format.html {
@@ -292,8 +268,8 @@ class UsersController < ApplicationController
       person = project.people.find_or_create_by_user_id user.id
 
       # Reset and update permissions
-      person.reset_permissions
-      person.update_str permission_list unless permission_list.nil?
+      person.clear_all_permissions
+      person.set_permissions permission_list unless permission_list.nil?
       person.save
     end
 
@@ -342,7 +318,7 @@ class UsersController < ApplicationController
   end
 
   def user_permit_list
-    return [:generate_password, :password, :password_confirmation, :im_values, :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification]
+    return [:generate_password, :password, :password_confirmation, :display_name, :email, :time_zone, :title, :office_number, :office_number_ext, :fax_number, :mobile_number, :home_number, :new_account_notification]
   end
 
   def user_params

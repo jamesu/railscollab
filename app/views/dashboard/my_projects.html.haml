@@ -1,5 +1,5 @@
 - @page_actions = []
-- if @logged_user.is_admin?
+- if can?(:create_project, @logged_user)
   - @page_actions << {title: :add_project, :url=> new_project_path}
 - @page_actions += [{title: :order_by_name, url: '/dashboard/my_projects?orderBy=name'}, {title: :order_by_priority, url: '/dashboard/my_projects?orderBy=priority'}]
 

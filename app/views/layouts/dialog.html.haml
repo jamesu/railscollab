@@ -8,9 +8,9 @@
     = yield(:page_head)
   %body
     #dialog
-      - if !Company.owner.nil? and Company.owner.logo.attached?
+      - if !@owner.nil? and @owner.logo.attached?
         #dialogLogo
-          %img{src: "#{url_for(Company.owner.logo)}"}/
+          %img{src: "#{url_for(@owner.logo)}"}/
       .inner
         %h1= h(page_title)
         - if flash[:message]

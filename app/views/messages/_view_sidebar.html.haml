@@ -36,10 +36,5 @@
               = t('enable_comments')
               \:
             = form.check_box 'comments_enabled', class: 'yes_no', id: 'messageFormEnableComments'
-          %div
-            %label
-              = t('enable_anonymous_comments')
-              \:
-            = form.check_box 'anonymous_comments_enabled', class: 'yes_no', id: 'messageFormEnableAnonymousComments'
         %button.submit{type: "submit"}= t('update_options')
         %p= link_to t('edit_message_sidebar_link').html_safe, edit_project_message_path(@message.project, id: @message.id)

@@ -47,7 +47,7 @@ class Ability
       task_list = task.task_list
       project = task_list.project
 
-      if !user.member_of(project) or !project.is_active? or user.is_anonymous?
+      if !user.member_of(project) or !project.is_active?
         false
       elsif user.is_admin
         true
@@ -79,15 +79,15 @@ class Ability
     # TaskList
 
     can :create_task_list, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_tasks)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_tasks)
     end
 
     can :manage, TaskList do |task_list|
-      task_list.project.is_active? and user.has_permission(task_list.project, :can_manage_tasks)
+      task_list.project.is_active? and user.permissions_for(task_list.project).has_permission(:can_manage_tasks)
     end
 
     can :edit, TaskList do |task_list|
-      if !task_list.project.is_active? or !user.member_of(task_list.project) or user.is_anonymous?
+      if !task_list.project.is_active? or !user.member_of(task_list.project)
         false
       elsif user.is_admin
         true
@@ -105,13 +105,13 @@ class Ability
     end
 
     can :comment, TaskList do |task_list|
-      task_list.project.is_active? and task_list.project.has_member(user) and !user.is_anonymous?
+      task_list.project.is_active? and task_list.project.has_member(user)
     end
 
     # TimeRecord
 
     can :create_time, TimeRecord do |project|
-      project.is_active? and user.has_permission(project, :can_manage_time)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_time)
     end
 
     can :edit, TimeRecord do |project_time|
@@ -129,7 +129,7 @@ class Ability
     can :show, TimeRecord do |project_time|
       if !project_time.project.has_member(user)
         false
-      elsif user.has_permission(project_time.project, :can_manage_time)
+      elsif user.permissions_for(project_time.project).has_permission(:can_manage_time)
         true
       elsif project_time.is_private and !user.member_of_owner?
         false
@@ -139,17 +139,17 @@ class Ability
     end
 
     can :manage_time, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_time)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_time)
     end
 
     can :manage, TimeRecord do |project_time|
-      project_time.project.is_active? and user.has_permission(project_time.project, :can_manage_time)
+      project_time.project.is_active? and user.permissions_for(project_time.project).has_permission(:can_manage_time)
     end
 
     # Milestone
 
     can :create_milestone, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_milestones)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_milestones)
     end
 
     can :edit, Milestone do |milestone|
@@ -169,7 +169,7 @@ class Ability
     end
 
     can :manage, Milestone do |milestone|
-      milestone.project.is_active? and user.has_permission(milestone.project, :can_manage_milestones)
+      milestone.project.is_active? and user.permissions_for(milestone.project).has_permission(:can_manage_milestones)
     end
 
     can :change_status, Milestone do |milestone|
@@ -182,21 +182,21 @@ class Ability
     end
 
     can :comment, Milestone do |milestone|
-      milestone.project.is_active? and milestone.project.has_member(user) and !user.is_anonymous?
+      milestone.project.is_active? and milestone.project.has_member(user)
     end
 
     # Category
 
     can :create_message_category, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_messages)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_messages)
     end
 
     can :edit, Category do |category|
-      category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
+      category.project.is_active? and user.permissions_for(category.project).has_permission(:can_manage_messages)
     end
 
     can :delete, Category do |category|
-      category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
+      category.project.is_active? and user.permissions_for(category.project).has_permission(:can_manage_messages)
     end
 
     can :show, Category do |category|
@@ -204,13 +204,13 @@ class Ability
     end
 
     can :manage, Category do |category|
-      category.project.is_active? and user.has_permission(category.project, :can_manage_messages)
+      category.project.is_active? and user.permissions_for(category.project).has_permission(:can_manage_messages)
     end
 
     # Message
 
     can :create_message, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_messages)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_messages)
     end
 
     can :edit, Message do |message|
@@ -240,11 +240,11 @@ class Ability
     end
 
     can :manage, Message do |message|
-      message.project.is_active? and user.has_permission(message.project, :can_manage_messages)
+      message.project.is_active? and user.permissions_for(message.project).has_permission(:can_manage_messages)
     end
 
     can :add_file, Message do |message|
-      can?(:edit, message) and user.has_permission(message.project, :can_upload_files)
+      can?(:edit, message) and user.permissions_for(message.project).has_permission(:can_upload_files)
     end
 
     can :change_options, Message do |message|
@@ -253,25 +253,21 @@ class Ability
 
     can :comment, Message do |message|
       project = message.project
-      if user.is_anonymous?
-        message.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !message.is_private
-      else
-        message.comments_enabled and project.is_active? and user.member_of(project) and !(message.is_private and !user.member_of_owner?)
-      end
+      message.comments_enabled and project.is_active? and user.member_of(project) and !(message.is_private and !user.member_of_owner?)
     end
 
     # Folder
 
     can :create_folder, Project do |project|
-      project.is_active? and user.has_permission(project, :can_manage_files)
+      project.is_active? and user.permissions_for(project).has_permission(:can_manage_files)
     end
 
     can :edit, Folder do |folder|
-      folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
+      folder.project.is_active? and user.permissions_for(folder.project).has_permission(:can_manage_files)
     end
 
     can :delete, Folder do |folder|
-      folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
+      folder.project.is_active? and user.permissions_for(folder.project).has_permission(:can_manage_files)
     end
 
     can :show, Folder do |folder|
@@ -279,17 +275,17 @@ class Ability
     end
 
     can :manage, Folder do |folder|
-      folder.project.is_active? and user.has_permission(folder.project, :can_manage_files)
+      folder.project.is_active? and user.permissions_for(folder.project).has_permission(:can_manage_files)
     end
 
     # ProjectFile
 
     can :create_file, Project do |project|
-      project.is_active? and user.has_permission(project, :can_upload_files)
+      project.is_active? and user.permissions_for(project).has_permission(:can_upload_files)
     end
 
     can :edit, ProjectFile do |project_file|
-      if (!project_file.project.is_active? or !(user.member_of(project_file.project) and user.has_permission(project_file.project, :can_manage_files)))
+      if (!project_file.project.is_active? or !(user.member_of(project_file.project) and user.permissions_for(project_file.project).has_permission(:can_manage_files)))
         false
       elsif user.is_admin
         true
@@ -311,7 +307,7 @@ class Ability
     end
 
     can :manage, ProjectFile do |project_file|
-      project_file.project.is_active? and user.has_permission(project_file.project, :can_manage_files)
+      project_file.project.is_active? and user.permissions_for(project_file.project).has_permission(:can_manage_files)
     end
 
     can :download, ProjectFile do |project_file|
@@ -324,11 +320,7 @@ class Ability
 
     can :comment, ProjectFile do |project_file|
       project = project_file.project
-      if user.is_anonymous?
-        project_file.anonymous_comments_enabled and project.is_active? and user.member_of(project) and !project_file.is_private
-      else
         project_file.comments_enabled and project.is_active? and user.member_of(project) and !(project_file.is_private and !user.member_of_owner?)
-      end
     end
 
     # Project
@@ -354,7 +346,7 @@ class Ability
     end
 
     can :remove_company, Project do |project, company|
-      if company.is_owner?
+      if company.is_instance_owner?
         false
       else
         user.member_of_owner? and user.is_admin
@@ -381,7 +373,7 @@ class Ability
       if comment_project.is_active? and comment_project.has_member(user)
         if (user.member_of_owner? and user.is_admin)
           true
-        elsif comment.created_by == user and !user.is_anonymous?
+        elsif comment.created_by == user
           now = Time.now.utc
           (now <= (comment.created_on + (60 * Rails.configuration.railscollab.minutes_to_comment_edit_expire)))
         end
@@ -403,7 +395,7 @@ class Ability
     end
 
     can :add_file, Comment do |comment|
-      can?(:edit, comment) and (comment.new_record? and user.has_permission(comment.rel_object.project, :can_upload_files))
+      can?(:edit, comment) and (comment.new_record? and user.permissions_for(comment.rel_object.project).has_permission(:can_upload_files))
     end
 
     # Company
@@ -429,11 +421,15 @@ class Ability
     end
 
     can :remove, Company do |company|
-      !company.is_owner? and user.is_admin and user.member_of_owner?
+      !company.is_instance_owner? and user.is_admin and user.member_of_owner?
     end
 
     can :manage, Company do |company|
-      user.is_admin and !company.is_owner?
+      if user.member_of_owner? and (user.is_admin or (company.created_by == user))
+        true
+      else
+        user.is_admin and !company.is_instance_owner?
+      end
     end
 
     # User
@@ -455,7 +451,7 @@ class Ability
     end
 
     can :update_profile, User do |target_user|
-      (target_user.id == user.id and !user.is_anonymous?) or (user.member_of_owner? and user.is_admin)
+      (target_user.id == user.id) or (user.member_of_owner? and user.is_admin)
     end
 
     can :update_permissions, User do |target_user|
@@ -469,11 +465,11 @@ class Ability
     # WikiPage
 
     can :create_wiki_page, Project do |project|
-      project.is_active? and user.member_of(project) and user.has_permission(project, :can_manage_wiki_pages)
+      project.is_active? and user.member_of(project) and user.permissions_for(project).has_permission(:can_manage_wiki_pages)
     end
 
     can :edit, WikiPage do |page|
-      page.project.is_active? and user.member_of(page.project) and user.has_permission(page.project, :can_manage_wiki_pages)
+      page.project.is_active? and user.member_of(page.project) and user.permissions_for(page.project).has_permission(:can_manage_wiki_pages)
     end
 
     can :delete, WikiPage do |page|

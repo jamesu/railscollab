@@ -89,10 +89,6 @@ class ProjectFile < ApplicationRecord
     self.project_file_revisions[0]
   end
 
-  def last_edited_by_owner?
-    self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?)
-  end
-
   def send_comment_notifications(comment)
   end
 
@@ -189,7 +185,7 @@ class ProjectFile < ApplicationRecord
     record.errors.add(attr, I18n.t("not_part_of_project")) if value.project_id != record.project_id
   end
 
-  validates_each :is_private, :is_important, :anonymous_comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, :is_important, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t("not_allowed")) if value == true
   end
 

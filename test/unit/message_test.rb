@@ -34,4 +34,7 @@ class MessageTest < ActiveSupport::TestCase
   def test_message_tags
     do_test_tags(messages(:owner_welcome_message))
   end
+
+  def test_validations
+  end
 end

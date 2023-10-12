@@ -1,4 +1,3 @@
-- user_permission = Person.where({'project_id' => permissions.id, 'user_id' => user.id})
 %tr
   %td.projectName
     = check_box_tag "user_project[]", "#{permissions.id}", user.member_of(permissions), {id: "projectPermissions#{permissions.id}", class: 'checkbox normal', onclick: "CoreController.permissions_form_project_select(#{permissions.id})"}
@@ -9,11 +8,11 @@
       %label.checkbox{for: "projectPermissions#{permissions.id}"}= h(permissions.name)
   %td.permissionsList
     - if can? :update_permissions, user
-      %div{id: "projectPermissionsBlock#{permissions.id}", style: !user.member_of(permissions) ? 'display:none' : ''}
+      %div{id: "projectPermissionsBlock#{permissions.id}", style: !user.permissions_for(permissions).nil? ? 'display:none' : ''}
         .projectPermission
-          = check_box_tag "project_#{permissions.id}_all", 1, user.has_all_permissions(permissions) 
+          = check_box_tag "project_#{permissions.id}_all", 1, user_has_all_permissions?(user, permissions) 
           %label.checkbox{style:'font-weight: bolder', for: "projectPermissions#{permissions.id}All", class: 'checkbox', onclick: "CoreController.permissions_form_project_select_all(#{permissions.id})"}= t('all')
       - @permissions.keys.each do |pname|
         .projectPermission
-          = check_box_tag "project_permission[#{permissions.id}][]", "#{pname}", user.has_permission(permissions, pname), {id: "projectPermission#{permissions.id}#{pname}", class: 'checkbox normal', onclick: "CoreController.permissions_form_project_select_item(#{permissions.id})"}
+          = check_box_tag "project_permission[#{permissions.id}][]", "#{pname}", user_has_permission?(user, permissions, pname), {id: "projectPermission#{permissions.id}#{pname}", class: 'checkbox normal', onclick: "CoreController.permissions_form_project_select_item(#{permissions.id})"}
           %label.checkbox.normal{for: "projectPermission#{permissions.id}#{pname}"}= @permissions[pname]

@@ -64,7 +64,7 @@ class Message < ApplicationRecord
   end
 
   def ordered_comments
-    self.comments.order("created_on ASC")
+    self.comments.order(created_on: :asc)
   end
 
   def object_name
@@ -84,8 +84,6 @@ class Message < ApplicationRecord
   end
 
   def ensure_subscribed(user)
-    return if user.is_anonymous?
-
     begin
       self.subscribers.find(user.id)
     rescue ActiveRecord::RecordNotFound
@@ -100,23 +98,9 @@ class Message < ApplicationRecord
     end
   end
 
-  def last_edited_by_owner?
-    if !self.updated_by.nil?
-      self.updated_by.member_of_owner?
-    else
-      self.created_by.member_of_owner?
-    end
-  end
-
   def send_notification(user)
     MailNotifier.new_message(user, self).deliver_now
   end
-
-
-
-  # Accesibility
-
-  #attr_accessible :title, :text, :milestone_id, :category_id, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled
 
   # Validation
 
@@ -130,7 +114,7 @@ class Message < ApplicationRecord
     record.errors.add(attr, I18n.t("not_part_of_project")) if value && value.project_id != record.project_id
   end
 
-  validates_each :is_private, :is_important, :anonymous_comments_enabled, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
+  validates_each :is_private, :is_important, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
     record.errors.add(attr, I18n.t("not_allowed")) if value == true
   end
 

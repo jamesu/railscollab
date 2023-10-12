@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_05_220129) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_12_213828) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -129,11 +129,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_220129) do
     t.index ["project_id", "name"], name: "index_folders_on_project_id_and_name", unique: true
   end
 
-  create_table "im_types", force: :cascade do |t|
-    t.string "name", limit: 30, default: "", null: false
-    t.string "icon", limit: 30, default: "", null: false
-  end
-
   create_table "message_subscriptions", id: false, force: :cascade do |t|
     t.integer "message_id", default: 0, null: false
     t.integer "user_id", default: 0, null: false
@@ -185,15 +180,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_220129) do
     t.integer "user_id", default: 0, null: false
     t.datetime "created_on", precision: nil
     t.integer "created_by_id", default: 0, null: false
-    t.boolean "can_manage_messages", default: false
-    t.boolean "can_manage_tasks", default: false
-    t.boolean "can_manage_milestones", default: false
-    t.boolean "can_upload_files", default: false
-    t.boolean "can_manage_files", default: false
-    t.boolean "can_assign_to_owners", default: false, null: false
-    t.boolean "can_assign_to_other", default: false, null: false
-    t.boolean "can_manage_time", default: false, null: false
-    t.boolean "can_manage_wiki_pages", default: false, null: false
+    t.integer "code", limit: 8, default: 0, null: false
   end
 
   create_table "project_companies", id: false, force: :cascade do |t|
@@ -346,14 +333,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_220129) do
     t.index ["created_on"], name: "index_time_records_on_created_on"
     t.index ["done_date"], name: "index_time_records_on_done_date"
     t.index ["project_id"], name: "index_time_records_on_project_id"
-  end
-
-  create_table "user_im_values", force: :cascade do |t|
-    t.integer "user_id", default: 0, null: false
-    t.integer "im_type_id", limit: 3, default: 0, null: false
-    t.string "value", limit: 50, default: "", null: false
-    t.boolean "is_default", default: false, null: false
-    t.index ["is_default"], name: "index_user_im_values_on_is_default"
   end
 
   create_table "users", force: :cascade do |t|

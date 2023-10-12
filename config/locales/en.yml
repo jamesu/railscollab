@@ -123,7 +123,6 @@ en:
   welcome_to_administration: Welcome to the administration panel. Using this tool you can manage your company data, members, clients and projects you are involved in.
   
   # User box
-  welcome_anonymous: "Welcome <strong>Anonymous</strong>"
   welcome_back: "Welcome back <strong>%{user}</strong>"
   logout: Logout
   are_you_sure_logout: Are you sure you want to log out?
@@ -281,7 +280,6 @@ en:
   private_message: Private message
   important_message: Important message
   enable_comments: Enable comments
-  enable_anonymous_comments: Anonymous comments
   update_options: Update options
   edit_message_sidebar_link: "&raquo; Edit message"
   completed_milestones: Completed milestones
@@ -318,7 +316,6 @@ en:
   private_message_info: "Private messages are visible only to owner company members. Members of client companies will not be able to see them."
   important_message_info: "Important messages are listed in the \"Important messages\" sidebar on the project messages page"
   enable_comments_info: "Users that can view this object can post comments on it. Select \"No\" to lock comments"
-  enable_anonymous_comments_info: "Allow anonymous comments be posted for this object. Anonymous comments can be posted through the API or other external sources (if enabled). The author must provide a name and valid email address. The source IP address will be logged."
   email_notification: Email notification
   email_notification_info: Notify selected people about this message via email
   tags_info: "List of comma separated tags (example: \"interface, javascript, public beta\")"

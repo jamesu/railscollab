@@ -11,4 +11,7 @@ class TimeRecordTest < ActiveSupport::TestCase
 
     tr.destroy
   end
+
+  def test_validations
+  end
 end

@@ -208,15 +208,11 @@ class User < ApplicationRecord
   end
 
   def member_of_owner?
-    !self.is_anonymous? and self.company.is_owner?
+    self.company.is_instance_owner?
   end
 
   def owner_of_owner?
-    self.company.is_owner? and self.company.created_by_id == self.id
-  end
-
-  def is_anonymous?
-    Rails.configuration.railscollab.allow_anonymous and self.username == "Anonymous"
+    self.company.is_instance_owner? and self.company.created_by_id == self.id
   end
 
   def is_part_of(project)
@@ -227,26 +223,8 @@ class User < ApplicationRecord
     Person.where(user_id: id, project_id: project.id).length > 0
   end
 
-  def has_all_permissions(project, reload = false)
-    return false if is_anonymous?
-
-    perms = self.permissions_for(project, reload)
-    return perms.nil? ? false : (self.is_admin or perms.has_all_permissions?)
-  end
-
-  def has_permission(project, pname, reload = false)
-    return false if is_anonymous?
-
-    perms = self.permissions_for(project, reload)
-    return perms.nil? ? false : (self.is_admin or perms[pname])
-  end
-
-  def permissions_for(project, reload = false)
-    @@cached_permissions ||= {}
-    @@cached_permissions[project] = nil if reload
-    @@cached_permissions[project] = (Person.where(["user_id = ? AND project_id = ?", self.id, project.id]).first || false)
-
-    @@cached_permissions[project].class == FalseClass ? nil : @@cached_permissions[project]
+  def permissions_for(project)
+    people.where(project_id: project.id).first
   end
 
   def has_avatar?

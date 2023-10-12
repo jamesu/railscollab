@@ -45,14 +45,6 @@
           \:
       .optionControl= form.check_box 'comments_enabled', class: 'yes_no', id: 'messageFormEnableComments'
       .optionDesc= t('enable_comments_info')
-    - if Rails.configuration.railscollab.allow_anonymous
-      .objectOption
-        .optionLabel
-          %label
-            = t('enable_anonymous_comments')
-            \:
-        .optionControl= form.check_box 'anonymous_comments_enabled', class: 'yes_no', id: 'messageFormEnableAnonymousComments'
-        .optionDesc= t('enable_anonymous_comments_info')
 %fieldset
   %legend= t('tags')
   = text_field 'tags', id: 'messageFormTags', class: 'long'

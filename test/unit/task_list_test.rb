@@ -6,4 +6,7 @@ class TaskListTest < ActiveSupport::TestCase
   def test_task_list_tags
     do_test_tags(task_lists(:owner_task_list))
   end
+
+  def test_validations
+  end
 end

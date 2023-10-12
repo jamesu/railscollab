@@ -106,4 +106,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert_equal start_count+1, Activity.count
   end
+
+  def test_validations
+  end
 end

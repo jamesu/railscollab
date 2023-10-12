@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   end
 
   def reload_owner
-    Company.owner.reload
+    @owner = Company.instance_owner
   end
 
   def process_session

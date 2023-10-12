@@ -11,10 +11,10 @@
   - if permissions_users.is_admin?
     %span.desc= t('administrator')
 %td
-  - unless company.is_owner?
+  - unless company.is_instance_owner?
     .projectUserPermissions{id: "projectPermissionsBlock#{perm_id}", style: permissions_users.member_of(project) ? '' : 'display: none'}
     %div
-      = check_box_tag "people_#{permissions_users.id}_all", 1, permissions_users.has_all_permissions(project), {id: "projectPermissions#{perm_id}All", class: 'checkbox', onclick: "permissions_form_project_select_all('#{perm_id}')"}
+      = check_box_tag "people_#{permissions_users.id}_all", 1, user_has_all_permissions?(permissions_users, project), {id: "projectPermissions#{perm_id}All", class: 'checkbox', onclick: "permissions_form_project_select_all('#{perm_id}')"}
       %label.checkbox{for: "projectPermissions#{perm_id}All", style:"font-weight: bolder"}= t('all')
     %div
       - @permissions.keys.each do |permission|

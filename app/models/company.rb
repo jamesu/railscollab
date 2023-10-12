@@ -47,7 +47,7 @@ class Company < ApplicationRecord
   def process_destroy
   end
 
-  def self.owner(reload = false)
+  def self.instance_owner
     Company.where(client_of_id: nil).first
   end
 
@@ -55,7 +55,7 @@ class Company < ApplicationRecord
     self.users.where(auto_assign: true)
   end
 
-  def is_owner?
+  def is_instance_owner?
     self.client_of.nil?
   end
 
@@ -64,7 +64,7 @@ class Company < ApplicationRecord
   end
 
   def is_part_of(project)
-    return true if self.is_owner? and (project.created_by.company_id == self.id)
+    return true if self.is_instance_owner? and (project.created_by.company_id == self.id)
     return true if project.company_ids.include?(self.id)
     false
   end

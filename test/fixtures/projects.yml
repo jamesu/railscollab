@@ -2,7 +2,9 @@
 owner_project:
   name: Project
   id: 1
+  created_by_id: 1
 
 client_project:
   name: Client Project
   id: 2
+  created_by_id: 3

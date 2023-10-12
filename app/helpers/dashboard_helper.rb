@@ -19,19 +19,19 @@
 module DashboardHelper
   def new_account_steps(user)
     [{ :title => I18n.t("new_account_step1"),
-       content: I18n.t("new_account_step1_info", url: edit_company_path(id: Company.owner.id)),
-       :del => Company.owner.updated? },
+       content: I18n.t("new_account_step1_info", url: edit_company_path(id: @owner.id)),
+       :del => @owner.updated? },
 
      { :title => I18n.t("new_account_step2"),
        content: I18n.t("new_account_step2_info", url: "/users/new?company_id=#{user.company.id}"),
-       :del => (Company.owner.users.length > 1) },
+       :del => (@owner.users.length > 1) },
 
      { :title => I18n.t("new_account_step3"),
        content: I18n.t("new_account_step3_info", url: new_company_path),
-       :del => (Company.owner.clients.length > 0) },
+       :del => (@owner.clients.length > 0) },
 
      { :title => I18n.t("new_account_step4"),
        content: I18n.t("new_account_step4_info", url: new_project_path),
-       :del => (Company.owner.projects.length > 0) }]
+       :del => (@owner.projects.length > 0) }]
   end
 end

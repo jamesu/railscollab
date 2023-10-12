@@ -15,13 +15,7 @@
             %a{href: "#{comment.rel_object.object_url}\#comment#{counter}", title: "#{t('permalink')}"}>
               \##{counter}
             \:
-          - if comment.is_anonymous?
-            = t('comment_posted',  name: comment.author_name, time: format_usertime(comment.created_on, :comment_posted_format))
-            - if @logged_user.is_admin
-              (
-              %span.commentAddress>= h(comment.author_homepage)
-              )
-          - elsif not comment.created_by.nil?
+          - if not comment.created_by.nil?
             = t('comment_posted_with_user', time: format_usertime(comment.created_on, :comment_posted_format), user: "<a href=\"#{comment.created_by.object_url}\">#{h(comment.created_by.display_name)}</a>").html_safe
           - else
             = format_usertime(comment.created_on, :comment_posted_format)

@@ -5,6 +5,14 @@ class ApplicationRecord < ActiveRecord::Base
     "#{self.class}#{self.id}"
   end
 
+  def last_edited_by_owner?
+    if !self.updated_by.nil?
+      self.updated_by.member_of_owner?
+    else
+      self.created_by.member_of_owner?
+    end
+  end
+
   def tag_list
     if !@new_tags.nil?
       @new_tags

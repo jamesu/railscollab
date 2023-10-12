@@ -20,9 +20,6 @@ defaults: &defaults
   # Default message category to list
   default_project_message_category: General
   
-  # Allow anonymous posting of comments
-  allow_anonymous: false
-  
   # Default locale
   default_language: en
   

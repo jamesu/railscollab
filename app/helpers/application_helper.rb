@@ -353,7 +353,7 @@ module ApplicationHelper
   end
 
   def administration_tabbed_navigation
-    return nil if !@logged_user.company.is_owner?
+    return nil if !@logged_user.company.is_instance_owner?
     items = [
       { id: :index, url: administration_path },
       { id: :people, url: companies_path },
@@ -362,7 +362,7 @@ module ApplicationHelper
   end
 
   def administration_crumbs
-    return nil if !@logged_user.company.is_owner?
+    return nil if !@logged_user.company.is_instance_owner?
     [
       { title: :dashboard, url: "/dashboard" },
       { title: :administration, url: "/administration" },
@@ -386,7 +386,7 @@ module ApplicationHelper
     items << { id: :messages, url: project_messages_path(@active_project) }
     items << { id: :tasks, url: project_task_lists_path(@active_project) }
     items << { id: :milestones, url: project_milestones_path(@active_project) }
-    items << { id: :ptime, url: project_times_path(@active_project) } if @logged_user.has_permission(@active_project, :can_manage_time)
+    items << { id: :ptime, url: project_times_path(@active_project) } if user_has_permission?(@logged_user, @active_project, :can_manage_time)
     items << { id: :files, url: project_files_path(@active_project) }
     items << { id: :wiki, url: project_wiki_pages_path(@active_project) }
     items << { id: :people, url: people_project_path(@active_project) }
@@ -458,13 +458,13 @@ module ApplicationHelper
 
   def assign_select_grouped_options(project, options = {})
     permissions = @logged_user.permissions_for(project)
-    return [] if permissions.nil? or !(permissions.can_assign_to_owners or permissions.can_assign_to_other)
+    return [] if permissions.nil? or !(permissions.has_permission(:can_assign_to_owners) or permissions.has_permission(:can_assign_to_other))
 
-    default_option = permissions.can_assign_to_other ? content_tag(:option, I18n.t("anyone"), value: 0) : ""
+    default_option = permissions.has_permission(:can_assign_to_other) ? content_tag(:option, I18n.t("anyone"), value: 0) : ""
     items = {}
     project.companies.each do |company|
-      next if company.is_owner? and !permissions.can_assign_to_owners
-      next if !company.is_owner? and !permissions.can_assign_to_other
+      next if company.is_instance_owner? and !permissions.has_permission(:can_assign_to_owners)
+      next if !company.is_instance_owner? and !permissions.has_permission(:can_assign_to_other)
 
       items[company.name] = [[I18n.t("anyone"), "c#{company.id}"], *company.users.collect do |user|
         [user.username, user.id.to_s] if user.member_of(project)
@@ -530,5 +530,17 @@ module ApplicationHelper
                calendar_block(t("today"), @milestones["#{date.month}-#{date.day}"], "today", true)
              end
            end
+  end
+
+  def user_has_all_permissions?(user, project)
+    person = user.permissions_for(project)
+    return false if person.nil?
+    return person.has_all_permissions?
+  end
+
+  def user_has_permission?(user, project, pname)
+    person = user.permissions_for(project)
+    return false if person.nil?
+    return person.has_permission(pname)
   end
 end

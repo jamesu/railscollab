@@ -1,17 +1,4 @@
 = error_messages_for :comment
-- if @logged_user.is_anonymous?
-  %div
-    %label{for: "commentFormName"}
-      = t('name')
-      \:
-      %span.label_required *
-    = form.text_field 'author_name', id: 'commentFormName', class: 'long'
-  %div
-    %label{for: "commentFormEmail"}
-      = t('email_address')
-      \:
-      %span.label_required *
-    = form.text_field 'author_email', id: 'commentFormEmail', class: 'long'
 .formAddCommentText
   %label{for: "addCommentText"}
     = t('text')

@@ -24,7 +24,12 @@ class ProjectsController < ApplicationController
   after_action :user_track, only: [:index, :search, :people]
 
   def index
-    @projects = @logged_user.is_admin ? Project.all : @logged_user.projects
+    if can?(:manage, @logged_user.company)
+      @projects = @logged_user.company.projects
+    else
+      @projects = @logged_user.projects
+    end
+    
     respond_to do |format|
       format.html { render layout: "administration" }
       format.json {
@@ -117,16 +122,16 @@ class ProjectsController < ApplicationController
       @people = @project.users
       @user_projects = @logged_user.projects
 
-      @companies = [Company.owner]
+      @companies = [@owner]
       @permissions = Person.permission_names()
-      clients = Company.owner.clients
+      clients = @owner.clients
       if clients.length > 0
         @companies += clients
       end
     when :post, :put
       # Sort out changes to the company set
       @project.companies.clear
-      @project.companies << Company.owner
+      @project.companies << @owner
       if params[:project_company]
         valid_companies = Company.where(id: params[:project_company]).select("id", "client_of_id")
         valid_companies.each { |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
@@ -149,9 +154,9 @@ class ProjectsController < ApplicationController
 
         if has_valid_user and has_valid_company
           permissions = params[:people_permissions] ? params[:people_permissions][user.id.to_s] : nil
-          person.reset_permissions
-          person.update_str permissions unless permissions.nil?
-          person.ensure_permissions if person.user.member_of_owner?
+          person.clear_all_permissions
+          person.set_permissions permissions unless permissions.nil?
+          person.set_all_permissions if person.user.member_of_owner?
           person.save
         else
           # Exterminate! (maybe better if this was a single query?)
@@ -170,9 +175,9 @@ class ProjectsController < ApplicationController
         next unless valid_companies.include? user.company
         person = @project.people.create(user: user)
         permissions = params[:people_permissions] ? params[:people_permissions][id] : nil
-        person.reset_permissions
-        person.update_str permissions unless permissions.nil?
-        person.ensure_permissions if person.user.member_of_owner?
+        person.clear_all_permissions
+        person.set_permissions permissions unless permissions.nil?
+        person.set_all_permissions if person.user.member_of_owner?
         person.save
       end
 
@@ -240,9 +245,9 @@ class ProjectsController < ApplicationController
 
     @project.attributes = project_attribs
     @project.created_by = @logged_user
-    @project.companies << Company.owner
+    @project.companies << @owner
 
-    @auto_assign_users = Company.owner.auto_assign_users
+    @auto_assign_users = @owner.auto_assign_users
     saved = @project.save
 
     if saved

@@ -6,4 +6,7 @@ class ProjectFileTest < ActiveSupport::TestCase
   def test_file_tags
     do_test_tags(project_files(:owner_file))
   end
+
+  def test_validations
+  end
 end

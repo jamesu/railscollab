@@ -59,13 +59,6 @@
         .cardBlock
           %a{href: "mailto:#{h user_card.email}"}= h user_card.email
         .cardBlock
-          - user_card.im_values.each do |im_value|
-            - next if im_value.value.blank?
-            .cardIM
-              %img{alt: "#{im_value.im_type.name}", src: "#{im_value.im_type.icon_url}"}/
-              %span
-                = h im_value.value
-        .cardBlock
           - if user_card.office_number?
             .cardOffice
               %span

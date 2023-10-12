@@ -396,7 +396,7 @@ class FilesController < ApplicationController
   end
 
   def file_params
-    params.require(:file).permit(:tags, :folder_id, :description, :is_private, :is_important, :comments_enabled, :anonymous_comments_enabled)
+    params.require(:file).permit(:tags, :folder_id, :description, :is_private, :is_important, :comments_enabled)
   end
 
   def load_related_object

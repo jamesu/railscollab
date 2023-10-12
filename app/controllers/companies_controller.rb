@@ -21,7 +21,6 @@ class CompaniesController < ApplicationController
   layout "administration"
 
   after_action :user_track, only: [:card]
-  after_action :reload_owner
 
   def show
     authorize! :show, @company
@@ -36,13 +35,11 @@ class CompaniesController < ApplicationController
   end
 
   def index
-    company = Company.owner
-    clients = Company.owner.clients
-    @companies = [company] + clients
+    @companies = [@owner] + @owner.clients
     respond_to do |format|
       format.html
       format.json {
-        if @logged_user.is_admin
+        if can(:manage, @owner)
           render json: @companies.to_json
         else
           return error_status(true, :insufficient_permissions)
@@ -63,7 +60,7 @@ class CompaniesController < ApplicationController
     @company = Company.new
 
     @company.attributes = company_params
-    @company.client_of = Company.owner
+    @company.client_of = @owner
     @company.created_by = @logged_user
 
     respond_to do |format|
@@ -109,7 +106,7 @@ class CompaniesController < ApplicationController
   end
 
   def hide_welcome_info
-    error_status(true, :invalid_company) unless @company.is_owner?
+    error_status(true, :invalid_company) unless @company.is_instance_owner?
     authorize! :edit, @company
 
     @company.hide_welcome_info = true
@@ -221,7 +218,7 @@ class CompaniesController < ApplicationController
     case action_name
     when "new", "create" then :add_client
     when "show" then @company.name
-    when "edit", "update" then @company.is_owner? ? :edit_company : :edit_client
+    when "edit", "update" then @company.is_instance_owner? ? :edit_company : :edit_client
     else super
     end
   end

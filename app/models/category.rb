@@ -63,10 +63,6 @@ class Category < ApplicationRecord
     categories.collect { |category| [category.name, category.id] }
   end
 
-  # Accesibility
-
-  #attr_accessible :name
-
   # Validation
 
   validates_presence_of :name

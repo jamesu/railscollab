@@ -7,7 +7,7 @@ initial_user_displayname: ENV['RAILSCOLLAB_INITIAL_DISPLAYNAME'] || 'Administrat
 }
 
 def setup
-  owner_company = Company.owner
+  owner_company = Company.instance_owner
   new_company = false
 
   # Ensure owner company exists

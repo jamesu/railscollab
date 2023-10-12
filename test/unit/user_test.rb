@@ -34,7 +34,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "Permissions" do
-    master_user = Company.owner.created_by
+    master_user = Company.instance_owner.created_by
     admin_user = users(:owner_admin_user)
     owner_user = users(:owner_user)
     
@@ -136,6 +136,9 @@ class UserTest < ActiveSupport::TestCase
     assert_equal User.get_online.length, start_count+5
     
     users.each { |u| u.destroy }
+  end
+
+  def test_validations
   end
   
   # TODO: all_milestones, todays_milestones, late_milestones, 

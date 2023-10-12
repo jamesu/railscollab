@@ -1,9 +1,9 @@
 #footer
   #copy
-    - if not Company.owner.homepage.nil?
-      %a{href: "#{Company.owner.homepage}"}= Company.owner.name
+    - if not @owner.homepage.nil?
+      %a{href: "#{@owner.homepage}"}= @owner.name
     - else
-      = Company.owner.name
+      = @owner.name
   #productSignature
     = product_signature
     \. Icons by

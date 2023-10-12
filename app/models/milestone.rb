@@ -35,8 +35,6 @@ class Milestone < ApplicationRecord
 
   has_many :messages, dependent: :nullify
 
-  #has_many :tags, as:  'rel_object', dependent:  :destroy
-
   scope :is_public, -> { where(is_private: false) }
   scope :is_open, -> { where("milestones.completed_on IS NULL").order("milestones.due_date ASC") }
   scope :late, -> { where(["due_date < ? AND completed_on IS NULL", Date.today]) }
@@ -82,6 +80,8 @@ class Milestone < ApplicationRecord
       self.completed_by = @update_completed_user
       Activity.new_log(self, @update_completed_user, @update_completed ? :close : :open, self.is_private)
     end
+
+    @update_completed = nil
   end
 
   def process_destroy
@@ -120,7 +120,7 @@ class Milestone < ApplicationRecord
     end
 
     begin
-      self.assigned_to = val[0] == 99 ?
+      self.assigned_to = val[0] == 'c' ?
         Company.find(val[1...val.length]) :
         User.find(val)
     rescue ActiveRecord::RecordNotFound
@@ -135,7 +135,7 @@ class Milestone < ApplicationRecord
   end
 
   def is_upcoming?
-    self.due_date.to_date > Date.tomorrow
+    self.due_date.to_date >= Date.tomorrow
   end
 
   def is_late?
@@ -156,10 +156,6 @@ class Milestone < ApplicationRecord
 
   def days_late
     (Date.today - self.due_date.to_date).to_i
-  end
-
-  def last_edited_by_owner?
-    self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?)
   end
 
   def send_comment_notifications(comment)
@@ -255,7 +251,7 @@ class Milestone < ApplicationRecord
 
     self.where(msg_conditions)
   end
-  
+
   # Validation
 
   validates_presence_of :name

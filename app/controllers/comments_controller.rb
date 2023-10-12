@@ -35,7 +35,6 @@ class CommentsController < ApplicationController
                                               :author_name,
                                               :created_by_id,
                                               :created_on,
-                                              :is_anonymous,
                                               :is_private,
                                               :attached_files_count])
       }
@@ -48,7 +47,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.html { }
       format.json {
-        fields = @logged_user.is_admin? ? [] : [:author_email, :author_homepage]
+        fields = []
         render json: @comment.to_json(except: fields)
       }
     end
@@ -245,6 +244,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:text, :is_private, :author_name, :author_email)
+    params.require(:comment).permit(:text, :is_private)
   end
 end

@@ -21,18 +21,6 @@
           = t('email_address')
           \:
         %a{href: "mailto:#{h card.email}"}= h card.email
-      - if !card.im_values.empty?
-        %table.imAddresses
-          - card.im_values.each do |im_value|
-            - next if im_value.value.blank?
-            %tr
-              %td
-                %img{alt: "#{im_value.im_type.name}", src: "#{im_value.im_type.icon_url}"}/
-              %td
-                = h im_value.value
-                - if im_value.is_default
-                  %span.desc
-                    (#{t('primary_im')})
     - if !card.office_number.nil? or !card.fax_number.nil? or !card.mobile_number.nil? or !card.home_number.nil?
       %h2= t('contact_offline')
       .cardBlock

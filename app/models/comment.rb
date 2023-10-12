@@ -35,7 +35,6 @@ class Comment < ApplicationRecord
 
   def process_params
     self.project_id ||= self.rel_object.try(:project_id)
-    self.is_anonymous = self.created_by.is_anonymous?
 
     true
   end
@@ -51,10 +50,6 @@ class Comment < ApplicationRecord
   def process_destroy
     AttachedFile.clear_attachments(self)
     Activity.new_log(self, self.updated_by, :delete, true, self.rel_object.project)
-  end
-
-  def last_edited_by_owner?
-    return (self.created_by.member_of_owner? or (!self.updated_by.nil? and self.updated_by.member_of_owner?))
   end
 
   # Helpers
@@ -82,15 +77,8 @@ class Comment < ApplicationRecord
   def project
     rel_object.nil? ? nil : rel_object.project
   end
-
-  # Accesibility
-
-  #attr_accessible :text, :is_private, :author_name, :author_email
-
+  
   # Validation
-
-  validates_presence_of :author_name, if: Proc.new { |obj| obj.is_anonymous }
-  validates_presence_of :author_email, if: Proc.new { |obj| obj.is_anonymous }
 
   validates_presence_of :text
   validates_each :is_private, if: Proc.new { |obj| !obj.last_edited_by_owner? } do |record, attr, value|
