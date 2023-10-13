@@ -62,37 +62,6 @@ def setup
   	ImType.create!(name: 'Skype',  icon: 'skype.gif')
   	ImType.create!(name: 'Jabber', icon: 'jabber.gif')
   end
-
-  # Ensure File Types are present
-  if FileType.count == 0
-  	FileType.create!(extension: 'zip',  icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'rar',  icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'bz',   icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'bz2',  icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'gz',   icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'ace',  icon: 'archive.png', is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'mp3',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'wma',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'ogg',  icon: 'audio.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'doc',  icon: 'doc.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'xsl',  icon: 'doc.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'gif',  icon: 'image.png',   is_searchable: 0, is_image: 1)
-  	FileType.create!(extension: 'jpg',  icon: 'image.png',   is_searchable: 0, is_image: 1)
-  	FileType.create!(extension: 'jpeg', icon: 'image.png',   is_searchable: 0, is_image: 1)
-  	FileType.create!(extension: 'png',  icon: 'image.png',   is_searchable: 0, is_image: 1)
-  	FileType.create!(extension: 'mov',  icon: 'mov.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'pdf',  icon: 'pdf.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'psd',  icon: 'psd.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'rm',   icon: 'rm.png',      is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'svg',  icon: 'svg.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'swf',  icon: 'swf.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'avi',  icon: 'video.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'mpeg', icon: 'video.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'mpg',  icon: 'video.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'qt',   icon: 'mov.png',     is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'vob',  icon: 'video.png',   is_searchable: 0, is_image: 0)
-  	FileType.create!(extension: 'txt',  icon: 'doc.png',     is_searchable: 1, is_image: 0)
-  end
 end
 
 setup

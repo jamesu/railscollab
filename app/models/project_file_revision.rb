@@ -22,7 +22,6 @@ class ProjectFileRevision < ApplicationRecord
 
   belongs_to :project
   belongs_to :project_file, foreign_key: "file_id"
-  belongs_to :file_type, foreign_key: "file_type_id"
 
   belongs_to :created_by, class_name: "User", foreign_key: "created_by_id"
   belongs_to :updated_by, class_name: "User", foreign_key: "updated_by_id", optional: true
@@ -68,8 +67,6 @@ class ProjectFileRevision < ApplicationRecord
 
     # Figure out the intended file type
     extension = value.original_filename.split(".", 2)[-1]
-    self.file_type = FileType.where(extension: extension).first
-    self.file_type ||= FileType.where(extension: "txt").first
 
     # Store
     self.data = value
@@ -92,13 +89,8 @@ class ProjectFileRevision < ApplicationRecord
   end
 
   def icon_url
-    name = "unknown.png"
-    return "/filetypes/#{name}"
+    "/filetypes/unknown.png"
   end
-
-  # Validation
-
-  #validates_presence_of :repository_id
 
   # Search
   register_meilisearch
