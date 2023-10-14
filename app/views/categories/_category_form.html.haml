@@ -1,0 +1,6 @@
+= form_with(model: @category, url: @category.new_record? ? project_categories_path(@active_project) : project_category_path(@category.project, @category), method: ( @category.new_record? ? :post : :put ), multipart: true, id: 'category_form') do |form|
+  = render partial: 'categories/form', locals: {form: form, is_new: @category.new_record?}
+  - if @category.new_record?
+    %button.submit{type: "submit"}= t('add_category')
+  - else
+    %button.submit{type: "submit"}= t('edit_category')

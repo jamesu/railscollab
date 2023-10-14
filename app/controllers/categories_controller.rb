@@ -33,12 +33,6 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    begin
-      @category = @active_project.categories.find(params[:id])
-    rescue
-      return error_status(true, :invalid_message_category)
-    end
-
     authorize! :show, @category
 
     respond_to do |format|
@@ -63,12 +57,6 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    begin
-      @category = @active_project.categories.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      return error_status(true, :invalid_message_category)
-    end
-
     authorize! :edit, @category
   end
 
@@ -86,6 +74,7 @@ class CategoriesController < ApplicationController
         }
         format.json { render json: @category.to_json, status: :created, location: @category }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("category_form", partial: "categories/category_form") }
         format.html { render action: "new" }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end
@@ -93,12 +82,6 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    begin
-      @category = @active_project.categories.find(params[:id])
-    rescue
-      return error_status(true, :invalid_message_category)
-    end
-
     authorize! :edit, @category
 
     @category.updated_by = @logged_user
@@ -111,6 +94,7 @@ class CategoriesController < ApplicationController
         }
         format.json { head :ok }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("category_form", partial: "categories/category_form") }
         format.html { render action: "edit" }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end
@@ -120,12 +104,6 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1
   # DELETE /categories/1.xml
   def destroy
-    begin
-      @category = @active_project.categories.find(params[:id])
-    rescue
-      return error_status(true, :invalid_message_category)
-    end
-
     authorize! :delete, @category
 
     @category.updated_by = @logged_user
@@ -143,12 +121,6 @@ class CategoriesController < ApplicationController
   # /categories/1/posts
   # /categories/1/posts.xml
   def posts
-    begin
-      @category = @active_project.categories.find(params[:id])
-    rescue
-      return error_status(true, :invalid_message_category)
-    end
-
     authorize! :show, @category
 
     # conditions
@@ -251,7 +223,15 @@ class CategoriesController < ApplicationController
     @page_actions
   end
 
+  def load_related_object
+    begin
+      @category = @active_project.categories.find(params[:id])
+    rescue
+      return error_status(true, :invalid_message_category)
+    end
+  end
+
   def category_params
-    params.require(:category].permit(:name)
+    params.require(:category).permit(:name)
   end
 end
