@@ -156,6 +156,16 @@ class ApplicationController < ActionController::Base
   def load_related_object
   end
 
+  def update_display_mode
+    # probably should make this more generic...
+    if params[:display] == "list"
+      session[:msglist] = true
+    elsif params[:display] == "summary"
+      session[:msglist] = false
+    end
+    @display_list = session[:msglist] || false
+  end
+
   def config_page
     @page_title = page_title
     @crumbs = crumbs

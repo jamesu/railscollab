@@ -127,14 +127,6 @@ class CategoriesController < ApplicationController
     msg_conditions = {}
     msg_conditions["is_private"] = false unless @logged_user.member_of_owner?
 
-    # probably should make this more generic...
-    if params[:display] == "list"
-      session[:msglist] = true
-    elsif params[:display] == "summary"
-      session[:msglist] = false
-    end
-    @display_list = session[:msglist] || false
-
     respond_to do |format|
       format.html {
         @content_for_sidebar = "messages/index_sidebar"
@@ -205,6 +197,7 @@ class CategoriesController < ApplicationController
 
   def page_actions
     @page_actions = []
+    update_display_mode
 
     if can? :create_message_category, @active_project
       @page_actions << { title: :add_category, url: new_project_category_path(@active_project) } if action_name == "index"
