@@ -117,6 +117,7 @@ class CommentsController < ApplicationController
         }
         format.json { render json: @comment.to_json, status: :created, location: @comment.object_url }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("comment_form", partial: "comments/comment_form", locals: {comment: @comment, commented_object: @commented_object}) }
         format.html { render action: "new" }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
@@ -155,6 +156,7 @@ class CommentsController < ApplicationController
         }
         format.json { head :ok }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("comment_form", partial: "comments/comment_form", locals: {comment: @comment, commented_object: @commented_object}) }
         format.html { render action: "edit" }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
@@ -214,10 +216,15 @@ class CommentsController < ApplicationController
   end
 
   def load_related_object
-    begin
-      @object_class, object_id = find_comment_object
+    load_related_object_index
+    @comment = @commented_object.comments.find(params[:id])
+  end
 
-      puts "KLASS=#{@object_class.inspect} ident=#{object_id} params=#{params}"
+  def load_related_object_index
+    begin
+      @object_class, rel_id = find_comment_object
+
+      #puts "KLASS=#{@object_class.inspect} ident=#{rel_id} params=#{params}"
 
       if @object_class.nil?
         error_status(true, :invalid_request, {}, false)
@@ -226,7 +233,7 @@ class CommentsController < ApplicationController
       end
 
       # Find object
-      @commented_object = @object_class.find(object_id)
+      @commented_object = @object_class.find(rel_id)
       return error_status(true, :invalid_object) if @commented_object.nil?
     rescue ActiveRecord::RecordNotFound
       error_status(true, :invalid_request, {}, false)
@@ -234,13 +241,7 @@ class CommentsController < ApplicationController
       return false
     end
 
-    @comment = @commented_object.comments.find(params[:id])
-
     return true
-  end
-
-  def load_related_object_index
-    load_related_object
   end
 
   def comment_params

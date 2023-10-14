@@ -1,0 +1,6 @@
+= form_with(model: comment, id: 'comment_form', url: (comment.new_record? ? object_comments_url(commented_object) : project_comment_path(commented_object.project, commented_object)), method: (comment.new_record? ? :post : :put), multipart: true) do |form|
+  = render partial: 'comments/form', locals: {form: form}
+  - if comment.new_record?
+    %button.submit{type: "submit"}= t('add_comment')
+  - else
+    %button.submit{type: "submit"}= t('edit_comment')

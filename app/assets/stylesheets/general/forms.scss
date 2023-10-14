@@ -196,11 +196,13 @@ div.fieldWithErrors {
 .form-group .desc {
   flex: 0 0 100%;
   padding-left: 8px;
+  box-sizing: border-box;
 }
 
 .form-group .desc.check {
   flex: 0 0 100%;
   padding-left: 24px;
+  box-sizing: border-box;
 }
 
 .form-group.checkbox {

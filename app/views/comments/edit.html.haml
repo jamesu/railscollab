@@ -1,3 +1,1 @@
-= form_with(model: @commented_object, url: project_comment_path(@commented_object.project, @commented_object), method: :post, multipart: true) do |form|
-  = render partial: 'form', locals: {form: form}
-  %button.submit{type: "submit"}= t('edit_comment')
+= render partial: 'comment_form', locals: {commented_object: @commented_object, comment: @comment}
