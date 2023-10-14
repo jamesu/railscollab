@@ -1,0 +1,6 @@
+= form_with(model: @milestone, id: 'milestone_form', url: (@milestone.new_record? ?  project_milestones_path(@active_project) : project_milestone_path(@milestone.project, @milestone)), method: (@milestone.new_record? ? :post : :put), multipart: true) do |form|
+  = render partial: 'form', locals: {form: form}
+  - if @milestone.new_record?
+    %button.submit{type: "submit"}= t('add_milestone')
+  - else
+    %button.submit{type: "submit"}= t('edit_milestone')

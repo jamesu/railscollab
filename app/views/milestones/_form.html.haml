@@ -1,41 +1,30 @@
-= error_messages_for :milestone
-%div
-  %label{for: "milestoneFormName"}
-    = t('name')
-    \:
-    %span.label_required *
-  = form.text_field 'name', id: 'milestoneFormName', class: 'long'
-%div
-  %label{for: "milestoneFormDesc"}
-    = t('description')
-    \:
-    %span.label_required *
-  = form.text_area 'description', id: 'milestoneFormDesc', class: 'short', rows: 10, cols: 40
-%div
-  %label{for: "milestoneDueDate"}
-    = t('due_date')
-    \:
-  = form.date_select 'due_date', id: 'milestoneDueDate', class: 'short'
+.form-group.normal
+  = form.label :name, t('name'), class: 'required-label'
+  = form.text_field 'name', class: 'long'
+  = form_field_errors(form, :name)
+.form-group.normal
+  = form.label :description, t('description')
+  = form.text_area :description, class: 'short', rows: 10, cols: 40
+  = form_field_errors(form, :description)
+.form-group.normal
+  = form.label :due_date, t('due_date')
+  %div
+    = form.date_select :due_date, class: 'short'
 - if @logged_user.member_of_owner?
   .formBlock
-    %label{for: "milestoneIsPrivate"}
-      = t('private_milestone')
-      \:
-      %span.desc= t('milestones_private_info')
-    = form.check_box 'is_private', id: 'milestoneIsPrivate', class: 'checkbox'
+    .form-group.checkbox
+      = form.label :is_private, t('private_milestone')
+      = form.check_box :is_private, class: 'checkbox'
+      .desc.check= t('milestones_private_info')
 .formBlock
-  %div
-    %label{for: "milestoneFormAssignedTo"}
-      = t('assign_to')
-      \:
-    = form_assign_project_select form, 'assigned_to_id', @active_project, id: 'milestoneFormAssignedTo'
-  %div
-    = form.check_box 'send_notification', {id: 'milestoneFormSendNotification', class: 'checkbox'}
-    %label.checkbox{for: "milestoneFormSendNotification"}= t('send_email_notification_to_user')
+  .form-group.normal
+    = form.label :assigned_to_id, t('assign_to')
+    = form_assign_project_select form, 'assigned_to_id', @active_project
+  .form-group.checkbox
+    = form.label :send_notification, t('send_email_notification_to_user')
+    = form.check_box :send_notification, id: 'milestoneIsPrivate', class: 'checkbox'
 .formBlock
-  %label{for: "milestoneFormTags"}
-    = t('tags')
-    \:
-  = form.text_field 'tags', id: 'milestoneFormTags', class: 'long'
-  %br/
-  %span.desc= t('tags_info')
+  .form-group.normal
+    = form.label :tags, t('tags')
+    = form.text_field 'tags', class: 'long'
+    .desc= t('tags_info')

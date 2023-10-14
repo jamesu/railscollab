@@ -1,4 +1,1 @@
-
-= form_with(model: @milestone, url: project_milestones_path(@active_project), method: :post, multipart: true) do |form|
-  = render partial: 'form', locals: {form: form}
-  %button.submit{type: "submit"}= t('add_milestone')
+= render partial: 'milestones/milestone_form'

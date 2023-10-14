@@ -67,6 +67,7 @@ class MilestonesController < ApplicationController
         }
         format.json { render json: @milestone.to_json, status: :created, location: @milestone }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("milestone_form", partial: "milestones/milestone_form") }
         format.html { render action: "new" }
         format.json { render json: @milestone.errors, status: :unprocessable_entity }
       end
@@ -96,6 +97,7 @@ class MilestonesController < ApplicationController
         }
         format.json { head :ok }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("milestone_form", partial: "milestones/milestone_form") }
         format.html { render action: "edit" }
         format.json { render json: @milestone.errors, status: :unprocessable_entity }
       end
