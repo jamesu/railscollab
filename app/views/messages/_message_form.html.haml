@@ -1,0 +1,6 @@
+= form_with(model: @message, url: @message.new_record? ? project_messages_path(@active_project) : project_message_path(@message.project, @message), method: ( @message.new_record? ? :post : :put ), multipart: true, id: 'message_form') do |form|
+  = render partial: 'form', locals: {form: form, is_new: @message.new_record?}
+  - if @message.new_record?
+    %button.submit{type: "submit"}= t('add_message')
+  - else
+    %button.submit{type: "submit"}= t('edit_message')

@@ -173,8 +173,8 @@ class MessagesController < ApplicationController
 
         format.json { render json: @message.to_json, status: :created, location: @message }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("message_form", partial: "messages/message_form") }
         format.html { render action: "new" }
-
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
@@ -207,8 +207,8 @@ class MessagesController < ApplicationController
 
         format.json { head :ok }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("message_form", partial: "messages/message_form") }
         format.html { render action: "edit" }
-
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end

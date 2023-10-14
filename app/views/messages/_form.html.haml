@@ -1,55 +1,45 @@
-= error_messages_for :message
 - json_data = @active_project.companies.map { |company| ["company_#{company.id}", "users": company.users_on_project(@active_project).map(&:id)] }.to_h
 - content_for :page_head do
   %meta{content: "#{h(json_data.to_json)}", name: "permissions-form-items"}/
   %meta{content: "#{@logged_user.company.id}", name: "notify-form-company"}/
-%div
-  %label{for: "messageFormTitle"}
-    = t('title')
-    \:
-    %span.label_required *
+.form-group.normal
+  = form.label :title, t('title'), class: 'required-label'
   = form.text_field 'title', id: 'messageFormTitle', class: 'title'
-%div
-  %label{for: "messageFormText"}
-    = t('text')
-    \:
-    %span.label_required *
+  = form_field_errors(form, :title)
+.form-group.normal
+  = form.label :text, t('text'), class: 'required-label'
   = form.text_area 'text', id: 'messageFormText', class: 'editor'
+  = form_field_errors(form, :text)
 %fieldset
   %legend= t('milestone')
-  = form.select 'milestone_id', select_milestone_options(@active_project), {}, {class: 'select_milestone', id: 'messageFormMilestone'}
+  .form-group.normal
+    = form.select 'milestone_id', select_milestone_options(@active_project), {}, {class: 'select_milestone', id: 'messageFormMilestone'}
+  = form_field_errors(form, :milestone)
 %fieldset
   %legend= t('category')
-  = form.select 'category_id', Category.select_list(@active_project), {}, {class: 'select_milestone', id: 'messageFormCategory'}
+  .form-group.normal
+    = form.select 'category_id', Category.select_list(@active_project), {}, {class: 'select_milestone', id: 'messageFormCategory'}
+  = form_field_errors(form, :category)
 - if @logged_user.member_of_owner?
   %fieldset
     %legend= t('options')
-    .objectOption
-      .optionLabel
-        %label
-          = t('private_message')
-          \:
-      .optionControl= form.check_box 'is_private', class: 'yes_no', id: 'messageFormIsPrivate'
-      .optionDesc= t('private_message_info')
-    .objectOption
-      .optionLabel
-        %label
-          = t('important_message')
-          \:
-      .optionControl= form.check_box 'is_important', class: 'yes_no', id: 'messageFormIsImportant'
-      .optionDesc= t('important_message_info')
-    .objectOption
-      .optionLabel
-        %label
-          = t('enable_comments')
-          \:
-      .optionControl= form.check_box 'comments_enabled', class: 'yes_no', id: 'messageFormEnableComments'
-      .optionDesc= t('enable_comments_info')
+    .form-group.checkbox
+      = form.label :is_private, t('private_message')
+      = form.check_box :is_private, class: 'yesno'
+      .desc.check= t('private_message_info')
+    .form-group.checkbox
+      = form.label :is_important, t('important_message')
+      = form.check_box :is_important, class: 'yesno'
+      .desc.check= t('important_message_info')
+    .form-group.checkbox
+      = form.label :comments_enabled, t('enable_comments')
+      = form.check_box :comments_enabled, class: 'yesno'
+      .desc.check= t('enable_comments_info')
 %fieldset
   %legend= t('tags')
   = text_field 'tags', id: 'messageFormTags', class: 'long'
-  %br/
-  %span.desc= t('tags_info')
+  .desc= t('tags_info')
+  = form_field_errors(form, :tags)
 - if @message.new_record?
   %fieldset#emailNotification
     %legend= t('email_notification')

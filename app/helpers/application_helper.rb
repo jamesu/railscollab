@@ -492,6 +492,15 @@ module ApplicationHelper
   def error_messages_for(object, other = nil)
   end
 
+  def form_field_errors(f, key)
+    if f.object.errors.has_key?(key)
+      error_list = f.object.errors.full_messages_for(key).map{|a| "<li>#{a}</li>"}.join("")
+      "<ul class=\"field_error_description\">#{error_list}</ul>".html_safe
+    else
+      ""
+    end
+  end
+
   def filetype_icon_url(file)
     if file.is_a?(ProjectFile)
       file.project_file_revisions.empty? ? "/assets/filetypes/unknown.png" : filetype_icon_url(file.project_file_revisions[0])

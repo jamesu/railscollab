@@ -160,31 +160,98 @@ form div.formBlock label {
   border-bottom: 2px solid #ccc;
 }
 
-/** Options block, best to put it into fieldset **/
-
-.objectOption {
-  margin-top: 5px;
+div.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
 }
 
-.objectOption .optionLabel {
-  float: left;
-  display: block;
-  width: 140px;
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    background-color: #cc0000;
+    color: white;
+  }
+  p {
+    color: #333333;
+    margin-bottom: 0;
+    padding: 5px;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
 }
 
-.objectOption .optionLabel label {
-  margin: 0;
-  padding: 0;
+.form-group .desc {
+  flex: 0 0 100%;
+  padding-left: 8px;
 }
 
-.objectOption div.optionControl {
-  margin-left: 140px;
+.form-group .desc.check {
+  flex: 0 0 100%;
+  padding-left: 24px;
 }
 
-.objectOption div.optionDesc {
-  clear: left;
-  font-size: 10px;
-  padding: 0 5px 5px 5px;
-  color: #333;
+.form-group.checkbox {
+  display: flex; /* Use flexbox layout */
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: left;
+  align-items: center; /* Center vertically */
+  margin-bottom: 15px;
+}
+
+.form-group.normal {
+  display: flex; /* Use flexbox layout */
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left; /* Center vertically */
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  width: 150px;
+  font-weight: bold;
+  flex: 1;
+}
+
+.form-group input[type="checkbox"] {
+  margin-left: 0px;
+  margin-right: 10px;
+  vertical-align: middle;
+  flex: 0;
+}
+
+form .field_with_errors label {
+  color: red;
+}
+
+form .field_with_errors input {
+  border-color: red;
+}
+
+form .field_with_errors textarea {
+  border-color: red;
+}
+
+form .field_error_description {
+  color: red
+}
+
+form .required-label:after {
+  content: " *";
+  color: red;
 }
 
