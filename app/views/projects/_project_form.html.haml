@@ -1,0 +1,7 @@
+= form_with(model: @project, id: 'project_form', url: (@project.new_record? ? projects_path() : project_path(@project)), method: (@project.new_record? ? :post : :put)) do |form|
+  = render partial: 'projects/form', locals: {form: form}
+  - if @project.new_record?
+    %button.submit{type: "submit"}= t('add_project')
+  - else
+    %button.submit{type: "submit"}= t('save_changes')
+  = "#{t('or')} #{link_to t('cancel'), :back}".html_safe

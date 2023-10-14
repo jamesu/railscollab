@@ -134,7 +134,7 @@ class ProjectsController < ApplicationController
       @project.companies << @owner
       if params[:project_company]
         valid_companies = Company.where(id: params[:project_company]).select("id", "client_of_id")
-        valid_companies.each { |valid_company| @project.companies << valid_company unless valid_company.is_owner? }
+        valid_companies.each { |valid_company| @project.companies << valid_company unless valid_company.is_instance_owner? }
       end
 
       valid_user_ids = params[:people] || []
@@ -212,7 +212,7 @@ class ProjectsController < ApplicationController
     case request.request_method_symbol
     when :delete
       company = Company.find(params[:company_id])
-      unless company.is_owner?
+      unless company.is_instance_owner?
         company_user_ids = company.users.collect { |user| user.id }
         Person.where({ user_id: company_user_ids, project_id: @project.id }).delete_all
         @project.companies.delete(company)
@@ -282,8 +282,8 @@ class ProjectsController < ApplicationController
 
         format.json { render json: @project.to_json, status: :created, location: @project }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/project_form") }
         format.html { render action: "new" }
-
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -308,8 +308,8 @@ class ProjectsController < ApplicationController
 
         format.json { head :ok }
       else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/project_form") }
         format.html { render action: "edit" }
-
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end

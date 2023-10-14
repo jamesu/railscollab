@@ -19,5 +19,5 @@
     %div
       - @permissions.keys.each do |permission|
         %div
-          = check_box_tag "people_permissions[#{permissions_users.id}][]", permission, permissions_users.has_permission(project, permission), {id: "projectPermission#{perm_id}#{permission}", class: 'checkbox normal', onclick: "permissions_form_project_select_item('#{perm_id}')"}
+          = check_box_tag "people_permissions[#{permissions_users.id}][]", permission, user_has_permission?(permissions_users, project, permission), {id: "projectPermission#{perm_id}#{permission}", class: 'checkbox normal', onclick: "permissions_form_project_select_item('#{perm_id}')"}
           %label.checkbox.normal{for: "projectPermissions#{perm_id}#{permission}"}= @permissions[permission]

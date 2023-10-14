@@ -1,3 +1,1 @@
-= form_with(model: @project, url: projects_path(), method: :post) do |form|
-  = render partial: 'form', locals: {form: form}
-  %button.submit{type: "submit"}= t('add_project')
+= render partial: 'projects/project_form'
