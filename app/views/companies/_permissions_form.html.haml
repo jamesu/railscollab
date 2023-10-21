@@ -1,0 +1,19 @@
+= form_with(model: @company, id: 'permissions_form', url: permissions_company_path(@company), method: :put) do |form|
+  #projectCompanies
+    .projectCompany
+      .projectCompanyMeta
+        .projectCompanyLogo
+          %img{src: @company.logo_url, alt: h(@company.name)}/
+        .projectCompanyTitle
+          %label= h(@company.name)
+      .companyProjectList
+        - @owner.owner_projects.each do |project|
+          .companyProject
+            .projectTitle
+              .form-group.checkbox
+                = form.label :project_ids, h(project.name), for: "project_company_ids_#{@company.id}"
+                = form.check_box :project_ids, { multiple: true, class: 'checkbox', 'project-id': project.id, 'company-id': @company.id}, project.id, nil
+            .projectCompanyUsers
+              = render partial: 'projects/user_perms', locals: {display_user: true, form: form, project: project, company: @company}, collection: @company.users
+      
+  %button.submit{type: "submit"}= t('update_people')

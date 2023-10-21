@@ -116,8 +116,6 @@ Railscollab::Application.routes.draw do
       get :avatar
       put :avatar
       delete :avatar
-      get :permissions
-      put :permissions
     end
     
     collection do

@@ -3,6 +3,12 @@ div.projectCompany {
   border: 1px solid #ccc;
   padding: 10px;
   min-height: 50px;
+  box-sizing: border-box;
+}
+
+.projectCompanies {
+  display: flex;
+  flex-direction: column;
 }
 
 * html div.projectCompany {
@@ -12,10 +18,15 @@ div.projectCompany {
 div.projectCompanyLogo {
   float: left;
   width: 60px;
+  height: 54px;
 }
 
 div.projectCompanyMeta {
-  margin-left: 60px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px dashed #cccccc;
+  min-height: 54px;
 }
 
 div.projectCompany .projectCompanyTitle label {
@@ -23,7 +34,7 @@ div.projectCompany .projectCompanyTitle label {
 }
 
 div.projectCompany div.projectCompanyUsers {
-  margin: 10px 0 0 10px;
+  margin: 10px 0 0 60px;
 }
 
 div.projectCompany div.projectUserPermissions {
@@ -33,4 +44,12 @@ div.projectCompany div.projectUserPermissions {
 div.projectCompany tr.user {
   border: 1px solid #ccc;
   border-width: 1px 0;
+}
+
+div.companyProject .projectTitle {
+  margin: 10px 0 0 30px;
+}
+
+div.companyProject {
+  border-bottom: 1px dotted #afafaf;
 }

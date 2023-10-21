@@ -103,8 +103,7 @@ module ApplicationHelper
 
     if @active_project.nil?
       actions += [
-        { name: I18n.t("delete"), url: user_path(id: user.id), cond: can?(:delete, user), data: { turbo_method: :delete, turbo_confirm: I18n.t("confirm_user_delete") } },
-        { name: I18n.t("permissions"), url: permissions_user_path(id: user.id), cond: can?(:update_permissions, user) },
+        { name: I18n.t("delete"), url: user_path(id: user.id), cond: can?(:delete, user), data: { turbo_method: :delete, turbo_confirm: I18n.t("confirm_user_delete") } }
       ]
     else
       actions << { name: I18n.t("remove"), url: users_project_path(id: @active_project.id, user: user.id), cond: can?(:delete, user), data: { turbo_method: :delete, turbo_confirm: I18n.t("confirm_user_remove") } }

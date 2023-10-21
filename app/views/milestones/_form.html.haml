@@ -22,7 +22,7 @@
     = form_assign_project_select form, 'assigned_to_id', @active_project
   .form-group.checkbox
     = form.label :send_notification, t('send_email_notification_to_user')
-    = form.check_box :send_notification, id: 'milestoneIsPrivate', class: 'checkbox'
+    = form.check_box :send_notification, class: 'checkbox'
 .formBlock
   .form-group.normal
     = form.label :tags, t('tags')

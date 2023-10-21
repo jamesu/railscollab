@@ -501,6 +501,7 @@ en:
   company_no_users: There are no users in this company
   permissions_form: Permissions form
   permissions_info: "Using the %{link} you can easily add or remove companies and users and control their access permissions."
+  permissions_owner_account: "✅ Owner Account"
   clients_involved_in: "%{company} users involved in %{project}"
   confirm_client_remove: "Are you sure you want to remove this company?"
   confirm_user_remove: "Are you sure you want to remove this user?"

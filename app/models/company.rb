@@ -27,6 +27,7 @@ class Company < ApplicationRecord
 
   has_many :clients, class_name: "Company", foreign_key: "client_of_id"
   has_many :users
+  has_many :owner_projects, class_name: "Project", foreign_key: "owner_company_id"
 
   has_and_belongs_to_many :projects, join_table: :project_companies
 
@@ -38,6 +39,9 @@ class Company < ApplicationRecord
   before_update :process_update_params
   before_destroy :process_destroy
 
+  after_create :update_perms
+  after_update :update_perms
+
   def process_params
   end
 
@@ -45,6 +49,10 @@ class Company < ApplicationRecord
   end
 
   def process_destroy
+  end
+
+  def people
+    Person.joins(:user).where('users.company_id': self.id)
   end
 
   def self.instance_owner
@@ -84,6 +92,52 @@ class Company < ApplicationRecord
   def users_on_project(project)
     proj_users = Person.where(project_id: project).select(:user_id).map(&:user_id)
     User.where(id: proj_users, company_id: id)
+  end
+
+  # Returns the owner company id
+  def perm_company_id
+    if !client_of.nil?
+      client_of_id
+    else
+      id
+    end
+  end
+
+  # Returns incomplete projects belonging to the owner company id
+  def perm_project_ids
+    if !client_of.nil?
+      client_of.owner_projects.where(completed_on: nil).all.map(&:id)
+    else
+      owner_projects.where(completed_on: nil).all.map(&:id)
+    end
+  end
+
+  # Returns incomplete projects belonging to the owner company id
+  def perm_user_ids
+    if !client_of.nil?
+      client_of.user_ids + user_ids
+    else
+      user_ids
+    end
+  end
+
+  def perms
+    return @new_perms_list if !@new_perms_list.nil?
+    people.all.map { |ps| ps.get_permissions.map{ |a| "#{ps.project_id}_#{ps.user_id}_#{a}" } }.flatten
+  end
+
+  def perms=(value)
+    @new_perms_list = value
+  end
+
+  def update_perms
+    return if @new_perms_list.nil?
+
+    pids = perm_project_ids
+    uids = perm_user_ids
+
+    set_perm_list(@new_perms_list, pids, uids)
+    @new_perms_list = nil
   end
 
   def object_name

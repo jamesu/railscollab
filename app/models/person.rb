@@ -21,7 +21,7 @@ class Person < ApplicationRecord
   belongs_to :user
   belongs_to :project
 
-  before_create :set_all_permissions
+  attr_accessor :mark
 
   # Update these when required
   @@permission_fields = {
@@ -69,6 +69,17 @@ class Person < ApplicationRecord
     end
   end
 
+  def get_permissions
+    list = @@permission_fields.keys.map do |k|
+      has_permission(k) ? k : nil
+    end.compact
+    if has_all_permissions?
+      list << "all"
+    end
+    list << "member"
+    return list
+  end
+
   def has_all_permissions?
     return true if user.is_admin
 
@@ -79,6 +90,18 @@ class Person < ApplicationRecord
     end
 
     return true
+  end
+
+  def self.permission_keys
+    @@permission_fields.keys
+  end
+
+  def self.permission_code(key)
+    if key == :all
+      0xFFFF
+    else
+      @@permission_fields[key]||0
+    end
   end
 
   def self.permission_names

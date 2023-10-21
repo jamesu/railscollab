@@ -49,7 +49,91 @@ class ApplicationRecord < ActiveRecord::Base
     @new_tags = val.split(",")
   end
 
-  def self.register_meilisearch
+  def reset_perm_with_uid_list(perm_list, uid_list, existing_people)
+    # Reset list with new people
+    uid_list.uniq!
+    existing_people.destroy_all
+
+    uid_list.each do |uid_proj_code|
+      key = uid_proj_code.map(&:to_s).join('_')
+      code = perm_list.has_key?(key) ? perm_list[key] : 0
+
+      person = Person.new(
+        user_id: uid_proj_code[1], 
+        project_id: uid_proj_code[0], 
+        code: code)
+      
+      person.save!
+    end
+  end
+
+  def make_perm_uid_lists(val, project_filter, user_filter)
+    # Make new list
+    new_list = {}
+    uid_list = []
+
+    if !user_filter.nil? and !user_filter.is_a?(Array)
+      user_filter = [user_filter]
+    end
+
+    if !project_filter.nil? and !project_filter.is_a?(Array)
+      project_filter = [project_filter]
+    end
+
+    val.map(&:strip).uniq.each do |perm|
+      begin
+        v = perm.split('_')
+
+        project_id = v[0].to_i
+        user_id = v[1].to_i
+        perm_name = v[2..-1].join('_')
+        key = [v[0], v[1]].join('_')
+
+        next if (!user_filter.nil? and !user_filter.include?(user_id))
+        next if (!project_filter.nil? and !project_filter.include?(project_id))
+
+        if perm_name == 'member'
+          uid_list << [project_id, user_id]
+        end
+
+        if new_list.has_key?(key)
+          new_list[key] |= Person.permission_code(perm_name.to_sym)
+        else
+          new_list[key] = Person.permission_code(perm_name.to_sym)
+        end
+
+      rescue Exception => e
+        next
+      end
+    end
+
+    return [new_list, uid_list]
+  end
+
+  # Sets a permission list based on project and user filter
+  def set_perm_list(val, project_filter=nil, user_filter=nil)
+    return if val.nil?
+
+    # Select correct existing records
+    if project_filter.nil? && user_filter.nil?
+      raise Exception.new("No filter")
+    elsif project_filter.nil?
+      existing_people = Person.where(user_id: user_filter)
+    elsif user_filter.nil?
+      existing_people = Person.where(project_id: project_filter)
+    else
+      existing_people = Person.where(project_id: project_filter, user_id: user_filter)
+    end
+
+    # Make new list
+    perm_list, uid_list = make_perm_uid_lists(val, project_filter, user_filter)
+
+    # Reset list with new people
+    reset_perm_with_uid_list(perm_list, uid_list, existing_people)
+  end
+
+  def self.register_meilisearch(&block)
+    return unless Rails.configuration.railscollab.search_enabled
     include MeiliSearch::Rails
     us = self
     inst = self.new
@@ -99,5 +183,7 @@ class ApplicationRecord < ActiveRecord::Base
         tag_list
       end
     end
+
+    block.call
   end
 end

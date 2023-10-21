@@ -92,12 +92,12 @@ class Tag < ApplicationRecord
 
 
   # Search
-  register_meilisearch
+  register_meilisearch do
+    meilisearch index_uid: 'Tag', primary_key: :ms_id do
+      attribute :tag
+      attribute :project
 
-  meilisearch index_uid: 'Tag', primary_key: :ms_id do
-    attribute :tag
-    attribute :project
-
-    filterable_attributes [:project]
+      filterable_attributes [:project]
+    end
   end
 end

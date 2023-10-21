@@ -29,6 +29,8 @@ class Project < ApplicationRecord
   has_many :users, through: :people
   has_many :comments
 
+  belongs_to :owner_company, class_name: "Company", foreign_key: "owner_company_id", optional: true
+
   has_many :time_records, dependent: :destroy
   has_many :tags, as: :rel_object # Dependent objects sould destroy all of these for us
 
@@ -54,12 +56,15 @@ class Project < ApplicationRecord
   before_update :process_update_params
   before_destroy :process_destroy
 
+  after_update  :update_perms
+
   def process_params
     write_attribute("completed_on", nil)
   end
 
   def process_create
     Activity.new_log(self, self.created_by, :add, true)
+    update_perms
   end
 
   def process_update_params
@@ -164,6 +169,21 @@ class Project < ApplicationRecord
     total = item_list.count
 
     return item_list, total
+  end
+
+  def perms
+    return @new_perms_list if !@new_perms_list.nil?
+    people.all.map { |ps| ps.get_permissions.map{ |a| "#{ps.project_id}_#{ps.user_id}_#{a}" } }.flatten
+  end
+
+  def perms=(value)
+    @new_perms_list = value
+  end
+
+  def update_perms
+    return if @new_perms_list.nil?
+    set_perm_list(@new_perms_list, self.id, nil)
+    @new_perms_list = nil
   end
 
   # Helpers

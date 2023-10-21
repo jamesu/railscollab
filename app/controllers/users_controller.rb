@@ -238,53 +238,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def permissions
-    authorize! :update_profile, @user
-
-    @projects = @user.company.projects
-    @permissions = Person.permission_names()
-
-    case request.request_method_symbol
-    when :put
-      update_project_permissions(@user, params[:user_project], params[:project_permission], @projects)
-      #Activity.new_log(@project, @logged_user, :edit, true)
-      error_status(false, :success_updated_permissions)
-    end
-  end
-
-  private
-
-  def update_project_permissions(user, project_ids, project_permission, old_projects = nil)
-    project_ids ||= []
-
-    # Grab the list of project id's specified
-    project_list = Project.where(id: project_ids & user.project_ids)
-
-    # Associate project permissions with user
-    project_list.each do |project|
-      permission_list = project_permission.nil? ? nil : project_permission[project.id.to_s]
-
-      # Find permission list
-      person = project.people.find_or_create_by_user_id user.id
-
-      # Reset and update permissions
-      person.clear_all_permissions
-      person.set_permissions permission_list unless permission_list.nil?
-      person.save
-    end
-
-    unless old_projects.nil?
-      # Delete all permissions that aren't in the project list
-      delete_list = old_projects.collect do |project|
-        project.id unless project_list.include?(project)
-      end.compact
-
-      unless delete_list.empty?
-        Person.where(user_id: user.id, project_id: delete_list).delete_all
-      end
-    end
-  end
-
   protected
 
   def page_title
@@ -333,7 +286,7 @@ class UsersController < ApplicationController
     nl << :auto_assign
     nl << :user_project
     nl << :project_permission
-    params[:user].nil? ? {} : params[:user].permit(*nl)
+    params[:user].nil? ? {} : params[:user].permit(*nl, perms: [])
   end
 
   def load_related_object

@@ -1,0 +1,21 @@
+- perm_id = "#{project.id}_#{company.id}_#{user_perms.id}"
+- if display_user
+  .project-perm-user
+    - if user_perms.owner_of_owner?
+      = form.label :people, h(user_perms.display_name)
+      = t('permissions_owner_account')
+    - else
+      .form-group.checkbox
+        = form.label :perms, h(user_perms.display_name), for: "project_perms_#{project.id}_#{user_perms.id}_member"
+        = form.check_box :perms, { multiple: true, class: 'checkbox' }, "#{project.id}_#{user_perms.id}_member", nil
+.project-perm-boxes{'project-id': project.id}
+  - unless company.is_instance_owner?
+    .project-perm-all
+      .form-group.checkbox
+        = form.label :perms, t('all'), for: "project_perms_#{project.id}_#{user_perms.id}_all"
+        = form.check_box :perms, { multiple: true, class: 'checkbox', 'project-id': project.id, 'user-id': user_perms.id, 'perm-id': 'all'}, "#{project.id}_#{user_perms.id}_all", nil
+    .project-perm-breakdown
+      - Person.permission_keys.each do |permission|
+        .form-group.checkbox
+          = form.label :perms, t(permission), for: "project_perms_#{project.id}_#{user_perms.id}_#{permission}"
+          = form.check_box :perms, { multiple: true, class: 'checkbox', 'project-id': project.id, 'user-id': user_perms.id, 'perm-id': permission }, "#{project.id}_#{user_perms.id}_#{permission}", nil

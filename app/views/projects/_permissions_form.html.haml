@@ -1,0 +1,22 @@
+= form_with(model: @active_project, id: 'permissions_form', url: permissions_project_path(), method: :put) do |form|
+  #projectCompanies
+    - @companies.each do |company|
+      - next if company.users.empty?
+      .projectCompany
+        .projectCompanyMeta
+          .projectCompanyLogo
+            %img{src: company.logo_url, alt: h(company.name)}/
+          .projectCompanyTitle
+            - if company.is_instance_owner?
+              %label= h(company.name)
+            - else
+              .form-group.checkbox
+                = form.label :companies, h(company.name), for: "project_company_ids_#{company.id}"
+                = form.check_box :company_ids, { multiple: true, class: 'checkbox', 'project-id': @active_project.id, 'company-id': company.id}, company.id, nil
+        .projectCompanyUsers
+          - unless company.users.empty?
+            = render partial: 'projects/user_perms', locals: {display_user: true, form: form, project: @active_project, company: company}, collection: company.users
+          - else
+            = t('company_no_users')
+        
+  %button.submit{type: "submit"}= t('update_people')

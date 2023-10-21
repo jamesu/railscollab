@@ -116,76 +116,33 @@ class ProjectsController < ApplicationController
 
   def permissions
     authorize! :manage, @project
-
+    @companies = company_list
+    
     case request.request_method_symbol
     when :get
-      @people = @project.users
-      @user_projects = @logged_user.projects
 
-      @companies = [@owner]
-      @permissions = Person.permission_names()
-      clients = @owner.clients
-      if clients.length > 0
-        @companies += clients
-      end
-    when :post, :put
-      # Sort out changes to the company set
-      @project.companies.clear
-      @project.companies << @owner
-      if params[:project_company]
-        valid_companies = Company.where(id: params[:project_company]).select("id", "client_of_id")
-        valid_companies.each { |valid_company| @project.companies << valid_company unless valid_company.is_instance_owner? }
-      end
+    when :put
+      @project.perms = project_params[:perms]
+      @project.company_ids = project_params[:company_ids]
 
-      valid_user_ids = params[:people] || []
+      saved = @project.save
 
-      # Grab the old user set
-      people = @project.people.all
-
-      # Destroy the Person entry for each non-active user
-      people.each do |person|
-        user = person.user
-        next if user.owner_of_owner?
-
-        # Have a look to see if it is on our list
-        has_valid_user = valid_user_ids.include? user.id.to_s
-        # Have another look to see if his company is enabled
-        has_valid_company = valid_companies.include? user.company
-
-        if has_valid_user and has_valid_company
-          permissions = params[:people_permissions] ? params[:people_permissions][user.id.to_s] : nil
-          person.clear_all_permissions
-          person.set_permissions permissions unless permissions.nil?
-          person.set_all_permissions if person.user.member_of_owner?
-          person.save
-        else
-          # Exterminate! (maybe better if this was a single query?)
-          person.destroy
+      if saved
+        respond_to do |format|
+          format.html {
+            error_status(false, :success_updated_permissions)
+            redirect_back_or_default people_project_path(id: @project.id)
+          }
+          format.json { render json: :ok }
         end
-        valid_user_ids.delete user.id.to_s if has_valid_user
-
-        # Also check if he is activated
-        #
+      else
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("permissions_form", partial: "projects/permissions_form") }
+          format.html {
+          }
+          format.json { render json: @project.errors, status: :unprocessable_entity }
+        end
       end
-
-      # Create new Person entries for new users
-
-      users = User.where(id: valid_user_ids).includes(:company)
-      users.each do |user|
-        next unless valid_companies.include? user.company
-        person = @project.people.create(user: user)
-        permissions = params[:people_permissions] ? params[:people_permissions][id] : nil
-        person.clear_all_permissions
-        person.set_permissions permissions unless permissions.nil?
-        person.set_all_permissions if person.user.member_of_owner?
-        person.save
-      end
-
-      # Now we can do the log keeping!
-      #@project.updated_by = @logged_user
-
-      error_status(false, :success_updated_permissions)
-      redirect_to people_project_path(id: @project.id)
     end
   end
 
@@ -225,7 +182,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def new
+  def neww
     authorize! :create_project, current_user
 
     @project = Project.new
@@ -405,7 +362,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name, :description, :priority, :show_description_in_overview)
+    params.require(:project).permit(:name, :description, :priority, :show_description_in_overview, :company_ids, perms: [], company_ids: [])
   end
 
   def load_related_object

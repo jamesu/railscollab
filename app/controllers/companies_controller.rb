@@ -141,32 +141,31 @@ class CompaniesController < ApplicationController
 
   def permissions
     authorize! :manage, @company
-
-    @projects = Project.order(name: :asc).all
-    if @projects.empty?
-      error_status(true, :no_projects)
-      redirect_back_or_default companies_path
-      return
-    end
+    @projects = @owner.owner_projects
 
     case request.request_method_symbol
+    when :get
+
     when :put
-      project_list = params[:project]
-      project_list ||= []
-      project_ids = project_list.collect { |ids| ids.to_i }
+      @company.perms = company_params[:perms]
+      @company.project_ids = company_params[:project_ids]
 
-      # Add and remove project associations
-      @projects.each do |project|
-        next unless @logged_user.member_of(project)
+      saved = @company.save
 
-        if project_ids.include?(project.id)
-          begin
-            project.companies.find(@company.id)
-          rescue ActiveRecord::RecordNotFound
-            project.companies << @company
-          end
-        else
-          project.companies.delete(@company)
+      if saved
+        respond_to do |format|
+          format.html {
+            error_status(false, :success_updated_permissions)
+            redirect_back_or_default company_path(id: @company.id)
+          }
+          format.json { render json: :ok }
+        end
+      else
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("permissions_form", partial: "companies/permissions_form") }
+          format.html {
+          }
+          format.json { render json: @company.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -230,7 +229,7 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country)
+    params.require(:company).permit(:logo, :name, :time_zone, :email, :homepage, :phone_number, :fax_number, :address, :address2, :city, :state, :zipcode, :country, company_ids: [], perms: [], project_ids: [])
   end
 
   def load_related_object

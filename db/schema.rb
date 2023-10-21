@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_12_213828) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_18_195226) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -180,7 +180,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_12_213828) do
     t.integer "user_id", default: 0, null: false
     t.datetime "created_on", precision: nil
     t.integer "created_by_id", default: 0, null: false
-    t.integer "code", limit: 8, default: 0, null: false
+    t.integer "code", limit: 8, default: 16777215, null: false
   end
 
   create_table "project_companies", id: false, force: :cascade do |t|
@@ -244,7 +244,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_12_213828) do
     t.integer "created_by_id"
     t.datetime "updated_on", precision: nil
     t.integer "updated_by_id"
+    t.integer "owner_company_id", limit: 8, default: 0, null: false
     t.index ["completed_on"], name: "index_projects_on_completed_on"
+    t.index ["owner_company_id"], name: "index_projects_on_owner_company_id"
   end
 
   create_table "slugs", force: :cascade do |t|

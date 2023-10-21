@@ -175,4 +175,8 @@ class ApplicationController < ActionController::Base
     @page_actions = page_actions
   end
 
+  def company_list
+    list = [@owner] + @owner.clients
+  end
+
 end

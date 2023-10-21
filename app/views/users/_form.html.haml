@@ -98,12 +98,3 @@
       %div
         %label{for: "userFormHomeNumber"}= t('home')
         = text_field 'user', 'home_number', id: 'userFormHomeNumber'
-- if @logged_user.member_of_owner? and @user.new_record? and !@active_projects.empty?
-  - content_for :page_head do
-    %meta{content: "#{h((@permissions.keys).to_json)}", name: "permissions-form-items"}/
-  %fieldset
-    %legend= t('permissions')
-    #userPermissions
-      #userProjects
-        %table.blank
-          = render partial: 'projects/permissions', locals: {user: @user}, collection: @projects

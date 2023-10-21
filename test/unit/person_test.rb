@@ -17,13 +17,13 @@ class PersonTest < ActiveSupport::TestCase
 
     person = Person.new()
     person.user = users(:client_user)
-    assert_equal false, person.has_all_permissions?
-
-    person.set_all_permissions
     assert_equal true, person.has_all_permissions?
 
     person.clear_all_permissions
     assert_equal false, person.has_all_permissions?
+
+    person.set_all_permissions
+    assert_equal true, person.has_all_permissions?
 
     pl.each do |key|
       person.set_permission(key, true)
