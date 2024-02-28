@@ -203,6 +203,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.4-java)
       racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
     psych (5.1.0)
       stringio
     psych (5.1.0-java)
@@ -214,7 +216,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.7.1)
     racc (1.7.1-java)
-    rack (3.0.8)
+    rack (3.0.9.1)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -286,6 +288,7 @@ GEM
     sqlite3 (1.6.6)
       mini_portile2 (~> 2.8.0)
     sqlite3 (1.6.6-arm64-darwin)
+    sqlite3 (1.6.6-x86_64-linux)
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     stringio (3.0.8)
@@ -324,6 +327,7 @@ GEM
 PLATFORMS
   arm64-darwin-22
   java
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-page_caching
