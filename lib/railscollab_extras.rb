@@ -17,6 +17,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+module RailscollabExtras
+end
+
 class String
   def twist(twister)
     return self if self.length != twister.length
