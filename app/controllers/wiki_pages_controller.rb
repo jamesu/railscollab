@@ -56,7 +56,6 @@ class WikiPagesController < ApplicationController
   def create
     @wiki_page = wiki_pages.build(wiki_page_params)
     @wiki_page.created_by = @logged_user
-    @wiki_page.current_revision = true
     puts @wiki_page.inspect
 
     if @wiki_page.save
@@ -68,7 +67,6 @@ class WikiPagesController < ApplicationController
   end
 
   def edit
-    puts "WIKIP=#{@wiki_page.inspect}"
   end
 
   def update
@@ -84,14 +82,15 @@ class WikiPagesController < ApplicationController
   end
 
   def destroy
-    if params[:version].nil?
-      @wiki_page.where(:slug => id.slug).destroy
-    else
-      @wiki_page.where(:slug => id.slug, :revision_number => params[:version].to_i).destroy
-    end
-
     flash[:message] = I18n.t "wiki_engine.success_deleting_wiki_page"
-    redirect_to project_wiki_pages_path(@active_project)
+
+    if params[:version].nil?
+      @wiki_page.destroy
+      redirect_to project_wiki_pages_path(@active_project)
+    else
+      @wiki_page.versions.where(revision_number: params[:version].to_i).destroy_all
+      redirect_to project_wiki_page_path(@active_project, id: @wiki_page.slug)
+    end
   end
 
   def preview
@@ -112,7 +111,8 @@ class WikiPagesController < ApplicationController
 
   # Find all wiki pages. This is by default used only for list action.
   def find_wiki_pages
-    @wiki_pages = wiki_pages.where(current_revision: true).all
+    @wiki_pages = wiki_pages.where(revision_number: WikiPage.select('MAX(revision_number)')
+                              .group(:slug)).all
   end
 
   # This is called when wiki page is not found. By default it display a page explaining
@@ -142,9 +142,11 @@ class WikiPagesController < ApplicationController
   end
 
   def load_related_object
-    begin
-      @wiki_page = wiki_pages.where(current_revision: true).where("slug = ? OR id = ?", params[:id], params[:id]).first
-    rescue ActiveRecord::RecordNotFound
+    @wiki_page = wiki_pages
+              .where("slug = ? OR id = ?", params[:id], params[:id])
+              .order(revision_number: :desc)
+              .first
+    if @wiki_page.nil?
       redirect_back_or_default project_path(@active_project)
       return false
     end

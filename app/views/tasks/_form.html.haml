@@ -1,26 +1,26 @@
-- if not form.object.new_record? and @no_show_list.nil?
-  %div
-    %label{for: "addTaskTaskList#{form.object.id}"}
-      = t('task_list')
-      \:
-      %span.label_required *
-    = form.select 'task_list_id', TaskList.select_list(@active_project), {}, id: "addTaskTaskList#{task.id}"
-  %div
-    %label{for: "addTaskText#{form.object.id}"}
-      = t('text')
-      \:
-      %span.label_required *
-    = form.text_area 'text', id: "addTaskText#{form.object.id}", class: 'short autofocus', rows: 10, cols: 40
-  %div
-    %label{for: "taskAssignedTo#{form.object.id}"}
-      = t('assign_to')
-      \:
-    = assign_project_select_form form, 'task', 'assigned_to_id', @active_project, id: "taskAssignedTo#{form.object.id}"
-  %div
-    = form.check_box 'send_notification', '1', id: "taskSendNotification#{form.object.id}", class: 'checkbox'
-    %label.checkbox{for: "taskSendNotification#{form.object.id}"}= t('send_email_notification_to_user')
-  %div
-    %label{for: "addTaskHours"}
-      = t('estimated_hours')
-      \:
-    = form.text_field 'estimated_hours', id: 'addTaskHours', class: 'short'
+= error_messages_for :task
+%div
+  %label{for: "addTaskTaskList#{form.object.id}"}
+    = t('task_list')
+    \:
+    %span.label_required *
+  = form.select 'task_list_id', TaskList.select_list(@active_project), {}, id: "addTaskTaskListSelect#{form.object.id}"
+%div
+  %label{for: "addTaskText#{form.object.id}"}
+    = t('text')
+    \:
+    %span.label_required *
+  = form.text_area 'text', id: "addTaskText#{form.object.id}", class: 'short autofocus', rows: 10, cols: 40
+%div
+  %label{for: "taskAssignedTo#{form.object.id}"}
+    = t('assign_to')
+    \:
+  = form_assign_project_select form, 'assigned_to_id', @active_project, id: "taskAssignedTo#{form.object.id}"
+%div
+  = form.check_box :'send_notification', id: "taskSendNotification#{form.object.id}", class: 'checkbox'
+  %label.checkbox{for: "taskSendNotification#{form.object.id}"}= t('send_email_notification_to_user')
+%div
+  %label{for: "addTaskHours"}
+    = t('estimated_hours')
+    \:
+  = form.text_field 'estimated_hours', id: 'addTaskHours', class: 'short'

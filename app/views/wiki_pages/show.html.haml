@@ -4,6 +4,6 @@
 - @page_actions << {title: :all_pages, url: list_project_wiki_pages_path(@active_project)}
 = render partial: 'wiki_page', object: @version
 .options
-  = action_list actions_for_wiki_page(@wiki_page)
+  = action_list actions_for_wiki_page(@wiki_page, @version)
   = select_tag :versions, options_for_versions_select(@versions), onchange: 'document.location.href = this.value;'
   = I18n.t('wiki_engine.last_modified_with_time', time: format_usertime(@version.created_at, :wiki_page_updated_format))

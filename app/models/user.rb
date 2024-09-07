@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require "digest/sha1"
+require "bcrypt"
 
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
@@ -101,7 +101,7 @@ class User < ApplicationRecord
 
   def password=(value)
     return if @generated_password
-    salt = nil
+    salt = ""
     token = nil
 
     if value.empty?
@@ -114,16 +114,7 @@ class User < ApplicationRecord
     # Calculate a unique token with salt
     loop do
       # Grab a few random things...
-      tnow = Time.now()
-      sec = tnow.tv_usec
-      usec = tnow.tv_usec % 0x100000
-      rval = rand()
-      roffs = rand(25)
-
-      # Now we can calculate salt and token
-      salt = Digest::SHA1.hexdigest(sprintf("%s%08x%05x%.8f", rand(32767), sec, usec, rval))[roffs..roffs + 12]
-      token = Digest::SHA1.hexdigest(salt + value)
-
+      token = BCrypt::Password.create(value)
       break if User.where({ token: token }).first.nil?
     end
 
@@ -190,7 +181,7 @@ class User < ApplicationRecord
   end
 
   def valid_password(pass)
-    self.token == Digest::SHA1.hexdigest(self.salt + pass)
+    BCrypt::Password.new(self.token) == pass
   end
 
   # Helpers

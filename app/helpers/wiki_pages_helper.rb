@@ -58,7 +58,7 @@ module WikiPagesHelper
 
   def versions(versions)
     versions.collect do |version|
-      [t("wiki_engine.version#{"_edited_by" unless version.user_name.blank?}", version: version.revision_number, user: version.user_name), project_wiki_page_path(@active_project, id: version.slug, version: version.revision_number)]
+      [t("wiki_engine.version#{"_edited_by" unless version.user_name.blank?}", version: version.revision_number, user: version.user_name), project_version_wiki_page_path(@active_project, id: version.slug, version: version.revision_number)]
     end
   end
 

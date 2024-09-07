@@ -59,6 +59,8 @@ Railscollab::Application.routes.draw do
       end
     end
     get 'wiki_pages/:id/:version', controller: 'wiki_pages', action: 'show', as:  :version_wiki_page
+    delete 'wiki_pages/:id/:version', to: 'wiki_pages#destroy', as: :delete_version_wiki_page
+
 
     resources :comments
     # Note: filter by category is done via "posts" on the category controller

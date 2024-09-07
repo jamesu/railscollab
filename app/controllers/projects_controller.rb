@@ -153,7 +153,7 @@ class ProjectsController < ApplicationController
     when :delete
       user = User.find(params[:user_id])
       unless user.owner_of_owner?
-        Person.where(["user_id = ? AND project_id = ?", params[:user], @project.id]).delete_all
+        Person.where(user_id: params[:user], project_id: @project.id).delete_all
       end
     end
 
@@ -182,7 +182,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def neww
+  def new
     authorize! :create_project, current_user
 
     @project = Project.new

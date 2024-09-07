@@ -180,9 +180,14 @@ module ApplicationHelper
      { name: I18n.t("delete"), url: project_time_path(time.project, id: time.id), cond: can?(:delete, time), data: { turbo_method: :delete, turbo_confirm: I18n.t("time_confirm_delete") } }]
   end
 
-  def actions_for_wiki_page(page)
+  def actions_for_wiki_page(page, version=nil)
+    if version.nil?
+      delete_path = project_wiki_page_path(page.project, id: page.slug)
+    else
+      delete_path = project_delete_version_wiki_page_path(page.project, id: page.slug, version: version.revision_number)
+    end
     [{ name: I18n.t("edit"), url: edit_project_wiki_page_path(page.project, id: page.slug), cond: can?(:edit, page) },
-     { name: I18n.t("delete"), url: project_wiki_page_path(page.project, id: page.slug), cond: can?(:delete, page), data: { turbo_method: :delete, turbo_confirm: I18n.t("wiki_page_confirm_delete") } }]
+     { name: I18n.t("delete"), url: delete_path, cond: can?(:delete, page), data: { turbo_method: :delete, turbo_confirm: I18n.t("wiki_page_confirm_delete") } }]
   end
 
   def running_time_for_task(task)

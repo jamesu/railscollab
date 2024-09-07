@@ -20,6 +20,7 @@ class WikiPage < ApplicationRecord
 
   def process_destroy
     if self.revision_number == 0
+      
       Activity.new_log(self, created_by, :delete)
     end
   end
@@ -52,18 +53,14 @@ class WikiPage < ApplicationRecord
     new_version.current_revision = true
 
     if new_version.save
-      self.versions.update_all(current_revision: false)
+      self.versions.where.not(id: new_version.id).update_all(current_revision: false)
     end
 
     new_version
   end
 
   def object_url(host = nil)
-    if self.current_revision
-      project_wiki_page_url(project, id: self.friendly_id, only_path: host.nil?, host: host)
-    else
-      project_wiki_page_url(project, id: self.friendly_id, version: self.revision_number, only_path: host.nil?, host: host)
-    end
+    project_wiki_page_url(project, id: self.friendly_id, only_path: host.nil?, host: host)
   end
 
   # Search
