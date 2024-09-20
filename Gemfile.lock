@@ -118,6 +118,7 @@ GEM
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-java)
+    ffi (1.17.0-x86_64-linux-gnu)
     friendly_id (5.4.2)
       activerecord (>= 4.0.0)
     globalid (1.2.1)
@@ -213,14 +214,16 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-java)
       racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-linux)
+      racc (~> 1.4)
     psych (5.1.2)
       stringio
     psych (5.1.2-java)
       jar-dependencies (>= 0.1.7)
     public_suffix (6.0.1)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
-    puma (6.4.2-java)
+    puma (6.4.3-java)
       nio4r (~> 2.0)
     racc (1.8.1)
     racc (1.8.1-java)
@@ -336,6 +339,7 @@ PLATFORMS
   aarch64-linux
   arm64-darwin-22
   java
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-page_caching
@@ -355,7 +359,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   meilisearch-rails
-  puma (~> 6.0)
+  puma (~> 6.4)
   rails (~> 7.1.4)
   redcarpet
   redis (~> 4.0)
