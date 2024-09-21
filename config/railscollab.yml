@@ -4,6 +4,9 @@ defaults: &defaults
   
   # Location you use to access RailsCollab
   site_url: http://localhost:3000
+
+  # Debug frontend mode
+  frontend_debug: true
   
   # Default folders in a project
   default_project_folders: 

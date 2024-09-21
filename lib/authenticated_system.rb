@@ -109,6 +109,11 @@ module AuthenticatedSystem
 
     # Called from #current_user.  First attempt to login by the user id stored in the session.
     def login_from_session
+      if Rails.configuration.railscollab.frontend_debug
+        self.current_user = @owner.created_by
+        return @logged_user
+      end
+
       self.current_user = User.find_by_id(session[:user_id]) if session[:user_id]
     end
 

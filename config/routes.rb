@@ -1,4 +1,33 @@
 Railscollab::Application.routes.draw do
+
+  # api
+
+  namespace :api do
+    resources :companies
+    resources :users
+    get 'search', to: 'search#index'
+
+    resources :projects do
+      resources :members
+      #
+      resources :comments
+      resources :categories
+      resources :messages
+      resources :folders
+      resources :files
+      resources :milestones
+      resources :tags
+      resources :task_lists do
+        resources :tasks do 
+          collection do
+            post :reorder
+          end
+        end
+      end
+      resources :wiki_pages
+    end
+  end
+
   # feed url's
 
   %w(recent_activities project_activities recent_milestones milestones export_times).each do |act|

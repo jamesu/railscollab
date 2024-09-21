@@ -1,0 +1,2 @@
+module Api::CategoriesHelper
+end

@@ -181,7 +181,7 @@ class User < ApplicationRecord
   end
 
   def valid_password(pass)
-    BCrypt::Password.new(self.token) == pass
+    BCrypt::Password.new(self.token) == pass rescue false
   end
 
   # Helpers
