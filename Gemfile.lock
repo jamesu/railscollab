@@ -118,6 +118,7 @@ GEM
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-java)
+    ffi (1.17.0-x86_64-linux-gnu)
     friendly_id (5.4.2)
       activerecord (>= 4.0.0)
     globalid (1.2.1)
@@ -213,6 +214,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-java)
       racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-linux)
+      racc (~> 1.4)
     psych (5.1.2)
       stringio
     psych (5.1.2-java)
@@ -269,7 +272,7 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
-    rexml (3.3.7)
+    rexml (3.3.9)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
@@ -336,6 +339,7 @@ PLATFORMS
   aarch64-linux
   arm64-darwin-22
   java
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-page_caching
