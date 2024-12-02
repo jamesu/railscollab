@@ -118,6 +118,7 @@ GEM
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-java)
+    ffi (1.17.0-x86_64-linux-gnu)
     friendly_id (5.4.2)
       activerecord (>= 4.0.0)
     globalid (1.2.1)
@@ -173,7 +174,7 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     logger (1.6.1)
-    loofah (2.22.0)
+    loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -207,11 +208,13 @@ GEM
       net-protocol
     nio4r (2.7.3)
     nio4r (2.7.3-java)
-    nokogiri (1.16.7-aarch64-linux)
+    nokogiri (1.16.8-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.16.7-arm64-darwin)
+    nokogiri (1.16.8-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.7-java)
+    nokogiri (1.16.8-java)
+      racc (~> 1.4)
+    nokogiri (1.16.8-x86_64-linux)
       racc (~> 1.4)
     psych (5.1.2)
       stringio
@@ -250,9 +253,9 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.6.0)
+    rails-html-sanitizer (1.6.1)
       loofah (~> 2.21)
-      nokogiri (~> 1.14)
+      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     railties (7.1.4)
       actionpack (= 7.1.4)
       activesupport (= 7.1.4)
@@ -336,6 +339,7 @@ PLATFORMS
   aarch64-linux
   arm64-darwin-22
   java
+  x86_64-linux
 
 DEPENDENCIES
   actionpack-page_caching
